@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          # kein cache:'pnpm' hier – das führt zu Fehlern, wenn pnpm noch nicht installiert ist
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -40,12 +39,28 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
+      - name: Restore Puppeteer browser cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            puppeteer-${{ runner.os }}-
+
+      - name: Install Puppeteer Chrome
+        run: pnpm exec puppeteer browsers install chrome
+        env:
+          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
+
+      # Unit & E2E getrennt (sofern du die Scripts ergänzt hast)
       - name: Run unit tests
-        run: pnpm test
+        run: pnpm run test:spec
         env:
           CI: true
+          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
 
       - name: Run e2e tests
-        run: pnpm test --e2e
+        run: pnpm run test:e2e
         env:
           CI: true
+          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
