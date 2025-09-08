@@ -1,4 +1,3 @@
-# .github/workflows/test.yml
 name: Test
 
 on:
@@ -9,6 +8,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+      NODE_OPTIONS: --experimental-vm-modules
+      PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,6 +44,24 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
+      # ---------- System-Libs für Chrome/Chromium ----------
+      - name: Install Chrome runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            libnss3 libnspr4 \
+            libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 \
+            libcups2 libdrm2 libgbm1 \
+            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
+            libx11-6 libx11-xcb1 libxcb1 libxext6 libxrandr2 libxrender1 libxshmfence1 \
+            libglib2.0-0 \
+            libcairo2 libpango-1.0-0 libpangocairo-1.0-0 \
+            libasound2 \
+            fonts-liberation \
+            ca-certificates
+          sudo rm -rf /var/lib/apt/lists/*
+
+      # ---------- Browser vorbereiten ----------
       - name: Restore Puppeteer browser cache
         uses: actions/cache@v4
         with:
@@ -47,20 +70,26 @@ jobs:
           restore-keys: |
             puppeteer-${{ runner.os }}-
 
-      - name: Install Puppeteer Chrome
-        run: pnpm exec puppeteer browsers install chrome
-        env:
-          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
+      - name: Install chrome-headless-shell
+        run: pnpm dlx @puppeteer/browsers install chrome-headless-shell@stable -P "$PUPPETEER_CACHE_DIR"
 
-      # Unit & E2E getrennt (sofern du die Scripts ergänzt hast)
-      - name: Run unit tests
+      - name: Resolve chrome-headless-shell path
+        id: phs
+        shell: bash
+        run: |
+          PHS_PATH="$(find "$PUPPETEER_CACHE_DIR" -type f -name 'chrome-headless-shell' | head -n1 || true)"
+          if [[ -z "$PHS_PATH" ]]; then
+            echo "No chrome-headless-shell found!" >&2
+            exit 1
+          fi
+          echo "path=$PHS_PATH" >> "$GITHUB_OUTPUT"
+          echo "PUPPETEER_EXECUTABLE_PATH=$PHS_PATH" >> "$GITHUB_ENV"
+
+      # ---------- Tests ----------
+      - name: Run unit/spec tests (Jest/jsdom)
         run: pnpm run test:spec
-        env:
-          CI: true
-          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
 
-      - name: Run e2e tests
-        run: pnpm run test:e2e
+      - name: Run e2e tests (Puppeteer)
         env:
-          CI: true
-          PUPPETEER_CACHE_DIR: ~/.cache/puppeteer
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.phs.outputs.path }}
+        run: pnpm run test:e2e
