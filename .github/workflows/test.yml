@@ -88,7 +88,7 @@ jobs:
           # 2) Falls Puppeteer doch ins Repo schrieb (kommt vor):
           if [[ -z "${CANDIDATE}" ]]; then
             CANDIDATE="$(find "$GITHUB_WORKSPACE" -type f -path '*/chrome-headless-shell/*/chrome-headless-shell' -print -quit 2>/dev/null || true)"
-          end
+          fi
           # 3) Letzter Fallback: Puppeteer (voll) liefern lassen
           if [[ -z "${CANDIDATE}" ]]; then
             echo "(warn) chrome-headless-shell not found in cache/workspace; trying puppeteer fallback"
