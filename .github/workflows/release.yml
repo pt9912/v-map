@@ -1,21 +1,65 @@
 # .github/workflows/release.yml
 name: Release
+
 on:
   push:
-    tags:
-      - 'v*' # Trigger auf Version-Tags (z. B. v1.0.0)
+    branches:
+      - main # ggf. auf deinen Default-Branch anpassen
+  workflow_dispatch:
+
+permissions:
+  contents: write # für Tags & GitHub Release
+  packages: write # falls GitHub Packages genutzt wird
+  issues: write # optional
+  pull-requests: write # optional
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci
-      - run: npm run build
-      - run: npx semantic-release
+          registry-url: https://registry.npmjs.org
+          # kein cache:'pnpm' hier, pnpm kommt erst im nächsten Schritt
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: PreBuild
+        run: pnpm run prebuild
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Release (semantic-release)
+        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # automatisch vorhanden
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # in Repo-Secrets hinterlegen
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # nötig fürs npm publish
+          CI: true
