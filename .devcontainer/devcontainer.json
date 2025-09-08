@@ -1,0 +1,21 @@
+{
+  "name": "Stencil.js + V-Map (Node.js 18)",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [3333, 6006],  // Stencil (3333) + Storybook (6006)
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbankier.vscode-stencil",
+        "esbenp.prettier-vscode",
+        "storybook.storybook",
+        "ms-vscode.vscode-typescript-next"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteUser": "node"
+}
