@@ -18,19 +18,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: Install
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: PreBuild library
-        run: npm run prebuild
+        run: pnpm run prebuild
 
       - name: Build library
-        run: npm run build
+        run: pnpm run build
 
       - name: Build Storybook
-        run: npm run build-storybook
+        run: pnpm run build-storybook
 
       - name: Upload Storybook artifact
         uses: actions/upload-artifact@v4
