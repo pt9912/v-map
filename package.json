@@ -1,0 +1,84 @@
+{
+  "name": "v-map",
+  "version": "0.0.1",
+  "description": "VMap Components",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/v-map/v-map.esm.js",
+  "exports": {
+    ".": {
+      "import": "./dist/v-map/v-map.esm.js",
+      "require": "./dist/v-map/v-map.cjs.js"
+    },
+    "./v-map-component": {
+      "types": "./dist/components/v-map-component.d.ts",
+      "import": "./dist/components/v-map-component.js"
+    },
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js",
+      "require": "./loader/index.cjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stenciljs/component-starter.git"
+  },
+  "files": [
+    "dist/",
+    "dist/v-map",
+    "dist/components",
+    "loader/"
+  ],
+  "scripts": {
+    "prebuild": "node scripts/gen-versions.mjs",
+    "build": "stencil build",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "generate": "stencil generate",
+    "storybook": "pnpm run build && storybook dev -p 6006 --no-open",
+    "build-storybook": "storybook build"
+  },
+  "peerDependencies": {
+    "cesium": "^1.133",
+    "leaflet": "^1.9",
+    "ol": "^10.6"
+  },
+  "peerDependenciesMeta": {
+    "ol": {
+      "optional": true
+    },
+    "leaflet": {
+      "optional": true
+    },
+    "cesium": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@stencil/core": "^4.36.3",
+    "@stencil/storybook-plugin": "0.4.2",
+    "@storybook/addon-docs": "^9.1.5",
+    "@storybook/addon-links": "^9.1.5",
+    "@storybook/addon-onboarding": "^9.1.5",
+    "@types/geojson": "^7946.0.16",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.5",
+    "caniuse-lite": "^1.0.30001741",
+    "cesium": "^1.133.0",
+    "jest": "^29.7.0",
+    "jest-cli": "^29.7.0",
+    "leaflet": "^1.9.4",
+    "ol": "^10.6.1",
+    "puppeteer": "^24.3.0",
+    "storybook": "^9.1.5"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "leaflet.gridlayer.googlemutant": "^0.15.0"
+  }
+}

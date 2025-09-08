@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es2022"],
+    "baseUrl": ".",
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "target": "es2022",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": false,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "h.Fragment",
+    "paths": {
+      "cesium": ["./node_modules/cesium/Source/Cesium.d.ts"]
+    },
+    // WICHTIG: KEIN "typeRoots" auf cesium/Source setzen
+    "types": ["@stencil/core", "jest", "node", "cesium", "ol", "geojson"] // <- keine 'Assets'/'Widgets' etc.
+  },
+  "include": ["src", "types", "node_modules/cesium/Source/Cesium.d.ts"],
+  "exclude": ["node_modules"]
+}
