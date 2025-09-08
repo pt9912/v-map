@@ -31,3 +31,5 @@ UserInterfaceState.xcuserstate
 .pnpm-store
 *storybook.log
 storybook-static
+
+chrome-headless-shell/

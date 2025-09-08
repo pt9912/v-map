@@ -18,6 +18,7 @@ export const config: Config = {
   buildEs5: 'prod',
   testing: {
     browserHeadless: 'shell',
+    browserArgs: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
   },
   rollupPlugins: {
     after: [
@@ -26,7 +27,13 @@ export const config: Config = {
         options(input) {
           return {
             ...input,
-            external: ['leaflet', /^leaflet\//, 'ol', /^ol\//],
+            external: [
+              'leaflet',
+              /^leaflet\//,
+              'ol',
+              /^ol\//,
+              'leaflet.gridlayer.googlemutant',
+            ],
           };
         },
       },
