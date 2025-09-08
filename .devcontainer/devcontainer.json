@@ -1,7 +1,9 @@
 {
-  "name": "Stencil.js + V-Map (Node.js 18)",
-  "dockerFile": "Dockerfile",
-  "forwardPorts": [3333, 6006],  // Stencil (3333) + Storybook (6006)
+  "name": "Stencil.js + V-Map (Node 22)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [3333, 6006],
   "customizations": {
     "vscode": {
       "extensions": [
