@@ -6,11 +6,11 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Flavour } from "./components/v-map/map-provider/provider-factory";
+import { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 import { MapProviderDetail } from "./utils/events";
-import { LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 export { Flavour } from "./components/v-map/map-provider/provider-factory";
+export { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 export { MapProviderDetail } from "./utils/events";
-export { LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 export namespace Components {
     interface VMap {
         "addLayer": (layerConfig: any) => Promise<void>;
@@ -18,6 +18,10 @@ export namespace Components {
           * @default '0,0'
          */
         "center": string;
+        /**
+          * @default 'cdn'
+         */
+        "cssMode": CssMode;
         /**
           * @default 'ol'
          */
@@ -149,6 +153,10 @@ declare namespace LocalJSX {
           * @default '0,0'
          */
         "center"?: string;
+        /**
+          * @default 'cdn'
+         */
+        "cssMode"?: CssMode;
         /**
           * @default 'ol'
          */

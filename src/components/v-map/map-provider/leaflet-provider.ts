@@ -1,45 +1,96 @@
 // src/components/v-map/map-provider/leaflet-provider.ts
 import type {
   MapProvider,
-  MapInitOptions,
   LayerConfig,
   LonLat,
+  ProviderOptions,
+  CssMode,
 } from './map-provider';
+
+import { watchElementResize, Unsubscribe } from '../../../utils/dom-env';
 
 import { LEAFLET_VERSION } from '../../../lib/versions.gen';
 
 // Leaflet ESM
 import * as L from 'leaflet';
-import 'leaflet.gridlayer.googlemutant';
+//import 'leaflet.gridlayer.googlemutant';
 
-type AnyLayer = L.Layer | L.LayerGroup;
+import { isBrowser, supportsAdoptedStyleSheets } from '../../../utils/dom-env';
 
-/** CSS in ShadowRoot injizieren – ohne '?inline', kompatibel zu Stencil/Rollup */
-async function injectLeafletCss(shadowRoot?: ShadowRoot) {
-  if (!shadowRoot) return;
-  const id = 'leaflet-css-sheet';
-  if (shadowRoot.querySelector(`style[data-id="${id}"]`)) return;
-
-  const url = `https://cdn.jsdelivr.net/npm/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
-  const css = await (await fetch(url)).text();
-
-  if ('adoptedStyleSheets' in Document.prototype) {
+function injectInlineMin(root?: ShadowRoot): void {
+  if (!isBrowser()) return;
+  const css = `
+    :host { display:block; }
+    #map { width:100%; height:100%; display:block; }
+  `;
+  if (supportsAdoptedStyleSheets()) {
     const sheet = new CSSStyleSheet();
-    await sheet.replace(css);
-    // @ts-ignore
-    shadowRoot.adoptedStyleSheets = [
-      ...(shadowRoot.adoptedStyleSheets ?? []),
-      sheet,
-    ];
+    sheet.replaceSync(css);
+    const target: any = root ?? document;
+    const current = target.adoptedStyleSheets ?? [];
+    target.adoptedStyleSheets = [...current, sheet];
   } else {
     const style = document.createElement('style');
-    style.setAttribute('data-id', id);
     style.textContent = css;
-    shadowRoot.appendChild(style);
+    (root ?? document.head).appendChild(style);
   }
 }
 
-/** Lädt die Google Maps JS API dynamisch, falls noch nicht vorhanden */
+function addLeafletCssFromCdn(
+  root?: ShadowRoot,
+  version = LEAFLET_VERSION,
+  cdn: 'jsdelivr' | 'unpkg' = 'jsdelivr',
+) {
+  if (!isBrowser()) return;
+
+  const href =
+    cdn === 'unpkg'
+      ? `https://unpkg.com/leaflet@${version}/dist/leaflet.css`
+      : `https://cdn.jsdelivr.net/npm/leaflet@${version}/dist/leaflet.css`;
+
+  // doppelte Injektion vermeiden (prüfe ShadowRoot **und** globales head)
+  const scope = (root as unknown as Document | ShadowRoot) ?? document;
+  const already =
+    scope.querySelector?.(`link[rel="stylesheet"][href="${href}"]`) ||
+    document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`);
+
+  if (already) return;
+
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  // Optional: link.integrity = '<SRI-Hash>'; link.crossOrigin = '';
+  (root ?? document.head).appendChild(link);
+}
+
+function ensureLeafletCss(mode: CssMode, root?: ShadowRoot) {
+  if (!isBrowser()) return; // Tests/SSR: no-op
+  switch (mode) {
+    case 'cdn':
+      addLeafletCssFromCdn(root);
+      break;
+    case 'inline-min':
+      injectInlineMin(root);
+      break;
+    case 'bundle':
+      // CSS wird vom Host/App-Bundle geliefert (z.B. via import 'leaflet/dist/leaflet.css')
+      break;
+    case 'none':
+    default:
+      // Host kümmert sich selbst; nichts tun
+      break;
+  }
+}
+
+async function ensureGoogleMutantLoaded(): Promise<void> {
+  if (!isBrowser()) return; // im SSR/Tests: noop
+  try {
+    await import('leaflet.gridlayer.googlemutant');
+  } catch {
+    // im Test (gemockt) oder wenn das Plugin nicht verfügbar ist → still
+  }
+}
+
 async function loadGoogleMapsApi(
   apiKey: string,
   opts?: { language?: string; region?: string; libraries?: string[] },
@@ -70,8 +121,8 @@ async function loadGoogleMapsApi(
   });
 }
 
-/** Fügt ein Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit) */
-function ensureGoogleLogo(map: L.Map) {
+/** Fügt ein kleines Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit) */
+function ensureGoogleLogo(map: L.Map, markAdded: () => void) {
   if ((map as any)._googleLogoAdded) return;
   const Logo = L.Control.extend({
     onAdd() {
@@ -88,27 +139,39 @@ function ensureGoogleLogo(map: L.Map) {
   });
   new Logo({ position: 'bottomleft' as L.ControlPosition }).addTo(map);
   (map as any)._googleLogoAdded = true;
+  markAdded();
 }
+
+type AnyLayer = L.Layer | L.LayerGroup;
 
 export class LeafletProvider implements MapProvider {
   private map?: L.Map;
   private layers: AnyLayer[] = [];
+  private googleLogoAdded: boolean = false;
+  private unsubscribeResize: Unsubscribe;
 
-  async init(container: HTMLElement, options?: MapInitOptions) {
-    const sr =
-      container.getRootNode() instanceof ShadowRoot
-        ? (container.getRootNode() as ShadowRoot)
-        : undefined;
-    await injectLeafletCss(sr);
+  async init(options: ProviderOptions) {
+    if (!isBrowser()) return;
 
-    const [lon, lat] = (options?.center ?? [0, 0]) as LonLat;
+    ensureLeafletCss(options.cssMode, options.shadowRoot);
 
-    this.map = L.map(container, {
+    const [lon, lat] = (options?.mapInitOptions?.center ?? [0, 0]) as LonLat;
+
+    this.map = L.map(options.target, {
       zoomControl: true,
       attributionControl: true,
-    }).setView([lat, lon], options?.zoom ?? 2);
+    }).setView([lat, lon], options?.mapInitOptions?.zoom ?? 2);
 
-    new ResizeObserver(() => this.map?.invalidateSize()).observe(container);
+    this.unsubscribeResize = watchElementResize(
+      options.target,
+      () => {
+        this.map?.invalidateSize();
+      },
+      {
+        attributes: true,
+        attributeFilter: ['style', 'class'],
+      },
+    );
   }
 
   async addLayer(layerConfig: LayerConfig) {
@@ -232,9 +295,9 @@ export class LeafletProvider implements MapProvider {
       throw new Error("Google-Layer benötigt 'apiKey' (Google Maps Platform).");
 
     await loadGoogleMapsApi(config.apiKey, {
-      language: (config as any).language,
-      region: (config as any).region,
-      libraries: (config as any).libraries,
+      language: config.language,
+      region: config.region,
+      libraries: config.libraries,
     });
 
     const type = (config.mapType ?? 'roadmap') as
@@ -243,17 +306,26 @@ export class LeafletProvider implements MapProvider {
       | 'terrain'
       | 'hybrid';
 
-    const gLayer = (L.gridLayer as any).googleMutant({
-      type,
-      maxZoom: (config as any).maxZoom ?? 21,
-      styles: (config as any).styles,
-    }) as L.GridLayer;
+    await ensureGoogleMutantLoaded();
 
-    ensureGoogleLogo(this.map);
+    // googleMutant-Optionen
+    const mutantOpts: any = {
+      type,
+      maxZoom: config.maxZoom ?? 21,
+      styles: config.styles,
+    };
+
+    const gLayer = (L.gridLayer as any).googleMutant(mutantOpts) as L.GridLayer;
+
+    ensureGoogleLogo(this.map, () => {
+      this.googleLogoAdded = true;
+      console.log('googleLogoAdded: ', this.googleLogoAdded);
+    });
     return gLayer;
   }
 
   async destroy() {
+    this.unsubscribeResize?.();
     for (const l of this.layers) {
       this.map?.removeLayer(l);
     }

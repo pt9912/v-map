@@ -2,18 +2,27 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { VMap } from './v-map';
 
-describe('v-map', () => {
+describe('<v-map>', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [VMap],
-      html: `<v-map flavour="ol" center="8.5417,49.0069" zoom="10"></v-map>`,
+      html: `<v-map flavour="leaflet" leaflet-css="none" center="8.5417,49.0069" zoom="10"></v-map>`,
     });
-    expect(page.root).toEqualHtml(`
-      <v-map flavour="ol" center="8.5417,49.0069" zoom="10">
-        <mock:shadow-root>
-          <div id="map-container" style="width: 100%; height: 100%;"></div>
-        </mock:shadow-root>
-      </v-map>
-    `);
+
+    expect(page.root).toBeTruthy();
+
+    const shadow = page.root!.shadowRoot!;
+    const container = shadow.querySelector('#map-container');
+    const map = shadow.querySelector('#map') as HTMLElement | null;
+
+    expect(container).not.toBeNull();
+    expect(map).not.toBeNull();
+
+    // Styles am #map (Target-Div) prüfen
+    expect(map!.style.width).toBe('100%');
+    expect(map!.style.height).toBe('100%');
+
+    // optional: display block
+    expect(map!.style.display).toBe('block');
   });
 });

@@ -1,7 +1,12 @@
 // src/app.ts
 import { loadCesium, injectWidgetsCss } from '../../../lib/cesium-loader';
 
-import { MapProvider, LayerConfig, LonLat } from './map-provider';
+import {
+  MapProvider,
+  ProviderOptions,
+  LayerConfig,
+  LonLat,
+} from './map-provider';
 type CesiumModule = typeof import('cesium');
 import { Viewer } from 'cesium';
 
@@ -9,10 +14,10 @@ export class CesiumProvider implements MapProvider {
   private viewer: Viewer;
   private Cesium: CesiumModule;
 
-  async init(container: HTMLElement, _options?: any) {
+  async init(options: ProviderOptions) {
     const sr =
-      container.getRootNode() instanceof ShadowRoot
-        ? (container.getRootNode() as ShadowRoot)
+      options.target.getRootNode() instanceof ShadowRoot
+        ? (options.target.getRootNode() as ShadowRoot)
         : undefined;
     await injectWidgetsCss(sr);
 
@@ -26,7 +31,7 @@ export class CesiumProvider implements MapProvider {
 */
     Cesium.Ion.defaultAccessToken = null;
 
-    this.viewer = new this.Cesium.Viewer(container, {
+    this.viewer = new this.Cesium.Viewer(options.target, {
       baseLayer: false,
       baseLayerPicker: false, // Remove the base layer picker if you don’t need to switch layers
       terrainProvider: new Cesium.EllipsoidTerrainProvider(), // Use a simple ellipsoid terrain

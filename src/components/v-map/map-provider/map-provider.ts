@@ -1,7 +1,4 @@
 // src/components/v-map/map-provider/map-provider.ts
-import { OpenLayersProvider } from './openlayers-provider';
-import { CesiumProvider } from './cesium-provider';
-
 export type LonLat = [number, number];
 
 export type MapInitOptions = {
@@ -11,8 +8,17 @@ export type MapInitOptions = {
   // projection?: 'EPSG:3857' | 'EPSG:4326';
 };
 
+export type CssMode = 'inline-min' | 'cdn' | 'none' | 'bundle';
+
+export type ProviderOptions = {
+  target: HTMLElement;
+  shadowRoot?: ShadowRoot;
+  mapInitOptions?: MapInitOptions;
+  cssMode?: CssMode;
+};
+
 export interface MapProvider {
-  init(container: HTMLElement, options?: MapInitOptions): Promise<void>;
+  init(options: ProviderOptions): Promise<void>;
   destroy(): Promise<void>;
 
   /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */
@@ -53,7 +59,11 @@ export type LayerConfig =
       scale?: 'scaleFactor1x' | 'scaleFactor2x';
       highDpi?: boolean;
       groupId?: string;
-      // language?: string; region?: string; // nur wenn deine OL-Version das typisiert
+      maxZoom?: number;
+      styles?: string;
+      language?: string;
+      libraries?: string[];
+      region?: string; // nur wenn deine OL-Version das typisiert
     }
   | {
       type: 'wms';
@@ -62,16 +72,3 @@ export type LayerConfig =
       params?: Record<string, string>;
       groupId?: string;
     };
-
-export class MapProviderFactory {
-  static create(flavour: 'ol' | 'cesium'): MapProvider {
-    switch (flavour) {
-      case 'ol':
-        return new OpenLayersProvider();
-      case 'cesium':
-        return new CesiumProvider();
-      default:
-        throw new Error(`Unsupported flavour: ${flavour}`);
-    }
-  }
-}

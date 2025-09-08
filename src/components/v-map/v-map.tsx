@@ -15,10 +15,13 @@ import type {
   MapProvider,
   MapInitOptions,
   LonLat,
+  ProviderOptions,
+  CssMode,
 } from './map-provider/map-provider';
 import { ensureImportMap } from '../../lib/ensure-importmap';
 
 import { VMapEvents, MapProviderDetail } from '../../utils/events';
+import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 
 @Component({
   tag: 'v-map',
@@ -35,6 +38,8 @@ export class VMap {
   /** Falls true, injiziert v-map automatisch die Import-Map. */
   @Prop() useDefaultImportMap: boolean = true;
 
+  @Prop() cssMode: CssMode = 'cdn';
+
   @Event({
     eventName: VMapEvents.MapProviderReady,
     bubbles: true,
@@ -46,6 +51,7 @@ export class VMap {
   // KEIN @State – keine Re-Renders nötig
   private mapProvider!: MapProvider;
   private mapContainer!: HTMLDivElement;
+  private unsubscribeResize: Unsubscribe;
 
   async componentWillLoad() {
     console.log('v-map - componentWillLoad');
@@ -76,14 +82,18 @@ export class VMap {
         `<v-map>: Ungültiges center-Prop: "${this.center}" (erwartet "lon,lat")`,
       );
     }
-    const opts: MapInitOptions = { center: centerLL, zoom: this.zoom };
-    await this.mapProvider.init(this.mapContainer, opts);
+    const mapInitOpts: MapInitOptions = { center: centerLL, zoom: this.zoom };
+    const opts: ProviderOptions = {
+      target: this.mapContainer,
+      shadowRoot: this.el.shadowRoot!,
+      mapInitOptions: mapInitOpts,
+      cssMode: this.cssMode,
+    };
+    await this.mapProvider.init(opts);
 
-    new ResizeObserver(() => {
-      if (this.mapProvider && opts.center && opts.zoom) {
-        this.mapProvider.setView(opts.center, opts.zoom);
-      }
-    }).observe(this.el);
+    this.unsubscribeResize = watchElementResize(this.el, () => {
+      this.mapProvider.setView(mapInitOpts.center, mapInitOpts.zoom);
+    });
 
     const payLoad: MapProviderDetail = {
       mapProvider: this.mapProvider,
@@ -160,6 +170,7 @@ export class VMap {
 
   disconnectedCallback() {
     console.log('v-map - disconnectedCallback');
+    this.unsubscribeResize?.();
     this.mapProvider?.destroy();
   }
   /*

@@ -13,7 +13,12 @@ import OSM from 'ol/source/OSM';
 import type BaseLayer from 'ol/layer/Base';
 import type LayerGroup from 'ol/layer/Group';
 
-import { MapProvider, LayerConfig, LonLat } from './map-provider';
+import {
+  MapProvider,
+  ProviderOptions,
+  LayerConfig,
+  LonLat,
+} from './map-provider';
 
 type AnyLayer = BaseLayer | LayerGroup;
 
@@ -48,27 +53,24 @@ export class OpenLayersProvider implements MapProvider {
   private layers: AnyLayer[] = [];
   private googleLogoAdded = false;
 
-  async init(
-    container: HTMLElement,
-    options?: { center?: [number, number]; zoom?: number },
-  ) {
+  async init(options: ProviderOptions) {
     const sr =
-      container.getRootNode() instanceof ShadowRoot
-        ? (container.getRootNode() as ShadowRoot)
+      options.target.getRootNode() instanceof ShadowRoot
+        ? (options.target.getRootNode() as ShadowRoot)
         : undefined;
     await injectOlCss(sr);
 
     this.map = new MapClass({
-      target: container,
+      target: options.target,
       //      layers: [new TileLayer({ source: new OSM() })],
       layers: [],
       view: new View({
-        center: fromLonLat(options?.center ?? [0, 0]),
-        zoom: options?.zoom ?? 2,
+        center: fromLonLat(options?.mapInitOptions?.center ?? [0, 0]),
+        zoom: options?.mapInitOptions?.zoom ?? 2,
       }),
     });
 
-    new ResizeObserver(() => this.map?.updateSize()).observe(container);
+    new ResizeObserver(() => this.map?.updateSize()).observe(options.target);
   }
 
   async destroy() {
