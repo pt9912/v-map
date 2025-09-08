@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          # WICHTIG: KEIN cache:'pnpm' hier, das triggert den Fehler
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -26,7 +27,20 @@ jobs:
           version: 9
           run_install: false
 
-      - name: Install
+      # pnpm Store-Pfad ermitteln und für Cache bereitstellen
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: Install deps
         run: pnpm install --frozen-lockfile
 
       - name: PreBuild library
