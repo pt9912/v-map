@@ -4,12 +4,14 @@ import {
   CESIUM_VERSION,
   OL_VERSION,
   LEAFLET_VERSION,
+  DECK_VERSION,
 } from './src/lib/versions.gen';
 
 console.log('[v-map demo versions]', {
   Cesium: CESIUM_VERSION,
   OL: OL_VERSION,
   Leaflet: LEAFLET_VERSION,
+  Deck: DECK_VERSION,
 });
 
 export default defineConfig({
@@ -23,7 +25,7 @@ export default defineConfig({
             background:#eee;padding:4px 8px;
             font:12px/1.4 monospace;z-index:9999;
           ">
-            Cesium ${CESIUM_VERSION} · OL ${OL_VERSION} · Leaflet ${LEAFLET_VERSION}
+            Cesium ${CESIUM_VERSION} · OL ${OL_VERSION} · Leaflet ${LEAFLET_VERSION} · Deck.gl ${DECK_VERSION}
           </div>`;
         return html.replace('</body>', `${banner}\n</body>`);
       },

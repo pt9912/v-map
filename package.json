@@ -1,5 +1,5 @@
 {
-  "name": "v-map",
+  "name": "@pt9912/v-map",
   "version": "0.0.1",
   "description": "VMap Components",
   "main": "dist/index.cjs.js",
@@ -59,6 +59,13 @@
   "scripts": {
     "prebuild": "node scripts/gen-versions.mjs",
     "build": "stencil build",
+    "docs:stencil": "stencil build --docs",
+    "docs:ts": "typedoc",
+    "docs:api": "node scripts/generate-api-docs.mjs",
+    "docs:build": "pnpm docs:stencil && pnpm docs:ts && pnpm docs:api && vitepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:preview": "vitepress preview docs",
+    "docs:pdf": "press-export-pdf export docs",
     "start": "stencil build --dev --watch --serve",
     "test": "pnpm run test:spec && pnpm run test:e2e",
     "test:spec": "stencil test --spec",
@@ -69,6 +76,10 @@
     "build-storybook": "storybook build"
   },
   "peerDependencies": {
+    "@deck.gl/core": "^9.1.0",
+    "@deck.gl/geo-layers": "^9.1.0",
+    "@deck.gl/json": "^9.1.0",
+    "@deck.gl/layers": "^9.1.0",
     "cesium": "^1.133",
     "leaflet": "^1.9",
     "ol": "^10.6"
@@ -112,6 +123,10 @@
     "puppeteer": "^24.3.0",
     "semantic-release": "^24.0.0",
     "storybook": "^9.1.5",
+    "typedoc": "^0.28.12",
+    "typedoc-plugin-markdown": "^4.8.1",
+    "vitepress": "^1.6.4",
+    "vitepress-export-pdf": "^1.0.0",
     "vitest": "^2.1.1"
   },
   "license": "MIT",

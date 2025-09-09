@@ -14,6 +14,15 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null,
     },
+    {
+      type: 'docs-readme', // generiert README pro Komponente (src/components/**/readme.md)
+      strict: true,
+    },
+    {
+      type: 'docs-json',
+      file: 'docs/api/stencil-docs.json', // Machine-readable API
+      strict: true,
+    },
   ],
   buildEs5: 'prod',
   testing: {
@@ -33,6 +42,8 @@ export const config: Config = {
               'ol',
               /^ol\//,
               'leaflet.gridlayer.googlemutant',
+
+              'child_process', // Node.js-spezifische APIs
             ],
           };
         },

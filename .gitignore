@@ -7,6 +7,7 @@ loader/
 *.log
 *.lock
 *.tmp
+*.temp
 *.tmp.*
 log.txt
 *.sublime-project
@@ -33,3 +34,5 @@ UserInterfaceState.xcuserstate
 storybook-static
 
 chrome-headless-shell/
+
+cache/
