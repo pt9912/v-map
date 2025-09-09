@@ -1,7 +1,7 @@
 # V-Map 🗺️
 
 **Eine moderne, provider-unabhängige Kartenkomponente für Webanwendungen.**  
-Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers.org/), [Cesium](https://cesium.com/) und [Deck.gl](https://deck.gl/).
+Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers.org/), [Cesium](https://cesium.com/), [Leaflet](https://leafletjs.com/) und [Deck.gl](https://deck.gl/).
 
 [![npm version](https://badge.fury.io/js/%40pt9912%2Fv-map.svg)](https://badge.fury.io/js/%40pt9912%2Fv-map)
 [![CI Status](https://github.com/pt9912/v-map/actions/workflows/test.yml/badge.svg)](https://github.com/pt9912/v-map/actions)
@@ -12,9 +12,9 @@ Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers
 
 ## ✨ Features
 
-- **Mehrere Provider**: OpenLayers, Cesium, Google Maps (als Tile-Layer)
+- **Mehrere Provider**: OpenLayers, Leaflet, Cesium und Deck.gl
 - **Layer-Gruppen**: Basemap- und Overlay-Verwaltung mit Sichtbarkeitssteuerung
-- **GPU-beschleunigte Layer**: Integration von Deck.gl für große Datensätze
+- **GPU-beschleunigte Provider**: Integration von Deck.gl für große Datensätze
 - **Touch-Optimiert**: Funktioniert auf Desktop und mobilen Geräten
 - **TypeScript-Unterstützung**: Vollständige Typdefinitionen
 - **Storybook-Dokumentation**: Interaktive Beispiele und API-Docs
@@ -39,10 +39,10 @@ pnpm add @pt9912/v-map
 ```tsx
 import { VMap } from '@pt9912/v-map';
 
-<VMap provider="openlayers" style={{ height: '400px' }}>
+<v-map flavour="ol" style={{ height: '400px' }}>
   <v-map-layer-osm></v-map-layer-osm>
   <v-map-layer-geojson src="data/points.geojson"></v-map-layer-geojson>
-</VMap>;
+</v-map>;
 ```
 
 - `provider` unterstützt aktuell: **`openlayers`**, **`cesium`**
@@ -81,6 +81,7 @@ Dieses Projekt nutzt **Jest** (Stencil integriert) und **Vitest** (für Utility-
 ```bash
 pnpm test       # Unit- und Komponententests
 pnpm test:spec  # Spezifikationstests
+pnpm test:e2e   # E2E tests
 ```
 
 ---
