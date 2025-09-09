@@ -1,9 +1,10 @@
 # V-Map 🗺️
 
-**Eine moderne, provider-unabhängige Kartenkomponente für Webanwendungen**
-Built with [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers.org/), [Cesium](https://cesium.com/) und [Deck.gl](https://deck.gl/).
+**Eine moderne, provider-unabhängige Kartenkomponente für Webanwendungen.**  
+Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers.org/), [Cesium](https://cesium.com/) und [Deck.gl](https://deck.gl/).
 
-[![npm version](https://badge.fury.io/js/%40pt9912%2Fv-map.svg)](https://badge.fury.io/js/%40pt9912/v-map/actions)
+[![npm version](https://badge.fury.io/js/%40pt9912%2Fv-map.svg)](https://badge.fury.io/js/%40pt9912%2Fv-map)
+[![CI Status](https://github.com/pt9912/v-map/actions/workflows/test.yml/badge.svg)](https://github.com/pt9912/v-map/actions)
 [![Storybook](https://img.shields.io/badge/Storybook-%23FF4785?logo=storybook&logoColor=white)](https://pt9912.github.io/v-map/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -17,6 +18,9 @@ Built with [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers
 - **Touch-Optimiert**: Funktioniert auf Desktop und mobilen Geräten
 - **TypeScript-Unterstützung**: Vollständige Typdefinitionen
 - **Storybook-Dokumentation**: Interaktive Beispiele und API-Docs
+- **Testing**: Jest/Vitest für Unit- und Komponententests
+- **CI/CD**: Automatisiertes Testing und Releases via GitHub Actions
+- **Devcontainer-Support**: Voll ausgestattete Entwicklungsumgebung mit Docker
 
 ---
 
@@ -24,255 +28,134 @@ Built with [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers
 
 ```bash
 npm install @pt9912/v-map
-```
-
-oder mit yarn:
-
-```bash
-yarn add @pt9912/v-map
+# oder mit pnpm
+pnpm add @pt9912/v-map
 ```
 
 ---
 
-## 🚀 Schnellstart
+## 🚀 Verwendung
 
-### 1. Grundlegende Karte
+```tsx
+import { VMap } from '@pt9912/v-map';
 
-```
-<v-map flavour="ol" center="8.5417,49.0069" zoom="10">
-  <v-map-layer-group basemap="true">
-    <v-map-layer-osm></v-map-layer-osm>
-  </v-map-layer-group>
-  <v-map-layer-group title="Daten">
-    <v-map-layer-geojson url="data.geojson"></v-map-layer-geojson>
-  </v-map-layer-group>
-</v-map>
+<VMap provider="openlayers" style={{ height: '400px' }}>
+  <v-map-layer-osm></v-map-layer-osm>
+  <v-map-layer-geojson src="data/points.geojson"></v-map-layer-geojson>
+</VMap>;
 ```
 
-### 2. Mit Google Maps (als Basemap)
-
-```
-<v-map flavour="ol" center="8.5417,49.0069" zoom="10">
-  <v-map-layer-group basemap="true">
-    <v-map-layer-google api-key="DEIN_API_KEY" map-type="roadmap" visible="true"></v-map-layer-google>
-  </v-map-layer-group>
-</v-map>
-```
-
----
-
-## 📖 API-Dokumentation
-
-### `<v-map>`
-
-**Props:**
-| Prop | Typ | Standardwert | Beschreibung |
-|------------|-------------------------|--------------|-----------------------------------------------------------------------------|
-| `flavour` | `'ol' | 'cesium'` | `'ol'` | Karten-Provider: OpenLayers (`'ol'`) oder Cesium (`'cesium'`) |
-| `center` | `string` (Lon,Lat) | `'0,0'` | Zentrum der Karte (z. B. `"8.5417,49.0069"` für Karlsruhe) |
-| `zoom` | `number` | `2` | Zoom-Level (0 = Welt, 20 = Gebäude) |
-| `style` | `CSSStyleDeclaration` | `{}` | CSS-Stile für die Karte (z. B. `width`, `height`) |
-
-**Methoden:**
-| Methode | Parameter | Beschreibung |
-|------------------|-------------------------------|----------------------------------------------|
-| `addLayer()` | `layer: any` | Fügt einen Layer zur Karte hinzu |
-| `setView()` | `coordinates: [number, number], zoom: number` | Setzt die Ansicht auf neue Koordinaten/Zoom |
-
----
-
-### `<v-map-layer-group>`
-
-**Props:**
-| Prop | Typ | Standardwert | Beschreibung |
-|-----------|----------|--------------|-----------------------------------------------------------------------------|
-| `basemap` | `boolean`| `false` | Definiert die Gruppe als Basemap (zIndex=0) oder Overlay (zIndex=1) |
-| `title` | `string` | `''` | Titel der Layer-Gruppe (für interne Verwaltung) |
-
-**Methoden:**
-| Methode | Parameter | Beschreibung |
-|--------------------------|-----------------|-----------------------------------------------------------------------------|
-| `addLayer()` | `layer: any` | Fügt einen Layer zur Gruppe hinzu |
-| `setActiveBasemapLayer()`| `layer: any` | Setzt den aktiven Basemap-Layer (nur für `basemap="true"`) |
-
----
-
-### `<v-map-layer-google>`
-
-**Props:**
-| Prop | Typ | Standardwert | Beschreibung |
-|-----------|------------------------------|--------------|-----------------------------------------------------------------------------|
-| `api-key` | `string` | `-` | **Pflicht:** Google Maps API-Key (nur für Maps Tile API nötig) |
-| `map-type`| `'roadmap' | 'satellite' | 'hybrid' | 'terrain'` | `'roadmap'` | Kartentyp |
-| `visible` | `boolean` | `false` | Sichtbarkeit des Layers (nur ein Basemap-Layer kann sichtbar sein) |
-
-**Beispiel:**
-
-```
-<v-map-layer-google api-key="DEIN_API_KEY" map-type="satellite" visible="true"></v-map-layer-google>
-```
-
----
-
-### `<v-map-layer-osm>`
-
-Einfacher OpenStreetMap-Layer.
-**Props:**
-| Prop | Typ | Standardwert | Beschreibung |
-|-----------|----------|--------------|---------------------------------|
-| `visible` | `boolean`| `false` | Sichtbarkeit des Layers |
-
----
-
-### `<v-map-layer-geojson>`
-
-Lädt GeoJSON-Daten und zeigt sie als Vektor-Layer an.
-**Props:**
-| Prop | Typ | Standardwert | Beschreibung |
-|-----------|----------|--------------|---------------------------------|
-| `url` | `string` | `-` | **Pflicht:** URL zur GeoJSON-Datei |
-| `visible` | `boolean`| `true` | Sichtbarkeit des Layers |
-
-**Beispiel:**
-
-```
-<v-map-layer-geojson url="https://example.com/data.geojson" visible="true"></v-map-layer-geojson>
-```
-
----
-
-## 🎨 Basemap-Wechsel (Beispiel)
-
-```
-<v-map flavour="ol" center="8.5417,49.0069" zoom="10">
-  <v-map-layer-group basemap="true">
-    <!-- Nur einer dieser Layer ist gleichzeitig sichtbar -->
-    <v-map-layer-google api-key="..." map-type="roadmap" visible="true"></v-map-layer-google>
-    <v-map-layer-google api-key="..." map-type="satellite" visible="false"></v-map-layer-google>
-    <v-map-layer-osm visible="false"></v-map-layer-osm>
-  </v-map-layer-group>
-
-  <!-- UI-Steuerung -->
-  <div class="basemap-switcher">
-    <button onclick="switchTo('roadmap')">Straßenkarte</button>
-    <button onclick="switchTo('satellite')">Satellit</button>
-    <button onclick="switchTo('osm')">OpenStreetMap</button>
-  </div>
-
-<script>
-  function switchTo(type) {
-    document.querySelectorAll('v-map-layer-group[basemap="true"] v-map-layer-*').forEach(layer => {
-      layer.setAttribute('visible', 'false');
-    });
-    if (type === 'osm') {
-      document.querySelector('v-map-layer-osm').setAttribute('visible', 'true');
-    } else {
-      document.querySelector(`v-map-layer-google[map-type="${type}"]`).setAttribute('visible', 'true');
-    }
-  }
-</script>
-```
-
----
-
-## 📚 Beispiele
-
-### 1. Cesium 3D-Karte mit GeoJSON-Overlay
-
-```
-<v-map flavour="cesium" center="8.5417,49.0069" zoom="10">
-  <v-map-layer-group basemap="true">
-    <!-- Cesium hat keine explizite Basemap-Komponente, nutze die Standard-Ansicht -->
-  </v-map-layer-group>
-  <v-map-layer-group title="3D-Gebäude">
-    <v-map-layer-geojson url="buildings.geojson"></v-map-layer-geojson>
-  </v-map-layer-group>
-</v-map>
-```
-
-### 2. OpenLayers mit mehreren Overlays
-
-```
-<v-map flavour="ol" center="8.5417,49.0069" zoom="12">
-  <v-map-layer-group basemap="true">
-    <v-map-layer-osm visible="true"></v-map-layer-osm>
-  </v-map-layer-group>
-  <v-map-layer-group title="Verkehr">
-    <v-map-layer-geojson url="roads.geojson" visible="true"></v-map-layer-geojson>
-  </v-map-layer-group>
-  <v-map-layer-group title="Points of Interest">
-    <v-map-layer-geojson url="pois.geojson" visible="true"></v-map-layer-geojson>
-  </v-map-layer-group>
-</v-map>
-```
+- `provider` unterstützt aktuell: **`openlayers`**, **`cesium`**
+- Layer können kombiniert und gruppiert werden (`<v-map-layer-group>`).
 
 ---
 
 ## 🛠️ Entwicklung
 
-### Vorraussetzungen
+### Voraussetzungen
 
-- Node.js (v16 oder höher)
-- npm oder yarn
+- Node.js ≥ 22
+- pnpm ≥ 9
+- Docker (für Devcontainer-Umgebung)
 
-### Lokale Entwicklung
-
-1. Repository klonen:
-   ```bash
-   git clone https://github.com/pt9912/v-map.git
-   cd v-map
-   ```
-2. Abhängigkeiten installieren:
-   ```bash
-   npm install
-   ```
-3. Entwicklungsserver starten:
-   ```bash
-   npm run dev
-   ```
-4. Storybook starten:
-   ```bash
-   npm run storybook
-   ```
-
-### Build
+### Setup
 
 ```bash
-npm run build
+pnpm install
 ```
 
-### Tests
+### Dev-Server starten
 
 ```bash
-npm test
+pnpm start
+```
+
+Läuft standardmäßig auf: [http://localhost:3333](http://localhost:3333)
+
+---
+
+## 🧪 Tests
+
+Dieses Projekt nutzt **Jest** (Stencil integriert) und **Vitest** (für Utility-Funktionen).
+
+```bash
+pnpm test       # Unit- und Komponententests
+pnpm test:spec  # Spezifikationstests
 ```
 
 ---
 
-## 📦 Veröffentlichen
+## 📖 Storybook
 
-Dieses Projekt nutzt [semantic-release](https://github.com/semantic-release/semantic-release) für automatische Versionierung.
+Interaktive Dokumentation der Komponenten:
 
-**Commit-Richtlinien:**
+```bash
+pnpm storybook
+```
 
-- `fix: ...` → Patch Release (0.0.1)
-- `feat: ...` → Minor Release (0.1.0)
-- `BREAKING CHANGE: ...` → Major Release (1.0.0)
+Erreichbar unter: [http://localhost:6006](http://localhost:6006)
+
+---
+
+## 🐳 Devcontainer
+
+Das Projekt enthält eine vorkonfigurierte **Devcontainer-Umgebung**:
+
+- Basierend auf `node:22`
+- Enthält pnpm, GitHub CLI, Linting/Prettier, Jest/Vitest
+- Automatisches Setup via `post-create.sh`
+
+Öffne das Repo in [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) oder [GitHub Codespaces].
+
+---
+
+## 🔄 Build & Release
+
+### Build
+
+```bash
+pnpm build
+```
+
+Erzeugt distributierbare Bundles (`dist/`).
+
+### Release
+
+Releases werden über [semantic-release](https://semantic-release.gitbook.io/) automatisiert:
+
+- Commit Messages nach [Conventional Commits](https://www.conventionalcommits.org/)
+- Automatisches Versioning, Changelog & npm-Publish
+
+```bash
+pnpm release
+```
+
+---
+
+## 📂 Projektstruktur
+
+```
+v-map/
+├── src/
+│   ├── components/
+│   │   ├── v-map/               # Hauptkarte
+│   │   ├── v-map-layer-osm/     # OSM-Basemap
+│   │   ├── v-map-layer-geojson/ # GeoJSON-Daten
+│   │   └── v-map-layer-group/   # Layer-Gruppierung
+│   └── index.ts                 # Entry Point
+├── .devcontainer/               # VS Code/Codespaces Setup
+├── .github/workflows/           # CI/CD Pipelines
+├── jest.config.ts               # Jest-Konfiguration
+├── vite.config.ts               # Vite-Build
+├── vitest.config.ts             # Vitest-Tests
+└── stencil.config.ts            # Stencil-Konfiguration
+```
 
 ---
 
 ## 🤝 Contributing
 
-Pull Requests sind willkommen! Für größere Änderungen bitte zuerst ein Issue erstellen.
-
-1. Forke das Repository
-2. Erstelle einen Feature-Branch (`git checkout -b feature/xy`)
-3. Commite deine Änderungen (`git commit -am 'Add feature xy'`)
-4. Pushe den Branch (`git push origin feature/xy`)
-5. Erstelle einen Pull Request
+Pull Requests und Issues sind willkommen!  
+Bitte halte dich an [Conventional Commits](https://www.conventionalcommits.org/).
 
 ---
-
-## 📄 Lizenz
-
-[MIT](LICENSE) © [pt9912]
