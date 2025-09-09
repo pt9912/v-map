@@ -45,7 +45,7 @@ import { VMap } from '@pt9912/v-map';
 </v-map>;
 ```
 
-- `provider` unterstützt aktuell: **`openlayers`**, **`cesium`**
+- `flavour` gibt es aktuell in: **`ol`**, **`cesium`**, **`leaflet`**, **`deck`**
 - Layer können kombiniert und gruppiert werden (`<v-map-layer-group>`).
 
 ---
