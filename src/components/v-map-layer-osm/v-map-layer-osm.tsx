@@ -68,12 +68,14 @@ export class VMapLayerOSM implements VMapLayer {
       this.mapProvider = mapEvent.mapProvider;
       await this.addToMapInternal();
     }) as EventListener);
+    /*
     vmap['el'].addEventListener(VMapEvents.MapProviderReady, ((
       event: CustomEvent<MapProviderDetail>,
     ) => {
       var mapEvent: MapProviderDetail = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
     }) as EventListener);
+     */
   }
 
   async componentWillLoad() {

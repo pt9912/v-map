@@ -7,10 +7,12 @@
 
 ## Properties
 
-| Property      | Attribute      | Description | Type          | Default     |
-| ------------- | -------------- | ----------- | ------------- | ----------- |
-| `url`         | `url`          |             | `string`      | `undefined` |
-| `vectorStyle` | `vector-style` |             | `StyleConfig` | `undefined` |
+| Property      | Attribute      | Description             | Type          | Default     |
+| ------------- | -------------- | ----------------------- | ------------- | ----------- |
+| `opacity`     | `opacity`      |                         | `number`      | `1.0`       |
+| `url`         | `url`          |                         | `string`      | `undefined` |
+| `vectorStyle` | `vector-style` |                         | `StyleConfig` | `undefined` |
+| `visible`     | `visible`      | Sichtbarkeit des Layers | `boolean`     | `true`      |
 
 
 ## Methods

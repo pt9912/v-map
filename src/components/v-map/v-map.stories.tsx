@@ -57,3 +57,19 @@ export const CesiumFlavour: Story = {
     );
   },
 };
+
+export const DeckFlavour: Story = {
+  args: { flavour: 'deck', center: '8.5417,49.0069', zoom: 10 },
+  render: props => {
+    return (
+      <v-map
+        {...props}
+        style={{ position: 'relative', height: '600px', width: '600px' }}
+      >
+        <v-map-layer-group group-title="Basis-Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layer-group>
+      </v-map>
+    );
+  },
+};

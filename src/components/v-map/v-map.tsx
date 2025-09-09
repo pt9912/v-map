@@ -230,7 +230,8 @@ export class VMap {
     if (!el) {
       el = document.createElement('div');
       el.id = 'map';
-      el.style.cssText = 'width:100%;height:100%;display:block;';
+      el.style.cssText =
+        'position:relative;width:100%;height:100%;display:block;';
       this.el.shadowRoot!.appendChild(el);
     }
     return el;
@@ -238,7 +239,8 @@ export class VMap {
 
   render() {
     console.log('v-map - render');
-    return <div id="map-container"></div>;
+    //return <div id="map-container"></div>;
+    return <slot></slot>;
   }
 
   // render() {

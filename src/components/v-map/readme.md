@@ -7,11 +7,20 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type               | Default |
-| --------- | --------- | ----------- | ------------------ | ------- |
-| `center`  | `center`  |             | `string`           | `'0,0'` |
-| `flavour` | `flavour` |             | `"cesium" \| "ol"` | `'ol'`  |
-| `zoom`    | `zoom`    |             | `number`           | `2`     |
+| Property              | Attribute                | Description                                             | Type                                          | Default |
+| --------------------- | ------------------------ | ------------------------------------------------------- | --------------------------------------------- | ------- |
+| `center`              | `center`                 |                                                         | `string`                                      | `'0,0'` |
+| `cssMode`             | `css-mode`               |                                                         | `"bundle" \| "cdn" \| "inline-min" \| "none"` | `'cdn'` |
+| `flavour`             | `flavour`                |                                                         | `"cesium" \| "deck" \| "leaflet" \| "ol"`     | `'ol'`  |
+| `useDefaultImportMap` | `use-default-import-map` | Falls true, injiziert v-map automatisch die Import-Map. | `boolean`                                     | `true`  |
+| `zoom`                | `zoom`                   |                                                         | `number`                                      | `2`     |
+
+
+## Events
+
+| Event              | Description | Type                             |
+| ------------------ | ----------- | -------------------------------- |
+| `mapProviderReady` |             | `CustomEvent<MapProviderDetail>` |
 
 
 ## Methods
@@ -39,6 +48,16 @@ Type: `Promise<void>`
 #### Returns
 
 Type: `Promise<MapProvider>`
+
+
+
+### `isMapProviderAvailable() => Promise<boolean>`
+
+
+
+#### Returns
+
+Type: `Promise<boolean>`
 
 
 

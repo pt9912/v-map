@@ -5,6 +5,21 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property  | Attribute | Description             | Type      | Default |
+| --------- | --------- | ----------------------- | --------- | ------- |
+| `opacity` | `opacity` |                         | `number`  | `1.0`   |
+| `visible` | `visible` | Sichtbarkeit des Layers | `boolean` | `true`  |
+
+
+## Events
+
+| Event   | Description | Type                |
+| ------- | ----------- | ------------------- |
+| `ready` |             | `CustomEvent<void>` |
+
+
 ## Methods
 
 ### `addToMap(mapElement: HTMLVMapElement) => Promise<void>`

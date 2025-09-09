@@ -40,9 +40,11 @@ export interface StyleConfig {
   strokeWidth?: number;
 }
 
+export type Color = string | [number, number, number, number?];
+
 export type LayerConfig =
   | { type: 'geojson'; url: string; style?: StyleConfig; groupId?: string }
-  | { type: 'osm'; groupId?: string }
+  | { type: 'osm'; groupId?: string; url?: string }
   | {
       type: 'xyz';
       url: string;
@@ -70,5 +72,32 @@ export type LayerConfig =
       url: string;
       layers: string;
       params?: Record<string, string>;
+      groupId?: string;
+    }
+  | {
+      type: 'scatterplot';
+
+      id?: string;
+      data?: any; //dataSource,
+      getFillColor?: Color;
+      getRadius?: number;
+      opacity?: number;
+      visible?: boolean;
+
+      getTooltip?: (info: any) => any;
+      onClick?: (info: any) => void;
+      onHover?: (info: any) => void;
+      groupId?: string;
+    }
+  | {
+      type: 'terrain';
+      elevationData: string;
+      texture?: string;
+      elevationDecoder?: { r: number; g: number; b: number; offset: number };
+      wireframe?: boolean;
+      color?: [number, number, number];
+      minZoom?: number;
+      maxZoom?: number;
+      meshMaxError?: number;
       groupId?: string;
     };
