@@ -40,8 +40,12 @@ pnpm add @pt9912/v-map
 import { VMap } from '@pt9912/v-map';
 
 <v-map flavour="ol" style={{ height: '400px' }}>
-  <v-map-layer-osm></v-map-layer-osm>
-  <v-map-layer-geojson src="data/points.geojson"></v-map-layer-geojson>
+  <v-map-layer-group group-title="Basis-Layer" basemap="true">
+    <v-map-layer-osm></v-map-layer-osm>
+  </v-map-layer-group>
+  <v-map-layer-group group-title="Vector-Layer">
+    <v-map-layer-geojson src="data/points.geojson"></v-map-layer-geojson>
+  </v-map-layer-group>
 </v-map>;
 ```
 
