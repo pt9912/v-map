@@ -27,7 +27,9 @@ mkdir -p "$PUPPETEER_CACHE_DIR"
 
 echo "• Installing chrome-headless-shell to ${PUPPETEER_CACHE_DIR}"
 # Versuche Cache-Ziel; manche Umgebungen ignorieren -P und legen im CWD ab
-pnpm dlx @puppeteer/browsers install chrome-headless-shell@stable -P "$PUPPETEER_CACHE_DIR" || true
+pushd "$PUPPETEER_CACHE_DIR"
+pnpm dlx @puppeteer/browsers install chrome-headless-shell@stable || true
+popd
 
 # Pfad robust auflösen: suche in (1) Cache, (2) Projektordner, (3) Fallbacks
 find_chrome() {
@@ -68,6 +70,10 @@ if [[ "${BOOTSTRAP:-0}" == "1" ]]; then
   fi
   # Stencil CLI ist über @stencil/core schon abgedeckt; keine globale Installation nötig.
 fi
+
+# Chrome immer ohne Sandbox starten (für Tools, die Flags nicht durchreichen)
+echo "export PRESS_CHROMIUM_ARGS='--no-sandbox --disable-setuid-sandbox'" >> "${HOME}/.bashrc"
+echo "export CHROMIUM_FLAGS='--no-sandbox --disable-setuid-sandbox'" >> "${HOME}/.bashrc"
 
 echo "✅ Dev-Container ist bereit."
 echo "   • Build:        pnpm run build"
