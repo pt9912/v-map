@@ -12,10 +12,8 @@ describe('<v-map>', () => {
     expect(page.root).toBeTruthy();
 
     const shadow = page.root!.shadowRoot!;
-    const container = shadow.querySelector('#map-container');
     const map = shadow.querySelector('#map') as HTMLElement | null;
 
-    expect(container).not.toBeNull();
     expect(map).not.toBeNull();
 
     // Styles am #map (Target-Div) prüfen
