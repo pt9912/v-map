@@ -1,0 +1,1900 @@
+{
+  "timestamp": "2025-09-09T15:07:12",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "4.36.3",
+    "typescriptVersion": "5.5.4"
+  },
+  "components": [
+    {
+      "filePath": "src/components/v-map/v-map.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map",
+      "readme": "# v-map\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "center",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "center",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'0,0'"
+            }
+          ],
+          "default": "'0,0'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "cssMode",
+          "type": "\"bundle\" | \"cdn\" | \"inline-min\" | \"none\"",
+          "complexType": {
+            "original": "CssMode",
+            "resolved": "\"bundle\" | \"cdn\" | \"inline-min\" | \"none\"",
+            "references": {
+              "CssMode": {
+                "location": "import",
+                "path": "./map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::CssMode"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "css-mode",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'cdn'"
+            }
+          ],
+          "default": "'cdn'",
+          "values": [
+            {
+              "value": "bundle",
+              "type": "string"
+            },
+            {
+              "value": "cdn",
+              "type": "string"
+            },
+            {
+              "value": "inline-min",
+              "type": "string"
+            },
+            {
+              "value": "none",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "flavour",
+          "type": "\"cesium\" | \"deck\" | \"leaflet\" | \"ol\"",
+          "complexType": {
+            "original": "Flavour",
+            "resolved": "\"cesium\" | \"deck\" | \"leaflet\" | \"ol\"",
+            "references": {
+              "Flavour": {
+                "location": "import",
+                "path": "./map-provider/provider-factory",
+                "id": "src/components/v-map/map-provider/provider-factory.ts::Flavour"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "flavour",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'ol'"
+            }
+          ],
+          "default": "'ol'",
+          "values": [
+            {
+              "value": "cesium",
+              "type": "string"
+            },
+            {
+              "value": "deck",
+              "type": "string"
+            },
+            {
+              "value": "leaflet",
+              "type": "string"
+            },
+            {
+              "value": "ol",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "useDefaultImportMap",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "use-default-import-map",
+          "reflectToAttr": false,
+          "docs": "Falls true, injiziert v-map automatisch die Import-Map.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "zoom",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "2"
+            }
+          ],
+          "default": "2",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addLayer",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(layerConfig: any) => Promise<void>",
+            "parameters": [
+              {
+                "name": "layerConfig",
+                "type": "any",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addLayer(layerConfig: any) => Promise<void>",
+          "parameters": [
+            {
+              "name": "layerConfig",
+              "type": "any",
+              "docs": ""
+            }
+          ],
+          "docs": "",
+          "docsTags": []
+        },
+        {
+          "name": "getMapProvider",
+          "returns": {
+            "type": "Promise<MapProvider>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<MapProvider>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "MapProvider": {
+                "location": "import",
+                "path": "./map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+              }
+            },
+            "return": "Promise<MapProvider>"
+          },
+          "signature": "getMapProvider() => Promise<MapProvider>",
+          "parameters": [],
+          "docs": "",
+          "docsTags": []
+        },
+        {
+          "name": "isMapProviderAvailable",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isMapProviderAvailable() => Promise<boolean>",
+          "parameters": [],
+          "docs": "",
+          "docsTags": []
+        },
+        {
+          "name": "setView",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(coordinates: [number, number], zoom: number) => Promise<void>",
+            "parameters": [
+              {
+                "name": "coordinates",
+                "type": "[number, number]",
+                "docs": ""
+              },
+              {
+                "name": "zoom",
+                "type": "number",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "setView(coordinates: [number, number], zoom: number) => Promise<void>",
+          "parameters": [
+            {
+              "name": "coordinates",
+              "type": "[number, number]",
+              "docs": ""
+            },
+            {
+              "name": "zoom",
+              "type": "number",
+              "docs": ""
+            }
+          ],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "mapProviderReady",
+          "detail": "MapProviderDetail",
+          "bubbles": true,
+          "complexType": {
+            "original": "MapProviderDetail",
+            "resolved": "MapProviderDetail",
+            "references": {
+              "MapProviderDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::MapProviderDetail"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": false,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-geojson/v-map-layer-geojson.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-geojson",
+      "readme": "# v-map-layer-geojson\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "vectorStyle",
+          "type": "StyleConfig",
+          "complexType": {
+            "original": "StyleConfig",
+            "resolved": "StyleConfig",
+            "references": {
+              "StyleConfig": {
+                "location": "import",
+                "path": "../v-map/map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::StyleConfig"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "vector-style",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "StyleConfig"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addToMap",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(mapElement: HTMLVMapElement) => Promise<void>",
+            "parameters": [
+              {
+                "name": "mapElement",
+                "type": "HTMLVMapElement",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "HTMLVMapElement": {
+                "location": "global",
+                "id": "global::HTMLVMapElement"
+              },
+              "MapProvider": {
+                "location": "import",
+                "path": "../v-map/map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+              },
+              "HTMLVMapLayerGroupElement": {
+                "location": "global",
+                "id": "global::HTMLVMapLayerGroupElement"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addToMap(mapElement: HTMLVMapElement) => Promise<void>",
+          "parameters": [
+            {
+              "name": "mapElement",
+              "type": "HTMLVMapElement",
+              "docs": ""
+            }
+          ],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-google/v-map-layer-google.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-google",
+      "readme": "# v-map-layer-google\n\n\n",
+      "docs": "Google Maps Basemap Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "apiKey",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "api-key",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "language",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "mapType",
+          "type": "\"hybrid\" | \"roadmap\" | \"satellite\" | \"terrain\"",
+          "complexType": {
+            "original": "| 'roadmap'\n    | 'satellite'\n    | 'terrain'\n    | 'hybrid'",
+            "resolved": "\"hybrid\" | \"roadmap\" | \"satellite\" | \"terrain\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "map-type",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'roadmap'"
+            }
+          ],
+          "default": "'roadmap'",
+          "values": [
+            {
+              "value": "hybrid",
+              "type": "string"
+            },
+            {
+              "value": "roadmap",
+              "type": "string"
+            },
+            {
+              "value": "satellite",
+              "type": "string"
+            },
+            {
+              "value": "terrain",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "region",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "region",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-group/v-map-layer-group.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-group",
+      "readme": "# v-map-layer-group\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "basemap",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "basemap",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "groupId",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "group-id",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "Math.random().toString(36).slice(2, 11)"
+            }
+          ],
+          "default": "Math.random().toString(36).slice(2, 11)",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addLayer",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(layerConfig: LayerConfig) => Promise<void>",
+            "parameters": [
+              {
+                "name": "layerConfig",
+                "type": "{ type: \"geojson\"; url: string; style?: StyleConfig; groupId?: string; } | { type: \"osm\"; groupId?: string; url?: string; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; groupId?: string; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; } | { type: \"scatterplot\"; id?: string; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; }",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "LayerConfig": {
+                "location": "import",
+                "path": "../v-map/map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::LayerConfig"
+              },
+              "HTMLVMapElement": {
+                "location": "global",
+                "id": "global::HTMLVMapElement"
+              },
+              "MapProvider": {
+                "location": "import",
+                "path": "../v-map/map-provider/map-provider",
+                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addLayer(layerConfig: LayerConfig) => Promise<void>",
+          "parameters": [
+            {
+              "name": "layerConfig",
+              "type": "{ type: \"geojson\"; url: string; style?: StyleConfig; groupId?: string; } | { type: \"osm\"; groupId?: string; url?: string; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; groupId?: string; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; } | { type: \"scatterplot\"; id?: string; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; }",
+              "docs": ""
+            }
+          ],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-osm/v-map-layer-osm.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-osm",
+      "readme": "# v-map-layer-osm\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "addToMap",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(mapElement: HTMLVMapElement) => Promise<void>",
+            "parameters": [
+              {
+                "name": "mapElement",
+                "type": "HTMLVMapElement",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "HTMLVMapElement": {
+                "location": "global",
+                "id": "global::HTMLVMapElement"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "addToMap(mapElement: HTMLVMapElement) => Promise<void>",
+          "parameters": [
+            {
+              "name": "mapElement",
+              "type": "HTMLVMapElement",
+              "docs": ""
+            }
+          ],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-scatterplot",
+      "readme": "# v-map-layer-scatterplot\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "data",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "data",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "getFillColor",
+          "type": "[number, number, number, number?] | string",
+          "complexType": {
+            "original": "Color",
+            "resolved": "[number, number, number, number?] | string",
+            "references": {
+              "Color": {
+                "location": "local",
+                "path": "/workspaces/v-map/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
+                "id": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx::Color"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "get-fill-color",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'#3388ff'"
+            }
+          ],
+          "default": "'#3388ff'",
+          "values": [
+            {
+              "type": "[number, number, number, number?]"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "getRadius",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "get-radius",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-wkt/v-map-layer-wkt.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wkt",
+      "readme": "# v-map-layer-wkt\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wkt",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wkt",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-wms/v-map-layer-wms.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wms",
+      "readme": "# v-map-layer-wms\n\n\n",
+      "docs": "OGC WMS Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "format",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "format",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'image/png'"
+            }
+          ],
+          "default": "'image/png'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "layers",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "layers",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "styles",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "styles",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tiled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tiled",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "transparent",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "transparent",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-xyz/v-map-layer-xyz.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-xyz",
+      "readme": "# v-map-layer-xyz\n\n\n",
+      "docs": "XYZ Tile Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "attributions",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "attributions",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "subdomains",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "subdomains",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tileSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tile-size",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    }
+  ],
+  "typeLibrary": {
+    "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx::Color": {
+      "declaration": "export type Color = string | [number, number, number, number?];",
+      "docstring": "",
+      "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
+    },
+    "src/components/v-map/map-provider/provider-factory.ts::Flavour": {
+      "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",
+      "docstring": "",
+      "path": "src/components/v-map/map-provider/provider-factory.ts"
+    },
+    "src/components/v-map/map-provider/map-provider.ts::CssMode": {
+      "declaration": "export type CssMode = 'inline-min' | 'cdn' | 'none' | 'bundle';",
+      "docstring": "",
+      "path": "src/components/v-map/map-provider/map-provider.ts"
+    },
+    "src/utils/events.ts::MapProviderDetail": {
+      "declaration": "export interface MapProviderDetail {\n  mapProvider: MapProvider;\n}",
+      "docstring": "",
+      "path": "src/utils/events.ts"
+    },
+    "src/components/v-map/map-provider/map-provider.ts::MapProvider": {
+      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayer(layer: LayerConfig): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  /** Optional: von v-map-layer-group genutzt, wenn vorhanden */\n  ensureGroup?(\n    groupId: string,\n    opts?: { basemap?: boolean; zIndex?: number },\n  ): Promise<void>;\n}",
+      "docstring": "",
+      "path": "src/components/v-map/map-provider/map-provider.ts"
+    },
+    "src/components/v-map/map-provider/map-provider.ts::StyleConfig": {
+      "declaration": "export interface StyleConfig {\n  fillColor?: string;\n  strokeColor?: string;\n  strokeWidth?: number;\n}",
+      "docstring": "",
+      "path": "src/components/v-map/map-provider/map-provider.ts"
+    },
+    "src/components/v-map/map-provider/map-provider.ts::LayerConfig": {
+      "declaration": "export type LayerConfig =\n  | { type: 'geojson'; url: string; style?: StyleConfig; groupId?: string }\n  | { type: 'osm'; groupId?: string; url?: string }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n    }\n  | { type: 'arcgis'; url: string; groupId?: string }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      groupId?: string;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      params?: Record<string, string>;\n      groupId?: string;\n    }\n  | {\n      type: 'scatterplot';\n\n      id?: string;\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n    };",
+      "docstring": "",
+      "path": "src/components/v-map/map-provider/map-provider.ts"
+    }
+  }
+}
