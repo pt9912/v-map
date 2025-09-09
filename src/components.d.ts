@@ -8,9 +8,11 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Flavour } from "./components/v-map/map-provider/provider-factory";
 import { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 import { MapProviderDetail } from "./utils/events";
+import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { Flavour } from "./components/v-map/map-provider/provider-factory";
 export { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
 export { MapProviderDetail } from "./utils/events";
+export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export namespace Components {
     interface VMap {
         "addLayer": (layerConfig: any) => Promise<void>;
@@ -53,6 +55,29 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    /**
+     * Google Maps Basemap Layer
+     */
+    interface VMapLayerGoogle {
+        "apiKey"?: string;
+        "language"?: string;
+        /**
+          * @default 'roadmap'
+         */
+        "mapType": | 'roadmap'
+    | 'satellite'
+    | 'terrain'
+    | 'hybrid';
+        /**
+          * @default 1.0
+         */
+        "opacity": number;
+        "region"?: string;
+        /**
+          * @default true
+         */
+        "visible": boolean;
+    }
     interface VMapLayerGroup {
         "addLayer": (layerConfig: LayerConfig) => Promise<void>;
         /**
@@ -84,14 +109,112 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface VMapLayerScatterplot {
+        "data"?: string;
+        /**
+          * @default '#3388ff'
+         */
+        "getFillColor": Color;
+        /**
+          * @default 1000
+         */
+        "getRadius": number;
+        /**
+          * @default 1.0
+         */
+        "opacity": number;
+        "url"?: string;
+        /**
+          * @default true
+         */
+        "visible": boolean;
+    }
+    interface VMapLayerWkt {
+        /**
+          * @default 1.0
+         */
+        "opacity": number;
+        "url"?: string;
+        /**
+          * @default true
+         */
+        "visible": boolean;
+        "wkt"?: string;
+    }
+    /**
+     * OGC WMS Layer
+     */
+    interface VMapLayerWms {
+        /**
+          * @default 'image/png'
+         */
+        "format": string;
+        "layers": string;
+        /**
+          * @default 1.0
+         */
+        "opacity": number;
+        "styles"?: string;
+        /**
+          * @default true
+         */
+        "tiled": boolean;
+        /**
+          * @default true
+         */
+        "transparent": boolean;
+        "url": string;
+        /**
+          * @default true
+         */
+        "visible": boolean;
+    }
+    /**
+     * XYZ Tile Layer
+     */
+    interface VMapLayerXyz {
+        "attributions"?: string;
+        "maxZoom"?: number;
+        /**
+          * @default 1.0
+         */
+        "opacity": number;
+        "subdomains"?: string;
+        "tileSize"?: number;
+        "url": string;
+        /**
+          * @default true
+         */
+        "visible": boolean;
+    }
 }
 export interface VMapCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapElement;
 }
+export interface VMapLayerGoogleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerGoogleElement;
+}
 export interface VMapLayerOsmCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerOsmElement;
+}
+export interface VMapLayerScatterplotCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerScatterplotElement;
+}
+export interface VMapLayerWktCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerWktElement;
+}
+export interface VMapLayerWmsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerWmsElement;
+}
+export interface VMapLayerXyzCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerXyzElement;
 }
 declare global {
     interface HTMLVMapElementEventMap {
@@ -117,6 +240,26 @@ declare global {
         prototype: HTMLVMapLayerGeojsonElement;
         new (): HTMLVMapLayerGeojsonElement;
     };
+    interface HTMLVMapLayerGoogleElementEventMap {
+        "ready": void;
+    }
+    /**
+     * Google Maps Basemap Layer
+     */
+    interface HTMLVMapLayerGoogleElement extends Components.VMapLayerGoogle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerGoogleElementEventMap>(type: K, listener: (this: HTMLVMapLayerGoogleElement, ev: VMapLayerGoogleCustomEvent<HTMLVMapLayerGoogleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerGoogleElementEventMap>(type: K, listener: (this: HTMLVMapLayerGoogleElement, ev: VMapLayerGoogleCustomEvent<HTMLVMapLayerGoogleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerGoogleElement: {
+        prototype: HTMLVMapLayerGoogleElement;
+        new (): HTMLVMapLayerGoogleElement;
+    };
     interface HTMLVMapLayerGroupElement extends Components.VMapLayerGroup, HTMLStencilElement {
     }
     var HTMLVMapLayerGroupElement: {
@@ -140,11 +283,90 @@ declare global {
         prototype: HTMLVMapLayerOsmElement;
         new (): HTMLVMapLayerOsmElement;
     };
+    interface HTMLVMapLayerScatterplotElementEventMap {
+        "ready": void;
+    }
+    interface HTMLVMapLayerScatterplotElement extends Components.VMapLayerScatterplot, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerScatterplotElementEventMap>(type: K, listener: (this: HTMLVMapLayerScatterplotElement, ev: VMapLayerScatterplotCustomEvent<HTMLVMapLayerScatterplotElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerScatterplotElementEventMap>(type: K, listener: (this: HTMLVMapLayerScatterplotElement, ev: VMapLayerScatterplotCustomEvent<HTMLVMapLayerScatterplotElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerScatterplotElement: {
+        prototype: HTMLVMapLayerScatterplotElement;
+        new (): HTMLVMapLayerScatterplotElement;
+    };
+    interface HTMLVMapLayerWktElementEventMap {
+        "ready": void;
+    }
+    interface HTMLVMapLayerWktElement extends Components.VMapLayerWkt, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerWktElementEventMap>(type: K, listener: (this: HTMLVMapLayerWktElement, ev: VMapLayerWktCustomEvent<HTMLVMapLayerWktElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerWktElementEventMap>(type: K, listener: (this: HTMLVMapLayerWktElement, ev: VMapLayerWktCustomEvent<HTMLVMapLayerWktElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerWktElement: {
+        prototype: HTMLVMapLayerWktElement;
+        new (): HTMLVMapLayerWktElement;
+    };
+    interface HTMLVMapLayerWmsElementEventMap {
+        "ready": void;
+    }
+    /**
+     * OGC WMS Layer
+     */
+    interface HTMLVMapLayerWmsElement extends Components.VMapLayerWms, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerWmsElementEventMap>(type: K, listener: (this: HTMLVMapLayerWmsElement, ev: VMapLayerWmsCustomEvent<HTMLVMapLayerWmsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerWmsElementEventMap>(type: K, listener: (this: HTMLVMapLayerWmsElement, ev: VMapLayerWmsCustomEvent<HTMLVMapLayerWmsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerWmsElement: {
+        prototype: HTMLVMapLayerWmsElement;
+        new (): HTMLVMapLayerWmsElement;
+    };
+    interface HTMLVMapLayerXyzElementEventMap {
+        "ready": void;
+    }
+    /**
+     * XYZ Tile Layer
+     */
+    interface HTMLVMapLayerXyzElement extends Components.VMapLayerXyz, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerXyzElementEventMap>(type: K, listener: (this: HTMLVMapLayerXyzElement, ev: VMapLayerXyzCustomEvent<HTMLVMapLayerXyzElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerXyzElementEventMap>(type: K, listener: (this: HTMLVMapLayerXyzElement, ev: VMapLayerXyzCustomEvent<HTMLVMapLayerXyzElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerXyzElement: {
+        prototype: HTMLVMapLayerXyzElement;
+        new (): HTMLVMapLayerXyzElement;
+    };
     interface HTMLElementTagNameMap {
         "v-map": HTMLVMapElement;
         "v-map-layer-geojson": HTMLVMapLayerGeojsonElement;
+        "v-map-layer-google": HTMLVMapLayerGoogleElement;
         "v-map-layer-group": HTMLVMapLayerGroupElement;
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
+        "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
+        "v-map-layer-wkt": HTMLVMapLayerWktElement;
+        "v-map-layer-wms": HTMLVMapLayerWmsElement;
+        "v-map-layer-xyz": HTMLVMapLayerXyzElement;
     }
 }
 declare namespace LocalJSX {
@@ -185,6 +407,30 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    /**
+     * Google Maps Basemap Layer
+     */
+    interface VMapLayerGoogle {
+        "apiKey"?: string;
+        "language"?: string;
+        /**
+          * @default 'roadmap'
+         */
+        "mapType"?: | 'roadmap'
+    | 'satellite'
+    | 'terrain'
+    | 'hybrid';
+        "onReady"?: (event: VMapLayerGoogleCustomEvent<void>) => void;
+        /**
+          * @default 1.0
+         */
+        "opacity"?: number;
+        "region"?: string;
+        /**
+          * @default true
+         */
+        "visible"?: boolean;
+    }
     interface VMapLayerGroup {
         /**
           * @default false
@@ -215,11 +461,98 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface VMapLayerScatterplot {
+        "data"?: string;
+        /**
+          * @default '#3388ff'
+         */
+        "getFillColor"?: Color;
+        /**
+          * @default 1000
+         */
+        "getRadius"?: number;
+        "onReady"?: (event: VMapLayerScatterplotCustomEvent<void>) => void;
+        /**
+          * @default 1.0
+         */
+        "opacity"?: number;
+        "url"?: string;
+        /**
+          * @default true
+         */
+        "visible"?: boolean;
+    }
+    interface VMapLayerWkt {
+        "onReady"?: (event: VMapLayerWktCustomEvent<void>) => void;
+        /**
+          * @default 1.0
+         */
+        "opacity"?: number;
+        "url"?: string;
+        /**
+          * @default true
+         */
+        "visible"?: boolean;
+        "wkt"?: string;
+    }
+    /**
+     * OGC WMS Layer
+     */
+    interface VMapLayerWms {
+        /**
+          * @default 'image/png'
+         */
+        "format"?: string;
+        "layers": string;
+        "onReady"?: (event: VMapLayerWmsCustomEvent<void>) => void;
+        /**
+          * @default 1.0
+         */
+        "opacity"?: number;
+        "styles"?: string;
+        /**
+          * @default true
+         */
+        "tiled"?: boolean;
+        /**
+          * @default true
+         */
+        "transparent"?: boolean;
+        "url": string;
+        /**
+          * @default true
+         */
+        "visible"?: boolean;
+    }
+    /**
+     * XYZ Tile Layer
+     */
+    interface VMapLayerXyz {
+        "attributions"?: string;
+        "maxZoom"?: number;
+        "onReady"?: (event: VMapLayerXyzCustomEvent<void>) => void;
+        /**
+          * @default 1.0
+         */
+        "opacity"?: number;
+        "subdomains"?: string;
+        "tileSize"?: number;
+        "url": string;
+        /**
+          * @default true
+         */
+        "visible"?: boolean;
+    }
     interface IntrinsicElements {
         "v-map": VMap;
         "v-map-layer-geojson": VMapLayerGeojson;
+        "v-map-layer-google": VMapLayerGoogle;
         "v-map-layer-group": VMapLayerGroup;
         "v-map-layer-osm": VMapLayerOsm;
+        "v-map-layer-scatterplot": VMapLayerScatterplot;
+        "v-map-layer-wkt": VMapLayerWkt;
+        "v-map-layer-wms": VMapLayerWms;
+        "v-map-layer-xyz": VMapLayerXyz;
     }
 }
 export { LocalJSX as JSX };
@@ -228,8 +561,22 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "v-map": LocalJSX.VMap & JSXBase.HTMLAttributes<HTMLVMapElement>;
             "v-map-layer-geojson": LocalJSX.VMapLayerGeojson & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
+            /**
+             * Google Maps Basemap Layer
+             */
+            "v-map-layer-google": LocalJSX.VMapLayerGoogle & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
             "v-map-layer-group": LocalJSX.VMapLayerGroup & JSXBase.HTMLAttributes<HTMLVMapLayerGroupElement>;
             "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
+            "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
+            "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
+            /**
+             * OGC WMS Layer
+             */
+            "v-map-layer-wms": LocalJSX.VMapLayerWms & JSXBase.HTMLAttributes<HTMLVMapLayerWmsElement>;
+            /**
+             * XYZ Tile Layer
+             */
+            "v-map-layer-xyz": LocalJSX.VMapLayerXyz & JSXBase.HTMLAttributes<HTMLVMapLayerXyzElement>;
         }
     }
 }
