@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:613](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L613)
+Defined in: [src/components.d.ts:613](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L613)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:613](https://github.com/pt9912/v-map/blob/9a5eb
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:623](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L623)
+Defined in: [src/components.d.ts:623](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L623)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -30,7 +30,7 @@ Opazität der OSM-Kacheln (0–1).
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:628](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L628)
+Defined in: [src/components.d.ts:628](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L628)
 
 Sichtbarkeit des Layers
 
@@ -46,7 +46,7 @@ true
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:618](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L618)
+Defined in: [src/components.d.ts:618](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L618)
 
 Wird ausgelöst, wenn der OSM-Layer bereit ist.
  ready

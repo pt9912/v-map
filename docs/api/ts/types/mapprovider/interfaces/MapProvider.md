@@ -6,7 +6,7 @@
 
 # Interface: MapProvider
 
-Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L5)
+Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L5)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/9a
 
 > **addLayer**(`layer`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:10](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L10)
+Defined in: [src/types/mapprovider.ts:10](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L10)
 
 Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
 
@@ -34,7 +34,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L7)
+Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L7)
 
 #### Returns
 
@@ -46,7 +46,7 @@ Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/9a
 
 > `optional` **ensureGroup**(`groupId`, `opts?`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:16](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L16)
+Defined in: [src/types/mapprovider.ts:16](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L16)
 
 Optional: von v-map-layer-group genutzt, wenn vorhanden
 
@@ -76,7 +76,7 @@ Optional: von v-map-layer-group genutzt, wenn vorhanden
 
 > **init**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L6)
+Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L6)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/9a
 
 > **setView**(`center`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:13](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/mapprovider.ts#L13)
+Defined in: [src/types/mapprovider.ts:13](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/types/mapprovider.ts#L13)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
