@@ -32,13 +32,20 @@ const methodsList = methods => {
   return `\n### Methods\n\n${items}\n`;
 };
 
+const formatUnionType = type => {
+  // Entferne alle Anführungszeichen
+  const cleanedType = type.replace(/"/g, '');
+  // Ersetze Pipes durch escaped Pipes
+  return `\`${cleanedType.replace(/\s*\|\s*/g, ' \\| ')}\``;
+};
+
 const mdForCmp = c => {
   const name = c.tag;
   const desc = h(c.docs);
 
   const props = (c.props || []).map(p => [
     `\`${p.name}\``,
-    `\`${p.type}\``,
+    p.type.includes('|') ? formatUnionType(p.type) : `\`${p.type}\``,
     p.attr ? `\`${p.attr}\`` : '',
     p.default ? `\`${h(p.default)}\`` : '',
     h(p.docs || ''),
