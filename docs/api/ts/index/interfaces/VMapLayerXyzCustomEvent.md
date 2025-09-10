@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerXyzCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:221](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L221)
+Defined in: [src/components.d.ts:221](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L221)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:222](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L222)
+Defined in: [src/components.d.ts:222](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L222)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerXyzElement`
 
-Defined in: [src/components.d.ts:223](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L223)
+Defined in: [src/components.d.ts:223](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L223)
 
 The read-only **`target`** property of the dispatched.
 

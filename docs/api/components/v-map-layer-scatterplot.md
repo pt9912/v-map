@@ -7,7 +7,7 @@
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
 | `data` | `string` | `data` |  |  |
-| `getFillColor` | `[number, number, number, number?] | string` | `get-fill-color` | `'#3388ff'` |  |
+| `getFillColor` | `[number, number, number, number?] \| string` | `get-fill-color` | `'#3388ff'` |  |
 | `getRadius` | `number` | `get-radius` | `1000` |  |
 | `opacity` | `number` | `opacity` | `1.0` |  |
 | `url` | `string` | `url` |  |  |

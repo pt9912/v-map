@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L440)
+Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L440)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:444](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L444)
+Defined in: [src/components.d.ts:444](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L444)
 
 #### Default
 
@@ -28,7 +28,7 @@ false
 
 > `optional` **groupId**: `string`
 
-Defined in: [src/components.d.ts:448](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L448)
+Defined in: [src/components.d.ts:448](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L448)
 
 #### Default
 
@@ -42,7 +42,7 @@ Math.random().toString(36).slice(2, 11)
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:452](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L452)
+Defined in: [src/components.d.ts:452](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L452)
 
 #### Default
 
@@ -56,7 +56,7 @@ Defined in: [src/components.d.ts:452](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:456](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L456)
+Defined in: [src/components.d.ts:456](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L456)
 
 #### Default
 

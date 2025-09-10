@@ -8,7 +8,7 @@
 
 > **ProviderOptions** = `object`
 
-Defined in: src/types/provideroptions.ts:4
+Defined in: [src/types/provideroptions.ts:4](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/provideroptions.ts#L4)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: src/types/provideroptions.ts:4
 
 > `optional` **cssMode**: [`CssMode`](../../cssmode/type-aliases/CssMode.md)
 
-Defined in: src/types/provideroptions.ts:8
+Defined in: [src/types/provideroptions.ts:8](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/provideroptions.ts#L8)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: src/types/provideroptions.ts:8
 
 > `optional` **mapInitOptions**: [`MapInitOptions`](../../mapinitoptions/type-aliases/MapInitOptions.md)
 
-Defined in: src/types/provideroptions.ts:7
+Defined in: [src/types/provideroptions.ts:7](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/provideroptions.ts#L7)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: src/types/provideroptions.ts:7
 
 > `optional` **shadowRoot**: `ShadowRoot`
 
-Defined in: src/types/provideroptions.ts:6
+Defined in: [src/types/provideroptions.ts:6](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/provideroptions.ts#L6)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: src/types/provideroptions.ts:6
 
 > **target**: `HTMLElement`
 
-Defined in: src/types/provideroptions.ts:5
+Defined in: [src/types/provideroptions.ts:5](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/provideroptions.ts#L5)

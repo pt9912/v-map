@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWms
 
-Defined in: [src/components.d.ts:153](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L153)
+Defined in: [src/components.d.ts:153](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L153)
 
 OGC WMS Layer
 
@@ -16,7 +16,7 @@ OGC WMS Layer
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L157)
+Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L157)
 
 #### Default
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/9428f
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:158](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L158)
+Defined in: [src/components.d.ts:158](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L158)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:158](https://github.com/pt9912/v-map/blob/9428f
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L162)
+Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L162)
 
 #### Default
 
@@ -52,7 +52,7 @@ Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **styles**: `string`
 
-Defined in: [src/components.d.ts:163](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L163)
+Defined in: [src/components.d.ts:163](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L163)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/components.d.ts:163](https://github.com/pt9912/v-map/blob/9428f
 
 > **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:167](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L167)
+Defined in: [src/components.d.ts:167](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L167)
 
 #### Default
 
@@ -74,7 +74,7 @@ true
 
 > **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:171](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L171)
+Defined in: [src/components.d.ts:171](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L171)
 
 #### Default
 
@@ -88,7 +88,7 @@ true
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L172)
+Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L172)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/9428f
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L176)
+Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L176)
 
 #### Default
 

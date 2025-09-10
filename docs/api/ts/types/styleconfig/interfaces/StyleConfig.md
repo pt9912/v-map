@@ -6,7 +6,7 @@
 
 # Interface: StyleConfig
 
-Defined in: src/types/styleconfig.ts:1
+Defined in: [src/types/styleconfig.ts:1](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/styleconfig.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: src/types/styleconfig.ts:1
 
 > `optional` **fillColor**: `string`
 
-Defined in: src/types/styleconfig.ts:2
+Defined in: [src/types/styleconfig.ts:2](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/styleconfig.ts#L2)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: src/types/styleconfig.ts:2
 
 > `optional` **strokeColor**: `string`
 
-Defined in: src/types/styleconfig.ts:3
+Defined in: [src/types/styleconfig.ts:3](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/styleconfig.ts#L3)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: src/types/styleconfig.ts:3
 
 > `optional` **strokeWidth**: `number`
 
-Defined in: src/types/styleconfig.ts:4
+Defined in: [src/types/styleconfig.ts:4](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/styleconfig.ts#L4)

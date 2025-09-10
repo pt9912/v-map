@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:106](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L106)
+Defined in: [src/components.d.ts:106](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L106)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:106](https://github.com/pt9912/v-map/blob/9428f
 
 > **addToMap**: (`mapElement`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:107](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L107)
+Defined in: [src/components.d.ts:107](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L107)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:107](https://github.com/pt9912/v-map/blob/9428f
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:111](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L111)
+Defined in: [src/components.d.ts:111](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L111)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:111](https://github.com/pt9912/v-map/blob/9428f
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:116](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L116)
+Defined in: [src/components.d.ts:116](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L116)
 
 Sichtbarkeit des Layers
 

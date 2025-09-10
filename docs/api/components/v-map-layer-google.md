@@ -8,7 +8,7 @@ Google Maps Basemap Layer
 | --- | --- | --- | --- | --- |
 | `apiKey` | `string` | `api-key` |  |  |
 | `language` | `string` | `language` |  |  |
-| `mapType` | `"hybrid" | "roadmap" | "satellite" | "terrain"` | `map-type` | `'roadmap'` |  |
+| `mapType` | `hybrid \| roadmap \| satellite \| terrain` | `map-type` | `'roadmap'` |  |
 | `opacity` | `number` | `opacity` | `1.0` |  |
 | `region` | `string` | `region` |  |  |
 | `visible` | `boolean` | `visible` | `true` |  |

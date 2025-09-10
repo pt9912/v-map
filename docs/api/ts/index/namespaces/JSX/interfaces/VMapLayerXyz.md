@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerXyz
 
-Defined in: [src/components.d.ts:536](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L536)
+Defined in: [src/components.d.ts:536](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L536)
 
 XYZ Tile Layer
 
@@ -16,7 +16,7 @@ XYZ Tile Layer
 
 > `optional` **attributions**: `string`
 
-Defined in: [src/components.d.ts:537](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L537)
+Defined in: [src/components.d.ts:537](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L537)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components.d.ts:537](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:538](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L538)
+Defined in: [src/components.d.ts:538](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L538)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:538](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:539](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L539)
+Defined in: [src/components.d.ts:539](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L539)
 
 #### Parameters
 
@@ -50,7 +50,7 @@ Defined in: [src/components.d.ts:539](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:543](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L543)
+Defined in: [src/components.d.ts:543](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L543)
 
 #### Default
 
@@ -64,7 +64,7 @@ Defined in: [src/components.d.ts:543](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **subdomains**: `string`
 
-Defined in: [src/components.d.ts:544](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L544)
+Defined in: [src/components.d.ts:544](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L544)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/components.d.ts:544](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L545)
+Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L545)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/9428f
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L546)
+Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L546)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L550)
+Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L550)
 
 #### Default
 

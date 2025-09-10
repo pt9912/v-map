@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogle
 
-Defined in: [src/components.d.ts:67](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L67)
+Defined in: [src/components.d.ts:67](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L67)
 
 Google Maps Basemap Layer
 
@@ -16,7 +16,7 @@ Google Maps Basemap Layer
 
 > `optional` **apiKey**: `string`
 
-Defined in: [src/components.d.ts:68](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L68)
+Defined in: [src/components.d.ts:68](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L68)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components.d.ts:68](https://github.com/pt9912/v-map/blob/9428f6
 
 > `optional` **language**: `string`
 
-Defined in: [src/components.d.ts:69](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L69)
+Defined in: [src/components.d.ts:69](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L69)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:69](https://github.com/pt9912/v-map/blob/9428f6
 
 > **mapType**: `"hybrid"` \| `"roadmap"` \| `"satellite"` \| `"terrain"`
 
-Defined in: [src/components.d.ts:73](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L73)
+Defined in: [src/components.d.ts:73](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L73)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:73](https://github.com/pt9912/v-map/blob/9428f6
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L80)
+Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L80)
 
 #### Default
 
@@ -60,7 +60,7 @@ Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/9428f6
 
 > `optional` **region**: `string`
 
-Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L81)
+Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L81)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/9428f6
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L85)
+Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L85)
 
 #### Default
 

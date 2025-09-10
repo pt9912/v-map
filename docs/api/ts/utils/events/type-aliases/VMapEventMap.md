@@ -8,7 +8,7 @@
 
 > **VMapEventMap** = `object`
 
-Defined in: [src/utils/events.ts:9](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/utils/events.ts#L9)
+Defined in: [src/utils/events.ts:9](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/utils/events.ts#L9)
 
 ## Properties
 
@@ -16,4 +16,4 @@ Defined in: [src/utils/events.ts:9](https://github.com/pt9912/v-map/blob/9428f65
 
 > **ready**: `void`
 
-Defined in: [src/utils/events.ts:10](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/utils/events.ts#L10)
+Defined in: [src/utils/events.ts:10](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/utils/events.ts#L10)

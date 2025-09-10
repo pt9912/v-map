@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:50](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L50)
+Defined in: [src/components.d.ts:50](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L50)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:50](https://github.com/pt9912/v-map/blob/9428f6
 
 > **addToMap**: (`mapElement`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L51)
+Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L51)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/9428f6
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:55](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L55)
+Defined in: [src/components.d.ts:55](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L55)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:55](https://github.com/pt9912/v-map/blob/9428f6
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:56](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L56)
+Defined in: [src/components.d.ts:56](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L56)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:56](https://github.com/pt9912/v-map/blob/9428f6
 
 > `optional` **vectorStyle**: [`StyleConfig`](../../../../types/styleconfig/interfaces/StyleConfig.md)
 
-Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L57)
+Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L57)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/9428f6
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:62](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L62)
+Defined in: [src/components.d.ts:62](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L62)
 
 Sichtbarkeit des Layers
 

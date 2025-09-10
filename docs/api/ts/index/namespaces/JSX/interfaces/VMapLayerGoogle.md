@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogle
 
-Defined in: [src/components.d.ts:419](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L419)
+Defined in: [src/components.d.ts:419](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L419)
 
 Google Maps Basemap Layer
 
@@ -16,7 +16,7 @@ Google Maps Basemap Layer
 
 > `optional` **apiKey**: `string`
 
-Defined in: [src/components.d.ts:420](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L420)
+Defined in: [src/components.d.ts:420](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L420)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components.d.ts:420](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **language**: `string`
 
-Defined in: [src/components.d.ts:421](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L421)
+Defined in: [src/components.d.ts:421](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L421)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:421](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **mapType**: `"hybrid"` \| `"roadmap"` \| `"satellite"` \| `"terrain"`
 
-Defined in: [src/components.d.ts:425](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L425)
+Defined in: [src/components.d.ts:425](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L425)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:425](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:429](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L429)
+Defined in: [src/components.d.ts:429](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L429)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/components.d.ts:429](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:433](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L433)
+Defined in: [src/components.d.ts:433](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L433)
 
 #### Default
 
@@ -78,7 +78,7 @@ Defined in: [src/components.d.ts:433](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **region**: `string`
 
-Defined in: [src/components.d.ts:434](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L434)
+Defined in: [src/components.d.ts:434](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L434)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/components.d.ts:434](https://github.com/pt9912/v-map/blob/9428f
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:438](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L438)
+Defined in: [src/components.d.ts:438](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L438)
 
 #### Default
 

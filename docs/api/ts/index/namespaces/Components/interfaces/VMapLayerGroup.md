@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L87)
+Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L87)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/9428f6
 
 > **addLayer**: (`layerConfig`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L88)
+Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L88)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/9428f6
 
 > **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:92](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L92)
+Defined in: [src/components.d.ts:92](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L92)
 
 #### Default
 
@@ -46,7 +46,7 @@ false
 
 > **groupId**: `string`
 
-Defined in: [src/components.d.ts:96](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L96)
+Defined in: [src/components.d.ts:96](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L96)
 
 #### Default
 
@@ -60,7 +60,7 @@ Math.random().toString(36).slice(2, 11)
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L100)
+Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L100)
 
 #### Default
 
@@ -74,7 +74,7 @@ Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/9428f
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:104](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L104)
+Defined in: [src/components.d.ts:104](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L104)
 
 #### Default
 
