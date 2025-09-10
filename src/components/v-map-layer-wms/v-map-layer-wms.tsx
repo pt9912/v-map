@@ -13,15 +13,58 @@ import type { MapProvider } from '../../types/mapprovider';
 })
 export class VMapLayerWms {
   @Element() el!: HTMLElement;
-  @Prop({ reflect: true }) url!: string;
-  @Prop({ reflect: true }) layers!: string;
-  @Prop({ reflect: true }) styles?: string;
-  @Prop({ reflect: true }) format: string = 'image/png';
-  @Prop({ reflect: true }) transparent: boolean = true;
-  @Prop({ reflect: true }) tiled: boolean = true;
-  @Prop({ reflect: true }) visible: boolean = true;
-  @Prop({ reflect: true }) opacity: number = 1.0;
-  @Event() ready!: EventEmitter<void>;
+  
+/**
+ * Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
+ */
+@Prop({ reflect: true }) url!: string;
+  
+/**
+ * Kommagetrennte Layer-Namen (z. B. "topp:states").
+ */
+@Prop({ reflect: true }) layers!: string;
+  
+/**
+ * WMS-`STYLES` Parameter (kommagetrennt).
+ * @default ""
+ */
+@Prop({ reflect: true }) styles?: string;
+  
+/**
+ * Bildformat des GetMap-Requests.
+ * @default "image/png"
+ */
+@Prop({ reflect: true }) format: string = 'image/png';
+  
+/**
+ * Transparente Kacheln anfordern.
+ * @default true
+ */
+@Prop({ reflect: true }) transparent: boolean = true;
+  
+/**
+ * Tiled/geslicete Requests verwenden (falls Server unterstützt).
+ * @default true
+ */
+@Prop({ reflect: true }) tiled: boolean = true;
+  
+/**
+ * Sichtbarkeit des WMS-Layers.
+ * @default true
+ */
+@Prop({ reflect: true }) visible: boolean = true;
+  
+/**
+ * Globale Opazität des WMS-Layers (0–1).
+ * @default 1
+ */
+@Prop({ reflect: true }) opacity: number = 1.0;
+  
+/**
+ * Signalisiert, dass der WMS-Layer bereit ist.
+ * @event ready
+ */
+@Event() ready!: EventEmitter<void>;
   private mapProvider?: MapProvider;
 
   async connectedCallback() {

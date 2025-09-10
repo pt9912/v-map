@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property  | Attribute  | Description | Type      | Default                                   |
-| --------- | ---------- | ----------- | --------- | ----------------------------------------- |
-| `basemap` | `basemap`  |             | `boolean` | `false`                                   |
-| `groupId` | `group-id` |             | `string`  | `Math.random().toString(36).slice(2, 11)` |
-| `opacity` | `opacity`  |             | `number`  | `1.0`                                     |
-| `visible` | `visible`  |             | `boolean` | `true`                                    |
+| Property  | Attribute  | Description                                                          | Type      | Default                                   |
+| --------- | ---------- | -------------------------------------------------------------------- | --------- | ----------------------------------------- |
+| `basemap` | `basemap`  | Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar). | `boolean` | `false`                                   |
+| `groupId` | `group-id` | Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).       | `string`  | `Math.random().toString(36).slice(2, 11)` |
+| `opacity` | `opacity`  | Globale Opazität (0–1) für alle Kinder.                              | `number`  | `1.0`                                     |
+| `visible` | `visible`  | Sichtbarkeit der gesamten Gruppe.                                    | `boolean` | `true`                                    |
 
 
 ## Methods
 
 ### `addLayer(layerConfig: LayerConfig) => Promise<void>`
 
-
+Fügt ein Kind-Layer zur Gruppe hinzu.
 
 #### Parameters
 

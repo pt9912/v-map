@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-10T08:40:13",
+  "timestamp": "2025-09-10T11:28:15",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.36.3",
@@ -26,11 +26,15 @@
           "mutable": false,
           "attr": "center",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Mittelpunkt der Karte im **WGS84**-Koordinatensystem.\nErwartet [lon, lat] (Längengrad, Breitengrad).",
           "docsTags": [
             {
               "name": "default",
-              "text": "'0,0'"
+              "text": "[0, 0]"
+            },
+            {
+              "name": "example",
+              "text": "<v-map center=\"[11.5761, 48.1371]\" zoom=\"12\"></v-map>"
             }
           ],
           "default": "'0,0'",
@@ -61,11 +65,11 @@
           "mutable": false,
           "attr": "css-mode",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts).\nBei `true` werden keine Provider initialisiert.",
           "docsTags": [
             {
               "name": "default",
-              "text": "'cdn'"
+              "text": "false"
             }
           ],
           "default": "'cdn'",
@@ -109,11 +113,15 @@
           "mutable": false,
           "attr": "flavour",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Zu verwendender Karten-Provider.\nUnterstützte Werte: \"ol\" | \"leaflet\" | \"cesium\" | \"deck\".",
           "docsTags": [
             {
               "name": "default",
-              "text": "'ol'"
+              "text": "\"ol\""
+            },
+            {
+              "name": "example",
+              "text": "<v-map flavour=\"leaflet\"></v-map>"
             }
           ],
           "default": "'ol'",
@@ -180,11 +188,11 @@
           "mutable": false,
           "attr": "zoom",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).",
           "docsTags": [
             {
               "name": "default",
-              "text": "2"
+              "text": "3"
             }
           ],
           "default": "2",
@@ -231,14 +239,23 @@
               "docs": ""
             }
           ],
-          "docs": "",
-          "docsTags": []
+          "docs": "Fügt ein Layer-Element (Web Component) zur Karte hinzu.\nDas Layer muss kompatibel mit dem aktiven Provider sein.",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>"
+            },
+            {
+              "name": "example",
+              "text": "const layer = document.createElement('v-map-layer-osm');\nawait mapEl.addLayer(layer);"
+            }
+          ]
         },
         {
           "name": "getMapProvider",
           "returns": {
             "type": "Promise<MapProvider>",
-            "docs": ""
+            "docs": "Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit."
           },
           "complexType": {
             "signature": "() => Promise<MapProvider>",
@@ -258,14 +275,19 @@
           },
           "signature": "getMapProvider() => Promise<MapProvider>",
           "parameters": [],
-          "docs": "",
-          "docsTags": []
+          "docs": "Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).\nNützlich für fortgeschrittene Integrationen.",
+          "docsTags": [
+            {
+              "name": "returns",
+              "text": "Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit."
+            }
+          ]
         },
         {
           "name": "isMapProviderAvailable",
           "returns": {
             "type": "Promise<boolean>",
-            "docs": ""
+            "docs": "`true`, wenn verfügbar, sonst `false`."
           },
           "complexType": {
             "signature": "() => Promise<boolean>",
@@ -280,8 +302,17 @@
           },
           "signature": "isMapProviderAvailable() => Promise<boolean>",
           "parameters": [],
-          "docs": "",
-          "docsTags": []
+          "docs": "Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "flavour Gewünschter Provider (optional; Standard ist `this.flavour`)"
+            },
+            {
+              "name": "returns",
+              "text": "`true`, wenn verfügbar, sonst `false`."
+            }
+          ]
         },
         {
           "name": "setView",
@@ -300,7 +331,7 @@
               {
                 "name": "zoom",
                 "type": "number",
-                "docs": ""
+                "docs": "Zoomstufe"
               }
             ],
             "references": {
@@ -321,11 +352,28 @@
             {
               "name": "zoom",
               "type": "number",
-              "docs": ""
+              "docs": "Zoomstufe"
             }
           ],
-          "docs": "",
-          "docsTags": []
+          "docs": "Setzt Kartenzentrum und Zoom (optional animiert).",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "center [lon, lat] in WGS84"
+            },
+            {
+              "name": "param",
+              "text": "zoom Zoomstufe"
+            },
+            {
+              "name": "param",
+              "text": "options Zusätzliche Optionen (z. B. { animate: true, duration: 300 })"
+            },
+            {
+              "name": "example",
+              "text": "await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });"
+            }
+          ]
         }
       ],
       "events": [
@@ -346,8 +394,13 @@
           },
           "cancelable": true,
           "composed": false,
-          "docs": "",
-          "docsTags": []
+          "docs": "Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt.\n`detail` enthält `{ provider, flavour }`.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "mapProviderReady"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -378,11 +431,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Globale Deck-/Provider-Opacity des Layers (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -407,7 +460,7 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON\ndirekt über einen Prop/Slot gesetzt werden.",
           "docsTags": [],
           "values": [
             {
@@ -436,7 +489,7 @@
           "mutable": false,
           "attr": "vector-style",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig).\nErlaubt die Anpassung von Füllfarbe, Linienbreite etc.",
           "docsTags": [],
           "values": [
             {
@@ -523,8 +576,13 @@
               "docs": ""
             }
           ],
-          "docs": "",
-          "docsTags": []
+          "docs": "Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "map Referenz auf die Map/Provider-Instanz."
+            }
+          ]
         }
       ],
       "events": [],
@@ -556,8 +614,13 @@
           "mutable": false,
           "attr": "api-key",
           "reflectToAttr": true,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Google Maps API-Schlüssel.",
+          "docsTags": [
+            {
+              "name": "example",
+              "text": "<v-map-layer-google api-key=\"YOUR_KEY\"></v-map-layer-google>"
+            }
+          ],
           "values": [
             {
               "type": "string"
@@ -579,8 +642,13 @@
           "mutable": false,
           "attr": "language",
           "reflectToAttr": true,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Sprach-Lokalisierung (BCP-47, z. B. \"de\", \"en-US\").",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"en\""
+            }
+          ],
           "values": [
             {
               "type": "string"
@@ -602,11 +670,11 @@
           "mutable": false,
           "attr": "map-type",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Karten-Typ: \"roadmap\" | \"satellite\" | \"hybrid\" | \"terrain\".",
           "docsTags": [
             {
               "name": "default",
-              "text": "'roadmap'"
+              "text": "\"roadmap\""
             }
           ],
           "default": "'roadmap'",
@@ -644,11 +712,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Opazität des Layers (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -673,7 +741,7 @@
           "mutable": false,
           "attr": "region",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Region-Bias (ccTLD/Region-Code, z. B. \"DE\", \"US\").\nBeeinflusst Labels/Suchergebnisse.",
           "docsTags": [],
           "values": [
             {
@@ -696,7 +764,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Sichtbarkeit des Layers.",
           "docsTags": [
             {
               "name": "default",
@@ -728,8 +796,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -760,7 +833,7 @@
           "mutable": false,
           "attr": "basemap",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).",
           "docsTags": [
             {
               "name": "default",
@@ -789,7 +862,7 @@
           "mutable": false,
           "attr": "group-id",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).",
           "docsTags": [
             {
               "name": "default",
@@ -818,11 +891,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Globale Opazität (0–1) für alle Kinder.",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -847,7 +920,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Sichtbarkeit der gesamten Gruppe.",
           "docsTags": [
             {
               "name": "default",
@@ -912,8 +985,13 @@
               "docs": ""
             }
           ],
-          "docs": "",
-          "docsTags": []
+          "docs": "Fügt ein Kind-Layer zur Gruppe hinzu.",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "layer Layer-Element (Web Component)"
+            }
+          ]
         }
       ],
       "events": [],
@@ -945,11 +1023,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": false,
-          "docs": "",
+          "docs": "Opazität der OSM-Kacheln (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -1029,7 +1107,7 @@
               "docs": ""
             }
           ],
-          "docs": "",
+          "docs": "Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).",
           "docsTags": []
         }
       ],
@@ -1045,8 +1123,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Wird ausgelöst, wenn der OSM-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -1077,7 +1160,7 @@
           "mutable": false,
           "attr": "data",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Datenquelle für Punkte. Erwartet Objekte mit mindestens\neiner Position in [lon, lat]. Zusätzliche Felder sind erlaubt.",
           "docsTags": [],
           "values": [
             {
@@ -1106,7 +1189,7 @@
           "mutable": false,
           "attr": "get-fill-color",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe\nz. B. [r,g,b] oder CSS-Farbe (providerabhängig).",
           "docsTags": [
             {
               "name": "default",
@@ -1138,11 +1221,11 @@
           "mutable": false,
           "attr": "get-radius",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Funktion/konstanter Wert für den Punkt-Radius.",
           "docsTags": [
             {
               "name": "default",
-              "text": "1000"
+              "text": "4"
             }
           ],
           "default": "1000",
@@ -1167,11 +1250,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Globale Opazität (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -1196,7 +1279,7 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.",
           "docsTags": [],
           "values": [
             {
@@ -1219,7 +1302,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Sichtbarkeit des Layers.",
           "docsTags": [
             {
               "name": "default",
@@ -1251,8 +1334,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Wird ausgelöst, sobald der Scatterplot registriert wurde.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -1283,11 +1371,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Globale Opazität (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -1312,7 +1400,7 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).",
           "docsTags": [],
           "values": [
             {
@@ -1335,7 +1423,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Sichtbarkeit des Layers.",
           "docsTags": [
             {
               "name": "default",
@@ -1364,7 +1452,7 @@
           "mutable": false,
           "attr": "wkt",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "WKT-Geometrie (z. B. \"POINT(11.57 48.14)\" oder \"POLYGON((...))\").",
           "docsTags": [],
           "values": [
             {
@@ -1390,8 +1478,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Signalisiert, dass das WKT-Layer initialisiert ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -1422,11 +1515,11 @@
           "mutable": false,
           "attr": "format",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Bildformat des GetMap-Requests.",
           "docsTags": [
             {
               "name": "default",
-              "text": "'image/png'"
+              "text": "\"image/png\""
             }
           ],
           "default": "'image/png'",
@@ -1451,7 +1544,7 @@
           "mutable": false,
           "attr": "layers",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Kommagetrennte Layer-Namen (z. B. \"topp:states\").",
           "docsTags": [],
           "values": [
             {
@@ -1474,11 +1567,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Globale Opazität des WMS-Layers (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -1503,8 +1596,13 @@
           "mutable": false,
           "attr": "styles",
           "reflectToAttr": true,
-          "docs": "",
-          "docsTags": [],
+          "docs": "WMS-`STYLES` Parameter (kommagetrennt).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"\""
+            }
+          ],
           "values": [
             {
               "type": "string"
@@ -1526,7 +1624,7 @@
           "mutable": false,
           "attr": "tiled",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Tiled/geslicete Requests verwenden (falls Server unterstützt).",
           "docsTags": [
             {
               "name": "default",
@@ -1555,7 +1653,7 @@
           "mutable": false,
           "attr": "transparent",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Transparente Kacheln anfordern.",
           "docsTags": [
             {
               "name": "default",
@@ -1584,7 +1682,7 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).",
           "docsTags": [],
           "values": [
             {
@@ -1607,7 +1705,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Sichtbarkeit des WMS-Layers.",
           "docsTags": [
             {
               "name": "default",
@@ -1639,8 +1737,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Signalisiert, dass der WMS-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],
@@ -1671,7 +1774,7 @@
           "mutable": false,
           "attr": "attributions",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Attributions-/Copyright-Text (HTML erlaubt).",
           "docsTags": [],
           "values": [
             {
@@ -1694,8 +1797,13 @@
           "mutable": false,
           "attr": "max-zoom",
           "reflectToAttr": true,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Maximaler Zoomlevel, den der Tile-Server liefert.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "19"
+            }
+          ],
           "values": [
             {
               "type": "number"
@@ -1717,11 +1825,11 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Opazität (0–1).",
           "docsTags": [
             {
               "name": "default",
-              "text": "1.0"
+              "text": "1"
             }
           ],
           "default": "1.0",
@@ -1746,7 +1854,7 @@
           "mutable": false,
           "attr": "subdomains",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Subdomains für parallele Tile-Anfragen (z. B. \"a,b,c\").",
           "docsTags": [],
           "values": [
             {
@@ -1769,8 +1877,13 @@
           "mutable": false,
           "attr": "tile-size",
           "reflectToAttr": true,
-          "docs": "",
-          "docsTags": [],
+          "docs": "Größe einer Kachel in Pixeln.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "256"
+            }
+          ],
           "values": [
             {
               "type": "number"
@@ -1792,7 +1905,7 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "URL-Template für Kacheln, z. B. \"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\".",
           "docsTags": [],
           "values": [
             {
@@ -1815,7 +1928,7 @@
           "mutable": false,
           "attr": "visible",
           "reflectToAttr": true,
-          "docs": "",
+          "docs": "Sichtbarkeit des XYZ-Layers.",
           "docsTags": [
             {
               "name": "default",
@@ -1847,8 +1960,13 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "",
-          "docsTags": []
+          "docs": "Wird ausgelöst, wenn der XYZ-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
         }
       ],
       "listeners": [],

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerScatterplot
 
-Defined in: [src/components.d.ts:470](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L470)
+Defined in: [src/components.d.ts:630](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L630)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:470](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **data**: `string`
 
-Defined in: [src/components.d.ts:471](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L471)
+Defined in: [src/components.d.ts:634](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L634)
+
+Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
 
 ***
 
@@ -22,7 +24,9 @@ Defined in: [src/components.d.ts:471](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **getFillColor**: [`Color`](../../../type-aliases/Color.md)
 
-Defined in: [src/components.d.ts:475](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L475)
+Defined in: [src/components.d.ts:639](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L639)
+
+Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
 
 #### Default
 
@@ -36,21 +40,68 @@ Defined in: [src/components.d.ts:475](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **getRadius**: `number`
 
-Defined in: [src/components.d.ts:479](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L479)
+Defined in: [src/components.d.ts:644](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L644)
+
+Funktion/konstanter Wert für den Punkt-Radius.
 
 #### Default
 
 ```ts
-1000
+4
 ```
 
 ***
+
+### opacity?
+
+> `optional` **opacity**: `number`
+
+Defined in: [src/components.d.ts:654](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L654)
+
+Globale Opazität (0–1).
+
+#### Default
+
+```ts
+1
+```
+
+***
+
+### url?
+
+> `optional` **url**: `string`
+
+Defined in: [src/components.d.ts:658](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L658)
+
+Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
+
+***
+
+### visible?
+
+> `optional` **visible**: `boolean`
+
+Defined in: [src/components.d.ts:663](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L663)
+
+Sichtbarkeit des Layers.
+
+#### Default
+
+```ts
+true
+```
+
+## Events
 
 ### onReady()?
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:480](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L480)
+Defined in: [src/components.d.ts:649](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L649)
+
+Wird ausgelöst, sobald der Scatterplot registriert wurde.
+ ready
 
 #### Parameters
 
@@ -61,39 +112,3 @@ Defined in: [src/components.d.ts:480](https://github.com/pt9912/v-map/blob/4db36
 #### Returns
 
 `void`
-
-***
-
-### opacity?
-
-> `optional` **opacity**: `number`
-
-Defined in: [src/components.d.ts:484](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L484)
-
-#### Default
-
-```ts
-1.0
-```
-
-***
-
-### url?
-
-> `optional` **url**: `string`
-
-Defined in: [src/components.d.ts:485](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L485)
-
-***
-
-### visible?
-
-> `optional` **visible**: `boolean`
-
-Defined in: [src/components.d.ts:489](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L489)
-
-#### Default
-
-```ts
-true
-```

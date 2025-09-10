@@ -6,7 +6,7 @@
 
 # Interface: VMap
 
-Defined in: [src/components.d.ts:23](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L23)
+Defined in: [src/components.d.ts:23](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L23)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:23](https://github.com/pt9912/v-map/blob/4db367
 
 > **addLayer**: (`layerConfig`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:24](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L24)
+Defined in: [src/components.d.ts:29](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L29)
+
+Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
 
 #### Parameters
 
@@ -26,18 +28,32 @@ Defined in: [src/components.d.ts:24](https://github.com/pt9912/v-map/blob/4db367
 
 `Promise`\<`void`\>
 
+#### Example
+
+```ts
+const layer = document.createElement('v-map-layer-osm'); await mapEl.addLayer(layer);
+```
+
 ***
 
 ### center
 
 > **center**: `string`
 
-Defined in: [src/components.d.ts:28](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L28)
+Defined in: [src/components.d.ts:35](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L35)
+
+Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
 
 #### Default
 
 ```ts
-'0,0'
+[0, 0]
+```
+
+#### Example
+
+```ts
+<v-map center="[11.5761, 48.1371]" zoom="12"></v-map>
 ```
 
 ***
@@ -46,12 +62,14 @@ Defined in: [src/components.d.ts:28](https://github.com/pt9912/v-map/blob/4db367
 
 > **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/components.d.ts:32](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L32)
+Defined in: [src/components.d.ts:40](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L40)
+
+Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert.
 
 #### Default
 
 ```ts
-'cdn'
+false
 ```
 
 ***
@@ -60,12 +78,20 @@ Defined in: [src/components.d.ts:32](https://github.com/pt9912/v-map/blob/4db367
 
 > **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
 
-Defined in: [src/components.d.ts:36](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L36)
+Defined in: [src/components.d.ts:46](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L46)
+
+Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
 
 #### Default
 
 ```ts
-'ol'
+"ol"
+```
+
+#### Example
+
+```ts
+<v-map flavour="leaflet"></v-map>
 ```
 
 ***
@@ -74,11 +100,15 @@ Defined in: [src/components.d.ts:36](https://github.com/pt9912/v-map/blob/4db367
 
 > **getMapProvider**: () => `Promise`\<[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md)\>
 
-Defined in: [src/components.d.ts:37](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L37)
+Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L51)
+
+Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
 
 #### Returns
 
 `Promise`\<[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md)\>
+
+Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
 
 ***
 
@@ -86,11 +116,15 @@ Defined in: [src/components.d.ts:37](https://github.com/pt9912/v-map/blob/4db367
 
 > **isMapProviderAvailable**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:38](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L38)
+Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L57)
+
+Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
 
 #### Returns
 
 `Promise`\<`boolean`\>
+
+`true`, wenn verfügbar, sonst `false`.
 
 ***
 
@@ -98,7 +132,9 @@ Defined in: [src/components.d.ts:38](https://github.com/pt9912/v-map/blob/4db367
 
 > **setView**: (`coordinates`, `zoom`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:39](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L39)
+Defined in: [src/components.d.ts:65](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L65)
+
+Setzt Kartenzentrum und Zoom (optional animiert).
 
 #### Parameters
 
@@ -110,9 +146,17 @@ Defined in: [src/components.d.ts:39](https://github.com/pt9912/v-map/blob/4db367
 
 `number`
 
+Zoomstufe
+
 #### Returns
 
 `Promise`\<`void`\>
+
+#### Example
+
+```ts
+await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });
+```
 
 ***
 
@@ -120,7 +164,7 @@ Defined in: [src/components.d.ts:39](https://github.com/pt9912/v-map/blob/4db367
 
 > **useDefaultImportMap**: `boolean`
 
-Defined in: [src/components.d.ts:44](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L44)
+Defined in: [src/components.d.ts:70](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L70)
 
 Falls true, injiziert v-map automatisch die Import-Map.
 
@@ -136,10 +180,12 @@ true
 
 > **zoom**: `number`
 
-Defined in: [src/components.d.ts:48](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L48)
+Defined in: [src/components.d.ts:75](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L75)
+
+Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
 
 #### Default
 
 ```ts
-2
+3
 ```

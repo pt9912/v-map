@@ -32,16 +32,49 @@ import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 export class VMap {
   @Element() el!: HTMLElement;
 
-  @Prop() flavour: Flavour = 'ol';
-  @Prop() center: string = '0,0';
-  @Prop() zoom: number = 2;
+  
+/**
+ * Zu verwendender Karten-Provider.
+ * Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
+ * @default "ol"
+ * @example
+ * <v-map flavour="leaflet"></v-map>
+ */
+@Prop() flavour: Flavour = 'ol';
+  
+/** 
+ * Mittelpunkt der Karte im **WGS84**-Koordinatensystem.
+ * Erwartet [lon, lat] (Längengrad, Breitengrad).
+ * @default [0, 0]
+ * @example
+ * <v-map center="[11.5761, 48.1371]" zoom="12"></v-map>
+ */
+@Prop() center: string = '0,0';
+  
+/**
+ * Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
+ * @default 3
+ */
+@Prop() zoom: number = 2;
 
   /** Falls true, injiziert v-map automatisch die Import-Map. */
   @Prop() useDefaultImportMap: boolean = true;
 
-  @Prop() cssMode: CssMode = 'cdn';
+  
+/**
+ * Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts).
+ * Bei `true` werden keine Provider initialisiert.
+ * @default false
+ */
+@Prop() cssMode: CssMode = 'cdn';
 
-  @Event({
+  
+/**
+ * Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt.
+ * `detail` enthält `{ provider, flavour }`.
+ * @event mapProviderReady
+ */
+@Event({
     eventName: VMapEvents.MapProviderReady,
     bubbles: true,
     composed: false,
@@ -197,14 +230,29 @@ export class VMap {
   }
     */
 
-  @Method()
+  
+/**
+ * Fügt ein Layer-Element (Web Component) zur Karte hinzu.
+ * Das Layer muss kompatibel mit dem aktiven Provider sein.
+ * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
+ * @example
+ * const layer = document.createElement('v-map-layer-osm');
+ * await mapEl.addLayer(layer);
+ */
+@Method()
   async addLayer(layerConfig: any): Promise<void> {
     if (!this.mapProvider)
       throw new Error('Map-Provider noch nicht initialisiert.');
     await Promise.resolve(this.mapProvider.addLayer(layerConfig));
   }
 
-  @Method()
+  
+/**
+ * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
+ * Nützlich für fortgeschrittene Integrationen.
+ * @returns Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
+ */
+@Method()
   async getMapProvider(): Promise<MapProvider> {
     if (!this.mapProvider) {
       //throw new Error('Map-Provider noch nicht initialisiert.');
@@ -213,13 +261,28 @@ export class VMap {
     return this.mapProvider;
   }
 
-  @Method()
+  
+/**
+ * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
+ * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
+ * @returns `true`, wenn verfügbar, sonst `false`.
+ */
+@Method()
   async isMapProviderAvailable(): Promise<boolean> {
     if (!this.mapProvider) return false;
     return true;
   }
 
-  @Method()
+  
+/**
+ * Setzt Kartenzentrum und Zoom (optional animiert).
+ * @param center [lon, lat] in WGS84
+ * @param zoom   Zoomstufe
+ * @param options Zusätzliche Optionen (z. B. { animate: true, duration: 300 })
+ * @example
+ * await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });
+ */
+@Method()
   async setView(coordinates: [number, number], zoom: number): Promise<void> {
     if (!this.mapProvider)
       throw new Error('Map-Provider noch nicht initialisiert.');

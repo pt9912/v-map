@@ -20,12 +20,32 @@ export class VMapLayerGeoJSON implements VMapLayer {
   @Element() el: HTMLElement;
 
   @Prop() visible: boolean = true;
-  @Prop() opacity: number = 1.0;
+  
+/**
+ * Globale Deck-/Provider-Opacity des Layers (0–1).
+ * @default 1
+ */
+@Prop() opacity: number = 1.0;
 
-  @Prop() url: string;
-  @Prop() vectorStyle?: StyleConfig;
+  
+/**
+ * URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON
+ * direkt über einen Prop/Slot gesetzt werden.
+ */
+@Prop() url: string;
+  
+/**
+ * Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig).
+ * Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+ */
+@Prop() vectorStyle?: StyleConfig;
 
-  @Method()
+  
+/**
+ * Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).
+ * @param map Referenz auf die Map/Provider-Instanz.
+ */
+@Method()
   async addToMap(mapElement: HTMLVMapElement) {
     const mapProvider: MapProvider = await mapElement.getMapProvider();
     const group = this.el.closest('v-map-layer-group');

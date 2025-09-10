@@ -6,38 +6,22 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:491](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L491)
+Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L665)
 
 ## Properties
-
-### onReady()?
-
-> `optional` **onReady**: (`event`) => `void`
-
-Defined in: [src/components.d.ts:492](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L492)
-
-#### Parameters
-
-##### event
-
-[`VMapLayerWktCustomEvent`](../../../interfaces/VMapLayerWktCustomEvent.md)\<`void`\>
-
-#### Returns
-
-`void`
-
-***
 
 ### opacity?
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:496](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L496)
+Defined in: [src/components.d.ts:675](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L675)
+
+Globale Opazität (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -46,7 +30,9 @@ Defined in: [src/components.d.ts:496](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:497](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L497)
+Defined in: [src/components.d.ts:679](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L679)
+
+URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
 ***
 
@@ -54,7 +40,9 @@ Defined in: [src/components.d.ts:497](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:501](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L501)
+Defined in: [src/components.d.ts:684](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L684)
+
+Sichtbarkeit des Layers.
 
 #### Default
 
@@ -68,4 +56,27 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:502](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L502)
+Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L688)
+
+WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
+
+## Events
+
+### onReady()?
+
+> `optional` **onReady**: (`event`) => `void`
+
+Defined in: [src/components.d.ts:670](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L670)
+
+Signalisiert, dass das WKT-Layer initialisiert ist.
+ ready
+
+#### Parameters
+
+##### event
+
+[`VMapLayerWktCustomEvent`](../../../interfaces/VMapLayerWktCustomEvent.md)\<`void`\>
+
+#### Returns
+
+`void`

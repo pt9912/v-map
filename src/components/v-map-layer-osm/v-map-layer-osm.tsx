@@ -26,9 +26,19 @@ export class VMapLayerOSM implements VMapLayer {
   @Element() el: HTMLElement;
 
   @Prop() visible: boolean = true;
-  @Prop() opacity: number = 1.0;
+  
+/**
+ * Opazität der OSM-Kacheln (0–1).
+ * @default 1
+ */
+@Prop() opacity: number = 1.0;
 
-  @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
+  
+/**
+ * Wird ausgelöst, wenn der OSM-Layer bereit ist.
+ * @event ready
+ */
+@Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
 
   private didLoad: boolean = false;
   private mapProvider: MapProvider;
@@ -50,7 +60,11 @@ export class VMapLayerOSM implements VMapLayer {
     await this.mapProvider.addLayer({ type: 'osm' });
   }
 
-  @Method()
+  
+/**
+ * Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
+ */
+@Method()
   async addToMap(mapElement: HTMLVMapElement) {
     if (!this.mapProvider) {
       this.mapProvider = await mapElement.getMapProvider();

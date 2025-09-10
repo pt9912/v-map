@@ -8,4 +8,4 @@
 
 > **Color** = `string` \| \[`number`, `number`, `number`, `number`?\]
 
-Defined in: [src/types/color.ts:1](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/types/color.ts#L1)
+Defined in: [src/types/color.ts:1](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/types/color.ts#L1)

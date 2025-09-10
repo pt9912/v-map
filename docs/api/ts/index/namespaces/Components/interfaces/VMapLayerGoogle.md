@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogle
 
-Defined in: [src/components.d.ts:67](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L67)
+Defined in: [src/components.d.ts:105](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L105)
 
 Google Maps Basemap Layer
 
@@ -16,7 +16,15 @@ Google Maps Basemap Layer
 
 > `optional` **apiKey**: `string`
 
-Defined in: [src/components.d.ts:68](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L68)
+Defined in: [src/components.d.ts:110](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L110)
+
+Google Maps API-Schlüssel.
+
+#### Example
+
+```ts
+<v-map-layer-google api-key="YOUR_KEY"></v-map-layer-google>
+```
 
 ***
 
@@ -24,7 +32,15 @@ Defined in: [src/components.d.ts:68](https://github.com/pt9912/v-map/blob/4db367
 
 > `optional` **language**: `string`
 
-Defined in: [src/components.d.ts:69](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L69)
+Defined in: [src/components.d.ts:115](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L115)
+
+Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
+
+#### Default
+
+```ts
+"en"
+```
 
 ***
 
@@ -32,12 +48,14 @@ Defined in: [src/components.d.ts:69](https://github.com/pt9912/v-map/blob/4db367
 
 > **mapType**: `"hybrid"` \| `"roadmap"` \| `"satellite"` \| `"terrain"`
 
-Defined in: [src/components.d.ts:73](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L73)
+Defined in: [src/components.d.ts:120](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L120)
+
+Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
 
 #### Default
 
 ```ts
-'roadmap'
+"roadmap"
 ```
 
 ***
@@ -46,12 +64,14 @@ Defined in: [src/components.d.ts:73](https://github.com/pt9912/v-map/blob/4db367
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L80)
+Defined in: [src/components.d.ts:128](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L128)
+
+Opazität des Layers (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -60,7 +80,9 @@ Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/4db367
 
 > `optional` **region**: `string`
 
-Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L81)
+Defined in: [src/components.d.ts:132](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L132)
+
+Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
 
 ***
 
@@ -68,7 +90,9 @@ Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/4db367
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L85)
+Defined in: [src/components.d.ts:137](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L137)
+
+Sichtbarkeit des Layers.
 
 #### Default
 

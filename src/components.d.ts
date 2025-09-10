@@ -21,21 +21,47 @@ export { LayerConfig } from "./types/layerconfig";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export namespace Components {
     interface VMap {
+        /**
+          * Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
+          * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
+          * @example const layer = document.createElement('v-map-layer-osm'); await mapEl.addLayer(layer);
+         */
         "addLayer": (layerConfig: any) => Promise<void>;
         /**
-          * @default '0,0'
+          * Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
+          * @default [0, 0]
+          * @example <v-map center="[11.5761, 48.1371]" zoom="12"></v-map>
          */
         "center": string;
         /**
-          * @default 'cdn'
+          * Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert.
+          * @default false
          */
         "cssMode": CssMode;
         /**
-          * @default 'ol'
+          * Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
+          * @default "ol"
+          * @example <v-map flavour="leaflet"></v-map>
          */
         "flavour": Flavour;
+        /**
+          * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
+          * @returns Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
+         */
         "getMapProvider": () => Promise<MapProvider>;
+        /**
+          * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
+          * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
+          * @returns `true`, wenn verfügbar, sonst `false`.
+         */
         "isMapProviderAvailable": () => Promise<boolean>;
+        /**
+          * Setzt Kartenzentrum und Zoom (optional animiert).
+          * @param center [lon, lat] in WGS84
+          * @param zoom Zoomstufe
+          * @param options Zusätzliche Optionen (z. B. { animate: true, duration: 300 })
+          * @example await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });
+         */
         "setView": (coordinates: [number, number], zoom: number) => Promise<void>;
         /**
           * Falls true, injiziert v-map automatisch die Import-Map.
@@ -43,17 +69,29 @@ export namespace Components {
          */
         "useDefaultImportMap": boolean;
         /**
-          * @default 2
+          * Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
+          * @default 3
          */
         "zoom": number;
     }
     interface VMapLayerGeojson {
+        /**
+          * Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).
+          * @param map Referenz auf die Map/Provider-Instanz.
+         */
         "addToMap": (mapElement: HTMLVMapElement) => Promise<void>;
         /**
-          * @default 1.0
+          * Globale Deck-/Provider-Opacity des Layers (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+         */
         "url": string;
+        /**
+          * Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+         */
         "vectorStyle"?: StyleConfig;
         /**
           * Sichtbarkeit des Layers
@@ -65,48 +103,74 @@ export namespace Components {
      * Google Maps Basemap Layer
      */
     interface VMapLayerGoogle {
+        /**
+          * Google Maps API-Schlüssel.
+          * @example <v-map-layer-google api-key="YOUR_KEY"></v-map-layer-google>
+         */
         "apiKey"?: string;
+        /**
+          * Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
+          * @default "en"
+         */
         "language"?: string;
         /**
-          * @default 'roadmap'
+          * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
+          * @default "roadmap"
          */
         "mapType": | 'roadmap'
     | 'satellite'
     | 'terrain'
     | 'hybrid';
         /**
-          * @default 1.0
+          * Opazität des Layers (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
+         */
         "region"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible": boolean;
     }
     interface VMapLayerGroup {
+        /**
+          * Fügt ein Kind-Layer zur Gruppe hinzu.
+          * @param layer Layer-Element (Web Component)
+         */
         "addLayer": (layerConfig: LayerConfig) => Promise<void>;
         /**
+          * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
           * @default false
          */
         "basemap": boolean;
         /**
+          * Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
           * @default Math.random().toString(36).slice(2, 11)
          */
         "groupId": string;
         /**
-          * @default 1.0
+          * Globale Opazität (0–1) für alle Kinder.
+          * @default 1
          */
         "opacity": number;
         /**
+          * Sichtbarkeit der gesamten Gruppe.
           * @default true
          */
         "visible": boolean;
     }
     interface VMapLayerOsm {
+        /**
+          * Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
+         */
         "addToMap": (mapElement: HTMLVMapElement) => Promise<void>;
         /**
-          * @default 1.0
+          * Opazität der OSM-Kacheln (0–1).
+          * @default 1
          */
         "opacity": number;
         /**
@@ -116,35 +180,53 @@ export namespace Components {
         "visible": boolean;
     }
     interface VMapLayerScatterplot {
+        /**
+          * Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
+         */
         "data"?: string;
         /**
+          * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
           * @default '#3388ff'
          */
         "getFillColor": Color;
         /**
-          * @default 1000
+          * Funktion/konstanter Wert für den Punkt-Radius.
+          * @default 4
          */
         "getRadius": number;
         /**
-          * @default 1.0
+          * Globale Opazität (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
+         */
         "url"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible": boolean;
     }
     interface VMapLayerWkt {
         /**
-          * @default 1.0
+          * Globale Opazität (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
+         */
         "url"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible": boolean;
+        /**
+          * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
+         */
         "wkt"?: string;
     }
     /**
@@ -152,25 +234,40 @@ export namespace Components {
      */
     interface VMapLayerWms {
         /**
-          * @default 'image/png'
+          * Bildformat des GetMap-Requests.
+          * @default "image/png"
          */
         "format": string;
+        /**
+          * Kommagetrennte Layer-Namen (z. B. "topp:states").
+         */
         "layers": string;
         /**
-          * @default 1.0
+          * Globale Opazität des WMS-Layers (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * WMS-`STYLES` Parameter (kommagetrennt).
+          * @default ""
+         */
         "styles"?: string;
         /**
+          * Tiled/geslicete Requests verwenden (falls Server unterstützt).
           * @default true
          */
         "tiled": boolean;
         /**
+          * Transparente Kacheln anfordern.
           * @default true
          */
         "transparent": boolean;
+        /**
+          * Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
+         */
         "url": string;
         /**
+          * Sichtbarkeit des WMS-Layers.
           * @default true
          */
         "visible": boolean;
@@ -179,16 +276,35 @@ export namespace Components {
      * XYZ Tile Layer
      */
     interface VMapLayerXyz {
+        /**
+          * Attributions-/Copyright-Text (HTML erlaubt).
+         */
         "attributions"?: string;
+        /**
+          * Maximaler Zoomlevel, den der Tile-Server liefert.
+          * @default 19
+         */
         "maxZoom"?: number;
         /**
-          * @default 1.0
+          * Opazität (0–1).
+          * @default 1
          */
         "opacity": number;
+        /**
+          * Subdomains für parallele Tile-Anfragen (z. B. "a,b,c").
+         */
         "subdomains"?: string;
+        /**
+          * Größe einer Kachel in Pixeln.
+          * @default 256
+         */
         "tileSize"?: number;
+        /**
+          * URL-Template für Kacheln, z. B. "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png".
+         */
         "url": string;
         /**
+          * Sichtbarkeit des XYZ-Layers.
           * @default true
          */
         "visible": boolean;
@@ -378,17 +494,26 @@ declare global {
 declare namespace LocalJSX {
     interface VMap {
         /**
-          * @default '0,0'
+          * Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
+          * @default [0, 0]
+          * @example <v-map center="[11.5761, 48.1371]" zoom="12"></v-map>
          */
         "center"?: string;
         /**
-          * @default 'cdn'
+          * Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert.
+          * @default false
          */
         "cssMode"?: CssMode;
         /**
-          * @default 'ol'
+          * Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
+          * @default "ol"
+          * @example <v-map flavour="leaflet"></v-map>
          */
         "flavour"?: Flavour;
+        /**
+          * Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt. `detail` enthält `{ provider, flavour }`.
+          * @event mapProviderReady
+         */
         "onMapProviderReady"?: (event: VMapCustomEvent<MapProviderDetail>) => void;
         /**
           * Falls true, injiziert v-map automatisch die Import-Map.
@@ -396,16 +521,24 @@ declare namespace LocalJSX {
          */
         "useDefaultImportMap"?: boolean;
         /**
-          * @default 2
+          * Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
+          * @default 3
          */
         "zoom"?: number;
     }
     interface VMapLayerGeojson {
         /**
-          * @default 1.0
+          * Globale Deck-/Provider-Opacity des Layers (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+         */
         "url"?: string;
+        /**
+          * Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+         */
         "vectorStyle"?: StyleConfig;
         /**
           * Sichtbarkeit des Layers
@@ -417,48 +550,75 @@ declare namespace LocalJSX {
      * Google Maps Basemap Layer
      */
     interface VMapLayerGoogle {
+        /**
+          * Google Maps API-Schlüssel.
+          * @example <v-map-layer-google api-key="YOUR_KEY"></v-map-layer-google>
+         */
         "apiKey"?: string;
+        /**
+          * Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
+          * @default "en"
+         */
         "language"?: string;
         /**
-          * @default 'roadmap'
+          * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
+          * @default "roadmap"
          */
         "mapType"?: | 'roadmap'
     | 'satellite'
     | 'terrain'
     | 'hybrid';
+        /**
+          * Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerGoogleCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Opazität des Layers (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
+         */
         "region"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible"?: boolean;
     }
     interface VMapLayerGroup {
         /**
+          * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
           * @default false
          */
         "basemap"?: boolean;
         /**
+          * Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
           * @default Math.random().toString(36).slice(2, 11)
          */
         "groupId"?: string;
         /**
-          * @default 1.0
+          * Globale Opazität (0–1) für alle Kinder.
+          * @default 1
          */
         "opacity"?: number;
         /**
+          * Sichtbarkeit der gesamten Gruppe.
           * @default true
          */
         "visible"?: boolean;
     }
     interface VMapLayerOsm {
+        /**
+          * Wird ausgelöst, wenn der OSM-Layer bereit ist.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerOsmCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Opazität der OSM-Kacheln (0–1).
+          * @default 1
          */
         "opacity"?: number;
         /**
@@ -468,37 +628,63 @@ declare namespace LocalJSX {
         "visible"?: boolean;
     }
     interface VMapLayerScatterplot {
+        /**
+          * Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
+         */
         "data"?: string;
         /**
+          * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
           * @default '#3388ff'
          */
         "getFillColor"?: Color;
         /**
-          * @default 1000
+          * Funktion/konstanter Wert für den Punkt-Radius.
+          * @default 4
          */
         "getRadius"?: number;
+        /**
+          * Wird ausgelöst, sobald der Scatterplot registriert wurde.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerScatterplotCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Globale Opazität (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
+         */
         "url"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible"?: boolean;
     }
     interface VMapLayerWkt {
+        /**
+          * Signalisiert, dass das WKT-Layer initialisiert ist.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerWktCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Globale Opazität (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
+         */
         "url"?: string;
         /**
+          * Sichtbarkeit des Layers.
           * @default true
          */
         "visible"?: boolean;
+        /**
+          * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
+         */
         "wkt"?: string;
     }
     /**
@@ -506,26 +692,45 @@ declare namespace LocalJSX {
      */
     interface VMapLayerWms {
         /**
-          * @default 'image/png'
+          * Bildformat des GetMap-Requests.
+          * @default "image/png"
          */
         "format"?: string;
+        /**
+          * Kommagetrennte Layer-Namen (z. B. "topp:states").
+         */
         "layers": string;
+        /**
+          * Signalisiert, dass der WMS-Layer bereit ist.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerWmsCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Globale Opazität des WMS-Layers (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * WMS-`STYLES` Parameter (kommagetrennt).
+          * @default ""
+         */
         "styles"?: string;
         /**
+          * Tiled/geslicete Requests verwenden (falls Server unterstützt).
           * @default true
          */
         "tiled"?: boolean;
         /**
+          * Transparente Kacheln anfordern.
           * @default true
          */
         "transparent"?: boolean;
+        /**
+          * Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
+         */
         "url": string;
         /**
+          * Sichtbarkeit des WMS-Layers.
           * @default true
          */
         "visible"?: boolean;
@@ -534,17 +739,40 @@ declare namespace LocalJSX {
      * XYZ Tile Layer
      */
     interface VMapLayerXyz {
+        /**
+          * Attributions-/Copyright-Text (HTML erlaubt).
+         */
         "attributions"?: string;
+        /**
+          * Maximaler Zoomlevel, den der Tile-Server liefert.
+          * @default 19
+         */
         "maxZoom"?: number;
+        /**
+          * Wird ausgelöst, wenn der XYZ-Layer bereit ist.
+          * @event ready
+         */
         "onReady"?: (event: VMapLayerXyzCustomEvent<void>) => void;
         /**
-          * @default 1.0
+          * Opazität (0–1).
+          * @default 1
          */
         "opacity"?: number;
+        /**
+          * Subdomains für parallele Tile-Anfragen (z. B. "a,b,c").
+         */
         "subdomains"?: string;
+        /**
+          * Größe einer Kachel in Pixeln.
+          * @default 256
+         */
         "tileSize"?: number;
+        /**
+          * URL-Template für Kacheln, z. B. "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png".
+         */
         "url": string;
         /**
+          * Sichtbarkeit des XYZ-Layers.
           * @default true
          */
         "visible"?: boolean;

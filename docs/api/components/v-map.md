@@ -6,22 +6,22 @@
 
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
-| `center` | `string` | `center` | `'0,0'` |  |
-| `cssMode` | `bundle \| cdn \| inline-min \| none` | `css-mode` | `'cdn'` |  |
-| `flavour` | `cesium \| deck \| leaflet \| ol` | `flavour` | `'ol'` |  |
+| `center` | `string` | `center` | `'0,0'` | Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad). |
+| `cssMode` | `bundle \| cdn \| inline-min \| none` | `css-mode` | `'cdn'` | Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert. |
+| `flavour` | `cesium \| deck \| leaflet \| ol` | `flavour` | `'ol'` | Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck". |
 | `useDefaultImportMap` | `boolean` | `use-default-import-map` | `true` | Falls true, injiziert v-map automatisch die Import-Map. |
-| `zoom` | `number` | `zoom` | `2` |  |
+| `zoom` | `number` | `zoom` | `2` | Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20). |
 
 ### Events
 
 | Event | Detail-Type | Beschreibung |
 | --- | --- | --- |
-| `mapProviderReady` | `MapProviderDetail` |  |
+| `mapProviderReady` | `MapProviderDetail` | Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt. `detail` enthält `{ provider, flavour }`. |
 
 ### Methods
 
-- `addLayer(layerConfig: any) => [object Object]`
-- `getMapProvider() => [object Object]`
-- `isMapProviderAvailable() => [object Object]`
-- `setView(coordinates: [number, number], zoom: number) => [object Object]`
+- `addLayer(layerConfig: any) => [object Object]` — Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
+- `getMapProvider() => [object Object]` — Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
+- `isMapProviderAvailable() => [object Object]` — Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
+- `setView(coordinates: [number, number], zoom: number) => [object Object]` — Setzt Kartenzentrum und Zoom (optional animiert).
 

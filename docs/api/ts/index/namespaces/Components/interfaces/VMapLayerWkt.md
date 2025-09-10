@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:138](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L138)
+Defined in: [src/components.d.ts:212](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L212)
 
 ## Properties
 
@@ -14,12 +14,14 @@ Defined in: [src/components.d.ts:138](https://github.com/pt9912/v-map/blob/4db36
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:142](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L142)
+Defined in: [src/components.d.ts:217](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L217)
+
+Globale Opazität (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -28,7 +30,9 @@ Defined in: [src/components.d.ts:142](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:143](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L143)
+Defined in: [src/components.d.ts:221](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L221)
+
+URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
 ***
 
@@ -36,7 +40,9 @@ Defined in: [src/components.d.ts:143](https://github.com/pt9912/v-map/blob/4db36
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:147](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L147)
+Defined in: [src/components.d.ts:226](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L226)
+
+Sichtbarkeit des Layers.
 
 #### Default
 
@@ -50,4 +56,6 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:148](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L148)
+Defined in: [src/components.d.ts:230](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L230)
+
+WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").

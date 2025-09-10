@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:50](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L50)
+Defined in: [src/components.d.ts:77](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L77)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:50](https://github.com/pt9912/v-map/blob/4db367
 
 > **addToMap**: (`mapElement`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L51)
+Defined in: [src/components.d.ts:82](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L82)
+
+Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).
 
 #### Parameters
 
@@ -32,12 +34,14 @@ Defined in: [src/components.d.ts:51](https://github.com/pt9912/v-map/blob/4db367
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:55](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L55)
+Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L87)
+
+Globale Deck-/Provider-Opacity des Layers (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -46,7 +50,9 @@ Defined in: [src/components.d.ts:55](https://github.com/pt9912/v-map/blob/4db367
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:56](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L56)
+Defined in: [src/components.d.ts:91](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L91)
+
+URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
 
 ***
 
@@ -54,7 +60,9 @@ Defined in: [src/components.d.ts:56](https://github.com/pt9912/v-map/blob/4db367
 
 > `optional` **vectorStyle**: [`StyleConfig`](../../../../types/styleconfig/interfaces/StyleConfig.md)
 
-Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L57)
+Defined in: [src/components.d.ts:95](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L95)
+
+Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
 
 ***
 
@@ -62,7 +70,7 @@ Defined in: [src/components.d.ts:57](https://github.com/pt9912/v-map/blob/4db367
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:62](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L62)
+Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L100)
 
 Sichtbarkeit des Layers
 

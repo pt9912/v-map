@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWms
 
-Defined in: [src/components.d.ts:507](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L507)
+Defined in: [src/components.d.ts:693](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L693)
 
 OGC WMS Layer
 
@@ -16,12 +16,14 @@ OGC WMS Layer
 
 > `optional` **format**: `string`
 
-Defined in: [src/components.d.ts:511](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L511)
+Defined in: [src/components.d.ts:698](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L698)
+
+Bildformat des GetMap-Requests.
 
 #### Default
 
 ```ts
-'image/png'
+"image/png"
 ```
 
 ***
@@ -30,25 +32,9 @@ Defined in: [src/components.d.ts:511](https://github.com/pt9912/v-map/blob/4db36
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:512](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L512)
+Defined in: [src/components.d.ts:702](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L702)
 
-***
-
-### onReady()?
-
-> `optional` **onReady**: (`event`) => `void`
-
-Defined in: [src/components.d.ts:513](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L513)
-
-#### Parameters
-
-##### event
-
-[`VMapLayerWmsCustomEvent`](../../../interfaces/VMapLayerWmsCustomEvent.md)\<`void`\>
-
-#### Returns
-
-`void`
+Kommagetrennte Layer-Namen (z. B. "topp:states").
 
 ***
 
@@ -56,12 +42,14 @@ Defined in: [src/components.d.ts:513](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:517](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L517)
+Defined in: [src/components.d.ts:712](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L712)
+
+Globale Opazität des WMS-Layers (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -70,7 +58,15 @@ Defined in: [src/components.d.ts:517](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **styles**: `string`
 
-Defined in: [src/components.d.ts:518](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L518)
+Defined in: [src/components.d.ts:717](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L717)
+
+WMS-`STYLES` Parameter (kommagetrennt).
+
+#### Default
+
+```ts
+""
+```
 
 ***
 
@@ -78,7 +74,9 @@ Defined in: [src/components.d.ts:518](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:522](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L522)
+Defined in: [src/components.d.ts:722](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L722)
+
+Tiled/geslicete Requests verwenden (falls Server unterstützt).
 
 #### Default
 
@@ -92,7 +90,9 @@ true
 
 > `optional` **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:526](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L526)
+Defined in: [src/components.d.ts:727](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L727)
+
+Transparente Kacheln anfordern.
 
 #### Default
 
@@ -106,7 +106,9 @@ true
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:527](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L527)
+Defined in: [src/components.d.ts:731](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L731)
+
+Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
 ***
 
@@ -114,10 +116,33 @@ Defined in: [src/components.d.ts:527](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:531](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L531)
+Defined in: [src/components.d.ts:736](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L736)
+
+Sichtbarkeit des WMS-Layers.
 
 #### Default
 
 ```ts
 true
 ```
+
+## Events
+
+### onReady()?
+
+> `optional` **onReady**: (`event`) => `void`
+
+Defined in: [src/components.d.ts:707](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L707)
+
+Signalisiert, dass der WMS-Layer bereit ist.
+ ready
+
+#### Parameters
+
+##### event
+
+[`VMapLayerWmsCustomEvent`](../../../interfaces/VMapLayerWmsCustomEvent.md)\<`void`\>
+
+#### Returns
+
+`void`

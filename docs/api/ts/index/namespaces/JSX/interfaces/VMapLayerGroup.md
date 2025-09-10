@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L440)
+Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L591)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:444](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L444)
+Defined in: [src/components.d.ts:596](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L596)
+
+Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
 
 #### Default
 
@@ -28,7 +30,9 @@ false
 
 > `optional` **groupId**: `string`
 
-Defined in: [src/components.d.ts:448](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L448)
+Defined in: [src/components.d.ts:601](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L601)
+
+Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
 
 #### Default
 
@@ -42,12 +46,14 @@ Math.random().toString(36).slice(2, 11)
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:452](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L452)
+Defined in: [src/components.d.ts:606](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L606)
+
+Globale Opazität (0–1) für alle Kinder.
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -56,7 +62,9 @@ Defined in: [src/components.d.ts:452](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:456](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L456)
+Defined in: [src/components.d.ts:611](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L611)
+
+Sichtbarkeit der gesamten Gruppe.
 
 #### Default
 

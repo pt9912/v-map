@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerXyz
 
-Defined in: [src/components.d.ts:536](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L536)
+Defined in: [src/components.d.ts:741](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L741)
 
 XYZ Tile Layer
 
@@ -16,7 +16,9 @@ XYZ Tile Layer
 
 > `optional` **attributions**: `string`
 
-Defined in: [src/components.d.ts:537](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L537)
+Defined in: [src/components.d.ts:745](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L745)
+
+Attributions-/Copyright-Text (HTML erlaubt).
 
 ***
 
@@ -24,15 +26,94 @@ Defined in: [src/components.d.ts:537](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:538](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L538)
+Defined in: [src/components.d.ts:750](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L750)
+
+Maximaler Zoomlevel, den der Tile-Server liefert.
+
+#### Default
+
+```ts
+19
+```
 
 ***
+
+### opacity?
+
+> `optional` **opacity**: `number`
+
+Defined in: [src/components.d.ts:760](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L760)
+
+Opazität (0–1).
+
+#### Default
+
+```ts
+1
+```
+
+***
+
+### subdomains?
+
+> `optional` **subdomains**: `string`
+
+Defined in: [src/components.d.ts:764](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L764)
+
+Subdomains für parallele Tile-Anfragen (z. B. "a,b,c").
+
+***
+
+### tileSize?
+
+> `optional` **tileSize**: `number`
+
+Defined in: [src/components.d.ts:769](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L769)
+
+Größe einer Kachel in Pixeln.
+
+#### Default
+
+```ts
+256
+```
+
+***
+
+### url
+
+> **url**: `string`
+
+Defined in: [src/components.d.ts:773](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L773)
+
+URL-Template für Kacheln, z. B. "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png".
+
+***
+
+### visible?
+
+> `optional` **visible**: `boolean`
+
+Defined in: [src/components.d.ts:778](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L778)
+
+Sichtbarkeit des XYZ-Layers.
+
+#### Default
+
+```ts
+true
+```
+
+## Events
 
 ### onReady()?
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:539](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L539)
+Defined in: [src/components.d.ts:755](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L755)
+
+Wird ausgelöst, wenn der XYZ-Layer bereit ist.
+ ready
 
 #### Parameters
 
@@ -43,55 +124,3 @@ Defined in: [src/components.d.ts:539](https://github.com/pt9912/v-map/blob/4db36
 #### Returns
 
 `void`
-
-***
-
-### opacity?
-
-> `optional` **opacity**: `number`
-
-Defined in: [src/components.d.ts:543](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L543)
-
-#### Default
-
-```ts
-1.0
-```
-
-***
-
-### subdomains?
-
-> `optional` **subdomains**: `string`
-
-Defined in: [src/components.d.ts:544](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L544)
-
-***
-
-### tileSize?
-
-> `optional` **tileSize**: `number`
-
-Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L545)
-
-***
-
-### url
-
-> **url**: `string`
-
-Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L546)
-
-***
-
-### visible?
-
-> `optional` **visible**: `boolean`
-
-Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L550)
-
-#### Default
-
-```ts
-true
-```

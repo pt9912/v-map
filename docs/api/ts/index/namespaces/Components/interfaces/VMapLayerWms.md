@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWms
 
-Defined in: [src/components.d.ts:153](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L153)
+Defined in: [src/components.d.ts:235](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L235)
 
 OGC WMS Layer
 
@@ -16,12 +16,14 @@ OGC WMS Layer
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L157)
+Defined in: [src/components.d.ts:240](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L240)
+
+Bildformat des GetMap-Requests.
 
 #### Default
 
 ```ts
-'image/png'
+"image/png"
 ```
 
 ***
@@ -30,7 +32,9 @@ Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/4db36
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:158](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L158)
+Defined in: [src/components.d.ts:244](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L244)
+
+Kommagetrennte Layer-Namen (z. B. "topp:states").
 
 ***
 
@@ -38,12 +42,14 @@ Defined in: [src/components.d.ts:158](https://github.com/pt9912/v-map/blob/4db36
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L162)
+Defined in: [src/components.d.ts:249](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L249)
+
+Globale Opazität des WMS-Layers (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -52,7 +58,15 @@ Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/4db36
 
 > `optional` **styles**: `string`
 
-Defined in: [src/components.d.ts:163](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L163)
+Defined in: [src/components.d.ts:254](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L254)
+
+WMS-`STYLES` Parameter (kommagetrennt).
+
+#### Default
+
+```ts
+""
+```
 
 ***
 
@@ -60,7 +74,9 @@ Defined in: [src/components.d.ts:163](https://github.com/pt9912/v-map/blob/4db36
 
 > **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:167](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L167)
+Defined in: [src/components.d.ts:259](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L259)
+
+Tiled/geslicete Requests verwenden (falls Server unterstützt).
 
 #### Default
 
@@ -74,7 +90,9 @@ true
 
 > **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:171](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L171)
+Defined in: [src/components.d.ts:264](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L264)
+
+Transparente Kacheln anfordern.
 
 #### Default
 
@@ -88,7 +106,9 @@ true
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L172)
+Defined in: [src/components.d.ts:268](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L268)
+
+Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
 ***
 
@@ -96,7 +116,9 @@ Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/4db36
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L176)
+Defined in: [src/components.d.ts:273](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L273)
+
+Sichtbarkeit des WMS-Layers.
 
 #### Default
 

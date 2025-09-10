@@ -18,11 +18,30 @@ import type { LayerConfig } from '../../types/layerconfig';
 export class VMapLayerGroup {
   @Element() el!: HTMLElement;
 
-  @Prop() visible: boolean = true;
-  @Prop() opacity: number = 1.0;
+  
+/**
+ * Sichtbarkeit der gesamten Gruppe.
+ * @default true
+ */
+@Prop() visible: boolean = true;
+  
+/**
+ * Globale Opazität (0–1) für alle Kinder.
+ * @default 1
+ */
+@Prop() opacity: number = 1.0;
 
-  @Prop() basemap = false;
-  @Prop() groupId: string = Math.random().toString(36).slice(2, 11);
+  
+/**
+ * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
+ * @default false
+ */
+@Prop() basemap = false;
+  
+/**
+ * Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
+ */
+@Prop() groupId: string = Math.random().toString(36).slice(2, 11);
 
   //private static loadedCSS: { [flavour: string]: boolean } = {};
 
@@ -65,7 +84,12 @@ export class VMapLayerGroup {
     console.log('v-map-layer-osm - componentWillRender');
   }
 
-  @Method()
+  
+/**
+ * Fügt ein Kind-Layer zur Gruppe hinzu.
+ * @param layer Layer-Element (Web Component)
+ */
+@Method()
   async addLayer(layerConfig: LayerConfig): Promise<void> {
     const mapElement = this.el.closest('v-map') as HTMLVMapElement | null;
     const mapProvider: MapProvider = await mapElement?.getMapProvider?.();

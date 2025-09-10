@@ -1,7 +1,6 @@
 // src/components/v-map/v-map.stories.ts
 import { h } from '@stencil/core';
 import type { Meta, StoryObj } from '@stencil/storybook-plugin';
-//import { html } from 'lit';
 
 import { VMap } from './v-map';
 

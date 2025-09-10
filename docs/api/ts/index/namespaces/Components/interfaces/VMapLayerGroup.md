@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L87)
+Defined in: [src/components.d.ts:139](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L139)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/4db367
 
 > **addLayer**: (`layerConfig`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L88)
+Defined in: [src/components.d.ts:144](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L144)
+
+Fügt ein Kind-Layer zur Gruppe hinzu.
 
 #### Parameters
 
@@ -32,7 +34,9 @@ Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/4db367
 
 > **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:92](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L92)
+Defined in: [src/components.d.ts:149](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L149)
+
+Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
 
 #### Default
 
@@ -46,7 +50,9 @@ false
 
 > **groupId**: `string`
 
-Defined in: [src/components.d.ts:96](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L96)
+Defined in: [src/components.d.ts:154](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L154)
+
+Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
 
 #### Default
 
@@ -60,12 +66,14 @@ Math.random().toString(36).slice(2, 11)
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L100)
+Defined in: [src/components.d.ts:159](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L159)
+
+Globale Opazität (0–1) für alle Kinder.
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -74,7 +82,9 @@ Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/4db36
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:104](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L104)
+Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L164)
+
+Sichtbarkeit der gesamten Gruppe.
 
 #### Default
 

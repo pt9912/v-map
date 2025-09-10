@@ -19,14 +19,48 @@ export type Color = string | [number, number, number, number?];
 export class VMapLayerScatterplot {
   @Element() el!: HTMLElement;
 
-  @Prop({ reflect: true }) data?: string; // inline JSON array
-  @Prop({ reflect: true }) url?: string; // external source
-  @Prop({ reflect: true }) getFillColor: Color = '#3388ff';
-  @Prop({ reflect: true }) getRadius: number = 1000;
-  @Prop({ reflect: true }) opacity: number = 1.0;
-  @Prop({ reflect: true }) visible: boolean = true;
+  
+/**
+ * Datenquelle für Punkte. Erwartet Objekte mit mindestens
+ * einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
+ */
+@Prop({ reflect: true }) data?: string; // inline JSON array
+  
+/**
+ * Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
+ */
+@Prop({ reflect: true }) url?: string; // external source
+  
+/**
+ * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe
+ * z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
+ */
+@Prop({ reflect: true }) getFillColor: Color = '#3388ff';
+  
+/**
+ * Funktion/konstanter Wert für den Punkt-Radius.
+ * @default 4
+ */
+@Prop({ reflect: true }) getRadius: number = 1000;
+  
+/**
+ * Globale Opazität (0–1).
+ * @default 1
+ */
+@Prop({ reflect: true }) opacity: number = 1.0;
+  
+/**
+ * Sichtbarkeit des Layers.
+ * @default true
+ */
+@Prop({ reflect: true }) visible: boolean = true;
 
-  @Event() ready!: EventEmitter<void>;
+  
+/**
+ * Wird ausgelöst, sobald der Scatterplot registriert wurde.
+ * @event ready
+ */
+@Event() ready!: EventEmitter<void>;
 
   private mapProvider?: MapProvider;
 

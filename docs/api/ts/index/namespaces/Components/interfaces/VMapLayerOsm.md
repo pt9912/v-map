@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:106](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L106)
+Defined in: [src/components.d.ts:166](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L166)
 
 ## Properties
 
@@ -14,7 +14,9 @@ Defined in: [src/components.d.ts:106](https://github.com/pt9912/v-map/blob/4db36
 
 > **addToMap**: (`mapElement`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:107](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L107)
+Defined in: [src/components.d.ts:170](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L170)
+
+Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
 
 #### Parameters
 
@@ -32,12 +34,14 @@ Defined in: [src/components.d.ts:107](https://github.com/pt9912/v-map/blob/4db36
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:111](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L111)
+Defined in: [src/components.d.ts:175](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L175)
+
+Opazität der OSM-Kacheln (0–1).
 
 #### Default
 
 ```ts
-1.0
+1
 ```
 
 ***
@@ -46,7 +50,7 @@ Defined in: [src/components.d.ts:111](https://github.com/pt9912/v-map/blob/4db36
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:116](https://github.com/pt9912/v-map/blob/4db367f23999463586a668ce9199b2387dda65a9/src/components.d.ts#L116)
+Defined in: [src/components.d.ts:180](https://github.com/pt9912/v-map/blob/9a5ebadcc954f2978c9c8c106dd32d9b39822791/src/components.d.ts#L180)
 
 Sichtbarkeit des Layers
 
