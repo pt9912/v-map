@@ -1,10 +1,7 @@
-// src/components/v-map/map-provider/deck-provider.ts
-import type {
-  MapProvider,
-  ProviderOptions,
-  LayerConfig,
-  LonLat,
-} from './map-provider';
+import type { MapProvider } from '../../types/mapprovider';
+import type { ProviderOptions } from '../../types/provideroptions';
+import type { LayerConfig } from '../../types/layerconfig';
+import type { LonLat } from '../../types/lonlat';
 
 //type DeckModule = typeof import('@deck.gl/core');
 //type JSONModule = typeof import('@deck.gl/json');

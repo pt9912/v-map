@@ -1,7 +1,15 @@
 // src/components/v-map-layer-google/v-map-layer-google.tsx
 import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
-import type { MapProvider } from '../v-map/map-provider/map-provider';
 import { VMapEvents, type MapProviderDetail } from '../../utils/events';
+
+//import type { VMapLayer } from '../../types/vmaplayer';
+//import type { VMapEvents, MapProviderDetail } from '../../utils/events';
+import type { MapProvider } from '../../types/mapprovider';
+//import type { Flavour } from '../../types/flavour';
+//import type { ProviderOptions } from '../../types/provideroptions';
+//import type { LayerConfig } from '../../types/layerconfig';
+//import type { LonLat } from '../../types/lonlat';
+//import type { CssMode } from '../../types/cssmode';
 
 /**
  * Google Maps Basemap Layer

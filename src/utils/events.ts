@@ -1,4 +1,4 @@
-import { MapProvider } from '../components/v-map/map-provider/map-provider';
+import type { MapProvider } from '../types/mapprovider';
 
 // events.ts
 export const VMapEvents = {

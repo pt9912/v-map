@@ -5,13 +5,19 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Flavour } from "./components/v-map/map-provider/provider-factory";
-import { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
+import { Flavour } from "./types/flavour";
+import { CssMode } from "./types/cssmode";
 import { MapProviderDetail } from "./utils/events";
+import { MapProvider } from "./types/mapprovider";
+import { StyleConfig } from "./types/styleconfig";
+import { LayerConfig } from "./types/layerconfig";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
-export { Flavour } from "./components/v-map/map-provider/provider-factory";
-export { CssMode, LayerConfig, MapProvider, StyleConfig } from "./components/v-map/map-provider/map-provider";
+export { Flavour } from "./types/flavour";
+export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
+export { MapProvider } from "./types/mapprovider";
+export { StyleConfig } from "./types/styleconfig";
+export { LayerConfig } from "./types/layerconfig";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export namespace Components {
     interface VMap {

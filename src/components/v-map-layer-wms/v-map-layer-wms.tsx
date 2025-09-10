@@ -1,7 +1,7 @@
 // src/components/v-map-layer-wms/v-map-layer-wms.tsx
 import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
-import type { MapProvider } from '../v-map/map-provider/map-provider';
 import { VMapEvents, type MapProviderDetail } from '../../utils/events';
+import type { MapProvider } from '../../types/mapprovider';
 
 /**
  * OGC WMS Layer

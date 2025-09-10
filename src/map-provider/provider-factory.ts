@@ -1,6 +1,6 @@
-import type { MapProvider } from './map-provider';
+import type { MapProvider } from '../types/mapprovider';
+import type { Flavour } from '../types/flavour';
 
-export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';
 /*
 import type { OpenLayersProvider } from './openlayers-provider';
 import type { CesiumProvider } from './cesium-provider';
@@ -16,13 +16,15 @@ export type AnyProvider =
 export async function createProvider(engine: Flavour): Promise<MapProvider> {
   switch (engine) {
     case 'ol':
-      return new (await import('./openlayers-provider')).OpenLayersProvider();
+      return new (
+        await import('./ol/openlayers-provider')
+      ).OpenLayersProvider();
     case 'cesium':
-      return new (await import('./cesium-provider')).CesiumProvider();
+      return new (await import('./cesium/cesium-provider')).CesiumProvider();
     case 'deck':
-      return new (await import('./deck-provider')).DeckProvider();
+      return new (await import('./deck/deck-provider')).DeckProvider();
     case 'leaflet':
-      return new (await import('./leaflet-provider')).LeafletProvider();
+      return new (await import('./leaflet/leaflet-provider')).LeafletProvider();
     default:
       throw new Error(`Unbekannte Engine: ${engine as string}`);
   }

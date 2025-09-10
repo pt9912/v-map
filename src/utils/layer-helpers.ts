@@ -1,5 +1,5 @@
 // src/utils/layer-helpers.ts
-import { VMapLayer } from '../types/vmaplayer';
+import type { VMapLayer } from '../types/vmaplayer';
 //import { VMapEvents } from './events';
 
 /**

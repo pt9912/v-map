@@ -8,19 +8,20 @@ import {
   Event,
   EventEmitter,
 } from '@stencil/core';
-//import { MapProviderFactory } from './map-provider/map-provider';
-import type { Flavour } from './map-provider/provider-factory';
-import { createProvider } from './map-provider/provider-factory';
-import type {
-  MapProvider,
-  MapInitOptions,
-  LonLat,
-  ProviderOptions,
-  CssMode,
-} from './map-provider/map-provider';
+
+import { createProvider } from '../../map-provider/provider-factory';
+
+import type { Flavour } from '../../types/flavour';
+import type { MapProvider } from '../../types/mapprovider';
+import type { ProviderOptions } from '../../types/provideroptions';
+//import type { LayerConfig } from '../../types/layerconfig';
+import type { LonLat } from '../../types/lonlat';
+import type { CssMode } from '../../types/cssmode';
+import type { MapInitOptions } from '../../types/mapinitoptions';
+
 import { ensureImportMap } from '../../lib/ensure-importmap';
 
-import { VMapEvents, MapProviderDetail } from '../../utils/events';
+import { VMapEvents, type MapProviderDetail } from '../../utils/events';
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 
 @Component({

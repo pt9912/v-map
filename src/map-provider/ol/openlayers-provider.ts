@@ -1,7 +1,4 @@
-// src/components/v-map/map-provider/openlayers-provider.ts
-//import { loadOl } from '../../../lib/ol-loader';
-
-import { OL_VERSION } from '../../../lib/versions.gen';
+import { OL_VERSION } from '../../lib/versions.gen';
 
 import type Map from 'ol/Map';
 import MapClass from 'ol/Map';
@@ -13,12 +10,10 @@ import OSM from 'ol/source/OSM';
 import type BaseLayer from 'ol/layer/Base';
 import type LayerGroup from 'ol/layer/Group';
 
-import {
-  MapProvider,
-  ProviderOptions,
-  LayerConfig,
-  LonLat,
-} from './map-provider';
+import type { MapProvider } from '../../types/mapprovider';
+import type { ProviderOptions } from '../../types/provideroptions';
+import type { LayerConfig } from '../../types/layerconfig';
+import type { LonLat } from '../../types/lonlat';
 
 type AnyLayer = BaseLayer | LayerGroup;
 

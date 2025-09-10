@@ -1,12 +1,11 @@
 // src/app.ts
-import { loadCesium, injectWidgetsCss } from '../../../lib/cesium-loader';
+import { loadCesium, injectWidgetsCss } from '../../lib/cesium-loader';
 
-import {
-  MapProvider,
-  ProviderOptions,
-  LayerConfig,
-  LonLat,
-} from './map-provider';
+import type { MapProvider } from '../../types/mapprovider';
+import type { ProviderOptions } from '../../types/provideroptions';
+import type { LayerConfig } from '../../types/layerconfig';
+import type { LonLat } from '../../types/lonlat';
+
 type CesiumModule = typeof import('cesium');
 import { Viewer } from 'cesium';
 

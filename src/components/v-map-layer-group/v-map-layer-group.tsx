@@ -1,8 +1,14 @@
 import { Component, Prop, Element, h, Method } from '@stencil/core';
-import type { LayerConfig } from '../v-map/map-provider/map-provider';
-import { MapProvider } from '../v-map/map-provider/map-provider';
 //import { getReadyMapLayers } from '../../utils/layer-helpers';
-//import { VMapLayer } from '../../types/vmaplayer';
+
+//import type { VMapLayer } from '../../types/vmaplayer';
+//import type { VMapEvents, MapProviderDetail } from '../../utils/events';
+import type { MapProvider } from '../../types/mapprovider';
+//import type { Flavour } from '../../types/flavour';
+//import type { ProviderOptions } from '../../types/provideroptions';
+import type { LayerConfig } from '../../types/layerconfig';
+//import type { LonLat } from '../../types/lonlat';
+//import type { CssMode } from '../../types/cssmode';
 
 @Component({
   tag: 'v-map-layer-group',

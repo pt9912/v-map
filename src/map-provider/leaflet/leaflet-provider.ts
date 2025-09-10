@@ -1,21 +1,18 @@
-// src/components/v-map/map-provider/leaflet-provider.ts
-import type {
-  MapProvider,
-  LayerConfig,
-  LonLat,
-  ProviderOptions,
-  CssMode,
-} from './map-provider';
+import type { MapProvider } from '../../types/mapprovider';
+import type { ProviderOptions } from '../../types/provideroptions';
+import type { LayerConfig } from '../../types/layerconfig';
+import type { LonLat } from '../../types/lonlat';
+import type { CssMode } from '../../types/cssmode';
 
-import { watchElementResize, Unsubscribe } from '../../../utils/dom-env';
+import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 
-import { LEAFLET_VERSION } from '../../../lib/versions.gen';
+import { LEAFLET_VERSION } from '../../lib/versions.gen';
 
 // Leaflet ESM
 import * as L from 'leaflet';
 //import 'leaflet.gridlayer.googlemutant';
 
-import { isBrowser, supportsAdoptedStyleSheets } from '../../../utils/dom-env';
+import { isBrowser, supportsAdoptedStyleSheets } from '../../utils/dom-env';
 
 function injectInlineMin(root?: ShadowRoot): void {
   if (!isBrowser()) return;
