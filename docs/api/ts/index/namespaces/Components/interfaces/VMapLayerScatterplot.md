@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerScatterplot
 
-Defined in: [src/components.d.ts:112](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L112)
+Defined in: [src/components.d.ts:118](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L118)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:112](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **data**: `string`
 
-Defined in: [src/components.d.ts:113](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L113)
+Defined in: [src/components.d.ts:119](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L119)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:113](https://github.com/pt9912/v-map/blob/bea65
 
 > **getFillColor**: [`Color`](../../../type-aliases/Color.md)
 
-Defined in: [src/components.d.ts:117](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L117)
+Defined in: [src/components.d.ts:123](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L123)
 
 #### Default
 
@@ -36,7 +36,7 @@ Defined in: [src/components.d.ts:117](https://github.com/pt9912/v-map/blob/bea65
 
 > **getRadius**: `number`
 
-Defined in: [src/components.d.ts:121](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L121)
+Defined in: [src/components.d.ts:127](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L127)
 
 #### Default
 
@@ -50,7 +50,7 @@ Defined in: [src/components.d.ts:121](https://github.com/pt9912/v-map/blob/bea65
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:125](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L125)
+Defined in: [src/components.d.ts:131](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L131)
 
 #### Default
 
@@ -64,7 +64,7 @@ Defined in: [src/components.d.ts:125](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:126](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L126)
+Defined in: [src/components.d.ts:132](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L132)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/components.d.ts:126](https://github.com/pt9912/v-map/blob/bea65
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:130](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L130)
+Defined in: [src/components.d.ts:136](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L136)
 
 #### Default
 

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:485](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L485)
+Defined in: [src/components.d.ts:491](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L491)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:485](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:486](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L486)
+Defined in: [src/components.d.ts:492](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L492)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:486](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:490](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L490)
+Defined in: [src/components.d.ts:496](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L496)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:490](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:491](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L491)
+Defined in: [src/components.d.ts:497](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L497)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:491](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:495](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L495)
+Defined in: [src/components.d.ts:501](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L501)
 
 #### Default
 
@@ -68,4 +68,4 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:496](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L496)
+Defined in: [src/components.d.ts:502](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L502)

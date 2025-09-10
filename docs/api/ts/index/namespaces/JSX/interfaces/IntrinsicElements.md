@@ -6,7 +6,7 @@
 
 # Interface: IntrinsicElements
 
-Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L546)
+Defined in: [src/components.d.ts:552](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L552)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:546](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map**: [`VMap`](VMap.md)
 
-Defined in: [src/components.d.ts:547](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L547)
+Defined in: [src/components.d.ts:553](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L553)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:547](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-geojson**: [`VMapLayerGeojson`](VMapLayerGeojson.md)
 
-Defined in: [src/components.d.ts:548](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L548)
+Defined in: [src/components.d.ts:554](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L554)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:548](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-google**: [`VMapLayerGoogle`](VMapLayerGoogle.md)
 
-Defined in: [src/components.d.ts:549](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L549)
+Defined in: [src/components.d.ts:555](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L555)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:549](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-group**: [`VMapLayerGroup`](VMapLayerGroup.md)
 
-Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L550)
+Defined in: [src/components.d.ts:556](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L556)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-osm**: [`VMapLayerOsm`](VMapLayerOsm.md)
 
-Defined in: [src/components.d.ts:551](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L551)
+Defined in: [src/components.d.ts:557](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L557)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:551](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-scatterplot**: [`VMapLayerScatterplot`](VMapLayerScatterplot.md)
 
-Defined in: [src/components.d.ts:552](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L552)
+Defined in: [src/components.d.ts:558](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L558)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components.d.ts:552](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-wkt**: [`VMapLayerWkt`](VMapLayerWkt.md)
 
-Defined in: [src/components.d.ts:553](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L553)
+Defined in: [src/components.d.ts:559](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L559)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/components.d.ts:553](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-wms**: [`VMapLayerWms`](VMapLayerWms.md)
 
-Defined in: [src/components.d.ts:554](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L554)
+Defined in: [src/components.d.ts:560](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L560)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/components.d.ts:554](https://github.com/pt9912/v-map/blob/bea65
 
 > **v-map-layer-xyz**: [`VMapLayerXyz`](VMapLayerXyz.md)
 
-Defined in: [src/components.d.ts:555](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L555)
+Defined in: [src/components.d.ts:561](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L561)

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerXyz
 
-Defined in: [src/components.d.ts:175](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L175)
+Defined in: [src/components.d.ts:181](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L181)
 
 XYZ Tile Layer
 
@@ -16,7 +16,7 @@ XYZ Tile Layer
 
 > `optional` **attributions**: `string`
 
-Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L176)
+Defined in: [src/components.d.ts:182](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L182)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:177](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L177)
+Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L183)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:177](https://github.com/pt9912/v-map/blob/bea65
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:181](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L181)
+Defined in: [src/components.d.ts:187](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L187)
 
 #### Default
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:181](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **subdomains**: `string`
 
-Defined in: [src/components.d.ts:182](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L182)
+Defined in: [src/components.d.ts:188](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L188)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:182](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L183)
+Defined in: [src/components.d.ts:189](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L189)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/bea65
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L184)
+Defined in: [src/components.d.ts:190](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L190)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/bea65
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:188](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L188)
+Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L194)
 
 #### Default
 

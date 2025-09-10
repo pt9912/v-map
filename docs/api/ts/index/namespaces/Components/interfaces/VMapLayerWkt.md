@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:132](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L132)
+Defined in: [src/components.d.ts:138](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L138)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:132](https://github.com/pt9912/v-map/blob/bea65
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:136](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L136)
+Defined in: [src/components.d.ts:142](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L142)
 
 #### Default
 
@@ -28,7 +28,7 @@ Defined in: [src/components.d.ts:136](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:137](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L137)
+Defined in: [src/components.d.ts:143](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L143)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components.d.ts:137](https://github.com/pt9912/v-map/blob/bea65
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:141](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L141)
+Defined in: [src/components.d.ts:147](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L147)
 
 #### Default
 
@@ -50,4 +50,4 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:142](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L142)
+Defined in: [src/components.d.ts:148](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L148)

@@ -13,8 +13,6 @@
 
 ## Interfaces
 
-- [MapProvider](interfaces/MapProvider.md)
-- [StyleConfig](interfaces/StyleConfig.md)
 - [VMapCustomEvent](interfaces/VMapCustomEvent.md)
 - [VMapLayerGoogleCustomEvent](interfaces/VMapLayerGoogleCustomEvent.md)
 - [VMapLayerOsmCustomEvent](interfaces/VMapLayerOsmCustomEvent.md)
@@ -26,12 +24,39 @@
 ## Type Aliases
 
 - [Color](type-aliases/Color.md)
-- [CssMode](type-aliases/CssMode.md)
-- [Flavour](type-aliases/Flavour.md)
-- [LayerConfig](type-aliases/LayerConfig.md)
 
 ## References
+
+### CssMode
+
+Re-exports [CssMode](../types/cssmode/type-aliases/CssMode.md)
+
+***
+
+### Flavour
+
+Re-exports [Flavour](../types/flavour/type-aliases/Flavour.md)
+
+***
+
+### LayerConfig
+
+Re-exports [LayerConfig](../types/layerconfig/type-aliases/LayerConfig.md)
+
+***
+
+### MapProvider
+
+Re-exports [MapProvider](../types/mapprovider/interfaces/MapProvider.md)
+
+***
 
 ### MapProviderDetail
 
 Re-exports [MapProviderDetail](../utils/events/interfaces/MapProviderDetail.md)
+
+***
+
+### StyleConfig
+
+Re-exports [StyleConfig](../types/styleconfig/interfaces/StyleConfig.md)

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-09T15:07:12",
+  "timestamp": "2025-09-10T08:01:59",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.36.3",
@@ -53,8 +53,8 @@
             "references": {
               "CssMode": {
                 "location": "import",
-                "path": "./map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::CssMode"
+                "path": "../../types/cssmode",
+                "id": "src/types/cssmode.ts::CssMode"
               }
             }
           },
@@ -101,8 +101,8 @@
             "references": {
               "Flavour": {
                 "location": "import",
-                "path": "./map-provider/provider-factory",
-                "id": "src/components/v-map/map-provider/provider-factory.ts::Flavour"
+                "path": "../../types/flavour",
+                "id": "src/types/flavour.ts::Flavour"
               }
             }
           },
@@ -250,8 +250,8 @@
               },
               "MapProvider": {
                 "location": "import",
-                "path": "./map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+                "path": "../../types/mapprovider",
+                "id": "src/types/mapprovider.ts::MapProvider"
               }
             },
             "return": "Promise<MapProvider>"
@@ -428,8 +428,8 @@
             "references": {
               "StyleConfig": {
                 "location": "import",
-                "path": "../v-map/map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::StyleConfig"
+                "path": "../../types/styleconfig",
+                "id": "src/types/styleconfig.ts::StyleConfig"
               }
             }
           },
@@ -505,8 +505,8 @@
               },
               "MapProvider": {
                 "location": "import",
-                "path": "../v-map/map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+                "path": "../../types/mapprovider",
+                "id": "src/types/mapprovider.ts::MapProvider"
               },
               "HTMLVMapLayerGroupElement": {
                 "location": "global",
@@ -889,8 +889,8 @@
               },
               "LayerConfig": {
                 "location": "import",
-                "path": "../v-map/map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::LayerConfig"
+                "path": "../../types/layerconfig",
+                "id": "src/types/layerconfig.ts::LayerConfig"
               },
               "HTMLVMapElement": {
                 "location": "global",
@@ -898,8 +898,8 @@
               },
               "MapProvider": {
                 "location": "import",
-                "path": "../v-map/map-provider/map-provider",
-                "id": "src/components/v-map/map-provider/map-provider.ts::MapProvider"
+                "path": "../../types/mapprovider",
+                "id": "src/types/mapprovider.ts::MapProvider"
               }
             },
             "return": "Promise<void>"
@@ -1866,35 +1866,35 @@
       "docstring": "",
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
     },
-    "src/components/v-map/map-provider/provider-factory.ts::Flavour": {
+    "src/types/flavour.ts::Flavour": {
       "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",
       "docstring": "",
-      "path": "src/components/v-map/map-provider/provider-factory.ts"
+      "path": "src/types/flavour.ts"
     },
-    "src/components/v-map/map-provider/map-provider.ts::CssMode": {
+    "src/types/cssmode.ts::CssMode": {
       "declaration": "export type CssMode = 'inline-min' | 'cdn' | 'none' | 'bundle';",
       "docstring": "",
-      "path": "src/components/v-map/map-provider/map-provider.ts"
+      "path": "src/types/cssmode.ts"
     },
     "src/utils/events.ts::MapProviderDetail": {
       "declaration": "export interface MapProviderDetail {\n  mapProvider: MapProvider;\n}",
       "docstring": "",
       "path": "src/utils/events.ts"
     },
-    "src/components/v-map/map-provider/map-provider.ts::MapProvider": {
+    "src/types/mapprovider.ts::MapProvider": {
       "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayer(layer: LayerConfig): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  /** Optional: von v-map-layer-group genutzt, wenn vorhanden */\n  ensureGroup?(\n    groupId: string,\n    opts?: { basemap?: boolean; zIndex?: number },\n  ): Promise<void>;\n}",
       "docstring": "",
-      "path": "src/components/v-map/map-provider/map-provider.ts"
+      "path": "src/types/mapprovider.ts"
     },
-    "src/components/v-map/map-provider/map-provider.ts::StyleConfig": {
+    "src/types/styleconfig.ts::StyleConfig": {
       "declaration": "export interface StyleConfig {\n  fillColor?: string;\n  strokeColor?: string;\n  strokeWidth?: number;\n}",
       "docstring": "",
-      "path": "src/components/v-map/map-provider/map-provider.ts"
+      "path": "src/types/styleconfig.ts"
     },
-    "src/components/v-map/map-provider/map-provider.ts::LayerConfig": {
+    "src/types/layerconfig.ts::LayerConfig": {
       "declaration": "export type LayerConfig =\n  | { type: 'geojson'; url: string; style?: StyleConfig; groupId?: string }\n  | { type: 'osm'; groupId?: string; url?: string }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n    }\n  | { type: 'arcgis'; url: string; groupId?: string }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      groupId?: string;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      params?: Record<string, string>;\n      groupId?: string;\n    }\n  | {\n      type: 'scatterplot';\n\n      id?: string;\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n    };",
       "docstring": "",
-      "path": "src/components/v-map/map-provider/map-provider.ts"
+      "path": "src/types/layerconfig.ts"
     }
   }
 }

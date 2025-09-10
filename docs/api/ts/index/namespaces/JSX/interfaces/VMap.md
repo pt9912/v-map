@@ -6,7 +6,7 @@
 
 # Interface: VMap
 
-Defined in: [src/components.d.ts:373](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L373)
+Defined in: [src/components.d.ts:379](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L379)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:373](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **center**: `string`
 
-Defined in: [src/components.d.ts:377](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L377)
+Defined in: [src/components.d.ts:383](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L383)
 
 #### Default
 
@@ -26,9 +26,9 @@ Defined in: [src/components.d.ts:377](https://github.com/pt9912/v-map/blob/bea65
 
 ### cssMode?
 
-> `optional` **cssMode**: [`CssMode`](../../../type-aliases/CssMode.md)
+> `optional` **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/components.d.ts:381](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L381)
+Defined in: [src/components.d.ts:387](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L387)
 
 #### Default
 
@@ -40,9 +40,9 @@ Defined in: [src/components.d.ts:381](https://github.com/pt9912/v-map/blob/bea65
 
 ### flavour?
 
-> `optional` **flavour**: [`Flavour`](../../../type-aliases/Flavour.md)
+> `optional` **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
 
-Defined in: [src/components.d.ts:385](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L385)
+Defined in: [src/components.d.ts:391](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L391)
 
 #### Default
 
@@ -56,7 +56,7 @@ Defined in: [src/components.d.ts:385](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **onMapProviderReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:386](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L386)
+Defined in: [src/components.d.ts:392](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L392)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/components.d.ts:386](https://github.com/pt9912/v-map/blob/bea65
 
 > `optional` **useDefaultImportMap**: `boolean`
 
-Defined in: [src/components.d.ts:391](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L391)
+Defined in: [src/components.d.ts:397](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L397)
 
 Falls true, injiziert v-map automatisch die Import-Map.
 
@@ -90,7 +90,7 @@ true
 
 > `optional` **zoom**: `number`
 
-Defined in: [src/components.d.ts:395](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L395)
+Defined in: [src/components.d.ts:401](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L401)
 
 #### Default
 

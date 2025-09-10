@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L81)
+Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L87)
 
 ## Properties
 
@@ -14,13 +14,13 @@ Defined in: [src/components.d.ts:81](https://github.com/pt9912/v-map/blob/bea65c
 
 > **addLayer**: (`layerConfig`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:82](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L82)
+Defined in: [src/components.d.ts:88](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L88)
 
 #### Parameters
 
 ##### layerConfig
 
-[`LayerConfig`](../../../type-aliases/LayerConfig.md)
+[`LayerConfig`](../../../../types/layerconfig/type-aliases/LayerConfig.md)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/components.d.ts:82](https://github.com/pt9912/v-map/blob/bea65c
 
 > **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:86](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L86)
+Defined in: [src/components.d.ts:92](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L92)
 
 #### Default
 
@@ -46,7 +46,7 @@ false
 
 > **groupId**: `string`
 
-Defined in: [src/components.d.ts:90](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L90)
+Defined in: [src/components.d.ts:96](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L96)
 
 #### Default
 
@@ -60,7 +60,7 @@ Math.random().toString(36).slice(2, 11)
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:94](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L94)
+Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L100)
 
 #### Default
 
@@ -74,7 +74,7 @@ Defined in: [src/components.d.ts:94](https://github.com/pt9912/v-map/blob/bea65c
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:98](https://github.com/pt9912/v-map/blob/bea65c6d2848bf21bb415bc9b7615d35b13f035e/src/components.d.ts#L98)
+Defined in: [src/components.d.ts:104](https://github.com/pt9912/v-map/blob/9428f65b23035f217fc965a1dcbd4604dab1c94a/src/components.d.ts#L104)
 
 #### Default
 
