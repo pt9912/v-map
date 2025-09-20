@@ -2,6 +2,7 @@
 
 - `v-map` — 
 - `v-map-layer-geojson` — 
+- `v-map-layer-geotiff` — 
 - `v-map-layer-google` — Google Maps Basemap Layer
 - `v-map-layer-group` — 
 - `v-map-layer-osm` — 

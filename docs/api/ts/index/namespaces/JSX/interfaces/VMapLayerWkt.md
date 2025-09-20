@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L665)
+Defined in: [src/components.d.ts:746](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L746)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/93b8c
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:675](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L675)
+Defined in: [src/components.d.ts:756](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L756)
 
 Globale Opazität (0–1).
 
@@ -30,7 +30,7 @@ Globale Opazität (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:679](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L679)
+Defined in: [src/components.d.ts:760](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L760)
 
 URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
@@ -40,7 +40,7 @@ URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:684](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L684)
+Defined in: [src/components.d.ts:765](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L765)
 
 Sichtbarkeit des Layers.
 
@@ -56,7 +56,7 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L688)
+Defined in: [src/components.d.ts:769](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L769)
 
 WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
 
@@ -66,7 +66,7 @@ WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:670](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L670)
+Defined in: [src/components.d.ts:751](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L751)
 
 Signalisiert, dass das WKT-Layer initialisiert ist.
  ready

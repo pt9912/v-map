@@ -7,7 +7,9 @@
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
 | `opacity` | `number` | `opacity` | `1.0` | Opazität der OSM-Kacheln (0–1). |
+| `url` | `string` | `url` | `'https://tile.openstreetmap.org'` |  |
 | `visible` | `boolean` | `visible` | `true` | Sichtbarkeit des Layers |
+| `zIndex` | `number` | `z-index` | `10` |  |
 
 ### Events
 
@@ -17,5 +19,5 @@
 
 ### Methods
 
-- `addToMap(mapElement: HTMLVMapElement) => [object Object]` — Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
+- `getLayerId() => [object Object]`
 

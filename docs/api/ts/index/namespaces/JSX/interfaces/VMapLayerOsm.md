@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:613](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L613)
+Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L686)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:613](https://github.com/pt9912/v-map/blob/93b8c
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:623](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L623)
+Defined in: [src/components.d.ts:696](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L696)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -26,11 +26,25 @@ Opazität der OSM-Kacheln (0–1).
 
 ***
 
+### url?
+
+> `optional` **url**: `string`
+
+Defined in: [src/components.d.ts:700](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L700)
+
+#### Default
+
+```ts
+'https://tile.openstreetmap.org'
+```
+
+***
+
 ### visible?
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:628](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L628)
+Defined in: [src/components.d.ts:705](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L705)
 
 Sichtbarkeit des Layers
 
@@ -40,13 +54,27 @@ Sichtbarkeit des Layers
 true
 ```
 
+***
+
+### zIndex?
+
+> `optional` **zIndex**: `number`
+
+Defined in: [src/components.d.ts:709](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L709)
+
+#### Default
+
+```ts
+10
+```
+
 ## Events
 
 ### onReady()?
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:618](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L618)
+Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L691)
 
 Wird ausgelöst, wenn der OSM-Layer bereit ist.
  ready

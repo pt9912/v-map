@@ -11,6 +11,7 @@
 - [IntrinsicElements](interfaces/IntrinsicElements.md)
 - [VMap](interfaces/VMap.md)
 - [VMapLayerGeojson](interfaces/VMapLayerGeojson.md)
+- [VMapLayerGeotiff](interfaces/VMapLayerGeotiff.md)
 - [VMapLayerGoogle](interfaces/VMapLayerGoogle.md)
 - [VMapLayerGroup](interfaces/VMapLayerGroup.md)
 - [VMapLayerOsm](interfaces/VMapLayerOsm.md)

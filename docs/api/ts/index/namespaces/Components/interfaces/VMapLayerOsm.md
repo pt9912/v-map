@@ -6,27 +6,19 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:166](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L166)
+Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L184)
 
 ## Properties
 
-### addToMap()
+### getLayerId()
 
-> **addToMap**: (`mapElement`) => `Promise`\<`void`\>
+> **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:170](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L170)
-
-Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
-
-#### Parameters
-
-##### mapElement
-
-`HTMLVMapElement`
+Defined in: [src/components.d.ts:185](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L185)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`string`\>
 
 ***
 
@@ -34,7 +26,7 @@ Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:175](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L175)
+Defined in: [src/components.d.ts:190](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L190)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -46,11 +38,25 @@ Opazität der OSM-Kacheln (0–1).
 
 ***
 
+### url
+
+> **url**: `string`
+
+Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L194)
+
+#### Default
+
+```ts
+'https://tile.openstreetmap.org'
+```
+
+***
+
 ### visible
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:180](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L180)
+Defined in: [src/components.d.ts:199](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L199)
 
 Sichtbarkeit des Layers
 
@@ -58,4 +64,18 @@ Sichtbarkeit des Layers
 
 ```ts
 true
+```
+
+***
+
+### zIndex
+
+> **zIndex**: `number`
+
+Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L203)
+
+#### Default
+
+```ts
+10
 ```

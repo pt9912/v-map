@@ -14,6 +14,7 @@
 ## Interfaces
 
 - [VMapCustomEvent](interfaces/VMapCustomEvent.md)
+- [VMapLayerGeotiffCustomEvent](interfaces/VMapLayerGeotiffCustomEvent.md)
 - [VMapLayerGoogleCustomEvent](interfaces/VMapLayerGoogleCustomEvent.md)
 - [VMapLayerOsmCustomEvent](interfaces/VMapLayerOsmCustomEvent.md)
 - [VMapLayerScatterplotCustomEvent](interfaces/VMapLayerScatterplotCustomEvent.md)
@@ -54,9 +55,3 @@ Re-exports [MapProvider](../types/mapprovider/interfaces/MapProvider.md)
 ### MapProviderDetail
 
 Re-exports [MapProviderDetail](../utils/events/interfaces/MapProviderDetail.md)
-
-***
-
-### StyleConfig
-
-Re-exports [StyleConfig](../types/styleconfig/interfaces/StyleConfig.md)

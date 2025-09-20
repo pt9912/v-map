@@ -6,27 +6,29 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:77](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L77)
+Defined in: [src/components.d.ts:75](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L75)
 
 ## Properties
 
-### addToMap()
+### geojson?
 
-> **addToMap**: (`mapElement`) => `Promise`\<`void`\>
+> `optional` **geojson**: `unknown`
 
-Defined in: [src/components.d.ts:82](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L82)
+Defined in: [src/components.d.ts:79](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L79)
 
-Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).
+Prop, die du intern nutzt/weiterverarbeitest
 
-#### Parameters
+***
 
-##### mapElement
+### getLayerId()
 
-`HTMLVMapElement`
+> **getLayerId**: () => `Promise`\<`string`\>
+
+Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L80)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`string`\>
 
 ***
 
@@ -34,9 +36,9 @@ Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgeruf
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:87](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L87)
+Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L85)
 
-Globale Deck-/Provider-Opacity des Layers (0–1).
+Opazität der geojson-Kacheln (0–1).
 
 #### Default
 
@@ -50,19 +52,13 @@ Globale Deck-/Provider-Opacity des Layers (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:91](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L91)
+Defined in: [src/components.d.ts:89](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L89)
 
-URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+#### Default
 
-***
-
-### vectorStyle?
-
-> `optional` **vectorStyle**: [`StyleConfig`](../../../../types/styleconfig/interfaces/StyleConfig.md)
-
-Defined in: [src/components.d.ts:95](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L95)
-
-Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+```ts
+null
+```
 
 ***
 
@@ -70,12 +66,24 @@ Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassu
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L100)
-
-Sichtbarkeit des Layers
+Defined in: [src/components.d.ts:93](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L93)
 
 #### Default
 
 ```ts
 true
+```
+
+***
+
+### zIndex
+
+> **zIndex**: `number`
+
+Defined in: [src/components.d.ts:97](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L97)
+
+#### Default
+
+```ts
+1000
 ```

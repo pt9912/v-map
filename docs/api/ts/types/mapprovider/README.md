@@ -9,3 +9,7 @@
 ## Interfaces
 
 - [MapProvider](interfaces/MapProvider.md)
+
+## Type Aliases
+
+- [LayerUpdate](type-aliases/LayerUpdate.md)

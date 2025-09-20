@@ -6,17 +6,27 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:529](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L529)
+Defined in: [src/components.d.ts:574](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L574)
 
 ## Properties
+
+### geojson?
+
+> `optional` **geojson**: `unknown`
+
+Defined in: [src/components.d.ts:578](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L578)
+
+Prop, die du intern nutzt/weiterverarbeitest
+
+***
 
 ### opacity?
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:534](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L534)
+Defined in: [src/components.d.ts:583](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L583)
 
-Globale Deck-/Provider-Opacity des Layers (0–1).
+Opazität der geojson-Kacheln (0–1).
 
 #### Default
 
@@ -30,19 +40,13 @@ Globale Deck-/Provider-Opacity des Layers (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:538](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L538)
+Defined in: [src/components.d.ts:587](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L587)
 
-URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+#### Default
 
-***
-
-### vectorStyle?
-
-> `optional` **vectorStyle**: [`StyleConfig`](../../../../types/styleconfig/interfaces/StyleConfig.md)
-
-Defined in: [src/components.d.ts:542](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L542)
-
-Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+```ts
+null
+```
 
 ***
 
@@ -50,12 +54,24 @@ Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassu
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:547](https://github.com/pt9912/v-map/blob/93b8cee058f776f62d4555f57b7731d033702264/src/components.d.ts#L547)
-
-Sichtbarkeit des Layers
+Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L591)
 
 #### Default
 
 ```ts
 true
+```
+
+***
+
+### zIndex?
+
+> `optional` **zIndex**: `number`
+
+Defined in: [src/components.d.ts:595](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L595)
+
+#### Default
+
+```ts
+1000
 ```

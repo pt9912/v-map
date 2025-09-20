@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-10T12:56:06",
+  "timestamp": "2025-09-20T18:16:22",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.36.3",
@@ -421,6 +421,29 @@
       "usage": {},
       "props": [
         {
+          "name": "geojson",
+          "type": "unknown",
+          "complexType": {
+            "original": "unknown",
+            "resolved": "unknown",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "geojson",
+          "reflectToAttr": false,
+          "docs": "Prop, die du intern nutzt/weiterverarbeitest",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "unknown"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "opacity",
           "type": "number",
           "complexType": {
@@ -431,7 +454,7 @@
           "mutable": false,
           "attr": "opacity",
           "reflectToAttr": false,
-          "docs": "Globale Deck-/Provider-Opacity des Layers (0–1).",
+          "docs": "Opazität der geojson-Kacheln (0–1).",
           "docsTags": [
             {
               "name": "default",
@@ -460,8 +483,14 @@
           "mutable": false,
           "attr": "url",
           "reflectToAttr": false,
-          "docs": "URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON\ndirekt über einen Prop/Slot gesetzt werden.",
-          "docsTags": [],
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
           "values": [
             {
               "type": "string"
@@ -473,30 +502,160 @@
           "setter": false
         },
         {
-          "name": "vectorStyle",
-          "type": "StyleConfig",
+          "name": "visible",
+          "type": "boolean",
           "complexType": {
-            "original": "StyleConfig",
-            "resolved": "StyleConfig",
-            "references": {
-              "StyleConfig": {
-                "location": "import",
-                "path": "../../types/styleconfig",
-                "id": "src/types/styleconfig.ts::StyleConfig"
-              }
-            }
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
           },
           "mutable": false,
-          "attr": "vector-style",
+          "attr": "visible",
           "reflectToAttr": false,
-          "docs": "Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig).\nErlaubt die Anpassung von Füllfarbe, Linienbreite etc.",
-          "docsTags": [],
-          "values": [
+          "docs": "",
+          "docsTags": [
             {
-              "type": "StyleConfig"
+              "name": "default",
+              "text": "true"
             }
           ],
-          "optional": true,
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-geotiff/v-map-layer-geotiff.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-geotiff",
+      "readme": "# v-map-layer-geotiff\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "Opazität der GeoTIFF-Kacheln (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -529,63 +688,82 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [
         {
-          "name": "addToMap",
+          "name": "getLayerId",
           "returns": {
-            "type": "Promise<void>",
+            "type": "Promise<string>",
             "docs": ""
           },
           "complexType": {
-            "signature": "(mapElement: HTMLVMapElement) => Promise<void>",
-            "parameters": [
-              {
-                "name": "mapElement",
-                "type": "HTMLVMapElement",
-                "docs": ""
-              }
-            ],
+            "signature": "() => Promise<string>",
+            "parameters": [],
             "references": {
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
-              },
-              "HTMLVMapElement": {
-                "location": "global",
-                "id": "global::HTMLVMapElement"
-              },
-              "MapProvider": {
-                "location": "import",
-                "path": "../../types/mapprovider",
-                "id": "src/types/mapprovider.ts::MapProvider"
-              },
-              "HTMLVMapLayerGroupElement": {
-                "location": "global",
-                "id": "global::HTMLVMapLayerGroupElement"
               }
             },
-            "return": "Promise<void>"
+            "return": "Promise<string>"
           },
-          "signature": "addToMap(mapElement: HTMLVMapElement) => Promise<void>",
-          "parameters": [
-            {
-              "name": "mapElement",
-              "type": "HTMLVMapElement",
-              "docs": ""
-            }
-          ],
-          "docs": "Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).",
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.",
           "docsTags": [
             {
-              "name": "param",
-              "text": "map Referenz auf die Map/Provider-Instanz."
+              "name": "event",
+              "text": "ready"
             }
           ]
         }
       ],
-      "events": [],
       "listeners": [],
       "styles": [],
       "slots": [],
@@ -943,15 +1121,15 @@
         {
           "name": "addLayer",
           "returns": {
-            "type": "Promise<void>",
+            "type": "Promise<string>",
             "docs": ""
           },
           "complexType": {
-            "signature": "(layerConfig: LayerConfig) => Promise<void>",
+            "signature": "(layerConfig: LayerConfig) => Promise<string>",
             "parameters": [
               {
                 "name": "layerConfig",
-                "type": "{ type: \"geojson\"; url: string; style?: StyleConfig; groupId?: string; } | { type: \"osm\"; groupId?: string; url?: string; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; groupId?: string; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; } | { type: \"scatterplot\"; id?: string; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; }",
+                "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; }",
                 "docs": ""
               }
             ],
@@ -975,13 +1153,13 @@
                 "id": "src/types/mapprovider.ts::MapProvider"
               }
             },
-            "return": "Promise<void>"
+            "return": "Promise<string>"
           },
-          "signature": "addLayer(layerConfig: LayerConfig) => Promise<void>",
+          "signature": "addLayer(layerConfig: LayerConfig) => Promise<string>",
           "parameters": [
             {
               "name": "layerConfig",
-              "type": "{ type: \"geojson\"; url: string; style?: StyleConfig; groupId?: string; } | { type: \"osm\"; groupId?: string; url?: string; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; groupId?: string; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; } | { type: \"scatterplot\"; id?: string; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; }",
+              "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; groupId?: string; } | { type: \"google\"; apiKey: string; mapType?: \"roadmap\" | \"satellite\" | \"terrain\" | \"hybrid\"; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; params?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; }",
               "docs": ""
             }
           ],
@@ -1042,6 +1220,35 @@
           "setter": false
         },
         {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'https://tile.openstreetmap.org'"
+            }
+          ],
+          "default": "'https://tile.openstreetmap.org'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "visible",
           "type": "boolean",
           "complexType": {
@@ -1069,45 +1276,58 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "10"
+            }
+          ],
+          "default": "10",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [
         {
-          "name": "addToMap",
+          "name": "getLayerId",
           "returns": {
-            "type": "Promise<void>",
+            "type": "Promise<string>",
             "docs": ""
           },
           "complexType": {
-            "signature": "(mapElement: HTMLVMapElement) => Promise<void>",
-            "parameters": [
-              {
-                "name": "mapElement",
-                "type": "HTMLVMapElement",
-                "docs": ""
-              }
-            ],
+            "signature": "() => Promise<string>",
+            "parameters": [],
             "references": {
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
-              },
-              "HTMLVMapElement": {
-                "location": "global",
-                "id": "global::HTMLVMapElement"
               }
             },
-            "return": "Promise<void>"
+            "return": "Promise<string>"
           },
-          "signature": "addToMap(mapElement: HTMLVMapElement) => Promise<void>",
-          "parameters": [
-            {
-              "name": "mapElement",
-              "type": "HTMLVMapElement",
-              "docs": ""
-            }
-          ],
-          "docs": "Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).",
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "",
           "docsTags": []
         }
       ],
@@ -2000,17 +2220,12 @@
       "path": "src/utils/events.ts"
     },
     "src/types/mapprovider.ts::MapProvider": {
-      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayer(layer: LayerConfig): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  /** Optional: von v-map-layer-group genutzt, wenn vorhanden */\n  ensureGroup?(\n    groupId: string,\n    opts?: { basemap?: boolean; zIndex?: number },\n  ): Promise<void>;\n}",
+      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  setOpacity(layerId: string, opacity: number): Promise<void>;\n  setVisible(layerId: string, visible: boolean): Promise<void>;\n  setZIndex(layerId: string, zIndex: number): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayer(layer: LayerConfig): Promise<string>;\n  updateLayer(layerId: string, update: LayerUpdate): Promise<void>;\n  removeLayer(layerId: string): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  /** Optional: von v-map-layer-group genutzt, wenn vorhanden */\n  ensureGroup?(\n    groupId: string,\n    opts?: { basemap?: boolean; zIndex?: number },\n  ): Promise<void>;\n}",
       "docstring": "",
       "path": "src/types/mapprovider.ts"
     },
-    "src/types/styleconfig.ts::StyleConfig": {
-      "declaration": "export interface StyleConfig {\n  fillColor?: string;\n  strokeColor?: string;\n  strokeWidth?: number;\n}",
-      "docstring": "",
-      "path": "src/types/styleconfig.ts"
-    },
     "src/types/layerconfig.ts::LayerConfig": {
-      "declaration": "export type LayerConfig =\n  | { type: 'geojson'; url: string; style?: StyleConfig; groupId?: string }\n  | { type: 'osm'; groupId?: string; url?: string }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n    }\n  | { type: 'arcgis'; url: string; groupId?: string }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      groupId?: string;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      params?: Record<string, string>;\n      groupId?: string;\n    }\n  | {\n      type: 'scatterplot';\n\n      id?: string;\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n    };",
+      "declaration": "export type LayerConfig =\n  | {\n      type: 'geojson';\n      url?: string;\n      geojson?: string;\n      style?: StyleConfig;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'osm';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'geotiff';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | { type: 'arcgis'; url: string; groupId?: string }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      opacity?: number;\n      visible?: boolean;\n      groupId?: string;\n      zIndex?: number;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      params?: Record<string, string>;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n    }\n  | {\n      type: 'scatterplot';\n\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n      zIndex?: number;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n    };",
       "docstring": "",
       "path": "src/types/layerconfig.ts"
     }
