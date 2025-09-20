@@ -22,5 +22,12 @@
     "types": ["@stencil/core", "jest", "node", "cesium", "ol", "geojson"] // <- keine 'Assets'/'Widgets' etc.
   },
   "include": ["src", "types", "node_modules/cesium/Source/Cesium.d.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "**/*.stories.*",
+    "**/*.story.*",
+    "**/*.mdx",
+    ".storybook",
+    "stories/**"
+  ]
 }

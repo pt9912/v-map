@@ -1,6 +1,13 @@
 {
   "entryPointStrategy": "expand",
-  "entryPoints": ["src/index.ts", "src/utils", "src/types"],
+  "entryPoints": [
+    "src/index.ts",
+    "src/layer",
+    "src/lib",
+    "src/map-provider",
+    "src/utils",
+    "src/types"
+  ],
   "tsconfig": "tsconfig.json",
   "plugin": ["typedoc-plugin-markdown"],
   "readme": "none",

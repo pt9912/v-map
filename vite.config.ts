@@ -45,7 +45,14 @@ export default defineConfig({
           ],
           'chunk-leaflet': ['leaflet'],
         },
+        external: ['path', 'fs', 'util'],
       },
     },
+    commonjsOptions: {
+      ignore: ['path'], // <-- Hinzugefügt
+    },
+  },
+  optimizeDeps: {
+    exclude: ['cesium'], // <-- Hinzugefügt
   },
 });

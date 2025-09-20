@@ -27,7 +27,13 @@ export const config: Config = {
   buildEs5: 'prod',
   testing: {
     browserHeadless: 'shell',
-    browserArgs: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+    browserArgs: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--single-process',
+    ],
   },
   rollupPlugins: {
     after: [
@@ -43,11 +49,36 @@ export const config: Config = {
               /^ol\//,
               'leaflet.gridlayer.googlemutant',
 
-              'child_process', // Node.js-spezifische APIs
+              // Node.js-spezifische Module (NEU)
+              'path',
+              'fs',
+              'util',
+              'child_process',
+              'crypto',
+              'stream',
+              'http',
+              'https',
+              'url',
+              'zlib',
+              'os',
+              'net',
+              'tls',
+              'dns',
+              'assert',
+              'events',
+              'buffer',
+              'querystring',
+              'punycode',
+              'string_decoder',
+              'path-browserify', // Falls irgendwo als Fallback verwendet
             ],
           };
         },
       },
     ],
+  },
+  nodeResolve: {
+    browser: true, // Erzwingt Browser-kompatible Module
+    preferBuiltins: false, // Verhindert, dass Node.js-Built-ins eingebunden werden
   },
 };

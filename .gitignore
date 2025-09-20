@@ -13,6 +13,7 @@ log.txt
 *.sublime-project
 *.sublime-workspace
 
+*.off
 * copy
 *.copy
 
@@ -36,3 +37,9 @@ storybook-static
 chrome-headless-shell/
 
 cache/
+
+
+v-map-cesium/
+v-map-test-harness*/
+
+docs/site.pdf
