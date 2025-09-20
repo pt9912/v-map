@@ -1,4 +1,4 @@
-// src/components/v-map-layer-osm/v-map-layer-osm.tsx
+// src/components/v-map-layer-geotiff/v-map-layer-geotiff.tsx
 import {
   Component,
   Prop,
@@ -15,27 +15,27 @@ import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 
 @Component({
-  tag: 'v-map-layer-osm',
-  styleUrl: 'v-map-layer-osm.css',
+  tag: 'v-map-layer-geotiff',
+  styleUrl: 'v-map-layer-geotiff.css',
   shadow: true,
 })
-export class VMapLayerOSM implements VMapLayer {
+export class VMapLayerGeoTIFF implements VMapLayer {
   @Element() el!: HTMLElement;
+
+  @Prop() url: string = null;
 
   @Prop() visible: boolean = true;
 
   /**
-   * Opazität der OSM-Kacheln (0–1).
+   * Opazität der GeoTIFF-Kacheln (0–1).
    * @default 1
    */
   @Prop() opacity: number = 1.0;
 
-  @Prop() zIndex: number = 10;
-
-  @Prop() url: string = 'https://tile.openstreetmap.org';
+  @Prop() zIndex: number = 1000;
 
   /**
-   * Wird ausgelöst, wenn der OSM-Layer bereit ist.
+   * Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
    * @event ready
    */
   @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
@@ -44,38 +44,33 @@ export class VMapLayerOSM implements VMapLayer {
 
   private helper: VMapLayerHelper;
 
+  @Watch('url')
+  async onUrlChanged() {
+    console.log('v-map-layer-geotiff - onUrlChanged');
+    await this.helper?.updateLayer({
+      type: 'geotiff',
+      data: {
+        url: this.url,
+      },
+    });
+  }
+
   @Watch('visible')
   async onVisibleChanged() {
-    console.log('v-map-layer-osm - onVisibleChanged');
+    console.log('v-map-layer-geotiff - onVisibleChanged');
     await this.helper?.setVisible(this.visible);
   }
 
   @Watch('opacity')
   async onOpacityChanged() {
-    console.log('v-map-layer-osm - onOpacityChanged');
+    console.log('v-map-layer-geotiff - onOpacityChanged');
     await this.helper?.setOpacity(this.opacity);
   }
 
   @Watch('zIndex')
   async onZIndexChanged() {
-    console.log('v-map-layer-osm - onZIndexChanged');
+    console.log('v-map-layer-geotiff - onZIndexChanged');
     await this.helper?.setZIndex(this.zIndex);
-  }
-
-  @Watch('url')
-  async onUrlChanged(oldValue: string, newValue: string) {
-    console.log('v-map-layer-osm - onUrlChanged');
-    if (oldValue !== newValue) {
-      await this.helper?.updateLayer({
-        type: 'osm',
-        data: {
-          url: this.url,
-        },
-      });
-    }
-    //    if (oldValue !== newValue) {
-    //      await this.helper.initLayer(() => this.createLayerConfig());
-    //    }
   }
 
   isReady(): boolean {
@@ -89,25 +84,34 @@ export class VMapLayerOSM implements VMapLayer {
 
   private createLayerConfig(): LayerConfig {
     return {
-      type: 'osm',
-      url: this.url,
+      type: 'geotiff',
       visible: this.visible,
       zIndex: this.zIndex,
       opacity: this.opacity,
+      url: this.url,
     };
   }
 
+  // /**
+  //  * Fügt den GeoTIFF-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
+  //  */
+  // @Method()
+  // async addToMap(_mapElement: HTMLVMapElement) {
+  //   await this.helper?.initLayer(() => this.createLayerConfig());
+  // }
+
   async connectedCallback() {
-    console.log('v-map-layer-osm - connectedCallback');
+    console.log('v-map-layer-geotiff - connectedCallback');
+    //await this.addToMapInternal();
   }
 
   async componentWillLoad() {
-    console.log('v-map-layer-osm - componentWillLoad');
+    console.log('v-map-layer-geotiff - componentWillLoad');
     this.helper = new VMapLayerHelper(this.el);
   }
 
   async componentDidLoad() {
-    console.log('v-map-layer-osm - componentDidLoad');
+    console.log('v-map-layer-geotiff - componentDidLoad');
 
     await this.helper.initLayer(() => this.createLayerConfig());
 
@@ -116,7 +120,7 @@ export class VMapLayerOSM implements VMapLayer {
   }
 
   async componentWillRender() {
-    console.log('v-map-layer-osm - componentWillRender');
+    console.log('v-map-layer-geotiff - componentWillRender');
   }
 
   render() {

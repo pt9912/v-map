@@ -16,34 +16,34 @@ import type { MapProvider } from '../../types/mapprovider';
 })
 export class VMapLayerWkt {
   @Element() el!: HTMLElement;
-  
-/**
- * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
- */
-@Prop({ reflect: true }) wkt?: string;
-  
-/**
- * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
- */
-@Prop({ reflect: true }) url?: string;
-  
-/**
- * Sichtbarkeit des Layers.
- * @default true
- */
-@Prop({ reflect: true }) visible: boolean = true;
-  
-/**
- * Globale Opazität (0–1).
- * @default 1
- */
-@Prop({ reflect: true }) opacity: number = 1.0;
-  
-/**
- * Signalisiert, dass das WKT-Layer initialisiert ist.
- * @event ready
- */
-@Event() ready!: EventEmitter<void>;
+
+  /**
+   * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
+   */
+  @Prop({ reflect: true }) wkt?: string;
+
+  /**
+   * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
+   */
+  @Prop({ reflect: true }) url?: string;
+
+  /**
+   * Sichtbarkeit des Layers.
+   * @default true
+   */
+  @Prop({ reflect: true }) visible: boolean = true;
+
+  /**
+   * Globale Opazität (0–1).
+   * @default 1
+   */
+  @Prop({ reflect: true }) opacity: number = 1.0;
+
+  /**
+   * Signalisiert, dass das WKT-Layer initialisiert ist.
+   * @event ready
+   */
+  @Event() ready!: EventEmitter<void>;
   private mapProvider?: MapProvider;
 
   async connectedCallback() {
@@ -129,7 +129,7 @@ export class VMapLayerWkt {
     const url = await this.resolveGeoJsonUrl();
     if (!url) return;
     await this.mapProvider.addLayer({
-      type: 'geojson',
+      type: 'wkt',
       url,
       // @ts-ignore
       visible: this.visible,
