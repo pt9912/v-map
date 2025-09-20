@@ -1,4 +1,4 @@
-import type { MapProvider } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
@@ -10,11 +10,15 @@ import { LEAFLET_VERSION } from '../../lib/versions.gen';
 
 // Leaflet ESM
 import * as L from 'leaflet';
-//import 'leaflet.gridlayer.googlemutant';
 
 import { isBrowser, supportsAdoptedStyleSheets } from '../../utils/dom-env';
 
-function injectInlineMin(root?: ShadowRoot): void {
+interface OpacityOptions {
+  opacity?: number;
+  fillOpacity?: number;
+}
+
+function injectInlineMin(root?: ShadowRoot): HTMLStyleElement | null {
   if (!isBrowser()) return;
   const css = `
     :host { display:block; }
@@ -26,10 +30,12 @@ function injectInlineMin(root?: ShadowRoot): void {
     const target: any = root ?? document;
     const current = target.adoptedStyleSheets ?? [];
     target.adoptedStyleSheets = [...current, sheet];
+    return null;
   } else {
     const style = document.createElement('style');
     style.textContent = css;
     (root ?? document.head).appendChild(style);
+    return style;
   }
 }
 
@@ -37,7 +43,7 @@ function addLeafletCssFromCdn(
   root?: ShadowRoot,
   version = LEAFLET_VERSION,
   cdn: 'jsdelivr' | 'unpkg' = 'jsdelivr',
-) {
+): HTMLStyleElement | null {
   if (!isBrowser()) return;
 
   const href =
@@ -45,30 +51,46 @@ function addLeafletCssFromCdn(
       ? `https://unpkg.com/leaflet@${version}/dist/leaflet.css`
       : `https://cdn.jsdelivr.net/npm/leaflet@${version}/dist/leaflet.css`;
 
+  if (cdn === 'unpkg')
+    L.Icon.Default.imagePath = `https://unpkg.com/npm/leaflet@${version}/dist/images/`;
+  else
+    L.Icon.Default.imagePath = `https://cdn.jsdelivr.net/npm/leaflet@${version}/dist/images/`;
+
   // doppelte Injektion vermeiden (prüfe ShadowRoot **und** globales head)
   const scope = (root as unknown as Document | ShadowRoot) ?? document;
   const already =
     scope.querySelector?.(`link[rel="stylesheet"][href="${href}"]`) ||
     document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`);
 
-  if (already) return;
+  if (already) return null;
 
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = href;
   // Optional: link.integrity = '<SRI-Hash>'; link.crossOrigin = '';
   (root ?? document.head).appendChild(link);
+  return link;
 }
 
-function ensureLeafletCss(mode: CssMode, root?: ShadowRoot) {
+function removeInjectedCss(
+  shadowRoot: ShadowRoot,
+  injectedStyle: HTMLStyleElement,
+) {
+  if (!shadowRoot || !injectedStyle) return;
+  // Das <style>-Element aus dem Shadow‑DOM entfernen
+  injectedStyle.remove(); // moderne API
+}
+
+function ensureLeafletCss(
+  mode: CssMode,
+  root?: ShadowRoot,
+): HTMLStyleElement | null {
   if (!isBrowser()) return; // Tests/SSR: no-op
   switch (mode) {
     case 'cdn':
-      addLeafletCssFromCdn(root);
-      break;
+      return addLeafletCssFromCdn(root);
     case 'inline-min':
-      injectInlineMin(root);
-      break;
+      return injectInlineMin(root);
     case 'bundle':
       // CSS wird vom Host/App-Bundle geliefert (z.B. via import 'leaflet/dist/leaflet.css')
       break;
@@ -77,6 +99,7 @@ function ensureLeafletCss(mode: CssMode, root?: ShadowRoot) {
       // Host kümmert sich selbst; nichts tun
       break;
   }
+  return null;
 }
 
 async function ensureGoogleMutantLoaded(): Promise<void> {
@@ -146,11 +169,14 @@ export class LeafletProvider implements MapProvider {
   private layers: AnyLayer[] = [];
   private googleLogoAdded: boolean = false;
   private unsubscribeResize: Unsubscribe;
+  private shadowRoot: ShadowRoot;
+  private injectedStyle: HTMLStyleElement;
 
   async init(options: ProviderOptions) {
     if (!isBrowser()) return;
 
-    ensureLeafletCss(options.cssMode, options.shadowRoot);
+    this.shadowRoot = options.shadowRoot;
+    this.injectedStyle = ensureLeafletCss(options.cssMode, this.shadowRoot);
 
     const [lon, lat] = (options?.mapInitOptions?.center ?? [0, 0]) as LonLat;
 
@@ -171,27 +197,68 @@ export class LeafletProvider implements MapProvider {
     );
   }
 
-  async addLayer(layerConfig: LayerConfig) {
-    if (!this.map) return;
-
-    if ('groupId' in layerConfig && layerConfig.groupId) {
-      await this.addLayerToGroup(
-        layerConfig as LayerConfig & { groupId: string },
-      ).catch(console.error);
-    } else {
-      await this.addStandaloneLayer(layerConfig).catch(console.error);
+  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
+    const layer = await this._getLayerById(layerId);
+    switch (update.type) {
+      case 'geojson':
+        await this.updateGeoJSONLayer(layer, update.data);
+        break;
+      case 'osm':
+        await this.updateOSMLayer(layer, update.data);
+        break;
     }
   }
 
-  private async addStandaloneLayer(layerConfig: LayerConfig) {
-    const layer = (await this.createLayer(layerConfig)) as AnyLayer;
+  async addLayer(config: LayerConfig): Promise<string> {
+    if (!this.map) return;
+    let layer: L.Layer = null;
+    if ('groupId' in config && config.groupId) {
+      try {
+        layer = await this.addLayerToGroup(
+          config as LayerConfig & { groupId: string },
+        );
+      } catch (ex) {
+        console.error('addLayer - Unerwarteter Fehler:', ex);
+        return null;
+      }
+    } else {
+      try {
+        layer = await this.addStandaloneLayer(config);
+      } catch (ex) {
+        console.error('addLayer - Unerwarteter Fehler:', ex);
+        return null;
+      }
+    }
+    if (layer == null) {
+      return null;
+    }
+    layer.vmapVisible = true;
+    layer.vmapOpacity = 1.0;
+
+    if ((config as any).opacity !== undefined) {
+      this.setOpacityByLayer(layer, (config as any).opacity);
+    }
+    if ((config as any).zIndex !== undefined) {
+      layer.setZIndex((config as any).zIndex);
+    }
+    if ((config as any).visible) {
+      this.setVisibleByLayer(layer, true);
+    } else if ((config as any).visible === false) {
+      this.setVisibleByLayer(layer, false);
+    }
+
+    return layer._leaflet_id;
+  }
+
+  private async addStandaloneLayer(layerConfig: LayerConfig): Promise<L.Layer> {
+    const layer = await this.createLayer(layerConfig);
     layer.addTo(this.map!);
     this.layers.push(layer);
   }
 
   private async addLayerToGroup(
     layerConfig: LayerConfig & { groupId: string },
-  ) {
+  ): Promise<L.Layer> {
     let group = this.layers.find(
       l =>
         l instanceof L.LayerGroup &&
@@ -205,11 +272,22 @@ export class LeafletProvider implements MapProvider {
       this.layers.push(group);
     }
 
-    const child = (await this.createLayer(layerConfig)) as AnyLayer;
+    const child = await this.createLayer(layerConfig);
     group.addLayer(child);
+    return child;
   }
 
-  private async createLayer(layerConfig: LayerConfig): Promise<AnyLayer> {
+  private async _getLayerById(layerId): Promise<L.Layer> {
+    let layerFound = null;
+    this.map.eachLayer(layer => {
+      if (L.stamp(layer) === layerId) {
+        layerFound = layer;
+      }
+    });
+    return layerFound;
+  }
+
+  private async createLayer(layerConfig: LayerConfig): Promise<L.Layer> {
     switch (layerConfig.type) {
       case 'geojson':
         return this.createGeoJSONLayer(
@@ -220,7 +298,9 @@ export class LeafletProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'xyz' }>,
         );
       case 'osm':
-        return this.createOSMLayer();
+        return this.createOSMLayer(
+          layerConfig as Extract<LayerConfig, { type: 'osm' }>,
+        );
       case 'wms':
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
@@ -234,25 +314,50 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
+  private async updateGeoJSONLayer(layer: L.Layer, data: any) {
+    let geoJsonData = null;
+    if (data.geojson) {
+      geoJsonData = JSON.parse(data.geojson);
+    } else if (data.url) {
+      const res = await fetch(data.url);
+      if (!res.ok)
+        throw new Error(
+          `GeoJSON fetch failed: ${res.status} ${res.statusText}`,
+        );
+      geoJsonData = await res.json();
+    }
+    layer.clearLayers();
+    layer.addData(geoJsonData);
+  }
+
   private async createGeoJSONLayer(
     config: Extract<LayerConfig, { type: 'geojson' }>,
   ): Promise<L.GeoJSON> {
-    const res = await fetch(config.url);
-    if (!res.ok)
-      throw new Error(`GeoJSON fetch failed: ${res.status} ${res.statusText}`);
-    const data = await res.json();
+    let data = null;
+    if (config.geojson) {
+      data = JSON.parse(config.geojson);
+    } else if (config.url) {
+      const res = await fetch(config.url);
+      if (!res.ok)
+        throw new Error(
+          `GeoJSON fetch failed: ${res.status} ${res.statusText}`,
+        );
+      data = await res.json();
+    }
+    if (data) {
+      const layer = L.geoJSON(data, {
+        style: config.style
+          ? () => ({
+              fillColor: config.style!.fillColor ?? 'rgba(255,0,0,0.2)',
+              color: config.style!.strokeColor ?? '#ff0000',
+              weight: config.style!.strokeWidth ?? 2,
+            })
+          : undefined,
+      });
 
-    const layer = L.geoJSON(data, {
-      style: config.style
-        ? () => ({
-            fillColor: config.style!.fillColor ?? 'rgba(255,0,0,0.2)',
-            color: config.style!.strokeColor ?? '#ff0000',
-            weight: config.style!.strokeWidth ?? 2,
-          })
-        : undefined,
-    });
-
-    return layer;
+      return layer;
+    }
+    return null;
   }
 
   private async createXYZLayer(
@@ -266,8 +371,22 @@ export class LeafletProvider implements MapProvider {
     return layer;
   }
 
-  private async createOSMLayer(): Promise<L.TileLayer> {
-    return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  private async updateOSMLayer(layer: L.Layer, data: any) {
+    let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    if (data.url) {
+      url = data.url + '/{z}/{x}/{y}.png';
+    }
+    layer.setUrl(url);
+  }
+
+  private async createOSMLayer(
+    cfg: Extract<LayerConfig, { type: 'osm' }>,
+  ): Promise<L.TileLayer> {
+    let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    if (cfg.url) {
+      url = cfg.url + '/{z}/{x}/{y}.png';
+    }
+    return L.tileLayer(url, {
       attribution: '© OpenStreetMap contributors',
       maxZoom: 19,
     });
@@ -316,13 +435,17 @@ export class LeafletProvider implements MapProvider {
 
     ensureGoogleLogo(this.map, () => {
       this.googleLogoAdded = true;
-      console.log('googleLogoAdded: ', this.googleLogoAdded);
+      console.log(
+        'v-map - provider - leaflet - googleLogoAdded: ',
+        this.googleLogoAdded,
+      );
     });
     return gLayer;
   }
 
   async destroy() {
     this.unsubscribeResize?.();
+    removeInjectedCss(this.shadowRoot, this.injectedStyle);
     for (const l of this.layers) {
       this.map?.removeLayer(l);
     }
@@ -333,6 +456,93 @@ export class LeafletProvider implements MapProvider {
 
   async setView([lon, lat]: LonLat, zoom: number) {
     this.map?.setView([lat, lon], zoom, { animate: false });
+  }
+
+  async removeLayer(layerId: string): Promise<void> {
+    if (!layerId) {
+      return;
+    }
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      this.map.removeLayer(layer);
+    }
+  }
+
+  async setZIndex(layerId: string, zIndex: number): Promise<void> {
+    if (!layerId) {
+      return;
+    }
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      if (typeof layer.setZIndex === 'function') {
+        layer.setZIndex(zIndex);
+      } //todo
+    }
+  }
+
+  async setOpacity(layerId: string, opacity: number): Promise<void> {
+    if (!layerId) return;
+
+    const layer = await this._getLayerById(layerId);
+    this.setOpacityByLayer(layer, opacity);
+  }
+
+  private setOpacityByLayer(layer: L.Layer, opacity: number): Promise<void> {
+    if (!layer) return;
+
+    // 1. Speichere die Ziel-Opazität (auch wenn Layer unsichtbar)
+    layer.vmapOpacity = opacity;
+    if (layer.vmapVisible === undefined) {
+      layer.vmapVisible = true;
+    }
+
+    // 2. Wende sie nur an, wenn der Layer sichtbar IST ODER GEMACHT WIRD
+    //    (vermeidet unnötige setOpacity-Aufrufe, wenn vmapVisible=false)
+    if (layer.vmapVisible !== false) {
+      this.setLayerOpacity(layer, opacity);
+    }
+  }
+
+  async setVisible(layerId: string, visible: boolean): Promise<void> {
+    if (!layerId) return;
+    const layer = await this._getLayerById(layerId);
+    this.setVisibleByLayer(layer, visible);
+  }
+
+  private setVisibleByLayer(layer: L.Layer, visible: boolean): Promise<void> {
+    if (!layer || typeof layer.setOpacity !== 'function') return;
+    // 1. Aktualisiere den Sichtbarkeitszustand
+    layer.vmapVisible = visible;
+    if (layer.vmapOpacity === undefined) {
+      layer.vmapOpacity = 1.0;
+    }
+
+    // 2. Setze die Opazität basierend auf dem neuen Zustand:
+    const targetOpacity = visible ? layer.vmapOpacity : 0.0;
+    layer.setOpacity(targetOpacity);
+  }
+
+  private setLayerOpacity(
+    layer: L.Layer,
+    options: OpacityOptions | number,
+  ): void {
+    if (!layer) return;
+
+    const opacity =
+      typeof options === 'number' ? options : options.opacity ?? 1;
+    const fillOpacity =
+      typeof options === 'number' ? options : options.fillOpacity ?? opacity;
+
+    if (layer instanceof L.GeoJSON || layer instanceof L.LayerGroup) {
+      layer.eachLayer(subLayer => this.setLayerOpacity(subLayer, options));
+    } else if (layer instanceof L.Path) {
+      layer.setStyle({ opacity, fillOpacity });
+    } else if (layer instanceof L.Marker) {
+      const marker = layer as L.Marker;
+      marker.setOpacity(opacity);
+    } else if ('setOpacity' in layer) {
+      (layer as L.GridLayer).setOpacity(opacity);
+    }
   }
 
   getMap() {

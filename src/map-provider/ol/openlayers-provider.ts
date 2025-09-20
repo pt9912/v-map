@@ -1,21 +1,26 @@
 import { OL_VERSION } from '../../lib/versions.gen';
 
 import type Map from 'ol/Map';
-import MapClass from 'ol/Map';
-import View from 'ol/View';
-import { fromLonLat } from 'ol/proj';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
 
+//import type View from 'ol/View';
+//import { fromLonLat } from 'ol/proj';
+//import type TileLayer from 'ol/layer/Tile';
+//import type OSM from 'ol/source/OSM';
+
+import type { ProjectionLike } from 'ol/proj';
+import type VectorSource from 'ol/source/Vector';
+import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
+import type VectorLayer from 'ol/layer/Vector';
+
 import type LayerGroup from 'ol/layer/Group';
 
-import type { MapProvider } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 
-type AnyLayer = BaseLayer | LayerGroup;
+type AnyLayer = BaseLayer | LayerGroup | VectorLayer;
 
 /** CSS in ShadowRoot injizieren – ohne '?inline', kompatibel zu Stencil/Rollup */
 async function injectOlCss(shadowRoot?: ShadowRoot) {
@@ -47,19 +52,28 @@ export class OpenLayersProvider implements MapProvider {
   private map!: Map;
   private layers: AnyLayer[] = [];
   private googleLogoAdded = false;
+  private projection: ProjectionLike = 'EPSG:3857';
 
   async init(options: ProviderOptions) {
-    const sr =
-      options.target.getRootNode() instanceof ShadowRoot
-        ? (options.target.getRootNode() as ShadowRoot)
-        : undefined;
-    await injectOlCss(sr);
+    const [{ default: View }] = await Promise.all([import('ol/View')]);
+    const [{ default: Map }] = await Promise.all([import('ol/Map')]);
+    const [{ fromLonLat }] = await Promise.all([import('ol/proj')]);
 
-    this.map = new MapClass({
+    await injectOlCss(options.shadowRoot);
+
+    Object.assign(options.target.style, {
+      width: '100%',
+      height: '100%',
+      position: 'relative',
+      background: '#fff',
+    });
+
+    this.map = new Map({
       target: options.target,
       //      layers: [new TileLayer({ source: new OSM() })],
       layers: [],
       view: new View({
+        projection: this.projection,
         center: fromLonLat(options?.mapInitOptions?.center ?? [0, 0]),
         zoom: options?.mapInitOptions?.zoom ?? 2,
       }),
@@ -73,25 +87,69 @@ export class OpenLayersProvider implements MapProvider {
     this.map = undefined;
   }
 
-  async addLayer(layerConfig: LayerConfig) {
-    if ('groupId' in layerConfig && layerConfig.groupId) {
-      await this.addLayerToGroup(
-        layerConfig as LayerConfig & { groupId: string },
-      ).catch(console.error);
-    } else {
-      await this.addStandaloneLayer(layerConfig).catch(console.error);
+  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
+    const layer = await this._getLayerById(layerId);
+    switch (update.type) {
+      case 'geojson':
+        await this.updateGeoJSONLayer(layer, update.data);
+        break;
+      case 'osm':
+        await this.updateOSMLayer(layer, update.data);
+        break;
     }
   }
 
-  private async addStandaloneLayer(layerConfig: LayerConfig) {
-    const layer = (await this.createLayer(layerConfig)) as AnyLayer;
+  async addLayer(layerConfig: LayerConfig): Promise<string> {
+    let layerId: string = null;
+    let layer: Layer = null;
+    if ('groupId' in layerConfig && layerConfig.groupId) {
+      try {
+        layer = await this.addLayerToGroup(
+          layerConfig as LayerConfig & { groupId: string },
+        );
+      } catch (ex) {
+        console.error('addLayer - Unerwarteter Fehler:', ex);
+        return null;
+      }
+    } else {
+      try {
+        layer = await this.addStandaloneLayer(layerConfig);
+      } catch (ex) {
+        console.error('addLayer - Unerwarteter Fehler:', ex);
+        return null;
+      }
+    }
+    if (layer) {
+      layerId = crypto.randomUUID();
+      layer.set('id', layerId, false);
+
+      if ((layerConfig as any).opacity !== undefined) {
+        await layer.setOpacity((layerConfig as any).opacity);
+      }
+      if ((layerConfig as any).zIndex !== undefined) {
+        layer.setZIndex((layerConfig as any).zIndex);
+      }
+      if ((layerConfig as any).visible) {
+        layer.setVisible(true);
+      } else if ((layerConfig as any).visible === false) {
+        layer.setVisible(false);
+      }
+      return layerId;
+    }
+
+    return layerId;
+  }
+
+  private async addStandaloneLayer(layerConfig: LayerConfig): Promise<Layer> {
+    const layer = await this.createLayer(layerConfig);
     this.map.addLayer(layer);
     this.layers.push(layer);
+    return layer;
   }
 
   private async addLayerToGroup(
     layerConfig: LayerConfig & { groupId: string },
-  ) {
+  ): Promise<Layer> {
     const { default: LayerGroup } = await import('ol/layer/Group');
     let group = this.layers.find(
       l => (l as LayerGroup).get?.('groupId') === layerConfig.groupId,
@@ -106,13 +164,13 @@ export class OpenLayersProvider implements MapProvider {
       this.layers.push(group);
     }
 
-    const layer = (await this.createLayer(layerConfig)) as AnyLayer;
-    group.getLayers().push(layer as AnyLayer);
+    const layer = await this.createLayer(layerConfig);
+    group.getLayers().push(layer);
+    layer.set('group', group);
+    return layer;
   }
 
-  private async createLayer(
-    layerConfig: LayerConfig,
-  ): Promise<BaseLayer | LayerGroup> {
+  private async createLayer(layerConfig: LayerConfig): Promise<Layer> {
     switch (layerConfig.type) {
       case 'geojson':
         return this.createGeoJSONLayer(
@@ -127,7 +185,9 @@ export class OpenLayersProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'google' }>,
         );
       case 'osm':
-        return this.createOSMLayer();
+        return this.createOSMLayer(
+          layerConfig as Extract<LayerConfig, { type: 'osm' }>,
+        );
       case 'wms':
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
@@ -137,9 +197,46 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
+  private async updateOSMLayer(layer: Layer, data: any) {
+    const [{ default: OSM }] = await Promise.all([import('ol/source/OSM')]);
+
+    let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    if (data.url) {
+      url = data.url + '/{z}/{x}/{y}.png';
+    }
+
+    layer.setSource(
+      new OSM({
+        url: url,
+      }),
+    );
+  }
+
+  private async updateGeoJSONLayer(layer: Layer, data: any) {
+    let vectorSource: VectorSource = null;
+    const geojsonOptions = {
+      featureProjection: this.projection,
+    };
+    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all(
+      [import('ol/source/Vector'), import('ol/format/GeoJSON')],
+    );
+    if (data.geojson) {
+      const geojsonObject = JSON.parse(data.geojson);
+      vectorSource = new VectorSource({
+        features: new GeoJSON(geojsonOptions).readFeatures(geojsonObject),
+      });
+    } else {
+      vectorSource = new VectorSource({
+        url: data.url,
+        format: new GeoJSON(geojsonOptions),
+      });
+    }
+    layer.setSource(vectorSource);
+  }
+
   private async createGeoJSONLayer(
     config: Extract<LayerConfig, { type: 'geojson' }>,
-  ) {
+  ): Promise<Layer> {
     const [
       { default: VectorLayer },
       { default: VectorSource },
@@ -156,8 +253,23 @@ export class OpenLayersProvider implements MapProvider {
       import('ol/style/Stroke'),
     ]);
 
-    return new VectorLayer({
-      source: new VectorSource({ url: config.url, format: new GeoJSON() }),
+    let vectorSource: VectorSource = null;
+    const geojsonOptions = {
+      featureProjection: this.projection,
+    };
+    if (config.geojson) {
+      const geojsonObject = JSON.parse(config.geojson);
+      vectorSource = new VectorSource({
+        features: new GeoJSON(geojsonOptions).readFeatures(geojsonObject),
+      });
+    } else {
+      vectorSource = new VectorSource({
+        url: config.url,
+        format: new GeoJSON(geojsonOptions),
+      });
+    }
+    const layer = new VectorLayer({
+      source: vectorSource,
       style: config.style
         ? new Style({
             fill: new Fill({
@@ -170,9 +282,12 @@ export class OpenLayersProvider implements MapProvider {
           })
         : undefined,
     });
+    return layer;
   }
 
-  private async createXYZLayer(config: Extract<LayerConfig, { type: 'xyz' }>) {
+  private async createXYZLayer(
+    config: Extract<LayerConfig, { type: 'xyz' }>,
+  ): Promise<Layer> {
     const [{ default: TileLayer }, { default: XYZ }] = await Promise.all([
       import('ol/layer/Tile'),
       import('ol/source/XYZ'),
@@ -189,7 +304,7 @@ export class OpenLayersProvider implements MapProvider {
 
   private async createGoogleLayer(
     config: Extract<LayerConfig, { type: 'google' }>,
-  ): Promise<import('ol/layer/Tile').default> {
+  ): Promise<Layer> {
     const [{ default: TileLayer }, { default: Google }] = await Promise.all([
       import('ol/layer/Tile'),
       import('ol/source/Google'),
@@ -250,59 +365,29 @@ export class OpenLayersProvider implements MapProvider {
     return layer;
   }
 
-  // private async createGoogleLayer(
-  //   config: Extract<LayerConfig, { type: 'google' }>,
-  // ): Promise<import('ol/layer/Tile').default> {
-  //   const [{ default: TileLayer }, { default: Google }] = await Promise.all([
-  //     import('ol/layer/Tile'),
-  //     import('ol/source/Google'),
-  //   ]);
+  private async createOSMLayer(
+    config: Extract<LayerConfig, { type: 'osm' }>,
+  ): Promise<Layer> {
+    const [{ default: TileLayer }, { default: OSM }] = await Promise.all([
+      import('ol/layer/Tile'),
+      import('ol/source/OSM'),
+    ]);
 
-  //   const source = new Google({
-  //     key: config.apiKey,
-  //     ...(config.mapType ? { mapType: config.mapType } : {}),
-  //     ...(config.scale ? { scale: config.scale } : { scale: 'scaleFactor2x' }),
-  //     ...(config.highDpi !== undefined
-  //       ? { highDpi: config.highDpi }
-  //       : { highDpi: true }),
-  //   });
-
-  //   source.on('change', () => {
-  //     if (source.getState() === 'error') {
-  //       alert((source as any).getError?.() ?? 'Google source error');
-  //     }
-  //   });
-
-  //   const layer = new TileLayer({ source });
-
-  //   if (!this.googleLogoAdded) {
-  //     const [{ default: Control }] = await Promise.all([
-  //       import('ol/control/Control'),
-  //     ]);
-  //     class GoogleLogoControl extends Control {
-  //       constructor() {
-  //         const el = document.createElement('img');
-  //         el.style.pointerEvents = 'none';
-  //         el.style.position = 'absolute';
-  //         el.style.bottom = '5px';
-  //         el.style.left = '5px';
-  //         el.src =
-  //           'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
-  //         super({ element: el });
-  //       }
-  //     }
-  //     this.map.addControl(new GoogleLogoControl());
-  //     this.googleLogoAdded = true;
-  //   }
-
-  //   return layer;
-  // }
-
-  private async createOSMLayer() {
-    return new TileLayer({ source: new OSM() });
+    let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    if (config.url) {
+      url = config.url + '/{z}/{x}/{y}.png';
+    }
+    const layer = new TileLayer({
+      source: new OSM({
+        url: url,
+      }),
+    });
+    return layer;
   }
 
-  private async createWMSLayer(config: Extract<LayerConfig, { type: 'wms' }>) {
+  private async createWMSLayer(
+    config: Extract<LayerConfig, { type: 'wms' }>,
+  ): Promise<Layer> {
     const [{ default: TileLayer }, { default: TileWMS }] = await Promise.all([
       import('ol/layer/Tile'),
       import('ol/source/TileWMS'),
@@ -329,10 +414,83 @@ export class OpenLayersProvider implements MapProvider {
     */
 
   async setView(center: LonLat, zoom: number) {
+    const [{ fromLonLat }] = await Promise.all([import('ol/proj')]);
     if (!this.map) return;
     this.map
       .getView()
       .animate({ center: fromLonLat(center), zoom, duration: 0 });
+  }
+
+  private async _forEachLayer(layerOrGroup, callback): Promise<boolean> {
+    const { default: LayerGroup } = await import('ol/layer/Group');
+    // Wenn das aktuelle Objekt eine LayerGroup ist, rufen wir die Funktion für jedes Kind erneut auf
+    if (layerOrGroup instanceof LayerGroup) {
+      const layers = layerOrGroup.getLayers().getArray(); // Array der Unter‑Layer
+      for (const child of layers) {
+        if (await this._forEachLayer(child, callback)) {
+          return true;
+        }
+      }
+    } else {
+      // Es handelt sich um einen normalen Layer → Callback ausführen
+      if (callback(layerOrGroup)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private async _getLayerById(layerId): Promise<Layer> {
+    if (!this.map) {
+      return null;
+    }
+    let layerFound = null;
+    await this._forEachLayer(this.map.getLayerGroup(), layer => {
+      if (layer.get('id') === layerId) {
+        layerFound = layer;
+        return true;
+      }
+    });
+    return layerFound;
+  }
+
+  async removeLayer(layerId: string): Promise<void> {
+    if (!layerId) {
+      return;
+    }
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      const group = layer.get('group');
+      group.getLayers().remove(layer);
+      //this.map.removeLayer(layer);
+    }
+  }
+
+  async setOpacity(layerId: string, opacity: number): Promise<void> {
+    if (!layerId) {
+      return;
+    }
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      layer.setOpacity(opacity);
+    }
+  }
+
+  async setZIndex(layerId: string, zIndex: number): Promise<void> {
+    if (!layerId) {
+      return;
+    }
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      layer.setZIndex(zIndex);
+    }
+  }
+
+  async setVisible(layerId: string, visible: boolean): Promise<void> {
+    const layer = await this._getLayerById(layerId);
+    if (layer) {
+      layer.setVisible(visible);
+    }
   }
 
   getMap() {
