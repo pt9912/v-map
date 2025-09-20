@@ -7,10 +7,12 @@
 
 ## Properties
 
-| Property  | Attribute | Description                     | Type      | Default |
-| --------- | --------- | ------------------------------- | --------- | ------- |
-| `opacity` | `opacity` | Opazität der OSM-Kacheln (0–1). | `number`  | `1.0`   |
-| `visible` | `visible` | Sichtbarkeit des Layers         | `boolean` | `true`  |
+| Property  | Attribute | Description                     | Type      | Default                            |
+| --------- | --------- | ------------------------------- | --------- | ---------------------------------- |
+| `opacity` | `opacity` | Opazität der OSM-Kacheln (0–1). | `number`  | `1.0`                              |
+| `url`     | `url`     |                                 | `string`  | `'https://tile.openstreetmap.org'` |
+| `visible` | `visible` | Sichtbarkeit des Layers         | `boolean` | `true`                             |
+| `zIndex`  | `z-index` |                                 | `number`  | `10`                               |
 
 
 ## Events
@@ -22,19 +24,13 @@
 
 ## Methods
 
-### `addToMap(mapElement: HTMLVMapElement) => Promise<void>`
+### `getLayerId() => Promise<string>`
 
-Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
 
-#### Parameters
-
-| Name         | Type              | Description |
-| ------------ | ----------------- | ----------- |
-| `mapElement` | `HTMLVMapElement` |             |
 
 #### Returns
 
-Type: `Promise<void>`
+Type: `Promise<string>`
 
 
 

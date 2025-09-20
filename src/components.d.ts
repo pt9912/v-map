@@ -9,14 +9,12 @@ import { Flavour } from "./types/flavour";
 import { CssMode } from "./types/cssmode";
 import { MapProviderDetail } from "./utils/events";
 import { MapProvider } from "./types/mapprovider";
-import { StyleConfig } from "./types/styleconfig";
 import { LayerConfig } from "./types/layerconfig";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
 export { MapProvider } from "./types/mapprovider";
-export { StyleConfig } from "./types/styleconfig";
 export { LayerConfig } from "./types/layerconfig";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export namespace Components {
@@ -76,28 +74,48 @@ export namespace Components {
     }
     interface VMapLayerGeojson {
         /**
-          * Fügt den Layer der aktuellen Karte hinzu (wird meist vom Elternelement aufgerufen).
-          * @param map Referenz auf die Map/Provider-Instanz.
+          * Prop, die du intern nutzt/weiterverarbeitest
          */
-        "addToMap": (mapElement: HTMLVMapElement) => Promise<void>;
+        "geojson"?: unknown;
+        "getLayerId": () => Promise<string>;
         /**
-          * Globale Deck-/Provider-Opacity des Layers (0–1).
+          * Opazität der geojson-Kacheln (0–1).
           * @default 1
          */
         "opacity": number;
         /**
-          * URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+          * @default null
          */
         "url": string;
         /**
-          * Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+          * @default true
          */
-        "vectorStyle"?: StyleConfig;
+        "visible": boolean;
+        /**
+          * @default 1000
+         */
+        "zIndex": number;
+    }
+    interface VMapLayerGeotiff {
+        "getLayerId": () => Promise<string>;
+        /**
+          * Opazität der GeoTIFF-Kacheln (0–1).
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * @default null
+         */
+        "url": string;
         /**
           * Sichtbarkeit des Layers
           * @default true
          */
         "visible": boolean;
+        /**
+          * @default 1000
+         */
+        "zIndex": number;
     }
     /**
      * Google Maps Basemap Layer
@@ -141,7 +159,7 @@ export namespace Components {
           * Fügt ein Kind-Layer zur Gruppe hinzu.
           * @param layer Layer-Element (Web Component)
          */
-        "addLayer": (layerConfig: LayerConfig) => Promise<void>;
+        "addLayer": (layerConfig: LayerConfig) => Promise<string>;
         /**
           * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
           * @default false
@@ -164,20 +182,25 @@ export namespace Components {
         "visible": boolean;
     }
     interface VMapLayerOsm {
-        /**
-          * Fügt den OSM-Layer der Karte hinzu (vom Eltern-<v-map> aufgerufen).
-         */
-        "addToMap": (mapElement: HTMLVMapElement) => Promise<void>;
+        "getLayerId": () => Promise<string>;
         /**
           * Opazität der OSM-Kacheln (0–1).
           * @default 1
          */
         "opacity": number;
         /**
+          * @default 'https://tile.openstreetmap.org'
+         */
+        "url": string;
+        /**
           * Sichtbarkeit des Layers
           * @default true
          */
         "visible": boolean;
+        /**
+          * @default 10
+         */
+        "zIndex": number;
     }
     interface VMapLayerScatterplot {
         /**
@@ -314,6 +337,10 @@ export interface VMapCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapElement;
 }
+export interface VMapLayerGeotiffCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerGeotiffElement;
+}
 export interface VMapLayerGoogleCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerGoogleElement;
@@ -361,6 +388,23 @@ declare global {
     var HTMLVMapLayerGeojsonElement: {
         prototype: HTMLVMapLayerGeojsonElement;
         new (): HTMLVMapLayerGeojsonElement;
+    };
+    interface HTMLVMapLayerGeotiffElementEventMap {
+        "ready": void;
+    }
+    interface HTMLVMapLayerGeotiffElement extends Components.VMapLayerGeotiff, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerGeotiffElementEventMap>(type: K, listener: (this: HTMLVMapLayerGeotiffElement, ev: VMapLayerGeotiffCustomEvent<HTMLVMapLayerGeotiffElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerGeotiffElementEventMap>(type: K, listener: (this: HTMLVMapLayerGeotiffElement, ev: VMapLayerGeotiffCustomEvent<HTMLVMapLayerGeotiffElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerGeotiffElement: {
+        prototype: HTMLVMapLayerGeotiffElement;
+        new (): HTMLVMapLayerGeotiffElement;
     };
     interface HTMLVMapLayerGoogleElementEventMap {
         "ready": void;
@@ -482,6 +526,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "v-map": HTMLVMapElement;
         "v-map-layer-geojson": HTMLVMapLayerGeojsonElement;
+        "v-map-layer-geotiff": HTMLVMapLayerGeotiffElement;
         "v-map-layer-google": HTMLVMapLayerGoogleElement;
         "v-map-layer-group": HTMLVMapLayerGroupElement;
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
@@ -528,23 +573,51 @@ declare namespace LocalJSX {
     }
     interface VMapLayerGeojson {
         /**
-          * Globale Deck-/Provider-Opacity des Layers (0–1).
+          * Prop, die du intern nutzt/weiterverarbeitest
+         */
+        "geojson"?: unknown;
+        /**
+          * Opazität der geojson-Kacheln (0–1).
           * @default 1
          */
         "opacity"?: number;
         /**
-          * URL zu einer GeoJSON-Ressource. Alternativ kann GeoJSON direkt über einen Prop/Slot gesetzt werden.
+          * @default null
          */
         "url"?: string;
         /**
-          * Vektor-Style-Funktion bzw. Style-Objekt (providerabhängig). Erlaubt die Anpassung von Füllfarbe, Linienbreite etc.
+          * @default true
          */
-        "vectorStyle"?: StyleConfig;
+        "visible"?: boolean;
+        /**
+          * @default 1000
+         */
+        "zIndex"?: number;
+    }
+    interface VMapLayerGeotiff {
+        /**
+          * Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
+          * @event ready
+         */
+        "onReady"?: (event: VMapLayerGeotiffCustomEvent<void>) => void;
+        /**
+          * Opazität der GeoTIFF-Kacheln (0–1).
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * @default null
+         */
+        "url"?: string;
         /**
           * Sichtbarkeit des Layers
           * @default true
          */
         "visible"?: boolean;
+        /**
+          * @default 1000
+         */
+        "zIndex"?: number;
     }
     /**
      * Google Maps Basemap Layer
@@ -622,10 +695,18 @@ declare namespace LocalJSX {
          */
         "opacity"?: number;
         /**
+          * @default 'https://tile.openstreetmap.org'
+         */
+        "url"?: string;
+        /**
           * Sichtbarkeit des Layers
           * @default true
          */
         "visible"?: boolean;
+        /**
+          * @default 10
+         */
+        "zIndex"?: number;
     }
     interface VMapLayerScatterplot {
         /**
@@ -780,6 +861,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "v-map": VMap;
         "v-map-layer-geojson": VMapLayerGeojson;
+        "v-map-layer-geotiff": VMapLayerGeotiff;
         "v-map-layer-google": VMapLayerGoogle;
         "v-map-layer-group": VMapLayerGroup;
         "v-map-layer-osm": VMapLayerOsm;
@@ -795,6 +877,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "v-map": LocalJSX.VMap & JSXBase.HTMLAttributes<HTMLVMapElement>;
             "v-map-layer-geojson": LocalJSX.VMapLayerGeojson & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
+            "v-map-layer-geotiff": LocalJSX.VMapLayerGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
             /**
              * Google Maps Basemap Layer
              */
