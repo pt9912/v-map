@@ -2,7 +2,7 @@ import type { MapInitOptions } from './mapinitoptions';
 import type { CssMode } from './cssmode';
 
 export type ProviderOptions = {
-  target: HTMLElement;
+  target: HTMLDivElement;
   shadowRoot?: ShadowRoot;
   mapInitOptions?: MapInitOptions;
   cssMode?: CssMode;

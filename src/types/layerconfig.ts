@@ -2,8 +2,32 @@ import type { StyleConfig } from './styleconfig';
 import type { Color } from './color';
 
 export type LayerConfig =
-  | { type: 'geojson'; url: string; style?: StyleConfig; groupId?: string }
-  | { type: 'osm'; groupId?: string; url?: string }
+  | {
+      type: 'geojson';
+      url?: string;
+      geojson?: string;
+      style?: StyleConfig;
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
+    }
+  | {
+      type: 'osm';
+      groupId?: string;
+      url?: string;
+      opacity?: number;
+      zIndex?: number;
+      visible?: boolean;
+    }
+  | {
+      type: 'geotiff';
+      groupId?: string;
+      url?: string;
+      opacity?: number;
+      zIndex?: number;
+      visible?: boolean;
+    }
   | {
       type: 'xyz';
       url: string;
@@ -11,6 +35,9 @@ export type LayerConfig =
       maxZoom?: number;
       options?: Record<string, unknown>;
       groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
     }
   | { type: 'arcgis'; url: string; groupId?: string }
   | {
@@ -19,7 +46,10 @@ export type LayerConfig =
       mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
       scale?: 'scaleFactor1x' | 'scaleFactor2x';
       highDpi?: boolean;
+      opacity?: number;
+      visible?: boolean;
       groupId?: string;
+      zIndex?: number;
       maxZoom?: number;
       styles?: string;
       language?: string;
@@ -32,11 +62,13 @@ export type LayerConfig =
       layers: string;
       params?: Record<string, string>;
       groupId?: string;
+      opacity?: number;
+      visible?: boolean;
+      zIndex?: number;
     }
   | {
       type: 'scatterplot';
 
-      id?: string;
       data?: any; //dataSource,
       getFillColor?: Color;
       getRadius?: number;
@@ -47,6 +79,7 @@ export type LayerConfig =
       onClick?: (info: any) => void;
       onHover?: (info: any) => void;
       groupId?: string;
+      zIndex?: number;
     }
   | {
       type: 'terrain';
@@ -59,4 +92,7 @@ export type LayerConfig =
       maxZoom?: number;
       meshMaxError?: number;
       groupId?: string;
+      opacity?: number;
+      visible?: boolean;
+      zIndex?: number;
     };
