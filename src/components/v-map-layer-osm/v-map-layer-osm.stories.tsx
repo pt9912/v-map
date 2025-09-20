@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 import { VMapLayerOSM } from './v-map-layer-osm';
 
 const meta = {
-  title: 'VMapLayerOSM',
+  title: 'Layers/OSM',
   component: VMapLayerOSM,
   tags: ['autodocs'],
 } satisfies Meta<VMapLayerOSM>;

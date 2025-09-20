@@ -3,6 +3,8 @@ import { h } from '@stencil/core';
 import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 
 import { VMap } from './v-map';
+import '../v-map-layer-group/v-map-layer-group';
+import '../v-map-layer-osm/v-map-layer-osm';
 
 const meta = {
   title: 'VMap',

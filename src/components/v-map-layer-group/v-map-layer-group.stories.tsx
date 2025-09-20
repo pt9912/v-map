@@ -9,7 +9,7 @@ import { VMapEvents } from '../../utils/events';
 import { VMapLayerGroup } from './v-map-layer-group';
 
 const meta = {
-  title: 'VMapLayerGroup',
+  title: 'Container/LayerGroup',
   component: VMapLayerGroup,
   tags: ['autodocs'],
 } satisfies Meta<VMapLayerGroup>;
