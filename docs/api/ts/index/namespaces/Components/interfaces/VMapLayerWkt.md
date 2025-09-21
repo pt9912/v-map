@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:235](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L235)
+Defined in: [src/components.d.ts:235](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L235)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:235](https://github.com/pt9912/v-map/blob/3d02d
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:240](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L240)
+Defined in: [src/components.d.ts:240](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L240)
 
 Globale Opazität (0–1).
 
@@ -30,7 +30,7 @@ Globale Opazität (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:244](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L244)
+Defined in: [src/components.d.ts:244](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L244)
 
 URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
@@ -40,7 +40,7 @@ URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:249](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L249)
+Defined in: [src/components.d.ts:249](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L249)
 
 Sichtbarkeit des Layers.
 
@@ -56,6 +56,6 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:253](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L253)
+Defined in: [src/components.d.ts:253](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L253)
 
 WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").

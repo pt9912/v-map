@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:597](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L597)
+Defined in: [src/components.d.ts:597](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L597)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:597](https://github.com/pt9912/v-map/blob/3d02d
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:607](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L607)
+Defined in: [src/components.d.ts:607](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L607)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -30,7 +30,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:611](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L611)
+Defined in: [src/components.d.ts:611](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L611)
 
 #### Default
 
@@ -44,7 +44,7 @@ null
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:616](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L616)
+Defined in: [src/components.d.ts:616](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L616)
 
 Sichtbarkeit des Layers
 
@@ -60,7 +60,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:620](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L620)
+Defined in: [src/components.d.ts:620](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L620)
 
 #### Default
 
@@ -74,7 +74,7 @@ Defined in: [src/components.d.ts:620](https://github.com/pt9912/v-map/blob/3d02d
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:602](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L602)
+Defined in: [src/components.d.ts:602](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L602)
 
 Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
  ready

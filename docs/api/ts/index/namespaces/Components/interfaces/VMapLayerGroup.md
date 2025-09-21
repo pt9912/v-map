@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGroup
 
-Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L157)
+Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L157)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/3d02d
 
 > **addLayer**: (`layerConfig`) => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L162)
+Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L162)
 
 Fügt ein Kind-Layer zur Gruppe hinzu.
 
@@ -34,7 +34,7 @@ Fügt ein Kind-Layer zur Gruppe hinzu.
 
 > **basemap**: `boolean`
 
-Defined in: [src/components.d.ts:167](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L167)
+Defined in: [src/components.d.ts:167](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L167)
 
 Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
 
@@ -50,7 +50,7 @@ false
 
 > **groupId**: `string`
 
-Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L172)
+Defined in: [src/components.d.ts:172](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L172)
 
 Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
 
@@ -66,7 +66,7 @@ Math.random().toString(36).slice(2, 11)
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:177](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L177)
+Defined in: [src/components.d.ts:177](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L177)
 
 Globale Opazität (0–1) für alle Kinder.
 
@@ -82,7 +82,7 @@ Globale Opazität (0–1) für alle Kinder.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:182](https://github.com/pt9912/v-map/blob/3d02de42805026a915c1c4fe1a3a23929a27af3b/src/components.d.ts#L182)
+Defined in: [src/components.d.ts:182](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L182)
 
 Sichtbarkeit der gesamten Gruppe.
 

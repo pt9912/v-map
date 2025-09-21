@@ -1,0 +1,75 @@
+{
+  "types": [
+    "arcgis",
+    "geojson",
+    "geotiff",
+    "google",
+    "osm",
+    "scatterplot",
+    "terrain",
+    "wms",
+    "xyz"
+  ],
+  "providers": [
+    "cesium",
+    "deck",
+    "leaflet",
+    "ol"
+  ],
+  "support": {
+    "arcgis": {
+      "cesium": true,
+      "deck": false,
+      "leaflet": false,
+      "ol": false
+    },
+    "geojson": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "geotiff": {
+      "cesium": false,
+      "deck": true,
+      "leaflet": false,
+      "ol": false
+    },
+    "google": {
+      "cesium": false,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "osm": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "scatterplot": {
+      "cesium": false,
+      "deck": true,
+      "leaflet": false,
+      "ol": false
+    },
+    "terrain": {
+      "cesium": false,
+      "deck": false,
+      "leaflet": false,
+      "ol": false
+    },
+    "wms": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "xyz": {
+      "cesium": false,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    }
+  }
+}
