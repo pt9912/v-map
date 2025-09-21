@@ -8,7 +8,7 @@
 
 > **Expr**\<`T`\> = `T` \| `any`[]
 
-Defined in: [src/lib/vstyle.ts:3](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/lib/vstyle.ts#L3)
+Defined in: [src/lib/vstyle.ts:3](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/lib/vstyle.ts#L3)
 
 ## Type Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L686)
+Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L686)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/f611b
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:696](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L696)
+Defined in: [src/components.d.ts:696](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L696)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -30,7 +30,7 @@ Opazität der OSM-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:700](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L700)
+Defined in: [src/components.d.ts:700](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L700)
 
 #### Default
 
@@ -44,7 +44,7 @@ Defined in: [src/components.d.ts:700](https://github.com/pt9912/v-map/blob/f611b
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:705](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L705)
+Defined in: [src/components.d.ts:705](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L705)
 
 Sichtbarkeit des Layers
 
@@ -60,7 +60,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:709](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L709)
+Defined in: [src/components.d.ts:709](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L709)
 
 #### Default
 
@@ -74,7 +74,7 @@ Defined in: [src/components.d.ts:709](https://github.com/pt9912/v-map/blob/f611b
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L691)
+Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L691)
 
 Wird ausgelöst, wenn der OSM-Layer bereit ist.
  ready

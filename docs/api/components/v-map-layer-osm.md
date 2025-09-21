@@ -1,5 +1,7 @@
 # v-map-layer-osm
 
+[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)
+
 
 
 ### Props
@@ -19,5 +21,5 @@
 
 ### Methods
 
-- `getLayerId() => [object Object]`
+- `getLayerId() => Promise<string>`
 

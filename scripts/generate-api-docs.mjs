@@ -43,6 +43,10 @@ const mdForCmp = c => {
   const name = c.tag;
   const desc = h(c.docs);
 
+  // 🔙 Rücklink / Breadcrumb
+  //const breadcrumb = `[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../index)\n\n`;
+  const breadcrumb = `[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)\n\n`;
+
   const props = (c.props || []).map(p => [
     `\`${p.name}\``,
     p.type.includes('|') ? formatUnionType(p.type) : `\`${p.type}\``,
@@ -57,22 +61,29 @@ const mdForCmp = c => {
     h(e.docs || ''),
   ]);
 
-  const methods = (c.methods || []).map(m => [
-    `\`${m.name}(${(m.parameters || [])
+  const methods = (c.methods || []).map(m => {
+    const retRaw = m.returns ?? '';
+    const ret =
+      typeof retRaw === 'string'
+        ? retRaw
+        : retRaw.type || retRaw.text || 'void';
+    const paramSig = (m.parameters || [])
       .map(p => `${p.name}: ${p.type}`)
-      .join(', ')}) => ${m.returns}\``,
-    h(m.docs || ''),
-  ]);
+      .join(', ');
+    return [`\`${m.name}(${paramSig}) => ${ret}\``, h(m.docs || '')];
+  });
 
   const slots = (c.slots || []).map(s => [
     `\`${s.name || 'default'}\``,
     h(s.docs || ''),
   ]);
+
   const parts = (c.parts || []).map(p => [`\`${p.name}\``, h(p.docs || '')]);
 
-  // ⬇️ statt section('Methods', ...) jetzt methodsList(methods)
   return (
-    `# ${name}\n\n${desc || ''}\n` +
+    `# ${name}\n\n` +
+    breadcrumb +
+    `${desc || ''}\n` +
     section('Props', props, [
       'Name',
       'Type',
@@ -107,8 +118,8 @@ const mdForCmp = c => {
     .join('\n');
 
   await fs.writeFile(
-    path.join(OUT_DIR, 'index.md'),
-    `# Komponenten-API\n\n${links}\n`,
+    path.join(OUT_DIR, 'README.md'),
+    `# Komponenten-API\n\n[**@pt9912/v-map**](../../README.md)\n\n${links}\n`,
     'utf8',
   );
   console.log('✅ Komponenten-API erzeugt.');
@@ -195,6 +206,7 @@ function tick(ok) {
 }
 
 async function generateMatrix() {
+  const breadcrumb = `[**@pt9912/v-map**](../README.md)\n\n`;
   const layerconfig = await readFileSafe(LAYERCONFIG_TS);
   const allTypes = detectLayerTypes(layerconfig);
 
@@ -219,7 +231,10 @@ async function generateMatrix() {
     ...providerNames.map(p => tick(matrix.support[t][p])),
   ]);
 
-  const content = `# Layer-Matrix (automatisch erzeugt)
+  const content =
+    `# Layer-Matrix (automatisch erzeugt)\n\n` +
+    breadcrumb +
+    `
 > Generiert von \`scripts/generate-api-docs.mjs\`. Bitte nicht manuell bearbeiten.
 
 ${mdTable(headers, rows)}
@@ -234,5 +249,68 @@ ${mdTable(headers, rows)}
   console.log('✅ Layer-Matrix erzeugt.');
 }
 
+// --------------------------------------------------------------------------
+// TypeDoc: Breadcrumbs in /docs/api/ts/**/*.md injizieren
+// --------------------------------------------------------------------------
+import * as fss from 'node:fs/promises';
+
+const TSDOC_DIR = 'docs/api/ts';
+//const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/index) · [**@pt9912/v-map**](/)\n\n`;
+const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/) · [**@pt9912/v-map**](/)\n\n`;
+
+async function listMdFiles(dir) {
+  const out = [];
+  async function walk(d) {
+    const ents = await fss.readdir(d, { withFileTypes: true });
+    for (const e of ents) {
+      const full = path.join(d, e.name);
+      if (e.isDirectory()) await walk(full);
+      else if (e.isFile() && e.name.toLowerCase().endsWith('.md'))
+        out.push(full);
+    }
+  }
+  await walk(dir);
+  return out;
+}
+
+function hasBreadcrumb(s) {
+  // Doppelte Injektion vermeiden
+  return s.includes('[← Zur Übersicht](/api/ts/index)');
+}
+
+async function patchTypedocBreadcrumbs() {
+  try {
+    const mdFiles = await listMdFiles(TSDOC_DIR);
+    for (const file of mdFiles) {
+      const name = path.basename(file).toLowerCase();
+      // Indexseiten selbst nicht patchen
+      if (name === 'readme.md' || name === 'index.md') continue;
+
+      let src = await fss.readFile(file, 'utf8');
+      if (hasBreadcrumb(src)) continue;
+
+      // Nach erster H1 (# ...) suchen, Breadcrumb direkt darunter einfügen
+      const m = src.match(/^# .*\r?\n/m);
+      if (m) {
+        const idx = m.index + m[0].length;
+        const patched =
+          src.slice(0, idx) + '\n' + BREADCRUMB_TS + src.slice(idx);
+        await fss.writeFile(file, patched, 'utf8');
+      } else {
+        // fallback: ganz an den Anfang
+        await fss.writeFile(file, BREADCRUMB_TS + src, 'utf8');
+      }
+    }
+    console.log('✅ TypeDoc-Breadcrumbs injiziert.');
+  } catch (e) {
+    console.warn(
+      '⚠️ Konnte TypeDoc-Breadcrumbs nicht injizieren:',
+      e?.message || e,
+    );
+  }
+}
+
 // Am Ende des bestehenden Scripts zusätzlich die Matrix erzeugen
 await generateMatrix();
+
+//await patchTypedocBreadcrumbs();

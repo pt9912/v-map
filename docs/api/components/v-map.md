@@ -1,5 +1,7 @@
 # v-map
 
+[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)
+
 
 
 ### Props
@@ -20,8 +22,8 @@
 
 ### Methods
 
-- `addLayer(layerConfig: any) => [object Object]` — Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
-- `getMapProvider() => [object Object]` — Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
-- `isMapProviderAvailable() => [object Object]` — Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
-- `setView(coordinates: [number, number], zoom: number) => [object Object]` — Setzt Kartenzentrum und Zoom (optional animiert).
+- `addLayer(layerConfig: any) => Promise<void>` — Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
+- `getMapProvider() => Promise<MapProvider>` — Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
+- `isMapProviderAvailable() => Promise<boolean>` — Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
+- `setView(coordinates: [number, number], zoom: number) => Promise<void>` — Setzt Kartenzentrum und Zoom (optional animiert).
 
