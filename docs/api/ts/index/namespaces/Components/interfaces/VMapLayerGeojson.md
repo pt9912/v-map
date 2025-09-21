@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:75](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L75)
+Defined in: [src/components.d.ts:75](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L75)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:75](https://github.com/pt9912/v-map/blob/efc622
 
 > `optional` **geojson**: `unknown`
 
-Defined in: [src/components.d.ts:79](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L79)
+Defined in: [src/components.d.ts:79](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L79)
 
 Prop, die du intern nutzt/weiterverarbeitest
 
@@ -24,7 +24,7 @@ Prop, die du intern nutzt/weiterverarbeitest
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L80)
+Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L80)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/efc622
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L85)
+Defined in: [src/components.d.ts:85](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L85)
 
 Opazität der geojson-Kacheln (0–1).
 
@@ -52,7 +52,7 @@ Opazität der geojson-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:89](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L89)
+Defined in: [src/components.d.ts:89](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L89)
 
 #### Default
 
@@ -66,7 +66,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:93](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L93)
+Defined in: [src/components.d.ts:93](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L93)
 
 #### Default
 
@@ -80,7 +80,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:97](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/components.d.ts#L97)
+Defined in: [src/components.d.ts:97](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/components.d.ts#L97)
 
 #### Default
 

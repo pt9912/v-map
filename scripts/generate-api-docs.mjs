@@ -98,7 +98,12 @@ const mdForCmp = c => {
   }
 
   const links = (raw.components || [])
-    .map(c => `- ${code(c.tag)} — ${h(c.docs || '')}`)
+    .map(c => {
+      const file = `${c.tag}.md`;
+      const label = code(c.tag); // z. B. `v-map`
+      const desc = h(c.docs || '');
+      return `- [${label}](./${file}) — ${desc}`;
+    })
     .join('\n');
 
   await fs.writeFile(

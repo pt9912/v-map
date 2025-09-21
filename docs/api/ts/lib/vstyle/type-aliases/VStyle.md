@@ -8,7 +8,7 @@
 
 > **VStyle** = `object`
 
-Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/lib/vstyle.ts#L18)
+Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/lib/vstyle.ts#L18)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/efc62233
 
 > **rules**: [`VStyleRule`](VStyleRule.md)[]
 
-Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/lib/vstyle.ts#L18)
+Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/lib/vstyle.ts#L18)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/efc62233
 
 > `optional` **vars**: `Record`\<`string`, [`Color`](Color.md) \| `number` \| `string`\>
 
-Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/efc62233e3d3263be3b179af93948b9a907bd60f/src/lib/vstyle.ts#L18)
+Defined in: [src/lib/vstyle.ts:18](https://github.com/pt9912/v-map/blob/f611b314e38c23a3ef6dba0cd5a8ca81485bbe8e/src/lib/vstyle.ts#L18)

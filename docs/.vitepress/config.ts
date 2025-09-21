@@ -21,8 +21,16 @@ export default {
           { text: 'TypeScript', link: '/api/ts/index' },
         ],
       },
+      { text: 'Layer-Matrix', link: '/layers/matrix' }, // optional im Top-Navi
     ],
+
     sidebar: {
+      '/layers/': [
+        {
+          text: 'Layer-Matrix',
+          items: [{ text: 'Übersicht', link: '/layers/matrix' }],
+        },
+      ],
       '/api/components/': [
         {
           text: 'Komponenten',
@@ -37,6 +45,7 @@ export default {
       ],
     },
   },
+
   vite: {
     vue: {
       template: {
