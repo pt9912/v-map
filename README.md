@@ -158,6 +158,22 @@ v-map/
 
 ---
 
+## Architektur
+
+- Saubere Trennung von deklarativem DOM-API (WebComponents) und imperativer Kartenlogik (Provider).
+
+- Engine-Agnostisch: Austausch/Koexistenz von Leaflet, Deck.gl, Cesium über ein klares Interface.
+
+- Typsicherheit durch LayerConfig-Union + exhaustiveness checks.
+
+- Shadow-DOM-Kompatibilität (CSS-Injection, Adopted Stylesheets).
+
+- Erweiterbarkeit: Neue Layer-Typen oder Engines fügen sich über je einen Adapter ein.
+
+- Wiederverwendbarkeit: VMapLayerHelper als einheitliche Registrierungs-/Update-Pipeline.
+
+---
+
 ## 🤝 Contributing
 
 Pull Requests und Issues sind willkommen!  
