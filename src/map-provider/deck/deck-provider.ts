@@ -1,42 +1,46 @@
+// DeckProvider.ts (relevante Änderungen)
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 
-import type { Layer, LayerProps, MapViewState } from '@deck.gl/core';
-import type { TileLayer } from '@deck.gl/geo-layers';
+import { log } from '../../utils/logger';
+
+import { formatBbox, buildQuery } from '../../utils/spatial-utils';
+
+import type { RenderableGroup } from './RenderableGroup';
+import { LayerGroups } from './LayerGroups';
+import { LayerGroupWithModel } from './LayerGroupWithModel';
+import { type LayerModel } from './LayerModel';
+
+import type { Layer, MapViewState } from '@deck.gl/core';
+import type {
+  TileLayer,
+  _TileLoadProps,
+  GeoBoundingBox,
+} from '@deck.gl/geo-layers';
 import type { BitmapBoundingBox } from '@deck.gl/layers';
-
-async function injectCss(
-  shadowRoot?: ShadowRoot,
-): Promise<HTMLStyleElement | null> {
-  const style = document.createElement('style');
-  style.textContent = 'canvas.deckgl-canvas { background:#fff !important; }';
-  shadowRoot.appendChild(style);
-  return style;
-}
-
-async function removeInjectedCss(
-  shadowRoot: ShadowRoot,
-  injectedStyle: HTMLStyleElement,
-) {
-  if (!shadowRoot || !injectedStyle) return;
-  // Das <style>-Element aus dem Shadow‑DOM entfernen
-  injectedStyle.remove(); // moderne API
-}
 
 export class DeckProvider implements MapProvider {
   private deck!: import('@deck.gl/core').Deck;
-  private canvas!: HTMLCanvasElement;
   private target!: HTMLDivElement;
-  private shadowRoot: ShadowRoot;
-  private injectedStyle: HTMLStyleElement;
+  private shadowRoot!: ShadowRoot;
+  private injectedStyle!: HTMLStyleElement;
+
+  // Store arbeitet mit RenderableGroup — wir nutzen hier die modellbasierte Gruppe
+  private layerGroups: LayerGroups<Layer, RenderableGroup<Layer>> =
+    new LayerGroups({});
 
   async init(opts: ProviderOptions) {
     this.target = opts.target;
     this.shadowRoot = opts.shadowRoot;
-
-    this.injectedStyle = await injectCss(this.shadowRoot);
+    this.injectedStyle = await (async function injectCss(sr?: ShadowRoot) {
+      const style = document.createElement('style');
+      style.textContent =
+        'canvas.deckgl-canvas { background:#fff !important; }';
+      sr?.appendChild(style);
+      return style;
+    })(this.shadowRoot);
 
     const [{ Deck }] = await Promise.all([import('@deck.gl/core')]);
 
@@ -61,9 +65,7 @@ export class DeckProvider implements MapProvider {
 
     this.deck = new Deck({
       parent: this.target,
-      // canvas: this.canvas,
       controller: {
-        // Alle üblichen Gesten aktivieren – du kannst einzelne abschalten
         scrollZoom: true,
         dragPan: true,
         dragRotate: true,
@@ -74,16 +76,43 @@ export class DeckProvider implements MapProvider {
       },
       viewState,
       onViewStateChange: ({ viewState: vs }) => {
-        // Deck informiert uns über jede Veränderung (Zoom, Pan, …)
-        //console.log(JSON.stringify(vs));
-        viewState = vs; // speichere, falls du später darauf zugreifen willst
-        // optional: UI‑Updates, Persistenz, etc.
+        viewState = vs;
         this.deck.setProps({ viewState });
       },
       layers: [],
       _typedArrayManagerProps: { overAlloc: 1 },
     });
+
+    this.layerGroups.attachDeck(this.deck);
   }
+
+  // ---------- Helpers: Modelle / Gruppen ----------
+
+  /** Liefert (oder erzeugt) eine modellbasierte Gruppe */
+  private ensureModelGroup(groupId: string): LayerGroupWithModel<Layer> {
+    const g = this.layerGroups.getGroup(groupId) as
+      | LayerGroupWithModel<Layer>
+      | undefined;
+    if (g) return g;
+    const ng = new LayerGroupWithModel<Layer>({
+      id: groupId,
+      syncMode: 'force-model',
+    });
+    this.layerGroups.addGroup(ng);
+    return ng;
+  }
+
+  /** Erzeugt ein LayerModel aus einem LayerConfig + Factory */
+  private createLayerModel(
+    layerId: string,
+    make: () => Layer,
+    enabled = true,
+    elementId = null,
+  ): LayerModel<Layer> {
+    return { id: layerId, elementId, enabled, make, meta: {} };
+  }
+
+  // ---------- Layer-Factories (unverändert, geben Deck-Layer zurück) ----------
 
   private async buildXyzTileLayer(
     cfg: any,
@@ -150,7 +179,7 @@ export class DeckProvider implements MapProvider {
       },
       */
       onTileError: err => {
-        console.log(`v-map - provider - deck - Tile Error: ${err}`);
+        log(`v-map - provider - deck - Tile Error: ${err}`);
       },
 
       renderSubLayers: sl => {
@@ -222,8 +251,7 @@ export class DeckProvider implements MapProvider {
 
       // optional – wenn du Hover‑Infos brauchst
       onHover: info => {
-        if (info.object)
-          console.log('v-map - provider - deck - Hover:', info.object);
+        if (info.object) log('v-map - provider - deck - Hover:', info.object);
       },
 
       // Wichtig für Deck.gl, damit es erkennt, wann sich etwas ändert
@@ -236,74 +264,10 @@ export class DeckProvider implements MapProvider {
     return scatterLayer;
   }
 
-  // private COLOR_SCALE = [
-  //   // negative
-  //   [65, 182, 196],
-  //   [127, 205, 187],
-  //   [199, 233, 180],
-  //   [237, 248, 177],
-
-  //   // positive
-  //   [255, 255, 204],
-  //   [255, 237, 160],
-  //   [254, 217, 118],
-  //   [254, 178, 76],
-  //   [253, 141, 60],
-  //   [252, 78, 42],
-  //   [227, 26, 28],
-  //   [189, 0, 38],
-  //   [128, 0, 38],
-  // ];
-
-  // private _colorScale(x): any {
-  //   const i = Math.round(x * 7) + 4;
-  //   if (x < 0) {
-  //     return this.COLOR_SCALE[i] || this.COLOR_SCALE[0];
-  //   }
-  //   return this.COLOR_SCALE[i] || this.COLOR_SCALE[this.COLOR_SCALE.length - 1];
-  // }
-  /*
-  private async createGeoTIFFLayer(
-    config: Extract<LayerConfig, { type: 'geotiff' }>,
-    layerId: string,
-  ) {
-    const { GeoTIFFLayer } = await import('@deck.gl/geo-layers/dist/experimental');
-    const { TIFFLoader } = await import('@loaders.gl/tiff');
-    const layer = new GeoTIFFLayer({
-      id: 'cog-layer',
-      data: config.cogUrl,
-      // COG-spezifische Optimierungen:
-      tiffOptions: {
-        pool: true, // Web Worker verwenden
-        cache: true, // Kacheln cachen
-        maxCacheSize: 10, // Cache-Limit in MB
-      },
-      // Styling (anpassen an deine Daten!)
-      colorRange: {
-        colors: [
-          [65, 182, 196], // Wasser (niedrig)
-          [254, 224, 139], // Land (mittel)
-          [217, 95, 2], // Berge (hoch)
-        ],
-        min: 0,
-        max: 3000, // Anpassen an deine Höhenwerte!
-      },
-      opacity: 0.8,
-      // Performance:
-      resamplingMode: 'nearest', // 'bilinear' für glattere Ergebnisse (langsamer)
-      // Optional: Nur bei Bedarf laden (z. B. für Überlagerungen)
-      visible: true,
-      // Koordinatenbegrenzung (falls bekannt)
-      bounds: [8.5, 49.0, 8.6, 49.1], // [minLng, minLat, maxLng, maxLat]
-    });
-
-    return layer;
-  }
-*/
   private async createGeoJSONLayer(
     config: Extract<LayerConfig, { type: 'geojson' }>,
     layerId: string,
-  ) {
+  ): Promise<Layer> {
     const { GeoJsonLayer } = await import('@deck.gl/layers');
     let layer = null;
     // if (layer != null) {
@@ -351,152 +315,374 @@ export class DeckProvider implements MapProvider {
     return layer;
   }
 
-  private async updateGeoJSONLayer(layer: Layer, data: any): Promise<void> {
-    let geojson_or_url = null;
-    if (data.geojson) {
-      geojson_or_url = JSON.parse(data.geojson);
-    } else {
-      geojson_or_url = data.url;
-    }
-    if (geojson_or_url) {
-      const layers = this.deck.props.layers;
-      this.deck.setProps({
-        layers: layers.map((l: Layer) =>
-          l.id === layer.id ? l.clone({ data: geojson_or_url }) : l,
-        ),
-      });
-    }
-  }
+  // --- innerhalb der DeckProvider-Klasse ---
+  private async buildWmsTileLayer(
+    cfg: Extract<LayerConfig, { type: 'wms' }>,
+    // cfg2: {
+    //   url: string; // Basis-URL ohne Query (z.B. https://server/wms)
+    //   layers: string; // Pflicht: WMS-Layers (kommagetrennt möglich)
+    //   styles?: string; // optional
+    //   format?: string; // default image/png
+    //   transparent?: boolean; // default true
+    //   version?: '1.1.1' | '1.3.0'; // default 1.3.0
+    //   crs?: WmsCrs; // default 'EPSG:3857'
+    //   tileSize?: number; // default 256
+    //   minZoom?: number; // default 0
+    //   maxZoom?: number; // default 19
+    //   opacity?: number; // optional
+    //   time?: string; // optional WMS TIME=
+    //   extraParams?: Record<string, string | number | boolean>; // optional Zusatz-Parameter
+    // },
+    layerId: string,
+  ) {
+    const { BitmapLayer } = await import('@deck.gl/layers');
+    const { TileLayer } = await import('@deck.gl/geo-layers');
 
-  private async updateOsmLayer(layer: Layer, data: any): Promise<void> {
-    if (data.url) {
-      let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-      if (data.url) {
-        url = data.url + '/{z}/{x}/{y}.png';
-      }
-      const layers = this.deck.props.layers;
-      this.deck.setProps({
-        layers: layers.map((l: Layer) =>
-          l.id === layer.id
-            ? l.clone({ url: url } as Partial<LayerProps> & {
-                url?: string;
-              })
-            : l,
-        ),
-      });
-    }
+    const tileSize = cfg.tileSize ?? 256;
+    const version = cfg.version ?? '1.3.0';
+    const crs: string = cfg.crs ?? 'EPSG:3857';
+    const format = cfg.format ?? 'image/png';
+    const transparent = cfg.transparent ?? true;
+
+    const crsParamKey = version === '1.1.1' ? 'SRS' : 'CRS';
+    const baseParams = {
+      SERVICE: 'WMS',
+      REQUEST: 'GetMap',
+      VERSION: version,
+      LAYERS: cfg.layers,
+      STYLES: cfg.styles ?? '',
+      FORMAT: format,
+      TRANSPARENT: transparent ? 'TRUE' : 'FALSE',
+      [crsParamKey]: crs,
+      TILED: 'true', // oder 'TRUE'
+    };
+
+    return new TileLayer<ImageBitmap | HTMLCanvasElement>({
+      id: layerId,
+      data: [cfg.url],
+      zIndex: 100,
+      tileSize,
+      minZoom: cfg.minZoom ?? 0,
+      maxZoom: cfg.maxZoom ?? 19,
+      opacity: cfg.opacity,
+      maxRequests: 20,
+
+      // Für jeden Tile-Index die passende GetMap-URL bauen und Bild laden
+      getTileData: async (tile: _TileLoadProps) => {
+        /*
+export type TileLoadProps = {
+  index: TileIndex;
+  id: string;
+  bbox: TileBoundingBox;
+  url?: string | null;
+  signal?: AbortSignal;
+  userData?: Record<string, any>;
+  zoom?: number;
+};
+*/
+        const { west, south, east, north } = tile.bbox as GeoBoundingBox; // lon/lat (WGS84)
+        const bbox = formatBbox(west, south, east, north, version, crs);
+
+        const params = {
+          ...baseParams,
+          BBOX: bbox,
+          WIDTH: tileSize, //tile.width,
+          HEIGHT: tileSize, //tile.height,
+          TIME: cfg.time,
+          ...cfg.extraParams,
+        };
+
+        const url = `${cfg.url}${buildQuery(params)}`;
+
+        try {
+          const res = await fetch(url, {
+            /*signal,*/ mode: 'cors' as RequestMode,
+          });
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const blob = await res.blob();
+          // Bei Image/* → ImageBitmap. Bei Fehlern transparente Kachel zurückgeben.
+          return await createImageBitmap(blob);
+        } catch (e) {
+          // Transparente Fallback-Kachel, damit Deck sauber weiterzeichnet
+          const canvas = document.createElement('canvas');
+          canvas.width = tileSize; //tile.width;
+          canvas.height = tileSize; //tile.height;
+          const ctx = canvas.getContext('2d');
+          ctx?.clearRect(0, 0, canvas.width, canvas.height);
+          return canvas;
+        }
+      },
+
+      onTileError: err => {
+        log(`v-map - provider - deck - WMS Tile Error: ${err}`);
+      },
+
+      renderSubLayers: sl => {
+        const { west, south, east, north } = sl.tile.bbox;
+        if (sl.data instanceof HTMLCanvasElement) {
+          return new BitmapLayer({
+            id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`, // Eindeutige ID!
+            image: sl.data,
+            coordinates: 'pixel',
+            bounds: [0, 0, sl.tile.width, sl.tile.height],
+          });
+        }
+        return new BitmapLayer({
+          id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`,
+          image: [sl.data], // ImageBitmap | Canvas
+          bounds: [west, south, east, north],
+          opacity: sl.opacity ?? 1,
+          pickable: false,
+        });
+      },
+
+      updateTriggers: {
+        // Neurendern, wenn sich Zeit/Styles/Opacity etc. ändern
+        getTileData: [
+          cfg.layers,
+          cfg.styles,
+          cfg.format,
+          cfg.transparent,
+          cfg.version,
+          cfg.crs,
+          cfg.time,
+          JSON.stringify(cfg.extraParams ?? {}),
+        ],
+        renderSubLayers: ['sl.props.opacity'],
+      },
+    } as any);
   }
 
   private async createLayer(
     layerConfig: LayerConfig,
     layerId: string,
   ): Promise<Layer> {
-    //a: DeckProps;
     switch (layerConfig.type) {
-      /*      case 'geotiff':
-        return await this.createGeoTIFFLayer(
-          layerConfig as Extract<LayerConfig, { type: 'geojson' }>,
-          layerId,
-        );
-  */ case 'geojson':
-        return await this.createGeoJSONLayer(
-          layerConfig as Extract<LayerConfig, { type: 'geojson' }>,
-          layerId,
-        );
-      /*
-      case 'xyz':
-        return this.createXYZLayer(
-          layerConfig as Extract<LayerConfig, { type: 'xyz' }>,
-        );
-      case 'google':
-        return this.createGoogleLayer(
-          layerConfig as Extract<LayerConfig, { type: 'google' }>,
-        );
-        */
+      case 'geojson':
+        return this.createGeoJSONLayer(layerConfig as any, layerId);
       case 'osm':
-        return await this.buildOsmLayer(
-          layerConfig as Extract<LayerConfig, { type: 'osm' }>,
+        return this.buildOsmLayer(layerConfig as any, layerId);
+      case 'wms':
+        return this.buildWmsTileLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wms' }>,
           layerId,
         );
       case 'xyz':
-        return await this.buildXyzTileLayer(
-          layerConfig as Extract<LayerConfig, { type: 'xyz' }>,
-          layerId,
-        );
-      /*
-      case 'wms':
-        return this.createWMSLayer(
-          layerConfig as Extract<LayerConfig, { type: 'wms' }>,
-        );
-        */
+        return this.buildXyzTileLayer(layerConfig as any, layerId);
       case 'scatterplot':
-        return await this.buildScatterPlot(
-          layerConfig as Extract<LayerConfig, { type: 'scatterplot' }>,
-          layerId,
-        );
+        return this.buildScatterPlot(layerConfig as any, layerId);
       default:
-        console.log(
+        log(
           `v-map - provider - deck - Unsupported layer type: ${
             (layerConfig as any).type
           }`,
         );
-        //throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
-        break;
+        return null as any;
     }
   }
 
-  // ---- API ----
-  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
-    const layer = await this._getLayerById(layerId);
-    switch (update.type) {
-      case 'geojson':
-        await this.updateGeoJSONLayer(layer, update.data);
-        break;
-      case 'osm':
-        await this.updateOsmLayer(layer, update.data);
-        break;
-    }
-  }
+  // ---------- Provider-API: nutzt NUR Model/Store ----------
 
-  async addLayer(config: LayerConfig): Promise<string> {
+  // async addLayer(config: LayerConfig): Promise<string> {
+  //   const groupId = config.groupId ?? 'default';
+  //   const group = this.ensureModelGroup(groupId);
+
+  //   const layerId = crypto.randomUUID();
+  //   const make = async () => this.createLayer(config, layerId);
+  //   const model = this.createLayerModel(layerId, () => null as any, true);
+
+  //   // make() lazy auflösen (async Factory umwickeln)
+  //   model.make = () => {
+  //     // Achtung: Factory muss sync sein → wir „promoten“ hier bekannte Layer
+  //     // Lösung: createLayer bei add* schon aufrufen:
+  //     throw new Error('model.make should not be async');
+  //   };
+
+  //   // Besser: Layer jetzt schon erstellen, damit make() sync bleibt:
+  //   const layer = await this.createLayer(config, layerId);
+  //   model.make = () => layer;
+
+  //   group.addModel(model);
+
+  //   // Overrides aus config übernehmen
+  //   const ov: any = {};
+  //   if ((config as any).opacity !== undefined)
+  //     ov.opacity = (config as any).opacity;
+  //   if ((config as any).zIndex !== undefined)
+  //     ov.zIndex = (config as any).zIndex;
+  //   if ((config as any).visible === true) ov.visible = true;
+  //   if ((config as any).visible === false) ov.visible = false;
+  //   if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+
+  //   // Render
+  //   this.layerGroups.applyToDeck();
+  //   return layerId;
+  // }
+
+  async addLayerToGroup(
+    layerConfig: LayerConfig,
+    groupId: string,
+  ): Promise<string> {
+    const group = this.ensureModelGroup(groupId);
     const layerId = crypto.randomUUID();
-    let layer: Layer = await this.createLayer(config, layerId);
-    const current = (this.deck.props.layers as any[]) ?? [];
-    this.deck.setProps({
-      layers: [...current, layer],
+    const template = await this.createLayer(layerConfig, layerId);
+    if (!template) return null;
+    const model = this.createLayerModel(
+      layerId,
+      () => template.clone({}),
+      (layerConfig as any).visible ?? true, // Model-Visibility (enabled)
+    );
+    group.addModel(model);
 
-      getTooltip: (config as any).getTooltip,
-      onClick: (config as any).onClick,
-      onHover: (config as any).onHover,
-    });
-    if (layer) {
-      if ((config as any).opacity !== undefined) {
-        layer = await this._setOpacity(layer, (config as any).opacity);
-      }
-      if ((config as any).zIndex !== undefined) {
-        layer = await this._setZIndex(layer, (config as any).zIndex);
-      }
-      if ((config as any).visible) {
-        layer = await this._setVisible(layer, true);
-      } else if ((config as any).visible === false) {
-        layer = await this._setVisible(layer, false);
-      }
-      return layerId;
+    const ov: any = {};
+    if ((layerConfig as any).opacity !== undefined)
+      ov.opacity = (layerConfig as any).opacity;
+    if ((layerConfig as any).zIndex !== undefined)
+      ov.zIndex = (layerConfig as any).zIndex;
+    if ((layerConfig as any).visible === true) ov.visible = true;
+    if ((layerConfig as any).visible === false) ov.visible = false;
+    if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+
+    this.layerGroups.applyToDeck();
+    return layerId;
+  }
+
+  async addBaseLayer(
+    layerConfig: LayerConfig,
+    basemapid: string,
+    layerElementId: string,
+  ): Promise<string> {
+    if (!layerElementId || !basemapid) {
+      log('ol - addBaseLayer - ids missing');
+      return null;
     }
 
-    return null;
+    const group = this.ensureModelGroup(layerConfig.groupId ?? 'basemap');
+    (group as LayerGroupWithModel<Layer>).basemap = basemapid;
+
+    const layerId = crypto.randomUUID();
+    const layer = await this.createLayer(layerConfig, layerId);
+    if (!layer) return null;
+
+    const model = this.createLayerModel(
+      layerId,
+      () => layer,
+      true,
+      layerElementId,
+    );
+    group.addModel(model);
+
+    // Overrides aus config
+    const ov: any = {};
+    if ((layerConfig as any).opacity !== undefined)
+      ov.opacity = (layerConfig as any).opacity;
+    if ((layerConfig as any).zIndex !== undefined)
+      ov.zIndex = (layerConfig as any).zIndex;
+    if ((layerConfig as any).visible === true) ov.visible = true;
+    if ((layerConfig as any).visible === false) ov.visible = false;
+    if (Object.keys(ov).length)
+      (group as LayerGroupWithModel<Layer>).setModelOverrides(layerId, ov);
+
+    this.layerGroups.applyToDeck();
+    return layerId;
   }
 
-  async addLayerToGroup(_groupId: string, layerConfig: LayerConfig) {
-    return this.addLayer(layerConfig);
+  async setBaseLayer(groupId: string, layerElementId: string): Promise<void> {
+    const group = this.ensureModelGroup(groupId);
+    group.basemap = layerElementId ?? null;
+    this.layerGroups.applyToDeck();
   }
 
-  async destroy() {
-    try {
-      await removeInjectedCss(this.shadowRoot, this.injectedStyle);
-      this.deck?.finalize();
-    } catch {}
-    this.canvas?.remove();
+  // ------ Updates: ausschließlich via Model-Overrides / Model-Factory ------
+
+  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
+    // Finde die Gruppe, die das Model hat
+    const group = this.layerGroups.groups.find(g =>
+      (g as any).getModel?.(layerId),
+    ) as LayerGroupWithModel<Layer> | undefined;
+    if (!group) return;
+
+    switch (update.type) {
+      case 'geojson': {
+        const data = update.data?.geojson
+          ? JSON.parse(update.data.geojson)
+          : update.data?.url;
+        if (data) group.setModelOverrides(layerId, { data });
+        break;
+      }
+      case 'osm': {
+        if (update.data?.url)
+          group.setModelOverrides(layerId, {
+            url: `${update.data.url}/{z}/{x}/{y}.png`,
+          });
+        break;
+      }
+      case 'wms': {
+        const ov: any = {};
+        if (update.data?.url) ov.url = update.data.url; // Basis-URL
+        if (update.data?.layers) ov.layers = update.data.layers;
+        if (update.data?.styles !== undefined) ov.styles = update.data.styles;
+        if (update.data?.format) ov.format = update.data.format;
+        if (update.data?.transparent !== undefined)
+          ov.transparent = update.data.transparent;
+        if (update.data?.version) ov.version = update.data.version;
+        if (update.data?.crs) ov.crs = update.data.crs;
+        if (update.data?.time !== undefined) ov.time = update.data.time;
+        if (update.data?.extraParams) ov.extraParams = update.data.extraParams;
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+        break;
+      }
+    }
+    this.layerGroups.applyToDeck();
+  }
+
+  async removeLayer(layerId: string): Promise<void> {
+    // Modellbasiert: Model entfernen → apply
+    for (const g of this.layerGroups.groups) {
+      const removeModel = (g as any).removeModel?.bind(g);
+      const getModel = (g as any).getModel?.bind(g);
+      if (typeof getModel === 'function' && getModel(layerId)) {
+        removeModel(layerId);
+        this.layerGroups.applyToDeck();
+        return;
+      }
+    }
+    // Fallback: falls nicht modellbasiert vorhanden, klassisch entfernen
+    this.layerGroups.removeLayer(layerId, { removeFromAll: true });
+  }
+
+  async setOpacity(layerId: string, opacity: number): Promise<void> {
+    const g = this.layerGroups.groups.find(grp =>
+      (grp as any).getModel?.(layerId),
+    ) as LayerGroupWithModel<Layer> | undefined;
+    if (!g) return;
+    g.setModelOverrides(layerId, { opacity });
+    this.layerGroups.applyToDeck();
+  }
+
+  async setZIndex(layerId: string, zIndex: number): Promise<void> {
+    const g = this.layerGroups.groups.find(grp =>
+      (grp as any).getModel?.(layerId),
+    ) as LayerGroupWithModel<Layer> | undefined;
+    if (!g) return;
+    g.setModelOverrides(layerId, { zIndex });
+    this.layerGroups.applyToDeck();
+  }
+
+  async setVisible(layerId: string, visible: boolean): Promise<void> {
+    const g = this.layerGroups.groups.find(grp =>
+      (grp as any).getModel?.(layerId),
+    ) as LayerGroupWithModel<Layer> | undefined;
+    if (!g) return;
+    // zwei Ebenen: Model.enabled (dein "Layer visible") und Deck-Visible
+    g.setModelEnabled(layerId, visible); // Model-Visibility
+    g.setModelOverrides(layerId, { visible }); // Deck-Override (optional)
+    this.layerGroups.applyToDeck();
+  }
+
+  async setGroupVisible(groupId: string, visible: boolean): Promise<void> {
+    this.layerGroups.setGroupVisible(groupId, visible);
   }
 
   async setView([lon, lat]: LonLat, zoom: number) {
@@ -505,178 +691,12 @@ export class DeckProvider implements MapProvider {
     });
   }
 
-  private async _getLayerById(layerId): Promise<Layer | undefined> {
-    if (!this.deck) {
-      return null;
-    }
-
-    const layers = this.deck.props.layers;
-    if (!layers) return undefined; // Falls layers `false` ist
-
-    // LayersList ist ein Array-ähnliches Objekt, das wir als Array behandeln können
-    const layersArray = Array.isArray(layers) ? layers : [layers];
-    return layersArray.find((layer): layer is Layer =>
-      Boolean(layer && 'id' in layer && layer.id === layerId),
-    );
-  }
-
-  /**
-   * Setzt den zIndex für einen bestimmten Layer.
-   * @param layer Der Layer, dessen zIndex geändert werden soll.
-   * @param zIndex Der neue zIndex-Wert (höhere Werte = weiter oben).
-   */
-  private async _setZIndex(layer: Layer, zIndex: number): Promise<Layer> {
-    if (!layer) {
-      console.warn('Ungültiger Layer.');
-      return;
-    }
-
-    // Definiere einen Typ für deine Layer, der LayerProps und deine Custom Props kombiniert
-    type CustomLayer = Layer & {
-      props: LayerProps & { zIndex?: number };
-    };
-
-    const layers = this.deck.props.layers;
-    if (!layers) return undefined;
-
-    const updatedLayer = layer.clone({
-      zIndex: zIndex,
-    } as Partial<LayerProps> & {
-      zIndex?: number;
-    });
-
-    this.deck.setProps({
-      layers: layers.map((l: Layer) =>
-        l.id === layer.id ? updatedLayer : l,
-      ) as CustomLayer[],
-    });
-
-    const layersArray = this.deck.props.layers as Array<
-      Layer & { props: { zIndex?: number } }
-    >;
-
-    layersArray.sort((a, b) => {
-      const aZ = (a.props as { zIndex?: number }).zIndex || 0;
-      const bZ = (b.props as { zIndex?: number }).zIndex || 0;
-      return aZ - bZ;
-    });
-
-    this.deck.setProps({ layers: layersArray });
-    return updatedLayer;
-  }
-
-  /**
-   * Setzt die Sichtbarkeit für einen bestimmten Layer.
-   * @param layer Der Layer, dessen Sichtbarkeit geändert werden soll.
-   * @param visible Ob der Layer sichtbar sein soll (true/false).
-   */
-  private async _setVisible(layer: Layer, visible: boolean): Promise<Layer> {
-    if (!layer) {
-      console.warn('Ungültiger Layer.');
-      return;
-    }
-
-    // Klone den Layer mit der neuen Sichtbarkeit
-    const updatedLayer = layer.clone({ visible });
-
-    // Aktualisiere die Layer in der Deck-Instanz
-    const layers = this.deck.props.layers;
-    if (!layers) return;
-
-    const layersArray = Array.isArray(layers) ? layers : [layers];
-    const updatedLayers = layersArray.map((l: Layer) =>
-      l.id === layer.id ? updatedLayer : l,
-    );
-
-    this.deck.setProps({ layers: updatedLayers });
-    return updatedLayer;
-  }
-
-  /**
-   * Setzt die Opazität für einen bestimmten Layer.
-   * @param layer Der Layer, dessen Opazität geändert werden soll.
-   * @param opacity Die gewünschte Opazität (0.0 bis 1.0).
-   */
-  private async _setOpacity(layer: Layer, opacity: number): Promise<Layer> {
-    //const { TileLayer } = await import('@deck.gl/geo-layers');
-
-    if (!layer || opacity < 0 || opacity > 1) {
-      console.warn('Ungültige Parameter für setOpacityForLayer.');
-      return layer;
-    }
-
-    const updatedLayer: Layer = layer.clone({ opacity });
-
-    // Aktualisiere die Layer in der Deck-Instanz
-    const layers = this.deck.props.layers;
-    if (!layers) return;
-
-    const layersArray = Array.isArray(layers) ? layers : [layers];
-    const updatedLayers = layersArray.map((l: Layer) =>
-      l.id === layer.id ? updatedLayer : l,
-    );
-
-    this.deck.setProps({ layers: updatedLayers });
-    return updatedLayer;
-  }
-
-  /**
-   * Entfernt einen Layer aus der deck.gl-Instanz.
-   * @param layer Der zu entfernende Layer.
-   */
-  private async _removeLayer(layer: Layer): Promise<void> {
-    if (!layer) {
-      console.warn('Ungültiger Layer.');
-      return;
-    }
-
-    const layers = this.deck.props.layers;
-    if (!layers) return;
-
-    const layersArray = Array.isArray(layers) ? layers : [layers];
-    const updatedLayers = layersArray.filter((l: Layer) => l.id !== layer.id);
-
-    this.deck.setProps({ layers: updatedLayers });
-  }
-
-  async removeLayer(layerId: string): Promise<void> {
-    if (!layerId) {
-      return;
-    }
-    const layer = await this._getLayerById(layerId);
-    if (layer) {
-      await this._removeLayer(layer);
-    }
-  }
-
-  async setOpacity(layerId: string, opacity: number): Promise<void> {
-    if (!layerId) {
-      return;
-    }
-    const layer = await this._getLayerById(layerId);
-    if (layer) {
-      await this._setOpacity(layer, opacity);
-    }
-  }
-
-  async setZIndex(layerId: string, zIndex: number): Promise<void> {
-    if (!layerId) {
-      return;
-    }
-    const layer = await this._getLayerById(layerId);
-    if (layer) {
-      await this._setZIndex(layer, zIndex);
-    }
-  }
-
-  async setVisible(layerId: string, visible: boolean): Promise<void> {
-    if (!layerId) {
-      return;
-    }
-    const layer = await this._getLayerById(layerId);
-    if (layer) {
-      await this._setVisible(layer, visible);
-    }
+  async destroy() {
+    try {
+      this.layerGroups.clear({ destroy: true });
+      this.shadowRoot && this.injectedStyle?.remove();
+      this.deck?.finalize();
+    } catch {}
   }
 
   getMap() {
