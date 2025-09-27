@@ -2,171 +2,33 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
-import type { CssMode } from '../../types/cssmode';
 
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
-
-import { LEAFLET_VERSION } from '../../lib/versions.gen';
 
 // Leaflet ESM
 import * as L from 'leaflet';
 
-import { isBrowser, supportsAdoptedStyleSheets } from '../../utils/dom-env';
+import { isBrowser } from '../../utils/dom-env';
+import { log } from '../../utils/logger';
+import {
+  removeInjectedCss,
+  ensureLeafletCss,
+  loadGoogleMapsApi,
+  ensureGoogleMutantLoaded,
+  ensureGoogleLogo,
+} from './leaflet-helpers';
 
+type AnyLayer = L.Layer | L.LayerGroup;
 interface OpacityOptions {
   opacity?: number;
   fillOpacity?: number;
 }
 
-function injectInlineMin(root?: ShadowRoot): HTMLStyleElement | null {
-  if (!isBrowser()) return;
-  const css = `
-    :host { display:block; }
-    #map { width:100%; height:100%; display:block; }
-  `;
-  if (supportsAdoptedStyleSheets()) {
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(css);
-    const target: any = root ?? document;
-    const current = target.adoptedStyleSheets ?? [];
-    target.adoptedStyleSheets = [...current, sheet];
-    return null;
-  } else {
-    const style = document.createElement('style');
-    style.textContent = css;
-    (root ?? document.head).appendChild(style);
-    return style;
-  }
-}
-
-function addLeafletCssFromCdn(
-  root?: ShadowRoot,
-  version = LEAFLET_VERSION,
-  cdn: 'jsdelivr' | 'unpkg' = 'jsdelivr',
-): HTMLStyleElement | null {
-  if (!isBrowser()) return;
-
-  const href =
-    cdn === 'unpkg'
-      ? `https://unpkg.com/leaflet@${version}/dist/leaflet.css`
-      : `https://cdn.jsdelivr.net/npm/leaflet@${version}/dist/leaflet.css`;
-
-  if (cdn === 'unpkg')
-    L.Icon.Default.imagePath = `https://unpkg.com/npm/leaflet@${version}/dist/images/`;
-  else
-    L.Icon.Default.imagePath = `https://cdn.jsdelivr.net/npm/leaflet@${version}/dist/images/`;
-
-  // doppelte Injektion vermeiden (prüfe ShadowRoot **und** globales head)
-  const scope = (root as unknown as Document | ShadowRoot) ?? document;
-  const already =
-    scope.querySelector?.(`link[rel="stylesheet"][href="${href}"]`) ||
-    document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`);
-
-  if (already) return null;
-
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = href;
-  // Optional: link.integrity = '<SRI-Hash>'; link.crossOrigin = '';
-  (root ?? document.head).appendChild(link);
-  return link;
-}
-
-function removeInjectedCss(
-  shadowRoot: ShadowRoot,
-  injectedStyle: HTMLStyleElement,
-) {
-  if (!shadowRoot || !injectedStyle) return;
-  // Das <style>-Element aus dem Shadow‑DOM entfernen
-  injectedStyle.remove(); // moderne API
-}
-
-function ensureLeafletCss(
-  mode: CssMode,
-  root?: ShadowRoot,
-): HTMLStyleElement | null {
-  if (!isBrowser()) return; // Tests/SSR: no-op
-  switch (mode) {
-    case 'cdn':
-      return addLeafletCssFromCdn(root);
-    case 'inline-min':
-      return injectInlineMin(root);
-    case 'bundle':
-      // CSS wird vom Host/App-Bundle geliefert (z.B. via import 'leaflet/dist/leaflet.css')
-      break;
-    case 'none':
-    default:
-      // Host kümmert sich selbst; nichts tun
-      break;
-  }
-  return null;
-}
-
-async function ensureGoogleMutantLoaded(): Promise<void> {
-  if (!isBrowser()) return; // im SSR/Tests: noop
-  try {
-    await import('leaflet.gridlayer.googlemutant');
-  } catch {
-    // im Test (gemockt) oder wenn das Plugin nicht verfügbar ist → still
-  }
-}
-
-async function loadGoogleMapsApi(
-  apiKey: string,
-  opts?: { language?: string; region?: string; libraries?: string[] },
-) {
-  if ((window as any).google?.maps) return;
-
-  await new Promise<void>((resolve, reject) => {
-    const cbName =
-      '___leafletGoogleInit___' + Math.random().toString(36).slice(2);
-    (window as any)[cbName] = () => resolve();
-
-    const script = document.createElement('script');
-    const params = new URLSearchParams({
-      key: apiKey,
-      callback: cbName,
-      v: 'weekly',
-    });
-    if (opts?.language) params.set('language', opts.language);
-    if (opts?.region) params.set('region', opts.region);
-    if (opts?.libraries?.length)
-      params.set('libraries', opts.libraries.join(','));
-
-    script.src = `https://maps.googleapis.com/maps/api/js?${params.toString()}`;
-    script.async = true;
-    script.onerror = () =>
-      reject(new Error('Google Maps JS API failed to load'));
-    document.head.appendChild(script);
-  });
-}
-
-/** Fügt ein kleines Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit) */
-function ensureGoogleLogo(map: L.Map, markAdded: () => void) {
-  if ((map as any)._googleLogoAdded) return;
-  const Logo = L.Control.extend({
-    onAdd() {
-      const img = L.DomUtil.create('img') as HTMLImageElement;
-      img.src =
-        'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
-      img.alt = 'Google';
-      img.style.pointerEvents = 'none';
-      img.style.height = '18px';
-      img.style.margin = '0 0 6px 6px';
-      return img;
-    },
-    onRemove() {},
-  });
-  new Logo({ position: 'bottomleft' as L.ControlPosition }).addTo(map);
-  (map as any)._googleLogoAdded = true;
-  markAdded();
-}
-
-type AnyLayer = L.Layer | L.LayerGroup;
-
 export class LeafletProvider implements MapProvider {
   private map?: L.Map;
   private layers: AnyLayer[] = [];
+  private baseLayers: L.Layer[] = [];
+  private hiddenLayerGroups: L.LayerGroup[] = [];
   private googleLogoAdded: boolean = false;
   private unsubscribeResize: Unsubscribe;
   private shadowRoot: ShadowRoot;
@@ -209,81 +71,182 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  async addLayer(config: LayerConfig): Promise<string> {
-    if (!this.map) return;
-    let layer: L.Layer = null;
-    if ('groupId' in config && config.groupId) {
-      try {
-        layer = await this.addLayerToGroup(
-          config as LayerConfig & { groupId: string },
-        );
-      } catch (ex) {
-        console.error('addLayer - Unerwarteter Fehler:', ex);
-        return null;
-      }
-    } else {
-      try {
-        layer = await this.addStandaloneLayer(config);
-      } catch (ex) {
-        console.error('addLayer - Unerwarteter Fehler:', ex);
-        return null;
-      }
-    }
+  // private async addStandaloneLayer(layerConfig: LayerConfig): Promise<L.Layer> {
+  //   const layer = await this.createLayer(layerConfig);
+  //   layer.addTo(this.map!);
+  //   this.layers.push(layer);
+  // }
+
+  async addLayerToGroup(
+    layerConfig: LayerConfig,
+    groupId: string,
+  ): Promise<string> {
+    const group = await this._ensureGroup(groupId);
+
+    const layer = await this.createLayer(layerConfig);
+
     if (layer == null) {
       return null;
     }
+    group.addLayer(layer);
+
+    const layerId = L.Util.stamp(layer); //layer._leaflet_id;
     layer.vmapVisible = true;
     layer.vmapOpacity = 1.0;
 
-    if ((config as any).opacity !== undefined) {
-      this.setOpacityByLayer(layer, (config as any).opacity);
+    if ((layerConfig as any).opacity !== undefined) {
+      this.setOpacityByLayer(layer, (layerConfig as any).opacity);
     }
-    if ((config as any).zIndex !== undefined) {
-      layer.setZIndex((config as any).zIndex);
+    if ((layerConfig as any).zIndex !== undefined) {
+      layer.setZIndex((layerConfig as any).zIndex);
     }
-    if ((config as any).visible) {
+    if ((layerConfig as any).visible) {
       this.setVisibleByLayer(layer, true);
-    } else if ((config as any).visible === false) {
+    } else if ((layerConfig as any).visible === false) {
       this.setVisibleByLayer(layer, false);
     }
 
-    return layer._leaflet_id;
+    return layerId;
   }
 
-  private async addStandaloneLayer(layerConfig: LayerConfig): Promise<L.Layer> {
-    const layer = await this.createLayer(layerConfig);
-    layer.addTo(this.map!);
-    this.layers.push(layer);
-  }
+  // async addLayer(config: LayerConfig): Promise<string> {
+  //   if (!this.map) return;
+  //   let layer: L.Layer = null;
+  //   if ('groupId' in config && config.groupId) {
+  //     try {
+  //       layer = await this.addLayerToGroup(
+  //         config as LayerConfig & { groupId: string },
+  //       );
+  //     } catch (ex) {
+  //       error('addLayer - Unerwarteter Fehler:', ex);
+  //       return null;
+  //     }
+  //   } else {
+  //     try {
+  //       layer = await this.addStandaloneLayer(config);
+  //     } catch (ex) {
+  //       error('addLayer - Unerwarteter Fehler:', ex);
+  //       return null;
+  //     }
+  //   }
+  //   if (layer == null) {
+  //     return null;
+  //   }
+  //   const layerId = L.Util.stamp(layer); //layer._leaflet_id;
+  //   layer.vmapVisible = true;
+  //   layer.vmapOpacity = 1.0;
 
-  private async addLayerToGroup(
-    layerConfig: LayerConfig & { groupId: string },
-  ): Promise<L.Layer> {
-    let group = this.layers.find(
-      l =>
-        l instanceof L.LayerGroup &&
-        (l as any)._groupId === layerConfig.groupId,
-    ) as L.LayerGroup | undefined;
+  //   if ((config as any).opacity !== undefined) {
+  //     this.setOpacityByLayer(layer, (config as any).opacity);
+  //   }
+  //   if ((config as any).zIndex !== undefined) {
+  //     layer.setZIndex((config as any).zIndex);
+  //   }
+  //   if ((config as any).visible) {
+  //     this.setVisibleByLayer(layer, true);
+  //   } else if ((config as any).visible === false) {
+  //     this.setVisibleByLayer(layer, false);
+  //   }
 
-    if (!group) {
-      group = L.layerGroup();
-      (group as any)._groupId = layerConfig.groupId;
-      group.addTo(this.map!);
-      this.layers.push(group);
+  //   return layerId;
+  // }
+
+  async addBaseLayer(
+    layerConfig: LayerConfig,
+    basemapid: string,
+    layerElementId: string,
+  ): Promise<string> {
+    if (layerElementId === undefined || layerElementId === null) {
+      log('leaflet - addBaseLayer - layerElementId not set.');
+      return null;
+    }
+    if (basemapid === undefined || basemapid === null) {
+      log('leaflet - addBaseLayer - basemapid not set.');
     }
 
-    const child = await this.createLayer(layerConfig);
-    group.addLayer(child);
-    return child;
+    const group = await this._ensureGroup(layerConfig.groupId);
+    group.basemap = true;
+
+    const layer = await this.createLayer(layerConfig);
+
+    //    layer.group = group;
+    this.baseLayers.push(layer);
+    if (layer == null) {
+      return null;
+    }
+    layer.layerElementId = layerElementId;
+
+    const layerId = L.Util.stamp(layer); //layer._leaflet_id;
+    layer.vmapVisible = true;
+    layer.vmapOpacity = 1.0;
+
+    if ((layerConfig as any).opacity !== undefined) {
+      this.setOpacityByLayer(layer, (layerConfig as any).opacity);
+    }
+    if ((layerConfig as any).zIndex !== undefined) {
+      layer.setZIndex((layerConfig as any).zIndex);
+    }
+    if ((layerConfig as any).visible) {
+      this.setVisibleByLayer(layer, true);
+    } else if ((layerConfig as any).visible === false) {
+      this.setVisibleByLayer(layer, false);
+    }
+    if (basemapid === layerElementId) {
+      const prev_layer = group.getLayers()[0];
+      if (prev_layer) {
+        this.map.removeLayer(prev_layer);
+        group.clearLayers();
+      }
+      group.addLayer(layer);
+      layer.addTo(this.map!);
+      //group.layerId = layerId;
+    }
+    return layerId;
+  }
+
+  async setBaseLayer(groupId: string, layerElementId: string): Promise<void> {
+    if (layerElementId === null) {
+      log('leaflet - setBaseLayer - layerElementId is null.');
+      return;
+    }
+    let group = this.layers.find(
+      l => (l as L.LayerGroup)?._groupId === groupId,
+    ) as L.LayerGroup | undefined;
+
+    const layer = this.baseLayers.find(
+      l => l.layerElementId === layerElementId,
+    );
+    if (layer === undefined) {
+      log(
+        'leaflet - setBaseLayer - layer not found. layerElementId: ' +
+          layerElementId,
+      );
+      return;
+    }
+
+    const prev_layer = group.getLayers()[0];
+    if (prev_layer) {
+      this.map.removeLayer(prev_layer);
+      group.clearLayers();
+    }
+    group.addLayer(layer);
+    layer.addTo(this.map!);
+    //group.layerId = layerId;
+
+    //group.set('layerId', layerId, false);
   }
 
   private async _getLayerById(layerId): Promise<L.Layer> {
     let layerFound = null;
     this.map.eachLayer(layer => {
-      if (L.stamp(layer) === layerId) {
+      if (layer._leaflet_id === layerId) {
         layerFound = layer;
       }
     });
+    if (layerFound) return layerFound;
+
+    layerFound = this.baseLayers.find(l => l._leaflet_id === layerId);
+    if (layerFound === undefined) return null;
     return layerFound;
   }
 
@@ -397,9 +360,9 @@ export class LeafletProvider implements MapProvider {
   ): Promise<L.TileLayer.WMS> {
     return L.tileLayer.wms(config.url, {
       layers: config.layers,
-      format: (config.params as any)?.FORMAT ?? 'image/png',
-      transparent: (config.params as any)?.TRANSPARENT ?? true,
-      ...(config.params ?? {}),
+      format: config.format ?? 'image/png',
+      transparent: config.transparent ?? true,
+      ...(config.extraParams ?? {}),
     } as L.WMSOptions);
   }
 
@@ -435,7 +398,7 @@ export class LeafletProvider implements MapProvider {
 
     ensureGoogleLogo(this.map, () => {
       this.googleLogoAdded = true;
-      console.log(
+      log(
         'v-map - provider - leaflet - googleLogoAdded: ',
         this.googleLogoAdded,
       );
@@ -510,7 +473,8 @@ export class LeafletProvider implements MapProvider {
   }
 
   private setVisibleByLayer(layer: L.Layer, visible: boolean): Promise<void> {
-    if (!layer || typeof layer.setOpacity !== 'function') return;
+    if (!layer) return;
+
     // 1. Aktualisiere den Sichtbarkeitszustand
     layer.vmapVisible = visible;
     if (layer.vmapOpacity === undefined) {
@@ -519,7 +483,7 @@ export class LeafletProvider implements MapProvider {
 
     // 2. Setze die Opazität basierend auf dem neuen Zustand:
     const targetOpacity = visible ? layer.vmapOpacity : 0.0;
-    layer.setOpacity(targetOpacity);
+    this.setLayerOpacity(layer, targetOpacity);
   }
 
   private setLayerOpacity(
@@ -542,6 +506,52 @@ export class LeafletProvider implements MapProvider {
       marker.setOpacity(opacity);
     } else if ('setOpacity' in layer) {
       (layer as L.GridLayer).setOpacity(opacity);
+    }
+  }
+
+  private async _ensureGroup(groupId: string): Promise<L.LayerGroup> {
+    let group = await this._getLayerGroupById(groupId);
+    if (!group) {
+      group = L.layerGroup();
+      (group as any)._groupId = groupId;
+      group.addTo(this.map!);
+      group.visible = true;
+      this.layers.push(group);
+    }
+    return group;
+  }
+
+  private async _getLayerGroupById(groupId): Promise<L.LayerGroup> {
+    if (!this.map) {
+      return null;
+    }
+    let group = this.layers.find(
+      l => l instanceof L.LayerGroup && (l as any)._groupId === groupId,
+    ) as L.LayerGroup | undefined;
+    if (!group) {
+      group = this.hiddenLayerGroups.find(lg => lg._groupId === groupId);
+      if (!group) return null;
+    }
+    return group;
+  }
+
+  async setGroupVisible(groupId: string, visible: boolean): Promise<void> {
+    const layerGroup = await this._getLayerGroupById(groupId);
+    if (layerGroup) {
+      if (layerGroup.visible === visible) return;
+      if (layerGroup.visible === false) {
+        layerGroup.addTo(this.map);
+        // remove layergroup from hidden list
+        this.hiddenLayerGroups = this.hiddenLayerGroups.filter(
+          lg => lg._groupId !== groupId,
+        );
+        layerGroup.visible = visible;
+      } else if (layerGroup.visible === true) {
+        this.map.removeLayer(layerGroup);
+        // add layergroup to hidden list
+        layerGroup.visible = visible;
+        this.hiddenLayerGroups.push(layerGroup);
+      }
     }
   }
 
