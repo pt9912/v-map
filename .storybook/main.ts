@@ -1,6 +1,6 @@
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  staticDirs: ['../dist/esm-es5'],
+  //staticDirs: ['../dist/esm-es5'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-docs',
