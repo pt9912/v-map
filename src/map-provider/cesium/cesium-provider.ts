@@ -1,4 +1,8 @@
-// src/app.ts
+// CesiumProvider.ts – relevante Ergänzungen
+import { CesiumLayerGroups, AnyLayer } from './CesiumLayerGroups';
+import { LayerManager } from './layer-manager';
+
+import { log, warn } from '../../utils/logger';
 import { loadCesium, injectWidgetsCss } from '../../lib/cesium-loader';
 
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
@@ -6,10 +10,10 @@ import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 
-type CesiumModule = typeof import('cesium');
-import { Viewer, ImageryLayer, GeoJsonDataSource } from 'cesium';
+import { AsyncMutex } from '../../utils/async-mutex';
 
-import { LayerManager } from './layer-manager';
+type CesiumModule = typeof import('cesium');
+import type { Viewer, ImageryLayer, GeoJsonDataSource } from 'cesium';
 
 /**
  * Entfernt das von Cesium injectWidgetsCss() eingefügte CSS.
@@ -27,7 +31,7 @@ function removeCesiumWidgetsCss(shadowRoot: ShadowRoot): void {
       style.remove(); // modernes DOM‑API
       // oder für sehr alte Browser:
       // style.parentNode?.removeChild(style);
-      console.log('v-map - provider - cesium - Cesium‑Widget‑CSS entfernt');
+      log('v-map - provider - cesium - Cesium‑Widget‑CSS entfernt');
       break; // wir haben das gesuchte Style‑Tag gefunden
     }
   }
@@ -38,6 +42,9 @@ export class CesiumProvider implements MapProvider {
   private Cesium: CesiumModule;
   private layerManager: LayerManager;
   private shadowRoot: ShadowRoot;
+
+  private layerGroups = new CesiumLayerGroups();
+  private layerManagerMutex = new AsyncMutex();
 
   async init(options: ProviderOptions) {
     this.shadowRoot = options.shadowRoot;
@@ -89,92 +96,148 @@ export class CesiumProvider implements MapProvider {
     this.viewer = undefined;
   }
 
-  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
-    const oldLayer = this.layerManager.getLayer(layerId);
-    switch (update.type) {
-      case 'geojson':
-        {
-          const data = update.data;
-          const options = oldLayer.getOptions();
-          const dataSource: GeoJsonDataSource = await this.createGeoJSONLayer(
-            data.geojson,
-            data.url,
-            options,
-          );
-          const layer = this.layerManager.replaceLayer(
-            layerId,
-            oldLayer,
-            dataSource,
-          );
-          layer.setOptions(options);
-        }
-        break;
-      case 'osm':
-        {
-          const osmOptions = oldLayer.getOptions();
-          const osmLayer = new this.Cesium.ImageryLayer(
-            new this.Cesium.OpenStreetMapImageryProvider({
-              url: update.data.url || 'https://a.tile.openstreetmap.org',
-            }),
-          );
-          const updatedOsmlayer = this.layerManager.replaceLayer(
-            layerId,
-            oldLayer,
-            osmLayer,
-          );
-          updatedOsmlayer.setOptions(osmOptions);
-        }
-        break;
-    }
-  }
+  private async createLayer(
+    layerConfig: LayerConfig,
+    layerId: string,
+  ): Promise<AnyLayer> {
+    let wrapper = null;
 
-  async addLayer(layerConfig: LayerConfig): Promise<string> {
-    const layerId = crypto.randomUUID();
-    let layer = null;
     switch (layerConfig.type) {
-      case 'geojson':
+      case 'geojson': {
         const options = { clampToGround: true };
-        const dataSource: GeoJsonDataSource = await this.createGeoJSONLayer(
+        const ds = await this.createGeoJSONLayer(
           layerConfig.geojson,
           layerConfig.url,
           options,
         );
-        layer = this.layerManager.addLayer(layerId, dataSource);
-        layer.setOptions(options);
+        wrapper = this.layerManager.addLayer(layerId, ds);
+        wrapper.setOptions(options);
         break;
-      case 'osm':
-        const iLayer = this.createOSMLayer(
+      }
+      case 'osm': {
+        const iLayer = await this.createOSMLayer(
           layerConfig as Extract<LayerConfig, { type: 'osm' }>,
         );
-        layer = this.layerManager.addLayer(layerId, iLayer);
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
-      case 'wms':
-        await this.addWMSLayer(layerConfig);
+      }
+      case 'wms': {
+        const iLayer = await this.addWMSLayer(layerConfig as any);
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
-      case 'arcgis':
-        await this.addArcGISLayer(layerConfig);
+      }
+      case 'arcgis': {
+        await this.addArcGISLayer(layerConfig as any);
+        //todo  wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
+      }
       default:
         throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
     }
-    if (layer == null) {
-      return null;
-    }
-    if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex((layerConfig as any).zIndex);
-      //await this.setZIndex(layerId, (layerConfig as any).zIndex);
-    }
-    if ((layerConfig as any).opacity !== undefined) {
-      layer.setOpacity((layerConfig as any).opacity);
-      //      await this.setOpacity(layerId, (layerConfig as any).opacity);
-    }
-    if ((layerConfig as any).visible !== undefined) {
-      layer.setVisible((layerConfig as any).visible);
-      //      await this.setVisible(layerId, (layerConfig as any).visible);
-    }
-    /*
-     */
-    return layerId;
+
+    if (!wrapper) return null;
+
+    // zIndex/Opacity/Visible zuerst auf dem Layer anwenden (bleiben „Originalzustand“ der Gruppe)
+    if ((layerConfig as any).zIndex !== undefined)
+      await wrapper.setZIndex((layerConfig as any).zIndex);
+    if ((layerConfig as any).opacity !== undefined)
+      wrapper.setOpacity((layerConfig as any).opacity);
+    if ((layerConfig as any).visible !== undefined)
+      wrapper.setVisible((layerConfig as any).visible);
+
+    return wrapper;
+  }
+
+  // ---------- Layer anlegen (mit Group & Basemap-Key) ----------
+  async addLayerToGroup(
+    layerConfig: LayerConfig,
+    groupId: string,
+  ): Promise<string> {
+    return await this.layerManagerMutex.runExclusive(async () => {
+      const layerId = crypto.randomUUID();
+      let wrapper = await this.createLayer(layerConfig, layerId);
+
+      // >>> In Gruppenverwaltung registrieren (inkl. Basemap-Key)
+      const elementId: string | null =
+        (layerConfig as any).layerElementId ??
+        (layerConfig as any).elementId ??
+        null;
+
+      this.layerGroups.addLayerToGroup(groupId, {
+        id: layerId,
+        elementId,
+        layer: wrapper,
+      });
+
+      // Regeln anwenden (sichtbar/basemap)
+      this.layerGroups.apply();
+      return layerId;
+    });
+  }
+
+  // ---------- Basemap-API analog deck ----------
+  async setBaseLayer(groupId: string, layerElementId: string): Promise<void> {
+    await this.layerManagerMutex.runExclusive(async () => {
+      this.layerGroups.setBasemap(groupId, layerElementId ?? null);
+      this.layerGroups.apply();
+    });
+  }
+
+  // Optional: Helper wie in deck.addBaseLayer(...)
+  async addBaseLayer(
+    layerConfig: LayerConfig,
+    basemapid: string,
+    layerElementId: string,
+  ): Promise<string> {
+    if (!layerElementId || !basemapid) return null;
+    return await this.layerManagerMutex.runExclusive(async () => {
+      const layerId = crypto.randomUUID();
+      let wrapper = await this.createLayer(layerConfig, layerId);
+
+      this.layerGroups.addLayerToGroup(layerConfig.groupId, {
+        id: layerId,
+        elementId: layerElementId,
+        layer: wrapper,
+      });
+
+      this.layerGroups.setBasemap(layerConfig.groupId ?? 'basemap', basemapid);
+      this.layerGroups.apply();
+      return layerId;
+    });
+  }
+
+  // ---------- Sichtbarkeit/Z-Index/Opacity bleiben wie gehabt ----------
+  async setGroupVisible(groupId: string, visible: boolean): Promise<void> {
+    this.layerGroups.setGroupVisible(groupId, visible);
+    this.layerGroups.apply();
+  }
+
+  async removeLayer(layerId: string): Promise<void> {
+    if (!layerId) return;
+    await this.layerManagerMutex.runExclusive(async () => {
+      // erst aus Viewer entfernen (bestehende Logik)
+      this.layerManager.removeLayer(layerId);
+      // dann aus Gruppen
+      this.layerGroups.removeLayer(layerId, true);
+      this.layerGroups.apply();
+    });
+  }
+
+  // updateLayer, setOpacity, setZIndex, setVisible bleiben – du änderst damit den
+  // „Originalzustand“ der Layer. Danach LayerGroups.apply() aufrufen, damit
+  // Gruppen-/Basemap-Regeln sofort wieder durchgesetzt werden:
+  async setOpacity(layerId: string, opacity: number): Promise<void> {
+    this.layerManager.setOpacity(layerId, opacity);
+    this.layerGroups.apply();
+  }
+  async setVisible(layerId: string, visible: boolean): Promise<void> {
+    this.layerManager.setVisible(layerId, visible);
+    this.layerGroups.apply();
+  }
+  async setZIndex(layerId: string, zIndex: number): Promise<void> {
+    await this.layerManager.setZIndex(layerId, zIndex);
+    // Z-Order ist unabhängig von Basemap/Group-Visible, aber apply() schadet nicht
+    this.layerGroups.apply();
   }
 
   private async createGeoJSONLayer(
@@ -195,9 +258,9 @@ export class CesiumProvider implements MapProvider {
     return dataSource;
   }
 
-  private createOSMLayer(
+  private async createOSMLayer(
     cfg: Extract<LayerConfig, { type: 'osm' }>,
-  ): ImageryLayer {
+  ): Promise<ImageryLayer> {
     return new this.Cesium.ImageryLayer(
       new this.Cesium.OpenStreetMapImageryProvider({
         url: cfg.url || 'https://a.tile.openstreetmap.org',
@@ -205,13 +268,16 @@ export class CesiumProvider implements MapProvider {
     );
   }
 
-  private async addWMSLayer(config: Extract<LayerConfig, { type: 'wms' }>) {
-    const provider = new this.Cesium.WebMapServiceImageryProvider({
-      url: config.url,
-      layers: config.layers,
-      parameters: config.params,
-    });
-    this.viewer.imageryLayers.addImageryProvider(provider);
+  private async addWMSLayer(
+    config: Extract<LayerConfig, { type: 'wms' }>,
+  ): Promise<ImageryLayer> {
+    return new this.Cesium.ImageryLayer(
+      new this.Cesium.WebMapServiceImageryProvider({
+        url: config.url,
+        layers: config.layers,
+        parameters: config.extraParams,
+      }),
+    );
   }
 
   private async addArcGISLayer(
@@ -222,6 +288,47 @@ export class CesiumProvider implements MapProvider {
       config.url,
     );
     this.viewer.imageryLayers.addImageryProvider(provider);
+  }
+
+  async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
+    return await this.layerManagerMutex.runExclusive(async () => {
+      const oldLayer = this.layerManager.getLayer(layerId);
+      switch (update.type) {
+        case 'geojson':
+          {
+            const data = update.data;
+            const options = oldLayer.getOptions();
+            const dataSource: GeoJsonDataSource = await this.createGeoJSONLayer(
+              data.geojson,
+              data.url,
+              options,
+            );
+            const layer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              dataSource,
+            );
+            layer.setOptions(options);
+          }
+          break;
+        case 'osm':
+          {
+            const osmOptions = oldLayer.getOptions();
+            const osmLayer = new this.Cesium.ImageryLayer(
+              new this.Cesium.OpenStreetMapImageryProvider({
+                url: update.data.url || 'https://a.tile.openstreetmap.org',
+              }),
+            );
+            const updatedOsmlayer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              osmLayer,
+            );
+            updatedOsmlayer.setOptions(osmOptions);
+          }
+          break;
+      }
+    });
   }
 
   async setView(center: LonLat, zoom: number) {
@@ -236,35 +343,8 @@ export class CesiumProvider implements MapProvider {
         roll: 0.0,
       },
       // optional: onComplete / onCancel callbacks
-      complete: () =>
-        console.log('v-map - provider - cesium - Fly‑to finished'),
-      cancel: () =>
-        console.warn('v-map - provider - cesium - Fly‑to cancelled'),
+      complete: () => log('v-map - provider - cesium - Fly‑to finished'),
+      cancel: () => warn('v-map - provider - cesium - Fly‑to cancelled'),
     });
-  }
-
-  async removeLayer(layerId: string): Promise<void> {
-    if (!layerId) {
-      return;
-    }
-    this.layerManager.removeLayer(layerId);
-  }
-
-  async setOpacity(layerId: string, opacity: number): Promise<void> {
-    this.layerManager.setOpacity(layerId, opacity);
-  }
-
-  async setVisible(layerId: string, visible: boolean): Promise<void> {
-    this.layerManager.setVisible(layerId, visible);
-  }
-
-  async setZIndex(layerId: string, zindex: number): Promise<void> {
-    this.layerManager.setZIndex(layerId, zindex);
-  }
-
-  // (optional) async ensureGroup?(...) { ... }
-
-  getMap(): Viewer {
-    return this.viewer;
   }
 }

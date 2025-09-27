@@ -10,22 +10,18 @@ import type {
   DataSourceCollection,
   Property,
   Entity,
-  //PrimitiveCollection,
+  PrimitiveCollection,
   //Primitive,
 } from 'cesium';
 
-interface ILayer {
-  //getShow(): boolean;
-  //setShow(value: boolean): void;
-  getOptions(): any;
-  setOptions(options: any): void;
-  getVisible(): boolean;
-  setVisible(value: boolean): void;
-  getOpacity(): number;
-  setOpacity(value: number): void;
-  getZIndex(): number;
-  setZIndex(zIndex: number): void;
-  remove(): void;
+//import { AsyncMutex } from '../../utils/async-mutex';
+
+import { ILayer } from './i-layer';
+
+interface CesiumCollection<T> {
+  remove(element: T, destroy?: boolean): boolean;
+  get(index: number): T | undefined;
+  readonly length: number;
 }
 
 interface I3DTilesLayer extends ILayer {
@@ -39,6 +35,7 @@ export class LayerManager {
   private Cesium: CesiumModule;
   private layers = new Map<string, ILayer | I3DTilesLayer>();
   private viewer: Viewer;
+  //private imageryZMutex = new AsyncMutex();
 
   constructor(Cesium: CesiumModule, viewer: Viewer) {
     this.viewer = viewer;
@@ -137,91 +134,58 @@ export class LayerManager {
     }
   }
 
-  /**
-   * Verschiebt ein bereits vorhandenes ImageryLayer innerhalb seiner Collection
-   * zu einem gewünschten zIndex und hält die Collection nach zIndex sortiert.
-   *
-   * @param collection  Die Sammlung, in der sich das Layer befindet.
-   * @param layer       Das zu verschiebende Layer (ist bereits Teil der Collection).
-   * @param targetZ     Der gewünschte neue zIndex.
-   */
-  private moveImageryLayerToZIndex(
+  private async sortImageryLayers(
     collection: ImageryLayerCollection,
     layer: ImageryLayer,
     targetZ: number,
-  ): void {
-    // -------------------------------------------------
-    // 1️⃣  Neues zIndex setzen (überschreibt das alte)
-    // -------------------------------------------------
-    (layer as any).zIndex = targetZ;
-
-    // -------------------------------------------------
-    // 2️⃣  Aktuelle Position bestimmen
-    // -------------------------------------------------
-    const curIdx = collection.indexOf(layer);
-    if (curIdx === -1) {
-      throw new Error('Der übergebene Layer ist nicht Teil der Collection.');
-    }
-
-    // -------------------------------------------------
-    // 3️⃣  Nach oben schieben, solange Vorgänger einen
-    //     größeren zIndex hat (stabile Sortierung)
-    // -------------------------------------------------
-    let idx = curIdx;
-    while (
-      idx > 0 && // nicht am Anfang
-      collection[idx - 1].zIndex > targetZ // Vorgänger hat höheren zIndex
-    ) {
-      // `raise` vertauscht das aktuelle Element mit seinem Vorgänger
-      collection.raise(collection[idx]);
-      idx--;
-    }
-
-    // -------------------------------------------------
-    // 4️⃣  Nach unten schieben, falls das neue zIndex
-    //     größer ist als das der nachfolgenden Elemente
-    // -------------------------------------------------
-    while (
-      idx < collection.length - 1 && // nicht am Ende
-      collection[idx + 1].zIndex < targetZ // Nachfolger hat kleineren zIndex
-    ) {
-      // `lower` vertauscht das aktuelle Element mit seinem Nachfolger
-      collection.lower(collection[idx]);
-      idx++;
-    }
-
-    // -------------------------------------------------
-    // 5️⃣  Optional: Guard‑Clause für extreme Werte
-    // -------------------------------------------------
-    // (Falls du Min/Max‑Grenzen definieren willst)
-    // if (targetZ < MIN_Z) (layer as any).zIndex = MIN_Z;
-    // if (targetZ > MAX_Z) (layer as any).zIndex = MAX_Z;
+  ): Promise<void> {
+    const tempCollection: ImageryLayer[] = this.sort(
+      collection,
+      layer,
+      targetZ,
+    );
+    // Collection leeren und neu befüllen
+    collection.removeAll(false);
+    tempCollection.forEach(ds => collection.add(ds));
   }
 
-  private moveTilesetToIndex(tileset: Cesium3DTileset, index: number): void {
-    const primitives = this.viewer.scene.primitives;
-    primitives.remove(tileset);
-    if (index >= primitives.length) {
-      primitives.add(tileset);
-    } else {
-      const tilesets = [];
-      for (let i = 0; i < primitives.length; i++) {
-        const current = primitives.get(i);
-        if (i === index) tilesets.push(tileset);
-        if (current !== tileset) tilesets.push(current);
-      }
-      primitives.removeAll();
-      tilesets.forEach(t => primitives.add(t));
-    }
+  private async sort3DTileSets(
+    collection: PrimitiveCollection,
+    tileset: Cesium3DTileset,
+    targetZ: number,
+  ): Promise<void> {
+    const tempCollection: ImageryLayer[] = this.sort(
+      collection,
+      tileset,
+      targetZ,
+    );
+    // Collection leeren und neu befüllen
+    collection.removeAll();
+    tempCollection.forEach(ds => collection.add(ds));
   }
 
-  private moveDataSourceToIndex(
+  private async sortDataSources(
     collection: DataSourceCollection,
     dataSource: DataSource,
     zIndex: number,
-  ): void {
+  ): Promise<void> {
+    const tempCollection: DataSource[] = this.sort(
+      collection,
+      dataSource,
+      zIndex,
+    );
+    // Collection leeren und neu befüllen
+    collection.removeAll(false);
+    tempCollection.forEach(async ds => await collection.add(ds));
+  }
+
+  private sort<T>(
+    collection: CesiumCollection<T>,
+    dataSource: T,
+    zIndex: number,
+  ): T[] {
     // 1. Layer entfernen
-    collection.remove(dataSource);
+    collection.remove(dataSource, false);
 
     // 2. Layer an der richtigen Position wieder hinzufügen
     // Cesium hat keine direkte "setZIndex"-Methode für DataSources,
@@ -229,7 +193,7 @@ export class LayerManager {
     // Da DataSourceCollection keine Z-Index-Unterstützung hat,
     // müssen wir alle Layer neu sortieren.
     //    const dataSources: DataSource[] = [];
-    const tempDataSources: DataSource[] = [];
+    const tempDataSources: T[] = [];
 
     // Alle Layer sammeln
     for (let i = 0; i < collection.length; i++) {
@@ -254,10 +218,132 @@ export class LayerManager {
       return aZIndex - bZIndex;
     });
 
-    // Collection leeren und neu befüllen
-    collection.removeAll();
-    tempDataSources.forEach(ds => collection.add(ds));
+    return tempDataSources;
   }
+
+  // /**
+  //  * Verschiebt ein bereits vorhandenes ImageryLayer innerhalb seiner Collection
+  //  * zu einem gewünschten zIndex und hält die Collection nach zIndex sortiert.
+  //  *
+  //  * @param collection  Die Sammlung, in der sich das Layer befindet.
+  //  * @param layer       Das zu verschiebende Layer (ist bereits Teil der Collection).
+  //  * @param targetZ     Der gewünschte neue zIndex.
+  //  */
+  // private moveImageryLayerToZIndex(
+  //   collection: ImageryLayerCollection,
+  //   layer: ImageryLayer,
+  //   targetZ: number,
+  // ): void {
+  //   // fire-and-forget; Thread-Sicherheit via Mutex
+  //   void this.imageryZMutex.runExclusive(async () => {
+  //     // -------------------------------------------------
+  //     // 1️⃣  Neues zIndex setzen (überschreibt das alte)
+  //     // -------------------------------------------------
+  //     (layer as any).zIndex = targetZ;
+
+  //     // -------------------------------------------------
+  //     // 2️⃣  Aktuelle Position bestimmen
+  //     // -------------------------------------------------
+  //     const curIdx = collection.indexOf(layer);
+  //     if (curIdx === -1) {
+  //       throw new Error('Der übergebene Layer ist nicht Teil der Collection.');
+  //     }
+
+  //     // -------------------------------------------------
+  //     // 3️⃣  Nach oben schieben, solange Vorgänger einen
+  //     //     größeren zIndex hat (stabile Sortierung)
+  //     // -------------------------------------------------
+  //     let idx = curIdx;
+  //     while (
+  //       idx > 0 && // nicht am Anfang
+  //       collection[idx - 1].zIndex > targetZ // Vorgänger hat höheren zIndex
+  //     ) {
+  //       // `raise` vertauscht das aktuelle Element mit seinem Vorgänger
+  //       collection.raise(collection[idx]);
+  //       idx--;
+  //     }
+
+  //     // -------------------------------------------------
+  //     // 4️⃣  Nach unten schieben, falls das neue zIndex
+  //     //     größer ist als das der nachfolgenden Elemente
+  //     // -------------------------------------------------
+  //     while (
+  //       idx < collection.length - 1 && // nicht am Ende
+  //       collection[idx + 1].zIndex < targetZ // Nachfolger hat kleineren zIndex
+  //     ) {
+  //       // `lower` vertauscht das aktuelle Element mit seinem Nachfolger
+  //       collection.lower(collection[idx]);
+  //       idx++;
+  //     }
+  //   });
+  //   // -------------------------------------------------
+  //   // 5️⃣  Optional: Guard‑Clause für extreme Werte
+  //   // -------------------------------------------------
+  //   // (Falls du Min/Max‑Grenzen definieren willst)
+  //   // if (targetZ < MIN_Z) (layer as any).zIndex = MIN_Z;
+  //   // if (targetZ > MAX_Z) (layer as any).zIndex = MAX_Z;
+  // }
+
+  // private moveTilesetToIndex(tileset: Cesium3DTileset, index: number): void {
+  //   const primitives = this.viewer.scene.primitives;
+  //   primitives.remove(tileset);
+  //   if (index >= primitives.length) {
+  //     primitives.add(tileset);
+  //   } else {
+  //     const tilesets = [];
+  //     for (let i = 0; i < primitives.length; i++) {
+  //       const current = primitives.get(i);
+  //       if (i === index) tilesets.push(tileset);
+  //       if (current !== tileset) tilesets.push(current);
+  //     }
+  //     primitives.removeAll();
+  //     tilesets.forEach(t => primitives.add(t));
+  //   }
+  // }
+
+  // private moveDataSourceToIndex(
+  //   collection: DataSourceCollection,
+  //   dataSource: DataSource,
+  //   zIndex: number,
+  // ): void {
+  //   // 1. Layer entfernen
+  //   collection.remove(dataSource);
+
+  //   // 2. Layer an der richtigen Position wieder hinzufügen
+  //   // Cesium hat keine direkte "setZIndex"-Methode für DataSources,
+  //   // also müssen wir die Reihenfolge manuell steuern.
+  //   // Da DataSourceCollection keine Z-Index-Unterstützung hat,
+  //   // müssen wir alle Layer neu sortieren.
+  //   //    const dataSources: DataSource[] = [];
+  //   const tempDataSources: DataSource[] = [];
+
+  //   // Alle Layer sammeln
+  //   for (let i = 0; i < collection.length; i++) {
+  //     tempDataSources.push(collection.get(i));
+  //   }
+
+  //   // Sortieren nach zIndex (falls vorhanden) oder Reihenfolge
+  //   tempDataSources.sort((a, b) => {
+  //     const aZIndex = (a as any).zIndex || 0;
+  //     const bZIndex = (b as any).zIndex || 0;
+  //     return aZIndex - bZIndex;
+  //   });
+
+  //   // Den Layer mit dem neuen zIndex einfügen
+  //   (dataSource as any).zIndex = zIndex;
+  //   tempDataSources.push(dataSource);
+
+  //   // Neu sortieren
+  //   tempDataSources.sort((a, b) => {
+  //     const aZIndex = (a as any).zIndex || 0;
+  //     const bZIndex = (b as any).zIndex || 0;
+  //     return aZIndex - bZIndex;
+  //   });
+
+  //   // Collection leeren und neu befüllen
+  //   collection.removeAll();
+  //   tempDataSources.forEach(ds => collection.add(ds));
+  // }
 
   private wrapImageryLayer(layer: ImageryLayer): ILayer {
     const collection = this.viewer.imageryLayers;
@@ -285,15 +371,17 @@ export class LayerManager {
         }
         return -1;
       },
-      setZIndex: (zIndex: number) => {
-        if (zIndex !== undefined)
-          this.moveImageryLayerToZIndex(collection, layer, zIndex);
+      setZIndex: async (zIndex: number): Promise<void> => {
+        if (zIndex !== undefined) {
+          await this.sortImageryLayers(collection, layer, zIndex);
+        }
       },
       remove: () => collection.remove(layer),
     };
   }
 
   private wrapTilesetLayer(layer: Cesium3DTileset): I3DTilesLayer {
+    const collection = this.viewer.scene.primitives;
     let c3dTSOptions: any = {};
     return {
       getOptions: () => {
@@ -346,8 +434,11 @@ export class LayerManager {
         }
         return -1;
       },
-      setZIndex: (zIndex: number) => {
-        if (zIndex !== undefined) this.moveTilesetToIndex(layer, zIndex);
+      setZIndex: async (zIndex: number): Promise<void> => {
+        if (zIndex !== undefined) {
+          this.sort3DTileSets(collection, layer, zIndex);
+          //this.moveTilesetToIndex(layer, zIndex);
+        }
       },
       setColor: (color: string | Color, opacity: number = 1.0) => {
         const cssColor =
@@ -488,9 +579,10 @@ export class LayerManager {
         }
         return -1;
       },
-      setZIndex: (zIndex: number) => {
-        if (zIndex !== undefined)
-          this.moveDataSourceToIndex(collection, layer, zIndex);
+      setZIndex: async (zIndex: number): Promise<void> => {
+        if (zIndex !== undefined) {
+          await this.sortDataSources(collection, layer, zIndex);
+        }
       },
       remove: () => collection.remove(layer),
     };
