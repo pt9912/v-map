@@ -1,11 +1,4 @@
-import { OL_VERSION } from '../../lib/versions.gen';
-
 import type Map from 'ol/Map';
-
-//import type View from 'ol/View';
-//import { fromLonLat } from 'ol/proj';
-//import type TileLayer from 'ol/layer/Tile';
-//import type OSM from 'ol/source/OSM';
 
 import type { ProjectionLike } from 'ol/proj';
 import type VectorSource from 'ol/source/Vector';
@@ -19,38 +12,15 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
+import { log, error } from '../../utils/logger';
+import { injectOlCss } from './openlayers-helper';
 
 type AnyLayer = BaseLayer | LayerGroup | VectorLayer;
-
-/** CSS in ShadowRoot injizieren – ohne '?inline', kompatibel zu Stencil/Rollup */
-async function injectOlCss(shadowRoot?: ShadowRoot) {
-  if (!shadowRoot) return;
-  const id = 'ol-css-sheet';
-  // Doppeltes Einfügen vermeiden
-  if (shadowRoot.querySelector(`style[data-id="${id}"]`)) return;
-
-  const url = `https://cdn.jsdelivr.net/npm/ol@${OL_VERSION}/ol.css`;
-  const css = await (await fetch(url)).text();
-
-  if ('adoptedStyleSheets' in Document.prototype) {
-    const sheet = new CSSStyleSheet();
-    await sheet.replace(css);
-    // @ts-ignore
-    shadowRoot.adoptedStyleSheets = [
-      ...(shadowRoot.adoptedStyleSheets ?? []),
-      sheet,
-    ];
-  } else {
-    const style = document.createElement('style');
-    style.setAttribute('data-id', id);
-    style.textContent = css;
-    shadowRoot.appendChild(style);
-  }
-}
 
 export class OpenLayersProvider implements MapProvider {
   private map!: Map;
   private layers: AnyLayer[] = [];
+  private baseLayers: Layer[] = [];
   private googleLogoAdded = false;
   private projection: ProjectionLike = 'EPSG:3857';
 
@@ -96,35 +66,84 @@ export class OpenLayersProvider implements MapProvider {
       case 'osm':
         await this.updateOSMLayer(layer, update.data);
         break;
+      case 'wms':
+        await this.updateWMSLayer(layer, update.data);
+        break;
     }
   }
 
-  async addLayer(layerConfig: LayerConfig): Promise<string> {
-    let layerId: string = null;
-    let layer: Layer = null;
-    if ('groupId' in layerConfig && layerConfig.groupId) {
-      try {
-        layer = await this.addLayerToGroup(
-          layerConfig as LayerConfig & { groupId: string },
-        );
-      } catch (ex) {
-        console.error('addLayer - Unerwarteter Fehler:', ex);
-        return null;
-      }
-    } else {
-      try {
-        layer = await this.addStandaloneLayer(layerConfig);
-      } catch (ex) {
-        console.error('addLayer - Unerwarteter Fehler:', ex);
-        return null;
-      }
+  private async _ensureGroup(groupId: string): Promise<LayerGroup> {
+    const { default: LayerGroup } = await import('ol/layer/Group');
+    let group = this.layers.find(
+      l => (l as LayerGroup).get?.('groupId') === groupId,
+    ) as LayerGroup | undefined;
+
+    if (!group) {
+      group = new LayerGroup({
+        layers: [],
+        properties: { groupId: groupId },
+      });
+      this.map.addLayer(group);
+      this.layers.push(group);
     }
+    return group;
+  }
+
+  async setBaseLayer(groupId: string, layerElementId: string): Promise<void> {
+    if (layerElementId === null) {
+      log('ol - setBaseLayer - layerElementId is null.');
+      return;
+    }
+    let group = this.layers.find(
+      l => (l as LayerGroup).get?.('groupId') === groupId,
+    ) as LayerGroup | undefined;
+
+    const layer = this.baseLayers.find(
+      l => l.get('layerElementId') === layerElementId,
+    );
+    if (layer === undefined) {
+      log(
+        'ol - setBaseLayer - layer not found. layerElementId: ' +
+          layerElementId,
+      );
+      return;
+    }
+
+    group.getLayers().clear();
+    group.getLayers().push(layer);
+    //group.set('layerId', layerId, false);
+  }
+
+  async addBaseLayer(
+    layerConfig: LayerConfig,
+    basemapid: string,
+    layerElementId: string,
+  ): Promise<string> {
+    if (layerElementId === undefined || layerElementId === null) {
+      log('ol - addBaseLayer - layerElementId not set.');
+      return null;
+    }
+    if (basemapid === undefined || basemapid === null) {
+      log('ol - addBaseLayer - basemapid not set.');
+    }
+
+    const group = await this._ensureGroup(layerConfig.groupId);
+    group.set('basemap', true, false);
+
+    const layer = await this.createLayer(layerConfig);
+
+    layer.set('group', group);
+    this.baseLayers.push(layer);
+
+    let layerId: string = null;
     if (layer) {
       layerId = crypto.randomUUID();
       layer.set('id', layerId, false);
 
+      layer.set('layerElementId', layerElementId, false);
+
       if ((layerConfig as any).opacity !== undefined) {
-        await layer.setOpacity((layerConfig as any).opacity);
+        layer.setOpacity((layerConfig as any).opacity);
       }
       if ((layerConfig as any).zIndex !== undefined) {
         layer.setZIndex((layerConfig as any).zIndex);
@@ -134,41 +153,94 @@ export class OpenLayersProvider implements MapProvider {
       } else if ((layerConfig as any).visible === false) {
         layer.setVisible(false);
       }
-      return layerId;
-    }
 
+      if (basemapid === layerElementId) {
+        group.getLayers().clear();
+        group.getLayers().push(layer);
+        //group.set('layerId', layerId, false);
+      }
+    }
     return layerId;
   }
 
-  private async addStandaloneLayer(layerConfig: LayerConfig): Promise<Layer> {
+  async addLayerToGroup(
+    layerConfig: LayerConfig,
+    groupId: string,
+  ): Promise<string> {
+    const group = await this._ensureGroup(groupId);
+
     const layer = await this.createLayer(layerConfig);
-    this.map.addLayer(layer);
-    this.layers.push(layer);
-    return layer;
-  }
 
-  private async addLayerToGroup(
-    layerConfig: LayerConfig & { groupId: string },
-  ): Promise<Layer> {
-    const { default: LayerGroup } = await import('ol/layer/Group');
-    let group = this.layers.find(
-      l => (l as LayerGroup).get?.('groupId') === layerConfig.groupId,
-    ) as LayerGroup | undefined;
-
-    if (!group) {
-      group = new LayerGroup({
-        layers: [],
-        properties: { groupId: layerConfig.groupId },
-      });
-      this.map.addLayer(group);
-      this.layers.push(group);
+    if (layer === null) {
+      return null;
     }
-
-    const layer = await this.createLayer(layerConfig);
-    group.getLayers().push(layer);
     layer.set('group', group);
-    return layer;
+    group.getLayers().push(layer);
+
+    const layerId = crypto.randomUUID();
+    layer.set('id', layerId, false);
+
+    if ((layerConfig as any).opacity !== undefined) {
+      layer.setOpacity((layerConfig as any).opacity);
+    }
+    if ((layerConfig as any).zIndex !== undefined) {
+      layer.setZIndex((layerConfig as any).zIndex);
+    }
+    if ((layerConfig as any).visible) {
+      layer.setVisible(true);
+    } else if ((layerConfig as any).visible === false) {
+      layer.setVisible(false);
+    }
+    return layerId;
   }
+
+  // async addLayer(layerConfig: LayerConfig): Promise<string> {
+  //   let layerId: string = null;
+  //   let layer: Layer = null;
+  //   if ('groupId' in layerConfig && layerConfig.groupId) {
+  //     try {
+  //       layer = await this.addLayerToGroup(
+  //         layerConfig as LayerConfig & { groupId: string },
+  //       );
+  //     } catch (ex) {
+  //       error('addLayer - Unerwarteter Fehler:', ex);
+  //       return null;
+  //     }
+  //   } else {
+  //     try {
+  //       layer = await this.addStandaloneLayer(layerConfig);
+  //     } catch (ex) {
+  //       error('addLayer - Unerwarteter Fehler:', ex);
+  //       return null;
+  //     }
+  //   }
+  //   if (layer) {
+  //     layerId = crypto.randomUUID();
+  //     layer.set('id', layerId, false);
+
+  //     if ((layerConfig as any).opacity !== undefined) {
+  //       layer.setOpacity((layerConfig as any).opacity);
+  //     }
+  //     if ((layerConfig as any).zIndex !== undefined) {
+  //       layer.setZIndex((layerConfig as any).zIndex);
+  //     }
+  //     if ((layerConfig as any).visible) {
+  //       layer.setVisible(true);
+  //     } else if ((layerConfig as any).visible === false) {
+  //       layer.setVisible(false);
+  //     }
+  //     return layerId;
+  //   }
+
+  //   return layerId;
+  // }
+
+  // private async addStandaloneLayer(layerConfig: LayerConfig): Promise<Layer> {
+  //   const layer = await this.createLayer(layerConfig);
+  //   this.map.addLayer(layer);
+  //   this.layers.push(layer);
+  //   return layer;
+  // }
 
   private async createLayer(layerConfig: LayerConfig): Promise<Layer> {
     switch (layerConfig.type) {
@@ -197,7 +269,24 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
-  private async updateOSMLayer(layer: Layer, data: any) {
+  private async updateWMSLayer(layer: Layer, data: any): Promise<void> {
+    const [{ default: TileWMS }] = await Promise.all([
+      import('ol/source/TileWMS'),
+    ]);
+
+    layer.setSource(
+      new TileWMS({
+        url: data.url,
+        params: {
+          LAYERS: data.layers,
+          TILED: true,
+          ...(data.params ?? {}),
+        },
+      }),
+    );
+  }
+
+  private async updateOSMLayer(layer: Layer, data: any): Promise<void> {
     const [{ default: OSM }] = await Promise.all([import('ol/source/OSM')]);
 
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -332,7 +421,7 @@ export class OpenLayersProvider implements MapProvider {
       if (source.getState() === 'error') {
         // Fehler transparent machen (z.B. ungültiger Key / Billing)
         const err = (source as any).getError?.();
-        console.error('Google source error', err);
+        error('Google source error', err);
         alert(err ?? 'Google source error');
       }
     });
@@ -398,7 +487,7 @@ export class OpenLayersProvider implements MapProvider {
         params: {
           LAYERS: config.layers,
           TILED: true,
-          ...(config.params ?? {}),
+          ...(config.extraParams ?? {}),
         },
       }),
     });
@@ -451,7 +540,22 @@ export class OpenLayersProvider implements MapProvider {
         return true;
       }
     });
+    if (layerFound) return layerFound;
+
+    layerFound = this.baseLayers.find(l => l.get('id') === layerId);
+    if (layerFound === undefined) return null;
     return layerFound;
+  }
+
+  private async _getLayerGroupById(groupId): Promise<LayerGroup> {
+    if (!this.map) {
+      return null;
+    }
+    let group = this.layers.find(
+      l => (l as LayerGroup).get?.('groupId') === groupId,
+    ) as LayerGroup | undefined;
+    if (group !== undefined) return group;
+    return null;
   }
 
   async removeLayer(layerId: string): Promise<void> {
@@ -461,7 +565,7 @@ export class OpenLayersProvider implements MapProvider {
     const layer = await this._getLayerById(layerId);
     if (layer) {
       const group = layer.get('group');
-      group.getLayers().remove(layer);
+      if (group) group.getLayers().remove(layer);
       //this.map.removeLayer(layer);
     }
   }
@@ -488,6 +592,13 @@ export class OpenLayersProvider implements MapProvider {
 
   async setVisible(layerId: string, visible: boolean): Promise<void> {
     const layer = await this._getLayerById(layerId);
+    if (layer) {
+      layer.setVisible(visible);
+    }
+  }
+
+  async setGroupVisible(groupId: string, visible: boolean): Promise<void> {
+    const layer = await this._getLayerGroupById(groupId);
     if (layer) {
       layer.setVisible(visible);
     }
