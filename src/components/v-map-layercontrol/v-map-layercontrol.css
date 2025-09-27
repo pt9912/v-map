@@ -1,0 +1,74 @@
+.layer-control {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.layer-group {
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.layer-group summary {
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.layer-item {
+  margin: 5px 0 5px 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.layer-item input[type='range'] {
+  width: 80px;
+}
+
+.layer-item input[type='number'] {
+  width: 40px;
+}
+
+.layer-group-title {
+  color: black;
+}
+
+.layer-item-title {
+  color: black;
+}
+
+.layer-control button {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px 6px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.layer-control button:hover {
+  background: #e0e0e0;
+}
+
+.layer-group summary button {
+  margin-left: auto;
+}
+
+.layer-item button {
+  margin-right: 5px;
+  color: #ff4444;
+  border: none;
+  background: none;
+  font-size: 1.2em;
+  line-height: 1;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
