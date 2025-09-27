@@ -40,17 +40,17 @@ pnpm add @pt9912/v-map
 import { VMap } from '@pt9912/v-map';
 
 <v-map flavour="ol" style={{ height: '400px' }}>
-  <v-map-layer-group group-title="Basis-Layer" basemap="true">
+  <v-map-layergroup group-title="Basis-Layer" basemap="true">
     <v-map-layer-osm></v-map-layer-osm>
-  </v-map-layer-group>
-  <v-map-layer-group group-title="Vector-Layer">
+  </v-map-layergroup>
+  <v-map-layergroup group-title="Vector-Layer">
     <v-map-layer-geojson src="data/points.geojson"></v-map-layer-geojson>
-  </v-map-layer-group>
+  </v-map-layergroup>
 </v-map>;
 ```
 
 - `flavour` gibt es aktuell in: **`ol`**, **`cesium`**, **`leaflet`**, **`deck`**
-- Layer können kombiniert und gruppiert werden (`<v-map-layer-group>`).
+- Layer können kombiniert und gruppiert werden (`<v-map-layergroup>`).
 
 ---
 
@@ -146,7 +146,7 @@ v-map/
 │   │   ├── v-map/               # Hauptkarte
 │   │   ├── v-map-layer-osm/     # OSM-Basemap
 │   │   ├── v-map-layer-geojson/ # GeoJSON-Daten
-│   │   └── v-map-layer-group/   # Layer-Gruppierung
+│   │   └── v-map-layergroup/    # Layer-Gruppierung
 │   └── index.ts                 # Entry Point
 ├── .devcontainer/               # VS Code/Codespaces Setup
 ├── .github/workflows/           # CI/CD Pipelines
