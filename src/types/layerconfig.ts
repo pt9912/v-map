@@ -60,11 +60,20 @@ export type LayerConfig =
       type: 'wms';
       url: string;
       layers: string;
-      params?: Record<string, string>;
+      extraParams?: Record<string, string>;
       groupId?: string;
       opacity?: number;
       visible?: boolean;
       zIndex?: number;
+      tileSize?: number;
+      version?: '1.1.1' | '1.3.0';
+      crs?: string;
+      format?: string;
+      transparent?: string;
+      styles?: string;
+      minZoom?: number;
+      maxZoom?: number;
+      time?: string;
     }
   | {
       type: 'scatterplot';
