@@ -24,6 +24,10 @@ import { ensureImportMap } from '../../lib/ensure-importmap';
 
 import { VMapEvents, type MapProviderDetail } from '../../utils/events';
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
+import { log } from '../../utils/logger';
+import MSG from '../../utils/messages';
+
+const MSG_COMPONENT: string = 'v-map - ';
 
 @Component({
   tag: 'v-map',
@@ -87,7 +91,7 @@ export class VMap {
 
   @Watch('flavour')
   async onFlavourChanged(oldValue: string, newValue: string) {
-    console.log('v-map - onFlavourChanged');
+    log(MSG_COMPONENT + 'onFlavourChanged');
     if (oldValue !== newValue) {
       this.reset();
       await this.createMap();
@@ -157,9 +161,9 @@ export class VMap {
   }
 
   async componentWillLoad() {
-    console.log('v-map - componentWillLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
     if (this.useDefaultImportMap) {
-      console.log('v-map - componentWillLoad - useDefaultImportMap');
+      log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD + ' - useDefaultImportMap');
       ensureImportMap();
     }
 
@@ -167,36 +171,36 @@ export class VMap {
   }
 
   async componentDidLoad() {
-    console.log('v-map - componentDidLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
     //test
     this.el.addEventListener(VMapEvents.MapProviderReady, ((
       event: CustomEvent<MapProviderDetail>,
     ) => {
-      console.log('v-map - test - event: ', event);
+      log(MSG_COMPONENT + 'test - event: ', event);
     }) as EventListener);
   }
 
   disconnectedCallback() {
-    console.log('v-map - disconnectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
     this.reset();
   }
 
-  //todo: remove
-  /**
-   * Fügt ein Layer-Element (Web Component) zur Karte hinzu.
-   * Das Layer muss kompatibel mit dem aktiven Provider sein.
-   * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
-   * @example
-   * const layer = document.createElement('v-map-layer-osm');
-   * await mapEl.addLayer(layer);
-   */
-  @Method()
-  async addLayer(layerConfig: any): Promise<void> {
-    if (!this.mapProvider)
-      throw new Error('Map-Provider noch nicht initialisiert.');
-    await Promise.resolve(this.mapProvider.addLayer(layerConfig));
-  }
+  // //todo: remove
+  // /**
+  //  * Fügt ein Layer-Element (Web Component) zur Karte hinzu.
+  //  * Das Layer muss kompatibel mit dem aktiven Provider sein.
+  //  * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
+  //  * @example
+  //  * const layer = document.createElement('v-map-layer-osm');
+  //  * await mapEl.addLayer(layer);
+  //  */
+  // @Method()
+  // async addLayer(layerConfig: any): Promise<void> {
+  //   if (!this.mapProvider)
+  //     throw new Error('Map-Provider noch nicht initialisiert.');
+  //   await Promise.resolve(this.mapProvider.addLayer(layerConfig));
+  // }
 
   /**
    * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
@@ -207,7 +211,7 @@ export class VMap {
   async getMapProvider(): Promise<MapProvider> {
     if (!this.mapProvider) {
       //throw new Error('Map-Provider noch nicht initialisiert.');
-      console.log('Map-Provider noch nicht initialisiert.');
+      log('Map-Provider noch nicht initialisiert.');
     }
     return this.mapProvider;
   }
@@ -251,7 +255,7 @@ export class VMap {
   }
 
   render() {
-    console.log('v-map - render');
+    log(MSG_COMPONENT + MSG.COMPONENT_RENDER);
     //return <div id="map-container"></div>;
     return (
       <div>

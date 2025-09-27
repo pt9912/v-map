@@ -1,13 +1,10 @@
 // src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx
 import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
 
-import { VMapEvents, type MapProviderDetail } from '../../utils/events';
-import type { MapProvider } from '../../types/mapprovider';
-//import type { Flavour } from '../../types/flavour';
-//import type { ProviderOptions } from '../../types/provideroptions';
-//import type { LayerConfig } from '../../types/layerconfig';
-//import type { LonLat } from '../../types/lonlat';
-//import type { CssMode } from '../../types/cssmode';
+import MSG from '../../utils/messages';
+import { log } from '../../utils/logger';
+
+const MSG_COMPONENT: string = 'v-map-layer-scatterplot - ';
 
 export type Color = string | [number, number, number, number?];
 
@@ -19,89 +16,65 @@ export type Color = string | [number, number, number, number?];
 export class VMapLayerScatterplot {
   @Element() el!: HTMLElement;
 
-  
-/**
- * Datenquelle für Punkte. Erwartet Objekte mit mindestens
- * einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
- */
-@Prop({ reflect: true }) data?: string; // inline JSON array
-  
-/**
- * Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
- */
-@Prop({ reflect: true }) url?: string; // external source
-  
-/**
- * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe
- * z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
- */
-@Prop({ reflect: true }) getFillColor: Color = '#3388ff';
-  
-/**
- * Funktion/konstanter Wert für den Punkt-Radius.
- * @default 4
- */
-@Prop({ reflect: true }) getRadius: number = 1000;
-  
-/**
- * Globale Opazität (0–1).
- * @default 1
- */
-@Prop({ reflect: true }) opacity: number = 1.0;
-  
-/**
- * Sichtbarkeit des Layers.
- * @default true
- */
-@Prop({ reflect: true }) visible: boolean = true;
+  /**
+   * Datenquelle für Punkte. Erwartet Objekte mit mindestens
+   * einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
+   */
+  @Prop({ reflect: true }) data?: string; // inline JSON array
 
-  
-/**
- * Wird ausgelöst, sobald der Scatterplot registriert wurde.
- * @event ready
- */
-@Event() ready!: EventEmitter<void>;
+  /**
+   * Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
+   */
+  @Prop({ reflect: true }) url?: string; // external source
 
-  private mapProvider?: MapProvider;
+  /**
+   * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe
+   * z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
+   */
+  @Prop({ reflect: true }) getFillColor: Color = '#3388ff';
+
+  /**
+   * Funktion/konstanter Wert für den Punkt-Radius.
+   * @default 4
+   */
+  @Prop({ reflect: true }) getRadius: number = 1000;
+
+  /**
+   * Globale Opazität (0–1).
+   * @default 1
+   */
+  @Prop({ reflect: true }) opacity: number = 1.0;
+
+  /**
+   * Sichtbarkeit des Layers.
+   * @default true
+   */
+  @Prop({ reflect: true }) visible: boolean = true;
+
+  /**
+   * Wird ausgelöst, sobald der Scatterplot registriert wurde.
+   * @event ready
+   */
+  @Event() ready!: EventEmitter<void>;
 
   async connectedCallback() {
-    const mapEl = this.el.closest('v-map') as HTMLElement | null;
-    if (!mapEl) return;
-    await customElements.whenDefined('v-map');
-    mapEl.addEventListener(VMapEvents.MapProviderReady, ((
-      ev: CustomEvent<MapProviderDetail>,
-    ) => {
-      const provider = ev.detail.mapProvider as MapProvider;
-      this.mapProvider = provider;
-      this.attach().catch(console.error);
-    }) as EventListener);
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
   }
 
-  private parseInline(): any[] {
-    if (!this.data) return [];
-    try {
-      const parsed = JSON.parse(this.data);
-      return Array.isArray(parsed) ? parsed : [parsed];
-    } catch (e) {
-      console.error('<v-map-layer-scatterplot> invalid JSON in "data"', e);
-      return [];
-    }
-  }
-
-  private async attach() {
-    const dataSource = this.url ? this.url : this.parseInline();
-    await this.mapProvider.addLayer({
-      type: 'scatterplot',
-      id: 'scatterplot-' + Math.random().toString(36).slice(2),
-      data: dataSource,
-      getFillColor: this.getFillColor as any,
-      getRadius: this.getRadius,
-      opacity: this.opacity,
-      visible: this.visible,
-    } as any);
-  }
+  // private parseInline(): any[] {
+  //   if (!this.data) return [];
+  //   try {
+  //     const parsed = JSON.parse(this.data);
+  //     return Array.isArray(parsed) ? parsed : [parsed];
+  //   } catch (e) {
+  //     error('<v-map-layer-scatterplot> invalid JSON in "data"', e);
+  //     return [];
+  //   }
+  // }
 
   async componentDidLoad() {
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
+
     this.ready.emit();
   }
   render() {

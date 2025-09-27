@@ -13,6 +13,10 @@ import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
 import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import MSG from '../../utils/messages';
+import { log } from '../../utils/logger';
+
+const MSG_COMPONENT: string = 'v-map-layer-osm - ';
 
 @Component({
   tag: 'v-map-layer-osm',
@@ -22,17 +26,17 @@ import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 export class VMapLayerOSM implements VMapLayer {
   @Element() el!: HTMLElement;
 
-  @Prop() visible: boolean = true;
+  @Prop({ reflect: true }) visible: boolean = true;
 
   /**
    * Opazität der OSM-Kacheln (0–1).
    * @default 1
    */
-  @Prop() opacity: number = 1.0;
+  @Prop({ reflect: true }) opacity: number = 1.0;
 
-  @Prop() zIndex: number = 10;
+  @Prop({ reflect: true }) zIndex: number = 10;
 
-  @Prop() url: string = 'https://tile.openstreetmap.org';
+  @Prop({ reflect: true }) url: string = 'https://tile.openstreetmap.org';
 
   /**
    * Wird ausgelöst, wenn der OSM-Layer bereit ist.
@@ -46,25 +50,25 @@ export class VMapLayerOSM implements VMapLayer {
 
   @Watch('visible')
   async onVisibleChanged() {
-    console.log('v-map-layer-osm - onVisibleChanged');
+    log(MSG_COMPONENT + 'onVisibleChanged');
     await this.helper?.setVisible(this.visible);
   }
 
   @Watch('opacity')
   async onOpacityChanged() {
-    console.log('v-map-layer-osm - onOpacityChanged');
+    log(MSG_COMPONENT + 'onOpacityChanged');
     await this.helper?.setOpacity(this.opacity);
   }
 
   @Watch('zIndex')
   async onZIndexChanged() {
-    console.log('v-map-layer-osm - onZIndexChanged');
+    log(MSG_COMPONENT + 'onZIndexChanged');
     await this.helper?.setZIndex(this.zIndex);
   }
 
   @Watch('url')
   async onUrlChanged(oldValue: string, newValue: string) {
-    console.log('v-map-layer-osm - onUrlChanged');
+    log(MSG_COMPONENT + 'onUrlChanged');
     if (oldValue !== newValue) {
       await this.helper?.updateLayer({
         type: 'osm',
@@ -98,25 +102,30 @@ export class VMapLayerOSM implements VMapLayer {
   }
 
   async connectedCallback() {
-    console.log('v-map-layer-osm - connectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
   }
 
   async componentWillLoad() {
-    console.log('v-map-layer-osm - componentWillLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
     this.helper = new VMapLayerHelper(this.el);
   }
 
   async componentDidLoad() {
-    console.log('v-map-layer-osm - componentDidLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
-    await this.helper.initLayer(() => this.createLayerConfig());
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
     this.didLoad = true;
     this.ready.emit();
   }
 
   async componentWillRender() {
-    console.log('v-map-layer-osm - componentWillRender');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
+  }
+
+  async disconnectedCallback() {
+    log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
+    this.helper.removeLayer();
   }
 
   render() {

@@ -1,6 +1,10 @@
 import { Component, h, Element, Method, Prop, Watch } from '@stencil/core';
 import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import { log, warn } from '../../utils/logger';
+import MSG from '../../utils/messages';
+
+const MSG_COMPONENT: string = 'v-map-layer-geojson - ';
 
 @Component({
   tag: 'v-map-layer-geojson',
@@ -12,17 +16,17 @@ export class VMapLayerGeoJSON {
   /** Prop, die du intern nutzt/weiterverarbeitest */
   @Prop({ mutable: true }) geojson?: unknown;
 
-  @Prop() url: string = null;
+  @Prop({ reflect: true }) url: string = null;
 
-  @Prop() visible: boolean = true;
+  @Prop({ reflect: true }) visible: boolean = true;
 
-  @Prop() zIndex: number = 1000;
+  @Prop({ reflect: true }) zIndex: number = 1000;
 
   /**
    * Opazität der geojson-Kacheln (0–1).
    * @default 1
    */
-  @Prop() opacity: number = 1.0;
+  @Prop({ reflect: true }) opacity: number = 1.0;
 
   private geoSlot?: HTMLSlotElement;
   private mo?: MutationObserver;
@@ -38,16 +42,16 @@ export class VMapLayerGeoJSON {
   }
 
   async connectedCallback() {
-    console.log('v-map-layer-geojson - connectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
   }
 
   async componentWillLoad() {
-    console.log('v-map-layer-geojson - componentWillLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
     this.helper = new VMapLayerHelper(this.el);
   }
 
   async componentDidLoad() {
-    console.log('v-map-layer-geojson - componentDidLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
     // Slot referenzieren
     this.geoSlot = this.el.shadowRoot!.querySelector(
       'slot[name="geojson"]',
@@ -62,16 +66,17 @@ export class VMapLayerGeoJSON {
       this.readGeoJsonFromSlot();
     }
 
-    await this.helper.initLayer(() => this.createLayerConfig());
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
     this.didLoad = true;
     //todo    this.ready.emit();
   }
 
   async disconnectedCallback() {
-    console.log('v-map-layer-geojson - disconnectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
     this.mo?.disconnect();
     this.geoSlot?.removeEventListener('slotchange', this.onSlotChange);
+    this.helper.removeLayer();
   }
 
   isReady(): boolean {
@@ -80,7 +85,7 @@ export class VMapLayerGeoJSON {
 
   @Watch('geojson')
   async onGeoJsonChanged(oldValue: string, newValue: string) {
-    console.log('v-map-layer-geojson - onGeoJsonChanged');
+    log(MSG_COMPONENT + 'onGeoJsonChanged');
     // hier deinen Layer aktualisieren
     if (oldValue !== newValue) {
       await this.helper?.updateLayer({
@@ -95,7 +100,7 @@ export class VMapLayerGeoJSON {
 
   @Watch('url')
   async onUrlChanged(oldValue: string, newValue: string) {
-    console.log('v-map-layer-geojson - onUrlChanged');
+    log(MSG_COMPONENT + 'onUrlChanged');
     if (oldValue !== newValue) {
       await this.helper?.updateLayer({
         type: 'geojson',
@@ -111,30 +116,30 @@ export class VMapLayerGeoJSON {
 
   @Watch('visible')
   async onVisibleChanged() {
-    console.log('v-map-layer-geojson - onVisibleChanged');
+    log(MSG_COMPONENT + 'onVisibleChanged');
     await this.helper?.setVisible(this.visible);
   }
 
   @Watch('opacity')
   async onOpacityChanged() {
-    console.log('v-map-layer-geojson - onOpacityChanged');
+    log(MSG_COMPONENT + 'onOpacityChanged');
     await this.helper?.setOpacity(this.opacity);
   }
 
   @Watch('zIndex')
   async onZIndexChanged() {
-    console.log('v-map-layer-geojson - onZIndexChanged');
+    log(MSG_COMPONENT + 'onZIndexChanged');
     await this.helper?.setZIndex(this.zIndex);
   }
 
   private onSlotChange = () => {
-    console.log('v-map-layer-geojson - onSlotChange');
+    log(MSG_COMPONENT + 'onSlotChange');
     this.observeAssignedNodes();
     this.readGeoJsonFromSlot();
   };
 
   private observeAssignedNodes() {
-    console.log('v-map-layer-geojson - observeAssignedNodes');
+    log(MSG_COMPONENT + 'observeAssignedNodes');
     this.mo?.disconnect();
     if (!this.geoSlot) return;
 
@@ -151,9 +156,9 @@ export class VMapLayerGeoJSON {
   }
 
   private readGeoJsonFromSlot() {
-    console.log('v-map-layer-geojson - readGeoJsonFromSlot');
+    log(MSG_COMPONENT + 'readGeoJsonFromSlot');
     if (!this.geoSlot) {
-      console.log('v-map-layer-geojson - readGeoJsonFromSlot - geoSlot: false');
+      log(MSG_COMPONENT + 'readGeoJsonFromSlot - geoSlot: false');
       return;
     }
     const raw = this.geoSlot
@@ -163,25 +168,23 @@ export class VMapLayerGeoJSON {
       .trim();
 
     if (!raw) {
-      console.log('v-map-layer-geojson - readGeoJsonFromSlot - raw: false');
+      log(MSG_COMPONENT + 'readGeoJsonFromSlot - raw: false');
       return; // nichts/keine Änderung
     }
     if (raw === this.lastString) {
-      console.log(
-        'v-map-layer-geojson - readGeoJsonFromSlot - raw === this.lastString',
-      );
+      log(MSG_COMPONENT + 'readGeoJsonFromSlot - raw === this.lastString');
       return; // nichts/keine Änderung
     }
 
     this.lastString = raw;
     try {
       const geojson = JSON.parse(raw);
-      console.log('v-map-layer-geojson - readGeoJsonFromSlot: ', geojson);
+      log(MSG_COMPONENT + 'readGeoJsonFromSlot: ', geojson);
       this.geojson = geojson;
       // optional: eigenes Event „data-updated“ feuern
       // this.host.dispatchEvent(new CustomEvent('data-updated', { detail: this.geojson }));
     } catch (e) {
-      console.warn('v-map-layer-geojson - Ungültiges JSON im Slot:', e);
+      warn(MSG_COMPONENT + 'Ungültiges JSON im Slot:', e);
     }
   }
 

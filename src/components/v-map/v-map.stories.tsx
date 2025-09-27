@@ -3,7 +3,7 @@ import { h } from '@stencil/core';
 import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 
 import { VMap } from './v-map';
-import '../v-map-layer-group/v-map-layer-group';
+import '../v-map-layergroup/v-map-layergroup';
 import '../v-map-layer-osm/v-map-layer-osm';
 
 const meta = {
@@ -25,9 +25,9 @@ export const OpenLayersFlavour: Story = {
   render: props => {
     return (
       <v-map {...props} style={{ height: '600px', width: '600px' }}>
-        <v-map-layer-group group-title="Basis-Layer">
+        <v-map-layergroup group-title="Basis-Layer">
           <v-map-layer-osm></v-map-layer-osm>
-        </v-map-layer-group>
+        </v-map-layergroup>
       </v-map>
     );
   },
@@ -38,9 +38,9 @@ export const LeafletFlavour: Story = {
   render: props => {
     return (
       <v-map {...props} style={{ height: '600px', width: '600px' }}>
-        <v-map-layer-group group-title="Basis-Layer">
+        <v-map-layergroup group-title="Basis-Layer">
           <v-map-layer-osm></v-map-layer-osm>
-        </v-map-layer-group>
+        </v-map-layergroup>
       </v-map>
     );
   },
@@ -51,9 +51,9 @@ export const CesiumFlavour: Story = {
   render: props => {
     return (
       <v-map {...props} style={{ height: '600px', width: '600px' }}>
-        <v-map-layer-group group-title="Basis-Layer">
+        <v-map-layergroup group-title="Basis-Layer">
           <v-map-layer-osm></v-map-layer-osm>
-        </v-map-layer-group>
+        </v-map-layergroup>
       </v-map>
     );
   },
@@ -67,9 +67,9 @@ export const DeckFlavour: Story = {
         {...props}
         style={{ position: 'relative', height: '600px', width: '600px' }}
       >
-        <v-map-layer-group group-title="Basis-Layer">
+        <v-map-layergroup group-title="Basis-Layer">
           <v-map-layer-osm></v-map-layer-osm>
-        </v-map-layer-group>
+        </v-map-layergroup>
       </v-map>
     );
   },

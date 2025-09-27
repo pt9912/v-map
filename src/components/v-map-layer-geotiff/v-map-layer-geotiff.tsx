@@ -13,6 +13,10 @@ import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
 import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import { log } from '../../utils/logger';
+import MSG from '../../utils/messages';
+
+const MSG_COMPONENT: string = 'v-map-layer-geotiff - ';
 
 @Component({
   tag: 'v-map-layer-geotiff',
@@ -46,7 +50,7 @@ export class VMapLayerGeoTIFF implements VMapLayer {
 
   @Watch('url')
   async onUrlChanged() {
-    console.log('v-map-layer-geotiff - onUrlChanged');
+    log(MSG_COMPONENT + 'onUrlChanged');
     await this.helper?.updateLayer({
       type: 'geotiff',
       data: {
@@ -57,19 +61,19 @@ export class VMapLayerGeoTIFF implements VMapLayer {
 
   @Watch('visible')
   async onVisibleChanged() {
-    console.log('v-map-layer-geotiff - onVisibleChanged');
+    log(MSG_COMPONENT + 'onVisibleChanged');
     await this.helper?.setVisible(this.visible);
   }
 
   @Watch('opacity')
   async onOpacityChanged() {
-    console.log('v-map-layer-geotiff - onOpacityChanged');
+    log(MSG_COMPONENT + 'onOpacityChanged');
     await this.helper?.setOpacity(this.opacity);
   }
 
   @Watch('zIndex')
   async onZIndexChanged() {
-    console.log('v-map-layer-geotiff - onZIndexChanged');
+    log(MSG_COMPONENT + 'onZIndexChanged');
     await this.helper?.setZIndex(this.zIndex);
   }
 
@@ -101,26 +105,26 @@ export class VMapLayerGeoTIFF implements VMapLayer {
   // }
 
   async connectedCallback() {
-    console.log('v-map-layer-geotiff - connectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
     //await this.addToMapInternal();
   }
 
   async componentWillLoad() {
-    console.log('v-map-layer-geotiff - componentWillLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
     this.helper = new VMapLayerHelper(this.el);
   }
 
   async componentDidLoad() {
-    console.log('v-map-layer-geotiff - componentDidLoad');
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
-    await this.helper.initLayer(() => this.createLayerConfig());
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
     this.didLoad = true;
     this.ready.emit();
   }
 
   async componentWillRender() {
-    console.log('v-map-layer-geotiff - componentWillRender');
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
   }
 
   render() {

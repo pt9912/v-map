@@ -2,7 +2,7 @@
 import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 import { h } from '@stencil/core';
 import '../v-map/v-map';
-import '../v-map-layer-group/v-map-layer-group';
+import '../v-map-layergroup/v-map-layergroup';
 import './v-map-layer-geojson';
 import '../v-map-layer-osm/v-map-layer-osm';
 
@@ -56,7 +56,7 @@ const meta: Meta<Args> = {
       flavour="ol"
       style={{ display: 'block', width: '100%', height: '420px' }}
     >
-      <v-map-layer-group group-title="GeoJSON Layers">
+      <v-map-layergroup group-title="GeoJSON Layers">
         <v-map-layer-osm zIndex="100"></v-map-layer-osm>
         <v-map-layer-geojson
           opacity={args.opacity}
@@ -65,7 +65,7 @@ const meta: Meta<Args> = {
         >
           <div slot="geojson">{JSON.stringify(args.geoJsonContent)}</div>
         </v-map-layer-geojson>
-      </v-map-layer-group>
+      </v-map-layergroup>
     </v-map>
   ),
 };

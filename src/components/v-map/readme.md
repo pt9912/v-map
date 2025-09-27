@@ -25,23 +25,6 @@
 
 ## Methods
 
-### `addLayer(layerConfig: any) => Promise<void>`
-
-Fügt ein Layer-Element (Web Component) zur Karte hinzu.
-Das Layer muss kompatibel mit dem aktiven Provider sein.
-
-#### Parameters
-
-| Name          | Type  | Description |
-| ------------- | ----- | ----------- |
-| `layerConfig` | `any` |             |
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
 ### `getMapProvider() => Promise<MapProvider>`
 
 Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
@@ -80,6 +63,19 @@ Type: `Promise<void>`
 
 
 
+
+## Dependencies
+
+### Used by
+
+ - [v-map-builder](../v-map-builder)
+
+### Graph
+```mermaid
+graph TD;
+  v-map-builder --> v-map
+  style v-map fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 
