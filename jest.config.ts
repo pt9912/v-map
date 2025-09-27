@@ -20,20 +20,7 @@ const config: Config = {
   },
   testEnvironmentOptions: {
     // Stencil uses Puppeteer under the hood for E2E tests
-    puppeteerConfig: {
-      // Silence specific warnings
-      onConsole: (message: { type: () => string; text: () => string }) => {
-        const excludedMessages = [
-          'No map visible because the map container', // OpenLayers warning
-          'v-map-layer-geojson ist nicht in einer v-map-layergroup enthalten', // Your custom warning
-        ];
-
-        // Only log messages that aren't in the excluded list
-        if (!excludedMessages.some(text => message.text().includes(text))) {
-          console.log(`[BROWSER ${message.type()}]: ${message.text()}`);
-        }
-      },
-    },
+    puppeteerConfig: {},
   },
 };
 

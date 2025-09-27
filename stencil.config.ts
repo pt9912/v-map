@@ -26,6 +26,11 @@ export const config: Config = {
   ],
   buildEs5: false, // Deaktiviert ES5-Builds komplett (nur ES2022)
   testing: {
+    setupFilesAfterEnv: ['./src/testing/setupTests.jest.ts'],
+    // sourceMaps helfen, die TS-Zeilen zu sehen:
+    // 'ts-jest' o. ä. kümmert sich idR. darum; alternativ:
+    // testEnvironmentOptions: { url: 'http://localhost' },
+    transformIgnorePatterns: ['/node_modules/(?!(ol)/)'],
     browserHeadless: 'shell',
     browserArgs: [
       '--no-sandbox',
