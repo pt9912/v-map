@@ -21,6 +21,7 @@ OGC WMS Layer
 | `transparent`         | `transparent` | Transparente Kacheln anfordern.                                    | `boolean` | `true`        |
 | `url` _(required)_    | `url`         | Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter). | `string`  | `undefined`   |
 | `visible`             | `visible`     | Sichtbarkeit des WMS-Layers.                                       | `boolean` | `true`        |
+| `zIndex`              | `z-index`     |                                                                    | `number`  | `10`          |
 
 
 ## Events
@@ -29,6 +30,19 @@ OGC WMS Layer
 | ------- | -------------------------------------------- | ------------------- |
 | `ready` | Signalisiert, dass der WMS-Layer bereit ist. | `CustomEvent<void>` |
 
+
+## Dependencies
+
+### Used by
+
+ - [v-map-builder](../v-map-builder)
+
+### Graph
+```mermaid
+graph TD;
+  v-map-builder --> v-map-layer-wms
+  style v-map-layer-wms fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 
