@@ -6,7 +6,8 @@ import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 import { VMapEvents } from '../../utils/events';
 
 //import { VMapLayerOSMoup } from '../v-map-layer-osm/v-map-layer-osm';
-import { VMapLayerGroup } from './v-map-layer-group';
+import { VMapLayerGroup } from './v-map-layergroup';
+import { log } from '../../utils/logger';
 
 const meta = {
   title: 'Container/LayerGroup',
@@ -22,9 +23,9 @@ export const Primary: Story = {
   render: _props => {
     return (
       <v-map flavour="ol" style={{ height: '600px', width: '600px' }}>
-        <v-map-layer-group group-title="Basis-Layer">
+        <v-map-layergroup group-title="Basis-Layer">
           <v-map-layer-osm></v-map-layer-osm>
-        </v-map-layer-group>
+        </v-map-layergroup>
       </v-map>
     );
   },
@@ -32,13 +33,13 @@ export const Primary: Story = {
     const win = canvasElement.ownerDocument.defaultView!;
     const ce = win.customElements;
 
-    console.log('Realm check – same window?', win === window); // Erwartet: false (Iframe)
-    console.log('Vor define – registriert?', !!ce.get('v-map-layer-osm')); // Erwartet: true (wenn Loader lief)
+    log('Realm check – same window?', win === window); // Erwartet: false (Iframe)
+    log('Vor define – registriert?', !!ce.get('v-map-layer-osm')); // Erwartet: true (wenn Loader lief)
 
     // 1) Sicherstellen, dass das CE registriert ist
-    console.log('Before await customElements.whenDefined(v-map-layer-osm)');
+    log('Before await customElements.whenDefined(v-map-layer-osm)');
     await customElements.whenDefined('v-map-layer-osm');
-    console.log('After await customElements.whenDefined(v-map-layer-osm)');
+    log('After await customElements.whenDefined(v-map-layer-osm)');
 
     // 2) Element bekommen
     const layerOsm = canvasElement.querySelector('v-map-layer-osm') as any;
@@ -47,13 +48,11 @@ export const Primary: Story = {
     // 3) Auf Stencil-Upgrade warten
     if (typeof layerOsm.componentOnReady === 'function') {
       await layerOsm.componentOnReady();
-      console.log('v-map-layer-osm ist bereit!');
+      log('v-map-layer-osm ist bereit!');
     } else {
-      console.log(
-        'layerOsm.componentOnReady ist keine Funktion! - addEventListener',
-      );
+      log('layerOsm.componentOnReady ist keine Funktion! - addEventListener');
       layerOsm.addEventListener(VMapEvents.Ready, () => {
-        console.log('v-map-layer-osm ist bereit!');
+        log('v-map-layer-osm ist bereit!');
       });
     }
   },
