@@ -25,7 +25,7 @@ const config: Config = {
       onConsole: (message: { type: () => string; text: () => string }) => {
         const excludedMessages = [
           'No map visible because the map container', // OpenLayers warning
-          'v-map-layer-geojson ist nicht in einer v-map-layer-group enthalten', // Your custom warning
+          'v-map-layer-geojson ist nicht in einer v-map-layergroup enthalten', // Your custom warning
         ];
 
         // Only log messages that aren't in the excluded list

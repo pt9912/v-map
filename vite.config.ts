@@ -49,10 +49,10 @@ export default defineConfig({
       },
     },
     commonjsOptions: {
-      ignore: ['path'], // <-- Hinzugefügt
+      ignore: ['path'],
     },
   },
   optimizeDeps: {
-    exclude: ['cesium'], // <-- Hinzugefügt
+    exclude: ['cesium'],
   },
 });

@@ -24,7 +24,7 @@ export const config: Config = {
       strict: true,
     },
   ],
-  buildEs5: 'prod',
+  buildEs5: false, // Deaktiviert ES5-Builds komplett (nur ES2022)
   testing: {
     browserHeadless: 'shell',
     browserArgs: [
