@@ -1,6 +1,7 @@
 import { LayerConfig } from 'src/components';
 import { VMapEvents, type MapProviderDetail } from '../utils/events';
 import type { MapProvider, LayerUpdate } from '../types/mapprovider';
+import { log, warn } from '../utils/logger';
 
 export class VMapLayerHelper {
   private layerId: string | null = null;
@@ -12,6 +13,7 @@ export class VMapLayerHelper {
     group: Element,
     vmap: HTMLVMapElement,
     createLayerConfig: () => LayerConfig,
+    elementId?: string,
   ) {
     if (this.layerId) {
       await this.mapProvider?.removeLayer(this.layerId);
@@ -21,22 +23,24 @@ export class VMapLayerHelper {
     const isMapProviderAvailable = await vmap.isMapProviderAvailable();
 
     if (isMapProviderAvailable) {
-      console.log(`${this.el.nodeName.toLowerCase()} - Layer wird hinzugefügt`);
+      log(`${this.el.nodeName.toLowerCase()} - Layer wird hinzugefügt`);
       this.mapProvider = await vmap.getMapProvider();
-      this.layerId = await (group as HTMLVMapLayerGroupElement).addLayer(
+      this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
         createLayerConfig(),
+        elementId,
       );
     } //else {
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
     ) => {
-      console.log(
+      log(
         `${this.el.nodeName.toLowerCase()} - Layer wird verzögert hinzugefügt`,
       );
       const mapEvent = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
-      this.layerId = await (group as HTMLVMapLayerGroupElement).addLayer(
+      this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
         createLayerConfig(),
+        elementId,
       );
     }) as EventListener);
     //}
@@ -62,22 +66,29 @@ export class VMapLayerHelper {
     return this.layerId;
   }
 
+  public async removeLayer() {
+    await this.mapProvider?.removeLayer(this.layerId);
+  }
+
   public async updateLayer(update: LayerUpdate) {
     await this.mapProvider?.updateLayer(this.layerId, update);
   }
 
-  public async initLayer(createLayerConfig: () => LayerConfig) {
-    const group = this.el.closest('v-map-layer-group');
+  public async initLayer(
+    createLayerConfig: () => LayerConfig,
+    elementId?: string,
+  ) {
+    const group = this.el.closest('v-map-layergroup');
     if (!group) {
-      console.warn(
-        `${this.el.nodeName.toLowerCase()} ist nicht in einer v-map-layer-group enthalten`,
+      warn(
+        `${this.el.nodeName.toLowerCase()} ist nicht in einer v-map-layergroup enthalten`,
       );
       return;
     }
 
     const vmap = await this.getVMap();
     if (!vmap) {
-      console.warn(
+      warn(
         `Keine v-map Elternkomponente für ${this.el.nodeName.toLowerCase()} gefunden`,
       );
       return;
@@ -87,9 +98,7 @@ export class VMapLayerHelper {
     vmap.addEventListener(
       VMapEvents.MapProviderWillShutdown,
       async (_event: CustomEvent) => {
-        console.log(
-          `${this.el.nodeName.toLowerCase()} map provider fährt herunter`,
-        );
+        log(`${this.el.nodeName.toLowerCase()} map provider fährt herunter`);
         this.mapProvider = null;
         this.layerId = null;
       },
@@ -99,21 +108,20 @@ export class VMapLayerHelper {
       group,
       vmap as HTMLVMapElement,
       createLayerConfig,
+      elementId,
     );
   }
 
   private async getVMap(): Promise<HTMLVMapElement> {
-    console.log(`${this.el.nodeName.toLowerCase()} - getVMap`);
+    log(`${this.el.nodeName.toLowerCase()} - getVMap`);
     const mapElement = this.el.closest('v-map') as HTMLElement;
     if (!mapElement) {
-      console.log(
-        `${this.el.nodeName.toLowerCase()} - getVMap - v-map not found.`,
-      );
+      log(`${this.el.nodeName.toLowerCase()} - getVMap - v-map not found.`);
       return null;
     }
     await customElements.whenDefined('v-map');
     const vmap = mapElement as HTMLVMapElement;
-    console.log(`${this.el.nodeName.toLowerCase()} - getVMap - assigned.`);
+    log(`${this.el.nodeName.toLowerCase()} - getVMap - assigned.`);
     return vmap;
   }
 }

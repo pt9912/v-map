@@ -9,22 +9,18 @@ import { Flavour } from "./types/flavour";
 import { CssMode } from "./types/cssmode";
 import { MapProviderDetail } from "./utils/events";
 import { MapProvider } from "./types/mapprovider";
-import { LayerConfig } from "./types/layerconfig";
+import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
+import { LayerConfig } from "./types/layerconfig";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
 export { MapProvider } from "./types/mapprovider";
-export { LayerConfig } from "./types/layerconfig";
+export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
+export { LayerConfig } from "./types/layerconfig";
 export namespace Components {
     interface VMap {
-        /**
-          * Fügt ein Layer-Element (Web Component) zur Karte hinzu. Das Layer muss kompatibel mit dem aktiven Provider sein.
-          * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
-          * @example const layer = document.createElement('v-map-layer-osm'); await mapEl.addLayer(layer);
-         */
-        "addLayer": (layerConfig: any) => Promise<void>;
         /**
           * Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
           * @default [0, 0]
@@ -71,6 +67,9 @@ export namespace Components {
           * @default 3
          */
         "zoom": number;
+    }
+    interface VMapBuilder {
+        "mapconfig"?: unknown;
     }
     interface VMapLayerGeojson {
         /**
@@ -150,33 +149,6 @@ export namespace Components {
         "region"?: string;
         /**
           * Sichtbarkeit des Layers.
-          * @default true
-         */
-        "visible": boolean;
-    }
-    interface VMapLayerGroup {
-        /**
-          * Fügt ein Kind-Layer zur Gruppe hinzu.
-          * @param layer Layer-Element (Web Component)
-         */
-        "addLayer": (layerConfig: LayerConfig) => Promise<string>;
-        /**
-          * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
-          * @default false
-         */
-        "basemap": boolean;
-        /**
-          * Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
-          * @default Math.random().toString(36).slice(2, 11)
-         */
-        "groupId": string;
-        /**
-          * Globale Opazität (0–1) für alle Kinder.
-          * @default 1
-         */
-        "opacity": number;
-        /**
-          * Sichtbarkeit der gesamten Gruppe.
           * @default true
          */
         "visible": boolean;
@@ -294,6 +266,10 @@ export namespace Components {
           * @default true
          */
         "visible": boolean;
+        /**
+          * @default 10
+         */
+        "zIndex": number;
     }
     /**
      * XYZ Tile Layer
@@ -332,10 +308,41 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface VMapLayercontrol {
+        /**
+          * ID der zu steuernden Karte (DOM-Element mit dieser id)
+         */
+        "for": string;
+    }
+    interface VMapLayergroup {
+        /**
+          * Fügt ein Kind-Layer zur Gruppe hinzu.
+          * @param layer Layer-Element (Web Component)
+         */
+        "addLayer": (layerConfig: LayerConfig, layerElementId?: string) => Promise<string>;
+        /**
+          * @default null
+         */
+        "basemapid": string | null;
+        /**
+          * Globale Opazität (0–1) für alle Kinder.
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Sichtbarkeit der gesamten Gruppe.
+          * @default true
+         */
+        "visible": boolean;
+    }
 }
 export interface VMapCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapElement;
+}
+export interface VMapBuilderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapBuilderElement;
 }
 export interface VMapLayerGeotiffCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -383,6 +390,27 @@ declare global {
         prototype: HTMLVMapElement;
         new (): HTMLVMapElement;
     };
+    interface HTMLVMapBuilderElementEventMap {
+        "configReady": BuilderConfig;
+        "configError": {
+    message: string;
+    errors?: string[];
+  };
+    }
+    interface HTMLVMapBuilderElement extends Components.VMapBuilder, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapBuilderElementEventMap>(type: K, listener: (this: HTMLVMapBuilderElement, ev: VMapBuilderCustomEvent<HTMLVMapBuilderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapBuilderElementEventMap>(type: K, listener: (this: HTMLVMapBuilderElement, ev: VMapBuilderCustomEvent<HTMLVMapBuilderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapBuilderElement: {
+        prototype: HTMLVMapBuilderElement;
+        new (): HTMLVMapBuilderElement;
+    };
     interface HTMLVMapLayerGeojsonElement extends Components.VMapLayerGeojson, HTMLStencilElement {
     }
     var HTMLVMapLayerGeojsonElement: {
@@ -425,12 +453,6 @@ declare global {
     var HTMLVMapLayerGoogleElement: {
         prototype: HTMLVMapLayerGoogleElement;
         new (): HTMLVMapLayerGoogleElement;
-    };
-    interface HTMLVMapLayerGroupElement extends Components.VMapLayerGroup, HTMLStencilElement {
-    }
-    var HTMLVMapLayerGroupElement: {
-        prototype: HTMLVMapLayerGroupElement;
-        new (): HTMLVMapLayerGroupElement;
     };
     interface HTMLVMapLayerOsmElementEventMap {
         "ready": void;
@@ -523,17 +545,31 @@ declare global {
         prototype: HTMLVMapLayerXyzElement;
         new (): HTMLVMapLayerXyzElement;
     };
+    interface HTMLVMapLayercontrolElement extends Components.VMapLayercontrol, HTMLStencilElement {
+    }
+    var HTMLVMapLayercontrolElement: {
+        prototype: HTMLVMapLayercontrolElement;
+        new (): HTMLVMapLayercontrolElement;
+    };
+    interface HTMLVMapLayergroupElement extends Components.VMapLayergroup, HTMLStencilElement {
+    }
+    var HTMLVMapLayergroupElement: {
+        prototype: HTMLVMapLayergroupElement;
+        new (): HTMLVMapLayergroupElement;
+    };
     interface HTMLElementTagNameMap {
         "v-map": HTMLVMapElement;
+        "v-map-builder": HTMLVMapBuilderElement;
         "v-map-layer-geojson": HTMLVMapLayerGeojsonElement;
         "v-map-layer-geotiff": HTMLVMapLayerGeotiffElement;
         "v-map-layer-google": HTMLVMapLayerGoogleElement;
-        "v-map-layer-group": HTMLVMapLayerGroupElement;
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
         "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
         "v-map-layer-wkt": HTMLVMapLayerWktElement;
         "v-map-layer-wms": HTMLVMapLayerWmsElement;
         "v-map-layer-xyz": HTMLVMapLayerXyzElement;
+        "v-map-layercontrol": HTMLVMapLayercontrolElement;
+        "v-map-layergroup": HTMLVMapLayergroupElement;
     }
 }
 declare namespace LocalJSX {
@@ -570,6 +606,14 @@ declare namespace LocalJSX {
           * @default 3
          */
         "zoom"?: number;
+    }
+    interface VMapBuilder {
+        "mapconfig"?: unknown;
+        "onConfigError"?: (event: VMapBuilderCustomEvent<{
+    message: string;
+    errors?: string[];
+  }>) => void;
+        "onConfigReady"?: (event: VMapBuilderCustomEvent<BuilderConfig>) => void;
     }
     interface VMapLayerGeojson {
         /**
@@ -657,28 +701,6 @@ declare namespace LocalJSX {
         "region"?: string;
         /**
           * Sichtbarkeit des Layers.
-          * @default true
-         */
-        "visible"?: boolean;
-    }
-    interface VMapLayerGroup {
-        /**
-          * Kennzeichnet diese Gruppe als Basis-Kartenebene (exklusiv sichtbar).
-          * @default false
-         */
-        "basemap"?: boolean;
-        /**
-          * Eindeutige Gruppen-ID (z. B. für programmatisches Umschalten).
-          * @default Math.random().toString(36).slice(2, 11)
-         */
-        "groupId"?: string;
-        /**
-          * Globale Opazität (0–1) für alle Kinder.
-          * @default 1
-         */
-        "opacity"?: number;
-        /**
-          * Sichtbarkeit der gesamten Gruppe.
           * @default true
          */
         "visible"?: boolean;
@@ -815,6 +837,10 @@ declare namespace LocalJSX {
           * @default true
          */
         "visible"?: boolean;
+        /**
+          * @default 10
+         */
+        "zIndex"?: number;
     }
     /**
      * XYZ Tile Layer
@@ -858,17 +884,41 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface VMapLayercontrol {
+        /**
+          * ID der zu steuernden Karte (DOM-Element mit dieser id)
+         */
+        "for"?: string;
+    }
+    interface VMapLayergroup {
+        /**
+          * @default null
+         */
+        "basemapid"?: string | null;
+        /**
+          * Globale Opazität (0–1) für alle Kinder.
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Sichtbarkeit der gesamten Gruppe.
+          * @default true
+         */
+        "visible"?: boolean;
+    }
     interface IntrinsicElements {
         "v-map": VMap;
+        "v-map-builder": VMapBuilder;
         "v-map-layer-geojson": VMapLayerGeojson;
         "v-map-layer-geotiff": VMapLayerGeotiff;
         "v-map-layer-google": VMapLayerGoogle;
-        "v-map-layer-group": VMapLayerGroup;
         "v-map-layer-osm": VMapLayerOsm;
         "v-map-layer-scatterplot": VMapLayerScatterplot;
         "v-map-layer-wkt": VMapLayerWkt;
         "v-map-layer-wms": VMapLayerWms;
         "v-map-layer-xyz": VMapLayerXyz;
+        "v-map-layercontrol": VMapLayercontrol;
+        "v-map-layergroup": VMapLayergroup;
     }
 }
 export { LocalJSX as JSX };
@@ -876,13 +926,13 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "v-map": LocalJSX.VMap & JSXBase.HTMLAttributes<HTMLVMapElement>;
+            "v-map-builder": LocalJSX.VMapBuilder & JSXBase.HTMLAttributes<HTMLVMapBuilderElement>;
             "v-map-layer-geojson": LocalJSX.VMapLayerGeojson & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
             "v-map-layer-geotiff": LocalJSX.VMapLayerGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
             /**
              * Google Maps Basemap Layer
              */
             "v-map-layer-google": LocalJSX.VMapLayerGoogle & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
-            "v-map-layer-group": LocalJSX.VMapLayerGroup & JSXBase.HTMLAttributes<HTMLVMapLayerGroupElement>;
             "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
             "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
             "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
@@ -894,6 +944,8 @@ declare module "@stencil/core" {
              * XYZ Tile Layer
              */
             "v-map-layer-xyz": LocalJSX.VMapLayerXyz & JSXBase.HTMLAttributes<HTMLVMapLayerXyzElement>;
+            "v-map-layercontrol": LocalJSX.VMapLayercontrol & JSXBase.HTMLAttributes<HTMLVMapLayercontrolElement>;
+            "v-map-layergroup": LocalJSX.VMapLayergroup & JSXBase.HTMLAttributes<HTMLVMapLayergroupElement>;
         }
     }
 }
