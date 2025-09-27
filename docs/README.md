@@ -8,6 +8,6 @@ Willkommen bei der offiziellen Dokumentation von **V-Map**.
 - [Komponenten API](./api/components/README.md)
 - [TypeScript API](./api/ts/README.md)
 
-::: tip Schnellzugriff
+### Layer‑Matrix
+
 Seht euch die **[Layer‑Matrix](./layers/matrix.md)** an, um zu prüfen, welche Layer von welchem Provider unterstützt werden.
-:::

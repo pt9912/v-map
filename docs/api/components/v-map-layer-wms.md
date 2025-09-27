@@ -16,6 +16,7 @@ OGC WMS Layer
 | `transparent` | `boolean` | `transparent` | `true` | Transparente Kacheln anfordern. |
 | `url` | `string` | `url` |  | Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter). |
 | `visible` | `boolean` | `visible` | `true` | Sichtbarkeit des WMS-Layers. |
+| `zIndex` | `number` | `z-index` | `10` |  |
 
 ### Events
 

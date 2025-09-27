@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L184)
+Defined in: [src/components.d.ts:156](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L156)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/a7dd4
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:185](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L185)
+Defined in: [src/components.d.ts:157](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L157)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/components.d.ts:185](https://github.com/pt9912/v-map/blob/a7dd4
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:190](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L190)
+Defined in: [src/components.d.ts:162](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L162)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -42,7 +42,7 @@ Opazität der OSM-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L194)
+Defined in: [src/components.d.ts:166](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L166)
 
 #### Default
 
@@ -56,7 +56,7 @@ Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/a7dd4
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:199](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L199)
+Defined in: [src/components.d.ts:171](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L171)
 
 Sichtbarkeit des Layers
 
@@ -72,7 +72,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L203)
+Defined in: [src/components.d.ts:175](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L175)
 
 #### Default
 

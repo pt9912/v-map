@@ -6,7 +6,7 @@
 
 # Class: LeafletProvider
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:167](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L167)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:27](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L27)
 
 ## Implements
 
@@ -24,19 +24,25 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:167](https://github.co
 
 ## Methods
 
-### addLayer()
+### addBaseLayer()
 
-> **addLayer**(`config`): `Promise`\<`string`\>
+> **addBaseLayer**(`layerConfig`, `basemapid`, `layerElementId`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:212](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L212)
-
-Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:154](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L154)
 
 #### Parameters
 
-##### config
+##### layerConfig
 
 [`LayerConfig`](../../../../types/layerconfig/type-aliases/LayerConfig.md)
+
+##### basemapid
+
+`string`
+
+##### layerElementId
+
+`string`
 
 #### Returns
 
@@ -44,7 +50,35 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 #### Implementation of
 
-[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`addLayer`](../../../../types/mapprovider/interfaces/MapProvider.md#addlayer)
+[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`addBaseLayer`](../../../../types/mapprovider/interfaces/MapProvider.md#addbaselayer)
+
+***
+
+### addLayerToGroup()
+
+> **addLayerToGroup**(`layerConfig`, `groupId`): `Promise`\<`string`\>
+
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:80](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L80)
+
+Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
+
+#### Parameters
+
+##### layerConfig
+
+[`LayerConfig`](../../../../types/layerconfig/type-aliases/LayerConfig.md)
+
+##### groupId
+
+`string`
+
+#### Returns
+
+`Promise`\<`string`\>
+
+#### Implementation of
+
+[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`addLayerToGroup`](../../../../types/mapprovider/interfaces/MapProvider.md#addlayertogroup)
 
 ***
 
@@ -52,7 +86,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:446](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L446)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:409](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L409)
 
 #### Returns
 
@@ -68,7 +102,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:446](https://github.co
 
 > **getMap**(): `Map`
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:548](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L548)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:558](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L558)
 
 #### Returns
 
@@ -80,7 +114,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:548](https://github.co
 
 > **init**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:175](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L175)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:37](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L37)
 
 #### Parameters
 
@@ -102,7 +136,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:175](https://github.co
 
 > **removeLayer**(`layerId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:461](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L461)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:424](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L424)
 
 #### Parameters
 
@@ -120,11 +154,63 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:461](https://github.co
 
 ***
 
+### setBaseLayer()
+
+> **setBaseLayer**(`groupId`, `layerElementId`): `Promise`\<`void`\>
+
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:207](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L207)
+
+#### Parameters
+
+##### groupId
+
+`string`
+
+##### layerElementId
+
+`string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`setBaseLayer`](../../../../types/mapprovider/interfaces/MapProvider.md#setbaselayer)
+
+***
+
+### setGroupVisible()
+
+> **setGroupVisible**(`groupId`, `visible`): `Promise`\<`void`\>
+
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:538](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L538)
+
+#### Parameters
+
+##### groupId
+
+`string`
+
+##### visible
+
+`boolean`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`setGroupVisible`](../../../../types/mapprovider/interfaces/MapProvider.md#setgroupvisible)
+
+***
+
 ### setOpacity()
 
 > **setOpacity**(`layerId`, `opacity`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:483](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L483)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:446](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L446)
 
 #### Parameters
 
@@ -150,7 +236,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:483](https://github.co
 
 > **setView**(`__namedParameters`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:457](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L457)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:420](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L420)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
@@ -178,7 +264,7 @@ View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promis
 
 > **setVisible**(`layerId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:506](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L506)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:469](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L469)
 
 #### Parameters
 
@@ -204,7 +290,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:506](https://github.co
 
 > **setZIndex**(`layerId`, `zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:471](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L471)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:434](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L434)
 
 #### Parameters
 
@@ -230,7 +316,7 @@ Defined in: [src/map-provider/leaflet/leaflet-provider.ts:471](https://github.co
 
 > **updateLayer**(`layerId`, `update`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/leaflet-provider.ts:200](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/map-provider/leaflet/leaflet-provider.ts#L200)
+Defined in: [src/map-provider/leaflet/leaflet-provider.ts:62](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/map-provider/leaflet/leaflet-provider.ts#L62)
 
 #### Parameters
 

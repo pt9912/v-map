@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:574](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L574)
+Defined in: [src/components.d.ts:618](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L618)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:574](https://github.com/pt9912/v-map/blob/a7dd4
 
 > `optional` **geojson**: `unknown`
 
-Defined in: [src/components.d.ts:578](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L578)
+Defined in: [src/components.d.ts:622](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L622)
 
 Prop, die du intern nutzt/weiterverarbeitest
 
@@ -24,7 +24,7 @@ Prop, die du intern nutzt/weiterverarbeitest
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:583](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L583)
+Defined in: [src/components.d.ts:627](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L627)
 
 Opazität der geojson-Kacheln (0–1).
 
@@ -40,7 +40,7 @@ Opazität der geojson-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:587](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L587)
+Defined in: [src/components.d.ts:631](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L631)
 
 #### Default
 
@@ -54,7 +54,7 @@ null
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L591)
+Defined in: [src/components.d.ts:635](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L635)
 
 #### Default
 
@@ -68,7 +68,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:595](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L595)
+Defined in: [src/components.d.ts:639](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L639)
 
 #### Default
 

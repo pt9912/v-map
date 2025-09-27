@@ -31,13 +31,13 @@
     },
     "geotiff": {
       "cesium": false,
-      "deck": true,
+      "deck": false,
       "leaflet": false,
       "ol": false
     },
     "google": {
       "cesium": false,
-      "deck": true,
+      "deck": false,
       "leaflet": true,
       "ol": true
     },

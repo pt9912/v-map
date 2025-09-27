@@ -9,10 +9,12 @@
 ## Interfaces
 
 - [VMap](interfaces/VMap.md)
+- [VMapBuilder](interfaces/VMapBuilder.md)
+- [VMapLayercontrol](interfaces/VMapLayercontrol.md)
 - [VMapLayerGeojson](interfaces/VMapLayerGeojson.md)
 - [VMapLayerGeotiff](interfaces/VMapLayerGeotiff.md)
 - [VMapLayerGoogle](interfaces/VMapLayerGoogle.md)
-- [VMapLayerGroup](interfaces/VMapLayerGroup.md)
+- [VMapLayergroup](interfaces/VMapLayergroup.md)
 - [VMapLayerOsm](interfaces/VMapLayerOsm.md)
 - [VMapLayerScatterplot](interfaces/VMapLayerScatterplot.md)
 - [VMapLayerWkt](interfaces/VMapLayerWkt.md)

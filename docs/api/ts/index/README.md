@@ -13,6 +13,7 @@
 
 ## Interfaces
 
+- [VMapBuilderCustomEvent](interfaces/VMapBuilderCustomEvent.md)
 - [VMapCustomEvent](interfaces/VMapCustomEvent.md)
 - [VMapLayerGeotiffCustomEvent](interfaces/VMapLayerGeotiffCustomEvent.md)
 - [VMapLayerGoogleCustomEvent](interfaces/VMapLayerGoogleCustomEvent.md)
@@ -27,6 +28,12 @@
 - [Color](type-aliases/Color.md)
 
 ## References
+
+### BuilderConfig
+
+Re-exports [BuilderConfig](../utils/diff/interfaces/BuilderConfig.md)
+
+***
 
 ### CssMode
 

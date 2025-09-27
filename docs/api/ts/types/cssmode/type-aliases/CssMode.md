@@ -8,4 +8,4 @@
 
 > **CssMode** = `"inline-min"` \| `"cdn"` \| `"none"` \| `"bundle"`
 
-Defined in: [src/types/cssmode.ts:1](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/types/cssmode.ts#L1)
+Defined in: [src/types/cssmode.ts:1](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/types/cssmode.ts#L1)

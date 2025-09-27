@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:99](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L99)
+Defined in: [src/components.d.ts:98](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L98)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:99](https://github.com/pt9912/v-map/blob/a7dd43
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L100)
+Defined in: [src/components.d.ts:99](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L99)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/components.d.ts:100](https://github.com/pt9912/v-map/blob/a7dd4
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:105](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L105)
+Defined in: [src/components.d.ts:104](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L104)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -42,7 +42,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:109](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L109)
+Defined in: [src/components.d.ts:108](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L108)
 
 #### Default
 
@@ -56,7 +56,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:114](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L114)
+Defined in: [src/components.d.ts:113](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L113)
 
 Sichtbarkeit des Layers
 
@@ -72,7 +72,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:118](https://github.com/pt9912/v-map/blob/a7dd4349afbfe2947d40f945b3226f293512e795/src/components.d.ts#L118)
+Defined in: [src/components.d.ts:117](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L117)
 
 #### Default
 
