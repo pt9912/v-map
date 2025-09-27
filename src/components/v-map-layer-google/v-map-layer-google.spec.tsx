@@ -1,5 +1,8 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerGoogle } from './v-map-layer-google';
+
+import '../../testing/fail-on-console-spec';
+
 describe('<v-map-layer-google>', () => {
   it('renders', async () => {
     const page = await newSpecPage({

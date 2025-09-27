@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerWkt } from './v-map-layer-wkt';
+import '../../testing/fail-on-console-spec';
 describe('<v-map-layer-wkt>', () => {
   it('renders', async () => {
     const page = await newSpecPage({

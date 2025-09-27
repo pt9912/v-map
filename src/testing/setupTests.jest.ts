@@ -1,4 +1,6 @@
-jest.mock('leaflet.gridlayer.googlemutant', () => ({}));
+//import '@stencil/core/testing';
+
+//jest.mock('leaflet.gridlayer.googlemutant', () => ({}));
 
 Object.defineProperty(document, 'createRange', {
   value: () => ({
@@ -19,3 +21,14 @@ class RO {
   disconnect() {}
 }
 (global as any).ResizeObserver = RO;
+
+class MockMutationObserver {
+  observe(): void {}
+  disconnect(): void {}
+  takeRecords(): unknown[] {
+    return [];
+  }
+}
+if (typeof (globalThis as any).MutationObserver === 'undefined') {
+  (globalThis as any).MutationObserver = MockMutationObserver as any;
+}

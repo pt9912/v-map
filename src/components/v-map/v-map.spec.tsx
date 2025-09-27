@@ -1,6 +1,7 @@
 // src/components/v-map/v-map.spec.tsx
 import { newSpecPage } from '@stencil/core/testing';
 import { VMap } from './v-map';
+import '../../testing/fail-on-console-spec';
 
 describe('<v-map>', () => {
   it('renders', async () => {

@@ -1,11 +1,13 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { newE2EPage } from '../../testing/e2e-testing';
 
 describe('<v-map-layer-wms> e2e', () => {
   it('hydrates inside <v-map>', async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layer-wms url="https://ahocevar.com/geoserver/wms" layers="topp:states"></v-map-layer-wms>
+        <v-map-layergroup>
+          <v-map-layer-wms url="https://ahocevar.com/geoserver/wms" layers="topp:states"></v-map-layer-wms>
+        </v-map-layergroup>
       </v-map>
     `);
     const el = await page.find('v-map-layer-wms');
@@ -14,7 +16,9 @@ describe('<v-map-layer-wms> e2e', () => {
 
   it('accepts common props', async () => {
     const page = await newE2EPage();
-    await page.setContent(`<v-map-layer-wms url="u" layers="l"></v-map-layer-wms>`);
+    await page.setContent(
+      `<v-map><v-map-layergroup><v-map-layer-wms url="u" layers="l"></v-map-layer-wms></v-map-layergroup></v-map>`,
+    );
     const el = await page.find('v-map-layer-wms');
     await el.setAttribute('transparent', 'true');
     await el.setAttribute('opacity', '0.5');

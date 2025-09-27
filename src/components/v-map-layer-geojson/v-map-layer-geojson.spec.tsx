@@ -1,11 +1,12 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { VMapLayerWms } from './v-map-layer-wms';
+import { VMapLayerGeoJSON } from './v-map-layer-geojson';
 import '../../testing/fail-on-console-spec';
+
 describe('<v-map-layer-wms>', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [VMapLayerWms],
-      html: `<v-map><v-map-layergroup><v-map-layer-wms url="http://example.com" layers="foo"></v-map-layer-wms></v-map-layergroup></v-map>`,
+      components: [VMapLayerGeoJSON],
+      html: `<v-map><v-map-layergroup><v-map-layer-geojson url="http://example.com" ></v-map-layer-geojson></v-map-layergroup></v-map>`,
     });
     expect(page.root).toBeTruthy();
   });

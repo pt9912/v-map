@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerXyz } from './v-map-layer-xyz';
+import '../../testing/fail-on-console-spec';
 describe('<v-map-layer-xyz>', () => {
   it('renders', async () => {
     const page = await newSpecPage({

@@ -142,7 +142,6 @@ export class VMapLayerGeoJSON {
     log(MSG_COMPONENT + 'observeAssignedNodes');
     this.mo?.disconnect();
     if (!this.geoSlot) return;
-
     const nodes = this.geoSlot.assignedNodes({ flatten: true });
     this.mo = new MutationObserver(() => this.readGeoJsonFromSlot());
     for (const n of nodes) {

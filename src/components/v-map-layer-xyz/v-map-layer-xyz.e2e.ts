@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { newE2EPage } from '../../testing/e2e-testing';
 
 describe('<v-map-layer-xyz> e2e', () => {
   it('hydrates inside <v-map>', async () => {
