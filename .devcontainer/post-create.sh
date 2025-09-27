@@ -71,6 +71,9 @@ if [[ "${BOOTSTRAP:-0}" == "1" ]]; then
   # Stencil CLI ist über @stencil/core schon abgedeckt; keine globale Installation nötig.
 fi
 
+# disable telemetry
+npx stencil telemetry off
+
 # Chrome immer ohne Sandbox starten (für Tools, die Flags nicht durchreichen)
 echo "export PRESS_CHROMIUM_ARGS='--no-sandbox --disable-setuid-sandbox'" >> "${HOME}/.bashrc"
 echo "export CHROMIUM_FLAGS='--no-sandbox --disable-setuid-sandbox'" >> "${HOME}/.bashrc"
