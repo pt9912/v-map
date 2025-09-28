@@ -33,6 +33,9 @@ export class VMapLayerGroup {
   //  */
   // @Prop({ reflect: true }) basemap = false;
 
+  /**
+   * Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
+   */
   @Prop({ reflect: true }) basemapid: string | null = null;
 
   // /**

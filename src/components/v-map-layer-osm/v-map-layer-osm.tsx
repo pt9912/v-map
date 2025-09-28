@@ -34,8 +34,14 @@ export class VMapLayerOSM implements VMapLayer {
    */
   @Prop({ reflect: true }) opacity: number = 1.0;
 
+  /**
+   * Z-index for layer stacking order. Higher values render on top.
+   */
   @Prop({ reflect: true }) zIndex: number = 10;
 
+  /**
+   * Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.
+   */
   @Prop({ reflect: true }) url: string = 'https://tile.openstreetmap.org';
 
   /**
@@ -86,6 +92,9 @@ export class VMapLayerOSM implements VMapLayer {
     return this.didLoad;
   }
 
+  /**
+   * Returns the internal layer ID used by the map provider.
+   */
   @Method()
   async getLayerId() {
     return this.helper.getLayerId();

@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property    | Attribute   | Description                             | Type      | Default |
-| ----------- | ----------- | --------------------------------------- | --------- | ------- |
-| `basemapid` | `basemapid` |                                         | `string`  | `null`  |
-| `opacity`   | `opacity`   | Globale Opazität (0–1) für alle Kinder. | `number`  | `1.0`   |
-| `visible`   | `visible`   | Sichtbarkeit der gesamten Gruppe.       | `boolean` | `true`  |
+| Property    | Attribute   | Description                                                                                                  | Type      | Default |
+| ----------- | ----------- | ------------------------------------------------------------------------------------------------------------ | --------- | ------- |
+| `basemapid` | `basemapid` | Base map identifier for this layer group. When set, layers in this group will be treated as base map layers. | `string`  | `null`  |
+| `opacity`   | `opacity`   | Globale Opazität (0–1) für alle Kinder.                                                                      | `number`  | `1.0`   |
+| `visible`   | `visible`   | Sichtbarkeit der gesamten Gruppe.                                                                            | `boolean` | `true`  |
 
 
 ## Methods

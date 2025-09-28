@@ -18,6 +18,11 @@ const MSG_COMPONENT: string = 'v-map-builder - ';
 
 type LayerType = 'osm' | 'wms' | 'wms-tiled' | 'geojson' | 'xyz' | 'custom';
 
+/**
+ * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+ *
+ * @part mount - The container element where the generated map and layers are mounted.
+ */
 @Component({
   tag: 'v-map-builder',
   shadow: true,
@@ -26,10 +31,20 @@ type LayerType = 'osm' | 'wms' | 'wms-tiled' | 'geojson' | 'xyz' | 'custom';
 export class VMapBuilder {
   @Element() hostEl!: HTMLElement;
 
+  /**
+   * Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.
+   */
   @Prop({ mutable: true }) mapconfig?: unknown;
 
+  /**
+   * Event emitted when the map configuration has been successfully parsed and is ready to use.
+   */
   @Event({ eventName: 'configReady' })
   configReady!: EventEmitter<BuilderConfig>;
+
+  /**
+   * Event emitted when there is an error parsing the map configuration.
+   */
   @Event({ eventName: 'configError' }) configError!: EventEmitter<{
     message: string;
     errors?: string[];

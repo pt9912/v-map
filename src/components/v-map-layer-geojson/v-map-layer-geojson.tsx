@@ -16,10 +16,19 @@ export class VMapLayerGeoJSON {
   /** Prop, die du intern nutzt/weiterverarbeitest */
   @Prop({ mutable: true }) geojson?: unknown;
 
+  /**
+   * URL to fetch GeoJSON data from. Alternative to providing data via slot.
+   */
   @Prop({ reflect: true }) url: string = null;
 
+  /**
+   * Whether the layer is visible on the map.
+   */
   @Prop({ reflect: true }) visible: boolean = true;
 
+  /**
+   * Z-index for layer stacking order. Higher values render on top.
+   */
   @Prop({ reflect: true }) zIndex: number = 1000;
 
   /**
@@ -36,6 +45,9 @@ export class VMapLayerGeoJSON {
 
   private helper: VMapLayerHelper;
 
+  /**
+   * Returns the internal layer ID used by the map provider.
+   */
   @Method()
   async getLayerId() {
     return this.layerId;

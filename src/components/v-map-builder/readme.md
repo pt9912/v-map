@@ -5,26 +5,30 @@
 <!-- Auto Generated Below -->
 
 
+## Overview
+
+A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+
 ## Properties
 
-| Property    | Attribute   | Description | Type      | Default     |
-| ----------- | ----------- | ----------- | --------- | ----------- |
-| `mapconfig` | `mapconfig` |             | `unknown` | `undefined` |
+| Property    | Attribute   | Description                                                                                              | Type      | Default     |
+| ----------- | ----------- | -------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `mapconfig` | `mapconfig` | Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig. | `unknown` | `undefined` |
 
 
 ## Events
 
-| Event         | Description | Type                                                   |
-| ------------- | ----------- | ------------------------------------------------------ |
-| `configError` |             | `CustomEvent<{ message: string; errors?: string[]; }>` |
-| `configReady` |             | `CustomEvent<BuilderConfig>`                           |
+| Event         | Description                                                                                | Type                                                   |
+| ------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `configError` | Event emitted when there is an error parsing the map configuration.                        | `CustomEvent<{ message: string; errors?: string[]; }>` |
+| `configReady` | Event emitted when the map configuration has been successfully parsed and is ready to use. | `CustomEvent<BuilderConfig>`                           |
 
 
 ## Shadow Parts
 
-| Part      | Description |
-| --------- | ----------- |
-| `"mount"` |             |
+| Part      | Description                                                           |
+| --------- | --------------------------------------------------------------------- |
+| `"mount"` | The container element where the generated map and layers are mounted. |
 
 
 ## Dependencies

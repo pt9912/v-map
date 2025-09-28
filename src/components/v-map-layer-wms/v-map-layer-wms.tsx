@@ -73,6 +73,9 @@ export class VMapLayerWms {
    */
   @Prop({ reflect: true }) opacity: number = 1.0;
 
+  /**
+   * Z-index for layer stacking order. Higher values render on top.
+   */
   @Prop({ reflect: true }) zIndex: number = 10;
 
   /**

@@ -26,6 +26,9 @@ const MSG_COMPONENT: string = 'v-map-layer-geotiff - ';
 export class VMapLayerGeoTIFF implements VMapLayer {
   @Element() el!: HTMLElement;
 
+  /**
+   * URL to the GeoTIFF file to be displayed on the map.
+   */
   @Prop() url: string = null;
 
   @Prop() visible: boolean = true;
@@ -36,6 +39,9 @@ export class VMapLayerGeoTIFF implements VMapLayer {
    */
   @Prop() opacity: number = 1.0;
 
+  /**
+   * Z-index for layer stacking order. Higher values render on top.
+   */
   @Prop() zIndex: number = 1000;
 
   /**
@@ -81,6 +87,9 @@ export class VMapLayerGeoTIFF implements VMapLayer {
     return this.didLoad;
   }
 
+  /**
+   * Returns the internal layer ID used by the map provider.
+   */
   @Method()
   async getLayerId() {
     return this.helper.getLayerId();

@@ -68,7 +68,13 @@ export namespace Components {
          */
         "zoom": number;
     }
+    /**
+     * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+     */
     interface VMapBuilder {
+        /**
+          * Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.
+         */
         "mapconfig"?: unknown;
     }
     interface VMapLayerGeojson {
@@ -76,6 +82,9 @@ export namespace Components {
           * Prop, die du intern nutzt/weiterverarbeitest
          */
         "geojson"?: unknown;
+        /**
+          * Returns the internal layer ID used by the map provider.
+         */
         "getLayerId": () => Promise<string>;
         /**
           * Opazität der geojson-Kacheln (0–1).
@@ -83,19 +92,25 @@ export namespace Components {
          */
         "opacity": number;
         /**
+          * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
          */
         "url": string;
         /**
+          * Whether the layer is visible on the map.
           * @default true
          */
         "visible": boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 1000
          */
         "zIndex": number;
     }
     interface VMapLayerGeotiff {
+        /**
+          * Returns the internal layer ID used by the map provider.
+         */
         "getLayerId": () => Promise<string>;
         /**
           * Opazität der GeoTIFF-Kacheln (0–1).
@@ -103,6 +118,7 @@ export namespace Components {
          */
         "opacity": number;
         /**
+          * URL to the GeoTIFF file to be displayed on the map.
           * @default null
          */
         "url": string;
@@ -112,6 +128,7 @@ export namespace Components {
          */
         "visible": boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 1000
          */
         "zIndex": number;
@@ -154,6 +171,9 @@ export namespace Components {
         "visible": boolean;
     }
     interface VMapLayerOsm {
+        /**
+          * Returns the internal layer ID used by the map provider.
+         */
         "getLayerId": () => Promise<string>;
         /**
           * Opazität der OSM-Kacheln (0–1).
@@ -161,6 +181,7 @@ export namespace Components {
          */
         "opacity": number;
         /**
+          * Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.
           * @default 'https://tile.openstreetmap.org'
          */
         "url": string;
@@ -170,6 +191,7 @@ export namespace Components {
          */
         "visible": boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 10
          */
         "zIndex": number;
@@ -267,6 +289,7 @@ export namespace Components {
          */
         "visible": boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 10
          */
         "zIndex": number;
@@ -321,6 +344,7 @@ export namespace Components {
          */
         "addLayer": (layerConfig: LayerConfig, layerElementId?: string) => Promise<string>;
         /**
+          * Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
           * @default null
          */
         "basemapid": string | null;
@@ -397,6 +421,9 @@ declare global {
     errors?: string[];
   };
     }
+    /**
+     * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+     */
     interface HTMLVMapBuilderElement extends Components.VMapBuilder, HTMLStencilElement {
         addEventListener<K extends keyof HTMLVMapBuilderElementEventMap>(type: K, listener: (this: HTMLVMapBuilderElement, ev: VMapBuilderCustomEvent<HTMLVMapBuilderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -607,12 +634,24 @@ declare namespace LocalJSX {
          */
         "zoom"?: number;
     }
+    /**
+     * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+     */
     interface VMapBuilder {
+        /**
+          * Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.
+         */
         "mapconfig"?: unknown;
+        /**
+          * Event emitted when there is an error parsing the map configuration.
+         */
         "onConfigError"?: (event: VMapBuilderCustomEvent<{
     message: string;
     errors?: string[];
   }>) => void;
+        /**
+          * Event emitted when the map configuration has been successfully parsed and is ready to use.
+         */
         "onConfigReady"?: (event: VMapBuilderCustomEvent<BuilderConfig>) => void;
     }
     interface VMapLayerGeojson {
@@ -626,14 +665,17 @@ declare namespace LocalJSX {
          */
         "opacity"?: number;
         /**
+          * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
          */
         "url"?: string;
         /**
+          * Whether the layer is visible on the map.
           * @default true
          */
         "visible"?: boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 1000
          */
         "zIndex"?: number;
@@ -650,6 +692,7 @@ declare namespace LocalJSX {
          */
         "opacity"?: number;
         /**
+          * URL to the GeoTIFF file to be displayed on the map.
           * @default null
          */
         "url"?: string;
@@ -659,6 +702,7 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 1000
          */
         "zIndex"?: number;
@@ -717,6 +761,7 @@ declare namespace LocalJSX {
          */
         "opacity"?: number;
         /**
+          * Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.
           * @default 'https://tile.openstreetmap.org'
          */
         "url"?: string;
@@ -726,6 +771,7 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 10
          */
         "zIndex"?: number;
@@ -838,6 +884,7 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
         /**
+          * Z-index for layer stacking order. Higher values render on top.
           * @default 10
          */
         "zIndex"?: number;
@@ -892,6 +939,7 @@ declare namespace LocalJSX {
     }
     interface VMapLayergroup {
         /**
+          * Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
           * @default null
          */
         "basemapid"?: string | null;
@@ -926,6 +974,9 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "v-map": LocalJSX.VMap & JSXBase.HTMLAttributes<HTMLVMapElement>;
+            /**
+             * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+             */
             "v-map-builder": LocalJSX.VMapBuilder & JSXBase.HTMLAttributes<HTMLVMapBuilderElement>;
             "v-map-layer-geojson": LocalJSX.VMapLayerGeojson & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
             "v-map-layer-geotiff": LocalJSX.VMapLayerGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
