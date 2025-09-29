@@ -1,6 +1,8 @@
 import type { StyleConfig } from './styleconfig';
 import type { Color } from './color';
 
+export type googleMapType = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
+
 export type LayerConfig =
   | {
       type: 'geojson';
@@ -43,7 +45,7 @@ export type LayerConfig =
   | {
       type: 'google';
       apiKey: string;
-      mapType?: 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
+      mapType?: googleMapType;
       scale?: 'scaleFactor1x' | 'scaleFactor2x';
       highDpi?: boolean;
       opacity?: number;
@@ -104,4 +106,14 @@ export type LayerConfig =
       opacity?: number;
       visible?: boolean;
       zIndex?: number;
+    }
+  | {
+      type: 'wkt';
+      wkt?: string;
+      url?: string;
+      style?: StyleConfig;
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
     };

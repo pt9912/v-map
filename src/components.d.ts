@@ -79,6 +79,16 @@ export namespace Components {
     }
     interface VMapLayerGeojson {
         /**
+          * Fill color for polygon geometries (CSS color value)
+          * @default 'rgba(0,100,255,0.3)'
+         */
+        "fillColor"?: string;
+        /**
+          * Fill opacity for polygon geometries (0-1)
+          * @default 0.3
+         */
+        "fillOpacity"?: number;
+        /**
           * Prop, die du intern nutzt/weiterverarbeitest
          */
         "geojson"?: unknown;
@@ -87,10 +97,58 @@ export namespace Components {
          */
         "getLayerId": () => Promise<string>;
         /**
+          * Icon size as [width, height] in pixels (comma-separated string like "32,32")
+          * @default "32,32"
+         */
+        "iconSize"?: string;
+        /**
+          * Icon URL for point features (alternative to pointColor/pointRadius)
+         */
+        "iconUrl"?: string;
+        /**
           * Opazität der geojson-Kacheln (0–1).
           * @default 1
          */
         "opacity": number;
+        /**
+          * Point color for point geometries (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "pointColor"?: string;
+        /**
+          * Point radius for point geometries in pixels
+          * @default 6
+         */
+        "pointRadius"?: number;
+        /**
+          * Stroke color for lines and polygon outlines (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "strokeColor"?: string;
+        /**
+          * Stroke opacity (0-1)
+          * @default 1
+         */
+        "strokeOpacity"?: number;
+        /**
+          * Stroke width in pixels
+          * @default 2
+         */
+        "strokeWidth"?: number;
+        /**
+          * Text color for labels (CSS color value)
+          * @default '#000000'
+         */
+        "textColor"?: string;
+        /**
+          * Text property name from feature properties to display as label
+         */
+        "textProperty"?: string;
+        /**
+          * Text size for labels in pixels
+          * @default 12
+         */
+        "textSize"?: number;
         /**
           * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
@@ -228,10 +286,72 @@ export namespace Components {
     }
     interface VMapLayerWkt {
         /**
+          * Fill color for polygon geometries (CSS color value)
+          * @default 'rgba(0,100,255,0.3)'
+         */
+        "fillColor"?: string;
+        /**
+          * Fill opacity for polygon geometries (0-1)
+          * @default 0.3
+         */
+        "fillOpacity"?: number;
+        /**
+          * Returns the internal layer ID used by the map provider.
+         */
+        "getLayerId": () => Promise<string>;
+        /**
+          * Icon size as [width, height] in pixels (comma-separated string like "32,32")
+          * @default "32,32"
+         */
+        "iconSize"?: string;
+        /**
+          * Icon URL for point features (alternative to pointColor/pointRadius)
+         */
+        "iconUrl"?: string;
+        /**
           * Globale Opazität (0–1).
           * @default 1
          */
         "opacity": number;
+        /**
+          * Point color for point geometries (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "pointColor"?: string;
+        /**
+          * Point radius for point geometries in pixels
+          * @default 6
+         */
+        "pointRadius"?: number;
+        /**
+          * Stroke color for lines and polygon outlines (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "strokeColor"?: string;
+        /**
+          * Stroke opacity (0-1)
+          * @default 1
+         */
+        "strokeOpacity"?: number;
+        /**
+          * Stroke width in pixels
+          * @default 2
+         */
+        "strokeWidth"?: number;
+        /**
+          * Text color for labels (CSS color value)
+          * @default '#000000'
+         */
+        "textColor"?: string;
+        /**
+          * Text property name from feature properties to display as label
+         */
+        "textProperty"?: string;
+        /**
+          * Text size for labels in pixels
+          * @default 12
+         */
+        "textSize"?: number;
         /**
           * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
          */
@@ -245,6 +365,11 @@ export namespace Components {
           * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
          */
         "wkt"?: string;
+        /**
+          * Z-index for layer stacking order. Higher values render on top.
+          * @default 1000
+         */
+        "zIndex": number;
     }
     /**
      * OGC WMS Layer
@@ -656,14 +781,72 @@ declare namespace LocalJSX {
     }
     interface VMapLayerGeojson {
         /**
+          * Fill color for polygon geometries (CSS color value)
+          * @default 'rgba(0,100,255,0.3)'
+         */
+        "fillColor"?: string;
+        /**
+          * Fill opacity for polygon geometries (0-1)
+          * @default 0.3
+         */
+        "fillOpacity"?: number;
+        /**
           * Prop, die du intern nutzt/weiterverarbeitest
          */
         "geojson"?: unknown;
+        /**
+          * Icon size as [width, height] in pixels (comma-separated string like "32,32")
+          * @default "32,32"
+         */
+        "iconSize"?: string;
+        /**
+          * Icon URL for point features (alternative to pointColor/pointRadius)
+         */
+        "iconUrl"?: string;
         /**
           * Opazität der geojson-Kacheln (0–1).
           * @default 1
          */
         "opacity"?: number;
+        /**
+          * Point color for point geometries (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "pointColor"?: string;
+        /**
+          * Point radius for point geometries in pixels
+          * @default 6
+         */
+        "pointRadius"?: number;
+        /**
+          * Stroke color for lines and polygon outlines (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "strokeColor"?: string;
+        /**
+          * Stroke opacity (0-1)
+          * @default 1
+         */
+        "strokeOpacity"?: number;
+        /**
+          * Stroke width in pixels
+          * @default 2
+         */
+        "strokeWidth"?: number;
+        /**
+          * Text color for labels (CSS color value)
+          * @default '#000000'
+         */
+        "textColor"?: string;
+        /**
+          * Text property name from feature properties to display as label
+         */
+        "textProperty"?: string;
+        /**
+          * Text size for labels in pixels
+          * @default 12
+         */
+        "textSize"?: number;
         /**
           * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
@@ -813,6 +996,25 @@ declare namespace LocalJSX {
     }
     interface VMapLayerWkt {
         /**
+          * Fill color for polygon geometries (CSS color value)
+          * @default 'rgba(0,100,255,0.3)'
+         */
+        "fillColor"?: string;
+        /**
+          * Fill opacity for polygon geometries (0-1)
+          * @default 0.3
+         */
+        "fillOpacity"?: number;
+        /**
+          * Icon size as [width, height] in pixels (comma-separated string like "32,32")
+          * @default "32,32"
+         */
+        "iconSize"?: string;
+        /**
+          * Icon URL for point features (alternative to pointColor/pointRadius)
+         */
+        "iconUrl"?: string;
+        /**
           * Signalisiert, dass das WKT-Layer initialisiert ist.
           * @event ready
          */
@@ -822,6 +1024,45 @@ declare namespace LocalJSX {
           * @default 1
          */
         "opacity"?: number;
+        /**
+          * Point color for point geometries (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "pointColor"?: string;
+        /**
+          * Point radius for point geometries in pixels
+          * @default 6
+         */
+        "pointRadius"?: number;
+        /**
+          * Stroke color for lines and polygon outlines (CSS color value)
+          * @default 'rgba(0,100,255,1)'
+         */
+        "strokeColor"?: string;
+        /**
+          * Stroke opacity (0-1)
+          * @default 1
+         */
+        "strokeOpacity"?: number;
+        /**
+          * Stroke width in pixels
+          * @default 2
+         */
+        "strokeWidth"?: number;
+        /**
+          * Text color for labels (CSS color value)
+          * @default '#000000'
+         */
+        "textColor"?: string;
+        /**
+          * Text property name from feature properties to display as label
+         */
+        "textProperty"?: string;
+        /**
+          * Text size for labels in pixels
+          * @default 12
+         */
+        "textSize"?: number;
         /**
           * URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
          */
@@ -835,6 +1076,11 @@ declare namespace LocalJSX {
           * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
          */
         "wkt"?: string;
+        /**
+          * Z-index for layer stacking order. Higher values render on top.
+          * @default 1000
+         */
+        "zIndex"?: number;
     }
     /**
      * OGC WMS Layer
