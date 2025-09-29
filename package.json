@@ -70,7 +70,7 @@
     "start": "stencil build --dev --watch --serve",
     "test": "pnpm run test:spec && pnpm run test:e2e",
     "test:spec": "stencil test --spec",
-    "test:e2e": "stencil test --e2e",
+    "test:e2e": "stencil test --e2e --logs",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "storybook": "pnpm run build && storybook dev -p 6006 --no-open",

@@ -16,7 +16,8 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "h.Fragment",
     "paths": {
-      "cesium": ["./node_modules/cesium/Source/Cesium.d.ts"]
+      "cesium": ["./node_modules/cesium/Source/Cesium.d.ts"],
+      "ol/webgl/PaletteTexture": ["./types/ol-override.d.ts"]
     },
     // WICHTIG: KEIN "typeRoots" auf cesium/Source setzen
     "types": ["@stencil/core", "jest", "node", "cesium", "ol", "geojson"] // <- keine 'Assets'/'Widgets' etc.
@@ -28,6 +29,7 @@
     "**/*.story.*",
     "**/*.mdx",
     ".storybook",
-    "stories/**"
+    "stories/**",
+    "node_modules/ol/webgl/PaletteTexture.d.ts"
   ]
 }
