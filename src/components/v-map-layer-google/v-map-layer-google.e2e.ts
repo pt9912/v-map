@@ -1,4 +1,4 @@
-import { newE2EPage } from '@stencil/core/testing';
+import { newE2EPage } from '../../testing/e2e-testing';
 import { googleMapType } from '../../types/layerconfig';
 
 describe('<v-map-layer-google> E2E', () => {
@@ -208,95 +208,95 @@ describe('<v-map-layer-google> E2E', () => {
     expect(await googleLayer.getProperty('region')).toBe('DE');
   });
 
-  // it('handles scale factors', async () => {
-  //   const scaleFactors = ['scaleFactor1x', 'scaleFactor2x', 'scaleFactor4x'];
+  it('handles scale factors', async () => {
+    const scaleFactors = ['scaleFactor1x', 'scaleFactor2x', 'scaleFactor4x'];
 
-  //   for (const scale of scaleFactors) {
-  //     const page = await newE2EPage();
-  //     await page.setContent(`
-  //       <v-map>
-  //         <v-map-layergroup>
-  //           <v-map-layer-google
-  //             api-key="${mockApiKey}"
-  //             map-type="roadmap"
-  //             scale="${scale}">
-  //           </v-map-layer-google>
-  //         </v-map-layergroup>
-  //       </v-map>
-  //     `);
+    for (const scale of scaleFactors) {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <v-map>
+          <v-map-layergroup>
+            <v-map-layer-google
+              api-key="${mockApiKey}"
+              map-type="roadmap"
+              scale="${scale}">
+            </v-map-layer-google>
+          </v-map-layergroup>
+        </v-map>
+      `);
 
-  //     const googleLayer = await page.find('v-map-layer-google');
-  //     expect(await googleLayer.getProperty('scale')).toBe(scale);
-  //   }
-  // });
+      const googleLayer = await page.find('v-map-layer-google');
+      expect(await googleLayer.getProperty('scale')).toBe(scale);
+    }
+  });
 
-  // it('handles max-zoom setting', async () => {
-  //   const page = await newE2EPage();
-  //   await page.setContent(`
-  //     <v-map>
-  //       <v-map-layergroup>
-  //         <v-map-layer-google
-  //           api-key="${mockApiKey}"
-  //           map-type="roadmap"
-  //           max-zoom="15">
-  //         </v-map-layer-google>
-  //       </v-map-layergroup>
-  //     </v-map>
-  //   `);
+  it('handles max-zoom setting', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <v-map>
+        <v-map-layergroup>
+          <v-map-layer-google
+            api-key="${mockApiKey}"
+            map-type="roadmap"
+            max-zoom="15">
+          </v-map-layer-google>
+        </v-map-layergroup>
+      </v-map>
+    `);
 
-  //   const googleLayer = await page.find('v-map-layer-google');
-  //   expect(await googleLayer.getProperty('maxZoom')).toBe(15);
-  // });
+    const googleLayer = await page.find('v-map-layer-google');
+    expect(await googleLayer.getProperty('maxZoom')).toBe(15);
+  });
 
-  // it('handles styles attribute', async () => {
-  //   const styles = [
-  //     {
-  //       featureType: 'water',
-  //       stylers: [{ color: '#0099cc' }],
-  //     },
-  //     {
-  //       featureType: 'landscape',
-  //       stylers: [{ color: '#f2f2f2' }],
-  //     },
-  //   ];
+  it('handles styles attribute', async () => {
+    const styles = [
+      {
+        featureType: 'water',
+        stylers: [{ color: '#0099cc' }],
+      },
+      {
+        featureType: 'landscape',
+        stylers: [{ color: '#f2f2f2' }],
+      },
+    ];
 
-  //   const page = await newE2EPage();
-  //   await page.setContent(`
-  //     <v-map>
-  //       <v-map-layergroup>
-  //         <v-map-layer-google
-  //           api-key="${mockApiKey}"
-  //           map-type="roadmap"
-  //           styles='${JSON.stringify(styles)}'>
-  //         </v-map-layer-google>
-  //       </v-map-layergroup>
-  //     </v-map>
-  //   `);
+    const page = await newE2EPage();
+    await page.setContent(`
+      <v-map>
+        <v-map-layergroup>
+          <v-map-layer-google
+            api-key="${mockApiKey}"
+            map-type="roadmap"
+            styles='${JSON.stringify(styles)}'>
+          </v-map-layer-google>
+        </v-map-layergroup>
+      </v-map>
+    `);
 
-  //   const googleLayer = await page.find('v-map-layer-google');
-  //   const layerStyles = await googleLayer.getProperty('styles');
-  //   expect(Array.isArray(layerStyles)).toBe(true);
-  //   expect(layerStyles).toHaveLength(2);
-  // });
+    const googleLayer = await page.find('v-map-layer-google');
+    const layerStyles = await googleLayer.getProperty('styles');
+    expect(Array.isArray(layerStyles)).toBe(true);
+    expect(layerStyles).toHaveLength(2);
+  });
 
-  // it('handles libraries attribute', async () => {
-  //   const page = await newE2EPage();
-  //   await page.setContent(`
-  //     <v-map>
-  //       <v-map-layergroup>
-  //         <v-map-layer-google
-  //           api-key="${mockApiKey}"
-  //           map-type="roadmap"
-  //           libraries="geometry,places,drawing">
-  //         </v-map-layer-google>
-  //       </v-map-layergroup>
-  //     </v-map>
-  //   `);
+  it('handles libraries attribute', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <v-map>
+        <v-map-layergroup>
+          <v-map-layer-google
+            api-key="${mockApiKey}"
+            map-type="roadmap"
+            libraries="geometry,places,drawing">
+          </v-map-layer-google>
+        </v-map-layergroup>
+      </v-map>
+    `);
 
-  //   const googleLayer = await page.find('v-map-layer-google');
-  //   const libraries = await googleLayer.getProperty('libraries');
-  //   expect(libraries).toBe('geometry,places,drawing');
-  // });
+    const googleLayer = await page.find('v-map-layer-google');
+    const libraries = await googleLayer.getProperty('libraries');
+    expect(libraries).toBe('geometry,places,drawing');
+  });
 
   it('gracefully handles missing API key', async () => {
     const page = await newE2EPage();
@@ -326,7 +326,7 @@ describe('<v-map-layer-google> E2E', () => {
   });
 
   it('works with different map providers', async () => {
-    const providers = ['leaflet', 'openlayers', 'deck', 'cesium'];
+    const providers = ['leaflet', 'ol', 'deck', 'cesium'];
 
     for (const provider of providers) {
       const page = await newE2EPage();

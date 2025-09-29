@@ -36,7 +36,14 @@ export const newE2EPage: typeof _newE2EPage = (async (...args: any[]) => {
   // Seitenbasierte Fehlerfalle
   const { failOnConsole } = await import('./e2e-utils');
   failOnConsole(page as any, {
-    ignore: [/useDefaultImportMap/i],
+    ignore: [
+      /useDefaultImportMap/i,
+      /Failed to resolve module specifier "child_process"/i,
+      /Failed to resolve module specifier "@loaders\.gl\//i,
+      /Blocked script execution in 'about:blank'/i,
+      /GPU stall due to ReadPixels/i,
+      /No map visible because the map container's width or height are 0/i,
+    ],
   });
 
   return page;

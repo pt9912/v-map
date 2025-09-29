@@ -206,6 +206,11 @@ export namespace Components {
          */
         "language"?: string;
         /**
+          * Google Maps libraries to load (comma-separated string).
+          * @example "geometry,places,drawing"
+         */
+        "libraries"?: string;
+        /**
           * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
           * @default "roadmap"
          */
@@ -213,6 +218,10 @@ export namespace Components {
     | 'satellite'
     | 'terrain'
     | 'hybrid';
+        /**
+          * Maximum zoom level for the layer.
+         */
+        "maxZoom"?: number;
         /**
           * Opazität des Layers (0–1).
           * @default 1
@@ -222,6 +231,15 @@ export namespace Components {
           * Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
          */
         "region"?: string;
+        /**
+          * Scale factor for tile display.
+          * @default "scaleFactor1x"
+         */
+        "scale"?: 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
+        /**
+          * Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array.
+         */
+        "styles"?: any[] | string;
         /**
           * Sichtbarkeit des Layers.
           * @default true
@@ -905,6 +923,11 @@ declare namespace LocalJSX {
          */
         "language"?: string;
         /**
+          * Google Maps libraries to load (comma-separated string).
+          * @example "geometry,places,drawing"
+         */
+        "libraries"?: string;
+        /**
           * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
           * @default "roadmap"
          */
@@ -912,6 +935,10 @@ declare namespace LocalJSX {
     | 'satellite'
     | 'terrain'
     | 'hybrid';
+        /**
+          * Maximum zoom level for the layer.
+         */
+        "maxZoom"?: number;
         /**
           * Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten.
           * @event ready
@@ -926,6 +953,15 @@ declare namespace LocalJSX {
           * Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
          */
         "region"?: string;
+        /**
+          * Scale factor for tile display.
+          * @default "scaleFactor1x"
+         */
+        "scale"?: 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
+        /**
+          * Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array.
+         */
+        "styles"?: any[] | string;
         /**
           * Sichtbarkeit des Layers.
           * @default true

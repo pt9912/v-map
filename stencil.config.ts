@@ -76,6 +76,10 @@ export const config: Config = {
               'punycode',
               'string_decoder',
               'path-browserify', // Falls irgendwo als Fallback verwendet
+
+              // @loaders.gl packages that try to import Node.js modules
+              '@loaders.gl/textures',
+              /^@loaders\.gl\//,
             ],
           };
         },

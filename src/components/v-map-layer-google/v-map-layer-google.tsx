@@ -1,5 +1,5 @@
 // src/components/v-map-layer-google/v-map-layer-google.tsx
-import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
 
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
@@ -59,14 +59,54 @@ export class VMapLayerGoogle {
   @Prop({ reflect: true }) opacity: number = 1.0;
 
   /**
+   * Scale factor for tile display.
+   * @default "scaleFactor1x"
+   */
+  @Prop({ reflect: true }) scale?: 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
+
+  /**
+   * Maximum zoom level for the layer.
+   */
+  @Prop({ reflect: true }) maxZoom?: number;
+
+  /**
+   * Custom styles for the Google Map (JSON array of styling objects).
+   * Can be passed as JSON string or array.
+   */
+  @Prop({ mutable: true }) styles?: any[] | string;
+
+  /**
+   * Google Maps libraries to load (comma-separated string).
+   * @example "geometry,places,drawing"
+   */
+  @Prop({ reflect: true }) libraries?: string;
+
+  /**
    * Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten.
    * @event ready
    */
   @Event() ready!: EventEmitter<void>;
   //private mapProvider?: MapProvider;
 
+  @Watch('styles')
+  parseStyles(newValue: any[] | string) {
+    if (typeof newValue === 'string') {
+      try {
+        const parsed = JSON.parse(newValue);
+        // Update the prop with the parsed array
+        this.styles = parsed;
+      } catch (e) {
+        console.warn('Invalid JSON in styles attribute:', e);
+      }
+    }
+  }
+
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    // Parse styles on initial load if they are a string
+    if (typeof this.styles === 'string') {
+      this.parseStyles(this.styles);
+    }
   }
 
   async componentDidLoad() {
