@@ -8,4 +8,5 @@
 
 ## Type Aliases
 
+- [googleMapType](type-aliases/googleMapType.md)
 - [LayerConfig](type-aliases/LayerConfig.md)

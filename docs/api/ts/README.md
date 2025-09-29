@@ -17,6 +17,7 @@
 - [map-provider/cesium/i-layer](map-provider/cesium/i-layer/README.md)
 - [map-provider/cesium/layer-manager](map-provider/cesium/layer-manager/README.md)
 - [map-provider/deck/deck-provider](map-provider/deck/deck-provider/README.md)
+- [map-provider/deck/deck-provider-google.spec](map-provider/deck/deck-provider-google.spec/README.md)
 - [map-provider/deck/LayerGroups](map-provider/deck/LayerGroups/README.md)
 - [map-provider/deck/LayerGroupWithModel](map-provider/deck/LayerGroupWithModel/README.md)
 - [map-provider/deck/LayerModel](map-provider/deck/LayerModel/README.md)

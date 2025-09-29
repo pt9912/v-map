@@ -8,7 +8,7 @@
 
 > **MapInitOptions** = `object`
 
-Defined in: [src/types/mapinitoptions.ts:1](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/types/mapinitoptions.ts#L1)
+Defined in: [src/types/mapinitoptions.ts:1](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/types/mapinitoptions.ts#L1)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/types/mapinitoptions.ts:1](https://github.com/pt9912/v-map/blob
 
 > `optional` **center**: \[`number`, `number`\]
 
-Defined in: [src/types/mapinitoptions.ts:2](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/types/mapinitoptions.ts#L2)
+Defined in: [src/types/mapinitoptions.ts:2](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/types/mapinitoptions.ts#L2)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/types/mapinitoptions.ts:2](https://github.com/pt9912/v-map/blob
 
 > `optional` **zoom**: `number`
 
-Defined in: [src/types/mapinitoptions.ts:3](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/types/mapinitoptions.ts#L3)
+Defined in: [src/types/mapinitoptions.ts:3](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/types/mapinitoptions.ts#L3)

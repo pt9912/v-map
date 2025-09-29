@@ -7,6 +7,7 @@
     "osm",
     "scatterplot",
     "terrain",
+    "wkt",
     "wms",
     "xyz"
   ],
@@ -30,14 +31,14 @@
       "ol": true
     },
     "geotiff": {
-      "cesium": false,
-      "deck": false,
-      "leaflet": false,
-      "ol": false
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
     },
     "google": {
-      "cesium": false,
-      "deck": false,
+      "cesium": true,
+      "deck": true,
       "leaflet": true,
       "ol": true
     },
@@ -54,10 +55,16 @@
       "ol": false
     },
     "terrain": {
-      "cesium": false,
-      "deck": false,
+      "cesium": true,
+      "deck": true,
       "leaflet": false,
       "ol": false
+    },
+    "wkt": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
     },
     "wms": {
       "cesium": true,

@@ -3,7 +3,7 @@
 [**@pt9912/v-map**](../../README.md)
 
 - [`v-map`](./v-map.md) — 
-- [`v-map-builder`](./v-map-builder.md) — 
+- [`v-map-builder`](./v-map-builder.md) — A component that builds map configurations dynamically from JSON/YAML configuration scripts.
 - [`v-map-layer-geojson`](./v-map-layer-geojson.md) — 
 - [`v-map-layer-geotiff`](./v-map-layer-geotiff.md) — 
 - [`v-map-layer-google`](./v-map-layer-google.md) — Google Maps Basemap Layer

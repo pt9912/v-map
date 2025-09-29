@@ -9,9 +9,9 @@
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
 | `opacity` | `number` | `opacity` | `1.0` | Opazität der OSM-Kacheln (0–1). |
-| `url` | `string` | `url` | `'https://tile.openstreetmap.org'` |  |
+| `url` | `string` | `url` | `'https://tile.openstreetmap.org'` | Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server. |
 | `visible` | `boolean` | `visible` | `true` | Sichtbarkeit des Layers |
-| `zIndex` | `number` | `z-index` | `10` |  |
+| `zIndex` | `number` | `z-index` | `10` | Z-index for layer stacking order. Higher values render on top. |
 
 ### Events
 
@@ -21,5 +21,5 @@
 
 ### Methods
 
-- `getLayerId() => Promise<string>`
+- `getLayerId() => Promise<string>` — Returns the internal layer ID used by the map provider.
 

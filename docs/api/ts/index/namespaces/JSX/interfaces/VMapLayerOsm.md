@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:708](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L708)
+Defined in: [src/components.d.ts:935](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L935)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:708](https://github.com/pt9912/v-map/blob/4f76f
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:718](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L718)
+Defined in: [src/components.d.ts:945](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L945)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -30,7 +30,9 @@ Opazität der OSM-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:722](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L722)
+Defined in: [src/components.d.ts:950](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L950)
+
+Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.
 
 #### Default
 
@@ -44,7 +46,7 @@ Defined in: [src/components.d.ts:722](https://github.com/pt9912/v-map/blob/4f76f
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:727](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L727)
+Defined in: [src/components.d.ts:955](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L955)
 
 Sichtbarkeit des Layers
 
@@ -60,7 +62,9 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:731](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L731)
+Defined in: [src/components.d.ts:960](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L960)
+
+Z-index for layer stacking order. Higher values render on top.
 
 #### Default
 
@@ -74,7 +78,7 @@ Defined in: [src/components.d.ts:731](https://github.com/pt9912/v-map/blob/4f76f
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:713](https://github.com/pt9912/v-map/blob/4f76f9d13521580cc568aa4a5772a648ce48d55a/src/components.d.ts#L713)
+Defined in: [src/components.d.ts:940](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/components.d.ts#L940)
 
 Wird ausgelöst, wenn der OSM-Layer bereit ist.
  ready
