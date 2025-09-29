@@ -6,7 +6,7 @@
 
 # Interface: BuilderConfig
 
-Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/utils/diff.ts#L33)
+Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/utils/diff.ts#L33)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/491237a0
 
 > **map**: [`MapConfig`](MapConfig.md)
 
-Defined in: [src/utils/diff.ts:34](https://github.com/pt9912/v-map/blob/491237a0db2a85a750ccdbdf80f55a823546a43b/src/utils/diff.ts#L34)
+Defined in: [src/utils/diff.ts:34](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/utils/diff.ts#L34)

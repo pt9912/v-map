@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-29T04:49:30",
+  "timestamp": "2025-09-29T05:44:22",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -1237,6 +1237,34 @@
           "setter": false
         },
         {
+          "name": "libraries",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "libraries",
+          "reflectToAttr": true,
+          "docs": "Google Maps libraries to load (comma-separated string).",
+          "docsTags": [
+            {
+              "name": "example",
+              "text": "\"geometry,places,drawing\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "mapType",
           "type": "\"hybrid\" | \"roadmap\" | \"satellite\" | \"terrain\"",
           "complexType": {
@@ -1274,6 +1302,29 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "Maximum zoom level for the layer.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -1321,6 +1372,69 @@
           "docs": "Region-Bias (ccTLD/Region-Code, z. B. \"DE\", \"US\").\nBeeinflusst Labels/Suchergebnisse.",
           "docsTags": [],
           "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "scale",
+          "type": "\"scaleFactor1x\" | \"scaleFactor2x\" | \"scaleFactor4x\"",
+          "complexType": {
+            "original": "'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x'",
+            "resolved": "\"scaleFactor1x\" | \"scaleFactor2x\" | \"scaleFactor4x\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "scale",
+          "reflectToAttr": true,
+          "docs": "Scale factor for tile display.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"scaleFactor1x\""
+            }
+          ],
+          "values": [
+            {
+              "value": "scaleFactor1x",
+              "type": "string"
+            },
+            {
+              "value": "scaleFactor2x",
+              "type": "string"
+            },
+            {
+              "value": "scaleFactor4x",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "styles",
+          "type": "any[] | string",
+          "complexType": {
+            "original": "any[] | string",
+            "resolved": "any[] | string",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "styles",
+          "reflectToAttr": false,
+          "docs": "Custom styles for the Google Map (JSON array of styling objects).\nCan be passed as JSON string or array.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "any[]"
+            },
             {
               "type": "string"
             }
