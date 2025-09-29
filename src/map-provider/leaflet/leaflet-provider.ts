@@ -68,6 +68,12 @@ export class LeafletProvider implements MapProvider {
       case 'osm':
         await this.updateOSMLayer(layer, update.data);
         break;
+      case 'wkt':
+        await this.updateWKTLayer(layer, update.data);
+        break;
+      case 'geotiff':
+        await this.updateGeoTIFFLayer(layer, update.data);
+        break;
     }
   }
 
@@ -272,6 +278,14 @@ export class LeafletProvider implements MapProvider {
         return this.createGoogleLayer(
           layerConfig as Extract<LayerConfig, { type: 'google' }>,
         );
+      case 'wkt':
+        return this.createWKTLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
+        );
+      case 'geotiff':
+        return this.createGeoTIFFLayer(
+          layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
+        );
       default:
         throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
     }
@@ -309,13 +323,9 @@ export class LeafletProvider implements MapProvider {
     }
     if (data) {
       const layer = L.geoJSON(data, {
-        style: config.style
-          ? () => ({
-              fillColor: config.style!.fillColor ?? 'rgba(255,0,0,0.2)',
-              color: config.style!.strokeColor ?? '#ff0000',
-              weight: config.style!.strokeWidth ?? 2,
-            })
-          : undefined,
+        style: config.style ? this.createLeafletStyle(config.style) : undefined,
+        pointToLayer: config.style ? (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style!) : undefined,
+        onEachFeature: config.style ? (feature, layer) => this.bindLeafletPopup(feature, layer, config.style!) : undefined,
       });
 
       return layer;
@@ -552,6 +562,297 @@ export class LeafletProvider implements MapProvider {
         layerGroup.visible = visible;
         this.hiddenLayerGroups.push(layerGroup);
       }
+    }
+  }
+
+  private async updateWKTLayer(layer: L.Layer, data: any): Promise<void> {
+    if (!(layer instanceof L.GeoJSON)) return;
+
+    let geoJsonData = null;
+    if (data.wkt) {
+      geoJsonData = this.wktToGeoJSON(data.wkt);
+    } else if (data.url) {
+      try {
+        const response = await fetch(data.url);
+        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        const wktText = await response.text();
+        geoJsonData = this.wktToGeoJSON(wktText);
+      } catch (e) {
+        log('Failed to load WKT from URL:', e);
+        return;
+      }
+    }
+
+    if (geoJsonData) {
+      (layer as L.GeoJSON).clearLayers();
+
+      // Update layer options to use enhanced styling
+      const geoJsonLayer = layer as L.GeoJSON;
+      geoJsonLayer.options.style = this.createLeafletStyle(data.style);
+      geoJsonLayer.options.pointToLayer = (feature, latlng) => this.createLeafletPoint(feature, latlng, data.style);
+      geoJsonLayer.options.onEachFeature = (feature, layer) => this.bindLeafletPopup(feature, layer, data.style);
+
+      geoJsonLayer.addData(geoJsonData);
+    }
+  }
+
+  private async createWKTLayer(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<L.Layer> {
+    let geoJsonData = null;
+
+    if (config.wkt) {
+      geoJsonData = this.wktToGeoJSON(config.wkt);
+    } else if (config.url) {
+      try {
+        const response = await fetch(config.url);
+        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        const wktText = await response.text();
+        geoJsonData = this.wktToGeoJSON(wktText);
+      } catch (e) {
+        log('Failed to load WKT from URL:', e);
+        geoJsonData = { type: 'FeatureCollection', features: [] };
+      }
+    } else {
+      geoJsonData = { type: 'FeatureCollection', features: [] };
+    }
+
+    const layer = L.geoJSON(geoJsonData, {
+      style: this.createLeafletStyle(config.style),
+      pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style),
+      onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style),
+    });
+
+    return layer;
+  }
+
+  private wktToGeoJSON(wkt: string): any {
+    const s = wkt.trim().toUpperCase();
+
+    if (s.startsWith('POINT')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const [x, y] = inside.split(/[\s]+/).map(parseFloat);
+      return {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [x, y] },
+        properties: {},
+      };
+    }
+
+    if (s.startsWith('LINESTRING')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const coords = inside
+        .split(',')
+        .map(p => p.trim().split(/[\s]+/).map(parseFloat));
+      return {
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: coords },
+        properties: {},
+      };
+    }
+
+    if (s.startsWith('POLYGON')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const rings = inside.split('),(').map(r => r.replace(/[()]/g, '').trim());
+      const coords = rings.map(r =>
+        r.split(',').map(p => p.trim().split(/[\s]+/).map(parseFloat)),
+      );
+      return {
+        type: 'Feature',
+        geometry: { type: 'Polygon', coordinates: coords },
+        properties: {},
+      };
+    }
+
+    // If unrecognized WKT format, return empty FeatureCollection
+    return { type: 'FeatureCollection', features: [] };
+  }
+
+  private async createGeoTIFFLayer(
+    config: Extract<LayerConfig, { type: 'geotiff' }>,
+  ): Promise<L.Layer> {
+    if (!config.url) {
+      throw new Error('GeoTIFF layer requires a URL');
+    }
+
+    try {
+      // Dynamic import of georaster dependencies
+      const [{ default: parseGeoraster }, GeoRasterLayer] = await Promise.all([
+        import('georaster' as any),
+        import('georaster-layer-for-leaflet' as any),
+      ]);
+
+      // Fetch and parse the GeoTIFF
+      const response = await fetch(config.url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const georaster = await parseGeoraster(arrayBuffer);
+
+      // Create the layer using georaster-layer-for-leaflet
+      const layer = new GeoRasterLayer.default({
+        georaster: georaster,
+        opacity: config.opacity ?? 1.0,
+        resolution: 256, // Adjust as needed
+      }) as L.Layer;
+
+      return layer;
+    } catch (error) {
+      console.error('Failed to create GeoTIFF layer:', error);
+      // Return a placeholder layer in case of error
+      return L.layerGroup([]);
+    }
+  }
+
+  private async updateGeoTIFFLayer(layer: L.Layer, data: any): Promise<void> {
+    if (!data.url) {
+      throw new Error('GeoTIFF update requires a URL');
+    }
+
+    try {
+      // Dynamic import of georaster dependencies
+      const [{ default: parseGeoraster }, GeoRasterLayer] = await Promise.all([
+        import('georaster' as any),
+        import('georaster-layer-for-leaflet' as any),
+      ]);
+
+      // Fetch and parse the new GeoTIFF
+      const response = await fetch(data.url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const georaster = await parseGeoraster(arrayBuffer);
+
+      // Update the layer's georaster
+      if ((layer as any).updateGeoraster) {
+        (layer as any).updateGeoraster(georaster);
+      } else {
+        // If update method not available, remove and re-add
+        if (this.map && layer && this.map.hasLayer(layer)) {
+          this.map.removeLayer(layer);
+        }
+
+        const newLayer = new GeoRasterLayer.default({
+          georaster: georaster,
+          opacity: 1.0,
+          resolution: 256,
+        });
+
+        if (this.map) {
+          newLayer.addTo(this.map);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update GeoTIFF layer:', error);
+    }
+  }
+
+  // ========== Enhanced Styling Methods ==========
+
+  private createLeafletStyle(style: any) {
+    return (feature: any) => {
+      const geometryType = feature.geometry?.type;
+
+      // Default colors
+      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+      const fillOpacity = style.fillOpacity ?? 0.3;
+      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = style.strokeOpacity ?? 1;
+      const strokeWidth = style.strokeWidth ?? 2;
+
+      let leafletStyle: any = {};
+
+      // Polygon and LineString styling
+      if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
+        leafletStyle = {
+          fillColor: fillColor,
+          fillOpacity: fillOpacity,
+          color: strokeColor,
+          opacity: strokeOpacity,
+          weight: strokeWidth,
+          dashArray: style.strokeDashArray ? style.strokeDashArray.join(',') : undefined,
+        };
+      } else if (geometryType === 'LineString' || geometryType === 'MultiLineString') {
+        leafletStyle = {
+          color: strokeColor,
+          opacity: strokeOpacity,
+          weight: strokeWidth,
+          dashArray: style.strokeDashArray ? style.strokeDashArray.join(',') : undefined,
+        };
+      }
+
+      return leafletStyle;
+    };
+  }
+
+  private createLeafletPoint(feature: any, latlng: L.LatLng, style: any): L.Layer {
+    // Apply conditional styling if styleFunction exists
+    let finalStyle = style;
+    if (style.styleFunction) {
+      const conditionalStyle = style.styleFunction(feature);
+      if (conditionalStyle) {
+        finalStyle = { ...style, ...conditionalStyle };
+      }
+    }
+
+    if (finalStyle.iconUrl) {
+      // Create icon marker
+      const iconSize = finalStyle.iconSize || [32, 32];
+      const iconAnchor = finalStyle.iconAnchor || [iconSize[0] / 2, iconSize[1]];
+
+      const icon = L.icon({
+        iconUrl: finalStyle.iconUrl,
+        iconSize: iconSize,
+        iconAnchor: iconAnchor,
+      });
+
+      return L.marker(latlng, { icon });
+    } else {
+      // Create circle marker
+      const pointColor = finalStyle.pointColor ?? 'rgba(0,100,255,1)';
+      const pointOpacity = finalStyle.pointOpacity ?? 1;
+      const pointRadius = finalStyle.pointRadius ?? 6;
+      const strokeColor = finalStyle.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = finalStyle.strokeOpacity ?? 1;
+      const strokeWidth = finalStyle.strokeWidth ?? 2;
+
+      return L.circleMarker(latlng, {
+        radius: pointRadius,
+        fillColor: pointColor,
+        fillOpacity: pointOpacity,
+        color: strokeColor,
+        opacity: strokeOpacity,
+        weight: strokeWidth,
+      });
+    }
+  }
+
+  private bindLeafletPopup(feature: any, layer: L.Layer, style: any): void {
+    // Text labeling via popup or tooltip
+    if (style.textProperty && feature.properties && feature.properties[style.textProperty]) {
+      const textContent = String(feature.properties[style.textProperty]);
+      const textColor = style.textColor ?? '#000000';
+      const textSize = style.textSize ?? 12;
+
+      // Create styled text content
+      const styledText = `<div style="color: ${textColor}; font-size: ${textSize}px; font-family: Arial, sans-serif;">${textContent}</div>`;
+
+      // Bind as permanent tooltip for labels or popup for clickable info
+      layer.bindTooltip(styledText, {
+        permanent: true,
+        direction: 'center',
+        className: 'leaflet-tooltip-custom',
+      });
     }
   }
 

@@ -69,6 +69,12 @@ export class OpenLayersProvider implements MapProvider {
       case 'wms':
         await this.updateWMSLayer(layer, update.data);
         break;
+      case 'wkt':
+        await this.updateWKTLayer(layer, update.data);
+        break;
+      case 'geotiff':
+        await this.updateGeoTIFFLayer(layer, update.data);
+        break;
     }
   }
 
@@ -264,6 +270,14 @@ export class OpenLayersProvider implements MapProvider {
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
         );
+      case 'wkt':
+        return this.createWKTLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
+        );
+      case 'geotiff':
+        return this.createGeoTIFFLayer(
+          layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
+        );
       default:
         throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
     }
@@ -333,6 +347,9 @@ export class OpenLayersProvider implements MapProvider {
       { default: Style },
       { default: Fill },
       { default: Stroke },
+      { default: Circle },
+      { default: Icon },
+      { default: Text },
     ] = await Promise.all([
       import('ol/layer/Vector'),
       import('ol/source/Vector'),
@@ -340,6 +357,9 @@ export class OpenLayersProvider implements MapProvider {
       import('ol/style/Style'),
       import('ol/style/Fill'),
       import('ol/style/Stroke'),
+      import('ol/style/Circle'),
+      import('ol/style/Icon'),
+      import('ol/style/Text'),
     ]);
 
     let vectorSource: VectorSource = null;
@@ -357,21 +377,125 @@ export class OpenLayersProvider implements MapProvider {
         format: new GeoJSON(geojsonOptions),
       });
     }
+
+    // Create enhanced style function
+    const styleFunction = (feature: any) => {
+      const styles = [];
+      const geometry = feature.getGeometry();
+      const geometryType = geometry.getType();
+
+      // Base style configuration
+      const style = config.style || {};
+
+      // Create fill style
+      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+      const fillOpacity = style.fillOpacity ?? 0.3;
+      const fill = new Fill({
+        color: this.applyOpacity(fillColor, fillOpacity),
+      });
+
+      // Create stroke style
+      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = style.strokeOpacity ?? 1;
+      const strokeWidth = style.strokeWidth ?? 2;
+      const stroke = new Stroke({
+        color: this.applyOpacity(strokeColor, strokeOpacity),
+        width: strokeWidth,
+        lineDash: style.strokeDashArray,
+      });
+
+      // Point styling
+      if (geometryType === 'Point') {
+        if (style.iconUrl) {
+          // Icon style for points
+          styles.push(new Style({
+            image: new Icon({
+              src: style.iconUrl,
+              size: style.iconSize || [32, 32],
+              anchor: style.iconAnchor || [0.5, 1],
+            }),
+          }));
+        } else {
+          // Circle style for points
+          const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
+          const pointOpacity = style.pointOpacity ?? 1;
+          const pointRadius = style.pointRadius ?? 6;
+
+          styles.push(new Style({
+            image: new Circle({
+              radius: pointRadius,
+              fill: new Fill({
+                color: this.applyOpacity(pointColor, pointOpacity),
+              }),
+              stroke: stroke,
+            }),
+          }));
+        }
+      } else {
+        // Polygon and line styling
+        styles.push(new Style({
+          fill: geometryType.includes('Polygon') ? fill : undefined,
+          stroke: stroke,
+        }));
+      }
+
+      // Text labeling
+      if (style.textProperty && feature.get(style.textProperty)) {
+        const textColor = style.textColor ?? '#000000';
+        const textSize = style.textSize ?? 12;
+        const textHaloColor = style.textHaloColor;
+        const textHaloWidth = style.textHaloWidth ?? 2;
+        const textOffset = style.textOffset || [0, 0];
+
+        styles.push(new Style({
+          text: new Text({
+            text: String(feature.get(style.textProperty)),
+            font: `${textSize}px Arial`,
+            fill: new Fill({ color: textColor }),
+            stroke: textHaloColor ? new Stroke({
+              color: textHaloColor,
+              width: textHaloWidth,
+            }) : undefined,
+            offsetX: textOffset[0],
+            offsetY: textOffset[1],
+          }),
+        }));
+      }
+
+      return styles;
+    };
+
     const layer = new VectorLayer({
       source: vectorSource,
-      style: config.style
-        ? new Style({
-            fill: new Fill({
-              color: config.style.fillColor ?? 'rgba(255,0,0,0.2)',
-            }),
-            stroke: new Stroke({
-              color: config.style.strokeColor ?? '#ff0000',
-              width: config.style.strokeWidth ?? 2,
-            }),
-          })
-        : undefined,
+      style: config.style ? styleFunction : undefined,
     });
     return layer;
+  }
+
+  // Helper method to apply opacity to colors
+  private applyOpacity(color: string, opacity: number): string {
+    if (color.startsWith('rgba')) {
+      // Extract rgb values and apply new opacity
+      const rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      if (rgbMatch) {
+        const [, r, g, b] = rgbMatch;
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+    } else if (color.startsWith('rgb')) {
+      const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (rgbMatch) {
+        const [, r, g, b] = rgbMatch;
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      }
+    } else if (color.startsWith('#')) {
+      // Convert hex to rgba
+      const hex = color.slice(1);
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+    return color; // Return original if can't parse
   }
 
   private async createXYZLayer(
@@ -602,6 +726,253 @@ export class OpenLayersProvider implements MapProvider {
     if (layer) {
       layer.setVisible(visible);
     }
+  }
+
+  private async updateWKTLayer(layer: Layer, data: any): Promise<void> {
+    const [
+      { default: VectorSource },
+      { default: WKT },
+    ] = await Promise.all([
+      import('ol/source/Vector'),
+      import('ol/format/WKT'),
+    ]);
+
+    const wktFormat = new WKT();
+    let vectorSource: VectorSource = null;
+
+    if (data.wkt) {
+      // Parse WKT string directly
+      const feature = wktFormat.readFeature(data.wkt, {
+        featureProjection: this.projection,
+      });
+      vectorSource = new VectorSource({
+        features: [feature],
+      });
+    } else if (data.url) {
+      // Fetch WKT from URL
+      const response = await fetch(data.url);
+      if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+      const wktText = await response.text();
+      const feature = wktFormat.readFeature(wktText, {
+        featureProjection: this.projection,
+      });
+      vectorSource = new VectorSource({
+        features: [feature],
+      });
+    }
+
+    if (vectorSource) {
+      (layer as VectorLayer).setSource(vectorSource);
+    }
+  }
+
+  private async createWKTLayer(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<Layer> {
+    const [
+      { default: VectorLayer },
+      { default: VectorSource },
+      { default: WKT },
+      { default: Style },
+      { default: Fill },
+      { default: Stroke },
+      { default: Circle },
+      { default: Icon },
+      { default: Text },
+    ] = await Promise.all([
+      import('ol/layer/Vector'),
+      import('ol/source/Vector'),
+      import('ol/format/WKT'),
+      import('ol/style/Style'),
+      import('ol/style/Fill'),
+      import('ol/style/Stroke'),
+      import('ol/style/Circle'),
+      import('ol/style/Icon'),
+      import('ol/style/Text'),
+    ]);
+
+    const wktFormat = new WKT();
+    let vectorSource: VectorSource = null;
+
+    const wktOptions = {
+      featureProjection: this.projection,
+    };
+
+    if (config.wkt) {
+      // Parse WKT string directly
+      try {
+        const feature = wktFormat.readFeature(config.wkt, wktOptions);
+        vectorSource = new VectorSource({
+          features: [feature],
+        });
+      } catch (e) {
+        error('Failed to parse WKT:', e);
+        vectorSource = new VectorSource({ features: [] });
+      }
+    } else if (config.url) {
+      // Fetch WKT from URL
+      try {
+        const response = await fetch(config.url);
+        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        const wktText = await response.text();
+        const feature = wktFormat.readFeature(wktText, wktOptions);
+        vectorSource = new VectorSource({
+          features: [feature],
+        });
+      } catch (e) {
+        error('Failed to load WKT from URL:', e);
+        vectorSource = new VectorSource({ features: [] });
+      }
+    } else {
+      vectorSource = new VectorSource({ features: [] });
+    }
+
+    // Create enhanced style function (reuse the same logic as GeoJSON)
+    const styleFunction = (feature: any) => {
+      const styles = [];
+      const geometry = feature.getGeometry();
+      const geometryType = geometry.getType();
+
+      // Base style configuration
+      const style = config.style || {};
+
+      // Create fill style
+      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+      const fillOpacity = style.fillOpacity ?? 0.3;
+      const fill = new Fill({
+        color: this.applyOpacity(fillColor, fillOpacity),
+      });
+
+      // Create stroke style
+      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = style.strokeOpacity ?? 1;
+      const strokeWidth = style.strokeWidth ?? 2;
+      const stroke = new Stroke({
+        color: this.applyOpacity(strokeColor, strokeOpacity),
+        width: strokeWidth,
+        lineDash: style.strokeDashArray,
+      });
+
+      // Point styling
+      if (geometryType === 'Point') {
+        if (style.iconUrl) {
+          // Icon style for points
+          styles.push(new Style({
+            image: new Icon({
+              src: style.iconUrl,
+              size: style.iconSize || [32, 32],
+              anchor: style.iconAnchor || [0.5, 1],
+            }),
+          }));
+        } else {
+          // Circle style for points
+          const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
+          const pointOpacity = style.pointOpacity ?? 1;
+          const pointRadius = style.pointRadius ?? 6;
+
+          styles.push(new Style({
+            image: new Circle({
+              radius: pointRadius,
+              fill: new Fill({
+                color: this.applyOpacity(pointColor, pointOpacity),
+              }),
+              stroke: stroke,
+            }),
+          }));
+        }
+      } else {
+        // Polygon and line styling
+        styles.push(new Style({
+          fill: geometryType.includes('Polygon') ? fill : undefined,
+          stroke: stroke,
+        }));
+      }
+
+      // Text labeling
+      if (style.textProperty && feature.get(style.textProperty)) {
+        const textColor = style.textColor ?? '#000000';
+        const textSize = style.textSize ?? 12;
+        const textHaloColor = style.textHaloColor;
+        const textHaloWidth = style.textHaloWidth ?? 2;
+        const textOffset = style.textOffset || [0, 0];
+
+        styles.push(new Style({
+          text: new Text({
+            text: String(feature.get(style.textProperty)),
+            font: `${textSize}px Arial`,
+            fill: new Fill({ color: textColor }),
+            stroke: textHaloColor ? new Stroke({
+              color: textHaloColor,
+              width: textHaloWidth,
+            }) : undefined,
+            offsetX: textOffset[0],
+            offsetY: textOffset[1],
+          }),
+        }));
+      }
+
+      return styles;
+    };
+
+    const layer = new VectorLayer({
+      source: vectorSource,
+      style: config.style ? styleFunction : undefined,
+      opacity: config.opacity ?? 1,
+      visible: config.visible ?? true,
+      zIndex: config.zIndex ?? 1000,
+    });
+
+    return layer;
+  }
+
+  private async createGeoTIFFLayer(
+    config: Extract<LayerConfig, { type: 'geotiff' }>,
+  ): Promise<Layer> {
+    const [{ default: GeoTIFF }, { default: TileLayer }] = await Promise.all([
+      import('ol/source/GeoTIFF'),
+      import('ol/layer/Tile'),
+    ]);
+
+    if (!config.url) {
+      throw new Error('GeoTIFF layer requires a URL');
+    }
+
+    const source = new GeoTIFF({
+      sources: [
+        {
+          url: config.url,
+        },
+      ],
+    });
+
+    const layer = new TileLayer({
+      source,
+      opacity: config.opacity ?? 1,
+      visible: config.visible ?? true,
+      zIndex: config.zIndex ?? 1000,
+    });
+
+    return layer;
+  }
+
+  private async updateGeoTIFFLayer(layer: Layer, data: any): Promise<void> {
+    const [{ default: GeoTIFF }] = await Promise.all([
+      import('ol/source/GeoTIFF'),
+    ]);
+
+    if (!data.url) {
+      throw new Error('GeoTIFF update requires a URL');
+    }
+
+    const newSource = new GeoTIFF({
+      sources: [
+        {
+          url: data.url,
+        },
+      ],
+    });
+
+    (layer as any).setSource(newSource);
   }
 
   getMap() {

@@ -109,6 +109,7 @@ export class CesiumProvider implements MapProvider {
           layerConfig.geojson,
           layerConfig.url,
           options,
+          layerConfig.style,
         );
         wrapper = this.layerManager.addLayer(layerId, ds);
         wrapper.setOptions(options);
@@ -121,6 +122,13 @@ export class CesiumProvider implements MapProvider {
         wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
+      case 'google': {
+        const iLayer = await this.createGoogleLayer(
+          layerConfig as Extract<LayerConfig, { type: 'google' }>,
+        );
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
       case 'wms': {
         const iLayer = await this.addWMSLayer(layerConfig as any);
         wrapper = this.layerManager.addLayer(layerId, iLayer);
@@ -129,6 +137,23 @@ export class CesiumProvider implements MapProvider {
       case 'arcgis': {
         await this.addArcGISLayer(layerConfig as any);
         //todo  wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
+      case 'wkt': {
+        const options = { clampToGround: true };
+        const ds = await this.createWKTLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
+          options,
+        );
+        wrapper = this.layerManager.addLayer(layerId, ds);
+        wrapper.setOptions(options);
+        break;
+      }
+      case 'geotiff': {
+        const iLayer = await this.createGeoTIFFLayer(
+          layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
+        );
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
       default:
@@ -240,10 +265,270 @@ export class CesiumProvider implements MapProvider {
     this.layerGroups.apply();
   }
 
+  // ========== Enhanced Styling Helper Methods ==========
+
+  /**
+   * Convert CSS color to Cesium Color
+   */
+  private parseCesiumColor(color: string | undefined, defaultColor: any): any {
+    if (!color) return defaultColor;
+
+    // Handle hex colors
+    if (color.startsWith('#')) {
+      return this.Cesium.Color.fromCssColorString(color);
+    }
+
+    // Handle rgba/rgb colors
+    if (color.includes('rgb')) {
+      return this.Cesium.Color.fromCssColorString(color);
+    }
+
+    // Try to parse as CSS color string
+    try {
+      return this.Cesium.Color.fromCssColorString(color);
+    } catch {
+      return defaultColor;
+    }
+  }
+
+  /**
+   * Apply opacity to Cesium color
+   */
+  private applyCesiumOpacity(color: any, opacity: number): any {
+    if (!color) return color;
+    return color.withAlpha(opacity);
+  }
+
+  /**
+   * Create Cesium styling options from StyleConfig
+   */
+  private createCesiumStyle(style: any = {}) {
+    // Default colors
+    const defaultFillColor = this.Cesium.Color.BLUE.withAlpha(0.3);
+    const defaultStrokeColor = this.Cesium.Color.BLUE;
+    const defaultPointColor = this.Cesium.Color.BLUE;
+
+    // Parse colors
+    const fillColor = this.parseCesiumColor(style.fillColor, defaultFillColor);
+    const strokeColor = this.parseCesiumColor(style.strokeColor, defaultStrokeColor);
+    const pointColor = this.parseCesiumColor(style.pointColor, defaultPointColor);
+
+    // Apply opacity
+    const finalFillColor = style.fillOpacity !== undefined
+      ? this.applyCesiumOpacity(fillColor, style.fillOpacity)
+      : fillColor;
+
+    const finalStrokeColor = style.strokeOpacity !== undefined
+      ? this.applyCesiumOpacity(strokeColor, style.strokeOpacity)
+      : strokeColor;
+
+    const finalPointColor = style.pointOpacity !== undefined
+      ? this.applyCesiumOpacity(pointColor, style.pointOpacity)
+      : pointColor;
+
+    return {
+      // Polygon styling
+      fill: true,
+      fillColor: finalFillColor,
+      outline: true,
+      outlineColor: finalStrokeColor,
+      outlineWidth: style.strokeWidth ?? 2,
+      extrudedHeight: style.extrudeHeight,
+      heightReference: style.zOffset ? this.Cesium.HeightReference.RELATIVE_TO_GROUND : this.Cesium.HeightReference.CLAMP_TO_GROUND,
+
+      // Point styling
+      pixelSize: style.pointRadius ?? 8,
+      color: finalPointColor,
+      scaleByDistance: style.pointRadius ? new this.Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5) : undefined,
+
+      // Line styling
+      width: style.strokeWidth ?? 2,
+      clampToGround: !style.zOffset,
+
+      // Text/Label styling
+      labelText: style.textProperty,
+      labelFont: style.textSize ? `${style.textSize}pt monospace` : '12pt monospace',
+      labelFillColor: style.textColor ? this.parseCesiumColor(style.textColor, this.Cesium.Color.WHITE) : this.Cesium.Color.WHITE,
+      labelOutlineColor: style.textHaloColor ? this.parseCesiumColor(style.textHaloColor, this.Cesium.Color.BLACK) : this.Cesium.Color.BLACK,
+      labelOutlineWidth: style.textHaloWidth ?? 1,
+      labelPixelOffset: style.textOffset ? new this.Cesium.Cartesian2(style.textOffset[0], style.textOffset[1]) : this.Cesium.Cartesian2.ZERO,
+
+      // 3D specific
+      height: style.zOffset ?? 0,
+    };
+  }
+
+  /**
+   * Apply enhanced styling to a GeoJsonDataSource
+   */
+  private applyEnhancedStyling(dataSource: any, style: any = {}) {
+    const cesiumStyle = this.createCesiumStyle(style);
+
+    // Apply styling to all entities
+    const entities = dataSource.entities.values;
+    for (let i = 0; i < entities.length; i++) {
+      const entity = entities[i];
+
+      // Apply conditional styling if styleFunction exists
+      let finalStyle = cesiumStyle;
+      if (style.styleFunction && entity.properties) {
+        const feature = {
+          properties: entity.properties._propertyNames.reduce((props: any, name: string) => {
+            props[name] = entity.properties[name]?._value;
+            return props;
+          }, {}),
+          geometry: entity // Pass the entity as geometry reference
+        };
+        const conditionalStyle = style.styleFunction(feature);
+        if (conditionalStyle) {
+          finalStyle = { ...cesiumStyle, ...this.createCesiumStyle(conditionalStyle) };
+        }
+      }
+
+      // Apply to different geometry types
+      if (entity.polygon) {
+        entity.polygon.fill = finalStyle.fill;
+        entity.polygon.material = finalStyle.fillColor;
+        entity.polygon.outline = finalStyle.outline;
+        entity.polygon.outlineColor = finalStyle.outlineColor;
+        entity.polygon.outlineWidth = finalStyle.outlineWidth;
+        entity.polygon.height = finalStyle.height;
+        entity.polygon.extrudedHeight = finalStyle.extrudedHeight;
+        entity.polygon.heightReference = finalStyle.heightReference;
+      }
+
+      if (entity.polyline) {
+        entity.polyline.material = finalStyle.outlineColor;
+        entity.polyline.width = finalStyle.width;
+        entity.polyline.clampToGround = finalStyle.clampToGround;
+      }
+
+      if (entity.point) {
+        entity.point.pixelSize = finalStyle.pixelSize;
+        entity.point.color = finalStyle.color;
+        entity.point.scaleByDistance = finalStyle.scaleByDistance;
+
+        // Handle icon styling
+        if (style.iconUrl) {
+          entity.billboard = new this.Cesium.BillboardGraphics({
+            image: style.iconUrl,
+            width: style.iconSize ? style.iconSize[0] : 32,
+            height: style.iconSize ? style.iconSize[1] : 32,
+            verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+            scaleByDistance: finalStyle.scaleByDistance,
+          });
+          // Hide the point when using icon
+          entity.point.show = false;
+        }
+      }
+
+      // Handle text labels
+      if (style.textProperty && entity.properties && entity.properties[style.textProperty]) {
+        entity.label = new this.Cesium.LabelGraphics({
+          text: entity.properties[style.textProperty]._value,
+          font: finalStyle.labelFont,
+          fillColor: finalStyle.labelFillColor,
+          outlineColor: finalStyle.labelOutlineColor,
+          outlineWidth: finalStyle.labelOutlineWidth,
+          pixelOffset: finalStyle.labelPixelOffset,
+          verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+        });
+      }
+    }
+  }
+
+  private async createWKTLayer(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+    options: any,
+  ): Promise<GeoJsonDataSource> {
+    let geoJsonData = null;
+
+    if (config.wkt) {
+      geoJsonData = this.wktToGeoJSON(config.wkt);
+    } else if (config.url) {
+      const response = await fetch(config.url);
+      const wktText = await response.text();
+      geoJsonData = this.wktToGeoJSON(wktText);
+    } else {
+      throw new Error('Either wkt or url must be provided');
+    }
+
+    const dataSource: GeoJsonDataSource =
+      await this.Cesium.GeoJsonDataSource.load(geoJsonData, options);
+
+    // Apply enhanced styling
+    this.applyEnhancedStyling(dataSource, config.style);
+
+    return dataSource;
+  }
+
+  private wktToGeoJSON(wkt: string): any {
+    const s = wkt.trim().toUpperCase();
+
+    if (s.startsWith('POINT')) {
+      const match = s.match(/POINT\s*\(\s*([-+]?\d*\.?\d+)\s+([-+]?\d*\.?\d+)\s*\)/);
+      if (!match) throw new Error('Invalid POINT WKT');
+      return {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [parseFloat(match[1]), parseFloat(match[2])]
+          }
+        }]
+      };
+    }
+
+    if (s.startsWith('LINESTRING')) {
+      const match = s.match(/LINESTRING\s*\(\s*(.+)\s*\)/);
+      if (!match) throw new Error('Invalid LINESTRING WKT');
+      const coords = match[1].split(',').map(pair => {
+        const [x, y] = pair.trim().split(/\s+/);
+        return [parseFloat(x), parseFloat(y)];
+      });
+      return {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: coords
+          }
+        }]
+      };
+    }
+
+    if (s.startsWith('POLYGON')) {
+      const match = s.match(/POLYGON\s*\(\s*\((.+)\)\s*\)/);
+      if (!match) throw new Error('Invalid POLYGON WKT');
+      const coords = match[1].split(',').map(pair => {
+        const [x, y] = pair.trim().split(/\s+/);
+        return [parseFloat(x), parseFloat(y)];
+      });
+      return {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [coords]
+          }
+        }]
+      };
+    }
+
+    throw new Error(`Unsupported WKT geometry type: ${s.split('(')[0]}`);
+  }
+
   private async createGeoJSONLayer(
     geojson: string,
     url: string,
     options: any,
+    style?: any,
   ): Promise<GeoJsonDataSource> {
     let geojson_or_url = null;
     if (geojson) {
@@ -255,6 +540,12 @@ export class CesiumProvider implements MapProvider {
     //https://cesium.com/learn/ion-sdk/ref-doc/GeoJsonDataSource.html
     const dataSource: GeoJsonDataSource =
       await this.Cesium.GeoJsonDataSource.load(geojson_or_url, options);
+
+    // Apply enhanced styling if provided
+    if (style) {
+      this.applyEnhancedStyling(dataSource, style);
+    }
+
     return dataSource;
   }
 
@@ -266,6 +557,153 @@ export class CesiumProvider implements MapProvider {
         url: cfg.url || 'https://a.tile.openstreetmap.org',
       }),
     );
+  }
+
+  private async createGoogleLayer(
+    config: Extract<LayerConfig, { type: 'google' }>,
+  ): Promise<ImageryLayer> {
+    if (!config.apiKey) {
+      throw new Error("Google-Layer benötigt 'apiKey' (Google Maps Platform).");
+    }
+
+    // Load Google Maps JavaScript API
+    await this.loadGoogleMapsApi(config.apiKey, {
+      language: config.language,
+      region: config.region,
+      libraries: config.libraries,
+    });
+
+    const mapType = config.mapType || 'roadmap';
+    const googleMapTypeId = this.getGoogleMapTypeId(mapType);
+
+    // Use a simpler approach with UrlTemplateImageryProvider and custom URL generator
+    const Cesium = this.Cesium;
+
+    // Create a custom URL template that we'll handle in the urlSchemeZeroPadding function
+    const customUrlTemplate = 'https://maps.googleapis.com/maps/api/staticmap?template';
+
+    const googleImageryProvider = new Cesium.UrlTemplateImageryProvider({
+      url: customUrlTemplate,
+      maximumLevel: config.maxZoom || 19,
+      minimumLevel: 0,
+      tilingScheme: new Cesium.WebMercatorTilingScheme(),
+      credit: 'Google Maps',
+
+      // Override URL generation using urlSchemeZeroPadding as a custom URL builder
+      urlSchemeZeroPadding: {
+        '{x}': '',
+        '{y}': '',
+        '{z}': ''
+      }
+    });
+
+    // Override the buildImageResource method to use Google Static Maps API
+    (googleImageryProvider as any).buildImageResource = function(x: number, y: number, level: number) {
+      const tilingScheme = new Cesium.WebMercatorTilingScheme();
+      const rectangle = tilingScheme.tileXYToRectangle(x, y, level);
+      const west = Cesium.Math.toDegrees(rectangle.west);
+      const south = Cesium.Math.toDegrees(rectangle.south);
+      const east = Cesium.Math.toDegrees(rectangle.east);
+      const north = Cesium.Math.toDegrees(rectangle.north);
+
+      // Center point of the tile
+      const centerLat = (south + north) / 2;
+      const centerLng = (west + east) / 2;
+
+      // Build Google Static Maps API URL
+      const params = new URLSearchParams({
+        center: `${centerLat},${centerLng}`,
+        zoom: level.toString(),
+        size: '256x256',
+        scale: config.scale === 'scaleFactor1x' ? '1' : '2',
+        maptype: googleMapTypeId,
+        key: config.apiKey,
+        format: 'png'
+      });
+
+      if (config.language) {
+        params.set('language', config.language);
+      }
+
+      if (config.region) {
+        params.set('region', config.region);
+      }
+
+      const url = `https://maps.googleapis.com/maps/api/staticmap?${params.toString()}`;
+
+      return new Cesium.Resource({ url });
+    };
+
+    // Add Google logo for compliance
+    this.ensureGoogleLogo();
+
+    return new this.Cesium.ImageryLayer(googleImageryProvider, {
+      alpha: config.opacity ?? 1,
+      show: config.visible ?? true,
+    });
+  }
+
+  private getGoogleMapTypeId(mapType: string): string {
+    switch (mapType) {
+      case 'roadmap': return 'roadmap';
+      case 'satellite': return 'satellite';
+      case 'terrain': return 'terrain';
+      case 'hybrid': return 'hybrid';
+      default: return 'roadmap';
+    }
+  }
+
+  /**
+   * Load Google Maps JavaScript API
+   */
+  private async loadGoogleMapsApi(
+    apiKey: string,
+    opts?: { language?: string; region?: string; libraries?: string[] },
+  ): Promise<void> {
+    if ((window as any).google?.maps) return;
+
+    await new Promise<void>((resolve, reject) => {
+      const cbName = '___cesiumGoogleInit___' + Math.random().toString(36).slice(2);
+      (window as any)[cbName] = () => resolve();
+
+      const script = document.createElement('script');
+      const params = new URLSearchParams({
+        key: apiKey,
+        callback: cbName,
+        v: 'weekly',
+      });
+      if (opts?.language) params.set('language', opts.language);
+      if (opts?.region) params.set('region', opts.region);
+      if (opts?.libraries?.length)
+        params.set('libraries', opts.libraries.join(','));
+
+      script.src = `https://maps.googleapis.com/maps/api/js?${params.toString()}`;
+      script.async = true;
+      script.onerror = () =>
+        reject(new Error('Google Maps JS API failed to load'));
+      document.head.appendChild(script);
+    });
+  }
+
+
+  /**
+   * Add Google logo for compliance
+   */
+  private ensureGoogleLogo(): void {
+    if (!this.viewer?.container || (this.viewer.container as any)._googleLogoAdded) return;
+
+    const logo = document.createElement('img');
+    logo.src = 'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
+    logo.alt = 'Google';
+    logo.style.position = 'absolute';
+    logo.style.bottom = '6px';
+    logo.style.left = '6px';
+    logo.style.height = '18px';
+    logo.style.pointerEvents = 'none';
+    logo.style.zIndex = '1000';
+
+    this.viewer.container.appendChild(logo);
+    (this.viewer.container as any)._googleLogoAdded = true;
   }
 
   private async addWMSLayer(
@@ -290,6 +728,58 @@ export class CesiumProvider implements MapProvider {
     this.viewer.imageryLayers.addImageryProvider(provider);
   }
 
+  private async createGeoTIFFLayer(
+    config: Extract<LayerConfig, { type: 'geotiff' }>,
+  ): Promise<ImageryLayer> {
+    if (!config.url) {
+      throw new Error('GeoTIFF layer requires a URL');
+    }
+
+    try {
+      // Use TIFFImageryProvider if available, otherwise fallback to SingleTileImageryProvider
+      // Note: This implementation assumes you have TIFFImageryProvider available
+      // For a more robust solution, you might want to dynamically import it
+
+      // Option 1: Try using TIFFImageryProvider (requires tiff-imagery-provider package)
+      try {
+        const TIFFImageryProvider = (await import('tiff-imagery-provider' as any)).default;
+        const provider = await TIFFImageryProvider.fromUrl(config.url);
+
+        return new this.Cesium.ImageryLayer(provider, {
+          alpha: config.opacity ?? 1.0,
+          show: config.visible ?? true,
+        });
+      } catch (tiffError) {
+        console.warn('TIFFImageryProvider not available, falling back to SingleTileImageryProvider');
+
+        // Option 2: Fallback to SingleTileImageryProvider
+        // This assumes the GeoTIFF can be displayed as a simple image
+        const provider = new this.Cesium.SingleTileImageryProvider({
+          url: config.url,
+          rectangle: this.Cesium.Rectangle.fromDegrees(-180, -90, 180, 90), // Default world bounds
+        });
+
+        return new this.Cesium.ImageryLayer(provider, {
+          alpha: config.opacity ?? 1.0,
+          show: config.visible ?? true,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to create GeoTIFF layer:', error);
+
+      // Return a placeholder layer in case of error
+      const provider = new this.Cesium.SingleTileImageryProvider({
+        url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+        rectangle: this.Cesium.Rectangle.fromDegrees(-180, -90, 180, 90),
+      });
+
+      return new this.Cesium.ImageryLayer(provider, {
+        alpha: 0,
+        show: false,
+      });
+    }
+  }
+
   async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
     return await this.layerManagerMutex.runExclusive(async () => {
       const oldLayer = this.layerManager.getLayer(layerId);
@@ -302,6 +792,7 @@ export class CesiumProvider implements MapProvider {
               data.geojson,
               data.url,
               options,
+              data.style,
             );
             const layer = this.layerManager.replaceLayer(
               layerId,
@@ -327,6 +818,45 @@ export class CesiumProvider implements MapProvider {
             updatedOsmlayer.setOptions(osmOptions);
           }
           break;
+        case 'google':
+          {
+            const googleOptions = oldLayer.getOptions();
+            const googleLayer = await this.createGoogleLayer(
+              update.data as Extract<LayerConfig, { type: 'google' }>,
+            );
+            const updatedGoogleLayer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              googleLayer,
+            );
+            updatedGoogleLayer.setOptions(googleOptions);
+          }
+          break;
+        case 'wkt':
+          {
+            const data = update.data;
+            const options = oldLayer.getOptions();
+            const dataSource: GeoJsonDataSource = await this.createWKTLayer(
+              { wkt: data.wkt, url: data.url } as Extract<LayerConfig, { type: 'wkt' }>,
+              options,
+            );
+            const layer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              dataSource,
+            );
+            layer.setOptions(options);
+          }
+          break;
+        case 'geotiff':
+          {
+            const data = update.data;
+            const iLayer = await this.createGeoTIFFLayer(
+              { url: data.url } as Extract<LayerConfig, { type: 'geotiff' }>,
+            );
+            this.layerManager.replaceLayer(layerId, oldLayer, iLayer);
+          }
+          break;
       }
     });
   }
@@ -334,12 +864,12 @@ export class CesiumProvider implements MapProvider {
   async setView(center: LonLat, zoom: number) {
     if (!this.viewer) return;
     const [lon, lat] = center;
-    await this.viewer.camera.flyTo({
+    this.viewer.camera.flyTo({
       destination: this.Cesium.Cartesian3.fromDegrees(lon, lat, 1000000 / zoom),
       duration: 2.0, // Sekunden, anpassbar
       orientation: {
-        heading: Cesium.Math.toRadians(0.0), // Blickrichtung nach Norden
-        pitch: Cesium.Math.toRadians(-30.0), // leicht nach unten schauen
+        heading: this.Cesium.Math.toRadians(0.0), // Blickrichtung nach Norden
+        pitch: this.Cesium.Math.toRadians(-30.0), // leicht nach unten schauen
         roll: 0.0,
       },
       // optional: onComplete / onCancel callbacks

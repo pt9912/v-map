@@ -213,6 +213,129 @@ export class DeckProvider implements MapProvider {
     } as any);
   }
 
+  // ========== Enhanced Styling Helper Methods ==========
+
+  /**
+   * Convert CSS color to Deck.gl RGBA array
+   */
+  private parseColor(color: string | undefined, defaultColor: [number, number, number, number]): [number, number, number, number] {
+    if (!color) return defaultColor;
+
+    // Handle hex colors
+    if (color.startsWith('#')) {
+      const hex = color.slice(1);
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return [r, g, b, 255];
+    }
+
+    // Handle rgba/rgb colors
+    const rgbaMatch = color.match(/rgba?\(([^)]+)\)/);
+    if (rgbaMatch) {
+      const values = rgbaMatch[1].split(',').map(v => parseFloat(v.trim()));
+      return [
+        values[0] || 0,
+        values[1] || 0,
+        values[2] || 0,
+        values[3] !== undefined ? Math.round(values[3] * 255) : 255
+      ];
+    }
+
+    return defaultColor;
+  }
+
+  /**
+   * Apply opacity to color array
+   */
+  private applyOpacity(color: [number, number, number, number], opacity: number): [number, number, number, number] {
+    return [color[0], color[1], color[2], Math.round(opacity * 255)];
+  }
+
+  /**
+   * Create Deck.gl style configuration from StyleConfig
+   */
+  private createDeckGLStyle(style: any = {}) {
+    // Default colors
+    const defaultFillColor: [number, number, number, number] = [0, 100, 255, 76];
+    const defaultStrokeColor: [number, number, number, number] = [0, 100, 255, 255];
+    const defaultPointColor: [number, number, number, number] = [0, 100, 255, 255];
+
+    // Parse colors
+    const fillColor = this.parseColor(style.fillColor, defaultFillColor);
+    const strokeColor = this.parseColor(style.strokeColor, defaultStrokeColor);
+    const pointColor = this.parseColor(style.pointColor, defaultPointColor);
+
+    // Apply opacity
+    const finalFillColor = style.fillOpacity !== undefined
+      ? this.applyOpacity(fillColor, style.fillOpacity)
+      : fillColor;
+
+    const finalStrokeColor = style.strokeOpacity !== undefined
+      ? this.applyOpacity(strokeColor, style.strokeOpacity)
+      : strokeColor;
+
+    const finalPointColor = style.pointOpacity !== undefined
+      ? this.applyOpacity(pointColor, style.pointOpacity)
+      : pointColor;
+
+    return {
+      getFillColor: (feature: any) => {
+        // Apply conditional styling if styleFunction exists
+        if (style.styleFunction) {
+          const conditionalStyle = style.styleFunction(feature);
+          if (conditionalStyle.fillColor) {
+            const conditionalFillColor = this.parseColor(conditionalStyle.fillColor, finalFillColor);
+            return conditionalStyle.fillOpacity !== undefined
+              ? this.applyOpacity(conditionalFillColor, conditionalStyle.fillOpacity)
+              : conditionalFillColor;
+          }
+        }
+        return finalFillColor;
+      },
+
+      getLineColor: (feature: any) => {
+        if (style.styleFunction) {
+          const conditionalStyle = style.styleFunction(feature);
+          if (conditionalStyle.strokeColor) {
+            const conditionalStrokeColor = this.parseColor(conditionalStyle.strokeColor, finalStrokeColor);
+            return conditionalStyle.strokeOpacity !== undefined
+              ? this.applyOpacity(conditionalStrokeColor, conditionalStyle.strokeOpacity)
+              : conditionalStrokeColor;
+          }
+        }
+        return finalStrokeColor;
+      },
+
+      getPointRadius: (feature: any) => {
+        if (style.styleFunction) {
+          const conditionalStyle = style.styleFunction(feature);
+          if (conditionalStyle.pointRadius !== undefined) {
+            return conditionalStyle.pointRadius;
+          }
+        }
+        return style.pointRadius ?? 8;
+      },
+
+      getPointFillColor: (feature: any) => {
+        if (style.styleFunction) {
+          const conditionalStyle = style.styleFunction(feature);
+          if (conditionalStyle.pointColor) {
+            const conditionalPointColor = this.parseColor(conditionalStyle.pointColor, finalPointColor);
+            return conditionalStyle.pointOpacity !== undefined
+              ? this.applyOpacity(conditionalPointColor, conditionalStyle.pointOpacity)
+              : conditionalPointColor;
+          }
+        }
+        return finalPointColor;
+      },
+
+      lineWidthMinPixels: style.strokeWidth ?? 2,
+      pointRadiusMinPixels: 2,
+      pointRadiusMaxPixels: 100,
+    };
+  }
+
   private async buildOsmLayer(
     cfg: Extract<LayerConfig, { type: 'osm' }>,
     layerId: string,
@@ -230,6 +353,163 @@ export class DeckProvider implements MapProvider {
       layerId,
     );
   }
+
+  private async buildGoogleTileLayer(
+    cfg: Extract<LayerConfig, { type: 'google' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    if (!cfg.apiKey) {
+      throw new Error("Google-Layer benötigt 'apiKey' (Google Maps Platform).");
+    }
+
+    // Load Google Maps JavaScript API
+    await this.loadGoogleMapsApi(cfg.apiKey, {
+      language: cfg.language,
+      region: cfg.region,
+      libraries: cfg.libraries,
+    });
+
+    // For deck.gl, we'll use a simplified approach with TileLayer
+    // that uses Google Static Maps API for better compatibility
+    const { TileLayer } = await import('@deck.gl/geo-layers');
+    const { BitmapLayer } = await import('@deck.gl/layers');
+
+    const mapType = cfg.mapType || 'roadmap';
+    const googleMapTypeId = this.getGoogleMapTypeId(mapType);
+
+    return new TileLayer({
+      id: layerId,
+      data: ['placeholder'], // Will be overridden by getTileData
+      opacity: cfg.opacity ?? 1,
+      visible: cfg.visible ?? true,
+      minZoom: 0,
+      maxZoom: cfg.maxZoom ?? 19,
+      tileSize: 256,
+
+      getTileData: async ({ index }: any) => {
+        const { x, y, z } = index;
+
+        // Build Google Static Maps API URL for this tile
+        const tilingScheme = { tileXYToNativeRectangle: (x: number, y: number, level: number) => {
+          const n = Math.pow(2, level);
+          const lonLeft = (x / n) * 360 - 180;
+          const lonRight = ((x + 1) / n) * 360 - 180;
+          const latBottom = Math.atan(Math.sinh(Math.PI * (1 - 2 * (y + 1) / n))) * 180 / Math.PI;
+          const latTop = Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
+          return { west: lonLeft, south: latBottom, east: lonRight, north: latTop };
+        }};
+
+        const rect = tilingScheme.tileXYToNativeRectangle(x, y, z);
+        const centerLat = (rect.south + rect.north) / 2;
+        const centerLng = (rect.west + rect.east) / 2;
+
+        const params = new URLSearchParams({
+          center: `${centerLat},${centerLng}`,
+          zoom: z.toString(),
+          size: '256x256',
+          scale: cfg.scale === 'scaleFactor1x' ? '1' : '2',
+          maptype: googleMapTypeId,
+          key: cfg.apiKey,
+          format: 'png'
+        });
+
+        if (cfg.language) params.set('language', cfg.language);
+        if (cfg.region) params.set('region', cfg.region);
+
+        const url = `https://maps.googleapis.com/maps/api/staticmap?${params.toString()}`;
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.blob();
+        } catch (error) {
+          console.warn('Failed to load Google tile:', error);
+          return null;
+        }
+      },
+
+      renderSubLayers: (sl: any) => {
+        const { data, tile } = sl;
+        if (!data) return null;
+
+        const { west, south, east, north } = tile.bbox;
+        return new BitmapLayer({
+          id: `${layerId}-bitmap-${tile.index.x}-${tile.index.y}-${tile.index.z}`,
+          image: data,
+          bounds: [west, south, east, north],
+          opacity: sl.opacity ?? 1,
+        });
+      },
+
+      onTileLoad: () => {
+        // Add Google logo for compliance when first tile loads
+        this.ensureGoogleLogo(this.target);
+      },
+    });
+  }
+
+  private getGoogleMapTypeId(mapType: string): string {
+    switch (mapType) {
+      case 'roadmap': return 'roadmap';
+      case 'satellite': return 'satellite';
+      case 'terrain': return 'terrain';
+      case 'hybrid': return 'hybrid';
+      default: return 'roadmap';
+    }
+  }
+
+  /**
+   * Load Google Maps JavaScript API
+   */
+  private async loadGoogleMapsApi(
+    apiKey: string,
+    opts?: { language?: string; region?: string; libraries?: string[] },
+  ): Promise<void> {
+    if ((window as any).google?.maps) return;
+
+    await new Promise<void>((resolve, reject) => {
+      const cbName = '___deckGoogleInit___' + Math.random().toString(36).slice(2);
+      (window as any)[cbName] = () => resolve();
+
+      const script = document.createElement('script');
+      const params = new URLSearchParams({
+        key: apiKey,
+        callback: cbName,
+        v: 'weekly',
+      });
+      if (opts?.language) params.set('language', opts.language);
+      if (opts?.region) params.set('region', opts.region);
+      if (opts?.libraries?.length)
+        params.set('libraries', opts.libraries.join(','));
+
+      script.src = `https://maps.googleapis.com/maps/api/js?${params.toString()}`;
+      script.async = true;
+      script.onerror = () =>
+        reject(new Error('Google Maps JS API failed to load'));
+      document.head.appendChild(script);
+    });
+  }
+
+  /**
+   * Add Google logo for compliance
+   */
+  private ensureGoogleLogo(container: HTMLElement): void {
+    if ((container as any)._googleLogoAdded) return;
+
+    const logo = document.createElement('img');
+    logo.src = 'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
+    logo.alt = 'Google';
+    logo.style.position = 'absolute';
+    logo.style.bottom = '6px';
+    logo.style.left = '6px';
+    logo.style.height = '18px';
+    logo.style.pointerEvents = 'none';
+    logo.style.zIndex = '1000';
+
+    container.appendChild(logo);
+    (container as any)._googleLogoAdded = true;
+  }
+
 
   async buildScatterPlot(
     layerConfig: Extract<LayerConfig, { type: 'scatterplot' }>,
@@ -297,19 +577,29 @@ export class DeckProvider implements MapProvider {
       geojson_or_url = config.url;
     }
     if (geojson_or_url) {
+      const deckStyle = this.createDeckGLStyle(config.style);
+
       layer = new GeoJsonLayer({
         id: layerId,
-        data: geojson_or_url, // kann auch eine URL sein, z. B. '/data/file.geojson'
+        data: geojson_or_url,
         filled: true,
+        stroked: true,
         pointType: 'circle',
-        //getText: (f: Feature<Geometry, PropertiesType>) => f.properties.name,
-        pointRadiusMinPixels: 4,
-        //pointRadiusScale: 2000,
-        getPointRadius: 10,
-        getFillColor: [200, 0, 80, 180],
-        getLineColor: [0, 0, 0, 255],
-        lineWidthMinPixels: 2,
-        zIndex: 100,
+        pickable: true,
+
+        // Enhanced styling
+        ...deckStyle,
+
+        opacity: config.opacity ?? 1,
+        visible: config.visible ?? true,
+
+        // Update triggers for dynamic styling
+        updateTriggers: {
+          getFillColor: [config.style],
+          getLineColor: [config.style],
+          getPointRadius: [config.style],
+          data: [config.geojson, config.url],
+        },
       });
     }
     return layer;
@@ -463,6 +753,11 @@ export type TileLoadProps = {
         return this.createGeoJSONLayer(layerConfig as any, layerId);
       case 'osm':
         return this.buildOsmLayer(layerConfig as any, layerId);
+      case 'google':
+        return this.buildGoogleTileLayer(
+          layerConfig as Extract<LayerConfig, { type: 'google' }>,
+          layerId,
+        );
       case 'wms':
         return this.buildWmsTileLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
@@ -472,6 +767,10 @@ export type TileLoadProps = {
         return this.buildXyzTileLayer(layerConfig as any, layerId);
       case 'scatterplot':
         return this.buildScatterPlot(layerConfig as any, layerId);
+      case 'wkt':
+        return this.createWKTLayer(layerConfig as any, layerId);
+      case 'geotiff':
+        return this.createGeoTIFFLayer(layerConfig as any, layerId);
       default:
         log(
           `v-map - provider - deck - Unsupported layer type: ${
@@ -618,6 +917,15 @@ export type TileLoadProps = {
           });
         break;
       }
+      case 'google': {
+        // Google maps updates would require rebuilding the layer
+        // as tile URLs are constructed dynamically
+        if (update.data?.mapType || update.data?.apiKey) {
+          // For now, log that Google updates aren't fully supported
+          console.warn('Google Maps layer updates require full layer recreation');
+        }
+        break;
+      }
       case 'wms': {
         const ov: any = {};
         if (update.data?.url) ov.url = update.data.url; // Basis-URL
@@ -631,6 +939,13 @@ export type TileLoadProps = {
         if (update.data?.time !== undefined) ov.time = update.data.time;
         if (update.data?.extraParams) ov.extraParams = update.data.extraParams;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+        break;
+      }
+      case 'wkt': {
+        const data = update.data?.wkt
+          ? this.wktToGeoJSON(update.data.wkt)
+          : update.data?.url;
+        if (data) group.setModelOverrides(layerId, { data });
         break;
       }
     }
@@ -689,6 +1004,149 @@ export type TileLoadProps = {
     this.deck?.setProps({
       viewState: { longitude: lon, latitude: lat, zoom, bearing: 0, pitch: 0 },
     });
+  }
+
+  private async createWKTLayer(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    let geoJsonData = null;
+
+    if (config.wkt) {
+      geoJsonData = this.wktToGeoJSON(config.wkt);
+    } else if (config.url) {
+      try {
+        const response = await fetch(config.url);
+        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        const wktText = await response.text();
+        geoJsonData = this.wktToGeoJSON(wktText);
+      } catch (e) {
+        log('Failed to load WKT from URL:', e);
+        geoJsonData = { type: 'FeatureCollection', features: [] };
+      }
+    } else {
+      geoJsonData = { type: 'FeatureCollection', features: [] };
+    }
+
+    const { GeoJsonLayer } = await import('@deck.gl/layers');
+    const deckStyle = this.createDeckGLStyle(config.style);
+
+    return new GeoJsonLayer({
+      id: layerId,
+      data: geoJsonData,
+      filled: true,
+      stroked: true,
+      pointType: 'circle',
+      pickable: true,
+
+      // Enhanced styling
+      ...deckStyle,
+
+      opacity: config.opacity ?? 1,
+      visible: config.visible ?? true,
+
+      // Update triggers for dynamic styling
+      updateTriggers: {
+        getFillColor: [config.style],
+        getLineColor: [config.style],
+        getPointRadius: [config.style],
+        data: [config.wkt, config.url],
+      },
+    });
+  }
+
+  private wktToGeoJSON(wkt: string): any {
+    const s = wkt.trim().toUpperCase();
+
+    if (s.startsWith('POINT')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const [x, y] = inside.split(/[\s]+/).map(parseFloat);
+      return {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [x, y] },
+        properties: {},
+      };
+    }
+
+    if (s.startsWith('LINESTRING')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const coords = inside
+        .split(',')
+        .map(p => p.trim().split(/[\s]+/).map(parseFloat));
+      return {
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: coords },
+        properties: {},
+      };
+    }
+
+    if (s.startsWith('POLYGON')) {
+      const inside = wkt
+        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
+        .trim();
+      const rings = inside.split('),(').map(r => r.replace(/[()]/g, '').trim());
+      const coords = rings.map(r =>
+        r.split(',').map(p => p.trim().split(/[\s]+/).map(parseFloat)),
+      );
+      return {
+        type: 'Feature',
+        geometry: { type: 'Polygon', coordinates: coords },
+        properties: {},
+      };
+    }
+
+    // If unrecognized WKT format, return empty FeatureCollection
+    return { type: 'FeatureCollection', features: [] };
+  }
+
+  private async createGeoTIFFLayer(
+    config: Extract<LayerConfig, { type: 'geotiff' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    if (!config.url) {
+      throw new Error('GeoTIFF layer requires a URL');
+    }
+
+    try {
+      // Using BitmapLayer for basic GeoTIFF display
+      // For more advanced GeoTIFF support, consider using deck.gl-raster or similar
+      const { BitmapLayer } = await import('@deck.gl/layers');
+
+      // For now, we'll create a basic bitmap layer
+      // Note: This assumes the GeoTIFF can be displayed directly as an image
+      // For COG (Cloud Optimized GeoTIFF) support, you might want to use
+      // specialized libraries like deck.gl-raster
+
+      const layer = new BitmapLayer({
+        id: layerId,
+        image: config.url,
+        bounds: [
+          // Default bounds - ideally these should come from GeoTIFF metadata
+          -180, -85.051129, 180, 85.051129
+        ],
+        opacity: config.opacity ?? 1.0,
+        visible: config.visible ?? true,
+        parameters: {
+          depthTest: false,
+        },
+      });
+
+      return layer;
+    } catch (error) {
+      log('v-map - provider - deck - Failed to create GeoTIFF layer:', error);
+
+      // Return a placeholder/empty layer in case of error
+      const { GeoJsonLayer } = await import('@deck.gl/layers');
+      return new GeoJsonLayer({
+        id: layerId,
+        data: { type: 'FeatureCollection', features: [] },
+        opacity: 0,
+      });
+    }
   }
 
   async destroy() {
