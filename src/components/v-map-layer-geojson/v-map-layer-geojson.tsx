@@ -37,6 +37,78 @@ export class VMapLayerGeoJSON {
    */
   @Prop({ reflect: true }) opacity: number = 1.0;
 
+  // ========== Styling Properties ==========
+
+  /**
+   * Fill color for polygon geometries (CSS color value)
+   * @default 'rgba(0,100,255,0.3)'
+   */
+  @Prop({ reflect: true }) fillColor?: string;
+
+  /**
+   * Fill opacity for polygon geometries (0-1)
+   * @default 0.3
+   */
+  @Prop({ reflect: true }) fillOpacity?: number;
+
+  /**
+   * Stroke color for lines and polygon outlines (CSS color value)
+   * @default 'rgba(0,100,255,1)'
+   */
+  @Prop({ reflect: true }) strokeColor?: string;
+
+  /**
+   * Stroke width in pixels
+   * @default 2
+   */
+  @Prop({ reflect: true }) strokeWidth?: number;
+
+  /**
+   * Stroke opacity (0-1)
+   * @default 1
+   */
+  @Prop({ reflect: true }) strokeOpacity?: number;
+
+  /**
+   * Point radius for point geometries in pixels
+   * @default 6
+   */
+  @Prop({ reflect: true }) pointRadius?: number;
+
+  /**
+   * Point color for point geometries (CSS color value)
+   * @default 'rgba(0,100,255,1)'
+   */
+  @Prop({ reflect: true }) pointColor?: string;
+
+  /**
+   * Icon URL for point features (alternative to pointColor/pointRadius)
+   */
+  @Prop({ reflect: true }) iconUrl?: string;
+
+  /**
+   * Icon size as [width, height] in pixels (comma-separated string like "32,32")
+   * @default "32,32"
+   */
+  @Prop({ reflect: true }) iconSize?: string;
+
+  /**
+   * Text property name from feature properties to display as label
+   */
+  @Prop({ reflect: true }) textProperty?: string;
+
+  /**
+   * Text color for labels (CSS color value)
+   * @default '#000000'
+   */
+  @Prop({ reflect: true }) textColor?: string;
+
+  /**
+   * Text size for labels in pixels
+   * @default 12
+   */
+  @Prop({ reflect: true }) textSize?: number;
+
   private geoSlot?: HTMLSlotElement;
   private mo?: MutationObserver;
   private lastString?: string;
@@ -144,6 +216,32 @@ export class VMapLayerGeoJSON {
     await this.helper?.setZIndex(this.zIndex);
   }
 
+  // ========== Styling Property Watchers ==========
+
+  @Watch('fillColor')
+  @Watch('fillOpacity')
+  @Watch('strokeColor')
+  @Watch('strokeWidth')
+  @Watch('strokeOpacity')
+  @Watch('pointRadius')
+  @Watch('pointColor')
+  @Watch('iconUrl')
+  @Watch('iconSize')
+  @Watch('textProperty')
+  @Watch('textColor')
+  @Watch('textSize')
+  async onStyleChanged() {
+    log(MSG_COMPONENT + 'onStyleChanged');
+    // Trigger layer recreation with new style
+    await this.helper?.updateLayer({
+      type: 'geojson',
+      data: {
+        geojson: this.geojson,
+        url: this.url,
+      },
+    });
+  }
+
   private onSlotChange = () => {
     log(MSG_COMPONENT + 'onSlotChange');
     this.observeAssignedNodes();
@@ -200,14 +298,35 @@ export class VMapLayerGeoJSON {
   }
 
   private createLayerConfig(): LayerConfig {
+    // Parse iconSize string to array
+    const iconSizeArray = this.iconSize
+      ? (this.iconSize.split(',').map(s => parseInt(s.trim(), 10)) as [
+          number,
+          number,
+        ])
+      : undefined;
+
     return {
       type: 'geojson',
       opacity: this.opacity,
       visible: this.visible,
       zIndex: this.zIndex,
       url: this.url,
-      //style: this.vectorStyle,
       geojson: JSON.stringify(this.geojson),
+      style: {
+        fillColor: this.fillColor,
+        fillOpacity: this.fillOpacity,
+        strokeColor: this.strokeColor,
+        strokeWidth: this.strokeWidth,
+        strokeOpacity: this.strokeOpacity,
+        pointRadius: this.pointRadius,
+        pointColor: this.pointColor,
+        iconUrl: this.iconUrl,
+        iconSize: iconSizeArray,
+        textProperty: this.textProperty,
+        textColor: this.textColor,
+        textSize: this.textSize,
+      },
     };
   }
 

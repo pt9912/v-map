@@ -44,7 +44,7 @@ export class VMap {
    * @example
    * <v-map flavour="leaflet"></v-map>
    */
-  @Prop() flavour: Flavour = 'ol';
+  @Prop({ reflect: true }) flavour: Flavour = 'ol';
 
   /**
    * Mittelpunkt der Karte im **WGS84**-Koordinatensystem.
