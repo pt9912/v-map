@@ -257,6 +257,25 @@ describe('v-map-style', () => {
     expect(result.name).toBe('Mock LYRX Style');
   });
 
+  it('should handle Cesium 3D Tiles style format', async () => {
+    const cesiumStyle = JSON.stringify({
+      color: 'color("white", 0.8)',
+      show: true,
+    });
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="cesium-3d-tiles" content='${cesiumStyle}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    expect(component.format).toBe('cesium-3d-tiles');
+
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeTruthy();
+    expect((result as any).color).toBe('color("white", 0.8)');
+  });
+
   it('should display loading state', async () => {
     const page = await newSpecPage({
       components: [VMapStyle],

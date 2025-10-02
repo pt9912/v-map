@@ -12,8 +12,7 @@ import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { LayerConfig } from "./types/layerconfig";
-import { StyleFormat } from "./components/v-map-style/v-map-style";
-import { Style } from "geostyler-style";
+import { ResolvedStyle, StyleFormat } from "./components/v-map-style/v-map-style";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
@@ -21,8 +20,7 @@ export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { LayerConfig } from "./types/layerconfig";
-export { StyleFormat } from "./components/v-map-style/v-map-style";
-export { Style } from "geostyler-style";
+export { ResolvedStyle, StyleFormat } from "./components/v-map-style/v-map-style";
 export namespace Components {
     interface VMap {
         /**
@@ -306,6 +304,35 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface VMapLayerTile3d {
+        /**
+          * Indicates whether the tileset has been initialised and added to the map.
+         */
+        "isReady": () => Promise<boolean>;
+        /**
+          * Global opacity factor (0-1).
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Optional JSON string or object with Cesium3DTileset options.
+         */
+        "tilesetOptions"?: string | Record<string, unknown>;
+        /**
+          * URL pointing to the Cesium 3D Tileset.
+         */
+        "url": string;
+        /**
+          * Whether the tileset should be visible.
+          * @default true
+         */
+        "visible": boolean;
+        /**
+          * Z-index used for ordering tilesets.
+          * @default 1000
+         */
+        "zIndex": number;
+    }
     interface VMapLayerWkt {
         /**
           * Fill color for polygon geometries (CSS color value)
@@ -524,7 +551,7 @@ export namespace Components {
         /**
           * Get the currently parsed style.
          */
-        "getStyle": () => Promise<Style | undefined>;
+        "getStyle": () => Promise<ResolvedStyle | undefined>;
         /**
           * Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
          */
@@ -558,6 +585,10 @@ export interface VMapLayerOsmCustomEvent<T> extends CustomEvent<T> {
 export interface VMapLayerScatterplotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerScatterplotElement;
+}
+export interface VMapLayerTile3dCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerTile3dElement;
 }
 export interface VMapLayerWktCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -694,6 +725,23 @@ declare global {
         prototype: HTMLVMapLayerScatterplotElement;
         new (): HTMLVMapLayerScatterplotElement;
     };
+    interface HTMLVMapLayerTile3dElementEventMap {
+        "ready": void;
+    }
+    interface HTMLVMapLayerTile3dElement extends Components.VMapLayerTile3d, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerTile3dElementEventMap>(type: K, listener: (this: HTMLVMapLayerTile3dElement, ev: VMapLayerTile3dCustomEvent<HTMLVMapLayerTile3dElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerTile3dElementEventMap>(type: K, listener: (this: HTMLVMapLayerTile3dElement, ev: VMapLayerTile3dCustomEvent<HTMLVMapLayerTile3dElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerTile3dElement: {
+        prototype: HTMLVMapLayerTile3dElement;
+        new (): HTMLVMapLayerTile3dElement;
+    };
     interface HTMLVMapLayerWktElementEventMap {
         "ready": void;
     }
@@ -764,7 +812,7 @@ declare global {
         new (): HTMLVMapLayergroupElement;
     };
     interface HTMLVMapStyleElementEventMap {
-        "styleReady": Style;
+        "styleReady": ResolvedStyle;
         "styleError": Error;
     }
     interface HTMLVMapStyleElement extends Components.VMapStyle, HTMLStencilElement {
@@ -789,6 +837,7 @@ declare global {
         "v-map-layer-google": HTMLVMapLayerGoogleElement;
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
         "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
+        "v-map-layer-tile3d": HTMLVMapLayerTile3dElement;
         "v-map-layer-wkt": HTMLVMapLayerWktElement;
         "v-map-layer-wms": HTMLVMapLayerWmsElement;
         "v-map-layer-xyz": HTMLVMapLayerXyzElement;
@@ -1085,6 +1134,35 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface VMapLayerTile3d {
+        /**
+          * Fired once the tileset layer is initialised.
+         */
+        "onReady"?: (event: VMapLayerTile3dCustomEvent<void>) => void;
+        /**
+          * Global opacity factor (0-1).
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Optional JSON string or object with Cesium3DTileset options.
+         */
+        "tilesetOptions"?: string | Record<string, unknown>;
+        /**
+          * URL pointing to the Cesium 3D Tileset.
+         */
+        "url": string;
+        /**
+          * Whether the tileset should be visible.
+          * @default true
+         */
+        "visible"?: boolean;
+        /**
+          * Z-index used for ordering tilesets.
+          * @default 1000
+         */
+        "zIndex"?: number;
+    }
     interface VMapLayerWkt {
         /**
           * Fill color for polygon geometries (CSS color value)
@@ -1317,7 +1395,7 @@ declare namespace LocalJSX {
         /**
           * Fired when style is successfully parsed and ready to apply.
          */
-        "onStyleReady"?: (event: VMapStyleCustomEvent<Style>) => void;
+        "onStyleReady"?: (event: VMapStyleCustomEvent<ResolvedStyle>) => void;
         /**
           * The style source - can be a URL to fetch from or inline SLD/style content.
          */
@@ -1331,6 +1409,7 @@ declare namespace LocalJSX {
         "v-map-layer-google": VMapLayerGoogle;
         "v-map-layer-osm": VMapLayerOsm;
         "v-map-layer-scatterplot": VMapLayerScatterplot;
+        "v-map-layer-tile3d": VMapLayerTile3d;
         "v-map-layer-wkt": VMapLayerWkt;
         "v-map-layer-wms": VMapLayerWms;
         "v-map-layer-xyz": VMapLayerXyz;
@@ -1356,6 +1435,7 @@ declare module "@stencil/core" {
             "v-map-layer-google": LocalJSX.VMapLayerGoogle & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
             "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
             "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
+            "v-map-layer-tile3d": LocalJSX.VMapLayerTile3d & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
             "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
             /**
              * OGC WMS Layer

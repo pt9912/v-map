@@ -1,6 +1,8 @@
 import { Style } from 'geostyler-style';
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'lyrx';
+export type Cesium3DTilesStyle = Record<string, unknown>;
+
+export type StyleFormat = 'sld' | 'mapbox-gl' | 'lyrx' | 'cesium-3d-tiles';
 
 export interface StyleConfig {
   format: StyleFormat;
@@ -27,7 +29,7 @@ export interface StyleApplyOptions {
 }
 
 export interface ParsedStyleInfo {
-  style: Style;
+  style: Style | Cesium3DTilesStyle;
   format: StyleFormat;
   source: string;
   appliedLayers: string[];
@@ -36,7 +38,7 @@ export interface ParsedStyleInfo {
 
 export interface StyleEvent {
   type: 'load' | 'apply' | 'error' | 'remove';
-  style?: Style;
+  style?: Style | Cesium3DTilesStyle;
   error?: Error;
   layerIds?: string[];
 }

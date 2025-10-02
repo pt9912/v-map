@@ -116,4 +116,14 @@ export type LayerConfig =
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
+    }
+  | {
+      type: 'tile3d';
+      url: string;
+      tilesetOptions?: Record<string, unknown>;
+      cesiumStyle?: Record<string, unknown>;
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
     };

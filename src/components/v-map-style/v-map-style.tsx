@@ -20,7 +20,15 @@ import MSG from '../../utils/messages';
 
 const MSG_COMPONENT = 'v-map-style';
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx';
+export type StyleFormat =
+  | 'sld'
+  | 'mapbox-gl'
+  | 'qgis'
+  | 'lyrx'
+  | 'cesium-3d-tiles';
+
+export type Cesium3DTilesStyle = Record<string, unknown>;
+export type ResolvedStyle = Style | Cesium3DTilesStyle;
 
 export interface StyleConfig {
   format: StyleFormat;
@@ -65,14 +73,14 @@ export class VMapStyle {
   /**
    * Fired when style is successfully parsed and ready to apply.
    */
-  @Event() styleReady!: EventEmitter<Style>;
+  @Event() styleReady!: EventEmitter<ResolvedStyle>;
 
   /**
    * Fired when style parsing fails.
    */
   @Event() styleError!: EventEmitter<Error>;
 
-  @State() private parsedStyle?: Style;
+  @State() private parsedStyle?: ResolvedStyle;
   @State() private isLoading: boolean = false;
   @State() private error?: Error;
 
@@ -101,7 +109,7 @@ export class VMapStyle {
   /**
    * Load and parse the style from src or content.
    */
-  async loadAndParseStyle(): Promise<Style | undefined> {
+  async loadAndParseStyle(): Promise<ResolvedStyle | undefined> {
     this.isLoading = true;
     this.error = undefined;
 
@@ -142,7 +150,7 @@ export class VMapStyle {
     }
   }
 
-  private async parseStyle(styleContent: string): Promise<Style> {
+  private async parseStyle(styleContent: string): Promise<ResolvedStyle> {
     switch (this.format) {
       case 'sld':
         return this.parseSLD(styleContent);
@@ -152,6 +160,8 @@ export class VMapStyle {
         return this.parseQGIS(styleContent);
       case 'lyrx':
         return this.parseLyrx(styleContent);
+      case 'cesium-3d-tiles':
+        return this.parseCesium3DTiles(styleContent);
       default:
         throw new Error(`Unsupported style format: ${this.format}`);
     }
@@ -231,8 +241,22 @@ export class VMapStyle {
    * Get the currently parsed style.
    */
   @Method()
-  async getStyle(): Promise<Style | undefined> {
+  async getStyle(): Promise<ResolvedStyle | undefined> {
     return this.parsedStyle;
+  }
+
+  private async parseCesium3DTiles(
+    jsonContent: string,
+  ): Promise<Cesium3DTilesStyle> {
+    try {
+      const style = JSON.parse(jsonContent);
+      if (typeof style !== 'object' || style === null) {
+        throw new Error('Parsed Cesium style is not an object');
+      }
+      return style as Cesium3DTilesStyle;
+    } catch (error) {
+      throw new Error(`Cesium 3D Tiles style parsing failed: ${error.message}`);
+    }
   }
 
   /**

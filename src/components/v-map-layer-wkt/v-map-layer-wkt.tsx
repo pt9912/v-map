@@ -204,11 +204,12 @@ export class VMapLayerWkt implements VMapLayer {
    * Listen for style events from v-map-style components
    */
   @Listen('styleReady', { target: 'document' })
-  async onStyleReady(event: CustomEvent<Style>) {
+  async onStyleReady(event: CustomEvent<unknown>) {
     const styleComponent = event.target as HTMLVMapStyleElement;
+    if (!this.isGeostylerFormat(styleComponent)) return;
     if (this.isTargetedByStyle(styleComponent)) {
       log(MSG_COMPONENT + 'Applying geostyler style');
-      this.appliedGeostylerStyle = event.detail;
+      this.appliedGeostylerStyle = event.detail as Style;
       await this.updateLayerWithGeostylerStyle();
     }
   }
@@ -230,6 +231,7 @@ export class VMapLayerWkt implements VMapLayer {
     ) as HTMLVMapStyleElement[];
 
     for (const styleComponent of styleComponents) {
+      if (!this.isGeostylerFormat(styleComponent)) continue;
       if (!this.isTargetedByStyle(styleComponent)) continue;
 
       const style = styleComponent.getStyle
@@ -238,9 +240,19 @@ export class VMapLayerWkt implements VMapLayer {
       if (!style) continue;
 
       log(MSG_COMPONENT + 'Applying existing geostyler style');
-      this.appliedGeostylerStyle = style;
+      this.appliedGeostylerStyle = style as Style;
       await this.updateLayerWithGeostylerStyle();
     }
+  }
+
+  private isGeostylerFormat(styleComponent: HTMLVMapStyleElement): boolean {
+    const format = styleComponent.format?.toLowerCase();
+    return (
+      format === 'sld' ||
+      format === 'mapbox-gl' ||
+      format === 'qgis' ||
+      format === 'lyrx'
+    );
   }
 
   /**

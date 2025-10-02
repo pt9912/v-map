@@ -13,7 +13,12 @@ import type { LonLat } from '../../types/lonlat';
 import { AsyncMutex } from '../../utils/async-mutex';
 
 type CesiumModule = typeof import('cesium');
-import type { Viewer, ImageryLayer, GeoJsonDataSource } from 'cesium';
+import type {
+  Viewer,
+  ImageryLayer,
+  GeoJsonDataSource,
+  Cesium3DTileset,
+} from 'cesium';
 
 /**
  * Entfernt das von Cesium injectWidgetsCss() eingefügte CSS.
@@ -156,6 +161,17 @@ export class CesiumProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
         );
         wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
+      case 'tile3d': {
+        const tileset = await this.createTile3DLayer(
+          layerConfig as Extract<LayerConfig, { type: 'tile3d' }>,
+        );
+        wrapper = this.layerManager.addLayer(layerId, tileset);
+        wrapper.setOptions((layerConfig as any).tilesetOptions ?? {});
+        if ((layerConfig as any).cesiumStyle && 'setStyle' in wrapper) {
+          (wrapper as any).setStyle((layerConfig as any).cesiumStyle);
+        }
         break;
       }
       default:
@@ -892,6 +908,25 @@ export class CesiumProvider implements MapProvider {
     }
   }
 
+  private async createTile3DLayer(
+    config: Extract<LayerConfig, { type: 'tile3d' }>,
+  ): Promise<Cesium3DTileset> {
+    if (!config.url) {
+      throw new Error('Tile3D layer requires a URL');
+    }
+
+    const tileset = await this.Cesium.Cesium3DTileset.fromUrl(
+      config.url,
+      config.tilesetOptions ?? {},
+    );
+
+    if (config.cesiumStyle) {
+      tileset.style = new this.Cesium.Cesium3DTileStyle(config.cesiumStyle);
+    }
+
+    return tileset;
+  }
+
   async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
     return await this.layerManagerMutex.runExclusive(async () => {
       const oldLayer = this.layerManager.getLayer(layerId);
@@ -967,6 +1002,40 @@ export class CesiumProvider implements MapProvider {
               { url: data.url } as Extract<LayerConfig, { type: 'geotiff' }>,
             );
             this.layerManager.replaceLayer(layerId, oldLayer, iLayer);
+          }
+          break;
+        case 'tile3d':
+          {
+            const data = update.data ?? {};
+            if (!data.url) {
+              throw new Error('tile3d update requires a url');
+            }
+
+            const layer = await this.createTile3DLayer({
+              type: 'tile3d',
+              url: data.url,
+              tilesetOptions: data.tilesetOptions,
+              cesiumStyle: data.style,
+            } as Extract<LayerConfig, { type: 'tile3d' }>);
+
+            const updatedLayer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              layer,
+            );
+            updatedLayer.setOptions(data.tilesetOptions ?? {});
+            if (data.style && 'setStyle' in updatedLayer) {
+              (updatedLayer as any).setStyle(data.style);
+            }
+          }
+          break;
+        case 'tile3d-style':
+          {
+            const data = update.data ?? {};
+            if ('setStyle' in oldLayer) {
+              const stylePayload = data.style ?? {};
+              (oldLayer as any).setStyle(stylePayload);
+            }
           }
           break;
       }
