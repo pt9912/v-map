@@ -254,7 +254,12 @@ export class VMapBuilder {
 
       this.ensureAttr(el, 'format', style.format);
       this.ensureAttr(el, 'layer-targets', style.layerTargets);
-      const autoApplyAttr = style.autoApply ? '' : undefined;
+      if (style.autoApply !== undefined) {
+        (el as any).autoApply = style.autoApply;
+      } else {
+        (el as any).autoApply = true;
+      }
+      const autoApplyAttr = style.autoApply === true ? '' : undefined;
       this.ensureAttr(el, 'auto-apply', autoApplyAttr);
       this.ensureAttr(el, 'id', style.id);
       this.ensureAttr(el, 'src', style.src);
