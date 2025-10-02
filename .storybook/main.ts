@@ -32,9 +32,8 @@ const config = {
       '@deck.gl/geo-layers',
     );
 
-    // Exclude problematic dependencies from optimization
-    config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
-    config.optimizeDeps.exclude.push(
+    // Include geo-related packages that need pre-bundling
+    config.optimizeDeps.include.push(
       'georaster',
       'georaster-layer-for-leaflet',
       'tiff-imagery-provider',
