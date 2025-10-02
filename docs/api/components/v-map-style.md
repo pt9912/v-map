@@ -10,7 +10,7 @@
 | --- | --- | --- | --- | --- |
 | `autoApply` | `boolean` | `auto-apply` | `true` | Whether to automatically apply the style when loaded. |
 | `content` | `string` | `content` |  | Inline style content as string (alternative to src). |
-| `format` | `lyrx \| mapbox-gl \| qgis \| sld` | `format` | `'sld'` | The styling format to parse (currently supports 'sld'). |
+| `format` | `cesium-3d-tiles \| lyrx \| mapbox-gl \| qgis \| sld` | `format` | `'sld'` | The styling format to parse (currently supports 'sld'). |
 | `layerTargets` | `string` | `layer-targets` |  | Target layer IDs to apply this style to. If not specified, applies to all compatible layers. |
 | `src` | `string` | `src` |  | The style source - can be a URL to fetch from or inline SLD/style content. |
 
@@ -19,9 +19,9 @@
 | Event | Detail-Type | Beschreibung |
 | --- | --- | --- |
 | `styleError` | `Error` | Fired when style parsing fails. |
-| `styleReady` | `Style` | Fired when style is successfully parsed and ready to apply. |
+| `styleReady` | `Style | { [x: string]: unknown; }` | Fired when style is successfully parsed and ready to apply. |
 
 ### Methods
 
-- `getStyle() => Promise<Style>` — Get the currently parsed style.
+- `getStyle() => Promise<ResolvedStyle>` — Get the currently parsed style.
 

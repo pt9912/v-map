@@ -8,7 +8,7 @@
 
 > **LayerUpdate** = `object`
 
-Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/types/mapprovider.ts#L5)
+Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/types/mapprovider.ts#L5)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/dc
 
 > **data**: `any`
 
-Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/types/mapprovider.ts#L7)
+Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/types/mapprovider.ts#L7)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/dc
 
 > **type**: `string`
 
-Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/types/mapprovider.ts#L6)
+Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/types/mapprovider.ts#L6)

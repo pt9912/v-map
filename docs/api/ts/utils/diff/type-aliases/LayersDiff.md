@@ -8,7 +8,7 @@
 
 > **LayersDiff** = `object`
 
-Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L68)
+Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L68)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/dc11bbe8
 
 > **added**: [`NormalizedLayer`](../interfaces/NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L69)
+Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L69)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/dc11bbe8
 
 > **moved**: `object`[]
 
-Defined in: [src/utils/diff.ts:72](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L72)
+Defined in: [src/utils/diff.ts:72](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L72)
 
 #### from
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/diff.ts:72](https://github.com/pt9912/v-map/blob/dc11bbe8
 
 > **removed**: [`NormalizedLayer`](../interfaces/NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:70](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L70)
+Defined in: [src/utils/diff.ts:70](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L70)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/diff.ts:70](https://github.com/pt9912/v-map/blob/dc11bbe8
 
 > **unchangedIds**: `string`[]
 
-Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L73)
+Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L73)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/dc11bbe8
 
 > **updated**: [`LayerPatch`](LayerPatch.md)[]
 
-Defined in: [src/utils/diff.ts:71](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L71)
+Defined in: [src/utils/diff.ts:71](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/diff.ts#L71)

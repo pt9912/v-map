@@ -6,7 +6,7 @@
 
 # Interface: VMapStyle
 
-Defined in: [src/components.d.ts:509](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L509)
+Defined in: [src/components.d.ts:536](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L536)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:509](https://github.com/pt9912/v-map/blob/dc11b
 
 > **autoApply**: `boolean`
 
-Defined in: [src/components.d.ts:514](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L514)
+Defined in: [src/components.d.ts:541](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L541)
 
 Whether to automatically apply the style when loaded.
 
@@ -30,7 +30,7 @@ true
 
 > `optional` **content**: `string`
 
-Defined in: [src/components.d.ts:518](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L518)
+Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L545)
 
 Inline style content as string (alternative to src).
 
@@ -40,7 +40,7 @@ Inline style content as string (alternative to src).
 
 > **format**: [`StyleFormat`](../../../type-aliases/StyleFormat.md)
 
-Defined in: [src/components.d.ts:523](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L523)
+Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L550)
 
 The styling format to parse (currently supports 'sld').
 
@@ -54,15 +54,15 @@ The styling format to parse (currently supports 'sld').
 
 ### getStyle()
 
-> **getStyle**: () => `Promise`\<[`Style`](../../../interfaces/Style.md)\>
+> **getStyle**: () => `Promise`\<[`ResolvedStyle`](../../../type-aliases/ResolvedStyle.md)\>
 
-Defined in: [src/components.d.ts:527](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L527)
+Defined in: [src/components.d.ts:554](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L554)
 
 Get the currently parsed style.
 
 #### Returns
 
-`Promise`\<[`Style`](../../../interfaces/Style.md)\>
+`Promise`\<[`ResolvedStyle`](../../../type-aliases/ResolvedStyle.md)\>
 
 ***
 
@@ -70,7 +70,7 @@ Get the currently parsed style.
 
 > `optional` **layerTargets**: `string`
 
-Defined in: [src/components.d.ts:531](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L531)
+Defined in: [src/components.d.ts:558](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L558)
 
 Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
 
@@ -80,6 +80,6 @@ Target layer IDs to apply this style to. If not specified, applies to all compat
 
 > `optional` **src**: `string`
 
-Defined in: [src/components.d.ts:535](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L535)
+Defined in: [src/components.d.ts:562](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L562)
 
 The style source - can be a URL to fetch from or inline SLD/style content.

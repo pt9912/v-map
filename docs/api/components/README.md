@@ -9,6 +9,7 @@
 - [`v-map-layer-google`](./v-map-layer-google.md) — Google Maps Basemap Layer
 - [`v-map-layer-osm`](./v-map-layer-osm.md) — 
 - [`v-map-layer-scatterplot`](./v-map-layer-scatterplot.md) — 
+- [`v-map-layer-tile3d`](./v-map-layer-tile3d.md) — 
 - [`v-map-layer-wkt`](./v-map-layer-wkt.md) — 
 - [`v-map-layer-wms`](./v-map-layer-wms.md) — OGC WMS Layer
 - [`v-map-layer-xyz`](./v-map-layer-xyz.md) — XYZ Tile Layer

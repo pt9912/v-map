@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeojson
 
-Defined in: [src/components.d.ts:855](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L855)
+Defined in: [src/components.d.ts:904](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L904)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:855](https://github.com/pt9912/v-map/blob/dc11b
 
 > `optional` **fillColor**: `string`
 
-Defined in: [src/components.d.ts:860](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L860)
+Defined in: [src/components.d.ts:909](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L909)
 
 Fill color for polygon geometries (CSS color value)
 
@@ -30,7 +30,7 @@ Fill color for polygon geometries (CSS color value)
 
 > `optional` **fillOpacity**: `number`
 
-Defined in: [src/components.d.ts:865](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L865)
+Defined in: [src/components.d.ts:914](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L914)
 
 Fill opacity for polygon geometries (0-1)
 
@@ -46,7 +46,7 @@ Fill opacity for polygon geometries (0-1)
 
 > `optional` **geojson**: `unknown`
 
-Defined in: [src/components.d.ts:869](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L869)
+Defined in: [src/components.d.ts:918](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L918)
 
 Prop, die du intern nutzt/weiterverarbeitest
 
@@ -56,7 +56,7 @@ Prop, die du intern nutzt/weiterverarbeitest
 
 > `optional` **iconSize**: `string`
 
-Defined in: [src/components.d.ts:874](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L874)
+Defined in: [src/components.d.ts:923](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L923)
 
 Icon size as [width, height] in pixels (comma-separated string like "32,32")
 
@@ -72,7 +72,7 @@ Icon size as [width, height] in pixels (comma-separated string like "32,32")
 
 > `optional` **iconUrl**: `string`
 
-Defined in: [src/components.d.ts:878](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L878)
+Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L927)
 
 Icon URL for point features (alternative to pointColor/pointRadius)
 
@@ -82,7 +82,7 @@ Icon URL for point features (alternative to pointColor/pointRadius)
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:883](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L883)
+Defined in: [src/components.d.ts:932](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L932)
 
 Opazität der geojson-Kacheln (0–1).
 
@@ -98,7 +98,7 @@ Opazität der geojson-Kacheln (0–1).
 
 > `optional` **pointColor**: `string`
 
-Defined in: [src/components.d.ts:888](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L888)
+Defined in: [src/components.d.ts:937](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L937)
 
 Point color for point geometries (CSS color value)
 
@@ -114,7 +114,7 @@ Point color for point geometries (CSS color value)
 
 > `optional` **pointRadius**: `number`
 
-Defined in: [src/components.d.ts:893](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L893)
+Defined in: [src/components.d.ts:942](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L942)
 
 Point radius for point geometries in pixels
 
@@ -130,7 +130,7 @@ Point radius for point geometries in pixels
 
 > `optional` **strokeColor**: `string`
 
-Defined in: [src/components.d.ts:898](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L898)
+Defined in: [src/components.d.ts:947](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L947)
 
 Stroke color for lines and polygon outlines (CSS color value)
 
@@ -146,7 +146,7 @@ Stroke color for lines and polygon outlines (CSS color value)
 
 > `optional` **strokeOpacity**: `number`
 
-Defined in: [src/components.d.ts:903](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L903)
+Defined in: [src/components.d.ts:952](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L952)
 
 Stroke opacity (0-1)
 
@@ -162,7 +162,7 @@ Stroke opacity (0-1)
 
 > `optional` **strokeWidth**: `number`
 
-Defined in: [src/components.d.ts:908](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L908)
+Defined in: [src/components.d.ts:957](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L957)
 
 Stroke width in pixels
 
@@ -178,7 +178,7 @@ Stroke width in pixels
 
 > `optional` **textColor**: `string`
 
-Defined in: [src/components.d.ts:913](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L913)
+Defined in: [src/components.d.ts:962](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L962)
 
 Text color for labels (CSS color value)
 
@@ -194,7 +194,7 @@ Text color for labels (CSS color value)
 
 > `optional` **textProperty**: `string`
 
-Defined in: [src/components.d.ts:917](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L917)
+Defined in: [src/components.d.ts:966](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L966)
 
 Text property name from feature properties to display as label
 
@@ -204,7 +204,7 @@ Text property name from feature properties to display as label
 
 > `optional` **textSize**: `number`
 
-Defined in: [src/components.d.ts:922](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L922)
+Defined in: [src/components.d.ts:971](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L971)
 
 Text size for labels in pixels
 
@@ -220,7 +220,7 @@ Text size for labels in pixels
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L927)
+Defined in: [src/components.d.ts:976](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L976)
 
 URL to fetch GeoJSON data from. Alternative to providing data via slot.
 
@@ -236,7 +236,7 @@ null
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:932](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L932)
+Defined in: [src/components.d.ts:981](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L981)
 
 Whether the layer is visible on the map.
 
@@ -252,7 +252,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:937](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L937)
+Defined in: [src/components.d.ts:986](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/components.d.ts#L986)
 
 Z-index for layer stacking order. Higher values render on top.
 

@@ -15,4 +15,5 @@
 
 ## Type Aliases
 
+- [Cesium3DTilesStyle](type-aliases/Cesium3DTilesStyle.md)
 - [StyleFormat](type-aliases/StyleFormat.md)

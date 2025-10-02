@@ -8,7 +8,7 @@
 
 > **createLogger**(`namespace`): `object`
 
-Defined in: [src/utils/logger.ts:168](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/logger.ts#L168)
+Defined in: [src/utils/logger.ts:168](https://github.com/pt9912/v-map/blob/47bc96dbb630838d8cacfa2e04b7f693dba4efe3/src/utils/logger.ts#L168)
 
 Erzeugt eine Logger-Instanz mit Namespace-Präfix.
 Ideal für Komponenten: `const log = createLogger('MyComponent');`
