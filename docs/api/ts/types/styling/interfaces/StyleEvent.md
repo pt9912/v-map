@@ -6,7 +6,7 @@
 
 # Interface: StyleEvent
 
-Defined in: [src/types/styling.ts:37](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L37)
+Defined in: [src/types/styling.ts:37](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L37)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:37](https://github.com/pt9912/v-map/blob/37aca
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/styling.ts:40](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L40)
+Defined in: [src/types/styling.ts:40](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L40)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/styling.ts:40](https://github.com/pt9912/v-map/blob/37aca
 
 > `optional` **layerIds**: `string`[]
 
-Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L41)
+Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L41)
 
 ***
 
@@ -30,12 +30,12 @@ Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/37aca
 
 > `optional` **style**: [`Style`](../../../index/interfaces/Style.md)
 
-Defined in: [src/types/styling.ts:39](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L39)
+Defined in: [src/types/styling.ts:39](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L39)
 
 ***
 
 ### type
 
-> **type**: `"error"` \| `"remove"` \| `"load"` \| `"apply"`
+> **type**: `"error"` \| `"load"` \| `"remove"` \| `"apply"`
 
-Defined in: [src/types/styling.ts:38](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L38)
+Defined in: [src/types/styling.ts:38](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L38)

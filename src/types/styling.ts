@@ -1,6 +1,6 @@
 import { Style } from 'geostyler-style';
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'cartocss' | 'slyr';
+export type StyleFormat = 'sld' | 'mapbox-gl' | 'lyrx';
 
 export interface StyleConfig {
   format: StyleFormat;

@@ -6,6 +6,6 @@
 
 # Type Alias: StyleFormat
 
-> **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"cartocss"` \| `"slyr"`
+> **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"lyrx"`
 
-Defined in: [src/types/styling.ts:3](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styling.ts#L3)
+Defined in: [src/types/styling.ts:3](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/types/styling.ts#L3)

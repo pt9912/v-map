@@ -1,4 +1,13 @@
-import { Component, Prop, Element, Event, EventEmitter, Watch, State, h } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  Element,
+  Event,
+  EventEmitter,
+  Watch,
+  State,
+  h,
+} from '@stencil/core';
 import SLDParser from 'geostyler-sld-parser';
 import MapboxParser from 'geostyler-mapbox-parser';
 import QGISParser from 'geostyler-qgis-parser';
@@ -10,7 +19,7 @@ import MSG from '../../utils/messages';
 
 const MSG_COMPONENT = 'v-map-style';
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cartocss';
+export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx';
 
 export interface StyleConfig {
   format: StyleFormat;
@@ -102,7 +111,9 @@ export class VMapStyle {
         // Fetch style from URL
         const response = await fetch(this.src);
         if (!response.ok) {
-          throw new Error(`Failed to fetch style from ${this.src}: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch style from ${this.src}: ${response.statusText}`,
+          );
         }
         styleContent = await response.text();
       } else if (this.content) {
@@ -120,7 +131,6 @@ export class VMapStyle {
 
       log(MSG_COMPONENT + ' - Style successfully parsed', style);
       return style;
-
     } catch (error) {
       this.error = error as Error;
       this.styleError.emit(this.error);
@@ -141,9 +151,6 @@ export class VMapStyle {
         return this.parseQGIS(styleContent);
       case 'lyrx':
         return this.parseLyrx(styleContent);
-      case 'cartocss':
-        // CartoCSS parser not available in GeoStyler ecosystem
-        throw new Error('CartoCSS format not supported - no GeoStyler parser available');
       default:
         throw new Error(`Unsupported style format: ${this.format}`);
     }
@@ -166,9 +173,10 @@ export class VMapStyle {
   private async parseMapboxGL(mapboxContent: string): Promise<Style> {
     try {
       // Parse JSON if string
-      const mapboxStyle = typeof mapboxContent === 'string'
-        ? JSON.parse(mapboxContent)
-        : mapboxContent;
+      const mapboxStyle =
+        typeof mapboxContent === 'string'
+          ? JSON.parse(mapboxContent)
+          : mapboxContent;
 
       const { output: style } = await this.mapboxParser.readStyle(mapboxStyle);
 
@@ -199,19 +207,22 @@ export class VMapStyle {
   private async parseLyrx(lyrxContent: string): Promise<Style> {
     try {
       // Parse JSON if string
-      const lyrxStyle = typeof lyrxContent === 'string'
-        ? JSON.parse(lyrxContent)
-        : lyrxContent;
+      const lyrxStyle =
+        typeof lyrxContent === 'string' ? JSON.parse(lyrxContent) : lyrxContent;
 
       const { output: style } = await this.lyrxParser.readStyle(lyrxStyle);
 
       if (!style) {
-        throw new Error('Failed to parse LYRX (ArcGIS Pro) Style - no style output');
+        throw new Error(
+          'Failed to parse LYRX (ArcGIS Pro) Style - no style output',
+        );
       }
 
       return style;
     } catch (error) {
-      throw new Error(`LYRX (ArcGIS Pro) Style parsing failed: ${error.message}`);
+      throw new Error(
+        `LYRX (ArcGIS Pro) Style parsing failed: ${error.message}`,
+      );
     }
   }
 
@@ -247,13 +258,9 @@ export class VMapStyle {
   render() {
     return (
       <div class="style-container">
-        {this.isLoading && (
-          <div class="loading">Loading style...</div>
-        )}
+        {this.isLoading && <div class="loading">Loading style...</div>}
         {this.error && (
-          <div class="error">
-            Style Error: {this.error.message}
-          </div>
+          <div class="error">Style Error: {this.error.message}</div>
         )}
         {this.parsedStyle && (
           <div class="success">

@@ -257,21 +257,6 @@ describe('v-map-style', () => {
     expect(result.name).toBe('Mock LYRX Style');
   });
 
-  it('should handle unsupported formats', async () => {
-    const page = await newSpecPage({
-      components: [VMapStyle],
-      html: `<v-map-style format="cartocss" content="test" auto-apply="false"></v-map-style>`,
-    });
-
-    const component = page.rootInstance as VMapStyle;
-
-    // Should return undefined and set error for unsupported format
-    const result = await component.loadAndParseStyle();
-    expect(result).toBeUndefined();
-    expect(component.getError()).toBeTruthy();
-    expect(component.getError().message).toContain('CartoCSS format not supported');
-  });
-
   it('should display loading state', async () => {
     const page = await newSpecPage({
       components: [VMapStyle],
@@ -313,6 +298,8 @@ describe('v-map-style', () => {
     const result = await component.loadAndParseStyle();
     expect(result).toBeUndefined();
     expect(component.getError()).toBeTruthy();
-    expect(component.getError().message).toContain('Either src or content must be provided');
+    expect(component.getError().message).toContain(
+      'Either src or content must be provided',
+    );
   });
 });

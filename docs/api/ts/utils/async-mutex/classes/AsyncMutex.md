@@ -6,7 +6,7 @@
 
 # Class: AsyncMutex
 
-Defined in: [src/utils/async-mutex.ts:2](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/utils/async-mutex.ts#L2)
+Defined in: [src/utils/async-mutex.ts:2](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/utils/async-mutex.ts#L2)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/async-mutex.ts:2](https://github.com/pt9912/v-map/blob/37
 
 > **runExclusive**\<`T`\>(`fn`): `Promise`\<`T`\>
 
-Defined in: [src/utils/async-mutex.ts:6](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/utils/async-mutex.ts#L6)
+Defined in: [src/utils/async-mutex.ts:6](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/utils/async-mutex.ts#L6)
 
 #### Type Parameters
 

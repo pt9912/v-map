@@ -6,6 +6,6 @@
 
 # Type Alias: StyleFormat
 
-> **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"cartocss"` \| `"slyr"`
+> **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"qgis"` \| `"lyrx"`
 
-Defined in: [src/components/v-map-style/v-map-style.tsx:10](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/components/v-map-style/v-map-style.tsx#L10)
+Defined in: [src/components/v-map-style/v-map-style.tsx:22](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/components/v-map-style/v-map-style.tsx#L22)
