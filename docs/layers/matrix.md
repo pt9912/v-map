@@ -17,7 +17,7 @@
 | `tile3d` | ✅ | ❌ | ❌ | ❌ |
 | `wkt` | ✅ | ✅ | ✅ | ✅ |
 | `wms` | ✅ | ✅ | ✅ | ✅ |
-| `xyz` | ❌ | ✅ | ✅ | ✅ |
+| `xyz` | ✅ | ✅ | ✅ | ✅ |
 
 
 **Hinweis:** Diese Matrix wird heuristisch aus den `case 'type'`-Vorkommen in den Provider-Dateien abgeleitet. Manuelle Spezialfälle (z. B. über Helper-Methoden) bitte zusätzlich dokumentieren.

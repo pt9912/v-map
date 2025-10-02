@@ -20,6 +20,10 @@ import type {
   Cesium3DTileset,
 } from 'cesium';
 
+type UrlTemplateOptions = ConstructorParameters<
+  CesiumModule['UrlTemplateImageryProvider']
+>[0];
+
 /**
  * Entfernt das von Cesium injectWidgetsCss() eingefügte CSS.
  * Funktioniert sowohl, wenn das Element eine ID hat,
@@ -131,6 +135,13 @@ export class CesiumProvider implements MapProvider {
       case 'google': {
         const iLayer = await this.createGoogleLayer(
           layerConfig as Extract<LayerConfig, { type: 'google' }>,
+        );
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
+      case 'xyz': {
+        const iLayer = await this.createXYZLayer(
+          layerConfig as Extract<LayerConfig, { type: 'xyz' }>,
         );
         wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
@@ -834,6 +845,34 @@ export class CesiumProvider implements MapProvider {
     (this.viewer.container as any)._googleLogoAdded = true;
   }
 
+  private async createXYZLayer(
+    config: Extract<LayerConfig, { type: 'xyz' }>,
+  ): Promise<ImageryLayer> {
+    if (!config.url) {
+      throw new Error('XYZ layer requires a url');
+    }
+
+    const credit = Array.isArray(config.attributions)
+      ? config.attributions.join(', ')
+      : config.attributions;
+
+    const providerOptions = {
+      url: config.url,
+      credit,
+      maximumLevel: config.maxZoom,
+      ...(config.options || {}),
+    } as UrlTemplateOptions;
+
+    const provider = new this.Cesium.UrlTemplateImageryProvider(providerOptions);
+
+    const layerOptions = {
+      alpha: config.opacity ?? 1,
+      show: config.visible ?? true,
+    };
+
+    return new this.Cesium.ImageryLayer(provider, layerOptions);
+  }
+
   private async addWMSLayer(
     config: Extract<LayerConfig, { type: 'wms' }>,
   ): Promise<ImageryLayer> {
@@ -977,6 +1016,20 @@ export class CesiumProvider implements MapProvider {
               googleLayer,
             );
             updatedGoogleLayer.setOptions(googleOptions);
+          }
+          break;
+        case 'xyz':
+          {
+            const xyzOptions = oldLayer.getOptions();
+            const xyzLayer = await this.createXYZLayer(
+              update.data as Extract<LayerConfig, { type: 'xyz' }>,
+            );
+            const updatedXyzLayer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              xyzLayer,
+            );
+            updatedXyzLayer.setOptions(xyzOptions);
           }
           break;
         case 'wkt':

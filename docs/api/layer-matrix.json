@@ -80,7 +80,7 @@
       "ol": true
     },
     "xyz": {
-      "cesium": false,
+      "cesium": true,
       "deck": true,
       "leaflet": true,
       "ol": true
