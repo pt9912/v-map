@@ -25,18 +25,24 @@ const config = {
     config.optimizeDeps = config.optimizeDeps || {};
     config.optimizeDeps.include = config.optimizeDeps.include || [];
     config.optimizeDeps.include.push(
-      '@loaders.gl/core',
-      '@loaders.gl/gltf',
+      // Deck.gl & Luma.gl
       '@deck.gl/core',
       '@deck.gl/layers',
       '@deck.gl/geo-layers',
-    );
-
-    // Include geo-related packages that need pre-bundling
-    config.optimizeDeps.include.push(
+      '@luma.gl/core',
+      // Loaders.gl
+      '@loaders.gl/core',
+      '@loaders.gl/gltf',
+      '@loaders.gl/images',
+      '@loaders.gl/schema',
+      '@loaders.gl/terrain',
+      // Geo-related
       'georaster',
       'georaster-layer-for-leaflet',
       'tiff-imagery-provider',
+      'geotiff',
+      'snap-bbox',
+      'uuid',
     );
 
     return config;

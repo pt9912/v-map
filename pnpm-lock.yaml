@@ -41,9 +41,21 @@ importers:
       '@loaders.gl/gltf':
         specifier: ^4.3.4
         version: 4.3.4(@loaders.gl/core@4.3.4)
+      '@loaders.gl/images':
+        specifier: ^4.3.4
+        version: 4.3.4(@loaders.gl/core@4.3.4)
       '@loaders.gl/loader-utils':
         specifier: 4.3.4
         version: 4.3.4(@loaders.gl/core@4.3.4)
+      '@loaders.gl/schema':
+        specifier: ^4.3.4
+        version: 4.3.4(@loaders.gl/core@4.3.4)
+      '@loaders.gl/terrain':
+        specifier: ^4.3.4
+        version: 4.3.4(@loaders.gl/core@4.3.4)
+      '@luma.gl/core':
+        specifier: ^9.1.9
+        version: 9.1.9
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.2.7(typescript@5.9.2))
@@ -125,6 +137,9 @@ importers:
       geostyler-style:
         specifier: ^10.5.0
         version: 10.5.0
+      geotiff:
+        specifier: 2.1.4-beta.0
+        version: 2.1.4-beta.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.1)
@@ -158,6 +173,9 @@ importers:
       semantic-release:
         specifier: ^24.0.0
         version: 24.2.7(typescript@5.9.2)
+      snap-bbox:
+        specifier: ^0.5.0
+        version: 0.5.0
       storybook:
         specifier: ^9.1.7
         version: 9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))
@@ -170,6 +188,9 @@ importers:
       typedoc-plugin-markdown:
         specifier: ^4.8.1
         version: 4.8.1(typedoc@0.28.12(typescript@5.9.2))
+      uuid:
+        specifier: ^13.0.0
+        version: 13.0.0
       vite:
         specifier: ^7.1.7
         version: 7.1.7(@types/node@22.18.1)(yaml@2.8.1)
@@ -3403,6 +3424,10 @@ packages:
     resolution: {integrity: sha512-PT6uoF5a1+kbC3tHmZSUsLHBp2QJlHasxxxxPW47QIY1VBKpFB+FcDvX+MxER6UzgLQZ0xDzJ9s48B9JbOCTqA==}
     engines: {node: '>=10.19'}
 
+  geotiff@2.1.4-beta.0:
+    resolution: {integrity: sha512-jb6SYvHMyiCqwqgGGLDAxtig9h1g6O+n1wEyNEE4QgVEXOItYaWrEgPg9SAnwdoZm2yx6DpFtilbGG65hvZgpQ==}
+    engines: {node: '>=10.19'}
+
   geowarp-canvas@0.2.0:
     resolution: {integrity: sha512-tFCYl10aN7bXTHSxfElBhdK3gDHMiks2G1OTlCwmWcxWA1799L8c/EnPZxHdCFCerT3lkYK6RwGdTODH5iKZFw==}
 
@@ -6140,6 +6165,10 @@ packages:
   utm-utils@0.6.1:
     resolution: {integrity: sha512-OqSVTkvVFfQaxX8WraDhP6PGECbz8YTDrYAeo74TMmZnzfGkE0wA797/5nFGuCzFVR9e6fnrO42gbqySS4kAxw==}
 
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
+
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
@@ -6496,6 +6525,9 @@ packages:
 
   zstddec@0.1.0:
     resolution: {integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==}
+
+  zstddec@0.2.0-alpha.3:
+    resolution: {integrity: sha512-uHyE3TN8jRFOaMVwdhERfrcaabyoUUawIRDKXE6x0nCU7mzyIZO0LndJ3AtVUiKLF0lC+8F5bMSySWEF586PSA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -10369,6 +10401,17 @@ snapshots:
       xml-utils: 1.10.2
       zstddec: 0.1.0
 
+  geotiff@2.1.4-beta.0:
+    dependencies:
+      '@petamoriken/float16': 3.9.2
+      lerc: 3.0.0
+      pako: 2.1.0
+      parse-headers: 2.0.6
+      quick-lru: 6.1.2
+      web-worker: 1.5.0
+      xml-utils: 1.10.2
+      zstddec: 0.2.0-alpha.3
+
   geowarp-canvas@0.2.0:
     dependencies:
       calc-image-stats: 0.9.0
@@ -13431,6 +13474,8 @@ snapshots:
 
   utm-utils@0.6.1: {}
 
+  uuid@13.0.0: {}
+
   uuid@8.3.2: {}
 
   v8-to-istanbul@9.3.0:
@@ -13814,5 +13859,7 @@ snapshots:
     optional: true
 
   zstddec@0.1.0: {}
+
+  zstddec@0.2.0-alpha.3: {}
 
   zwitch@2.0.4: {}
