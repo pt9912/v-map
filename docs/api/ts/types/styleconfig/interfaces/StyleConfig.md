@@ -6,7 +6,7 @@
 
 # Interface: StyleConfig
 
-Defined in: [src/types/styleconfig.ts:1](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L1)
+Defined in: [src/types/styleconfig.ts:1](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styleconfig.ts:1](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **extrudeHeight**: `number`
 
-Defined in: [src/types/styleconfig.ts:32](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L32)
+Defined in: [src/types/styleconfig.ts:32](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L32)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/styleconfig.ts:32](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **fillColor**: `string`
 
-Defined in: [src/types/styleconfig.ts:3](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L3)
+Defined in: [src/types/styleconfig.ts:3](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L3)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/styleconfig.ts:3](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **fillOpacity**: `number`
 
-Defined in: [src/types/styleconfig.ts:4](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L4)
+Defined in: [src/types/styleconfig.ts:4](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L4)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/styleconfig.ts:4](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **iconAnchor**: \[`number`, `number`\]
 
-Defined in: [src/types/styleconfig.ts:20](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L20)
+Defined in: [src/types/styleconfig.ts:20](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L20)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/styleconfig.ts:20](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **iconSize**: \[`number`, `number`\]
 
-Defined in: [src/types/styleconfig.ts:19](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L19)
+Defined in: [src/types/styleconfig.ts:19](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L19)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/styleconfig.ts:19](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **iconUrl**: `string`
 
-Defined in: [src/types/styleconfig.ts:18](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L18)
+Defined in: [src/types/styleconfig.ts:18](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L18)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/styleconfig.ts:18](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **pointColor**: `string`
 
-Defined in: [src/types/styleconfig.ts:14](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L14)
+Defined in: [src/types/styleconfig.ts:14](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L14)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/styleconfig.ts:14](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **pointOpacity**: `number`
 
-Defined in: [src/types/styleconfig.ts:15](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L15)
+Defined in: [src/types/styleconfig.ts:15](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L15)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/styleconfig.ts:15](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **pointRadius**: `number`
 
-Defined in: [src/types/styleconfig.ts:13](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L13)
+Defined in: [src/types/styleconfig.ts:13](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L13)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/styleconfig.ts:13](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **strokeColor**: `string`
 
-Defined in: [src/types/styleconfig.ts:7](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L7)
+Defined in: [src/types/styleconfig.ts:7](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L7)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/styleconfig.ts:7](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **strokeDashArray**: `number`[]
 
-Defined in: [src/types/styleconfig.ts:10](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L10)
+Defined in: [src/types/styleconfig.ts:10](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L10)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/styleconfig.ts:10](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **strokeOpacity**: `number`
 
-Defined in: [src/types/styleconfig.ts:9](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L9)
+Defined in: [src/types/styleconfig.ts:9](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L9)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/types/styleconfig.ts:9](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **strokeWidth**: `number`
 
-Defined in: [src/types/styleconfig.ts:8](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L8)
+Defined in: [src/types/styleconfig.ts:8](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L8)
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [src/types/styleconfig.ts:8](https://github.com/pt9912/v-map/blob/e0
 
 > `optional` **styleFunction**: (`feature`) => `Partial`\<`StyleConfig`\>
 
-Defined in: [src/types/styleconfig.ts:35](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L35)
+Defined in: [src/types/styleconfig.ts:35](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L35)
 
 #### Parameters
 
@@ -136,7 +136,7 @@ Defined in: [src/types/styleconfig.ts:35](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textColor**: `string`
 
-Defined in: [src/types/styleconfig.ts:24](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L24)
+Defined in: [src/types/styleconfig.ts:24](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L24)
 
 ***
 
@@ -144,7 +144,7 @@ Defined in: [src/types/styleconfig.ts:24](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textHaloColor**: `string`
 
-Defined in: [src/types/styleconfig.ts:26](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L26)
+Defined in: [src/types/styleconfig.ts:26](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L26)
 
 ***
 
@@ -152,7 +152,7 @@ Defined in: [src/types/styleconfig.ts:26](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textHaloWidth**: `number`
 
-Defined in: [src/types/styleconfig.ts:27](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L27)
+Defined in: [src/types/styleconfig.ts:27](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L27)
 
 ***
 
@@ -160,7 +160,7 @@ Defined in: [src/types/styleconfig.ts:27](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textOffset**: \[`number`, `number`\]
 
-Defined in: [src/types/styleconfig.ts:28](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L28)
+Defined in: [src/types/styleconfig.ts:28](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L28)
 
 ***
 
@@ -168,7 +168,7 @@ Defined in: [src/types/styleconfig.ts:28](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textProperty**: `string`
 
-Defined in: [src/types/styleconfig.ts:23](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L23)
+Defined in: [src/types/styleconfig.ts:23](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L23)
 
 ***
 
@@ -176,7 +176,7 @@ Defined in: [src/types/styleconfig.ts:23](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **textSize**: `number`
 
-Defined in: [src/types/styleconfig.ts:25](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L25)
+Defined in: [src/types/styleconfig.ts:25](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L25)
 
 ***
 
@@ -184,4 +184,4 @@ Defined in: [src/types/styleconfig.ts:25](https://github.com/pt9912/v-map/blob/e
 
 > `optional` **zOffset**: `number`
 
-Defined in: [src/types/styleconfig.ts:31](https://github.com/pt9912/v-map/blob/e04291a8bb419e1e0d2b30dae72595fa16a77e3b/src/types/styleconfig.ts#L31)
+Defined in: [src/types/styleconfig.ts:31](https://github.com/pt9912/v-map/blob/37aca36597098f225317a63dc1bb84263078aa55/src/types/styleconfig.ts#L31)

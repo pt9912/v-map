@@ -21,3 +21,4 @@
 - [VMapLayerWkt](interfaces/VMapLayerWkt.md)
 - [VMapLayerWms](interfaces/VMapLayerWms.md)
 - [VMapLayerXyz](interfaces/VMapLayerXyz.md)
+- [VMapStyle](interfaces/VMapStyle.md)

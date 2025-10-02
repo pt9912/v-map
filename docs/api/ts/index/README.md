@@ -13,6 +13,7 @@
 
 ## Interfaces
 
+- [Style](interfaces/Style.md)
 - [VMapBuilderCustomEvent](interfaces/VMapBuilderCustomEvent.md)
 - [VMapCustomEvent](interfaces/VMapCustomEvent.md)
 - [VMapLayerGeotiffCustomEvent](interfaces/VMapLayerGeotiffCustomEvent.md)
@@ -22,10 +23,12 @@
 - [VMapLayerWktCustomEvent](interfaces/VMapLayerWktCustomEvent.md)
 - [VMapLayerWmsCustomEvent](interfaces/VMapLayerWmsCustomEvent.md)
 - [VMapLayerXyzCustomEvent](interfaces/VMapLayerXyzCustomEvent.md)
+- [VMapStyleCustomEvent](interfaces/VMapStyleCustomEvent.md)
 
 ## Type Aliases
 
 - [Color](type-aliases/Color.md)
+- [StyleFormat](type-aliases/StyleFormat.md)
 
 ## References
 

@@ -14,3 +14,4 @@
 - [`v-map-layer-xyz`](./v-map-layer-xyz.md) — XYZ Tile Layer
 - [`v-map-layercontrol`](./v-map-layercontrol.md) — 
 - [`v-map-layergroup`](./v-map-layergroup.md) — 
+- [`v-map-style`](./v-map-style.md) — 
