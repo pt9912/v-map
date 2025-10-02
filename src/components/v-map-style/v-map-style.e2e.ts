@@ -97,6 +97,19 @@ describe('<v-map-style> E2E', () => {
     },
   };
 
+  // describe('mock tests', () => {
+  //   // v-map-style.e2e.ts
+  //   it('should load mocked parsers', async () => {
+  //     const page = await browser.newPage();
+  //     await page.goto('about:blank');
+  //     const result = await page.evaluate(() => {
+  //       const parser = new (window as any).SLDParser(); // Von setupTests.jest.ts injiziert
+  //       return parser.readStyle('').then((res: any) => res.output.name);
+  //     });
+  //     expect(result).toBe('Mock SLD Style');
+  //   });
+  // });
+
   describe('v-map-style with v-map-layer-wkt', () => {
     it('should render and apply SLD style to WKT point layer', async () => {
       const page = await newE2EPage();
@@ -383,7 +396,7 @@ describe('<v-map-style> E2E', () => {
         <v-map zoom="10" center-lat="47.4" center-lon="8.5">
           <v-map-style
             format="mapbox-gl"
-            content="{'version': 8}"
+            content='{"version": 8}'
             layer-targets="test-layer">
           </v-map-style>
 
