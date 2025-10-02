@@ -33,7 +33,7 @@ export interface NormalizedStyle {
   src?: string;
   content?: string;
   layerTargets?: string;
-  autoApply?: boolean | string;
+  autoApply?: boolean;
   id?: string;
 }
 
