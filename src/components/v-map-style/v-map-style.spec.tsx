@@ -43,6 +43,48 @@ jest.mock('geostyler-mapbox-parser', () => {
   }));
 });
 
+jest.mock('geostyler-qgis-parser', () => {
+  return jest.fn().mockImplementation(() => ({
+    readStyle: jest.fn().mockResolvedValue({
+      output: {
+        name: 'Mock QGIS Style',
+        rules: [
+          {
+            name: 'Mock QGIS Rule',
+            symbolizers: [
+              {
+                kind: 'Fill',
+                color: '#00ff00',
+              },
+            ],
+          },
+        ],
+      },
+    }),
+  }));
+});
+
+jest.mock('geostyler-lyrx-parser', () => {
+  return jest.fn().mockImplementation(() => ({
+    readStyle: jest.fn().mockResolvedValue({
+      output: {
+        name: 'Mock LYRX Style',
+        rules: [
+          {
+            name: 'Mock LYRX Rule',
+            symbolizers: [
+              {
+                kind: 'Fill',
+                color: '#ffff00',
+              },
+            ],
+          },
+        ],
+      },
+    }),
+  }));
+});
+
 jest.mock('geostyler-style', () => ({
   Style: {},
 }));
@@ -164,6 +206,57 @@ describe('v-map-style', () => {
     expect(result.name).toBe('Mock Mapbox Style');
   });
 
+  it('should handle QGIS Style format', async () => {
+    const qgisStyle = `<?xml version="1.0" encoding="UTF-8"?>
+      <qgis>
+        <renderer-v2>
+          <symbol>
+            <layer class="SimpleFill">
+              <prop k="color" v="0,255,0,255"/>
+            </layer>
+          </symbol>
+        </renderer-v2>
+      </qgis>`;
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="qgis" content='${qgisStyle}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    expect(component.format).toBe('qgis');
+
+    // Parse the QGIS style
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeTruthy();
+    expect(result.name).toBe('Mock QGIS Style');
+  });
+
+  it('should handle LYRX (ArcGIS Pro) Style format', async () => {
+    const lyrxStyle = JSON.stringify({
+      type: 'CIMFeatureLayer',
+      renderer: {
+        type: 'CIMSimpleRenderer',
+        symbol: {
+          type: 'CIMPolygonSymbol',
+        },
+      },
+    });
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="lyrx" content='${lyrxStyle}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    expect(component.format).toBe('lyrx');
+
+    // Parse the LYRX style
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeTruthy();
+    expect(result.name).toBe('Mock LYRX Style');
+  });
+
   it('should handle unsupported formats', async () => {
     const page = await newSpecPage({
       components: [VMapStyle],
@@ -176,7 +269,7 @@ describe('v-map-style', () => {
     const result = await component.loadAndParseStyle();
     expect(result).toBeUndefined();
     expect(component.getError()).toBeTruthy();
-    expect(component.getError().message).toContain('CartoCSS format not yet implemented');
+    expect(component.getError().message).toContain('CartoCSS format not supported');
   });
 
   it('should display loading state', async () => {

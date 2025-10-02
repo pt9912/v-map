@@ -1,6 +1,8 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, State, h } from '@stencil/core';
 import SLDParser from 'geostyler-sld-parser';
 import MapboxParser from 'geostyler-mapbox-parser';
+import QGISParser from 'geostyler-qgis-parser';
+import LyrxParser from 'geostyler-lyrx-parser';
 import { Style } from 'geostyler-style';
 
 import { log } from '../../utils/logger';
@@ -8,7 +10,7 @@ import MSG from '../../utils/messages';
 
 const MSG_COMPONENT = 'v-map-style';
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'cartocss' | 'slyr';
+export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cartocss';
 
 export interface StyleConfig {
   format: StyleFormat;
@@ -66,6 +68,8 @@ export class VMapStyle {
 
   private sldParser = new SLDParser();
   private mapboxParser = new MapboxParser();
+  private qgisParser = new QGISParser();
+  private lyrxParser = new LyrxParser();
 
   async connectedCallback() {
     log(MSG_COMPONENT + ' - ' + MSG.COMPONENT_CONNECTED_CALLBACK);
@@ -133,12 +137,13 @@ export class VMapStyle {
         return this.parseSLD(styleContent);
       case 'mapbox-gl':
         return this.parseMapboxGL(styleContent);
+      case 'qgis':
+        return this.parseQGIS(styleContent);
+      case 'lyrx':
+        return this.parseLyrx(styleContent);
       case 'cartocss':
-        // TODO: Implement CartoCSS parser
-        throw new Error('CartoCSS format not yet implemented');
-      case 'slyr':
-        // TODO: Implement SLYR parser
-        throw new Error('SLYR format not yet implemented');
+        // CartoCSS parser not available in GeoStyler ecosystem
+        throw new Error('CartoCSS format not supported - no GeoStyler parser available');
       default:
         throw new Error(`Unsupported style format: ${this.format}`);
     }
@@ -174,6 +179,39 @@ export class VMapStyle {
       return style;
     } catch (error) {
       throw new Error(`Mapbox GL Style parsing failed: ${error.message}`);
+    }
+  }
+
+  private async parseQGIS(qgisContent: string): Promise<Style> {
+    try {
+      const { output: style } = await this.qgisParser.readStyle(qgisContent);
+
+      if (!style) {
+        throw new Error('Failed to parse QGIS Style - no style output');
+      }
+
+      return style;
+    } catch (error) {
+      throw new Error(`QGIS Style parsing failed: ${error.message}`);
+    }
+  }
+
+  private async parseLyrx(lyrxContent: string): Promise<Style> {
+    try {
+      // Parse JSON if string
+      const lyrxStyle = typeof lyrxContent === 'string'
+        ? JSON.parse(lyrxContent)
+        : lyrxContent;
+
+      const { output: style } = await this.lyrxParser.readStyle(lyrxStyle);
+
+      if (!style) {
+        throw new Error('Failed to parse LYRX (ArcGIS Pro) Style - no style output');
+      }
+
+      return style;
+    } catch (error) {
+      throw new Error(`LYRX (ArcGIS Pro) Style parsing failed: ${error.message}`);
     }
   }
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T07:06:53",
+  "timestamp": "2025-10-02T07:11:33",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -3233,10 +3233,10 @@
         },
         {
           "name": "format",
-          "type": "\"cartocss\" | \"mapbox-gl\" | \"sld\" | \"slyr\"",
+          "type": "\"cartocss\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
           "complexType": {
             "original": "StyleFormat",
-            "resolved": "\"cartocss\" | \"mapbox-gl\" | \"sld\" | \"slyr\"",
+            "resolved": "\"cartocss\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
             "references": {
               "StyleFormat": {
                 "location": "local",
@@ -3262,15 +3262,19 @@
               "type": "string"
             },
             {
+              "value": "lyrx",
+              "type": "string"
+            },
+            {
               "value": "mapbox-gl",
               "type": "string"
             },
             {
-              "value": "sld",
+              "value": "qgis",
               "type": "string"
             },
             {
-              "value": "slyr",
+              "value": "sld",
               "type": "string"
             }
           ],
@@ -3384,7 +3388,7 @@
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
     },
     "src/components/v-map-style/v-map-style.tsx::StyleFormat": {
-      "declaration": "export type StyleFormat = 'sld' | 'mapbox-gl' | 'cartocss' | 'slyr';",
+      "declaration": "export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cartocss';",
       "docstring": "",
       "path": "src/components/v-map-style/v-map-style.tsx"
     },
