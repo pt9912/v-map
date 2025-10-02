@@ -1,8 +1,9 @@
-import { Component, h, Element, Method, Prop, Watch } from '@stencil/core';
+import { Component, h, Element, Method, Prop, Watch, Listen } from '@stencil/core';
 import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log, warn } from '../../utils/logger';
 import MSG from '../../utils/messages';
+import { Style } from 'geostyler-style';
 
 const MSG_COMPONENT: string = 'v-map-layer-geojson - ';
 
@@ -116,6 +117,7 @@ export class VMapLayerGeoJSON {
   private didLoad: boolean = false;
 
   private helper: VMapLayerHelper;
+  private appliedGeostylerStyle?: Style;
 
   /**
    * Returns the internal layer ID used by the map provider.
@@ -242,6 +244,45 @@ export class VMapLayerGeoJSON {
     });
   }
 
+  /**
+   * Listen for style events from v-map-style components
+   */
+  @Listen('styleReady', { target: 'document' })
+  async onStyleReady(event: CustomEvent<Style>) {
+    const styleComponent = event.target as HTMLVMapStyleElement;
+    if (this.isTargetedByStyle(styleComponent)) {
+      log(MSG_COMPONENT + 'Applying geostyler style');
+      this.appliedGeostylerStyle = event.detail;
+      await this.updateLayerWithGeostylerStyle();
+    }
+  }
+
+  /**
+   * Check if this layer is targeted by a style component
+   */
+  private isTargetedByStyle(styleComponent: HTMLVMapStyleElement): boolean {
+    const layerTargets = styleComponent.layerTargets;
+    if (!layerTargets) return false;
+
+    const targets = layerTargets.split(',').map(id => id.trim());
+    return targets.includes(this.el.id) || targets.length === 0;
+  }
+
+  /**
+   * Update the layer with the applied geostyler style
+   */
+  private async updateLayerWithGeostylerStyle() {
+    if (!this.appliedGeostylerStyle || !this.helper) return;
+
+    await this.helper.updateLayer({
+      type: 'geojson',
+      data: {
+        geojson: this.geojson,
+        url: this.url,
+      },
+    });
+  }
+
   private onSlotChange = () => {
     log(MSG_COMPONENT + 'onSlotChange');
     this.observeAssignedNodes();
@@ -306,7 +347,7 @@ export class VMapLayerGeoJSON {
         ])
       : undefined;
 
-    return {
+    const config: LayerConfig = {
       type: 'geojson',
       opacity: this.opacity,
       visible: this.visible,
@@ -328,6 +369,13 @@ export class VMapLayerGeoJSON {
         textSize: this.textSize,
       },
     };
+
+    // Add geostyler style if available (takes precedence over component style props)
+    if (this.appliedGeostylerStyle) {
+      (config as any).geostylerStyle = this.appliedGeostylerStyle;
+    }
+
+    return config;
   }
 
   render() {
