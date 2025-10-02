@@ -29,7 +29,6 @@
 
 - [Color](type-aliases/Color.md)
 - [ResolvedStyle](type-aliases/ResolvedStyle.md)
-- [StyleFormat](type-aliases/StyleFormat.md)
 
 ## References
 
@@ -66,3 +65,9 @@ Re-exports [MapProvider](../types/mapprovider/interfaces/MapProvider.md)
 ### MapProviderDetail
 
 Re-exports [MapProviderDetail](../utils/events/interfaces/MapProviderDetail.md)
+
+***
+
+### StyleFormat
+
+Re-exports [StyleFormat](../types/styling/type-aliases/StyleFormat.md)

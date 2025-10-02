@@ -376,15 +376,38 @@ describe('<v-map-style> E2E', () => {
       );
     });
 
-    it('should handle unsupported format gracefully', async () => {
-      newE2EPage.setIgnoreError('format not yet implemented');
+    it('should handle Mapbox GL style format', async () => {
+      // Valid Mapbox GL Style with minimal required fields
+      const mapboxStyle = JSON.stringify({
+        version: 8,
+        name: 'Test Mapbox Style',
+        sources: {
+          'test-source': {
+            type: 'geojson',
+            data: pointGeoJSON,
+          },
+        },
+        layers: [
+          {
+            id: 'test-layer',
+            type: 'circle',
+            source: 'test-source',
+            paint: {
+              'circle-radius': 8,
+              'circle-color': '#ff0000',
+            },
+          },
+        ],
+      });
+
       const page = await newE2EPage();
       await page.setContent(`
         <v-map zoom="10" center-lat="47.4" center-lon="8.5">
           <v-map-style
             format="mapbox-gl"
-            content='{"version": 8}'
-            layer-targets="test-layer">
+            content='${mapboxStyle}'
+            layer-targets="test-layer"
+            auto-apply="true">
           </v-map-style>
 
           <v-map-layergroup>
@@ -401,8 +424,10 @@ describe('<v-map-style> E2E', () => {
       const styleComponent = await page.find('v-map-style');
       expect(styleComponent).toBeTruthy();
 
-      // Should show error for unsupported format - verify component has correct format
+      // Verify Mapbox GL format is properly configured
       expect(await styleComponent.getProperty('format')).toBe('mapbox-gl');
+      expect(await styleComponent.getProperty('layerTargets')).toBe('test-layer');
+      expect(await styleComponent.getProperty('autoApply')).toBe(true);
     });
   });
 

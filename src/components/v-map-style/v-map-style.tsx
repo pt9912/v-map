@@ -17,24 +17,14 @@ import { Style } from 'geostyler-style';
 
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
+import {
+  StyleFormat,
+  Cesium3DTilesStyle,
+} from '../../types/styling';
 
 const MSG_COMPONENT = 'v-map-style';
 
-export type StyleFormat =
-  | 'sld'
-  | 'mapbox-gl'
-  | 'qgis'
-  | 'lyrx'
-  | 'cesium-3d-tiles';
-
-export type Cesium3DTilesStyle = Record<string, unknown>;
 export type ResolvedStyle = Style | Cesium3DTilesStyle;
-
-export interface StyleConfig {
-  format: StyleFormat;
-  source: string;
-  layerTargets?: string[];
-}
 
 @Component({
   tag: 'v-map-style',
@@ -45,7 +35,7 @@ export class VMapStyle {
   @Element() el!: HTMLElement;
 
   /**
-   * The styling format to parse (currently supports 'sld').
+   * The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').
    */
   @Prop({ reflect: true }) format: StyleFormat = 'sld';
 
@@ -177,7 +167,7 @@ export class VMapStyle {
 
       return style;
     } catch (error) {
-      throw new Error(`SLD parsing failed: ${error.message}`);
+      throw new Error(`SLD parsing failed: ${error?.message || error}`);
     }
   }
 
@@ -189,6 +179,10 @@ export class VMapStyle {
           ? JSON.parse(mapboxContent)
           : mapboxContent;
 
+      if (typeof mapboxStyle !== 'object' || mapboxStyle === null) {
+        throw new Error('Parsed Mapbox GL style is not a valid object');
+      }
+
       const { output: style } = await this.mapboxParser.readStyle(mapboxStyle);
 
       if (!style) {
@@ -197,7 +191,7 @@ export class VMapStyle {
 
       return style;
     } catch (error) {
-      throw new Error(`Mapbox GL Style parsing failed: ${error.message}`);
+      throw new Error(`Mapbox GL Style parsing failed: ${error?.message || error}`);
     }
   }
 
@@ -211,7 +205,7 @@ export class VMapStyle {
 
       return style;
     } catch (error) {
-      throw new Error(`QGIS Style parsing failed: ${error.message}`);
+      throw new Error(`QGIS Style parsing failed: ${error?.message || error}`);
     }
   }
 
@@ -220,6 +214,10 @@ export class VMapStyle {
       // Parse JSON if string
       const lyrxStyle =
         typeof lyrxContent === 'string' ? JSON.parse(lyrxContent) : lyrxContent;
+
+      if (typeof lyrxStyle !== 'object' || lyrxStyle === null) {
+        throw new Error('Parsed LYRX style is not a valid object');
+      }
 
       const { output: style } = await this.lyrxParser.readStyle(lyrxStyle);
 
@@ -232,7 +230,7 @@ export class VMapStyle {
       return style;
     } catch (error) {
       throw new Error(
-        `LYRX (ArcGIS Pro) Style parsing failed: ${error.message}`,
+        `LYRX (ArcGIS Pro) Style parsing failed: ${error?.message || error}`,
       );
     }
   }
@@ -250,12 +248,14 @@ export class VMapStyle {
   ): Promise<Cesium3DTilesStyle> {
     try {
       const style = JSON.parse(jsonContent);
+
       if (typeof style !== 'object' || style === null) {
-        throw new Error('Parsed Cesium style is not an object');
+        throw new Error('Parsed Cesium 3D Tiles style is not a valid object');
       }
+
       return style as Cesium3DTilesStyle;
     } catch (error) {
-      throw new Error(`Cesium 3D Tiles style parsing failed: ${error.message}`);
+      throw new Error(`Cesium 3D Tiles style parsing failed: ${error?.message || error}`);
     }
   }
 

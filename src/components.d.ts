@@ -12,7 +12,8 @@ import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { LayerConfig } from "./types/layerconfig";
-import { ResolvedStyle, StyleFormat } from "./components/v-map-style/v-map-style";
+import { StyleFormat } from "./types/styling";
+import { ResolvedStyle } from "./components/v-map-style/v-map-style";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
@@ -20,7 +21,8 @@ export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { LayerConfig } from "./types/layerconfig";
-export { ResolvedStyle, StyleFormat } from "./components/v-map-style/v-map-style";
+export { StyleFormat } from "./types/styling";
+export { ResolvedStyle } from "./components/v-map-style/v-map-style";
 export namespace Components {
     interface VMap {
         /**
@@ -696,7 +698,7 @@ export namespace Components {
          */
         "content"?: string;
         /**
-          * The styling format to parse (currently supports 'sld').
+          * The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').
           * @default 'sld'
          */
         "format": StyleFormat;
@@ -1693,7 +1695,7 @@ declare namespace LocalJSX {
          */
         "content"?: string;
         /**
-          * The styling format to parse (currently supports 'sld').
+          * The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').
           * @default 'sld'
          */
         "format"?: StyleFormat;

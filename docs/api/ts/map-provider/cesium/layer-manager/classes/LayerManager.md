@@ -6,7 +6,7 @@
 
 # Class: LayerManager
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L34)
+Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L34)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9
 
 > **new LayerManager**(`Cesium`, `viewer`): `LayerManager`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L40)
+Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L40)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9
 
 > **addCustomLayer**(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L96)
+Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L96)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9
 
 > **addLayer**\<`T`\>(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L69)
+Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L69)
 
 #### Type Parameters
 
@@ -86,7 +86,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9
 
 > **getLayer**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:101](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L101)
+Defined in: [src/map-provider/cesium/layer-manager.ts:101](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L101)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:101](https://github.com/pt
 
 > **getLayerById**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:107](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L107)
+Defined in: [src/map-provider/cesium/layer-manager.ts:107](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L107)
 
 #### Parameters
 
@@ -122,7 +122,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:107](https://github.com/pt
 
 > **removeLayer**(`layerId`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L111)
+Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L111)
 
 #### Parameters
 
@@ -140,7 +140,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt
 
 > **replaceLayer**\<`T`\>(`id`, `oldlayer`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L45)
+Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L45)
 
 #### Type Parameters
 
@@ -172,7 +172,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9
 
 > **setOpacity**(`layerId`, `opacity`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:122](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L122)
+Defined in: [src/map-provider/cesium/layer-manager.ts:122](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L122)
 
 #### Parameters
 
@@ -194,7 +194,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:122](https://github.com/pt
 
 > **setVisible**(`layerId`, `visible`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L117)
+Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L117)
 
 #### Parameters
 
@@ -216,7 +216,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt
 
 > **setZIndex**(`layerId`, `zindex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:127](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/map-provider/cesium/layer-manager.ts#L127)
+Defined in: [src/map-provider/cesium/layer-manager.ts:127](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/map-provider/cesium/layer-manager.ts#L127)
 
 #### Parameters
 

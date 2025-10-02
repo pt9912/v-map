@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T15:28:05",
+  "timestamp": "2025-10-02T15:43:27",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -4374,16 +4374,16 @@
             "resolved": "\"cesium-3d-tiles\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
             "references": {
               "StyleFormat": {
-                "location": "local",
-                "path": "/workspaces/v-map/src/components/v-map-style/v-map-style.tsx",
-                "id": "src/components/v-map-style/v-map-style.tsx::StyleFormat"
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::StyleFormat"
               }
             }
           },
           "mutable": false,
           "attr": "format",
           "reflectToAttr": true,
-          "docs": "The styling format to parse (currently supports 'sld').",
+          "docs": "The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').",
           "docsTags": [
             {
               "name": "default",
@@ -4556,10 +4556,10 @@
       "docstring": "",
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
     },
-    "src/components/v-map-style/v-map-style.tsx::StyleFormat": {
-      "declaration": "export type StyleFormat =\n  | 'sld'\n  | 'mapbox-gl'\n  | 'qgis'\n  | 'lyrx'\n  | 'cesium-3d-tiles';",
+    "src/types/styling.ts::StyleFormat": {
+      "declaration": "export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cesium-3d-tiles';",
       "docstring": "",
-      "path": "src/components/v-map-style/v-map-style.tsx"
+      "path": "src/types/styling.ts"
     },
     "src/components/v-map-style/v-map-style.tsx::ResolvedStyle": {
       "declaration": "export type ResolvedStyle = Style | Cesium3DTilesStyle;",

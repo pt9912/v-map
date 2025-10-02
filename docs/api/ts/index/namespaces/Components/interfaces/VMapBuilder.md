@@ -6,7 +6,7 @@
 
 # Interface: VMapBuilder
 
-Defined in: [src/components.d.ts:76](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L76)
+Defined in: [src/components.d.ts:78](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/components.d.ts#L78)
 
 A component that builds map configurations dynamically from JSON/YAML configuration scripts.
 
@@ -16,6 +16,6 @@ A component that builds map configurations dynamically from JSON/YAML configurat
 
 > `optional` **mapconfig**: `unknown`
 
-Defined in: [src/components.d.ts:80](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L80)
+Defined in: [src/components.d.ts:82](https://github.com/pt9912/v-map/blob/a0487e7879c57bc1bb09ef4fd23524b8b3d97cf2/src/components.d.ts#L82)
 
 Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.

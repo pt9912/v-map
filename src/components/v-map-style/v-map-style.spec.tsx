@@ -321,4 +321,158 @@ describe('v-map-style', () => {
       'Either src or content must be provided',
     );
   });
+
+  describe('Negative test cases - Parser errors', () => {
+    it('should handle invalid JSON for Mapbox GL Style', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="mapbox-gl" content="invalid json" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('Mapbox GL Style parsing failed');
+    });
+
+    it('should handle invalid JSON for LYRX Style', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="lyrx" content="{invalid: json}" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('LYRX (ArcGIS Pro) Style parsing failed');
+    });
+
+    it('should handle invalid JSON for Cesium 3D Tiles Style', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="cesium-3d-tiles" content="not valid json" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('Cesium 3D Tiles style parsing failed');
+    });
+
+    it('should handle non-object JSON for Mapbox GL Style', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="mapbox-gl" content='"just a string"' auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('not a valid object');
+    });
+
+    it('should handle null JSON for LYRX Style', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="lyrx" content="null" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('not a valid object');
+    });
+
+    it('should handle parser returning undefined output for SLD', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="sld" content="invalid sld" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+
+      // Mock parser to return undefined output
+      const originalParser = component['sldParser'];
+      component['sldParser'] = {
+        readStyle: jest.fn().mockResolvedValue({ output: undefined }),
+      } as any;
+
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('no style output');
+
+      // Restore original parser
+      component['sldParser'] = originalParser;
+    });
+
+    it('should handle parser returning undefined output for QGIS', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="qgis" content="invalid qgis" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+
+      // Mock parser to return undefined output
+      const originalParser = component['qgisParser'];
+      component['qgisParser'] = {
+        readStyle: jest.fn().mockResolvedValue({ output: undefined }),
+      } as any;
+
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('no style output');
+
+      // Restore original parser
+      component['qgisParser'] = originalParser;
+    });
+
+    it('should handle unsupported format', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="sld" content="test" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+
+      // Manually set an invalid format
+      (component as any).format = 'unsupported-format' as any;
+
+      const result = await component.loadAndParseStyle();
+
+      expect(result).toBeUndefined();
+      expect(component.getError()).toBeTruthy();
+      expect(component.getError().message).toContain('Unsupported style format');
+    });
+
+    it('should emit styleError event on parsing failure', async () => {
+      const page = await newSpecPage({
+        components: [VMapStyle],
+        html: `<v-map-style format="mapbox-gl" content="invalid" auto-apply="false"></v-map-style>`,
+      });
+
+      const component = page.rootInstance as VMapStyle;
+      const styleErrorSpy = jest.fn();
+      page.root.addEventListener('styleError', styleErrorSpy);
+
+      await component.loadAndParseStyle();
+
+      expect(styleErrorSpy).toHaveBeenCalled();
+      expect(styleErrorSpy.mock.calls[0][0].detail).toBeInstanceOf(Error);
+    });
+  });
 });
