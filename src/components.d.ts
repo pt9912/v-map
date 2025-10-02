@@ -304,6 +304,59 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface VMapLayerTerrain {
+        /**
+          * Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').
+         */
+        "color"?: string;
+        /**
+          * URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).
+         */
+        "elevationData": string;
+        /**
+          * JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
+         */
+        "elevationDecoder"?: string;
+        /**
+          * Liefert `true`, sobald das Terrain-Layer initialisiert wurde.
+         */
+        "isReady": () => Promise<boolean>;
+        /**
+          * Maximale Zoomstufe für das Terrain.
+         */
+        "maxZoom"?: number;
+        /**
+          * Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).
+         */
+        "meshMaxError"?: number;
+        /**
+          * Minimale Zoomstufe für das Terrain.
+         */
+        "minZoom"?: number;
+        /**
+          * Opazität des Layers.
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Optionale Textur (RGB) für das Terrain.
+         */
+        "texture"?: string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible": boolean;
+        /**
+          * Darstellung des Mesh als Drahtgitter.
+         */
+        "wireframe"?: boolean;
+        /**
+          * Z-Index für die Darstellung.
+          * @default 1000
+         */
+        "zIndex": number;
+    }
     interface VMapLayerTile3d {
         /**
           * Indicates whether the tileset has been initialised and added to the map.
@@ -725,6 +778,12 @@ declare global {
         prototype: HTMLVMapLayerScatterplotElement;
         new (): HTMLVMapLayerScatterplotElement;
     };
+    interface HTMLVMapLayerTerrainElement extends Components.VMapLayerTerrain, HTMLStencilElement {
+    }
+    var HTMLVMapLayerTerrainElement: {
+        prototype: HTMLVMapLayerTerrainElement;
+        new (): HTMLVMapLayerTerrainElement;
+    };
     interface HTMLVMapLayerTile3dElementEventMap {
         "ready": void;
     }
@@ -837,6 +896,7 @@ declare global {
         "v-map-layer-google": HTMLVMapLayerGoogleElement;
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
         "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
+        "v-map-layer-terrain": HTMLVMapLayerTerrainElement;
         "v-map-layer-tile3d": HTMLVMapLayerTile3dElement;
         "v-map-layer-wkt": HTMLVMapLayerWktElement;
         "v-map-layer-wms": HTMLVMapLayerWmsElement;
@@ -1134,6 +1194,55 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface VMapLayerTerrain {
+        /**
+          * Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').
+         */
+        "color"?: string;
+        /**
+          * URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).
+         */
+        "elevationData": string;
+        /**
+          * JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
+         */
+        "elevationDecoder"?: string;
+        /**
+          * Maximale Zoomstufe für das Terrain.
+         */
+        "maxZoom"?: number;
+        /**
+          * Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).
+         */
+        "meshMaxError"?: number;
+        /**
+          * Minimale Zoomstufe für das Terrain.
+         */
+        "minZoom"?: number;
+        /**
+          * Opazität des Layers.
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Optionale Textur (RGB) für das Terrain.
+         */
+        "texture"?: string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible"?: boolean;
+        /**
+          * Darstellung des Mesh als Drahtgitter.
+         */
+        "wireframe"?: boolean;
+        /**
+          * Z-Index für die Darstellung.
+          * @default 1000
+         */
+        "zIndex"?: number;
+    }
     interface VMapLayerTile3d {
         /**
           * Fired once the tileset layer is initialised.
@@ -1409,6 +1518,7 @@ declare namespace LocalJSX {
         "v-map-layer-google": VMapLayerGoogle;
         "v-map-layer-osm": VMapLayerOsm;
         "v-map-layer-scatterplot": VMapLayerScatterplot;
+        "v-map-layer-terrain": VMapLayerTerrain;
         "v-map-layer-tile3d": VMapLayerTile3d;
         "v-map-layer-wkt": VMapLayerWkt;
         "v-map-layer-wms": VMapLayerWms;
@@ -1435,6 +1545,7 @@ declare module "@stencil/core" {
             "v-map-layer-google": LocalJSX.VMapLayerGoogle & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
             "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
             "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
+            "v-map-layer-terrain": LocalJSX.VMapLayerTerrain & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainElement>;
             "v-map-layer-tile3d": LocalJSX.VMapLayerTile3d & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
             "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
             /**

@@ -1,5 +1,6 @@
 // CesiumProvider.ts – relevante Ergänzungen
 import { CesiumLayerGroups, AnyLayer } from './CesiumLayerGroups';
+import type { ILayer } from './i-layer';
 import { LayerManager } from './layer-manager';
 
 import { log, warn } from '../../utils/logger';
@@ -42,6 +43,78 @@ function removeCesiumWidgetsCss(shadowRoot: ShadowRoot): void {
       // style.parentNode?.removeChild(style);
       log('v-map - provider - cesium - Cesium‑Widget‑CSS entfernt');
       break; // wir haben das gesuchte Style‑Tag gefunden
+    }
+  }
+}
+
+class CesiumTerrainLayer implements ILayer {
+  private options: any;
+  private opacity = 1;
+  private previousProvider: any;
+
+  constructor(
+    private Cesium: CesiumModule,
+    private viewer: Viewer,
+    private provider: any,
+    options: Partial<Extract<LayerConfig, { type: 'terrain' }>>,
+  ) {
+    this.options = options ?? {};
+    this.previousProvider = viewer.terrainProvider;
+    this.viewer.terrainProvider = this.provider;
+  }
+
+  getOptions() {
+    return this.options;
+  }
+
+  setOptions(options: any): void {
+    this.options = options;
+  }
+
+  getVisible(): boolean {
+    return this.viewer.scene.globe.show;
+  }
+
+  setVisible(value: boolean): void {
+    this.viewer.scene.globe.show = value;
+  }
+
+  getOpacity(): number {
+    return this.opacity;
+  }
+
+  setOpacity(value: number): void {
+    this.opacity = value;
+    const globe: any = this.viewer.scene.globe;
+    if (!globe.translucency) {
+      try {
+        globe.translucency = new this.Cesium.GlobeTranslucency();
+        globe.translucency.enabled = true;
+      } catch (error) {
+        warn('Cesium terrain opacity not supported', error);
+        return;
+      }
+    }
+    globe.translucency.enabled = value < 1;
+    globe.translucency.frontFaceAlpha = value;
+  }
+
+  getZIndex(): number {
+    return 0;
+  }
+
+  async setZIndex(_zIndex: number): Promise<void> {
+    return;
+  }
+
+  remove(): void {
+    try {
+      this.viewer.terrainProvider = this.previousProvider
+        ? this.previousProvider
+        : new this.Cesium.EllipsoidTerrainProvider();
+      this.viewer.scene.globe.show = true;
+    } catch (error) {
+      warn('Cesium terrain reset failed', error);
     }
   }
 }
@@ -137,6 +210,13 @@ export class CesiumProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'google' }>,
         );
         wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
+      case 'terrain': {
+        const terrainLayer = await this.createTerrainLayer(
+          layerConfig as Extract<LayerConfig, { type: 'terrain' }>,
+        );
+        wrapper = this.layerManager.addCustomLayer(layerId, terrainLayer);
         break;
       }
       case 'xyz': {
@@ -873,6 +953,30 @@ export class CesiumProvider implements MapProvider {
     return new this.Cesium.ImageryLayer(provider, layerOptions);
   }
 
+  private async createTerrainLayer(
+    config: Extract<LayerConfig, { type: 'terrain' }>,
+  ): Promise<CesiumTerrainLayer> {
+    let provider: any;
+    if (config.elevationData) {
+      provider = await this.Cesium.CesiumTerrainProvider.fromUrl(
+        config.elevationData,
+      );
+    } else {
+      provider = await this.Cesium.createWorldTerrainAsync();
+    }
+
+    const layer = new CesiumTerrainLayer(this.Cesium, this.viewer, provider, config);
+
+    if (config.visible !== undefined) {
+      layer.setVisible(config.visible);
+    }
+    if (config.opacity !== undefined) {
+      layer.setOpacity(config.opacity);
+    }
+
+    return layer;
+  }
+
   private async addWMSLayer(
     config: Extract<LayerConfig, { type: 'wms' }>,
   ): Promise<ImageryLayer> {
@@ -1016,6 +1120,27 @@ export class CesiumProvider implements MapProvider {
               googleLayer,
             );
             updatedGoogleLayer.setOptions(googleOptions);
+          }
+          break;
+        case 'terrain':
+          {
+            const previousOptions = oldLayer.getOptions();
+            const visible = oldLayer.getVisible();
+            const opacity = oldLayer.getOpacity();
+            oldLayer.remove();
+
+            const terrainLayer = await this.createTerrainLayer({
+              type: 'terrain',
+              ...previousOptions,
+              ...(update.data ?? {}),
+            } as Extract<LayerConfig, { type: 'terrain' }>);
+
+            const wrapped = this.layerManager.addCustomLayer(
+              layerId,
+              terrainLayer,
+            );
+            wrapped.setVisible(visible);
+            wrapped.setOpacity(opacity);
           }
           break;
         case 'xyz':

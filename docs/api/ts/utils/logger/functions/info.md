@@ -8,7 +8,7 @@
 
 > **info**(...`args`): `void`
 
-Defined in: [src/utils/logger.ts:180](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/utils/logger.ts#L180)
+Defined in: [src/utils/logger.ts:180](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/utils/logger.ts#L180)
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerTile3dCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:589](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L589)
+Defined in: [src/components.d.ts:589](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L589)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:590](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L590)
+Defined in: [src/components.d.ts:590](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L590)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerTile3dElement`
 
-Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L591)
+Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L591)
 
 The read-only **`target`** property of the dispatched.
 

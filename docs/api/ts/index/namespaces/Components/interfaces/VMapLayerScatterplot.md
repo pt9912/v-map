@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerScatterplot
 
-Defined in: [src/components.d.ts:277](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L277)
+Defined in: [src/components.d.ts:277](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L277)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:277](https://github.com/pt9912/v-map/blob/31b41
 
 > `optional` **data**: `string`
 
-Defined in: [src/components.d.ts:281](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L281)
+Defined in: [src/components.d.ts:281](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L281)
 
 Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
 
@@ -24,7 +24,7 @@ Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon,
 
 > **getFillColor**: [`Color`](../../../type-aliases/Color.md)
 
-Defined in: [src/components.d.ts:286](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L286)
+Defined in: [src/components.d.ts:286](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L286)
 
 Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
 
@@ -40,7 +40,7 @@ Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CS
 
 > **getRadius**: `number`
 
-Defined in: [src/components.d.ts:291](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L291)
+Defined in: [src/components.d.ts:291](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L291)
 
 Funktion/konstanter Wert für den Punkt-Radius.
 
@@ -56,7 +56,7 @@ Funktion/konstanter Wert für den Punkt-Radius.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:296](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L296)
+Defined in: [src/components.d.ts:296](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L296)
 
 Globale Opazität (0–1).
 
@@ -72,7 +72,7 @@ Globale Opazität (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:300](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L300)
+Defined in: [src/components.d.ts:300](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L300)
 
 Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
 
@@ -82,7 +82,7 @@ Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:305](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/components.d.ts#L305)
+Defined in: [src/components.d.ts:305](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L305)
 
 Sichtbarkeit des Layers.
 

@@ -6,7 +6,7 @@
 
 # Interface: ParsedStyleInfo
 
-Defined in: [src/types/styling.ts:31](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L31)
+Defined in: [src/types/styling.ts:31](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L31)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:31](https://github.com/pt9912/v-map/blob/31b41
 
 > **appliedLayers**: `string`[]
 
-Defined in: [src/types/styling.ts:35](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L35)
+Defined in: [src/types/styling.ts:35](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L35)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/styling.ts:35](https://github.com/pt9912/v-map/blob/31b41
 
 > **format**: [`StyleFormat`](../type-aliases/StyleFormat.md)
 
-Defined in: [src/types/styling.ts:33](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L33)
+Defined in: [src/types/styling.ts:33](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L33)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/styling.ts:33](https://github.com/pt9912/v-map/blob/31b41
 
 > **source**: `string`
 
-Defined in: [src/types/styling.ts:34](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L34)
+Defined in: [src/types/styling.ts:34](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L34)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/styling.ts:34](https://github.com/pt9912/v-map/blob/31b41
 
 > **style**: `Style` \| [`Cesium3DTilesStyle`](../type-aliases/Cesium3DTilesStyle.md)
 
-Defined in: [src/types/styling.ts:32](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L32)
+Defined in: [src/types/styling.ts:32](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L32)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/styling.ts:32](https://github.com/pt9912/v-map/blob/31b41
 
 > **timestamp**: `number`
 
-Defined in: [src/types/styling.ts:36](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L36)
+Defined in: [src/types/styling.ts:36](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L36)

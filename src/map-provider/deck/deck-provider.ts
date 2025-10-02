@@ -256,6 +256,30 @@ export class DeckProvider implements MapProvider {
     );
   }
 
+  private async buildTerrainLayer(
+    cfg: Extract<LayerConfig, { type: 'terrain' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    const { TerrainLayer } = await import('@deck.gl/geo-layers');
+    const elevationDecoder = this.normalizeElevationDecoder(cfg.elevationDecoder);
+
+    return new TerrainLayer({
+      id: layerId,
+      elevationData: cfg.elevationData,
+      texture: cfg.texture,
+      elevationDecoder,
+      wireframe: cfg.wireframe ?? false,
+      color: cfg.color,
+      minZoom: cfg.minZoom,
+      maxZoom: cfg.maxZoom,
+      meshMaxError: cfg.meshMaxError,
+      opacity: cfg.opacity ?? 1,
+      visible: cfg.visible ?? true,
+      material: true,
+      pickable: false,
+    });
+  }
+
   private getModelUrl(
     model: LayerModel<Layer> | undefined,
   ): string | undefined {
@@ -267,6 +291,28 @@ export class DeckProvider implements MapProvider {
       console.warn('Failed to resolve model URL', error);
       return undefined;
     }
+  }
+
+  private normalizeElevationDecoder(
+    decoder?: Extract<LayerConfig, { type: 'terrain' }>['elevationDecoder'],
+  ) {
+    const defaults = {
+      rScaler: 1,
+      gScaler: 1,
+      bScaler: 1,
+      offset: 0,
+    };
+
+    if (!decoder) {
+      return defaults;
+    }
+
+    return {
+      rScaler: (decoder as any).rScaler ?? (decoder as any).r ?? defaults.rScaler,
+      gScaler: (decoder as any).gScaler ?? (decoder as any).g ?? defaults.gScaler,
+      bScaler: (decoder as any).bScaler ?? (decoder as any).b ?? defaults.bScaler,
+      offset: decoder.offset ?? defaults.offset,
+    };
   }
 
   // ========== Enhanced Styling Helper Methods ==========
@@ -901,6 +947,11 @@ export type TileLoadProps = {
           layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
           layerId,
         );
+      case 'terrain':
+        return this.buildTerrainLayer(
+          layerConfig as Extract<LayerConfig, { type: 'terrain' }>,
+          layerId,
+        );
       case 'xyz':
         return this.buildXyzTileLayer(layerConfig as any, layerId);
       case 'scatterplot':
@@ -1095,6 +1146,19 @@ export type TileLoadProps = {
         }
         if (update.data?.minZoom !== undefined) ov.minZoom = update.data.minZoom;
         if (update.data?.maxZoom !== undefined) ov.maxZoom = update.data.maxZoom;
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+        break;
+      }
+      case 'terrain': {
+        const ov: any = {};
+        if (update.data?.elevationData) ov.elevationData = update.data.elevationData;
+        if (update.data?.texture !== undefined) ov.texture = update.data.texture;
+        if (update.data?.elevationDecoder !== undefined)
+          ov.elevationDecoder = update.data.elevationDecoder;
+        if (update.data?.wireframe !== undefined) ov.wireframe = update.data.wireframe;
+        if (update.data?.color !== undefined) ov.color = update.data.color;
+        if (update.data?.meshMaxError !== undefined)
+          ov.meshMaxError = update.data.meshMaxError;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }

@@ -93,6 +93,11 @@ export class LayerManager {
     return wrapped;
   }
 
+  addCustomLayer(id: string, layer: ILayer | I3DTilesLayer) {
+    this.layers.set(id, layer);
+    return layer;
+  }
+
   getLayer(layerId: string): ILayer | I3DTilesLayer {
     const layer = this.layers.get(layerId);
     if (!layer) throw new Error(`Layer mit ID "${layerId}" nicht gefunden.`);

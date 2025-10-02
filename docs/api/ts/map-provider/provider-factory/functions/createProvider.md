@@ -8,7 +8,7 @@
 
 > **createProvider**(`engine`): `Promise`\<[`MapProvider`](../../../types/mapprovider/interfaces/MapProvider.md)\>
 
-Defined in: [src/map-provider/provider-factory.ts:18](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/map-provider/provider-factory.ts#L18)
+Defined in: [src/map-provider/provider-factory.ts:18](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/provider-factory.ts#L18)
 
 Erzeugt eine konkrete Karten-Provider-Instanz abhängig vom gewählten Flavour.
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T12:22:08",
+  "timestamp": "2025-10-02T12:57:21",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -1899,6 +1899,320 @@
           ]
         }
       ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-terrain/v-map-layer-terrain.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-terrain",
+      "readme": "# v-map-layer-terrain\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "color",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "color",
+          "reflectToAttr": true,
+          "docs": "Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationData",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-data",
+          "reflectToAttr": true,
+          "docs": "URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationDecoder",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-decoder",
+          "reflectToAttr": true,
+          "docs": "JSON-Repräsentation eines Elevation-Decoders (z. B. '{\"r\":1,\"g\":1,\"b\":1,\"offset\":0}').",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "Maximale Zoomstufe für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "meshMaxError",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "mesh-max-error",
+          "reflectToAttr": true,
+          "docs": "Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "minZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min-zoom",
+          "reflectToAttr": true,
+          "docs": "Minimale Zoomstufe für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "texture",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "texture",
+          "reflectToAttr": true,
+          "docs": "Optionale Textur (RGB) für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wireframe",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wireframe",
+          "reflectToAttr": true,
+          "docs": "Darstellung des Mesh als Drahtgitter.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-Index für die Darstellung.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "isReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Liefert `true`, sobald das Terrain-Layer initialisiert wurde.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
       "listeners": [],
       "styles": [],
       "slots": [],

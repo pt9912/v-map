@@ -6,7 +6,7 @@
 
 # Interface: StyleConfig
 
-Defined in: [src/types/styling.ts:7](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L7)
+Defined in: [src/types/styling.ts:7](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L7)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:7](https://github.com/pt9912/v-map/blob/31b41b
 
 > **format**: [`StyleFormat`](../type-aliases/StyleFormat.md)
 
-Defined in: [src/types/styling.ts:8](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L8)
+Defined in: [src/types/styling.ts:8](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/styling.ts:8](https://github.com/pt9912/v-map/blob/31b41b
 
 > `optional` **layerTargets**: `string`[]
 
-Defined in: [src/types/styling.ts:10](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L10)
+Defined in: [src/types/styling.ts:10](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L10)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/styling.ts:10](https://github.com/pt9912/v-map/blob/31b41
 
 > **source**: `string`
 
-Defined in: [src/types/styling.ts:9](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/types/styling.ts#L9)
+Defined in: [src/types/styling.ts:9](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L9)

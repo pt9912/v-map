@@ -8,6 +8,6 @@
 
 > `const` **isProd**: `boolean` = `!Build.isDev`
 
-Defined in: [src/utils/logger.ts:24](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/utils/logger.ts#L24)
+Defined in: [src/utils/logger.ts:24](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/utils/logger.ts#L24)
 
 Stencil-nativ: prod = !Build.isDev
