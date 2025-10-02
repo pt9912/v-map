@@ -1329,8 +1329,10 @@ export class OpenLayersProvider implements MapProvider {
   private async createWcsSource(
     config: Extract<LayerConfig, { type: 'wcs' }>,
   ) {
-    const [{ default: ImageWCS }] = await Promise.all([
-      import('ol/source/ImageWCS'),
+    const [
+      { default: ImageWMS },
+    ] = await Promise.all([
+      import('ol/source/ImageWMS'),
     ]);
 
     const params = {
@@ -1343,20 +1345,15 @@ export class OpenLayersProvider implements MapProvider {
       ...((config.params as any) ?? {}),
     };
 
-    const options: Record<string, any> = {
-      url: config.url,
-      params,
-    };
+    const query = this.appendParams(config.url, params);
 
-    if (config.projection) {
-      options.projection = config.projection;
-    }
-
-    if (config.resolutions) {
-      options.resolutions = config.resolutions;
-    }
-
-    return new ImageWCS(options);
+    return new ImageWMS({
+      url: query,
+      params: {},
+      projection: config.projection ?? this.projection,
+      resolutions: config.resolutions,
+      ratio: 1,
+    });
   }
 
   private async createArcGISLayer(
