@@ -224,6 +224,25 @@ export class VMapLayerWkt implements VMapLayer {
     return targets.includes(this.el.id) || targets.length === 0;
   }
 
+  private async applyExistingStyles() {
+    const styleComponents = Array.from(
+      document.querySelectorAll('v-map-style'),
+    ) as HTMLVMapStyleElement[];
+
+    for (const styleComponent of styleComponents) {
+      if (!this.isTargetedByStyle(styleComponent)) continue;
+
+      const style = styleComponent.getStyle
+        ? await styleComponent.getStyle()
+        : undefined;
+      if (!style) continue;
+
+      log(MSG_COMPONENT + 'Applying existing geostyler style');
+      this.appliedGeostylerStyle = style;
+      await this.updateLayerWithGeostylerStyle();
+    }
+  }
+
   /**
    * Update the layer with the applied geostyler style
    */
@@ -301,6 +320,8 @@ export class VMapLayerWkt implements VMapLayer {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+
+    await this.applyExistingStyles();
 
     this.didLoad = true;
     this.ready.emit();

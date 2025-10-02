@@ -24,6 +24,19 @@
 | `styleReady` | Fired when style is successfully parsed and ready to apply. | `CustomEvent<Style>` |
 
 
+## Methods
+
+### `getStyle() => Promise<Style | undefined>`
+
+Get the currently parsed style.
+
+#### Returns
+
+Type: `Promise<Style>`
+
+
+
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

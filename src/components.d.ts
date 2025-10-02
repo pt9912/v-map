@@ -522,6 +522,10 @@ export namespace Components {
          */
         "format": StyleFormat;
         /**
+          * Get the currently parsed style.
+         */
+        "getStyle": () => Promise<Style | undefined>;
+        /**
           * Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
          */
         "layerTargets"?: string;

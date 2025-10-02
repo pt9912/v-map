@@ -154,6 +154,8 @@ export class VMapLayerGeoJSON {
 
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
+    await this.applyExistingStyles();
+
     this.didLoad = true;
     //todo    this.ready.emit();
   }
@@ -266,6 +268,25 @@ export class VMapLayerGeoJSON {
 
     const targets = layerTargets.split(',').map(id => id.trim());
     return targets.includes(this.el.id) || targets.length === 0;
+  }
+
+  private async applyExistingStyles() {
+    const styleComponents = Array.from(
+      document.querySelectorAll('v-map-style'),
+    ) as HTMLVMapStyleElement[];
+
+    for (const styleComponent of styleComponents) {
+      if (!this.isTargetedByStyle(styleComponent)) continue;
+
+      const style = styleComponent.getStyle
+        ? await styleComponent.getStyle()
+        : undefined;
+      if (!style) continue;
+
+      log(MSG_COMPONENT + 'Applying existing geostyler style');
+      this.appliedGeostylerStyle = style;
+      await this.updateLayerWithGeostylerStyle();
+    }
   }
 
   /**

@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Watch,
   State,
+  Method,
   h,
 } from '@stencil/core';
 import SLDParser from 'geostyler-sld-parser';
@@ -229,7 +230,8 @@ export class VMapStyle {
   /**
    * Get the currently parsed style.
    */
-  getStyle(): Style | undefined {
+  @Method()
+  async getStyle(): Promise<Style | undefined> {
     return this.parsedStyle;
   }
 

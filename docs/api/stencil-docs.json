@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T09:28:10",
+  "timestamp": "2025-10-02T09:56:39",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -3326,7 +3326,35 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "getStyle",
+          "returns": {
+            "type": "Promise<Style>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<Style | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "Style": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::Style"
+              }
+            },
+            "return": "Promise<Style>"
+          },
+          "signature": "getStyle() => Promise<Style | undefined>",
+          "parameters": [],
+          "docs": "Get the currently parsed style.",
+          "docsTags": []
+        }
+      ],
       "events": [
         {
           "event": "styleError",
