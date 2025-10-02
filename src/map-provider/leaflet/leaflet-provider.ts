@@ -322,12 +322,20 @@ export class LeafletProvider implements MapProvider {
       data = await res.json();
     }
     if (data) {
-      const layer = L.geoJSON(data, {
-        style: config.style ? this.createLeafletStyle(config.style) : undefined,
-        pointToLayer: config.style ? (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style!) : undefined,
-        onEachFeature: config.style ? (feature, layer) => this.bindLeafletPopup(feature, layer, config.style!) : undefined,
-      });
+      // Use geostyler style if available, otherwise use default style
+      let layerOptions: L.GeoJSONOptions = {};
 
+      if ((config as any).geostylerStyle) {
+        layerOptions = await this.createGeostylerLeafletOptions((config as any).geostylerStyle);
+      } else if (config.style) {
+        layerOptions = {
+          style: this.createLeafletStyle(config.style),
+          pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style!),
+          onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style!),
+        };
+      }
+
+      const layer = L.geoJSON(data, layerOptions);
       return layer;
     }
     return null;
@@ -617,12 +625,20 @@ export class LeafletProvider implements MapProvider {
       geoJsonData = { type: 'FeatureCollection', features: [] };
     }
 
-    const layer = L.geoJSON(geoJsonData, {
-      style: this.createLeafletStyle(config.style),
-      pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style),
-      onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style),
-    });
+    // Use geostyler style if available, otherwise use default style
+    let layerOptions: L.GeoJSONOptions = {};
 
+    if ((config as any).geostylerStyle) {
+      layerOptions = await this.createGeostylerLeafletOptions((config as any).geostylerStyle);
+    } else if (config.style) {
+      layerOptions = {
+        style: this.createLeafletStyle(config.style),
+        pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style),
+        onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style),
+      };
+    }
+
+    const layer = L.geoJSON(geoJsonData, layerOptions);
     return layer;
   }
 
@@ -758,6 +774,150 @@ export class LeafletProvider implements MapProvider {
   }
 
   // ========== Enhanced Styling Methods ==========
+
+  /**
+   * Convert a Geostyler style to Leaflet GeoJSON options
+   */
+  private async createGeostylerLeafletOptions(geostylerStyle: any): Promise<L.GeoJSONOptions> {
+    // Helper to extract static value from GeoStyler property
+    const getValue = (prop: any, defaultValue: any = undefined) => {
+      if (prop === undefined || prop === null) return defaultValue;
+      // If it's a GeoStyler function object, we can't evaluate it here - return default
+      if (typeof prop === 'object' && prop.name) return defaultValue;
+      return prop;
+    };
+
+    const options: L.GeoJSONOptions = {
+      style: (feature: any) => {
+        const geometryType = feature?.geometry?.type;
+        let leafletStyle: L.PathOptions = {};
+
+        if (geostylerStyle.rules) {
+          for (const rule of geostylerStyle.rules) {
+            if (rule.symbolizers) {
+              for (const symbolizer of rule.symbolizers) {
+                switch (symbolizer.kind) {
+                  case 'Fill':
+                    if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
+                      const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
+                      const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
+                      const outlineColor = getValue(symbolizer.outlineColor, 'rgba(0,100,255,1)') as string;
+                      const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+
+                      leafletStyle = {
+                        ...leafletStyle,
+                        fillColor: fillColor,
+                        fillOpacity: fillOpacity,
+                        color: outlineColor,
+                        weight: outlineWidth,
+                      };
+                    }
+                    break;
+
+                  case 'Line':
+                    const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const lineWidth = getValue(symbolizer.width, 2) as number;
+                    const dashArray = symbolizer.dasharray
+                      ? (Array.isArray(symbolizer.dasharray)
+                          ? symbolizer.dasharray.map((v: any) => getValue(v, 0) as number).join(',')
+                          : undefined)
+                      : undefined;
+
+                    leafletStyle = {
+                      ...leafletStyle,
+                      color: lineColor,
+                      weight: lineWidth,
+                      dashArray: dashArray,
+                    };
+                    break;
+                }
+              }
+            }
+          }
+        }
+
+        return leafletStyle;
+      },
+
+      pointToLayer: (_feature: any, latlng: L.LatLng) => {
+        if (geostylerStyle.rules) {
+          for (const rule of geostylerStyle.rules) {
+            if (rule.symbolizers) {
+              for (const symbolizer of rule.symbolizers) {
+                switch (symbolizer.kind) {
+                  case 'Mark':
+                    const markColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const markRadius = getValue(symbolizer.radius, 6) as number;
+                    const strokeColor = getValue(symbolizer.strokeColor, 'rgba(0,100,255,1)') as string;
+                    const strokeWidth = getValue(symbolizer.strokeWidth, 2) as number;
+
+                    return L.circleMarker(latlng, {
+                      radius: markRadius,
+                      fillColor: markColor,
+                      fillOpacity: 1,
+                      color: strokeColor,
+                      weight: strokeWidth,
+                    });
+
+                  case 'Icon':
+                    const iconSrc = getValue(symbolizer.image) as string | undefined;
+                    const iconSize = getValue(symbolizer.size, 32) as number;
+
+                    if (iconSrc && typeof iconSrc === 'string') {
+                      const icon = L.icon({
+                        iconUrl: iconSrc,
+                        iconSize: [iconSize, iconSize],
+                        iconAnchor: [iconSize / 2, iconSize],
+                      });
+                      return L.marker(latlng, { icon });
+                    }
+                    break;
+                }
+              }
+            }
+          }
+        }
+
+        // Default point style
+        return L.circleMarker(latlng, {
+          radius: 6,
+          fillColor: 'rgba(0,100,255,1)',
+          fillOpacity: 1,
+          color: 'rgba(0,100,255,1)',
+          weight: 2,
+        });
+      },
+
+      onEachFeature: (feature: any, layer: L.Layer) => {
+        if (geostylerStyle.rules) {
+          for (const rule of geostylerStyle.rules) {
+            if (rule.symbolizers) {
+              for (const symbolizer of rule.symbolizers) {
+                if (symbolizer.kind === 'Text') {
+                  const labelProp = (symbolizer as any).label;
+                  if (labelProp && feature.properties && feature.properties[labelProp]) {
+                    const textContent = String(feature.properties[labelProp]);
+                    const textColor = getValue(symbolizer.color, '#000000') as string;
+                    const textSize = getValue(symbolizer.size, 12) as number;
+
+                    const styledText = `<div style="color: ${textColor}; font-size: ${textSize}px; font-family: Arial, sans-serif;">${textContent}</div>`;
+
+                    layer.bindTooltip(styledText, {
+                      permanent: true,
+                      direction: 'center',
+                      className: 'leaflet-tooltip-custom',
+                    });
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+    };
+
+    return options;
+  }
 
   private createLeafletStyle(style: any) {
     return (feature: any) => {

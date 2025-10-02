@@ -110,6 +110,7 @@ export class CesiumProvider implements MapProvider {
           layerConfig.url,
           options,
           layerConfig.style,
+          (layerConfig as any).geostylerStyle,
         );
         wrapper = this.layerManager.addLayer(layerId, ds);
         wrapper.setOptions(options);
@@ -144,6 +145,7 @@ export class CesiumProvider implements MapProvider {
         const ds = await this.createWKTLayer(
           layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
           options,
+          (layerConfig as any).geostylerStyle,
         );
         wrapper = this.layerManager.addLayer(layerId, ds);
         wrapper.setOptions(options);
@@ -260,12 +262,114 @@ export class CesiumProvider implements MapProvider {
     this.layerGroups.apply();
   }
   async setZIndex(layerId: string, zIndex: number): Promise<void> {
+    // Note: layerManager.setZIndex calls layer.setZIndex which is async (returns Promise<void>)
+    // even though the manager method itself is not marked as async. The await is kept here
+    // for future compatibility when the manager method becomes properly async.
     await this.layerManager.setZIndex(layerId, zIndex);
     // Z-Order ist unabhängig von Basemap/Group-Visible, aber apply() schadet nicht
     this.layerGroups.apply();
   }
 
   // ========== Enhanced Styling Helper Methods ==========
+
+  /**
+   * Apply Geostyler styling to a GeoJsonDataSource
+   */
+  private applyGeostylerStyling(dataSource: any, geostylerStyle: any) {
+    // Helper to extract static value from GeoStyler property
+    const getValue = (prop: any, defaultValue: any = undefined) => {
+      if (prop === undefined || prop === null) return defaultValue;
+      // If it's a GeoStyler function object, we can't evaluate it here - return default
+      if (typeof prop === 'object' && prop.name) return defaultValue;
+      return prop;
+    };
+
+    const entities = dataSource.entities.values;
+
+    if (geostylerStyle.rules) {
+      for (const rule of geostylerStyle.rules) {
+        if (rule.symbolizers) {
+          for (const symbolizer of rule.symbolizers) {
+            for (let i = 0; i < entities.length; i++) {
+              const entity = entities[i];
+
+              switch (symbolizer.kind) {
+                case 'Fill':
+                  if (entity.polygon) {
+                    const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
+                    const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
+                    const outlineColor = getValue(symbolizer.outlineColor, 'rgba(0,100,255,1)') as string;
+                    const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+
+                    entity.polygon.fill = true;
+                    entity.polygon.material = this.parseCesiumColor(fillColor, this.Cesium.Color.BLUE.withAlpha(0.3));
+                    if (fillOpacity !== undefined) {
+                      entity.polygon.material = this.applyCesiumOpacity(entity.polygon.material, fillOpacity);
+                    }
+                    entity.polygon.outline = true;
+                    entity.polygon.outlineColor = this.parseCesiumColor(outlineColor, this.Cesium.Color.BLUE);
+                    entity.polygon.outlineWidth = outlineWidth;
+                  }
+                  break;
+
+                case 'Line':
+                  if (entity.polyline) {
+                    const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const lineWidth = getValue(symbolizer.width, 2) as number;
+
+                    entity.polyline.material = this.parseCesiumColor(lineColor, this.Cesium.Color.BLUE);
+                    entity.polyline.width = lineWidth;
+                  }
+                  break;
+
+                case 'Mark':
+                  if (entity.point) {
+                    const pointColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const pointRadius = getValue(symbolizer.radius, 6) as number;
+
+                    entity.point.color = this.parseCesiumColor(pointColor, this.Cesium.Color.BLUE);
+                    entity.point.pixelSize = pointRadius;
+                  }
+                  break;
+
+                case 'Icon':
+                  if (entity.point) {
+                    const iconSrc = getValue(symbolizer.image) as string | undefined;
+                    const iconSize = getValue(symbolizer.size, 32) as number;
+
+                    if (iconSrc && typeof iconSrc === 'string') {
+                      entity.billboard = new this.Cesium.BillboardGraphics({
+                        image: iconSrc,
+                        width: iconSize,
+                        height: iconSize,
+                        verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+                      });
+                      entity.point.show = false;
+                    }
+                  }
+                  break;
+
+                case 'Text':
+                  const labelProp = (symbolizer as any).label;
+                  if (labelProp && entity.properties && entity.properties[labelProp]) {
+                    const textColor = getValue(symbolizer.color, '#000000') as string;
+                    const textSize = getValue(symbolizer.size, 12) as number;
+
+                    entity.label = new this.Cesium.LabelGraphics({
+                      text: entity.properties[labelProp]._value,
+                      font: `${textSize}px Arial`,
+                      fillColor: this.parseCesiumColor(textColor, this.Cesium.Color.WHITE),
+                      verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+                    });
+                  }
+                  break;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Convert CSS color to Cesium Color
@@ -440,6 +544,7 @@ export class CesiumProvider implements MapProvider {
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
     options: any,
+    geostylerStyle?: any,
   ): Promise<GeoJsonDataSource> {
     let geoJsonData = null;
 
@@ -456,8 +561,12 @@ export class CesiumProvider implements MapProvider {
     const dataSource: GeoJsonDataSource =
       await this.Cesium.GeoJsonDataSource.load(geoJsonData, options);
 
-    // Apply enhanced styling
-    this.applyEnhancedStyling(dataSource, config.style);
+    // Apply geostyler style if provided, otherwise use enhanced styling
+    if (geostylerStyle) {
+      this.applyGeostylerStyling(dataSource, geostylerStyle);
+    } else if (config.style) {
+      this.applyEnhancedStyling(dataSource, config.style);
+    }
 
     return dataSource;
   }
@@ -529,6 +638,7 @@ export class CesiumProvider implements MapProvider {
     url: string,
     options: any,
     style?: any,
+    geostylerStyle?: any,
   ): Promise<GeoJsonDataSource> {
     let geojson_or_url = null;
     if (geojson) {
@@ -541,8 +651,10 @@ export class CesiumProvider implements MapProvider {
     const dataSource: GeoJsonDataSource =
       await this.Cesium.GeoJsonDataSource.load(geojson_or_url, options);
 
-    // Apply enhanced styling if provided
-    if (style) {
+    // Apply geostyler style if provided, otherwise use enhanced styling
+    if (geostylerStyle) {
+      this.applyGeostylerStyling(dataSource, geostylerStyle);
+    } else if (style) {
       this.applyEnhancedStyling(dataSource, style);
     }
 

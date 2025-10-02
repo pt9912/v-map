@@ -119,9 +119,9 @@ export class LayerManager {
     layer.setOpacity(opacity);
   }
 
-  setZIndex(layerId: string, zindex: number): void {
+  async setZIndex(layerId: string, zindex: number): Promise<void> {
     const layer = this.getLayer(layerId);
-    layer.setZIndex(zindex);
+    await layer.setZIndex(zindex);
   }
 
   private wrapLayer(layer: any): ILayer | I3DTilesLayer {

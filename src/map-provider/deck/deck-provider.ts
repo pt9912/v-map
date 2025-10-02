@@ -216,6 +216,95 @@ export class DeckProvider implements MapProvider {
   // ========== Enhanced Styling Helper Methods ==========
 
   /**
+   * Convert a Geostyler style to Deck.gl style configuration
+   */
+  private createGeostylerDeckGLStyle(geostylerStyle: any) {
+    // Helper to extract static value from GeoStyler property
+    const getValue = (prop: any, defaultValue: any = undefined) => {
+      if (prop === undefined || prop === null) return defaultValue;
+      // If it's a GeoStyler function object, we can't evaluate it here - return default
+      if (typeof prop === 'object' && prop.name) return defaultValue;
+      return prop;
+    };
+
+    const defaultFillColor: [number, number, number, number] = [0, 100, 255, 76];
+    const defaultStrokeColor: [number, number, number, number] = [0, 100, 255, 255];
+    const defaultPointColor: [number, number, number, number] = [0, 100, 255, 255];
+
+    let fillColorValue = defaultFillColor;
+    let strokeColorValue = defaultStrokeColor;
+    let pointColorValue = defaultPointColor;
+    let pointRadiusValue = 8;
+    let lineWidthValue = 2;
+
+    // Extract styles from rules
+    if (geostylerStyle.rules) {
+      for (const rule of geostylerStyle.rules) {
+        if (rule.symbolizers) {
+          for (const symbolizer of rule.symbolizers) {
+            switch (symbolizer.kind) {
+              case 'Fill':
+                const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
+                const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
+                fillColorValue = this.parseColor(fillColor, defaultFillColor);
+                if (fillOpacity !== undefined) {
+                  fillColorValue = this.applyOpacity(fillColorValue, fillOpacity);
+                }
+
+                const outlineColor = getValue(symbolizer.outlineColor) as string | undefined;
+                if (outlineColor) {
+                  strokeColorValue = this.parseColor(outlineColor, defaultStrokeColor);
+                }
+                const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+                if (outlineWidth !== undefined) {
+                  lineWidthValue = outlineWidth;
+                }
+                break;
+
+              case 'Line':
+                const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                strokeColorValue = this.parseColor(lineColor, defaultStrokeColor);
+                const lineWidth = getValue(symbolizer.width, 2) as number;
+                if (lineWidth !== undefined) {
+                  lineWidthValue = lineWidth;
+                }
+                break;
+
+              case 'Mark':
+                const markColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                pointColorValue = this.parseColor(markColor, defaultPointColor);
+                const markRadius = getValue(symbolizer.radius, 6) as number;
+                if (markRadius !== undefined) {
+                  pointRadiusValue = markRadius;
+                }
+                break;
+
+              case 'Icon':
+                // Icon handling would require custom IconLayer implementation
+                // For now, we'll use Mark as fallback
+                const iconSize = getValue(symbolizer.size, 32) as number;
+                if (iconSize !== undefined) {
+                  pointRadiusValue = iconSize / 2; // Convert size to radius
+                }
+                break;
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      getFillColor: () => fillColorValue,
+      getLineColor: () => strokeColorValue,
+      getPointRadius: () => pointRadiusValue,
+      getPointFillColor: () => pointColorValue,
+      lineWidthMinPixels: lineWidthValue,
+      pointRadiusMinPixels: 2,
+      pointRadiusMaxPixels: 100,
+    };
+  }
+
+  /**
    * Convert CSS color to Deck.gl RGBA array
    */
   private parseColor(color: string | undefined, defaultColor: [number, number, number, number]): [number, number, number, number] {
@@ -550,26 +639,7 @@ export class DeckProvider implements MapProvider {
   ): Promise<Layer> {
     const { GeoJsonLayer } = await import('@deck.gl/layers');
     let layer = null;
-    // if (layer != null) {
-    //   layer = new GeoJsonLayer({
-    //     id: layerId,
-    //     data: 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/geojson/vancouver-blocks.json',
-    //     opacity: 0.8,
-    //     stroked: false,
-    //     filled: true,
-    //     extruded: true,
-    //     wireframe: true,
 
-    //     getElevation: f => Math.sqrt(f.properties.valuePerSqm) * 10,
-    //     getFillColor: f => this._colorScale(f.properties.growth),
-    //     getLineColor: [255, 255, 255],
-
-    //     pickable: true,
-    //   });
-    //   if (layer !== null) {
-    //     return layer;
-    //   }
-    // }
     let geojson_or_url = null;
     if (config.geojson) {
       geojson_or_url = JSON.parse(config.geojson);
@@ -577,7 +647,14 @@ export class DeckProvider implements MapProvider {
       geojson_or_url = config.url;
     }
     if (geojson_or_url) {
-      const deckStyle = this.createDeckGLStyle(config.style);
+      // Use geostyler style if available, otherwise use default style
+      let deckStyle: any;
+
+      if ((config as any).geostylerStyle) {
+        deckStyle = this.createGeostylerDeckGLStyle((config as any).geostylerStyle);
+      } else {
+        deckStyle = this.createDeckGLStyle(config.style);
+      }
 
       layer = new GeoJsonLayer({
         id: layerId,
@@ -595,9 +672,9 @@ export class DeckProvider implements MapProvider {
 
         // Update triggers for dynamic styling
         updateTriggers: {
-          getFillColor: [config.style],
-          getLineColor: [config.style],
-          getPointRadius: [config.style],
+          getFillColor: [config.style, (config as any).geostylerStyle],
+          getLineColor: [config.style, (config as any).geostylerStyle],
+          getPointRadius: [config.style, (config as any).geostylerStyle],
           data: [config.geojson, config.url],
         },
       });
@@ -1029,7 +1106,15 @@ export type TileLoadProps = {
     }
 
     const { GeoJsonLayer } = await import('@deck.gl/layers');
-    const deckStyle = this.createDeckGLStyle(config.style);
+
+    // Use geostyler style if available, otherwise use default style
+    let deckStyle: any;
+
+    if ((config as any).geostylerStyle) {
+      deckStyle = this.createGeostylerDeckGLStyle((config as any).geostylerStyle);
+    } else {
+      deckStyle = this.createDeckGLStyle(config.style);
+    }
 
     return new GeoJsonLayer({
       id: layerId,
@@ -1047,9 +1132,9 @@ export type TileLoadProps = {
 
       // Update triggers for dynamic styling
       updateTriggers: {
-        getFillColor: [config.style],
-        getLineColor: [config.style],
-        getPointRadius: [config.style],
+        getFillColor: [config.style, (config as any).geostylerStyle],
+        getLineColor: [config.style, (config as any).geostylerStyle],
+        getPointRadius: [config.style, (config as any).geostylerStyle],
         data: [config.wkt, config.url],
       },
     });
