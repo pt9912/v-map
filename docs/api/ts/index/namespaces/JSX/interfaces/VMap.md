@@ -6,7 +6,7 @@
 
 # Interface: VMap
 
-Defined in: [src/components.d.ts:850](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L850)
+Defined in: [src/components.d.ts:910](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L910)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:850](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **center**: `string`
 
-Defined in: [src/components.d.ts:856](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L856)
+Defined in: [src/components.d.ts:916](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L916)
 
 Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
 
@@ -36,7 +36,7 @@ Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Läng
 
 > `optional` **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/components.d.ts:861](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L861)
+Defined in: [src/components.d.ts:921](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L921)
 
 Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert.
 
@@ -52,7 +52,7 @@ false
 
 > `optional` **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
 
-Defined in: [src/components.d.ts:867](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L867)
+Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L927)
 
 Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
 
@@ -74,7 +74,7 @@ Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium
 
 > `optional` **useDefaultImportMap**: `boolean`
 
-Defined in: [src/components.d.ts:877](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L877)
+Defined in: [src/components.d.ts:937](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L937)
 
 Falls true, injiziert v-map automatisch die Import-Map.
 
@@ -90,7 +90,7 @@ true
 
 > `optional` **zoom**: `number`
 
-Defined in: [src/components.d.ts:882](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L882)
+Defined in: [src/components.d.ts:942](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L942)
 
 Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
 
@@ -106,7 +106,7 @@ Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
 
 > `optional` **onMapProviderReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:872](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L872)
+Defined in: [src/components.d.ts:932](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L932)
 
 Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt. `detail` enthält `{ provider, flavour }`.
  mapProviderReady

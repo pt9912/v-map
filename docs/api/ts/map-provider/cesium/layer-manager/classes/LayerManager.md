@@ -6,7 +6,7 @@
 
 # Class: LayerManager
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L34)
+Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L34)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:34](https://github.com/pt9
 
 > **new LayerManager**(`Cesium`, `viewer`): `LayerManager`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L40)
+Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L40)
 
 #### Parameters
 
@@ -32,11 +32,33 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:40](https://github.com/pt9
 
 ## Methods
 
+### addCustomLayer()
+
+> **addCustomLayer**(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
+
+Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L96)
+
+#### Parameters
+
+##### id
+
+`string`
+
+##### layer
+
+[`ILayer`](../../i-layer/interfaces/ILayer.md) | `I3DTilesLayer`
+
+#### Returns
+
+[`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
+
+***
+
 ### addLayer()
 
 > **addLayer**\<`T`\>(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L69)
+Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L69)
 
 #### Type Parameters
 
@@ -64,7 +86,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:69](https://github.com/pt9
 
 > **getLayer**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L96)
+Defined in: [src/map-provider/cesium/layer-manager.ts:101](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L101)
 
 #### Parameters
 
@@ -82,7 +104,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:96](https://github.com/pt9
 
 > **getLayerById**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:102](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L102)
+Defined in: [src/map-provider/cesium/layer-manager.ts:107](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L107)
 
 #### Parameters
 
@@ -100,7 +122,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:102](https://github.com/pt
 
 > **removeLayer**(`layerId`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:106](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L106)
+Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L111)
 
 #### Parameters
 
@@ -118,7 +140,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:106](https://github.com/pt
 
 > **replaceLayer**\<`T`\>(`id`, `oldlayer`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L45)
+Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L45)
 
 #### Type Parameters
 
@@ -150,7 +172,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:45](https://github.com/pt9
 
 > **setOpacity**(`layerId`, `opacity`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L117)
+Defined in: [src/map-provider/cesium/layer-manager.ts:122](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L122)
 
 #### Parameters
 
@@ -172,7 +194,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt
 
 > **setVisible**(`layerId`, `visible`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:112](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L112)
+Defined in: [src/map-provider/cesium/layer-manager.ts:117](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L117)
 
 #### Parameters
 
@@ -194,7 +216,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:112](https://github.com/pt
 
 > **setZIndex**(`layerId`, `zindex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:122](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/cesium/layer-manager.ts#L122)
+Defined in: [src/map-provider/cesium/layer-manager.ts:127](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/cesium/layer-manager.ts#L127)
 
 #### Parameters
 

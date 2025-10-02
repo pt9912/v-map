@@ -6,7 +6,7 @@
 
 # Interface: StyleApplyOptions
 
-Defined in: [src/types/styling.ts:13](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L13)
+Defined in: [src/types/styling.ts:13](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L13)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:13](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **layerIds**: `string`[]
 
-Defined in: [src/types/styling.ts:17](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L17)
+Defined in: [src/types/styling.ts:17](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L17)
 
 Layer IDs to apply the style to.
 
@@ -24,7 +24,7 @@ Layer IDs to apply the style to.
 
 > `optional` **mode**: `"replace"` \| `"merge"`
 
-Defined in: [src/types/styling.ts:23](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L23)
+Defined in: [src/types/styling.ts:23](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L23)
 
 Whether to replace existing styles or merge with them.
 
@@ -40,6 +40,6 @@ Whether to replace existing styles or merge with them.
 
 > `optional` **priority**: `number`
 
-Defined in: [src/types/styling.ts:28](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L28)
+Defined in: [src/types/styling.ts:28](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L28)
 
 Optional priority for style application.

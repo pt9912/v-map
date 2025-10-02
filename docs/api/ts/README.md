@@ -23,6 +23,7 @@
 - [map-provider/deck/deck-provider-arcgis.spec](map-provider/deck/deck-provider-arcgis.spec/README.md)
 - [map-provider/deck/deck-provider-geostyler.spec](map-provider/deck/deck-provider-geostyler.spec/README.md)
 - [map-provider/deck/deck-provider-google.spec](map-provider/deck/deck-provider-google.spec/README.md)
+- [map-provider/deck/deck-provider-terrain.spec](map-provider/deck/deck-provider-terrain.spec/README.md)
 - [map-provider/deck/LayerGroups](map-provider/deck/LayerGroups/README.md)
 - [map-provider/deck/LayerGroupWithModel](map-provider/deck/LayerGroupWithModel/README.md)
 - [map-provider/deck/LayerModel](map-provider/deck/LayerModel/README.md)

@@ -6,7 +6,7 @@
 
 # Interface: RenderableGroup\<L\>
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:7](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L7)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:7](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L7)
 
 Gemeinsames Interface, das sowohl von der klassischen LayerGroup als auch
 von der modellbasierten LayerGroupWithModel implementiert wird.
@@ -23,7 +23,7 @@ von der modellbasierten LayerGroupWithModel implementiert wird.
 
 > `readonly` **id**: `string`
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:8](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L8)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:8](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L8)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/map-provider/deck/RenderableGroup.ts:8](https://github.com/pt99
 
 > **visible**: `boolean`
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:9](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L9)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:9](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L9)
 
 ## Methods
 
@@ -39,7 +39,7 @@ Defined in: [src/map-provider/deck/RenderableGroup.ts:9](https://github.com/pt99
 
 > `optional` **destroy**(): `void`
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:18](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L18)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:18](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L18)
 
 Optionale Ressourcenfreigabe
 
@@ -53,7 +53,7 @@ Optionale Ressourcenfreigabe
 
 > **getLayers**(`options?`): readonly `L`[]
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:16](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L16)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:16](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L16)
 
 Liefert die Deck-Layer zur Darstellung.
 groups/LayerGroups reichen intern options weiter (falls benötigt).
@@ -76,7 +76,7 @@ readonly `L`[]
 
 > **isDirty**(): `boolean`
 
-Defined in: [src/map-provider/deck/RenderableGroup.ts:11](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/map-provider/deck/RenderableGroup.ts#L11)
+Defined in: [src/map-provider/deck/RenderableGroup.ts:11](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/map-provider/deck/RenderableGroup.ts#L11)
 
 true, wenn ein Rebuild der Ausgabe-Layer nötig ist
 

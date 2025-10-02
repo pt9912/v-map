@@ -6,7 +6,7 @@
 
 # Interface: VMapLayergroup
 
-Defined in: [src/components.d.ts:1355](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1355)
+Defined in: [src/components.d.ts:1464](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1464)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1355](https://github.com/pt9912/v-map/blob/8f08
 
 > `optional` **basemapid**: `string`
 
-Defined in: [src/components.d.ts:1360](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1360)
+Defined in: [src/components.d.ts:1469](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1469)
 
 Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
 
@@ -30,7 +30,7 @@ null
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1365](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1365)
+Defined in: [src/components.d.ts:1474](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1474)
 
 Globale Opazität (0–1) für alle Kinder.
 
@@ -46,7 +46,7 @@ Globale Opazität (0–1) für alle Kinder.
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1370](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1370)
+Defined in: [src/components.d.ts:1479](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1479)
 
 Sichtbarkeit der gesamten Gruppe.
 

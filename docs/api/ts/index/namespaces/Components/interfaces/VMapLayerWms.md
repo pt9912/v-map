@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWms
 
-Defined in: [src/components.d.ts:426](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L426)
+Defined in: [src/components.d.ts:479](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L479)
 
 OGC WMS Layer
 
@@ -16,7 +16,7 @@ OGC WMS Layer
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:431](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L431)
+Defined in: [src/components.d.ts:484](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L484)
 
 Bildformat des GetMap-Requests.
 
@@ -32,7 +32,7 @@ Bildformat des GetMap-Requests.
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:435](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L435)
+Defined in: [src/components.d.ts:488](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L488)
 
 Kommagetrennte Layer-Namen (z. B. "topp:states").
 
@@ -42,7 +42,7 @@ Kommagetrennte Layer-Namen (z. B. "topp:states").
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L440)
+Defined in: [src/components.d.ts:493](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L493)
 
 Globale Opazität des WMS-Layers (0–1).
 
@@ -58,7 +58,7 @@ Globale Opazität des WMS-Layers (0–1).
 
 > `optional` **styles**: `string`
 
-Defined in: [src/components.d.ts:445](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L445)
+Defined in: [src/components.d.ts:498](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L498)
 
 WMS-`STYLES` Parameter (kommagetrennt).
 
@@ -74,7 +74,7 @@ WMS-`STYLES` Parameter (kommagetrennt).
 
 > **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:450](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L450)
+Defined in: [src/components.d.ts:503](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L503)
 
 Tiled/geslicete Requests verwenden (falls Server unterstützt).
 
@@ -90,7 +90,7 @@ true
 
 > **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:455](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L455)
+Defined in: [src/components.d.ts:508](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L508)
 
 Transparente Kacheln anfordern.
 
@@ -106,7 +106,7 @@ true
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:459](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L459)
+Defined in: [src/components.d.ts:512](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L512)
 
 Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
@@ -116,7 +116,7 @@ Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:464](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L464)
+Defined in: [src/components.d.ts:517](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L517)
 
 Sichtbarkeit des WMS-Layers.
 
@@ -132,7 +132,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:469](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L469)
+Defined in: [src/components.d.ts:522](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L522)
 
 Z-index for layer stacking order. Higher values render on top.
 

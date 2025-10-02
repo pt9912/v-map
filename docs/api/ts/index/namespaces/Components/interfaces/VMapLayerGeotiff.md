@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:170](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L170)
+Defined in: [src/components.d.ts:170](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L170)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:170](https://github.com/pt9912/v-map/blob/8f081
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:174](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L174)
+Defined in: [src/components.d.ts:174](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L174)
 
 Returns the internal layer ID used by the map provider.
 
@@ -28,7 +28,7 @@ Returns the internal layer ID used by the map provider.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:179](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L179)
+Defined in: [src/components.d.ts:179](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L179)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -44,7 +44,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L184)
+Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L184)
 
 URL to the GeoTIFF file to be displayed on the map.
 
@@ -60,7 +60,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:189](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L189)
+Defined in: [src/components.d.ts:189](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L189)
 
 Sichtbarkeit des Layers
 
@@ -76,7 +76,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L194)
+Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L194)
 
 Z-index for layer stacking order. Higher values render on top.
 

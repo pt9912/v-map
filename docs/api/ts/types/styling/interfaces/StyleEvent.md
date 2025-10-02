@@ -6,7 +6,7 @@
 
 # Interface: StyleEvent
 
-Defined in: [src/types/styling.ts:39](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L39)
+Defined in: [src/types/styling.ts:39](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:39](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/styling.ts:42](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L42)
+Defined in: [src/types/styling.ts:42](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L42)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/styling.ts:42](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **layerIds**: `string`[]
 
-Defined in: [src/types/styling.ts:43](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L43)
+Defined in: [src/types/styling.ts:43](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L43)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/styling.ts:43](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **style**: `Style` \| [`Cesium3DTilesStyle`](../type-aliases/Cesium3DTilesStyle.md)
 
-Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L41)
+Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L41)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/styling.ts:41](https://github.com/pt9912/v-map/blob/8f081
 
 > **type**: `"error"` \| `"load"` \| `"remove"` \| `"apply"`
 
-Defined in: [src/types/styling.ts:40](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/types/styling.ts#L40)
+Defined in: [src/types/styling.ts:40](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/types/styling.ts#L40)

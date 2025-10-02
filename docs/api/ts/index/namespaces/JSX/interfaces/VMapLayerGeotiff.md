@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:988](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L988)
+Defined in: [src/components.d.ts:1048](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1048)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:988](https://github.com/pt9912/v-map/blob/8f081
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:998](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L998)
+Defined in: [src/components.d.ts:1058](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1058)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -30,7 +30,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:1003](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1003)
+Defined in: [src/components.d.ts:1063](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1063)
 
 URL to the GeoTIFF file to be displayed on the map.
 
@@ -46,7 +46,7 @@ null
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1008](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1008)
+Defined in: [src/components.d.ts:1068](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1068)
 
 Sichtbarkeit des Layers
 
@@ -62,7 +62,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1013](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1013)
+Defined in: [src/components.d.ts:1073](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1073)
 
 Z-index for layer stacking order. Higher values render on top.
 
@@ -78,7 +78,7 @@ Z-index for layer stacking order. Higher values render on top.
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:993](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L993)
+Defined in: [src/components.d.ts:1053](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1053)
 
 Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
  ready

@@ -6,7 +6,7 @@
 
 # Interface: VMapStyle
 
-Defined in: [src/components.d.ts:1372](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1372)
+Defined in: [src/components.d.ts:1481](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1481)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1372](https://github.com/pt9912/v-map/blob/8f08
 
 > `optional` **autoApply**: `boolean`
 
-Defined in: [src/components.d.ts:1377](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1377)
+Defined in: [src/components.d.ts:1486](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1486)
 
 Whether to automatically apply the style when loaded.
 
@@ -30,7 +30,7 @@ true
 
 > `optional` **content**: `string`
 
-Defined in: [src/components.d.ts:1381](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1381)
+Defined in: [src/components.d.ts:1490](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1490)
 
 Inline style content as string (alternative to src).
 
@@ -40,7 +40,7 @@ Inline style content as string (alternative to src).
 
 > `optional` **format**: [`StyleFormat`](../../../type-aliases/StyleFormat.md)
 
-Defined in: [src/components.d.ts:1386](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1386)
+Defined in: [src/components.d.ts:1495](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1495)
 
 The styling format to parse (currently supports 'sld').
 
@@ -56,7 +56,7 @@ The styling format to parse (currently supports 'sld').
 
 > `optional` **layerTargets**: `string`
 
-Defined in: [src/components.d.ts:1390](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1390)
+Defined in: [src/components.d.ts:1499](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1499)
 
 Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
 
@@ -66,7 +66,7 @@ Target layer IDs to apply this style to. If not specified, applies to all compat
 
 > `optional` **onStyleError**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1394](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1394)
+Defined in: [src/components.d.ts:1503](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1503)
 
 Fired when style parsing fails.
 
@@ -86,7 +86,7 @@ Fired when style parsing fails.
 
 > `optional` **onStyleReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1398](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1398)
+Defined in: [src/components.d.ts:1507](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1507)
 
 Fired when style is successfully parsed and ready to apply.
 
@@ -106,6 +106,6 @@ Fired when style is successfully parsed and ready to apply.
 
 > `optional` **src**: `string`
 
-Defined in: [src/components.d.ts:1402](https://github.com/pt9912/v-map/blob/8f0817afc9b5ea7f80423de35105ce1ef20ead85/src/components.d.ts#L1402)
+Defined in: [src/components.d.ts:1511](https://github.com/pt9912/v-map/blob/ac368ead6d5e8e13bca5125c7afc82c58e4ff77c/src/components.d.ts#L1511)
 
 The style source - can be a URL to fetch from or inline SLD/style content.
