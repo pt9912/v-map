@@ -30,7 +30,7 @@ export const config: Config = {
     // sourceMaps helfen, die TS-Zeilen zu sehen:
     // 'ts-jest' o. ä. kümmert sich idR. darum; alternativ:
     // testEnvironmentOptions: { url: 'http://localhost' },
-    transformIgnorePatterns: ['/node_modules/(?!(ol)/)'],
+    transformIgnorePatterns: ['/node_modules/(?!(ol|geostyler-style|geostyler-sld-parser)/)'],
     browserHeadless: 'shell',
     browserArgs: [
       '--no-sandbox',

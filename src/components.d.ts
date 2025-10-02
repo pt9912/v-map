@@ -12,6 +12,8 @@ import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { LayerConfig } from "./types/layerconfig";
+import { StyleFormat } from "./components/v-map-style/v-map-style";
+import { Style } from "geostyler-style";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
@@ -19,6 +21,8 @@ export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { LayerConfig } from "./types/layerconfig";
+export { StyleFormat } from "./components/v-map-style/v-map-style";
+export { Style } from "geostyler-style";
 export namespace Components {
     interface VMap {
         /**
@@ -502,6 +506,30 @@ export namespace Components {
          */
         "visible": boolean;
     }
+    interface VMapStyle {
+        /**
+          * Whether to automatically apply the style when loaded.
+          * @default true
+         */
+        "autoApply": boolean;
+        /**
+          * Inline style content as string (alternative to src).
+         */
+        "content"?: string;
+        /**
+          * The styling format to parse (currently supports 'sld').
+          * @default 'sld'
+         */
+        "format": StyleFormat;
+        /**
+          * Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
+         */
+        "layerTargets"?: string;
+        /**
+          * The style source - can be a URL to fetch from or inline SLD/style content.
+         */
+        "src"?: string;
+    }
 }
 export interface VMapCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -538,6 +566,10 @@ export interface VMapLayerWmsCustomEvent<T> extends CustomEvent<T> {
 export interface VMapLayerXyzCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerXyzElement;
+}
+export interface VMapStyleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapStyleElement;
 }
 declare global {
     interface HTMLVMapElementEventMap {
@@ -727,6 +759,24 @@ declare global {
         prototype: HTMLVMapLayergroupElement;
         new (): HTMLVMapLayergroupElement;
     };
+    interface HTMLVMapStyleElementEventMap {
+        "styleReady": Style;
+        "styleError": Error;
+    }
+    interface HTMLVMapStyleElement extends Components.VMapStyle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapStyleElementEventMap>(type: K, listener: (this: HTMLVMapStyleElement, ev: VMapStyleCustomEvent<HTMLVMapStyleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapStyleElementEventMap>(type: K, listener: (this: HTMLVMapStyleElement, ev: VMapStyleCustomEvent<HTMLVMapStyleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapStyleElement: {
+        prototype: HTMLVMapStyleElement;
+        new (): HTMLVMapStyleElement;
+    };
     interface HTMLElementTagNameMap {
         "v-map": HTMLVMapElement;
         "v-map-builder": HTMLVMapBuilderElement;
@@ -740,6 +790,7 @@ declare global {
         "v-map-layer-xyz": HTMLVMapLayerXyzElement;
         "v-map-layercontrol": HTMLVMapLayercontrolElement;
         "v-map-layergroup": HTMLVMapLayergroupElement;
+        "v-map-style": HTMLVMapStyleElement;
     }
 }
 declare namespace LocalJSX {
@@ -1236,6 +1287,38 @@ declare namespace LocalJSX {
          */
         "visible"?: boolean;
     }
+    interface VMapStyle {
+        /**
+          * Whether to automatically apply the style when loaded.
+          * @default true
+         */
+        "autoApply"?: boolean;
+        /**
+          * Inline style content as string (alternative to src).
+         */
+        "content"?: string;
+        /**
+          * The styling format to parse (currently supports 'sld').
+          * @default 'sld'
+         */
+        "format"?: StyleFormat;
+        /**
+          * Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
+         */
+        "layerTargets"?: string;
+        /**
+          * Fired when style parsing fails.
+         */
+        "onStyleError"?: (event: VMapStyleCustomEvent<Error>) => void;
+        /**
+          * Fired when style is successfully parsed and ready to apply.
+         */
+        "onStyleReady"?: (event: VMapStyleCustomEvent<Style>) => void;
+        /**
+          * The style source - can be a URL to fetch from or inline SLD/style content.
+         */
+        "src"?: string;
+    }
     interface IntrinsicElements {
         "v-map": VMap;
         "v-map-builder": VMapBuilder;
@@ -1249,6 +1332,7 @@ declare namespace LocalJSX {
         "v-map-layer-xyz": VMapLayerXyz;
         "v-map-layercontrol": VMapLayercontrol;
         "v-map-layergroup": VMapLayergroup;
+        "v-map-style": VMapStyle;
     }
 }
 export { LocalJSX as JSX };
@@ -1279,6 +1363,7 @@ declare module "@stencil/core" {
             "v-map-layer-xyz": LocalJSX.VMapLayerXyz & JSXBase.HTMLAttributes<HTMLVMapLayerXyzElement>;
             "v-map-layercontrol": LocalJSX.VMapLayercontrol & JSXBase.HTMLAttributes<HTMLVMapLayercontrolElement>;
             "v-map-layergroup": LocalJSX.VMapLayergroup & JSXBase.HTMLAttributes<HTMLVMapLayergroupElement>;
+            "v-map-style": LocalJSX.VMapStyle & JSXBase.HTMLAttributes<HTMLVMapStyleElement>;
         }
     }
 }

@@ -3,7 +3,13 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
-  "forwardPorts": [3333, 6006],
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"
+  ],
+  "forwardPorts": [
+    3333,
+    6006
+  ],
   "customizations": {
     "vscode": {
       "extensions": [

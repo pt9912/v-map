@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-29T05:44:22",
+  "timestamp": "2025-10-02T06:27:53",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -978,7 +978,14 @@
         }
       ],
       "events": [],
-      "listeners": [],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
       "styles": [],
       "slots": [],
       "parts": [],
@@ -2414,7 +2421,14 @@
           ]
         }
       ],
-      "listeners": [],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
       "styles": [],
       "slots": [],
       "parts": [],
@@ -3155,6 +3169,212 @@
           "v-map-layergroup"
         ]
       }
+    },
+    {
+      "filePath": "src/components/v-map-style/v-map-style.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-style",
+      "readme": "# v-map-style\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "autoApply",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "auto-apply",
+          "reflectToAttr": true,
+          "docs": "Whether to automatically apply the style when loaded.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "content",
+          "reflectToAttr": true,
+          "docs": "Inline style content as string (alternative to src).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "format",
+          "type": "\"cartocss\" | \"mapbox-gl\" | \"sld\" | \"slyr\"",
+          "complexType": {
+            "original": "StyleFormat",
+            "resolved": "\"cartocss\" | \"mapbox-gl\" | \"sld\" | \"slyr\"",
+            "references": {
+              "StyleFormat": {
+                "location": "local",
+                "path": "/workspaces/v-map/src/components/v-map-style/v-map-style.tsx",
+                "id": "src/components/v-map-style/v-map-style.tsx::StyleFormat"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "format",
+          "reflectToAttr": true,
+          "docs": "The styling format to parse (currently supports 'sld').",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'sld'"
+            }
+          ],
+          "default": "'sld'",
+          "values": [
+            {
+              "value": "cartocss",
+              "type": "string"
+            },
+            {
+              "value": "mapbox-gl",
+              "type": "string"
+            },
+            {
+              "value": "sld",
+              "type": "string"
+            },
+            {
+              "value": "slyr",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "layerTargets",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "layer-targets",
+          "reflectToAttr": true,
+          "docs": "Target layer IDs to apply this style to. If not specified, applies to all compatible layers.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "src",
+          "reflectToAttr": true,
+          "docs": "The style source - can be a URL to fetch from or inline SLD/style content.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "styleError",
+          "detail": "Error",
+          "bubbles": true,
+          "complexType": {
+            "original": "Error",
+            "resolved": "Error",
+            "references": {
+              "Error": {
+                "location": "global",
+                "id": "global::Error"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when style parsing fails.",
+          "docsTags": []
+        },
+        {
+          "event": "styleReady",
+          "detail": "Style",
+          "bubbles": true,
+          "complexType": {
+            "original": "Style",
+            "resolved": "Style",
+            "references": {
+              "Style": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::Style"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when style is successfully parsed and ready to apply.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     }
   ],
   "typeLibrary": {
@@ -3162,6 +3382,11 @@
       "declaration": "export type Color = string | [number, number, number, number?];",
       "docstring": "",
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
+    },
+    "src/components/v-map-style/v-map-style.tsx::StyleFormat": {
+      "declaration": "export type StyleFormat = 'sld' | 'mapbox-gl' | 'cartocss' | 'slyr';",
+      "docstring": "",
+      "path": "src/components/v-map-style/v-map-style.tsx"
     },
     "src/types/flavour.ts::Flavour": {
       "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",
