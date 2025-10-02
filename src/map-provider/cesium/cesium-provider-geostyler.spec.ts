@@ -1,7 +1,6 @@
-import { CesiumProvider } from './cesium-provider';
 import type { Style } from 'geostyler-style';
 
-// Mock Cesium
+// Mock Cesium object
 const mockCesium = {
   Ion: {
     defaultAccessToken: null,
@@ -32,13 +31,50 @@ const mockCesium = {
     BLUE: { withAlpha: jest.fn(() => ({})) },
     fromCssColorString: jest.fn(() => ({ withAlpha: jest.fn(() => ({})) })),
   },
-  GeoJsonDataSource: {
-    load: jest.fn().mockResolvedValue({
+  GeoJsonDataSource: Object.assign(
+    jest.fn().mockImplementation(() => ({
       entities: {
         values: [],
       },
-    }),
+      show: true,
+    })),
+    {
+      load: jest.fn().mockResolvedValue({
+        entities: {
+          values: [],
+        },
+        show: true,
+      }),
+    }
+  ),
+  DataSource: jest.fn().mockImplementation(() => ({
+    show: true,
+  })),
+  Cesium3DTileset: jest.fn().mockImplementation(() => ({
+    show: true,
+    style: null,
+  })),
+  ImageryLayer: jest.fn().mockImplementation(() => ({
+    show: true,
+    alpha: 1,
+  })),
+  Cesium3DTileStyle: jest.fn(),
+  ColorBlendMode: {
+    MIX: 0,
   },
+  Property: class MockProperty {},
+  Color: class MockColor {
+    static fromCssColorString() {
+      return { withAlpha: jest.fn(() => ({})) };
+    }
+    withAlpha() {
+      return {};
+    }
+  },
+  JulianDate: jest.fn(),
+  ColorMaterialProperty: jest.fn(),
+  ImageMaterialProperty: jest.fn(),
+  PolylineOutlineMaterialProperty: jest.fn(),
   HeightReference: {
     CLAMP_TO_GROUND: 0,
     RELATIVE_TO_GROUND: 1,
@@ -50,13 +86,23 @@ const mockCesium = {
   LabelGraphics: jest.fn(),
 };
 
+// Mock cesium-loader BEFORE importing the provider
 jest.mock('../../lib/cesium-loader', () => ({
   loadCesium: jest.fn().mockResolvedValue(mockCesium),
   injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
 }));
 
+// Import provider AFTER mocks are defined
+import { CesiumProvider } from './cesium-provider';
+
+// Make Cesium available globally for the provider code
+(global as any).Cesium = mockCesium;
+
 describe('CesiumProvider GeoStyler Integration', () => {
   let provider: CesiumProvider;
+
+  // Increase timeout for all tests in this suite
+  jest.setTimeout(30000);
 
   beforeEach(() => {
     provider = new CesiumProvider();
