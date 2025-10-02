@@ -1,5 +1,9 @@
-import { OpenLayersProvider } from './openlayers-provider';
 import type { Style } from 'geostyler-style';
+
+// Mock CSS injection FIRST before any other imports
+jest.mock('./openlayers-helper', () => ({
+  injectOlCss: jest.fn().mockResolvedValue(undefined),
+}));
 
 // Mock OpenLayers imports
 jest.mock('ol/Map', () => ({
@@ -15,7 +19,19 @@ jest.mock('ol/Map', () => ({
 }));
 
 jest.mock('ol/View', () => ({
-  default: jest.fn(),
+  default: jest.fn().mockImplementation(() => ({
+    setCenter: jest.fn(),
+    setZoom: jest.fn(),
+    getCenter: jest.fn(() => [0, 0]),
+    getZoom: jest.fn(() => 2),
+  })),
+}));
+
+jest.mock('ol/proj', () => ({
+  fromLonLat: jest.fn((coords) => coords),
+  toLonLat: jest.fn((coords) => coords),
+  get: jest.fn(),
+  transform: jest.fn((coords) => coords),
 }));
 
 jest.mock('ol/layer/Vector', () => ({
@@ -25,6 +41,14 @@ jest.mock('ol/layer/Vector', () => ({
     setVisible: jest.fn(),
     setOpacity: jest.fn(),
     setZIndex: jest.fn(),
+  })),
+}));
+
+jest.mock('ol/layer/Group', () => ({
+  default: jest.fn().mockImplementation(() => ({
+    setLayers: jest.fn(),
+    getLayers: jest.fn(() => ({ getArray: () => [] })),
+    setVisible: jest.fn(),
   })),
 }));
 
@@ -40,6 +64,15 @@ jest.mock('ol/format/GeoJSON', () => ({
     readFeatures: jest.fn(() => []),
   })),
 }));
+
+jest.mock('ol/format/WKT', () => ({
+  default: jest.fn().mockImplementation(() => ({
+    readFeature: jest.fn(() => ({})),
+  })),
+}));
+
+// Now import the provider AFTER all mocks are defined
+import { OpenLayersProvider } from './openlayers-provider';
 
 describe('OpenLayersProvider GeoStyler Integration', () => {
   let provider: OpenLayersProvider;
