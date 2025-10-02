@@ -6,7 +6,7 @@
 
 # Interface: MapConfig
 
-Defined in: [src/utils/diff.ts:26](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L26)
+Defined in: [src/utils/diff.ts:26](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L26)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/diff.ts:26](https://github.com/pt9912/v-map/blob/e6a52bf4
 
 > **center**: `string`
 
-Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L29)
+Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/e6a52bf4
 
 > **flavour**: `string`
 
-Defined in: [src/utils/diff.ts:27](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L27)
+Defined in: [src/utils/diff.ts:27](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L27)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/diff.ts:27](https://github.com/pt9912/v-map/blob/e6a52bf4
 
 > **layerGroups**: [`LayerGroup`](LayerGroup.md)[]
 
-Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L31)
+Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L31)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/e6a52bf4
 
 > **style**: `string`
 
-Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L30)
+Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L30)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/e6a52bf4
 
 > **zoom**: `number`
 
-Defined in: [src/utils/diff.ts:28](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/diff.ts#L28)
+Defined in: [src/utils/diff.ts:28](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/utils/diff.ts#L28)

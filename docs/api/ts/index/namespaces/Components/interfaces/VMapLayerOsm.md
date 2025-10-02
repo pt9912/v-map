@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsm
 
-Defined in: [src/components.d.ts:253](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L253)
+Defined in: [src/components.d.ts:253](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L253)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:253](https://github.com/pt9912/v-map/blob/e6a52
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:257](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L257)
+Defined in: [src/components.d.ts:257](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L257)
 
 Returns the internal layer ID used by the map provider.
 
@@ -28,7 +28,7 @@ Returns the internal layer ID used by the map provider.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:262](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L262)
+Defined in: [src/components.d.ts:262](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L262)
 
 Opazität der OSM-Kacheln (0–1).
 
@@ -44,7 +44,7 @@ Opazität der OSM-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:267](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L267)
+Defined in: [src/components.d.ts:267](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L267)
 
 Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.
 
@@ -60,7 +60,7 @@ Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:272](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L272)
+Defined in: [src/components.d.ts:272](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L272)
 
 Sichtbarkeit des Layers
 
@@ -76,7 +76,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:277](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components.d.ts#L277)
+Defined in: [src/components.d.ts:277](https://github.com/pt9912/v-map/blob/dc11bbe80f9910b9501652c936ba377a6a601edf/src/components.d.ts#L277)
 
 Z-index for layer stacking order. Higher values render on top.
 

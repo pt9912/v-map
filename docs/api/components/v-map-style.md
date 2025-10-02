@@ -21,3 +21,7 @@
 | `styleError` | `Error` | Fired when style parsing fails. |
 | `styleReady` | `Style` | Fired when style is successfully parsed and ready to apply. |
 
+### Methods
+
+- `getStyle() => Promise<Style>` — Get the currently parsed style.
+
