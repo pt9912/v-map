@@ -125,6 +125,7 @@
     "caniuse-lite": "^1.0.30001741",
     "cesium": "^1.133.1",
     "cross-env": "^10.0.0",
+    "geostyler-mapbox-parser": "^6.1.1",
     "geostyler-sld-parser": "^8.1.0",
     "geostyler-style": "^10.5.0",
     "jest": "^29.7.0",

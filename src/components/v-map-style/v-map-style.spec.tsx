@@ -22,6 +22,27 @@ jest.mock('geostyler-sld-parser', () => {
   }));
 });
 
+jest.mock('geostyler-mapbox-parser', () => {
+  return jest.fn().mockImplementation(() => ({
+    readStyle: jest.fn().mockResolvedValue({
+      output: {
+        name: 'Mock Mapbox Style',
+        rules: [
+          {
+            name: 'Mock Mapbox Rule',
+            symbolizers: [
+              {
+                kind: 'Fill',
+                color: '#0000ff',
+              },
+            ],
+          },
+        ],
+      },
+    }),
+  }));
+});
+
 jest.mock('geostyler-style', () => ({
   Style: {},
 }));
@@ -114,10 +135,39 @@ describe('v-map-style', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should handle Mapbox GL Style format', async () => {
+    const mapboxStyle = JSON.stringify({
+      version: 8,
+      name: 'Test Style',
+      layers: [
+        {
+          id: 'test-layer',
+          type: 'fill',
+          paint: {
+            'fill-color': '#0000ff',
+          },
+        },
+      ],
+    });
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="mapbox-gl" content='${mapboxStyle}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    expect(component.format).toBe('mapbox-gl');
+
+    // Parse the Mapbox GL style
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeTruthy();
+    expect(result.name).toBe('Mock Mapbox Style');
+  });
+
   it('should handle unsupported formats', async () => {
     const page = await newSpecPage({
       components: [VMapStyle],
-      html: `<v-map-style format="mapbox-gl" content="test" auto-apply="false"></v-map-style>`,
+      html: `<v-map-style format="cartocss" content="test" auto-apply="false"></v-map-style>`,
     });
 
     const component = page.rootInstance as VMapStyle;
@@ -126,7 +176,7 @@ describe('v-map-style', () => {
     const result = await component.loadAndParseStyle();
     expect(result).toBeUndefined();
     expect(component.getError()).toBeTruthy();
-    expect(component.getError().message).toContain('Mapbox GL Style format not yet implemented');
+    expect(component.getError().message).toContain('CartoCSS format not yet implemented');
   });
 
   it('should display loading state', async () => {

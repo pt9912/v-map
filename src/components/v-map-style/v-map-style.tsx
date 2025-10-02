@@ -1,5 +1,6 @@
 import { Component, Prop, Element, Event, EventEmitter, Watch, State, h } from '@stencil/core';
 import SLDParser from 'geostyler-sld-parser';
+import MapboxParser from 'geostyler-mapbox-parser';
 import { Style } from 'geostyler-style';
 
 import { log } from '../../utils/logger';
@@ -64,6 +65,7 @@ export class VMapStyle {
   @State() private error?: Error;
 
   private sldParser = new SLDParser();
+  private mapboxParser = new MapboxParser();
 
   async connectedCallback() {
     log(MSG_COMPONENT + ' - ' + MSG.COMPONENT_CONNECTED_CALLBACK);
@@ -130,8 +132,7 @@ export class VMapStyle {
       case 'sld':
         return this.parseSLD(styleContent);
       case 'mapbox-gl':
-        // TODO: Implement Mapbox GL Style parser
-        throw new Error('Mapbox GL Style format not yet implemented');
+        return this.parseMapboxGL(styleContent);
       case 'cartocss':
         // TODO: Implement CartoCSS parser
         throw new Error('CartoCSS format not yet implemented');
@@ -154,6 +155,25 @@ export class VMapStyle {
       return style;
     } catch (error) {
       throw new Error(`SLD parsing failed: ${error.message}`);
+    }
+  }
+
+  private async parseMapboxGL(mapboxContent: string): Promise<Style> {
+    try {
+      // Parse JSON if string
+      const mapboxStyle = typeof mapboxContent === 'string'
+        ? JSON.parse(mapboxContent)
+        : mapboxContent;
+
+      const { output: style } = await this.mapboxParser.readStyle(mapboxStyle);
+
+      if (!style) {
+        throw new Error('Failed to parse Mapbox GL Style - no style output');
+      }
+
+      return style;
+    } catch (error) {
+      throw new Error(`Mapbox GL Style parsing failed: ${error.message}`);
     }
   }
 

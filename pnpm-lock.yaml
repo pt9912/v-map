@@ -92,6 +92,9 @@ importers:
       cross-env:
         specifier: ^10.0.0
         version: 10.0.0
+      geostyler-mapbox-parser:
+        specifier: ^6.1.1
+        version: 6.1.1
       geostyler-sld-parser:
         specifier: ^8.1.0
         version: 8.1.0
@@ -1698,6 +1701,9 @@ packages:
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
+  '@types/mapbox-gl@2.7.21':
+    resolution: {integrity: sha512-Dx9MuF2kKgT/N22LsMUB4b3acFZh9clVqz9zv1fomoiPoBrJolwYxpWA/9LPO/2N0xWbKi4V+pkjTaFkkx/4wA==}
+
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
 
@@ -2752,6 +2758,10 @@ packages:
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
+
+  geostyler-mapbox-parser@6.1.1:
+    resolution: {integrity: sha512-2KUoCcYzMDc3wWcgQe4FhhKgMl8nrp3NWjECWGP+vlIfk7Hf5cKW4sQwr/la8LG1DHs/KILh+g4r03caKxSZbw==}
+    engines: {node: '>=18', npm: '>=9'}
 
   geostyler-sld-parser@8.1.0:
     resolution: {integrity: sha512-9iDxWAR2nkkhMgBcAe+XgbmDdw36OdTEyGfXZcac5d7XbK8/KGZbxcKiQRiE9/+gPtFGIoc5+PSjjgWoJHMaaw==}
@@ -6828,6 +6838,10 @@ snapshots:
 
   '@types/linkify-it@5.0.0': {}
 
+  '@types/mapbox-gl@2.7.21':
+    dependencies:
+      '@types/geojson': 7946.0.16
+
   '@types/markdown-it@14.1.2':
     dependencies:
       '@types/linkify-it': 5.0.0
@@ -7937,6 +7951,11 @@ snapshots:
   function-timeout@1.0.2: {}
 
   gensync@1.0.0-beta.2: {}
+
+  geostyler-mapbox-parser@6.1.1:
+    dependencies:
+      '@types/mapbox-gl': 2.7.21
+      geostyler-style: 10.5.0
 
   geostyler-sld-parser@8.1.0:
     dependencies:
