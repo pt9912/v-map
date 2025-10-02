@@ -52,7 +52,6 @@ jest.mock('leaflet', () => ({
 
 // Import after mocks
 import { LeafletProvider } from './leaflet-provider';
-import * as L from 'leaflet';
 
 describe('LeafletProvider GeoStyler Integration', () => {
   let provider: LeafletProvider;

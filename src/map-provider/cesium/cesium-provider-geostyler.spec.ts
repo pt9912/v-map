@@ -63,14 +63,6 @@ const mockCesium = {
     MIX: 0,
   },
   Property: class MockProperty {},
-  Color: class MockColor {
-    static fromCssColorString() {
-      return { withAlpha: jest.fn(() => ({})) };
-    }
-    withAlpha() {
-      return {};
-    }
-  },
   JulianDate: jest.fn(),
   ColorMaterialProperty: jest.fn(),
   ImageMaterialProperty: jest.fn(),
