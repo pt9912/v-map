@@ -8,7 +8,7 @@
 
 > **diffRelevantFields**(`a`, `b`): `Partial`\<`Record`\<`"type"` \| `"visible"` \| `"opacity"` \| `"zIndex"` \| `"url"` \| `"layers"` \| `"tiled"` \| `"data"` \| `"style"`, \{ `new`: `any`; `old`: `any`; \}\>\>
 
-Defined in: [src/utils/diff.ts:130](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/utils/diff.ts#L130)
+Defined in: [src/utils/diff.ts:130](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/utils/diff.ts#L130)
 
 Compare fields relevant for rendering; returns patch (only changed fields)
 

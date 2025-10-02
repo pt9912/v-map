@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsmCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:733](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L733)
+Defined in: [src/components.d.ts:733](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L733)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:734](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L734)
+Defined in: [src/components.d.ts:734](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L734)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerOsmElement`
 
-Defined in: [src/components.d.ts:735](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L735)
+Defined in: [src/components.d.ts:735](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L735)
 
 The read-only **`target`** property of the dispatched.
 

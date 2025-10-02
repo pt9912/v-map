@@ -6,7 +6,7 @@
 
 # Interface: VMap
 
-Defined in: [src/components.d.ts:25](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L25)
+Defined in: [src/components.d.ts:25](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L25)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:25](https://github.com/pt9912/v-map/blob/1ce141
 
 > **center**: `string`
 
-Defined in: [src/components.d.ts:31](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L31)
+Defined in: [src/components.d.ts:31](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L31)
 
 Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
 
@@ -36,7 +36,7 @@ Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Läng
 
 > **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/components.d.ts:36](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L36)
+Defined in: [src/components.d.ts:36](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L36)
 
 Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts). Bei `true` werden keine Provider initialisiert.
 
@@ -52,7 +52,7 @@ false
 
 > **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
 
-Defined in: [src/components.d.ts:42](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L42)
+Defined in: [src/components.d.ts:42](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L42)
 
 Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium" | "deck".
 
@@ -74,7 +74,7 @@ Zu verwendender Karten-Provider. Unterstützte Werte: "ol" | "leaflet" | "cesium
 
 > **getMapProvider**: () => `Promise`\<[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md)\>
 
-Defined in: [src/components.d.ts:47](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L47)
+Defined in: [src/components.d.ts:47](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L47)
 
 Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
 
@@ -90,7 +90,7 @@ Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
 
 > **isMapProviderAvailable**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:53](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L53)
+Defined in: [src/components.d.ts:53](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L53)
 
 Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
 
@@ -106,7 +106,7 @@ Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
 
 > **setView**: (`coordinates`, `zoom`) => `Promise`\<`void`\>
 
-Defined in: [src/components.d.ts:61](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L61)
+Defined in: [src/components.d.ts:61](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L61)
 
 Setzt Kartenzentrum und Zoom (optional animiert).
 
@@ -138,7 +138,7 @@ await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });
 
 > **useDefaultImportMap**: `boolean`
 
-Defined in: [src/components.d.ts:66](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L66)
+Defined in: [src/components.d.ts:66](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L66)
 
 Falls true, injiziert v-map automatisch die Import-Map.
 
@@ -154,7 +154,7 @@ true
 
 > **zoom**: `number`
 
-Defined in: [src/components.d.ts:71](https://github.com/pt9912/v-map/blob/1ce14191249825d0bb62b52654bd1cde2162b581/src/components.d.ts#L71)
+Defined in: [src/components.d.ts:71](https://github.com/pt9912/v-map/blob/11744db29be2961aa24917a4dca680b91c5270b9/src/components.d.ts#L71)
 
 Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).
 
