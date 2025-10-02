@@ -1,49 +1,72 @@
-import { LeafletProvider } from './leaflet-provider';
 import type { Style } from 'geostyler-style';
-import * as L from 'leaflet';
 
-// Mock Leaflet
+// Create mock functions
+const mockMap = jest.fn(() => ({
+  setView: jest.fn().mockReturnThis(),
+  addLayer: jest.fn(),
+  removeLayer: jest.fn(),
+  eachLayer: jest.fn(),
+  invalidateSize: jest.fn(),
+  remove: jest.fn(),
+}));
+
+const mockGeoJSON = jest.fn(() => ({
+  addTo: jest.fn().mockReturnThis(),
+  clearLayers: jest.fn(),
+  addData: jest.fn(),
+  eachLayer: jest.fn(),
+  setStyle: jest.fn(),
+}));
+
+const mockLayerGroup = jest.fn(() => ({
+  addTo: jest.fn().mockReturnThis(),
+  addLayer: jest.fn(),
+  clearLayers: jest.fn(),
+  getLayers: jest.fn(() => []),
+}));
+
+const mockTileLayer = jest.fn(() => ({
+  addTo: jest.fn().mockReturnThis(),
+  setUrl: jest.fn(),
+  setOpacity: jest.fn(),
+  setZIndex: jest.fn(),
+}));
+
+const mockCircleMarker = jest.fn(() => ({}));
+const mockMarker = jest.fn(() => ({}));
+const mockIcon = jest.fn(() => ({}));
+
+// Mock Leaflet module
 jest.mock('leaflet', () => ({
-  map: jest.fn(() => ({
-    setView: jest.fn().mockReturnThis(),
-    addLayer: jest.fn(),
-    removeLayer: jest.fn(),
-    eachLayer: jest.fn(),
-    invalidateSize: jest.fn(),
-    remove: jest.fn(),
-  })),
-  geoJSON: jest.fn(() => ({
-    addTo: jest.fn().mockReturnThis(),
-    clearLayers: jest.fn(),
-    addData: jest.fn(),
-    eachLayer: jest.fn(),
-    setStyle: jest.fn(),
-  })),
-  layerGroup: jest.fn(() => ({
-    addTo: jest.fn().mockReturnThis(),
-    addLayer: jest.fn(),
-    clearLayers: jest.fn(),
-    getLayers: jest.fn(() => []),
-  })),
-  tileLayer: jest.fn(() => ({
-    addTo: jest.fn().mockReturnThis(),
-    setUrl: jest.fn(),
-    setOpacity: jest.fn(),
-    setZIndex: jest.fn(),
-  })),
-  circleMarker: jest.fn(() => ({})),
-  marker: jest.fn(() => ({})),
-  icon: jest.fn(() => ({})),
+  map: mockMap,
+  geoJSON: mockGeoJSON,
+  layerGroup: mockLayerGroup,
+  tileLayer: mockTileLayer,
+  circleMarker: mockCircleMarker,
+  marker: mockMarker,
+  icon: mockIcon,
   Util: {
     stamp: jest.fn(() => 'layer-id-123'),
   },
 }));
+
+// Import after mocks
+import { LeafletProvider } from './leaflet-provider';
+import * as L from 'leaflet';
 
 describe('LeafletProvider GeoStyler Integration', () => {
   let provider: LeafletProvider;
 
   beforeEach(() => {
     provider = new LeafletProvider();
+    // Clear all mock calls before each test
+    mockMap.mockClear();
+    mockGeoJSON.mockClear();
+    mockLayerGroup.mockClear();
+    mockTileLayer.mockClear();
+    mockCircleMarker.mockClear();
+    mockMarker.mockClear();
+    mockIcon.mockClear();
   });
 
   afterEach(() => {
@@ -89,7 +112,7 @@ describe('LeafletProvider GeoStyler Integration', () => {
       );
 
       expect(layerId).toBeTruthy();
-      expect(L.geoJSON).toHaveBeenCalled();
+      expect(mockGeoJSON).toHaveBeenCalled();
     });
 
     it('should handle Fill symbolizer correctly', async () => {
