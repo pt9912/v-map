@@ -8,4 +8,4 @@
 
 > **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"qgis"` \| `"lyrx"`
 
-Defined in: [src/components/v-map-style/v-map-style.tsx:22](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/components/v-map-style/v-map-style.tsx#L22)
+Defined in: [src/components/v-map-style/v-map-style.tsx:22](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/components/v-map-style/v-map-style.tsx#L22)

@@ -8,4 +8,4 @@
 
 > `const` **LEAFLET\_VERSION**: `"1.9.4"`
 
-Defined in: [src/lib/versions.gen.ts:4](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/lib/versions.gen.ts#L4)
+Defined in: [src/lib/versions.gen.ts:4](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/lib/versions.gen.ts#L4)

@@ -8,7 +8,7 @@
 
 > **ensureGoogleLogo**(`map`, `markAdded`): `void`
 
-Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:131](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/leaflet/leaflet-helpers.ts#L131)
+Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:131](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/leaflet/leaflet-helpers.ts#L131)
 
 Fügt ein kleines Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit)
 

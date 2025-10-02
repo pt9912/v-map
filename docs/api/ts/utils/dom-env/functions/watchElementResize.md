@@ -8,7 +8,7 @@
 
 > **watchElementResize**(`target`, `cb`, `mutationObserverInit?`): [`Unsubscribe`](../type-aliases/Unsubscribe.md)
 
-Defined in: [src/utils/dom-env.ts:17](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/utils/dom-env.ts#L17)
+Defined in: [src/utils/dom-env.ts:17](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/utils/dom-env.ts#L17)
 
 Beobachtet Größenänderungen des Targets. Nutzt ResizeObserver wenn vorhanden, sonst Fallback.
 

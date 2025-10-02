@@ -8,7 +8,7 @@
 
 > **ensureImportMap**(`__namedParameters`): `void`
 
-Defined in: [src/lib/ensure-importmap.ts:3](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/lib/ensure-importmap.ts#L3)
+Defined in: [src/lib/ensure-importmap.ts:3](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/lib/ensure-importmap.ts#L3)
 
 ## Parameters
 

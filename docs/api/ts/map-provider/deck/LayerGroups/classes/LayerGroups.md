@@ -6,7 +6,7 @@
 
 # Class: LayerGroups\<L, G\>
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:24](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L24)
+Defined in: [src/map-provider/deck/LayerGroups.ts:24](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L24)
 
 ## Type Parameters
 
@@ -24,7 +24,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:24](https://github.com/pt9912/
 
 > **new LayerGroups**\<`L`, `G`\>(`props`): `LayerGroups`\<`L`, `G`\>
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:34](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L34)
+Defined in: [src/map-provider/deck/LayerGroups.ts:34](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L34)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:34](https://github.com/pt9912/
 
 > **get** **groups**(): readonly `G`[]
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:51](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L51)
+Defined in: [src/map-provider/deck/LayerGroups.ts:51](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L51)
 
 ##### Returns
 
@@ -58,7 +58,7 @@ readonly `G`[]
 
 > **get** **size**(): `number`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:48](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L48)
+Defined in: [src/map-provider/deck/LayerGroups.ts:48](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L48)
 
 ##### Returns
 
@@ -70,7 +70,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:48](https://github.com/pt9912/
 
 > **addGroup**(`group`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:86](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L86)
+Defined in: [src/map-provider/deck/LayerGroups.ts:86](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L86)
 
 #### Parameters
 
@@ -88,7 +88,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:86](https://github.com/pt9912/
 
 > **addGroups**(`groups`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:93](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L93)
+Defined in: [src/map-provider/deck/LayerGroups.ts:93](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L93)
 
 #### Parameters
 
@@ -106,7 +106,7 @@ readonly `G`[]
 
 > **applyToDeck**(`options`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:70](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L70)
+Defined in: [src/map-provider/deck/LayerGroups.ts:70](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L70)
 
 #### Parameters
 
@@ -126,7 +126,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:70](https://github.com/pt9912/
 
 > **attachDeck**(`deck`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:63](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L63)
+Defined in: [src/map-provider/deck/LayerGroups.ts:63](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L63)
 
 #### Parameters
 
@@ -144,7 +144,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:63](https://github.com/pt9912/
 
 > **clear**(`opts?`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:105](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L105)
+Defined in: [src/map-provider/deck/LayerGroups.ts:105](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L105)
 
 #### Parameters
 
@@ -164,7 +164,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:105](https://github.com/pt9912
 
 > **destroy**(`opts?`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:234](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L234)
+Defined in: [src/map-provider/deck/LayerGroups.ts:234](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L234)
 
 #### Parameters
 
@@ -184,7 +184,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:234](https://github.com/pt9912
 
 > **detachDeck**(): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:66](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L66)
+Defined in: [src/map-provider/deck/LayerGroups.ts:66](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L66)
 
 #### Returns
 
@@ -196,7 +196,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:66](https://github.com/pt9912/
 
 > **getGroup**(`id`): `G`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:54](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L54)
+Defined in: [src/map-provider/deck/LayerGroups.ts:54](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L54)
 
 #### Parameters
 
@@ -214,7 +214,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:54](https://github.com/pt9912/
 
 > **getLayers**(`options`): readonly `L`[]
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:212](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L212)
+Defined in: [src/map-provider/deck/LayerGroups.ts:212](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L212)
 
 #### Parameters
 
@@ -234,7 +234,7 @@ readonly `L`[]
 
 > **hasGroup**(`id`): `boolean`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:57](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L57)
+Defined in: [src/map-provider/deck/LayerGroups.ts:57](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L57)
 
 #### Parameters
 
@@ -252,7 +252,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:57](https://github.com/pt9912/
 
 > **markDirty**(): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:230](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L230)
+Defined in: [src/map-provider/deck/LayerGroups.ts:230](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L230)
 
 #### Returns
 
@@ -264,7 +264,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:230](https://github.com/pt9912
 
 > **moveGroup**(`id`, `toIndex`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:126](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L126)
+Defined in: [src/map-provider/deck/LayerGroups.ts:126](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L126)
 
 #### Parameters
 
@@ -286,7 +286,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:126](https://github.com/pt9912
 
 > **removeGroup**(`id`, `opts?`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:97](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L97)
+Defined in: [src/map-provider/deck/LayerGroups.ts:97](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L97)
 
 #### Parameters
 
@@ -310,7 +310,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:97](https://github.com/pt9912/
 
 > **removeLayer**(`layerId`, `opts`): `boolean`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:156](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L156)
+Defined in: [src/map-provider/deck/LayerGroups.ts:156](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L156)
 
 Entfernt einen Layer mit gegebener ID aus allen Gruppen, die
 klassische LayerGroup **unterstützen**. Bei modellbasierten Gruppen
@@ -342,7 +342,7 @@ suchst du nach Model-ID und nutzt removeModel().
 
 > **replaceGroup**(`group`, `keepPosition`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:111](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L111)
+Defined in: [src/map-provider/deck/LayerGroups.ts:111](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L111)
 
 #### Parameters
 
@@ -364,7 +364,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:111](https://github.com/pt9912
 
 > **setGroupVisible**(`id`, `visible`, `opts`): `boolean`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:136](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L136)
+Defined in: [src/map-provider/deck/LayerGroups.ts:136](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L136)
 
 #### Parameters
 
@@ -392,7 +392,7 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:136](https://github.com/pt9912
 
 > **setModelEnabled**(`groupId`, `modelId`, `enabled`, `opts`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:187](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L187)
+Defined in: [src/map-provider/deck/LayerGroups.ts:187](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L187)
 
 Convenience: Für modellbasierte Gruppen – LayerModel enabled togglen.
 No-Op für klassische LayerGroup.
@@ -427,7 +427,7 @@ No-Op für klassische LayerGroup.
 
 > **withUpdate**(`fn`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:205](https://github.com/pt9912/v-map/blob/7ec83fbafdc736b2858f5dda8728bd671ed42485/src/map-provider/deck/LayerGroups.ts#L205)
+Defined in: [src/map-provider/deck/LayerGroups.ts:205](https://github.com/pt9912/v-map/blob/e6a52bf405741bc10bec3ba4b05a7060bdf1cf5b/src/map-provider/deck/LayerGroups.ts#L205)
 
 #### Parameters
 
