@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T13:16:20",
+  "timestamp": "2025-10-02T14:51:18",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -460,20 +460,28 @@
       ],
       "dependents": [],
       "dependencies": [
+        "v-map-style",
         "v-map-layergroup",
         "v-map-layer-osm",
         "v-map-layer-wms",
         "v-map-layer-geojson",
         "v-map-layer-xyz",
+        "v-map-layer-terrain",
+        "v-map-layer-wfs",
+        "v-map-layer-wcs",
         "v-map"
       ],
       "dependencyGraph": {
         "v-map-builder": [
+          "v-map-style",
           "v-map-layergroup",
           "v-map-layer-osm",
           "v-map-layer-wms",
           "v-map-layer-geojson",
           "v-map-layer-xyz",
+          "v-map-layer-terrain",
+          "v-map-layer-wfs",
+          "v-map-layer-wcs",
           "v-map"
         ]
       }
@@ -2217,9 +2225,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-terrain"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-tile3d/v-map-layer-tile3d.tsx",
@@ -2726,9 +2740,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wcs"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-wfs/v-map-layer-wfs.tsx",
@@ -3012,9 +3032,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wfs"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-wkt/v-map-layer-wkt.tsx",
@@ -4513,9 +4539,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-style"
+        ]
+      }
     }
   ],
   "typeLibrary": {

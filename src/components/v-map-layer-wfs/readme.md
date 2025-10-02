@@ -33,6 +33,19 @@ Type: `Promise<boolean>`
 
 
 
+## Dependencies
+
+### Used by
+
+ - [v-map-builder](../v-map-builder)
+
+### Graph
+```mermaid
+graph TD;
+  v-map-builder --> v-map-layer-wfs
+  style v-map-layer-wfs fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

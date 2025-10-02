@@ -35,21 +35,29 @@ A component that builds map configurations dynamically from JSON/YAML configurat
 
 ### Depends on
 
+- [v-map-style](../v-map-style)
 - [v-map-layergroup](../v-map-layergroup)
 - [v-map-layer-osm](../v-map-layer-osm)
 - [v-map-layer-wms](../v-map-layer-wms)
 - [v-map-layer-geojson](../v-map-layer-geojson)
 - [v-map-layer-xyz](../v-map-layer-xyz)
+- [v-map-layer-terrain](../v-map-layer-terrain)
+- [v-map-layer-wfs](../v-map-layer-wfs)
+- [v-map-layer-wcs](../v-map-layer-wcs)
 - [v-map](../v-map)
 
 ### Graph
 ```mermaid
 graph TD;
+  v-map-builder --> v-map-style
   v-map-builder --> v-map-layergroup
   v-map-builder --> v-map-layer-osm
   v-map-builder --> v-map-layer-wms
   v-map-builder --> v-map-layer-geojson
   v-map-builder --> v-map-layer-xyz
+  v-map-builder --> v-map-layer-terrain
+  v-map-builder --> v-map-layer-wfs
+  v-map-builder --> v-map-layer-wcs
   v-map-builder --> v-map
   style v-map-builder fill:#f9f,stroke:#333,stroke-width:4px
 ```

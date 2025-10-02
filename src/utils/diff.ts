@@ -4,6 +4,9 @@ export type LayerType =
   | 'wms-tiled'
   | 'geojson'
   | 'xyz'
+  | 'terrain'
+  | 'wfs'
+  | 'wcs'
   | 'custom';
 
 // interface BaseLayer {
@@ -23,11 +26,23 @@ export interface LayerGroup {
   visible?: boolean | string;
   layers: NormalizedLayer[];
 }
+export interface NormalizedStyle {
+  /** internal identifier to keep track between updates */
+  key: string;
+  format: string;
+  src?: string;
+  content?: string;
+  layerTargets?: string;
+  autoApply?: boolean | string;
+  id?: string;
+}
+
 export interface MapConfig {
   flavour: string;
   zoom: number;
   center: string;
   style: string;
+  styles: NormalizedStyle[];
   layerGroups: LayerGroup[];
 }
 export interface BuilderConfig {
@@ -45,6 +60,7 @@ export interface NormalizedLayer {
   tiled?: string;
   data?: unknown;
   style?: Record<string, unknown>;
+  [key: string]: any;
 }
 
 export type LayerPatch = {

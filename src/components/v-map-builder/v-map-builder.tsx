@@ -9,7 +9,11 @@ import {
   Watch,
 } from '@stencil/core';
 import { load as loadYaml } from 'js-yaml';
-import type { NormalizedLayer, BuilderConfig } from '../../utils/diff';
+import type {
+  NormalizedLayer,
+  BuilderConfig,
+  NormalizedStyle,
+} from '../../utils/diff';
 import { diffLayers } from '../../utils/diff';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
@@ -98,6 +102,7 @@ export class VMapBuilder {
         zoom: Number(map.zoom ?? 2),
         center: String(map.center ?? '0,0'),
         style: String(map.style ?? ''),
+        styles: this.normalizeStyles(map.styles),
         layerGroups: (map.layerGroups ?? []).map((g: any, gi: number) => ({
           groupTitle: g.groupTitle ?? g.group ?? g.title ?? `Gruppe ${gi + 1}`,
           visible: g.visible,
@@ -133,6 +138,137 @@ export class VMapBuilder {
       },
     };
     return norm;
+  }
+
+  private normalizeStyles(input: any): NormalizedStyle[] {
+    const list = Array.isArray(input) ? input : input ? [input] : [];
+    return list
+      .map((entry, index) => this.normalizeStyle(entry, index))
+      .filter((style): style is NormalizedStyle => Boolean(style));
+  }
+
+  private normalizeStyle(entry: any, index: number): NormalizedStyle | undefined {
+    if (entry == null) return undefined;
+
+    const raw = typeof entry === 'object' ? entry : { content: entry };
+    const keySource = raw.key ?? raw.id ?? raw.name;
+    const key = String(
+      keySource != null ? keySource : `style-${index + 1}`,
+    );
+
+    const format = String(raw.format ?? 'sld').toLowerCase();
+
+    let layerTargets: string | undefined;
+    if (Array.isArray(raw.layerTargets)) {
+      layerTargets = raw.layerTargets
+        .map((target: any) => String(target).trim())
+        .filter(Boolean)
+        .join(',');
+    } else if (typeof raw.layerTargets === 'string') {
+      layerTargets = raw.layerTargets;
+    }
+
+    const autoApply =
+      raw.autoApply == null
+        ? undefined
+        : typeof raw.autoApply === 'boolean'
+          ? raw.autoApply
+          : String(raw.autoApply).toLowerCase() !== 'false';
+
+    let src: string | undefined =
+      raw.src != null ? String(raw.src).trim() : undefined;
+    if (src === '') src = undefined;
+    let content: string | undefined =
+      raw.content != null ? String(raw.content) : undefined;
+
+    if (!src && !content && typeof raw.source === 'string') {
+      const source = raw.source.trim();
+      if (source) {
+        if (/^(https?:)?\/\//.test(source) || source.startsWith('/') || source.startsWith('./') || source.startsWith('../')) {
+          src = source;
+        } else {
+          content = source;
+        }
+      }
+    }
+
+    if (!src && !content) {
+      if (typeof entry === 'string') {
+        content = String(entry);
+      } else {
+        log(
+          `${MSG_COMPONENT}normalizeStyle: skipping style without src/content (key=${key})`,
+        );
+        return undefined;
+      }
+    }
+
+    return {
+      key,
+      format,
+      src,
+      content,
+      layerTargets,
+      autoApply,
+      id: raw.id != null ? String(raw.id) : undefined,
+    };
+  }
+
+  private syncStyles(mapEl: HTMLElement, styles: NormalizedStyle[]) {
+    const selector = 'v-map-style[data-builder-style="true"]';
+    const existing = Array.from(
+      mapEl.querySelectorAll(selector),
+    ) as HTMLElement[];
+
+    const existingByKey = new Map<string, HTMLElement>();
+    for (const el of existing) {
+      const key = el.getAttribute('data-builder-style-id');
+      if (key) existingByKey.set(key, el);
+    }
+
+    const processed = new Set<string>();
+    const anchor = Array.from(mapEl.children).find(child => {
+      if (child.tagName.toLowerCase() !== 'v-map-style') return true;
+      return (
+        (child as HTMLElement).getAttribute('data-builder-style') !== 'true'
+      );
+    }) as HTMLElement | undefined;
+
+    styles.forEach((style, index) => {
+      const key = style.key || `style-${index + 1}`;
+      let el = existingByKey.get(key);
+      if (!el || el.parentElement !== mapEl) {
+        el = document.createElement('v-map-style') as HTMLElement;
+        el.setAttribute('data-builder-style', 'true');
+        el.setAttribute('data-builder-style-id', key);
+      } else {
+        el.setAttribute('data-builder-style', 'true');
+        el.setAttribute('data-builder-style-id', key);
+      }
+
+      processed.add(key);
+
+      this.ensureAttr(el, 'format', style.format);
+      this.ensureAttr(el, 'layer-targets', style.layerTargets);
+      this.ensureAttr(el, 'auto-apply', style.autoApply);
+      this.ensureAttr(el, 'id', style.id);
+      this.ensureAttr(el, 'src', style.src);
+      this.ensureAttr(el, 'content', style.content);
+
+      const reference = anchor && anchor.parentElement === mapEl ? anchor : null;
+      if (!el.isConnected || el.parentElement !== mapEl) {
+        mapEl.insertBefore(el, reference);
+      } else if (reference) {
+        mapEl.insertBefore(el, reference);
+      }
+    });
+
+    for (const el of existing) {
+      const key = el.getAttribute('data-builder-style-id') || '';
+      if (!processed.has(key)) {
+        mapEl.removeChild(el);
+      }
+    }
   }
 
   private ensureAttr(el: Element, name: string, value?: any) {
@@ -200,6 +336,50 @@ export class VMapBuilder {
         el = document.createElement('v-map-layer-xyz') as HTMLElement;
         common.url = layer.url;
         break;
+      case 'terrain': {
+        el = document.createElement('v-map-layer-terrain') as HTMLElement;
+        const cfg = (layer.data || {}) as Record<string, any>;
+        common['elevation-data'] = cfg.elevationData;
+        common['texture'] = cfg.texture;
+        common['elevation-decoder'] = cfg.elevationDecoder
+          ? JSON.stringify(cfg.elevationDecoder)
+          : undefined;
+        common['wireframe'] = cfg.wireframe;
+        common['color'] = cfg.color
+          ? Array.isArray(cfg.color)
+            ? JSON.stringify(cfg.color)
+            : cfg.color
+          : undefined;
+        common['min-zoom'] = cfg.minZoom;
+        common['max-zoom'] = cfg.maxZoom;
+        common['mesh-max-error'] = cfg.meshMaxError;
+        break;
+      }
+      case 'wfs': {
+        el = document.createElement('v-map-layer-wfs') as HTMLElement;
+        const cfg = (layer.data || {}) as Record<string, any>;
+        common['url'] = cfg.url ?? layer.url;
+        common['type-name'] = cfg.typeName;
+        common['version'] = cfg.version;
+        common['output-format'] = cfg.outputFormat;
+        common['srs-name'] = cfg.srsName;
+        common['params'] = cfg.params ? JSON.stringify(cfg.params) : undefined;
+        break;
+      }
+      case 'wcs': {
+        el = document.createElement('v-map-layer-wcs') as HTMLElement;
+        const cfg = (layer.data || {}) as Record<string, any>;
+        common['url'] = cfg.url ?? layer.url;
+        common['coverage-name'] = cfg.coverageName;
+        common['format'] = cfg.format;
+        common['version'] = cfg.version;
+        common['projection'] = cfg.projection;
+        common['resolutions'] = cfg.resolutions
+          ? JSON.stringify(cfg.resolutions)
+          : undefined;
+        common['params'] = cfg.params ? JSON.stringify(cfg.params) : undefined;
+        break;
+      }
       default:
         el = document.createElement('v-map-layer-custom') as HTMLElement;
         el.setAttribute('type', layer.type);
@@ -237,12 +417,18 @@ export class VMapBuilder {
         case 'style':
           this.ensureAttr(el, 'style', nv ? JSON.stringify(nv) : undefined);
           break;
-        case 'data':
-          (el as any).setData?.(nv);
-          if (!(el as any).setData) {
-            const s = typeof nv === 'object' ? JSON.stringify(nv) : nv;
-            this.ensureAttr(el, 'data', s);
-          }
+      case 'data':
+        if (['terrain', 'wfs', 'wcs'].includes(next.type)) {
+          const parent = el.parentElement!;
+          const newEl = this.createLayerEl(next);
+          parent.replaceChild(newEl, el);
+          return;
+        }
+        (el as any).setData?.(nv);
+        if (!(el as any).setData) {
+          const s = typeof nv === 'object' ? JSON.stringify(nv) : nv;
+          this.ensureAttr(el, 'data', s);
+        }
           break;
         case 'type':
           const parent = el.parentElement!;
@@ -264,6 +450,7 @@ export class VMapBuilder {
     this.ensureAttr(mapEl, 'zoom', String(next.map.zoom));
     this.ensureAttr(mapEl, 'center', next.map.center);
     this.ensureAttr(mapEl, 'style', next.map.style);
+    this.syncStyles(mapEl, next.map.styles || []);
 
     const nextTitles = new Set(next.map.layerGroups.map(g => g.groupTitle));
     Array.from(mapEl.children).forEach(ch => {
