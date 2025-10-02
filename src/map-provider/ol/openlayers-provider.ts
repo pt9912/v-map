@@ -70,6 +70,12 @@ export class OpenLayersProvider implements MapProvider {
       case 'wms':
         await this.updateWMSLayer(layer, update.data);
         break;
+      case 'wfs':
+        await this.updateWFSLayer(layer, update.data);
+        break;
+      case 'wcs':
+        await this.updateWCSLayer(layer, update.data);
+        break;
       case 'arcgis':
         await this.updateArcGISLayer(layer, update.data);
         break;
@@ -274,6 +280,14 @@ export class OpenLayersProvider implements MapProvider {
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
         );
+      case 'wfs':
+        return this.createWFSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wfs' }>,
+        );
+      case 'wcs':
+        return this.createWCSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wcs' }>,
+        );
       case 'arcgis':
         return this.createArcGISLayer(
           layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
@@ -343,6 +357,19 @@ export class OpenLayersProvider implements MapProvider {
       });
     }
     layer.setSource(vectorSource);
+  }
+
+  private async updateWFSLayer(layer: Layer, data: any) {
+    const merged = this.mergeLayerConfig(layer, 'wfsConfig', data);
+    const geojson = await this.fetchWFSGeoJSON(merged);
+    const vectorSource = await this.createVectorSourceFromGeoJSON(geojson);
+    layer.setSource(vectorSource);
+  }
+
+  private async updateWCSLayer(layer: Layer, data: any) {
+    const merged = this.mergeLayerConfig(layer, 'wcsConfig', data);
+    const source = await this.createWcsSource(merged);
+    (layer as any).setSource(source);
   }
 
   private async updateArcGISLayer(layer: Layer, data: any): Promise<void> {
@@ -523,6 +550,25 @@ export class OpenLayersProvider implements MapProvider {
       style: layerStyle,
     });
     return layer;
+  }
+
+  private async createWFSLayer(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<Layer> {
+    const [{ default: VectorLayer }] = await Promise.all([
+      import('ol/layer/Vector'),
+    ]);
+
+    const geojson = await this.fetchWFSGeoJSON(config);
+    const vectorSource = await this.createVectorSourceFromGeoJSON(geojson);
+
+    const layer = new VectorLayer({
+      source: vectorSource,
+      visible: config.visible ?? true,
+    });
+    layer.setOpacity(config.opacity ?? 1);
+    layer.set('wfsConfig', config, false);
+    return layer as unknown as Layer;
   }
 
   // Helper method to apply opacity to colors
@@ -1200,6 +1246,117 @@ export class OpenLayersProvider implements MapProvider {
     });
 
     return layer;
+  }
+
+  private async createWCSLayer(
+    config: Extract<LayerConfig, { type: 'wcs' }>,
+  ): Promise<Layer> {
+    const [{ default: ImageLayer }] = await Promise.all([
+      import('ol/layer/Image'),
+    ]);
+
+    const source = await this.createWcsSource(config);
+    const layer = new ImageLayer({
+      source,
+      visible: config.visible ?? true,
+      opacity: config.opacity ?? 1,
+    });
+    layer.set('wcsConfig', config, false);
+    return layer as unknown as Layer;
+  }
+
+  private async fetchWFSGeoJSON(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<any> {
+    const baseParams = {
+      service: 'WFS',
+      request: 'GetFeature',
+      version: config.version ?? '1.1.0',
+      typeName: config.typeName,
+      outputFormat: config.outputFormat ?? 'application/json',
+      srsName: config.srsName ?? (this.projection as string),
+    };
+
+    const params = { ...baseParams, ...(config.params ?? {}) };
+    const requestUrl = this.appendParams(config.url, params);
+
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      throw new Error(
+        `WFS request failed (${response.status} ${response.statusText})`,
+      );
+    }
+    return await response.json();
+  }
+
+  private async createVectorSourceFromGeoJSON(geojson: any): Promise<VectorSource> {
+    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all([
+      import('ol/source/Vector'),
+      import('ol/format/GeoJSON'),
+    ]);
+
+    const format = new GeoJSON({ featureProjection: this.projection });
+    return new VectorSource({
+      features: format.readFeatures(geojson),
+    });
+  }
+
+  private mergeLayerConfig(
+    layer: Layer,
+    key: string,
+    data: any,
+  ) {
+    const previous = (layer as any).get?.(key) ?? {};
+    const merged = { ...previous, ...data };
+    (layer as any).set?.(key, merged, false);
+    return merged;
+  }
+
+  private appendParams(
+    baseUrl: string,
+    params: Record<string, string | number | boolean>,
+  ): string {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        query.set(key, String(value));
+      }
+    });
+    if (!query.toString()) return baseUrl;
+    return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
+  }
+
+  private async createWcsSource(
+    config: Extract<LayerConfig, { type: 'wcs' }>,
+  ) {
+    const [{ default: ImageWCS }] = await Promise.all([
+      import('ol/source/ImageWCS'),
+    ]);
+
+    const params = {
+      SERVICE: 'WCS',
+      REQUEST: 'GetCoverage',
+      VERSION: config.version ?? '1.1.0',
+      FORMAT: config.format ?? 'image/tiff',
+      COVERAGE: config.coverageName,
+      coverageId: config.coverageName,
+      ...((config.params as any) ?? {}),
+    };
+
+    const options: Record<string, any> = {
+      url: config.url,
+      params,
+    };
+
+    if (config.projection) {
+      options.projection = config.projection;
+    }
+
+    if (config.resolutions) {
+      options.resolutions = config.resolutions;
+    }
+
+    return new ImageWCS(options);
   }
 
   private async createArcGISLayer(

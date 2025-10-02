@@ -386,6 +386,105 @@ export namespace Components {
          */
         "zIndex": number;
     }
+    interface VMapLayerWcs {
+        /**
+          * Coverage-Name/ID.
+         */
+        "coverageName": string;
+        /**
+          * Ausgabeformat, z. B. image/tiff.
+          * @default 'image/tiff'
+         */
+        "format": string;
+        /**
+          * Gibt `true` zurück, sobald der Layer initialisiert wurde.
+         */
+        "isReady": () => Promise<boolean>;
+        /**
+          * Opazität (0–1).
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Zusätzliche Parameter als JSON-String.
+         */
+        "params"?: string;
+        /**
+          * Projektion (Projection) für die Quelle.
+         */
+        "projection"?: string;
+        /**
+          * Auflösungen als JSON-Array, z. B. [1000,500].
+         */
+        "resolutions"?: string;
+        /**
+          * Basis-URL des WCS-Dienstes.
+         */
+        "url": string;
+        /**
+          * WCS-Version.
+          * @default '1.1.0'
+         */
+        "version": string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible": boolean;
+        /**
+          * Z-Index für die Darstellung.
+          * @default 1000
+         */
+        "zIndex": number;
+    }
+    interface VMapLayerWfs {
+        /**
+          * Gibt `true` zurück, sobald der Layer initialisiert wurde.
+         */
+        "isReady": () => Promise<boolean>;
+        /**
+          * Opazität (0–1).
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Ausgabeformat, z. B. application/json.
+          * @default 'application/json'
+         */
+        "outputFormat": string;
+        /**
+          * Zusätzliche Parameter als JSON-String.
+         */
+        "params"?: string;
+        /**
+          * Ziel-Referenzsystem, Standard EPSG:3857.
+          * @default 'EPSG:3857'
+         */
+        "srsName": string;
+        /**
+          * Feature-Typ (typeName) des WFS.
+         */
+        "typeName": string;
+        /**
+          * WFS Endpunkt (z. B. https://server/wfs).
+         */
+        "url": string;
+        /**
+          * WFS Version, Standard 1.1.0.
+          * @default '1.1.0'
+         */
+        "version": string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible": boolean;
+        /**
+          * Z-Index für Rendering.
+          * @default 1000
+         */
+        "zIndex": number;
+    }
     interface VMapLayerWkt {
         /**
           * Fill color for polygon geometries (CSS color value)
@@ -801,6 +900,18 @@ declare global {
         prototype: HTMLVMapLayerTile3dElement;
         new (): HTMLVMapLayerTile3dElement;
     };
+    interface HTMLVMapLayerWcsElement extends Components.VMapLayerWcs, HTMLStencilElement {
+    }
+    var HTMLVMapLayerWcsElement: {
+        prototype: HTMLVMapLayerWcsElement;
+        new (): HTMLVMapLayerWcsElement;
+    };
+    interface HTMLVMapLayerWfsElement extends Components.VMapLayerWfs, HTMLStencilElement {
+    }
+    var HTMLVMapLayerWfsElement: {
+        prototype: HTMLVMapLayerWfsElement;
+        new (): HTMLVMapLayerWfsElement;
+    };
     interface HTMLVMapLayerWktElementEventMap {
         "ready": void;
     }
@@ -898,6 +1009,8 @@ declare global {
         "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
         "v-map-layer-terrain": HTMLVMapLayerTerrainElement;
         "v-map-layer-tile3d": HTMLVMapLayerTile3dElement;
+        "v-map-layer-wcs": HTMLVMapLayerWcsElement;
+        "v-map-layer-wfs": HTMLVMapLayerWfsElement;
         "v-map-layer-wkt": HTMLVMapLayerWktElement;
         "v-map-layer-wms": HTMLVMapLayerWmsElement;
         "v-map-layer-xyz": HTMLVMapLayerXyzElement;
@@ -1272,6 +1385,97 @@ declare namespace LocalJSX {
          */
         "zIndex"?: number;
     }
+    interface VMapLayerWcs {
+        /**
+          * Coverage-Name/ID.
+         */
+        "coverageName": string;
+        /**
+          * Ausgabeformat, z. B. image/tiff.
+          * @default 'image/tiff'
+         */
+        "format"?: string;
+        /**
+          * Opazität (0–1).
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Zusätzliche Parameter als JSON-String.
+         */
+        "params"?: string;
+        /**
+          * Projektion (Projection) für die Quelle.
+         */
+        "projection"?: string;
+        /**
+          * Auflösungen als JSON-Array, z. B. [1000,500].
+         */
+        "resolutions"?: string;
+        /**
+          * Basis-URL des WCS-Dienstes.
+         */
+        "url": string;
+        /**
+          * WCS-Version.
+          * @default '1.1.0'
+         */
+        "version"?: string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible"?: boolean;
+        /**
+          * Z-Index für die Darstellung.
+          * @default 1000
+         */
+        "zIndex"?: number;
+    }
+    interface VMapLayerWfs {
+        /**
+          * Opazität (0–1).
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Ausgabeformat, z. B. application/json.
+          * @default 'application/json'
+         */
+        "outputFormat"?: string;
+        /**
+          * Zusätzliche Parameter als JSON-String.
+         */
+        "params"?: string;
+        /**
+          * Ziel-Referenzsystem, Standard EPSG:3857.
+          * @default 'EPSG:3857'
+         */
+        "srsName"?: string;
+        /**
+          * Feature-Typ (typeName) des WFS.
+         */
+        "typeName": string;
+        /**
+          * WFS Endpunkt (z. B. https://server/wfs).
+         */
+        "url": string;
+        /**
+          * WFS Version, Standard 1.1.0.
+          * @default '1.1.0'
+         */
+        "version"?: string;
+        /**
+          * Sichtbarkeit des Layers.
+          * @default true
+         */
+        "visible"?: boolean;
+        /**
+          * Z-Index für Rendering.
+          * @default 1000
+         */
+        "zIndex"?: number;
+    }
     interface VMapLayerWkt {
         /**
           * Fill color for polygon geometries (CSS color value)
@@ -1520,6 +1724,8 @@ declare namespace LocalJSX {
         "v-map-layer-scatterplot": VMapLayerScatterplot;
         "v-map-layer-terrain": VMapLayerTerrain;
         "v-map-layer-tile3d": VMapLayerTile3d;
+        "v-map-layer-wcs": VMapLayerWcs;
+        "v-map-layer-wfs": VMapLayerWfs;
         "v-map-layer-wkt": VMapLayerWkt;
         "v-map-layer-wms": VMapLayerWms;
         "v-map-layer-xyz": VMapLayerXyz;
@@ -1547,6 +1753,8 @@ declare module "@stencil/core" {
             "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
             "v-map-layer-terrain": LocalJSX.VMapLayerTerrain & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainElement>;
             "v-map-layer-tile3d": LocalJSX.VMapLayerTile3d & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
+            "v-map-layer-wcs": LocalJSX.VMapLayerWcs & JSXBase.HTMLAttributes<HTMLVMapLayerWcsElement>;
+            "v-map-layer-wfs": LocalJSX.VMapLayerWfs & JSXBase.HTMLAttributes<HTMLVMapLayerWfsElement>;
             "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
             /**
              * OGC WMS Layer

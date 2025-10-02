@@ -11,6 +11,8 @@
 - [`v-map-layer-scatterplot`](./v-map-layer-scatterplot.md) — 
 - [`v-map-layer-terrain`](./v-map-layer-terrain.md) — 
 - [`v-map-layer-tile3d`](./v-map-layer-tile3d.md) — 
+- [`v-map-layer-wcs`](./v-map-layer-wcs.md) — 
+- [`v-map-layer-wfs`](./v-map-layer-wfs.md) — 
 - [`v-map-layer-wkt`](./v-map-layer-wkt.md) — 
 - [`v-map-layer-wms`](./v-map-layer-wms.md) — OGC WMS Layer
 - [`v-map-layer-xyz`](./v-map-layer-xyz.md) — XYZ Tile Layer

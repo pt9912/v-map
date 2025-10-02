@@ -121,6 +121,33 @@ export type LayerConfig =
       zIndex?: number;
     }
   | {
+      type: 'wfs';
+      url: string;
+      typeName: string;
+      version?: string;
+      outputFormat?: string;
+      srsName?: string;
+      params?: Record<string, string | number | boolean>;
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
+    }
+  | {
+      type: 'wcs';
+      url: string;
+      coverageName: string;
+      format?: string;
+      version?: string;
+      projection?: string;
+      resolutions?: number[];
+      params?: Record<string, string | number | boolean>;
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
+    }
+  | {
       type: 'wkt';
       wkt?: string;
       url?: string;
