@@ -1,13 +1,38 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
-import { html } from 'lit-html';
+import type { Meta, StoryObj } from '@stencil/storybook-plugin';
+import { h } from '@stencil/core';
 
-const meta: Meta = {
+import '../v-map/v-map';
+import '../v-map-layer-osm/v-map-layer-osm';
+import './v-map-layer-wkt';
+
+type Args = {
+  wkt?: string;
+  url?: string;
+  visible?: boolean;
+  opacity?: number;
+  zIndex?: number;
+  fillColor?: string;
+  fillOpacity?: number;
+  strokeColor?: string;
+  strokeWidth?: number;
+  strokeOpacity?: number;
+  pointRadius?: number;
+  pointColor?: string;
+  iconUrl?: string;
+  iconSize?: string;
+  textProperty?: string;
+  textColor?: string;
+  textSize?: number;
+};
+
+const meta: Meta<Args> = {
   title: 'Map/Layer/WKT',
   component: 'v-map-layer-wkt',
   parameters: {
     docs: {
       description: {
-        component: 'WKT (Well-Known Text) layer component for displaying geometric features from WKT strings or URLs.',
+        component:
+          'WKT (Well-Known Text) layer component for displaying geometric features from WKT strings or URLs.',
       },
     },
   },
@@ -85,7 +110,7 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<Args>;
 
 export const Point: Story = {
   args: {
@@ -94,17 +119,17 @@ export const Point: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="10" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const LineString: Story = {
@@ -114,17 +139,17 @@ export const LineString: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="10" center="11.57,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="10" center="11.57,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const Polygon: Story = {
@@ -134,17 +159,17 @@ export const Polygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="10" center="11.55,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const MunichArea: Story = {
@@ -154,17 +179,17 @@ export const MunichArea: Story = {
     opacity: 0.5,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="9" center="11.541,48.154" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="9" center="11.541,48.154" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const LeafletPoint: Story = {
@@ -174,17 +199,17 @@ export const LeafletPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="leaflet" zoom="10" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="leaflet" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const LeafletPolygon: Story = {
@@ -194,17 +219,17 @@ export const LeafletPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="leaflet" zoom="10" center="11.55,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="leaflet" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const DeckGLPoint: Story = {
@@ -214,17 +239,17 @@ export const DeckGLPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="deck" zoom="10" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="deck" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const DeckGLPolygon: Story = {
@@ -234,17 +259,17 @@ export const DeckGLPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="deck" zoom="10" center="11.55,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="deck" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const CesiumPoint: Story = {
@@ -254,17 +279,17 @@ export const CesiumPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="cesium" zoom="10" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="cesium" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const CesiumPolygon: Story = {
@@ -274,17 +299,17 @@ export const CesiumPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => html`
-    <v-map flavour="cesium" zoom="10" center="11.55,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="cesium" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const StyledPoint: Story = {
@@ -298,21 +323,21 @@ export const StyledPoint: Story = {
     strokeColor: '#ffffff',
     strokeWidth: 3,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
-        point-radius="${args.pointRadius}"
-        point-color="${args.pointColor}"
-        stroke-color="${args.strokeColor}"
-        stroke-width="${args.strokeWidth}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
+        point-radius={args.pointRadius}
+        point-color={args.pointColor}
+        stroke-color={args.strokeColor}
+        stroke-width={args.strokeWidth}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const StyledPolygon: Story = {
@@ -327,22 +352,22 @@ export const StyledPolygon: Story = {
     strokeWidth: 3,
     strokeOpacity: 0.8,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="11" center="11.55,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="11" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
-        fill-color="${args.fillColor}"
-        fill-opacity="${args.fillOpacity}"
-        stroke-color="${args.strokeColor}"
-        stroke-width="${args.strokeWidth}"
-        stroke-opacity="${args.strokeOpacity}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
+        fill-color={args.fillColor}
+        fill-opacity={args.fillOpacity}
+        stroke-color={args.strokeColor}
+        stroke-width={args.strokeWidth}
+        stroke-opacity={args.strokeOpacity}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const WithIcon: Story = {
@@ -354,19 +379,19 @@ export const WithIcon: Story = {
     iconUrl: 'https://cdn-icons-png.flaticon.com/32/684/684908.png',
     iconSize: '32,32',
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
-        icon-url="${args.iconUrl}"
-        icon-size="${args.iconSize}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
+        icon-url={args.iconUrl}
+        icon-size={args.iconSize}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const DashedLine: Story = {
@@ -379,27 +404,27 @@ export const DashedLine: Story = {
     strokeWidth: 4,
     strokeOpacity: 0.9,
   },
-  render: (args) => html`
-    <v-map flavour="ol" zoom="11" center="11.575,48.15" style="width: 100%; height: 400px;">
+  render: (args) => (
+    <v-map flavour="ol" zoom="11" center="11.575,48.15" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
       <v-map-layer-wkt
-        wkt="${args.wkt}"
-        ?visible="${args.visible}"
-        opacity="${args.opacity}"
-        z-index="${args.zIndex}"
-        stroke-color="${args.strokeColor}"
-        stroke-width="${args.strokeWidth}"
-        stroke-opacity="${args.strokeOpacity}"
+        wkt={args.wkt}
+        visible={args.visible}
+        opacity={args.opacity}
+        z-index={args.zIndex}
+        stroke-color={args.strokeColor}
+        stroke-width={args.strokeWidth}
+        stroke-opacity={args.strokeOpacity}
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
 
 export const MultipleGeometries: Story = {
-  render: () => html`
-    <v-map flavour="ol" zoom="9" center="11.541,48.154" style="width: 100%; height: 400px;">
+  render: () => (
+    <v-map flavour="ol" zoom="9" center="11.541,48.154" style={{ width: '100%', height: '400px' }}>
       <v-map-layer-osm></v-map-layer-osm>
-      <!-- Red styled point -->
+      {/* Red styled point */}
       <v-map-layer-wkt
         wkt="POINT(11.57548 48.13743)"
         z-index="1001"
@@ -408,14 +433,14 @@ export const MultipleGeometries: Story = {
         stroke-color="#ffffff"
         stroke-width="2"
       ></v-map-layer-wkt>
-      <!-- Blue styled line -->
+      {/* Blue styled line */}
       <v-map-layer-wkt
         wkt="LINESTRING(11.5 48.1, 11.6 48.15, 11.65 48.2)"
         z-index="1002"
         stroke-color="#1971c2"
         stroke-width="4"
       ></v-map-layer-wkt>
-      <!-- Green styled polygon -->
+      {/* Green styled polygon */}
       <v-map-layer-wkt
         wkt="POLYGON((11.45 48.08, 11.55 48.08, 11.55 48.18, 11.45 48.18, 11.45 48.08))"
         opacity="0.8"
@@ -426,5 +451,5 @@ export const MultipleGeometries: Story = {
         stroke-width="2"
       ></v-map-layer-wkt>
     </v-map>
-  `,
+  ),
 };
