@@ -36,6 +36,7 @@
 - [map-provider/ol/openlayers-provider](map-provider/ol/openlayers-provider/README.md)
 - [map-provider/ol/openlayers-provider-arcgis.spec](map-provider/ol/openlayers-provider-arcgis.spec/README.md)
 - [map-provider/ol/openlayers-provider-geostyler.spec](map-provider/ol/openlayers-provider-geostyler.spec/README.md)
+- [map-provider/ol/openlayers-provider-wfs-wcs.spec](map-provider/ol/openlayers-provider-wfs-wcs.spec/README.md)
 - [map-provider/provider-factory](map-provider/provider-factory/README.md)
 - [types/color](types/color/README.md)
 - [types/cssmode](types/cssmode/README.md)

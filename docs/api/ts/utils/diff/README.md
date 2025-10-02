@@ -12,6 +12,7 @@
 - [LayerGroup](interfaces/LayerGroup.md)
 - [MapConfig](interfaces/MapConfig.md)
 - [NormalizedLayer](interfaces/NormalizedLayer.md)
+- [NormalizedStyle](interfaces/NormalizedStyle.md)
 
 ## Type Aliases
 
