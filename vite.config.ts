@@ -17,6 +17,15 @@ console.log('[v-map demo versions]', {
 export default defineConfig({
   plugins: [
     {
+      name: 'node-polyfills',
+      transform(code, id) {
+        if (id.includes('geostyler-sld-parser')) {
+          return code.replace(/require\('fs'\)/, 'require("memfs")');
+        }
+        return code;
+      },
+    },
+    {
       name: 'inject-versions',
       transformIndexHtml(html) {
         const banner = `
@@ -45,14 +54,20 @@ export default defineConfig({
           ],
           'chunk-leaflet': ['leaflet'],
         },
-        external: ['path', 'fs', 'util'],
       },
     },
     commonjsOptions: {
       ignore: ['path'],
+      transformMixedEsModules: true, // Handle ESM/CJS interop
     },
+  },
+  define: {
+    global: 'window', // Polyfill global for browser
   },
   optimizeDeps: {
     exclude: ['cesium'],
+    include: [
+      'geostyler-sld-parser > memfs', // Force bundle memfs
+    ],
   },
 });

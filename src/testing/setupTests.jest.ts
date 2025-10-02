@@ -32,3 +32,25 @@ class MockMutationObserver {
 if (typeof (globalThis as any).MutationObserver === 'undefined') {
   (globalThis as any).MutationObserver = MockMutationObserver as any;
 }
+
+// src/testing/setupTests.jest.ts
+// Automatische Mocks für alle geostyler-Parser
+jest.mock('geostyler-sld-parser', () =>
+  require('./mocks/geostyler-sld-parser'),
+);
+jest.mock('geostyler-mapbox-parser', () =>
+  require('./mocks/geostyler-mapbox-parser'),
+);
+jest.mock('geostyler-qgis-parser', () =>
+  require('./mocks/geostyler-qgis-parser'),
+);
+jest.mock('geostyler-lyrx-parser', () =>
+  require('./mocks/geostyler-lyrx-parser'),
+);
+jest.mock('geostyler-style', () => require('./mocks/geostyler-style'));
+// jest.mock('leaflet.gridlayer.googlemutant', () =>
+//   require('./mocks/leaflet.gridlayer.googlemutant'),
+// );
+
+// Polyfill für Node.js-Module im Browser
+globalThis.global = globalThis;
