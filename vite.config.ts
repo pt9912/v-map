@@ -68,6 +68,17 @@ export default defineConfig({
     exclude: ['cesium'],
     include: [
       'geostyler-sld-parser > memfs', // Force bundle memfs
+      '@loaders.gl/core',
+      '@loaders.gl/gltf',
+      '@deck.gl/core',
+      '@deck.gl/layers',
+      '@deck.gl/geo-layers',
     ],
+  },
+  resolve: {
+    alias: {
+      // Ensure @loaders.gl modules resolve correctly
+      '@loaders.gl/core': '@loaders.gl/core',
+    },
   },
 });
