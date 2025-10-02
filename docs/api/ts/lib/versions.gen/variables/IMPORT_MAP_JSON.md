@@ -8,4 +8,4 @@
 
 > `const` **IMPORT\_MAP\_JSON**: "\{\n  \"imports\": \{\n    \"ol/\": \"https://esm.sh/ol@10.6.1/\",\n    \"ol\": \"https://esm.sh/ol@10.6.1\",\n    \"leaflet\": \"https://esm.sh/leaflet@1.9.4\",\n    \"deck\": \"https://esm.sh/deck@9.1.14\"\n  \}\n\}"
 
-Defined in: [src/lib/versions.gen.ts:7](https://github.com/pt9912/v-map/blob/5a00c1d02e817ebdb5ae521c04a945d173fb9c9d/src/lib/versions.gen.ts#L7)
+Defined in: [src/lib/versions.gen.ts:7](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/lib/versions.gen.ts#L7)

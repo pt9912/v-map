@@ -41,7 +41,20 @@ export type LayerConfig =
       visible?: boolean;
       opacity?: number;
     }
-  | { type: 'arcgis'; url: string; groupId?: string }
+  | {
+      type: 'arcgis';
+      url: string;
+      params?: Record<string, string | number | boolean>;
+      token?: string;
+      minZoom?: number;
+      maxZoom?: number;
+      options?: Record<string, unknown>;
+      attributions?: string | string[];
+      groupId?: string;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
+    }
   | {
       type: 'google';
       apiKey: string;

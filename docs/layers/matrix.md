@@ -7,7 +7,7 @@
 
 | Layer-Typ | CESIUM | DECK | LEAFLET | OL |
 | --- | --- | --- | --- | --- |
-| `arcgis` | ✅ | ❌ | ❌ | ❌ |
+| `arcgis` | ✅ | ✅ | ✅ | ✅ |
 | `geojson` | ✅ | ✅ | ✅ | ✅ |
 | `geotiff` | ✅ | ✅ | ✅ | ✅ |
 | `google` | ✅ | ✅ | ✅ | ✅ |

@@ -8,7 +8,7 @@
 
 > **ensureLeafletCss**(`mode`, `root?`): `HTMLStyleElement`
 
-Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:70](https://github.com/pt9912/v-map/blob/5a00c1d02e817ebdb5ae521c04a945d173fb9c9d/src/map-provider/leaflet/leaflet-helpers.ts#L70)
+Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:70](https://github.com/pt9912/v-map/blob/31b41b18ac6b57e612200cec79597eaf539a6c03/src/map-provider/leaflet/leaflet-helpers.ts#L70)
 
 ## Parameters
 

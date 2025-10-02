@@ -21,9 +21,9 @@
   "support": {
     "arcgis": {
       "cesium": true,
-      "deck": false,
-      "leaflet": false,
-      "ol": false
+      "deck": true,
+      "leaflet": true,
+      "ol": true
     },
     "geojson": {
       "cesium": true,

@@ -213,6 +213,62 @@ export class DeckProvider implements MapProvider {
     } as any);
   }
 
+  private buildArcgisUrl(
+    url: string,
+    params?: Record<string, string | number | boolean>,
+    token?: string,
+  ): string {
+    const query = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          query.set(key, String(value));
+        }
+      });
+    }
+    if (token) {
+      query.set('token', token);
+    }
+    const qs = query.toString();
+    if (!qs) return url;
+    return `${url}${url.includes('?') ? '&' : '?'}${qs}`;
+  }
+
+  private async buildArcgisTileLayer(
+    cfg: Extract<LayerConfig, { type: 'arcgis' }>,
+    layerId: string,
+  ): Promise<TileLayer> {
+    const templateUrl = this.buildArcgisUrl(
+      cfg.url,
+      cfg.params,
+      cfg.token,
+    );
+
+    return this.buildXyzTileLayer(
+      {
+        ...cfg,
+        url: templateUrl,
+        minZoom: cfg.minZoom,
+        maxZoom: cfg.maxZoom,
+        opacity: cfg.opacity,
+      },
+      layerId,
+    );
+  }
+
+  private getModelUrl(
+    model: LayerModel<Layer> | undefined,
+  ): string | undefined {
+    if (!model || typeof model.make !== 'function') return undefined;
+    try {
+      const layerInstance: any = model.make();
+      return layerInstance?.props?.data?.[0] ?? layerInstance?.props?.url;
+    } catch (error) {
+      console.warn('Failed to resolve model URL', error);
+      return undefined;
+    }
+  }
+
   // ========== Enhanced Styling Helper Methods ==========
 
   /**
@@ -840,6 +896,11 @@ export type TileLoadProps = {
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
           layerId,
         );
+      case 'arcgis':
+        return this.buildArcgisTileLayer(
+          layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
+          layerId,
+        );
       case 'xyz':
         return this.buildXyzTileLayer(layerConfig as any, layerId);
       case 'scatterplot':
@@ -1015,6 +1076,25 @@ export type TileLoadProps = {
         if (update.data?.crs) ov.crs = update.data.crs;
         if (update.data?.time !== undefined) ov.time = update.data.time;
         if (update.data?.extraParams) ov.extraParams = update.data.extraParams;
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+        break;
+      }
+      case 'arcgis': {
+        const ov: any = {};
+        const currentModel = (group as any).getModel?.(layerId);
+        const currentUrl = this.getModelUrl(currentModel);
+        const baseUrl = update.data?.url ?? currentUrl ?? null;
+        if (baseUrl) {
+          const nextUrl = this.buildArcgisUrl(
+            baseUrl,
+            update.data?.params,
+            update.data?.token,
+          );
+          ov.data = [nextUrl];
+          ov.url = nextUrl;
+        }
+        if (update.data?.minZoom !== undefined) ov.minZoom = update.data.minZoom;
+        if (update.data?.maxZoom !== undefined) ov.maxZoom = update.data.maxZoom;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }

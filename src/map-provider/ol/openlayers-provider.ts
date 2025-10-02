@@ -70,6 +70,9 @@ export class OpenLayersProvider implements MapProvider {
       case 'wms':
         await this.updateWMSLayer(layer, update.data);
         break;
+      case 'arcgis':
+        await this.updateArcGISLayer(layer, update.data);
+        break;
       case 'wkt':
         await this.updateWKTLayer(layer, update.data);
         break;
@@ -271,6 +274,10 @@ export class OpenLayersProvider implements MapProvider {
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
         );
+      case 'arcgis':
+        return this.createArcGISLayer(
+          layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
+        );
       case 'wkt':
         return this.createWKTLayer(
           layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
@@ -336,6 +343,31 @@ export class OpenLayersProvider implements MapProvider {
       });
     }
     layer.setSource(vectorSource);
+  }
+
+  private async updateArcGISLayer(layer: Layer, data: any): Promise<void> {
+    const [{ default: TileArcGISRest }] = await Promise.all([
+      import('ol/source/TileArcGISRest'),
+    ]);
+
+    const currentSource: any = (layer as any).getSource?.();
+    const params = {
+      ...(currentSource?.getParams?.() ?? {}),
+      ...(data?.params ?? {}),
+    } as Record<string, any>;
+
+    if (data?.token) {
+      params.token = data.token;
+    }
+
+    const sourceOptions: Record<string, any> = {
+      url: data?.url ?? currentSource?.getUrls?.()?.[0] ?? currentSource?.getUrl?.(),
+      params,
+      ...(data?.options ?? {}),
+    };
+
+    const arcgisSource = new TileArcGISRest(sourceOptions);
+    (layer as any).setSource?.(arcgisSource);
   }
 
   private async createGeoJSONLayer(
@@ -1168,6 +1200,38 @@ export class OpenLayersProvider implements MapProvider {
     });
 
     return layer;
+  }
+
+  private async createArcGISLayer(
+    config: Extract<LayerConfig, { type: 'arcgis' }>,
+  ): Promise<Layer> {
+    const [{ default: TileLayer }] = await Promise.all([
+      import('ol/layer/Tile'),
+    ]);
+    const [{ default: TileArcGISRest }] = await Promise.all([
+      import('ol/source/TileArcGISRest'),
+    ]);
+
+    const params = {
+      ...(config.params ?? {}),
+    } as Record<string, any>;
+
+    if (config.token) {
+      params.token = config.token;
+    }
+
+    const sourceOptions: Record<string, any> = {
+      url: config.url,
+      params,
+      ...(config.options ?? {}),
+    };
+
+    const layer = new TileLayer({
+      source: new TileArcGISRest(sourceOptions),
+      visible: config.visible ?? true,
+    });
+
+    return layer as unknown as Layer;
   }
 
   private async updateGeoTIFFLayer(layer: Layer, data: any): Promise<void> {

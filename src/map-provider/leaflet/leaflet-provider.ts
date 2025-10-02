@@ -68,6 +68,9 @@ export class LeafletProvider implements MapProvider {
       case 'osm':
         await this.updateOSMLayer(layer, update.data);
         break;
+      case 'arcgis':
+        await this.updateArcGISLayer(layer, update.data);
+        break;
       case 'wkt':
         await this.updateWKTLayer(layer, update.data);
         break;
@@ -274,6 +277,10 @@ export class LeafletProvider implements MapProvider {
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
         );
+      case 'arcgis':
+        return this.createArcGISLayer(
+          layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
+        );
       case 'google':
         return this.createGoogleLayer(
           layerConfig as Extract<LayerConfig, { type: 'google' }>,
@@ -382,6 +389,61 @@ export class LeafletProvider implements MapProvider {
       transparent: config.transparent ?? true,
       ...(config.extraParams ?? {}),
     } as L.WMSOptions);
+  }
+
+  private buildArcGISUrl(
+    url: string,
+    params?: Record<string, string | number | boolean>,
+  ): string {
+    if (!params || Object.keys(params).length === 0) return url;
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        query.set(key, String(value));
+      }
+    });
+    if (query.toString().length === 0) return url;
+    return `${url}${url.includes('?') ? '&' : '?'}${query.toString()}`;
+  }
+
+  private async createArcGISLayer(
+    config: Extract<LayerConfig, { type: 'arcgis' }>,
+  ): Promise<L.TileLayer> {
+    const params = {
+      ...(config.params ?? {}),
+    } as Record<string, string | number | boolean>;
+
+    if (config.token) {
+      params.token = config.token;
+    }
+
+    const arcgisUrl = this.buildArcGISUrl(config.url, params);
+
+    const options: L.TileLayerOptions = {
+      attribution: config.attributions,
+      minZoom: config.minZoom,
+      maxZoom: config.maxZoom,
+      ...(config.options ?? {}),
+    };
+
+    return L.tileLayer(arcgisUrl, options);
+  }
+
+  private async updateArcGISLayer(layer: L.Layer, data: any) {
+    const params = {
+      ...(data?.params ?? {}),
+    } as Record<string, string | number | boolean>;
+
+    if (data?.token) {
+      params.token = data.token;
+    }
+
+    const targetUrl = data?.url ?? (layer as any).options?.url ?? '';
+    const nextUrl = this.buildArcGISUrl(targetUrl, params);
+
+    if ((layer as any).setUrl) {
+      (layer as any).setUrl(nextUrl);
+    }
   }
 
   private async createGoogleLayer(
