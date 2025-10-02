@@ -49,6 +49,13 @@ export function failOnConsole(page: E2EPage, opts?: { ignore?: RegExp[] }) {
 
     const text = parts.join('\n');
 
+    const prefix = `[browser:${msg.type()}]`;
+    if (msg.type() !== 'error') {
+      console.log(`${prefix} ${text}`);
+    } else {
+      console.error(`${prefix} ${text}`);
+    }
+
     if (msg.type() === 'error') {
       if (ignore.some(rx => rx.test(text))) return;
       throw new Error(`Console error in browser:\n${text}`);
@@ -57,6 +64,7 @@ export function failOnConsole(page: E2EPage, opts?: { ignore?: RegExp[] }) {
 
   page.on('pageerror', err => {
     const text = anyToStringSafe(err);
+    console.error(`[browser:pageerror] ${text}`);
     if (ignore.some(rx => rx.test(text))) return;
     throw new Error(`Unhandled page error:\n${text}`);
   });

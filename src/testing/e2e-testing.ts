@@ -7,17 +7,37 @@ const additionalIgnoredErrors: string[] = [];
 async function patchConsoleOnNewDocument(page: any) {
   await page.evaluateOnNewDocument(() => {
     const origError = console.error;
-    console.error = (...args: any[]) => {
-      const mapped = args.map(a => {
-        if (a instanceof Error) return a.stack || a.message;
-        try {
-          return JSON.stringify(a);
-        } catch {
-          return String(a);
+    const origWarn = console.warn;
+    const origInfo = console.info;
+    const origLog = console.log;
+
+    const stringifyArg = (arg: any) => {
+      if (arg instanceof Error) {
+        return arg.stack || arg.message;
+      }
+      try {
+        if (typeof arg === 'string') {
+          return arg;
         }
-      });
-      origError(...mapped);
+        return JSON.stringify(arg);
+      } catch {
+        return String(arg);
+      }
     };
+
+    console.error = (...args: any[]) => {
+      origError('[browser:error]', ...args.map(stringifyArg));
+    };
+    console.warn = (...args: any[]) => {
+      origWarn('[browser:warn]', ...args.map(stringifyArg));
+    };
+    console.info = (...args: any[]) => {
+      origInfo('[browser:info]', ...args.map(stringifyArg));
+    };
+    console.log = (...args: any[]) => {
+      origLog('[browser:log]', ...args.map(stringifyArg));
+    };
+
     window.addEventListener('error', e => {
       const err = (e as ErrorEvent).error;
       console.error('window.error:', err?.stack || e.message);
@@ -28,6 +48,42 @@ async function patchConsoleOnNewDocument(page: any) {
         'unhandledrejection:',
         (r && (r.stack || r.message)) || String(r),
       );
+    });
+
+    try {
+      const seenDefines = new Set<string>();
+      const seenMissing = new Set<string>();
+      const origDefine = customElements.define.bind(customElements);
+      const origGet = customElements.get.bind(customElements);
+
+      customElements.define = (name, constructor, options) => {
+        seenDefines.add(name);
+        console.info(`[custom-elements#define] ${name}`);
+        return origDefine(name, constructor, options);
+      };
+
+      customElements.get = name => {
+        const ctor = origGet(name);
+        if (!ctor && !seenMissing.has(name)) {
+          seenMissing.add(name);
+          console.warn(`[custom-elements#get-miss] ${name}`);
+        } else if (ctor && !seenDefines.has(name)) {
+          console.info(`[custom-elements#get-hit] ${name}`);
+        }
+        return ctor;
+      };
+    } catch (err) {
+      console.warn('Failed to patch customElements logging', err);
+    }
+
+    document.addEventListener('readystatechange', () => {
+      console.info(`[document.readyState] ${document.readyState}`);
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+      console.info('[lifecycle] DOMContentLoaded');
+    });
+    window.addEventListener('load', () => {
+      console.info('[lifecycle] load');
     });
   });
 }
