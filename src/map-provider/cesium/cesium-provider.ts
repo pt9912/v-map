@@ -10,15 +10,17 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
+import type { Style } from 'geostyler-style';
+import type { StyleConfig } from '../../types/styleconfig';
 
 import { AsyncMutex } from '../../utils/async-mutex';
 
 type CesiumModule = typeof import('cesium');
-import type {
-  Viewer,
-  ImageryLayer,
-  GeoJsonDataSource,
-  Cesium3DTileset,
+import {
+  type Viewer,
+  type ImageryLayer,
+  type GeoJsonDataSource,
+  type Cesium3DTileset,
 } from 'cesium';
 
 type UrlTemplateOptions = ConstructorParameters<
@@ -154,8 +156,9 @@ export class CesiumProvider implements MapProvider {
     });
     //this.viewer.scene.terrainProvider..removeAll();
     this.viewer.scene.primitives.removeAll();
-    this.viewer.scene.backgroundColor = Cesium.Color.WHITE;
+    this.viewer.scene.backgroundColor = this.Cesium.Color.WHITE;
     this.viewer.scene.globe.baseColor = this.Cesium.Color.WHITE;
+    this.viewer.scene.globe.depthTestAgainstTerrain = false;
     // this.viewer.terrainProvider = null;
     /*
     if (options.center) {
@@ -168,7 +171,6 @@ export class CesiumProvider implements MapProvider {
       });
     }
       */
-
     this.layerManager = new LayerManager(this.Cesium, this.viewer);
   }
 
@@ -186,14 +188,15 @@ export class CesiumProvider implements MapProvider {
 
     switch (layerConfig.type) {
       case 'geojson': {
-        const options = { clampToGround: true };
-        const ds = await this.createGeoJSONLayer(
-          layerConfig.geojson,
-          layerConfig.url,
-          options,
-          layerConfig.style,
-          (layerConfig as any).geostylerStyle,
-        );
+        const options: GeoJsonDataSource.LoadOptions = {
+          // clampToGround: true,
+          //fill: Cesium.Color.RED,
+        };
+        const geojsonConfig = layerConfig as Extract<
+          LayerConfig,
+          { type: 'geojson' }
+        >;
+        const ds = await this.createGeoJSONLayer(geojsonConfig, options);
         wrapper = this.layerManager.addLayer(layerId, ds);
         wrapper.setOptions(options);
         break;
@@ -238,11 +241,8 @@ export class CesiumProvider implements MapProvider {
       }
       case 'wkt': {
         const options = { clampToGround: true };
-        const ds = await this.createWKTLayer(
-          layerConfig as Extract<LayerConfig, { type: 'wkt' }>,
-          options,
-          (layerConfig as any).geostylerStyle,
-        );
+        const wktConfig = layerConfig as Extract<LayerConfig, { type: 'wkt' }>;
+        const ds = await this.createWKTLayer(wktConfig, options);
         wrapper = this.layerManager.addLayer(layerId, ds);
         wrapper.setOptions(options);
         break;
@@ -382,13 +382,24 @@ export class CesiumProvider implements MapProvider {
   /**
    * Apply Geostyler styling to a GeoJsonDataSource
    */
-  private applyGeostylerStyling(dataSource: any, geostylerStyle: any) {
+  private applyGeostylerStyling(
+    dataSource: GeoJsonDataSource,
+    geostylerStyle: Style,
+  ) {
+    (dataSource as any).__vmapLockOpacity = true;
     // Helper to extract static value from GeoStyler property
     const getValue = (prop: any, defaultValue: any = undefined) => {
       if (prop === undefined || prop === null) return defaultValue;
       // If it's a GeoStyler function object, we can't evaluate it here - return default
       if (typeof prop === 'object' && prop.name) return defaultValue;
       return prop;
+    };
+
+    const toNumber = (value: any, fallback?: number) => {
+      if (value == null) return fallback;
+      if (typeof value === 'number') return value;
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
     };
 
     const entities = dataSource.entities.values;
@@ -403,70 +414,276 @@ export class CesiumProvider implements MapProvider {
               switch (symbolizer.kind) {
                 case 'Fill':
                   if (entity.polygon) {
-                    const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
-                    const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
-                    const outlineColor = getValue(symbolizer.outlineColor, 'rgba(0,100,255,1)') as string;
-                    const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+                    const fillColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,0.3)',
+                    ) as string;
+                    const fillOpacity = toNumber(
+                      getValue(symbolizer.opacity, 0.3),
+                      0.3,
+                    );
+                    const outlineColor = getValue(
+                      symbolizer.outlineColor,
+                      'rgba(0,100,255,1)',
+                    ) as string;
+                    const outlineWidth = getValue(
+                      symbolizer.outlineWidth,
+                      1,
+                    ) as number;
 
-                    entity.polygon.fill = true;
-                    entity.polygon.material = this.parseCesiumColor(fillColor, this.Cesium.Color.BLUE.withAlpha(0.3));
-                    if (fillOpacity !== undefined) {
-                      entity.polygon.material = this.applyCesiumOpacity(entity.polygon.material, fillOpacity);
+                    let polygonColor = this.parseCesiumColor(
+                      fillColor,
+                      this.Cesium.Color.BLUE.withAlpha(0.3),
+                    );
+                    if (fillOpacity !== undefined && fillOpacity !== null) {
+                      polygonColor = this.applyCesiumOpacity(
+                        polygonColor,
+                        fillOpacity,
+                      );
                     }
-                    entity.polygon.outline = true;
-                    entity.polygon.outlineColor = this.parseCesiumColor(outlineColor, this.Cesium.Color.BLUE);
-                    entity.polygon.outlineWidth = outlineWidth;
+
+                    //outline color
+                    const outlineCesiumColor = this.parseCesiumColor(
+                      outlineColor,
+                      this.Cesium.Color.BLUE,
+                    );
+
+                    log(
+                      'v-map - provider - cesium - applyGeostylerStyling: Fill',
+                      {
+                        fillColor,
+                        fillOpacity,
+                        computedFill: polygonColor?.toString?.(),
+                        outlineColor,
+                        outlineWidth,
+                      },
+                    );
+
+                    //fill
+                    entity.polygon.fill = new this.Cesium.ConstantProperty(
+                      true,
+                    );
+                    //fill color
+                    entity.polygon.material =
+                      new this.Cesium.ColorMaterialProperty(polygonColor);
+
+                    //outline
+                    entity.polygon.outline = new this.Cesium.ConstantProperty(
+                      true,
+                    );
+                    entity.polygon.outlineColor =
+                      new this.Cesium.ConstantProperty(outlineCesiumColor);
+                    entity.polygon.outlineWidth =
+                      new this.Cesium.ConstantProperty(outlineWidth);
+                    //entity.polygon.height = new this.Cesium.ConstantProperty(0);
+
+                    //
+                    entity.polygon.extrudedHeight = undefined;
+                    entity.polygon.heightReference =
+                      new this.Cesium.ConstantProperty(
+                        this.Cesium.HeightReference.CLAMP_TO_GROUND, //NONE,
+                      );
+                    entity.polygon.perPositionHeight =
+                      new this.Cesium.ConstantProperty(false);
+                    entity.polygon.classificationType =
+                      new this.Cesium.ConstantProperty(
+                        this.Cesium.ClassificationType.BOTH,
+                      );
                   }
                   break;
 
                 case 'Line':
                   if (entity.polyline) {
-                    const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
-                    const lineWidth = getValue(symbolizer.width, 2) as number;
+                    const lineColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
+                    const lineWidth = toNumber(
+                      getValue(symbolizer.width, 2),
+                      2,
+                    );
+                    const lineOpacity = toNumber(
+                      getValue(symbolizer.opacity, 1),
+                      1,
+                    );
 
-                    entity.polyline.material = this.parseCesiumColor(lineColor, this.Cesium.Color.BLUE);
-                    entity.polyline.width = lineWidth;
+                    let materialColor = this.parseCesiumColor(
+                      lineColor,
+                      this.Cesium.Color.BLUE,
+                    );
+                    if (lineOpacity !== undefined && lineOpacity !== null) {
+                      materialColor = this.applyCesiumOpacity(
+                        materialColor,
+                        lineOpacity,
+                      );
+                    }
+
+                    log(
+                      'v-map - provider - cesium - applyGeostylerStyling: Line',
+                      {
+                        lineColor,
+                        lineOpacity,
+                        computedColor: materialColor?.toString?.(),
+                        lineWidth,
+                      },
+                    );
+
+                    entity.polyline.material =
+                      new this.Cesium.ColorMaterialProperty(materialColor);
+                    entity.polyline.width = new this.Cesium.ConstantProperty(
+                      lineWidth,
+                    );
                   }
                   break;
 
                 case 'Mark':
                   if (entity.point) {
-                    const pointColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
-                    const pointRadius = getValue(symbolizer.radius, 6) as number;
+                    const pointColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
+                    const pointRadius = toNumber(
+                      getValue(symbolizer.radius, 6),
+                      6,
+                    );
+                    const pointOpacity = toNumber(
+                      getValue(symbolizer.opacity, 1),
+                      1,
+                    );
 
-                    entity.point.color = this.parseCesiumColor(pointColor, this.Cesium.Color.BLUE);
-                    entity.point.pixelSize = pointRadius;
+                    let materialColor = this.parseCesiumColor(
+                      pointColor,
+                      this.Cesium.Color.BLUE,
+                    );
+                    if (pointOpacity !== undefined && pointOpacity !== null) {
+                      materialColor = this.applyCesiumOpacity(
+                        materialColor,
+                        pointOpacity,
+                      );
+                    }
+
+                    log(
+                      'v-map - provider - cesium - applyGeostylerStyling: Mark',
+                      {
+                        pointColor,
+                        pointOpacity,
+                        computedColor: materialColor?.toString?.(),
+                        pointRadius,
+                      },
+                    );
+
+                    entity.point.color = new this.Cesium.ConstantProperty(
+                      materialColor,
+                    );
+                    entity.point.pixelSize = new this.Cesium.ConstantProperty(
+                      pointRadius,
+                    );
                   }
                   break;
 
                 case 'Icon':
                   if (entity.point) {
-                    const iconSrc = getValue(symbolizer.image) as string | undefined;
-                    const iconSize = getValue(symbolizer.size, 32) as number;
+                    const iconSrc = getValue(symbolizer.image) as
+                      | string
+                      | undefined;
+                    const iconSize = toNumber(
+                      getValue(symbolizer.size, 32),
+                      32,
+                    );
+                    const iconOpacity = toNumber(
+                      getValue(symbolizer.opacity, 1),
+                      1,
+                    );
 
                     if (iconSrc && typeof iconSrc === 'string') {
                       entity.billboard = new this.Cesium.BillboardGraphics({
-                        image: iconSrc,
-                        width: iconSize,
-                        height: iconSize,
-                        verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+                        image: new this.Cesium.ConstantProperty(iconSrc),
+                        width: new this.Cesium.ConstantProperty(iconSize),
+                        height: new this.Cesium.ConstantProperty(iconSize),
+                        verticalOrigin: new this.Cesium.ConstantProperty(
+                          this.Cesium.VerticalOrigin.BOTTOM,
+                        ),
+                        color:
+                          iconOpacity !== undefined && iconOpacity !== null
+                            ? new this.Cesium.ConstantProperty(
+                                this.Cesium.Color.WHITE.withAlpha(iconOpacity),
+                              )
+                            : undefined,
                       });
-                      entity.point.show = false;
+                      entity.point.show = new this.Cesium.ConstantProperty(
+                        false,
+                      );
+
+                      log(
+                        'v-map - provider - cesium - applyGeostylerStyling: Icon',
+                        {
+                          iconSrc,
+                          iconSize,
+                          iconOpacity,
+                        },
+                      );
                     }
                   }
                   break;
 
                 case 'Text':
                   const labelProp = (symbolizer as any).label;
-                  if (labelProp && entity.properties && entity.properties[labelProp]) {
-                    const textColor = getValue(symbolizer.color, '#000000') as string;
-                    const textSize = getValue(symbolizer.size, 12) as number;
+                  if (
+                    labelProp &&
+                    entity.properties &&
+                    entity.properties[labelProp]
+                  ) {
+                    const textColor = getValue(
+                      symbolizer.color,
+                      '#000000',
+                    ) as string;
+                    const textSize = toNumber(
+                      getValue(symbolizer.size, 12),
+                      12,
+                    );
+                    const textOpacity = toNumber(
+                      getValue(symbolizer.opacity, 1),
+                      1,
+                    );
+
+                    let labelColor = this.parseCesiumColor(
+                      textColor,
+                      this.Cesium.Color.WHITE,
+                    );
+                    if (textOpacity !== undefined && textOpacity !== null) {
+                      labelColor = this.applyCesiumOpacity(
+                        labelColor,
+                        textOpacity,
+                      );
+                    }
+
+                    log(
+                      'v-map - provider - cesium - applyGeostylerStyling: Text',
+                      {
+                        labelProp,
+                        textColor,
+                        textOpacity,
+                        computedColor: labelColor?.toString?.(),
+                        textSize,
+                      },
+                    );
+
+                    const textValue =
+                      entity.properties[labelProp]?.getValue?.(
+                        this.viewer.clock.currentTime,
+                      ) ??
+                      entity.properties[labelProp]?._value ??
+                      '';
 
                     entity.label = new this.Cesium.LabelGraphics({
-                      text: entity.properties[labelProp]._value,
-                      font: `${textSize}px Arial`,
-                      fillColor: this.parseCesiumColor(textColor, this.Cesium.Color.WHITE),
-                      verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+                      text: new this.Cesium.ConstantProperty(String(textValue)),
+                      font: new this.Cesium.ConstantProperty(
+                        `${textSize}px Arial`,
+                      ),
+                      fillColor: new this.Cesium.ConstantProperty(labelColor),
+                      verticalOrigin: new this.Cesium.ConstantProperty(
+                        this.Cesium.VerticalOrigin.BOTTOM,
+                      ),
                     });
                   }
                   break;
@@ -513,7 +730,7 @@ export class CesiumProvider implements MapProvider {
   /**
    * Create Cesium styling options from StyleConfig
    */
-  private createCesiumStyle(style: any = {}) {
+  private createCesiumStyle(style: StyleConfig = {}) {
     // Default colors
     const defaultFillColor = this.Cesium.Color.BLUE.withAlpha(0.3);
     const defaultStrokeColor = this.Cesium.Color.BLUE;
@@ -521,21 +738,30 @@ export class CesiumProvider implements MapProvider {
 
     // Parse colors
     const fillColor = this.parseCesiumColor(style.fillColor, defaultFillColor);
-    const strokeColor = this.parseCesiumColor(style.strokeColor, defaultStrokeColor);
-    const pointColor = this.parseCesiumColor(style.pointColor, defaultPointColor);
+    const strokeColor = this.parseCesiumColor(
+      style.strokeColor,
+      defaultStrokeColor,
+    );
+    const pointColor = this.parseCesiumColor(
+      style.pointColor,
+      defaultPointColor,
+    );
 
     // Apply opacity
-    const finalFillColor = style.fillOpacity !== undefined
-      ? this.applyCesiumOpacity(fillColor, style.fillOpacity)
-      : fillColor;
+    const finalFillColor =
+      style.fillOpacity !== undefined
+        ? this.applyCesiumOpacity(fillColor, style.fillOpacity)
+        : fillColor;
 
-    const finalStrokeColor = style.strokeOpacity !== undefined
-      ? this.applyCesiumOpacity(strokeColor, style.strokeOpacity)
-      : strokeColor;
+    const finalStrokeColor =
+      style.strokeOpacity !== undefined
+        ? this.applyCesiumOpacity(strokeColor, style.strokeOpacity)
+        : strokeColor;
 
-    const finalPointColor = style.pointOpacity !== undefined
-      ? this.applyCesiumOpacity(pointColor, style.pointOpacity)
-      : pointColor;
+    const finalPointColor =
+      style.pointOpacity !== undefined
+        ? this.applyCesiumOpacity(pointColor, style.pointOpacity)
+        : pointColor;
 
     return {
       // Polygon styling
@@ -545,12 +771,16 @@ export class CesiumProvider implements MapProvider {
       outlineColor: finalStrokeColor,
       outlineWidth: style.strokeWidth ?? 2,
       extrudedHeight: style.extrudeHeight,
-      heightReference: style.zOffset ? this.Cesium.HeightReference.RELATIVE_TO_GROUND : this.Cesium.HeightReference.CLAMP_TO_GROUND,
+      heightReference: style.zOffset
+        ? this.Cesium.HeightReference.RELATIVE_TO_GROUND
+        : this.Cesium.HeightReference.CLAMP_TO_GROUND,
 
       // Point styling
       pixelSize: style.pointRadius ?? 8,
       color: finalPointColor,
-      scaleByDistance: style.pointRadius ? new this.Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5) : undefined,
+      scaleByDistance: style.pointRadius
+        ? new this.Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5)
+        : undefined,
 
       // Line styling
       width: style.strokeWidth ?? 2,
@@ -558,11 +788,19 @@ export class CesiumProvider implements MapProvider {
 
       // Text/Label styling
       labelText: style.textProperty,
-      labelFont: style.textSize ? `${style.textSize}pt monospace` : '12pt monospace',
-      labelFillColor: style.textColor ? this.parseCesiumColor(style.textColor, this.Cesium.Color.WHITE) : this.Cesium.Color.WHITE,
-      labelOutlineColor: style.textHaloColor ? this.parseCesiumColor(style.textHaloColor, this.Cesium.Color.BLACK) : this.Cesium.Color.BLACK,
+      labelFont: style.textSize
+        ? `${style.textSize}pt monospace`
+        : '12pt monospace',
+      labelFillColor: style.textColor
+        ? this.parseCesiumColor(style.textColor, this.Cesium.Color.WHITE)
+        : this.Cesium.Color.WHITE,
+      labelOutlineColor: style.textHaloColor
+        ? this.parseCesiumColor(style.textHaloColor, this.Cesium.Color.BLACK)
+        : this.Cesium.Color.BLACK,
       labelOutlineWidth: style.textHaloWidth ?? 1,
-      labelPixelOffset: style.textOffset ? new this.Cesium.Cartesian2(style.textOffset[0], style.textOffset[1]) : this.Cesium.Cartesian2.ZERO,
+      labelPixelOffset: style.textOffset
+        ? new this.Cesium.Cartesian2(style.textOffset[0], style.textOffset[1])
+        : this.Cesium.Cartesian2.ZERO,
 
       // 3D specific
       height: style.zOffset ?? 0,
@@ -572,77 +810,137 @@ export class CesiumProvider implements MapProvider {
   /**
    * Apply enhanced styling to a GeoJsonDataSource
    */
-  private applyEnhancedStyling(dataSource: any, style: any = {}) {
+  private applyEnhancedStyling(
+    dataSource: GeoJsonDataSource,
+    style: StyleConfig = {},
+  ) {
     const cesiumStyle = this.createCesiumStyle(style);
 
-    // Apply styling to all entities
     const entities = dataSource.entities.values;
     for (let i = 0; i < entities.length; i++) {
       const entity = entities[i];
 
-      // Apply conditional styling if styleFunction exists
       let finalStyle = cesiumStyle;
       if (style.styleFunction && entity.properties) {
         const feature = {
-          properties: entity.properties._propertyNames.reduce((props: any, name: string) => {
-            props[name] = entity.properties[name]?._value;
-            return props;
-          }, {}),
-          geometry: entity // Pass the entity as geometry reference
+          properties: entity.properties._propertyNames.reduce(
+            (props: any, name: string) => {
+              props[name] = entity.properties[name]?._value;
+              return props;
+            },
+            {},
+          ),
+          geometry: entity,
         };
         const conditionalStyle = style.styleFunction(feature);
         if (conditionalStyle) {
-          finalStyle = { ...cesiumStyle, ...this.createCesiumStyle(conditionalStyle) };
+          finalStyle = {
+            ...cesiumStyle,
+            ...this.createCesiumStyle(conditionalStyle as StyleConfig),
+          };
         }
       }
 
-      // Apply to different geometry types
       if (entity.polygon) {
-        entity.polygon.fill = finalStyle.fill;
-        entity.polygon.material = finalStyle.fillColor;
-        entity.polygon.outline = finalStyle.outline;
-        entity.polygon.outlineColor = finalStyle.outlineColor;
-        entity.polygon.outlineWidth = finalStyle.outlineWidth;
-        entity.polygon.height = finalStyle.height;
-        entity.polygon.extrudedHeight = finalStyle.extrudedHeight;
-        entity.polygon.heightReference = finalStyle.heightReference;
+        entity.polygon.fill = new this.Cesium.ConstantProperty(finalStyle.fill);
+        entity.polygon.material = new this.Cesium.ColorMaterialProperty(
+          finalStyle.fillColor,
+        );
+        entity.polygon.outline = new this.Cesium.ConstantProperty(
+          finalStyle.outline,
+        );
+        entity.polygon.outlineColor = new this.Cesium.ConstantProperty(
+          finalStyle.outlineColor,
+        );
+        entity.polygon.outlineWidth = new this.Cesium.ConstantProperty(
+          finalStyle.outlineWidth,
+        );
+        entity.polygon.height =
+          finalStyle.height !== undefined
+            ? new this.Cesium.ConstantProperty(finalStyle.height)
+            : undefined;
+        entity.polygon.extrudedHeight =
+          finalStyle.extrudedHeight !== undefined
+            ? new this.Cesium.ConstantProperty(finalStyle.extrudedHeight)
+            : undefined;
+        entity.polygon.heightReference =
+          finalStyle.heightReference !== undefined
+            ? new this.Cesium.ConstantProperty(finalStyle.heightReference)
+            : undefined;
       }
 
       if (entity.polyline) {
-        entity.polyline.material = finalStyle.outlineColor;
-        entity.polyline.width = finalStyle.width;
-        entity.polyline.clampToGround = finalStyle.clampToGround;
+        entity.polyline.material = new this.Cesium.ColorMaterialProperty(
+          finalStyle.outlineColor,
+        );
+        entity.polyline.width = new this.Cesium.ConstantProperty(
+          finalStyle.width,
+        );
+        entity.polyline.clampToGround = new this.Cesium.ConstantProperty(
+          finalStyle.clampToGround,
+        );
       }
 
       if (entity.point) {
-        entity.point.pixelSize = finalStyle.pixelSize;
-        entity.point.color = finalStyle.color;
-        entity.point.scaleByDistance = finalStyle.scaleByDistance;
+        entity.point.pixelSize = new this.Cesium.ConstantProperty(
+          finalStyle.pixelSize,
+        );
+        entity.point.color = new this.Cesium.ConstantProperty(finalStyle.color);
+        const scaleByDistance = finalStyle.scaleByDistance;
+        entity.point.scaleByDistance = scaleByDistance
+          ? new this.Cesium.ConstantProperty(scaleByDistance)
+          : undefined;
 
-        // Handle icon styling
         if (style.iconUrl) {
           entity.billboard = new this.Cesium.BillboardGraphics({
-            image: style.iconUrl,
-            width: style.iconSize ? style.iconSize[0] : 32,
-            height: style.iconSize ? style.iconSize[1] : 32,
-            verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
-            scaleByDistance: finalStyle.scaleByDistance,
+            image: new this.Cesium.ConstantProperty(style.iconUrl),
+            width: new this.Cesium.ConstantProperty(
+              style.iconSize ? style.iconSize[0] : 32,
+            ),
+            height: new this.Cesium.ConstantProperty(
+              style.iconSize ? style.iconSize[1] : 32,
+            ),
+            verticalOrigin: new this.Cesium.ConstantProperty(
+              this.Cesium.VerticalOrigin.BOTTOM,
+            ),
+            scaleByDistance: scaleByDistance
+              ? new this.Cesium.ConstantProperty(scaleByDistance)
+              : undefined,
           });
-          // Hide the point when using icon
-          entity.point.show = false;
+          entity.point.show = new this.Cesium.ConstantProperty(false);
         }
       }
 
-      // Handle text labels
-      if (style.textProperty && entity.properties && entity.properties[style.textProperty]) {
+      if (
+        style.textProperty &&
+        entity.properties &&
+        entity.properties[style.textProperty]
+      ) {
+        const textValue =
+          entity.properties[style.textProperty]?.getValue?.(
+            this.viewer.clock.currentTime,
+          ) ??
+          entity.properties[style.textProperty]?._value ??
+          '';
+
         entity.label = new this.Cesium.LabelGraphics({
-          text: entity.properties[style.textProperty]._value,
-          font: finalStyle.labelFont,
-          fillColor: finalStyle.labelFillColor,
-          outlineColor: finalStyle.labelOutlineColor,
-          outlineWidth: finalStyle.labelOutlineWidth,
-          pixelOffset: finalStyle.labelPixelOffset,
-          verticalOrigin: this.Cesium.VerticalOrigin.BOTTOM,
+          text: new this.Cesium.ConstantProperty(String(textValue)),
+          font: new this.Cesium.ConstantProperty(finalStyle.labelFont),
+          fillColor: new this.Cesium.ConstantProperty(
+            finalStyle.labelFillColor,
+          ),
+          outlineColor: new this.Cesium.ConstantProperty(
+            finalStyle.labelOutlineColor,
+          ),
+          outlineWidth: new this.Cesium.ConstantProperty(
+            finalStyle.labelOutlineWidth,
+          ),
+          pixelOffset: new this.Cesium.ConstantProperty(
+            finalStyle.labelPixelOffset,
+          ),
+          verticalOrigin: new this.Cesium.ConstantProperty(
+            this.Cesium.VerticalOrigin.BOTTOM,
+          ),
         });
       }
     }
@@ -651,26 +949,15 @@ export class CesiumProvider implements MapProvider {
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
     options: any,
-    geostylerStyle?: any,
   ): Promise<GeoJsonDataSource> {
-    let geoJsonData = null;
-
-    if (config.wkt) {
-      geoJsonData = this.wktToGeoJSON(config.wkt);
-    } else if (config.url) {
-      const response = await fetch(config.url);
-      const wktText = await response.text();
-      geoJsonData = this.wktToGeoJSON(wktText);
-    } else {
-      throw new Error('Either wkt or url must be provided');
-    }
+    const geoJsonData = await this.wktToGeoJSON(config);
 
     const dataSource: GeoJsonDataSource =
       await this.Cesium.GeoJsonDataSource.load(geoJsonData, options);
 
     // Apply geostyler style if provided, otherwise use enhanced styling
-    if (geostylerStyle) {
-      this.applyGeostylerStyling(dataSource, geostylerStyle);
+    if (config.geostylerStyle) {
+      this.applyGeostylerStyling(dataSource, config.geostylerStyle);
     } else if (config.style) {
       this.applyEnhancedStyling(dataSource, config.style);
     }
@@ -678,80 +965,61 @@ export class CesiumProvider implements MapProvider {
     return dataSource;
   }
 
-  private wktToGeoJSON(wkt: string): any {
-    const s = wkt.trim().toUpperCase();
+  private async wktToGeoJSON(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<any> {
+    const wktText = await this.resolveWktText(config);
 
-    if (s.startsWith('POINT')) {
-      const match = s.match(/POINT\s*\(\s*([-+]?\d*\.?\d+)\s+([-+]?\d*\.?\d+)\s*\)/);
-      if (!match) throw new Error('Invalid POINT WKT');
-      return {
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [parseFloat(match[1]), parseFloat(match[2])]
-          }
-        }]
-      };
+    const wellknownModule = await import('wellknown');
+    const parseFn =
+      typeof wellknownModule.default === 'function'
+        ? wellknownModule.default
+        : (wellknownModule as any).parse;
+
+    if (typeof parseFn !== 'function') {
+      throw new Error('wellknown parser not available');
     }
 
-    if (s.startsWith('LINESTRING')) {
-      const match = s.match(/LINESTRING\s*\(\s*(.+)\s*\)/);
-      if (!match) throw new Error('Invalid LINESTRING WKT');
-      const coords = match[1].split(',').map(pair => {
-        const [x, y] = pair.trim().split(/\s+/);
-        return [parseFloat(x), parseFloat(y)];
-      });
-      return {
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'LineString',
-            coordinates: coords
-          }
-        }]
-      };
+    const geometry = parseFn(wktText);
+
+    if (!geometry) {
+      throw new Error('Failed to parse WKT');
     }
 
-    if (s.startsWith('POLYGON')) {
-      const match = s.match(/POLYGON\s*\(\s*\((.+)\)\s*\)/);
-      if (!match) throw new Error('Invalid POLYGON WKT');
-      const coords = match[1].split(',').map(pair => {
-        const [x, y] = pair.trim().split(/\s+/);
-        return [parseFloat(x), parseFloat(y)];
-      });
-      return {
-        type: 'FeatureCollection',
-        features: [{
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
           type: 'Feature',
           properties: {},
-          geometry: {
-            type: 'Polygon',
-            coordinates: [coords]
-          }
-        }]
-      };
-    }
+          geometry,
+        },
+      ],
+    };
+  }
 
-    throw new Error(`Unsupported WKT geometry type: ${s.split('(')[0]}`);
+  private async resolveWktText(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<string> {
+    if (config.wkt) return config.wkt;
+    if (config.url) {
+      const response = await fetch(config.url);
+      if (!response.ok)
+        throw new Error(`Failed to fetch WKT: ${response.status}`);
+      return await response.text();
+    }
+    throw new Error('Either wkt or url must be provided');
   }
 
   private async createGeoJSONLayer(
-    geojson: string,
-    url: string,
+    config: Extract<LayerConfig, { type: 'geojson' }>,
     options: any,
-    style?: any,
-    geostylerStyle?: any,
   ): Promise<GeoJsonDataSource> {
     let geojson_or_url = null;
-    if (geojson) {
-      geojson_or_url = JSON.parse(geojson);
+    if (config.geojson) {
+      geojson_or_url = JSON.parse(config.geojson);
     } else {
-      geojson_or_url = url;
+      geojson_or_url = config.url;
     }
 
     //https://cesium.com/learn/ion-sdk/ref-doc/GeoJsonDataSource.html
@@ -759,10 +1027,10 @@ export class CesiumProvider implements MapProvider {
       await this.Cesium.GeoJsonDataSource.load(geojson_or_url, options);
 
     // Apply geostyler style if provided, otherwise use enhanced styling
-    if (geostylerStyle) {
-      this.applyGeostylerStyling(dataSource, geostylerStyle);
-    } else if (style) {
-      this.applyEnhancedStyling(dataSource, style);
+    if (config.geostylerStyle) {
+      this.applyGeostylerStyling(dataSource, config.geostylerStyle);
+    } else if (config.style) {
+      this.applyEnhancedStyling(dataSource, config.style);
     }
 
     return dataSource;
@@ -799,7 +1067,8 @@ export class CesiumProvider implements MapProvider {
     const Cesium = this.Cesium;
 
     // Create a custom URL template that we'll handle in the urlSchemeZeroPadding function
-    const customUrlTemplate = 'https://maps.googleapis.com/maps/api/staticmap?template';
+    const customUrlTemplate =
+      'https://maps.googleapis.com/maps/api/staticmap?template';
 
     const googleImageryProvider = new Cesium.UrlTemplateImageryProvider({
       url: customUrlTemplate,
@@ -812,12 +1081,16 @@ export class CesiumProvider implements MapProvider {
       urlSchemeZeroPadding: {
         '{x}': '',
         '{y}': '',
-        '{z}': ''
-      }
+        '{z}': '',
+      },
     });
 
     // Override the buildImageResource method to use Google Static Maps API
-    (googleImageryProvider as any).buildImageResource = function(x: number, y: number, level: number) {
+    (googleImageryProvider as any).buildImageResource = function (
+      x: number,
+      y: number,
+      level: number,
+    ) {
       const tilingScheme = new Cesium.WebMercatorTilingScheme();
       const rectangle = tilingScheme.tileXYToRectangle(x, y, level);
       const west = Cesium.Math.toDegrees(rectangle.west);
@@ -837,7 +1110,7 @@ export class CesiumProvider implements MapProvider {
         scale: config.scale === 'scaleFactor1x' ? '1' : '2',
         maptype: googleMapTypeId,
         key: config.apiKey,
-        format: 'png'
+        format: 'png',
       });
 
       if (config.language) {
@@ -864,11 +1137,16 @@ export class CesiumProvider implements MapProvider {
 
   private getGoogleMapTypeId(mapType: string): string {
     switch (mapType) {
-      case 'roadmap': return 'roadmap';
-      case 'satellite': return 'satellite';
-      case 'terrain': return 'terrain';
-      case 'hybrid': return 'hybrid';
-      default: return 'roadmap';
+      case 'roadmap':
+        return 'roadmap';
+      case 'satellite':
+        return 'satellite';
+      case 'terrain':
+        return 'terrain';
+      case 'hybrid':
+        return 'hybrid';
+      default:
+        return 'roadmap';
     }
   }
 
@@ -882,7 +1160,8 @@ export class CesiumProvider implements MapProvider {
     if ((window as any).google?.maps) return;
 
     await new Promise<void>((resolve, reject) => {
-      const cbName = '___cesiumGoogleInit___' + Math.random().toString(36).slice(2);
+      const cbName =
+        '___cesiumGoogleInit___' + Math.random().toString(36).slice(2);
       (window as any)[cbName] = () => resolve();
 
       const script = document.createElement('script');
@@ -904,15 +1183,19 @@ export class CesiumProvider implements MapProvider {
     });
   }
 
-
   /**
    * Add Google logo for compliance
    */
   private ensureGoogleLogo(): void {
-    if (!this.viewer?.container || (this.viewer.container as any)._googleLogoAdded) return;
+    if (
+      !this.viewer?.container ||
+      (this.viewer.container as any)._googleLogoAdded
+    )
+      return;
 
     const logo = document.createElement('img');
-    logo.src = 'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
+    logo.src =
+      'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
     logo.alt = 'Google';
     logo.style.position = 'absolute';
     logo.style.bottom = '6px';
@@ -943,7 +1226,9 @@ export class CesiumProvider implements MapProvider {
       ...(config.options || {}),
     } as UrlTemplateOptions;
 
-    const provider = new this.Cesium.UrlTemplateImageryProvider(providerOptions);
+    const provider = new this.Cesium.UrlTemplateImageryProvider(
+      providerOptions,
+    );
 
     const layerOptions = {
       alpha: config.opacity ?? 1,
@@ -965,7 +1250,12 @@ export class CesiumProvider implements MapProvider {
       provider = await this.Cesium.createWorldTerrainAsync();
     }
 
-    const layer = new CesiumTerrainLayer(this.Cesium, this.viewer, provider, config);
+    const layer = new CesiumTerrainLayer(
+      this.Cesium,
+      this.viewer,
+      provider,
+      config,
+    );
 
     if (config.visible !== undefined) {
       layer.setVisible(config.visible);
@@ -1013,7 +1303,9 @@ export class CesiumProvider implements MapProvider {
 
       // Option 1: Try using TIFFImageryProvider (requires tiff-imagery-provider package)
       try {
-        const TIFFImageryProvider = (await import('tiff-imagery-provider' as any)).default;
+        const TIFFImageryProvider = (
+          await import('tiff-imagery-provider' as any)
+        ).default;
         const provider = await TIFFImageryProvider.fromUrl(config.url);
 
         return new this.Cesium.ImageryLayer(provider, {
@@ -1021,7 +1313,9 @@ export class CesiumProvider implements MapProvider {
           show: config.visible ?? true,
         });
       } catch (tiffError) {
-        console.warn('TIFFImageryProvider not available, falling back to SingleTileImageryProvider');
+        console.warn(
+          'TIFFImageryProvider not available, falling back to SingleTileImageryProvider',
+        );
 
         // Option 2: Fallback to SingleTileImageryProvider
         // This assumes the GeoTIFF can be displayed as a simple image
@@ -1079,10 +1373,13 @@ export class CesiumProvider implements MapProvider {
             const data = update.data;
             const options = oldLayer.getOptions();
             const dataSource: GeoJsonDataSource = await this.createGeoJSONLayer(
-              data.geojson,
-              data.url,
+              {
+                geojson: data.geojson,
+                url: data.url,
+                style: data.style,
+                geostylerStyle: data.geostylerStyle,
+              } as Extract<LayerConfig, { type: 'geojson' }>,
               options,
-              data.style,
             );
             const layer = this.layerManager.replaceLayer(
               layerId,
@@ -1162,7 +1459,12 @@ export class CesiumProvider implements MapProvider {
             const data = update.data;
             const options = oldLayer.getOptions();
             const dataSource: GeoJsonDataSource = await this.createWKTLayer(
-              { wkt: data.wkt, url: data.url } as Extract<LayerConfig, { type: 'wkt' }>,
+              {
+                wkt: data.wkt,
+                url: data.url,
+                style: data.style,
+                geostylerStyle: data.geostylerStyle,
+              } as Extract<LayerConfig, { type: 'wkt' }>,
               options,
             );
             const layer = this.layerManager.replaceLayer(
@@ -1176,9 +1478,9 @@ export class CesiumProvider implements MapProvider {
         case 'geotiff':
           {
             const data = update.data;
-            const iLayer = await this.createGeoTIFFLayer(
-              { url: data.url } as Extract<LayerConfig, { type: 'geotiff' }>,
-            );
+            const iLayer = await this.createGeoTIFFLayer({
+              url: data.url,
+            } as Extract<LayerConfig, { type: 'geotiff' }>);
             this.layerManager.replaceLayer(layerId, oldLayer, iLayer);
           }
           break;

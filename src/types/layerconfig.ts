@@ -1,5 +1,6 @@
 import type { StyleConfig } from './styleconfig';
 import type { Color } from './color';
+import type { Style } from 'geostyler-style';
 
 export type googleMapType = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
 
@@ -9,6 +10,7 @@ export type LayerConfig =
       url?: string;
       geojson?: string;
       style?: StyleConfig;
+      geostylerStyle?: Style;
       groupId?: string;
       zIndex?: number;
       visible?: boolean;
@@ -152,6 +154,7 @@ export type LayerConfig =
       wkt?: string;
       url?: string;
       style?: StyleConfig;
+      geostylerStyle?: Style;
       groupId?: string;
       zIndex?: number;
       visible?: boolean;

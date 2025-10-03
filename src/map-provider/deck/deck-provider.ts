@@ -4,7 +4,7 @@ import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 
-import { log } from '../../utils/logger';
+import { log, warn } from '../../utils/logger';
 
 import { formatBbox, buildQuery } from '../../utils/spatial-utils';
 
@@ -238,11 +238,7 @@ export class DeckProvider implements MapProvider {
     cfg: Extract<LayerConfig, { type: 'arcgis' }>,
     layerId: string,
   ): Promise<TileLayer> {
-    const templateUrl = this.buildArcgisUrl(
-      cfg.url,
-      cfg.params,
-      cfg.token,
-    );
+    const templateUrl = this.buildArcgisUrl(cfg.url, cfg.params, cfg.token);
 
     return this.buildXyzTileLayer(
       {
@@ -261,7 +257,9 @@ export class DeckProvider implements MapProvider {
     layerId: string,
   ): Promise<Layer> {
     const { TerrainLayer } = await import('@deck.gl/geo-layers');
-    const elevationDecoder = this.normalizeElevationDecoder(cfg.elevationDecoder);
+    const elevationDecoder = this.normalizeElevationDecoder(
+      cfg.elevationDecoder,
+    );
 
     return new TerrainLayer({
       id: layerId,
@@ -288,7 +286,7 @@ export class DeckProvider implements MapProvider {
       const layerInstance: any = model.make();
       return layerInstance?.props?.data?.[0] ?? layerInstance?.props?.url;
     } catch (error) {
-      console.warn('Failed to resolve model URL', error);
+      warn('Failed to resolve model URL', error);
       return undefined;
     }
   }
@@ -308,9 +306,12 @@ export class DeckProvider implements MapProvider {
     }
 
     return {
-      rScaler: (decoder as any).rScaler ?? (decoder as any).r ?? defaults.rScaler,
-      gScaler: (decoder as any).gScaler ?? (decoder as any).g ?? defaults.gScaler,
-      bScaler: (decoder as any).bScaler ?? (decoder as any).b ?? defaults.bScaler,
+      rScaler:
+        (decoder as any).rScaler ?? (decoder as any).r ?? defaults.rScaler,
+      gScaler:
+        (decoder as any).gScaler ?? (decoder as any).g ?? defaults.gScaler,
+      bScaler:
+        (decoder as any).bScaler ?? (decoder as any).b ?? defaults.bScaler,
       offset: decoder.offset ?? defaults.offset,
     };
   }
@@ -329,9 +330,15 @@ export class DeckProvider implements MapProvider {
       return prop;
     };
 
-    const defaultFillColor: [number, number, number, number] = [0, 100, 255, 76];
-    const defaultStrokeColor: [number, number, number, number] = [0, 100, 255, 255];
-    const defaultPointColor: [number, number, number, number] = [0, 100, 255, 255];
+    const defaultFillColor: [number, number, number, number] = [
+      0, 100, 255, 76,
+    ];
+    const defaultStrokeColor: [number, number, number, number] = [
+      0, 100, 255, 255,
+    ];
+    const defaultPointColor: [number, number, number, number] = [
+      0, 100, 255, 255,
+    ];
 
     let fillColorValue = defaultFillColor;
     let strokeColorValue = defaultStrokeColor;
@@ -346,26 +353,46 @@ export class DeckProvider implements MapProvider {
           for (const symbolizer of rule.symbolizers) {
             switch (symbolizer.kind) {
               case 'Fill':
-                const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
+                const fillColor = getValue(
+                  symbolizer.color,
+                  'rgba(0,100,255,0.3)',
+                ) as string;
                 const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
                 fillColorValue = this.parseColor(fillColor, defaultFillColor);
                 if (fillOpacity !== undefined) {
-                  fillColorValue = this.applyOpacity(fillColorValue, fillOpacity);
+                  fillColorValue = this.applyOpacity(
+                    fillColorValue,
+                    fillOpacity,
+                  );
                 }
 
-                const outlineColor = getValue(symbolizer.outlineColor) as string | undefined;
+                const outlineColor = getValue(symbolizer.outlineColor) as
+                  | string
+                  | undefined;
                 if (outlineColor) {
-                  strokeColorValue = this.parseColor(outlineColor, defaultStrokeColor);
+                  strokeColorValue = this.parseColor(
+                    outlineColor,
+                    defaultStrokeColor,
+                  );
                 }
-                const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+                const outlineWidth = getValue(
+                  symbolizer.outlineWidth,
+                  1,
+                ) as number;
                 if (outlineWidth !== undefined) {
                   lineWidthValue = outlineWidth;
                 }
                 break;
 
               case 'Line':
-                const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
-                strokeColorValue = this.parseColor(lineColor, defaultStrokeColor);
+                const lineColor = getValue(
+                  symbolizer.color,
+                  'rgba(0,100,255,1)',
+                ) as string;
+                strokeColorValue = this.parseColor(
+                  lineColor,
+                  defaultStrokeColor,
+                );
                 const lineWidth = getValue(symbolizer.width, 2) as number;
                 if (lineWidth !== undefined) {
                   lineWidthValue = lineWidth;
@@ -373,7 +400,10 @@ export class DeckProvider implements MapProvider {
                 break;
 
               case 'Mark':
-                const markColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                const markColor = getValue(
+                  symbolizer.color,
+                  'rgba(0,100,255,1)',
+                ) as string;
                 pointColorValue = this.parseColor(markColor, defaultPointColor);
                 const markRadius = getValue(symbolizer.radius, 6) as number;
                 if (markRadius !== undefined) {
@@ -409,7 +439,10 @@ export class DeckProvider implements MapProvider {
   /**
    * Convert CSS color to Deck.gl RGBA array
    */
-  private parseColor(color: string | undefined, defaultColor: [number, number, number, number]): [number, number, number, number] {
+  private parseColor(
+    color: string | undefined,
+    defaultColor: [number, number, number, number],
+  ): [number, number, number, number] {
     if (!color) return defaultColor;
 
     // Handle hex colors
@@ -429,7 +462,7 @@ export class DeckProvider implements MapProvider {
         values[0] || 0,
         values[1] || 0,
         values[2] || 0,
-        values[3] !== undefined ? Math.round(values[3] * 255) : 255
+        values[3] !== undefined ? Math.round(values[3] * 255) : 255,
       ];
     }
 
@@ -439,7 +472,10 @@ export class DeckProvider implements MapProvider {
   /**
    * Apply opacity to color array
    */
-  private applyOpacity(color: [number, number, number, number], opacity: number): [number, number, number, number] {
+  private applyOpacity(
+    color: [number, number, number, number],
+    opacity: number,
+  ): [number, number, number, number] {
     return [color[0], color[1], color[2], Math.round(opacity * 255)];
   }
 
@@ -448,9 +484,15 @@ export class DeckProvider implements MapProvider {
    */
   private createDeckGLStyle(style: any = {}) {
     // Default colors
-    const defaultFillColor: [number, number, number, number] = [0, 100, 255, 76];
-    const defaultStrokeColor: [number, number, number, number] = [0, 100, 255, 255];
-    const defaultPointColor: [number, number, number, number] = [0, 100, 255, 255];
+    const defaultFillColor: [number, number, number, number] = [
+      0, 100, 255, 76,
+    ];
+    const defaultStrokeColor: [number, number, number, number] = [
+      0, 100, 255, 255,
+    ];
+    const defaultPointColor: [number, number, number, number] = [
+      0, 100, 255, 255,
+    ];
 
     // Parse colors
     const fillColor = this.parseColor(style.fillColor, defaultFillColor);
@@ -458,17 +500,20 @@ export class DeckProvider implements MapProvider {
     const pointColor = this.parseColor(style.pointColor, defaultPointColor);
 
     // Apply opacity
-    const finalFillColor = style.fillOpacity !== undefined
-      ? this.applyOpacity(fillColor, style.fillOpacity)
-      : fillColor;
+    const finalFillColor =
+      style.fillOpacity !== undefined
+        ? this.applyOpacity(fillColor, style.fillOpacity)
+        : fillColor;
 
-    const finalStrokeColor = style.strokeOpacity !== undefined
-      ? this.applyOpacity(strokeColor, style.strokeOpacity)
-      : strokeColor;
+    const finalStrokeColor =
+      style.strokeOpacity !== undefined
+        ? this.applyOpacity(strokeColor, style.strokeOpacity)
+        : strokeColor;
 
-    const finalPointColor = style.pointOpacity !== undefined
-      ? this.applyOpacity(pointColor, style.pointOpacity)
-      : pointColor;
+    const finalPointColor =
+      style.pointOpacity !== undefined
+        ? this.applyOpacity(pointColor, style.pointOpacity)
+        : pointColor;
 
     return {
       getFillColor: (feature: any) => {
@@ -476,9 +521,15 @@ export class DeckProvider implements MapProvider {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.fillColor) {
-            const conditionalFillColor = this.parseColor(conditionalStyle.fillColor, finalFillColor);
+            const conditionalFillColor = this.parseColor(
+              conditionalStyle.fillColor,
+              finalFillColor,
+            );
             return conditionalStyle.fillOpacity !== undefined
-              ? this.applyOpacity(conditionalFillColor, conditionalStyle.fillOpacity)
+              ? this.applyOpacity(
+                  conditionalFillColor,
+                  conditionalStyle.fillOpacity,
+                )
               : conditionalFillColor;
           }
         }
@@ -489,9 +540,15 @@ export class DeckProvider implements MapProvider {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.strokeColor) {
-            const conditionalStrokeColor = this.parseColor(conditionalStyle.strokeColor, finalStrokeColor);
+            const conditionalStrokeColor = this.parseColor(
+              conditionalStyle.strokeColor,
+              finalStrokeColor,
+            );
             return conditionalStyle.strokeOpacity !== undefined
-              ? this.applyOpacity(conditionalStrokeColor, conditionalStyle.strokeOpacity)
+              ? this.applyOpacity(
+                  conditionalStrokeColor,
+                  conditionalStyle.strokeOpacity,
+                )
               : conditionalStrokeColor;
           }
         }
@@ -512,9 +569,15 @@ export class DeckProvider implements MapProvider {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.pointColor) {
-            const conditionalPointColor = this.parseColor(conditionalStyle.pointColor, finalPointColor);
+            const conditionalPointColor = this.parseColor(
+              conditionalStyle.pointColor,
+              finalPointColor,
+            );
             return conditionalStyle.pointOpacity !== undefined
-              ? this.applyOpacity(conditionalPointColor, conditionalStyle.pointOpacity)
+              ? this.applyOpacity(
+                  conditionalPointColor,
+                  conditionalStyle.pointOpacity,
+                )
               : conditionalPointColor;
           }
         }
@@ -581,14 +644,25 @@ export class DeckProvider implements MapProvider {
         const { x, y, z } = index;
 
         // Build Google Static Maps API URL for this tile
-        const tilingScheme = { tileXYToNativeRectangle: (x: number, y: number, level: number) => {
-          const n = Math.pow(2, level);
-          const lonLeft = (x / n) * 360 - 180;
-          const lonRight = ((x + 1) / n) * 360 - 180;
-          const latBottom = Math.atan(Math.sinh(Math.PI * (1 - 2 * (y + 1) / n))) * 180 / Math.PI;
-          const latTop = Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
-          return { west: lonLeft, south: latBottom, east: lonRight, north: latTop };
-        }};
+        const tilingScheme = {
+          tileXYToNativeRectangle: (x: number, y: number, level: number) => {
+            const n = Math.pow(2, level);
+            const lonLeft = (x / n) * 360 - 180;
+            const lonRight = ((x + 1) / n) * 360 - 180;
+            const latBottom =
+              (Math.atan(Math.sinh(Math.PI * (1 - (2 * (y + 1)) / n))) * 180) /
+              Math.PI;
+            const latTop =
+              (Math.atan(Math.sinh(Math.PI * (1 - (2 * y) / n))) * 180) /
+              Math.PI;
+            return {
+              west: lonLeft,
+              south: latBottom,
+              east: lonRight,
+              north: latTop,
+            };
+          },
+        };
 
         const rect = tilingScheme.tileXYToNativeRectangle(x, y, z);
         const centerLat = (rect.south + rect.north) / 2;
@@ -601,7 +675,7 @@ export class DeckProvider implements MapProvider {
           scale: cfg.scale === 'scaleFactor1x' ? '1' : '2',
           maptype: googleMapTypeId,
           key: cfg.apiKey,
-          format: 'png'
+          format: 'png',
         });
 
         if (cfg.language) params.set('language', cfg.language);
@@ -614,7 +688,7 @@ export class DeckProvider implements MapProvider {
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           return response.blob();
         } catch (error) {
-          console.warn('Failed to load Google tile:', error);
+          warn('Failed to load Google tile:', error);
           return null;
         }
       },
@@ -641,11 +715,16 @@ export class DeckProvider implements MapProvider {
 
   private getGoogleMapTypeId(mapType: string): string {
     switch (mapType) {
-      case 'roadmap': return 'roadmap';
-      case 'satellite': return 'satellite';
-      case 'terrain': return 'terrain';
-      case 'hybrid': return 'hybrid';
-      default: return 'roadmap';
+      case 'roadmap':
+        return 'roadmap';
+      case 'satellite':
+        return 'satellite';
+      case 'terrain':
+        return 'terrain';
+      case 'hybrid':
+        return 'hybrid';
+      default:
+        return 'roadmap';
     }
   }
 
@@ -659,7 +738,8 @@ export class DeckProvider implements MapProvider {
     if ((window as any).google?.maps) return;
 
     await new Promise<void>((resolve, reject) => {
-      const cbName = '___deckGoogleInit___' + Math.random().toString(36).slice(2);
+      const cbName =
+        '___deckGoogleInit___' + Math.random().toString(36).slice(2);
       (window as any)[cbName] = () => resolve();
 
       const script = document.createElement('script');
@@ -688,7 +768,8 @@ export class DeckProvider implements MapProvider {
     if ((container as any)._googleLogoAdded) return;
 
     const logo = document.createElement('img');
-    logo.src = 'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
+    logo.src =
+      'https://developers.google.com/static/maps/documentation/images/google_on_white.png';
     logo.alt = 'Google';
     logo.style.position = 'absolute';
     logo.style.bottom = '6px';
@@ -700,7 +781,6 @@ export class DeckProvider implements MapProvider {
     container.appendChild(logo);
     (container as any)._googleLogoAdded = true;
   }
-
 
   async buildScatterPlot(
     layerConfig: Extract<LayerConfig, { type: 'scatterplot' }>,
@@ -752,8 +832,10 @@ export class DeckProvider implements MapProvider {
       // Use geostyler style if available, otherwise use default style
       let deckStyle: any;
 
-      if ((config as any).geostylerStyle) {
-        deckStyle = this.createGeostylerDeckGLStyle((config as any).geostylerStyle);
+      if (config.geostylerStyle) {
+        deckStyle = this.createGeostylerDeckGLStyle(
+          config.geostylerStyle,
+        );
       } else {
         deckStyle = this.createDeckGLStyle(config.style);
       }
@@ -774,9 +856,9 @@ export class DeckProvider implements MapProvider {
 
         // Update triggers for dynamic styling
         updateTriggers: {
-          getFillColor: [config.style, (config as any).geostylerStyle],
-          getLineColor: [config.style, (config as any).geostylerStyle],
-          getPointRadius: [config.style, (config as any).geostylerStyle],
+          getFillColor: [config.style, config.geostylerStyle],
+          getLineColor: [config.style, config.geostylerStyle],
+          getPointRadius: [config.style, config.geostylerStyle],
           data: [config.geojson, config.url],
         },
       });
@@ -1111,7 +1193,7 @@ export type TileLoadProps = {
         // as tile URLs are constructed dynamically
         if (update.data?.mapType || update.data?.apiKey) {
           // For now, log that Google updates aren't fully supported
-          console.warn('Google Maps layer updates require full layer recreation');
+          warn('Google Maps layer updates require full layer recreation');
         }
         break;
       }
@@ -1144,18 +1226,23 @@ export type TileLoadProps = {
           ov.data = [nextUrl];
           ov.url = nextUrl;
         }
-        if (update.data?.minZoom !== undefined) ov.minZoom = update.data.minZoom;
-        if (update.data?.maxZoom !== undefined) ov.maxZoom = update.data.maxZoom;
+        if (update.data?.minZoom !== undefined)
+          ov.minZoom = update.data.minZoom;
+        if (update.data?.maxZoom !== undefined)
+          ov.maxZoom = update.data.maxZoom;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
       case 'terrain': {
         const ov: any = {};
-        if (update.data?.elevationData) ov.elevationData = update.data.elevationData;
-        if (update.data?.texture !== undefined) ov.texture = update.data.texture;
+        if (update.data?.elevationData)
+          ov.elevationData = update.data.elevationData;
+        if (update.data?.texture !== undefined)
+          ov.texture = update.data.texture;
         if (update.data?.elevationDecoder !== undefined)
           ov.elevationDecoder = update.data.elevationDecoder;
-        if (update.data?.wireframe !== undefined) ov.wireframe = update.data.wireframe;
+        if (update.data?.wireframe !== undefined)
+          ov.wireframe = update.data.wireframe;
         if (update.data?.color !== undefined) ov.color = update.data.color;
         if (update.data?.meshMaxError !== undefined)
           ov.meshMaxError = update.data.meshMaxError;
@@ -1163,10 +1250,12 @@ export type TileLoadProps = {
         break;
       }
       case 'wkt': {
-        const data = update.data?.wkt
-          ? this.wktToGeoJSON(update.data.wkt)
-          : update.data?.url;
-        if (data) group.setModelOverrides(layerId, { data });
+        if (update.data?.wkt) {
+          const data = await this.wktToGeoJSON(update.data.wkt);
+          group.setModelOverrides(layerId, { data });
+        } else if (update.data?.url) {
+          group.setModelOverrides(layerId, { data: update.data.url });
+        }
         break;
       }
     }
@@ -1231,31 +1320,17 @@ export type TileLoadProps = {
     config: Extract<LayerConfig, { type: 'wkt' }>,
     layerId: string,
   ): Promise<Layer> {
-    let geoJsonData = null;
-
-    if (config.wkt) {
-      geoJsonData = this.wktToGeoJSON(config.wkt);
-    } else if (config.url) {
-      try {
-        const response = await fetch(config.url);
-        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
-        const wktText = await response.text();
-        geoJsonData = this.wktToGeoJSON(wktText);
-      } catch (e) {
-        log('Failed to load WKT from URL:', e);
-        geoJsonData = { type: 'FeatureCollection', features: [] };
-      }
-    } else {
-      geoJsonData = { type: 'FeatureCollection', features: [] };
-    }
+    const geoJsonData = await this.resolveWktToGeoJSON(config);
 
     const { GeoJsonLayer } = await import('@deck.gl/layers');
 
     // Use geostyler style if available, otherwise use default style
     let deckStyle: any;
 
-    if ((config as any).geostylerStyle) {
-      deckStyle = this.createGeostylerDeckGLStyle((config as any).geostylerStyle);
+    if (config.geostylerStyle) {
+      deckStyle = this.createGeostylerDeckGLStyle(
+        config.geostylerStyle,
+      );
     } else {
       deckStyle = this.createDeckGLStyle(config.style);
     }
@@ -1276,60 +1351,65 @@ export type TileLoadProps = {
 
       // Update triggers for dynamic styling
       updateTriggers: {
-        getFillColor: [config.style, (config as any).geostylerStyle],
-        getLineColor: [config.style, (config as any).geostylerStyle],
-        getPointRadius: [config.style, (config as any).geostylerStyle],
+        getFillColor: [config.style, config.geostylerStyle],
+        getLineColor: [config.style, config.geostylerStyle],
+        getPointRadius: [config.style, config.geostylerStyle],
         data: [config.wkt, config.url],
       },
     });
   }
 
-  private wktToGeoJSON(wkt: string): any {
-    const s = wkt.trim().toUpperCase();
+  private async resolveWktToGeoJSON(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<any> {
+    try {
+      const wktText = await this.resolveWktText(config);
+      return await this.wktToGeoJSON(wktText);
+    } catch (e) {
+      log('v-map - provider - deck - Failed to parse WKT:', e);
+      return { type: 'FeatureCollection', features: [] };
+    }
+  }
 
-    if (s.startsWith('POINT')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const [x, y] = inside.split(/[\s]+/).map(parseFloat);
-      return {
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [x, y] },
-        properties: {},
-      };
+  private async resolveWktText(
+    config: Extract<LayerConfig, { type: 'wkt' }>,
+  ): Promise<string> {
+    if (config.wkt) return config.wkt;
+    if (config.url) {
+      const response = await fetch(config.url);
+      if (!response.ok)
+        throw new Error(`Failed to fetch WKT: ${response.status}`);
+      return await response.text();
+    }
+    throw new Error('Either wkt or url must be provided');
+  }
+
+  private async wktToGeoJSON(wkt: string): Promise<any> {
+    const wellknownModule = await import('wellknown');
+    const parseFn =
+      typeof wellknownModule.default === 'function'
+        ? wellknownModule.default
+        : (wellknownModule as any).parse;
+
+    if (typeof parseFn !== 'function') {
+      throw new Error('wellknown parser not available');
     }
 
-    if (s.startsWith('LINESTRING')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const coords = inside
-        .split(',')
-        .map(p => p.trim().split(/[\s]+/).map(parseFloat));
-      return {
-        type: 'Feature',
-        geometry: { type: 'LineString', coordinates: coords },
-        properties: {},
-      };
+    const geometry = parseFn(wkt);
+    if (!geometry) {
+      throw new Error('Failed to parse WKT');
     }
 
-    if (s.startsWith('POLYGON')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const rings = inside.split('),(').map(r => r.replace(/[()]/g, '').trim());
-      const coords = rings.map(r =>
-        r.split(',').map(p => p.trim().split(/[\s]+/).map(parseFloat)),
-      );
-      return {
-        type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: coords },
-        properties: {},
-      };
-    }
-
-    // If unrecognized WKT format, return empty FeatureCollection
-    return { type: 'FeatureCollection', features: [] };
+    return {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry,
+          properties: {},
+        },
+      ],
+    };
   }
 
   private async createGeoTIFFLayer(
@@ -1355,7 +1435,7 @@ export type TileLoadProps = {
         image: config.url,
         bounds: [
           // Default bounds - ideally these should come from GeoTIFF metadata
-          -180, -85.051129, 180, 85.051129
+          -180, -85.051129, 180, 85.051129,
         ],
         opacity: config.opacity ?? 1.0,
         visible: config.visible ?? true,

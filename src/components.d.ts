@@ -12,8 +12,7 @@ import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { LayerConfig } from "./types/layerconfig";
-import { StyleFormat } from "./types/styling";
-import { ResolvedStyle } from "./components/v-map-style/v-map-style";
+import { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
@@ -21,8 +20,7 @@ export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { LayerConfig } from "./types/layerconfig";
-export { StyleFormat } from "./types/styling";
-export { ResolvedStyle } from "./components/v-map-style/v-map-style";
+export { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export namespace Components {
     interface VMap {
         /**
@@ -703,6 +701,10 @@ export namespace Components {
          */
         "format": StyleFormat;
         /**
+          * Get the target layer IDs as array. async
+         */
+        "getLayerTargetIds": () => Promise<string[]>;
+        /**
           * Get the currently parsed style.
          */
         "getStyle": () => Promise<ResolvedStyle | undefined>;
@@ -984,7 +986,7 @@ declare global {
         new (): HTMLVMapLayergroupElement;
     };
     interface HTMLVMapStyleElementEventMap {
-        "styleReady": ResolvedStyle;
+        "styleReady": StyleEvent;
         "styleError": Error;
     }
     interface HTMLVMapStyleElement extends Components.VMapStyle, HTMLStencilElement {
@@ -1710,7 +1712,7 @@ declare namespace LocalJSX {
         /**
           * Fired when style is successfully parsed and ready to apply.
          */
-        "onStyleReady"?: (event: VMapStyleCustomEvent<ResolvedStyle>) => void;
+        "onStyleReady"?: (event: VMapStyleCustomEvent<StyleEvent>) => void;
         /**
           * The style source - can be a URL to fetch from or inline SLD/style content.
          */

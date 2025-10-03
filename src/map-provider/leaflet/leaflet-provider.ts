@@ -9,7 +9,8 @@ import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 import * as L from 'leaflet';
 
 import { isBrowser } from '../../utils/dom-env';
-import { log } from '../../utils/logger';
+import { log, error } from '../../utils/logger';
+import type { StyleConfig } from '../../types/styleconfig';
 import {
   removeInjectedCss,
   ensureLeafletCss,
@@ -332,13 +333,17 @@ export class LeafletProvider implements MapProvider {
       // Use geostyler style if available, otherwise use default style
       let layerOptions: L.GeoJSONOptions = {};
 
-      if ((config as any).geostylerStyle) {
-        layerOptions = await this.createGeostylerLeafletOptions((config as any).geostylerStyle);
+      if (config.geostylerStyle) {
+        layerOptions = await this.createGeostylerLeafletOptions(
+          config.geostylerStyle,
+        );
       } else if (config.style) {
         layerOptions = {
           style: this.createLeafletStyle(config.style),
-          pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style!),
-          onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style!),
+          pointToLayer: (feature, latlng) =>
+            this.createLeafletPoint(feature, latlng, config.style!),
+          onEachFeature: (feature, layer) =>
+            this.bindLeafletPopup(feature, layer, config.style!),
         };
       }
 
@@ -640,15 +645,16 @@ export class LeafletProvider implements MapProvider {
 
     let geoJsonData = null;
     if (data.wkt) {
-      geoJsonData = this.wktToGeoJSON(data.wkt);
+      geoJsonData = await this.wktToGeoJSON(data.wkt);
     } else if (data.url) {
       try {
         const response = await fetch(data.url);
-        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`Failed to fetch WKT: ${response.status}`);
         const wktText = await response.text();
-        geoJsonData = this.wktToGeoJSON(wktText);
+        geoJsonData = await this.wktToGeoJSON(wktText);
       } catch (e) {
-        log('Failed to load WKT from URL:', e);
+        error('Failed to load WKT from URL:', e);
         return;
       }
     }
@@ -659,8 +665,10 @@ export class LeafletProvider implements MapProvider {
       // Update layer options to use enhanced styling
       const geoJsonLayer = layer as L.GeoJSON;
       geoJsonLayer.options.style = this.createLeafletStyle(data.style);
-      geoJsonLayer.options.pointToLayer = (feature, latlng) => this.createLeafletPoint(feature, latlng, data.style);
-      geoJsonLayer.options.onEachFeature = (feature, layer) => this.bindLeafletPopup(feature, layer, data.style);
+      geoJsonLayer.options.pointToLayer = (feature, latlng) =>
+        this.createLeafletPoint(feature, latlng, data.style);
+      geoJsonLayer.options.onEachFeature = (feature, layer) =>
+        this.bindLeafletPopup(feature, layer, data.style);
 
       geoJsonLayer.addData(geoJsonData);
     }
@@ -672,84 +680,86 @@ export class LeafletProvider implements MapProvider {
     let geoJsonData = null;
 
     if (config.wkt) {
-      geoJsonData = this.wktToGeoJSON(config.wkt);
+      geoJsonData = await this.wktToGeoJSON(config.wkt);
     } else if (config.url) {
       try {
         const response = await fetch(config.url);
-        if (!response.ok) throw new Error(`Failed to fetch WKT: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`Failed to fetch WKT: ${response.status}`);
         const wktText = await response.text();
-        geoJsonData = this.wktToGeoJSON(wktText);
+        geoJsonData = await this.wktToGeoJSON(wktText);
       } catch (e) {
-        log('Failed to load WKT from URL:', e);
+        error('Failed to load WKT from URL:', e);
         geoJsonData = { type: 'FeatureCollection', features: [] };
       }
     } else {
       geoJsonData = { type: 'FeatureCollection', features: [] };
     }
 
-    // Use geostyler style if available, otherwise use default style
+    log('[Leaflet WKT] Creating layer with GeoJSON data:', geoJsonData);
+    log('[Leaflet WKT] Config:', config);
+
+    // Use geostyler style if available, otherwise use config style or default
     let layerOptions: L.GeoJSONOptions = {};
 
-    if ((config as any).geostylerStyle) {
-      layerOptions = await this.createGeostylerLeafletOptions((config as any).geostylerStyle);
-    } else if (config.style) {
+    if (config.geostylerStyle) {
+      layerOptions = await this.createGeostylerLeafletOptions(
+        config.geostylerStyle,
+      );
+    } else {
+      // Use config.style if available, otherwise undefined (will use default styles)
+      const styleConfig = config.style || undefined;
       layerOptions = {
-        style: this.createLeafletStyle(config.style),
-        pointToLayer: (feature, latlng) => this.createLeafletPoint(feature, latlng, config.style),
-        onEachFeature: (feature, layer) => this.bindLeafletPopup(feature, layer, config.style),
+        style: this.createLeafletStyle(styleConfig),
+        pointToLayer: (feature, latlng) =>
+          this.createLeafletPoint(feature, latlng, styleConfig),
+        onEachFeature: (feature, layer) =>
+          this.bindLeafletPopup(feature, layer, styleConfig),
       };
     }
 
+    log('[Leaflet WKT] Layer options:', layerOptions);
+
     const layer = L.geoJSON(geoJsonData, layerOptions);
+
+    log('[Leaflet WKT] Created layer:', layer);
+    if (typeof (layer as any).getBounds === 'function') {
+      log('[Leaflet WKT] Layer bounds:', (layer as any).getBounds());
+    }
+
     return layer;
   }
 
-  private wktToGeoJSON(wkt: string): any {
-    const s = wkt.trim().toUpperCase();
+  private async wktToGeoJSON(wkt: string): Promise<any> {
+    try {
+      // Use wellknown library to parse WKT into GeoJSON (browser-compatible)
+      const wellknown = await import('wellknown');
+      const geoJSON = wellknown.parse(wkt);
 
-    if (s.startsWith('POINT')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const [x, y] = inside.split(/[\s]+/).map(parseFloat);
-      return {
+      if (!geoJSON) {
+        throw new Error('Failed to parse WKT - returned null');
+      }
+
+      // Return as a Feature
+      const feature = {
         type: 'Feature',
-        geometry: { type: 'Point', coordinates: [x, y] },
+        geometry: geoJSON,
         properties: {},
       };
-    }
 
-    if (s.startsWith('LINESTRING')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const coords = inside
-        .split(',')
-        .map(p => p.trim().split(/[\s]+/).map(parseFloat));
+      // Debug output to browser console
+      log('[Leaflet WKT] Input WKT:', wkt);
+      log('[Leaflet WKT] Generated GeoJSON:', JSON.stringify(feature, null, 2));
+
       return {
-        type: 'Feature',
-        geometry: { type: 'LineString', coordinates: coords },
-        properties: {},
+        type: 'FeatureCollection',
+        features: [feature],
       };
+    } catch (e) {
+      error('[Leaflet WKT] Failed to parse WKT:', wkt, e);
+      // If parsing fails, return empty FeatureCollection
+      return { type: 'FeatureCollection', features: [] };
     }
-
-    if (s.startsWith('POLYGON')) {
-      const inside = wkt
-        .substring(wkt.indexOf('(') + 1, wkt.lastIndexOf(')'))
-        .trim();
-      const rings = inside.split('),(').map(r => r.replace(/[()]/g, '').trim());
-      const coords = rings.map(r =>
-        r.split(',').map(p => p.trim().split(/[\s]+/).map(parseFloat)),
-      );
-      return {
-        type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: coords },
-        properties: {},
-      };
-    }
-
-    // If unrecognized WKT format, return empty FeatureCollection
-    return { type: 'FeatureCollection', features: [] };
   }
 
   private async createGeoTIFFLayer(
@@ -784,7 +794,7 @@ export class LeafletProvider implements MapProvider {
 
       return layer;
     } catch (error) {
-      console.error('Failed to create GeoTIFF layer:', error);
+      error('Failed to create GeoTIFF layer:', error);
       // Return a placeholder layer in case of error
       return L.layerGroup([]);
     }
@@ -831,7 +841,7 @@ export class LeafletProvider implements MapProvider {
         }
       }
     } catch (error) {
-      console.error('Failed to update GeoTIFF layer:', error);
+      error('Failed to update GeoTIFF layer:', error);
     }
   }
 
@@ -840,7 +850,9 @@ export class LeafletProvider implements MapProvider {
   /**
    * Convert a Geostyler style to Leaflet GeoJSON options
    */
-  private async createGeostylerLeafletOptions(geostylerStyle: any): Promise<L.GeoJSONOptions> {
+  private async createGeostylerLeafletOptions(
+    geostylerStyle: any,
+  ): Promise<L.GeoJSONOptions> {
     // Helper to extract static value from GeoStyler property
     const getValue = (prop: any, defaultValue: any = undefined) => {
       if (prop === undefined || prop === null) return defaultValue;
@@ -860,11 +872,26 @@ export class LeafletProvider implements MapProvider {
               for (const symbolizer of rule.symbolizers) {
                 switch (symbolizer.kind) {
                   case 'Fill':
-                    if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
-                      const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
-                      const fillOpacity = getValue(symbolizer.opacity, 0.3) as number;
-                      const outlineColor = getValue(symbolizer.outlineColor, 'rgba(0,100,255,1)') as string;
-                      const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+                    if (
+                      geometryType === 'Polygon' ||
+                      geometryType === 'MultiPolygon'
+                    ) {
+                      const fillColor = getValue(
+                        symbolizer.color,
+                        'rgba(0,100,255,0.3)',
+                      ) as string;
+                      const fillOpacity = getValue(
+                        symbolizer.opacity,
+                        0.3,
+                      ) as number;
+                      const outlineColor = getValue(
+                        symbolizer.outlineColor,
+                        'rgba(0,100,255,1)',
+                      ) as string;
+                      const outlineWidth = getValue(
+                        symbolizer.outlineWidth,
+                        1,
+                      ) as number;
 
                       leafletStyle = {
                         ...leafletStyle,
@@ -877,12 +904,17 @@ export class LeafletProvider implements MapProvider {
                     break;
 
                   case 'Line':
-                    const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const lineColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
                     const lineWidth = getValue(symbolizer.width, 2) as number;
                     const dashArray = symbolizer.dasharray
-                      ? (Array.isArray(symbolizer.dasharray)
-                          ? symbolizer.dasharray.map((v: any) => getValue(v, 0) as number).join(',')
-                          : undefined)
+                      ? Array.isArray(symbolizer.dasharray)
+                        ? symbolizer.dasharray
+                            .map((v: any) => getValue(v, 0) as number)
+                            .join(',')
+                        : undefined
                       : undefined;
 
                     leafletStyle = {
@@ -908,10 +940,19 @@ export class LeafletProvider implements MapProvider {
               for (const symbolizer of rule.symbolizers) {
                 switch (symbolizer.kind) {
                   case 'Mark':
-                    const markColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const markColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
                     const markRadius = getValue(symbolizer.radius, 6) as number;
-                    const strokeColor = getValue(symbolizer.strokeColor, 'rgba(0,100,255,1)') as string;
-                    const strokeWidth = getValue(symbolizer.strokeWidth, 2) as number;
+                    const strokeColor = getValue(
+                      symbolizer.strokeColor,
+                      'rgba(0,100,255,1)',
+                    ) as string;
+                    const strokeWidth = getValue(
+                      symbolizer.strokeWidth,
+                      2,
+                    ) as number;
 
                     return L.circleMarker(latlng, {
                       radius: markRadius,
@@ -922,7 +963,9 @@ export class LeafletProvider implements MapProvider {
                     });
 
                   case 'Icon':
-                    const iconSrc = getValue(symbolizer.image) as string | undefined;
+                    const iconSrc = getValue(symbolizer.image) as
+                      | string
+                      | undefined;
                     const iconSize = getValue(symbolizer.size, 32) as number;
 
                     if (iconSrc && typeof iconSrc === 'string') {
@@ -957,9 +1000,16 @@ export class LeafletProvider implements MapProvider {
               for (const symbolizer of rule.symbolizers) {
                 if (symbolizer.kind === 'Text') {
                   const labelProp = (symbolizer as any).label;
-                  if (labelProp && feature.properties && feature.properties[labelProp]) {
+                  if (
+                    labelProp &&
+                    feature.properties &&
+                    feature.properties[labelProp]
+                  ) {
                     const textContent = String(feature.properties[labelProp]);
-                    const textColor = getValue(symbolizer.color, '#000000') as string;
+                    const textColor = getValue(
+                      symbolizer.color,
+                      '#000000',
+                    ) as string;
                     const textSize = getValue(symbolizer.size, 12) as number;
 
                     const styledText = `<div style="color: ${textColor}; font-size: ${textSize}px; font-family: Arial, sans-serif;">${textContent}</div>`;
@@ -981,56 +1031,67 @@ export class LeafletProvider implements MapProvider {
     return options;
   }
 
-  private createLeafletStyle(style: any) {
-    return (feature: any) => {
+  private createLeafletStyle(style?: StyleConfig) {
+    return (feature: any): L.PathOptions => {
       const geometryType = feature.geometry?.type;
 
-      // Default colors
-      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
-      const fillOpacity = style.fillOpacity ?? 0.3;
-      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
-      const strokeOpacity = style.strokeOpacity ?? 1;
-      const strokeWidth = style.strokeWidth ?? 2;
+      const fillColor = style?.fillColor ?? 'rgba(0,100,255,0.3)';
+      const fillOpacity = style?.fillOpacity ?? 0.3;
+      const strokeColor = style?.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = style?.strokeOpacity ?? 1;
+      const strokeWidth = style?.strokeWidth ?? 2;
 
-      let leafletStyle: any = {};
-
-      // Polygon and LineString styling
       if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
-        leafletStyle = {
-          fillColor: fillColor,
-          fillOpacity: fillOpacity,
+        return {
+          fillColor,
+          fillOpacity,
           color: strokeColor,
           opacity: strokeOpacity,
           weight: strokeWidth,
-          dashArray: style.strokeDashArray ? style.strokeDashArray.join(',') : undefined,
-        };
-      } else if (geometryType === 'LineString' || geometryType === 'MultiLineString') {
-        leafletStyle = {
-          color: strokeColor,
-          opacity: strokeOpacity,
-          weight: strokeWidth,
-          dashArray: style.strokeDashArray ? style.strokeDashArray.join(',') : undefined,
+          dashArray: style?.strokeDashArray
+            ? style.strokeDashArray.join(',')
+            : undefined,
         };
       }
 
-      return leafletStyle;
+      if (geometryType === 'LineString' || geometryType === 'MultiLineString') {
+        return {
+          color: strokeColor,
+          opacity: strokeOpacity,
+          weight: strokeWidth,
+          dashArray: style?.strokeDashArray
+            ? style.strokeDashArray.join(',')
+            : undefined,
+        };
+      }
+
+      return {};
     };
   }
 
-  private createLeafletPoint(feature: any, latlng: L.LatLng, style: any): L.Layer {
-    // Apply conditional styling if styleFunction exists
-    let finalStyle = style;
-    if (style.styleFunction) {
-      const conditionalStyle = style.styleFunction(feature);
+  private createLeafletPoint(
+    feature: any,
+    latlng: L.LatLng,
+    style?: StyleConfig,
+  ): L.Layer {
+    let finalStyle: StyleConfig = { ...(style ?? {}) };
+    if (style?.styleFunction) {
+      const conditionalStyle = style.styleFunction(feature) as StyleConfig | undefined;
       if (conditionalStyle) {
-        finalStyle = { ...style, ...conditionalStyle };
+        finalStyle = {
+          ...style,
+          ...conditionalStyle,
+        };
       }
     }
 
-    if (finalStyle.iconUrl) {
+    if (finalStyle?.iconUrl) {
       // Create icon marker
       const iconSize = finalStyle.iconSize || [32, 32];
-      const iconAnchor = finalStyle.iconAnchor || [iconSize[0] / 2, iconSize[1]];
+      const iconAnchor = finalStyle.iconAnchor || [
+        iconSize[0] / 2,
+        iconSize[1],
+      ];
 
       const icon = L.icon({
         iconUrl: finalStyle.iconUrl,
@@ -1041,12 +1102,12 @@ export class LeafletProvider implements MapProvider {
       return L.marker(latlng, { icon });
     } else {
       // Create circle marker
-      const pointColor = finalStyle.pointColor ?? 'rgba(0,100,255,1)';
-      const pointOpacity = finalStyle.pointOpacity ?? 1;
-      const pointRadius = finalStyle.pointRadius ?? 6;
-      const strokeColor = finalStyle.strokeColor ?? 'rgba(0,100,255,1)';
-      const strokeOpacity = finalStyle.strokeOpacity ?? 1;
-      const strokeWidth = finalStyle.strokeWidth ?? 2;
+      const pointColor = finalStyle?.pointColor ?? 'rgba(0,100,255,1)';
+      const pointOpacity = finalStyle?.pointOpacity ?? 1;
+      const pointRadius = finalStyle?.pointRadius ?? 6;
+      const strokeColor = finalStyle?.strokeColor ?? 'rgba(0,100,255,1)';
+      const strokeOpacity = finalStyle?.strokeOpacity ?? 1;
+      const strokeWidth = finalStyle?.strokeWidth ?? 2;
 
       return L.circleMarker(latlng, {
         radius: pointRadius,
@@ -1059,12 +1120,20 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  private bindLeafletPopup(feature: any, layer: L.Layer, style: any): void {
-    // Text labeling via popup or tooltip
-    if (style.textProperty && feature.properties && feature.properties[style.textProperty]) {
+  private bindLeafletPopup(
+    feature: any,
+    layer: L.Layer,
+    style?: StyleConfig,
+  ): void {
+    // Text labeling via popup or tooltip - handle undefined style
+    if (
+      style?.textProperty &&
+      feature.properties &&
+      feature.properties[style.textProperty]
+    ) {
       const textContent = String(feature.properties[style.textProperty]);
-      const textColor = style.textColor ?? '#000000';
-      const textSize = style.textSize ?? 12;
+      const textColor = style?.textColor ?? '#000000';
+      const textSize = style?.textSize ?? 12;
 
       // Create styled text content
       const styledText = `<div style="color: ${textColor}; font-size: ${textSize}px; font-family: Arial, sans-serif;">${textContent}</div>`;

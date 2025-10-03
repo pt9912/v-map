@@ -483,28 +483,44 @@ export class LayerManager {
       },
       getOpacity: () => 1.0, //todo
       setOpacity: (value: number) => {
+        if ((layer as any).__vmapLockOpacity) return;
         layer.entities.values.forEach((entity: Entity) => {
           // Helper-Funktion zum Setzen der Opacity
           const setColorOpacity = (
             colorProperty: Property | Color | undefined,
             defaultColor: Color,
-          ) => {
-            if (!colorProperty) return defaultColor.withAlpha(value);
+          ): Property => {
+            const { Color: CesiumColor, JulianDate } = this.Cesium;
+            const applyAlpha = (color: Color | undefined) =>
+              CesiumColor.fromAlpha(
+                color ?? defaultColor,
+                value,
+                new CesiumColor(),
+              );
 
-            // Falls es ein Property-Objekt ist (z. B. ColorProperty, ConstantProperty)
-            if (colorProperty instanceof Cesium.Property) {
-              const currentColor =
-                colorProperty.getValue(new Cesium.JulianDate()) || defaultColor;
-              return currentColor.withAlpha(value);
+            if (!colorProperty) {
+              return new this.Cesium.ConstantProperty(applyAlpha(defaultColor));
             }
-            // Falls es ein Color-Objekt ist
-            else if (colorProperty instanceof Cesium.Color) {
-              return colorProperty.withAlpha(value);
+
+            const maybeProperty = colorProperty as any;
+            if (maybeProperty && typeof maybeProperty.getValue === 'function') {
+              const currentColor = maybeProperty.getValue(
+                this.viewer?.clock?.currentTime ?? new JulianDate(),
+                new CesiumColor(),
+              );
+              const nextColor = applyAlpha(currentColor);
+              if (typeof maybeProperty.setValue === 'function') {
+                maybeProperty.setValue(nextColor);
+                return maybeProperty;
+              }
+              return new this.Cesium.ConstantProperty(nextColor);
             }
-            // Fallback
-            else {
-              return defaultColor.withAlpha(value);
+
+            if (colorProperty instanceof this.Cesium.Color) {
+              return new this.Cesium.ConstantProperty(applyAlpha(colorProperty));
             }
+
+            return new this.Cesium.ConstantProperty(applyAlpha(defaultColor));
           };
 
           // Polygone

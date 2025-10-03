@@ -1,9 +1,19 @@
-import { Component, h, Element, Method, Prop, Watch, Listen } from '@stencil/core';
+import {
+  Component,
+  h,
+  Element,
+  Method,
+  Prop,
+  Watch,
+  Listen,
+} from '@stencil/core';
 import { LayerConfig } from 'src/components';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log, warn } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { Style } from 'geostyler-style';
+import { isGeoStylerStyle, StyleEvent } from '../../types/styling';
+import type { StyleConfig } from '../../types/styleconfig';
 
 const MSG_COMPONENT: string = 'v-map-layer-geojson - ';
 
@@ -176,10 +186,16 @@ export class VMapLayerGeoJSON {
     log(MSG_COMPONENT + 'onGeoJsonChanged');
     // hier deinen Layer aktualisieren
     if (oldValue !== newValue) {
+      let geojsonString: string = null;
+      if (typeof this.geojson === 'object') {
+        geojsonString = JSON.stringify(this.geojson);
+      } else if (typeof this.geojson === 'string') {
+        geojsonString = this.geojson;
+      }
       await this.helper?.updateLayer({
         type: 'geojson',
         data: {
-          geojson: JSON.stringify(this.geojson),
+          geojson: geojsonString,
         },
       });
       //     await this.helper.initLayer(() => this.createLayerConfig());
@@ -250,25 +266,22 @@ export class VMapLayerGeoJSON {
    * Listen for style events from v-map-style components
    */
   @Listen('styleReady', { target: 'document' })
-  async onStyleReady(event: CustomEvent<unknown>) {
-    const styleComponent = event.target as HTMLVMapStyleElement;
-    if (!this.isGeostylerFormat(styleComponent)) return;
-    if (this.isTargetedByStyle(styleComponent)) {
-      log(MSG_COMPONENT + 'Applying geostyler style');
-      this.appliedGeostylerStyle = event.detail as Style;
-      await this.updateLayerWithGeostylerStyle();
+  async onStyleReady(event: CustomEvent<StyleEvent>) {
+    if (isGeoStylerStyle(event.detail.style)) {
+      if (this.isTargetedByStyle(event.detail.layerIds)) {
+        log(MSG_COMPONENT + 'Applying geostyler style');
+        this.appliedGeostylerStyle = event.detail.style as Style;
+        await this.updateLayerWithGeostylerStyle();
+      }
     }
   }
 
   /**
    * Check if this layer is targeted by a style component
    */
-  private isTargetedByStyle(styleComponent: HTMLVMapStyleElement): boolean {
-    const layerTargets = styleComponent.layerTargets;
-    if (!layerTargets) return false;
-
-    const targets = layerTargets.split(',').map(id => id.trim());
-    return targets.includes(this.el.id) || targets.length === 0;
+  private isTargetedByStyle(layerIds?: string[]): boolean {
+    if (!layerIds) return false;
+    return layerIds.includes(this.el.id) || layerIds.length === 0;
   }
 
   private async applyExistingStyles() {
@@ -277,13 +290,17 @@ export class VMapLayerGeoJSON {
     ) as HTMLVMapStyleElement[];
 
     for (const styleComponent of styleComponents) {
-      if (!this.isGeostylerFormat(styleComponent)) continue;
-      if (!this.isTargetedByStyle(styleComponent)) continue;
-
       const style = styleComponent.getStyle
         ? await styleComponent.getStyle()
         : undefined;
       if (!style) continue;
+      if (!isGeoStylerStyle(style)) continue;
+
+      const layerTargetIds = styleComponent.getLayerTargetIds
+        ? await styleComponent.getLayerTargetIds()
+        : undefined;
+      if (!layerTargetIds) continue;
+      if (!this.isTargetedByStyle(layerTargetIds)) continue;
 
       log(MSG_COMPONENT + 'Applying existing geostyler style');
       this.appliedGeostylerStyle = style as Style;
@@ -291,15 +308,15 @@ export class VMapLayerGeoJSON {
     }
   }
 
-  private isGeostylerFormat(styleComponent: HTMLVMapStyleElement): boolean {
-    const format = styleComponent.format?.toLowerCase();
-    return (
-      format === 'sld' ||
-      format === 'mapbox-gl' ||
-      format === 'qgis' ||
-      format === 'lyrx'
-    );
-  }
+  // private isGeostylerFormat(styleComponent: HTMLVMapStyleElement): boolean {
+  //   const format = styleComponent.format?.toLowerCase();
+  //   return (
+  //     format === 'sld' ||
+  //     format === 'mapbox-gl' ||
+  //     format === 'qgis' ||
+  //     format === 'lyrx'
+  //   );
+  // }
 
   /**
    * Update the layer with the applied geostyler style
@@ -312,6 +329,7 @@ export class VMapLayerGeoJSON {
       data: {
         geojson: this.geojson,
         url: this.url,
+        geostylerStyle: this.appliedGeostylerStyle,
       },
     });
   }
@@ -379,33 +397,40 @@ export class VMapLayerGeoJSON {
           number,
         ])
       : undefined;
+    let geojsonString: string = null;
+    if (typeof this.geojson === 'object') {
+      geojsonString = JSON.stringify(this.geojson);
+    } else if (typeof this.geojson === 'string') {
+      geojsonString = this.geojson;
+    }
 
+    const style: StyleConfig = {
+      fillColor: this.fillColor,
+      fillOpacity: this.fillOpacity,
+      strokeColor: this.strokeColor,
+      strokeWidth: this.strokeWidth,
+      strokeOpacity: this.strokeOpacity,
+      pointRadius: this.pointRadius,
+      pointColor: this.pointColor,
+      iconUrl: this.iconUrl,
+      iconSize: iconSizeArray,
+      textProperty: this.textProperty,
+      textColor: this.textColor,
+      textSize: this.textSize,
+    };
     const config: LayerConfig = {
       type: 'geojson',
       opacity: this.opacity,
       visible: this.visible,
       zIndex: this.zIndex,
       url: this.url,
-      geojson: JSON.stringify(this.geojson),
-      style: {
-        fillColor: this.fillColor,
-        fillOpacity: this.fillOpacity,
-        strokeColor: this.strokeColor,
-        strokeWidth: this.strokeWidth,
-        strokeOpacity: this.strokeOpacity,
-        pointRadius: this.pointRadius,
-        pointColor: this.pointColor,
-        iconUrl: this.iconUrl,
-        iconSize: iconSizeArray,
-        textProperty: this.textProperty,
-        textColor: this.textColor,
-        textSize: this.textSize,
-      },
+      geojson: geojsonString,
+      style,
     };
 
     // Add geostyler style if available (takes precedence over component style props)
     if (this.appliedGeostylerStyle) {
-      (config as any).geostylerStyle = this.appliedGeostylerStyle;
+      config.geostylerStyle = this.appliedGeostylerStyle;
     }
 
     return config;

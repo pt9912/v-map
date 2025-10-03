@@ -12,6 +12,7 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
+import type { StyleConfig } from '../../types/styleconfig';
 import { log, error } from '../../utils/logger';
 import { injectOlCss } from './openlayers-helper';
 import { Style } from 'geostyler-style';
@@ -62,7 +63,7 @@ export class OpenLayersProvider implements MapProvider {
     const layer = await this._getLayerById(layerId);
     switch (update.type) {
       case 'geojson':
-        await this.updateGeoJSONLayer(layer, update.data);
+        await this.updateGeoJSONLayer(layer as VectorLayer, update.data);
         break;
       case 'osm':
         await this.updateOSMLayer(layer, update.data);
@@ -80,7 +81,7 @@ export class OpenLayersProvider implements MapProvider {
         await this.updateArcGISLayer(layer, update.data);
         break;
       case 'wkt':
-        await this.updateWKTLayer(layer, update.data);
+        await this.updateWKTLayer(layer as VectorLayer, update.data);
         break;
       case 'geotiff':
         await this.updateGeoTIFFLayer(layer, update.data);
@@ -337,7 +338,7 @@ export class OpenLayersProvider implements MapProvider {
     );
   }
 
-  private async updateGeoJSONLayer(layer: Layer, data: any) {
+  private async updateGeoJSONLayer(layer: VectorLayer, data: any) {
     let vectorSource: VectorSource = null;
     const geojsonOptions = {
       featureProjection: this.projection,
@@ -357,6 +358,20 @@ export class OpenLayersProvider implements MapProvider {
       });
     }
     layer.setSource(vectorSource);
+
+    let layerStyle;
+    if (data.geostylerStyle) {
+      layerStyle = await this.createGeostylerStyleFunction(data.geostylerStyle);
+    } else if (data.style) {
+      const styleFunction = async (feature: any) => {
+        const style = data.style || {};
+        return await this.createEnhancedStyleFunction(feature, style);
+      };
+      layerStyle = styleFunction;
+    }
+    if (layerStyle) {
+      layer.setStyle(layerStyle);
+    }
   }
 
   private async updateWFSLayer(layer: Layer, data: any) {
@@ -388,13 +403,123 @@ export class OpenLayersProvider implements MapProvider {
     }
 
     const sourceOptions: Record<string, any> = {
-      url: data?.url ?? currentSource?.getUrls?.()?.[0] ?? currentSource?.getUrl?.(),
+      url:
+        data?.url ??
+        currentSource?.getUrls?.()?.[0] ??
+        currentSource?.getUrl?.(),
       params,
       ...(data?.options ?? {}),
     };
 
     const arcgisSource = new TileArcGISRest(sourceOptions);
     (layer as any).setSource?.(arcgisSource);
+  }
+
+  private async createEnhancedStyleFunction(feature: any, style: StyleConfig) {
+    const [
+      { default: Style },
+      { default: Fill },
+      { default: Stroke },
+      { default: Circle },
+      { default: Icon },
+      { default: Text },
+    ] = await Promise.all([
+      import('ol/style/Style'),
+      import('ol/style/Fill'),
+      import('ol/style/Stroke'),
+      import('ol/style/Circle'),
+      import('ol/style/Icon'),
+      import('ol/style/Text'),
+    ]);
+    const styles = [];
+    const geometry = feature.getGeometry();
+    const geometryType = geometry.getType();
+
+    // Create fill style
+    const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+    const fillOpacity = style.fillOpacity ?? 0.3;
+    const fill = new Fill({
+      color: this.applyOpacity(fillColor, fillOpacity),
+    });
+
+    // Create stroke style
+    const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+    const strokeOpacity = style.strokeOpacity ?? 1;
+    const strokeWidth = style.strokeWidth ?? 2;
+    const stroke = new Stroke({
+      color: this.applyOpacity(strokeColor, strokeOpacity),
+      width: strokeWidth,
+      lineDash: style.strokeDashArray,
+    });
+
+    // Point styling
+    if (geometryType === 'Point') {
+      if (style.iconUrl) {
+        // Icon style for points
+        styles.push(
+          new Style({
+            image: new Icon({
+              src: style.iconUrl,
+              size: style.iconSize || [32, 32],
+              anchor: style.iconAnchor || [0.5, 1],
+            }),
+          }),
+        );
+      } else {
+        // Circle style for points
+        const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
+        const pointOpacity = style.pointOpacity ?? 1;
+        const pointRadius = style.pointRadius ?? 6;
+
+        styles.push(
+          new Style({
+            image: new Circle({
+              radius: pointRadius,
+              fill: new Fill({
+                color: this.applyOpacity(pointColor, pointOpacity),
+              }),
+              stroke: stroke,
+            }),
+          }),
+        );
+      }
+    } else {
+      // Polygon and line styling
+      styles.push(
+        new Style({
+          fill: geometryType.includes('Polygon') ? fill : undefined,
+          stroke: stroke,
+        }),
+      );
+    }
+
+    // Text labeling
+    if (style.textProperty && feature.get(style.textProperty)) {
+      const textColor = style.textColor ?? '#000000';
+      const textSize = style.textSize ?? 12;
+      const textHaloColor = style.textHaloColor;
+      const textHaloWidth = style.textHaloWidth ?? 2;
+      const textOffset = style.textOffset || [0, 0];
+
+      styles.push(
+        new Style({
+          text: new Text({
+            text: String(feature.get(style.textProperty)),
+            font: `${textSize}px Arial`,
+            fill: new Fill({ color: textColor }),
+            stroke: textHaloColor
+              ? new Stroke({
+                  color: textHaloColor,
+                  width: textHaloWidth,
+                })
+              : undefined,
+            offsetX: textOffset[0],
+            offsetY: textOffset[1],
+          }),
+        }),
+      );
+    }
+    return styles;
   }
 
   private async createGeoJSONLayer(
@@ -404,22 +529,10 @@ export class OpenLayersProvider implements MapProvider {
       { default: VectorLayer },
       { default: VectorSource },
       { default: GeoJSON },
-      { default: Style },
-      { default: Fill },
-      { default: Stroke },
-      { default: Circle },
-      { default: Icon },
-      { default: Text },
     ] = await Promise.all([
       import('ol/layer/Vector'),
       import('ol/source/Vector'),
       import('ol/format/GeoJSON'),
-      import('ol/style/Style'),
-      import('ol/style/Fill'),
-      import('ol/style/Stroke'),
-      import('ol/style/Circle'),
-      import('ol/style/Icon'),
-      import('ol/style/Text'),
     ]);
 
     let vectorSource: VectorSource = null;
@@ -438,110 +551,115 @@ export class OpenLayersProvider implements MapProvider {
       });
     }
 
-    // Create enhanced style function
-    const styleFunction = (feature: any) => {
-      const styles = [];
-      const geometry = feature.getGeometry();
-      const geometryType = geometry.getType();
+    // // Create enhanced style function
+    // const styleFunction = (feature: any) => {
+    //   const styles = [];
+    //   const geometry = feature.getGeometry();
+    //   const geometryType = geometry.getType();
 
-      // Base style configuration
-      const style = config.style || {};
+    //   // Base style configuration
+    //   const style = config.style || {};
 
-      // Create fill style
-      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
-      const fillOpacity = style.fillOpacity ?? 0.3;
-      const fill = new Fill({
-        color: this.applyOpacity(fillColor, fillOpacity),
-      });
+    //   // Create fill style
+    //   const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+    //   const fillOpacity = style.fillOpacity ?? 0.3;
+    //   const fill = new Fill({
+    //     color: this.applyOpacity(fillColor, fillOpacity),
+    //   });
 
-      // Create stroke style
-      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
-      const strokeOpacity = style.strokeOpacity ?? 1;
-      const strokeWidth = style.strokeWidth ?? 2;
-      const stroke = new Stroke({
-        color: this.applyOpacity(strokeColor, strokeOpacity),
-        width: strokeWidth,
-        lineDash: style.strokeDashArray,
-      });
+    //   // Create stroke style
+    //   const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+    //   const strokeOpacity = style.strokeOpacity ?? 1;
+    //   const strokeWidth = style.strokeWidth ?? 2;
+    //   const stroke = new Stroke({
+    //     color: this.applyOpacity(strokeColor, strokeOpacity),
+    //     width: strokeWidth,
+    //     lineDash: style.strokeDashArray,
+    //   });
 
-      // Point styling
-      if (geometryType === 'Point') {
-        if (style.iconUrl) {
-          // Icon style for points
-          styles.push(
-            new Style({
-              image: new Icon({
-                src: style.iconUrl,
-                size: style.iconSize || [32, 32],
-                anchor: style.iconAnchor || [0.5, 1],
-              }),
-            }),
-          );
-        } else {
-          // Circle style for points
-          const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
-          const pointOpacity = style.pointOpacity ?? 1;
-          const pointRadius = style.pointRadius ?? 6;
+    //   // Point styling
+    //   if (geometryType === 'Point') {
+    //     if (style.iconUrl) {
+    //       // Icon style for points
+    //       styles.push(
+    //         new Style({
+    //           image: new Icon({
+    //             src: style.iconUrl,
+    //             size: style.iconSize || [32, 32],
+    //             anchor: style.iconAnchor || [0.5, 1],
+    //           }),
+    //         }),
+    //       );
+    //     } else {
+    //       // Circle style for points
+    //       const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
+    //       const pointOpacity = style.pointOpacity ?? 1;
+    //       const pointRadius = style.pointRadius ?? 6;
 
-          styles.push(
-            new Style({
-              image: new Circle({
-                radius: pointRadius,
-                fill: new Fill({
-                  color: this.applyOpacity(pointColor, pointOpacity),
-                }),
-                stroke: stroke,
-              }),
-            }),
-          );
-        }
-      } else {
-        // Polygon and line styling
-        styles.push(
-          new Style({
-            fill: geometryType.includes('Polygon') ? fill : undefined,
-            stroke: stroke,
-          }),
-        );
-      }
+    //       styles.push(
+    //         new Style({
+    //           image: new Circle({
+    //             radius: pointRadius,
+    //             fill: new Fill({
+    //               color: this.applyOpacity(pointColor, pointOpacity),
+    //             }),
+    //             stroke: stroke,
+    //           }),
+    //         }),
+    //       );
+    //     }
+    //   } else {
+    //     // Polygon and line styling
+    //     styles.push(
+    //       new Style({
+    //         fill: geometryType.includes('Polygon') ? fill : undefined,
+    //         stroke: stroke,
+    //       }),
+    //     );
+    //   }
 
-      // Text labeling
-      if (style.textProperty && feature.get(style.textProperty)) {
-        const textColor = style.textColor ?? '#000000';
-        const textSize = style.textSize ?? 12;
-        const textHaloColor = style.textHaloColor;
-        const textHaloWidth = style.textHaloWidth ?? 2;
-        const textOffset = style.textOffset || [0, 0];
+    //   // Text labeling
+    //   if (style.textProperty && feature.get(style.textProperty)) {
+    //     const textColor = style.textColor ?? '#000000';
+    //     const textSize = style.textSize ?? 12;
+    //     const textHaloColor = style.textHaloColor;
+    //     const textHaloWidth = style.textHaloWidth ?? 2;
+    //     const textOffset = style.textOffset || [0, 0];
 
-        styles.push(
-          new Style({
-            text: new Text({
-              text: String(feature.get(style.textProperty)),
-              font: `${textSize}px Arial`,
-              fill: new Fill({ color: textColor }),
-              stroke: textHaloColor
-                ? new Stroke({
-                    color: textHaloColor,
-                    width: textHaloWidth,
-                  })
-                : undefined,
-              offsetX: textOffset[0],
-              offsetY: textOffset[1],
-            }),
-          }),
-        );
-      }
+    //     styles.push(
+    //       new Style({
+    //         text: new Text({
+    //           text: String(feature.get(style.textProperty)),
+    //           font: `${textSize}px Arial`,
+    //           fill: new Fill({ color: textColor }),
+    //           stroke: textHaloColor
+    //             ? new Stroke({
+    //                 color: textHaloColor,
+    //                 width: textHaloWidth,
+    //               })
+    //             : undefined,
+    //           offsetX: textOffset[0],
+    //           offsetY: textOffset[1],
+    //         }),
+    //       }),
+    //     );
+    //   }
 
-      return styles;
-    };
+    //   return styles;
+    // };
 
     // Use geostyler style if available, otherwise use default style function
     let layerStyle;
-    if ((config as any).geostylerStyle) {
+    if (config.geostylerStyle) {
       layerStyle = await this.createGeostylerStyleFunction(
-        (config as any).geostylerStyle,
+        config.geostylerStyle,
       );
     } else if (config.style) {
+      // Create enhanced style function
+      const styleFunction = async (feature: any) => {
+        const style = config.style || {};
+        return await this.createEnhancedStyleFunction(feature, style);
+      };
       layerStyle = styleFunction;
     }
 
@@ -640,9 +758,17 @@ export class OpenLayersProvider implements MapProvider {
               switch (symbolizer.kind) {
                 case 'Fill':
                   if (geometryType.includes('Polygon')) {
-                    const fillColor = getValue(symbolizer.color, 'rgba(0,100,255,0.3)') as string;
-                    const outlineColor = getValue(symbolizer.outlineColor) as string | undefined;
-                    const outlineWidth = getValue(symbolizer.outlineWidth, 1) as number;
+                    const fillColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,0.3)',
+                    ) as string;
+                    const outlineColor = getValue(symbolizer.outlineColor) as
+                      | string
+                      | undefined;
+                    const outlineWidth = getValue(
+                      symbolizer.outlineWidth,
+                      1,
+                    ) as number;
 
                     styles.push(
                       new Style({
@@ -662,12 +788,17 @@ export class OpenLayersProvider implements MapProvider {
 
                 case 'Line':
                   {
-                    const lineColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const lineColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
                     const lineWidth = getValue(symbolizer.width, 1) as number;
                     const dashArray = symbolizer.dasharray
-                      ? (Array.isArray(symbolizer.dasharray)
-                          ? symbolizer.dasharray.map(v => getValue(v, 0) as number)
-                          : undefined)
+                      ? Array.isArray(symbolizer.dasharray)
+                        ? symbolizer.dasharray.map(
+                            v => getValue(v, 0) as number,
+                          )
+                        : undefined
                       : undefined;
 
                     styles.push(
@@ -684,10 +815,18 @@ export class OpenLayersProvider implements MapProvider {
 
                 case 'Mark':
                   if (geometryType === 'Point') {
-                    const markColor = getValue(symbolizer.color, 'rgba(0,100,255,1)') as string;
+                    const markColor = getValue(
+                      symbolizer.color,
+                      'rgba(0,100,255,1)',
+                    ) as string;
                     const markRadius = getValue(symbolizer.radius, 6) as number;
-                    const strokeColor = getValue(symbolizer.strokeColor) as string | undefined;
-                    const strokeWidth = getValue(symbolizer.strokeWidth, 1) as number;
+                    const strokeColor = getValue(symbolizer.strokeColor) as
+                      | string
+                      | undefined;
+                    const strokeWidth = getValue(
+                      symbolizer.strokeWidth,
+                      1,
+                    ) as number;
 
                     styles.push(
                       new Style({
@@ -710,9 +849,14 @@ export class OpenLayersProvider implements MapProvider {
 
                 case 'Icon':
                   if (geometryType === 'Point') {
-                    const iconSrc = getValue(symbolizer.image) as string | undefined;
+                    const iconSrc = getValue(symbolizer.image) as
+                      | string
+                      | undefined;
                     const iconSize = getValue(symbolizer.size, 32) as number;
-                    const iconOpacity = getValue(symbolizer.opacity, 1) as number;
+                    const iconOpacity = getValue(
+                      symbolizer.opacity,
+                      1,
+                    ) as number;
 
                     if (iconSrc && typeof iconSrc === 'string') {
                       styles.push(
@@ -732,14 +876,31 @@ export class OpenLayersProvider implements MapProvider {
                   {
                     const labelProp = (symbolizer as any).label;
                     if (labelProp && feature.get(labelProp)) {
-                      const textColor = getValue(symbolizer.color, '#000000') as string;
+                      const textColor = getValue(
+                        symbolizer.color,
+                        '#000000',
+                      ) as string;
                       const textSize = getValue(symbolizer.size, 12) as number;
-                      const textFont = getValue((symbolizer as any).font, 'Arial') as string;
-                      const haloColor = getValue((symbolizer as any).haloColor) as string | undefined;
-                      const haloWidth = getValue((symbolizer as any).haloWidth, 1) as number;
+                      const textFont = getValue(
+                        (symbolizer as any).font,
+                        'Arial',
+                      ) as string;
+                      const haloColor = getValue(
+                        (symbolizer as any).haloColor,
+                      ) as string | undefined;
+                      const haloWidth = getValue(
+                        (symbolizer as any).haloWidth,
+                        1,
+                      ) as number;
                       const offset = (symbolizer as any).offset;
-                      const offsetX = offset && Array.isArray(offset) ? getValue(offset[0], 0) as number : 0;
-                      const offsetY = offset && Array.isArray(offset) ? getValue(offset[1], 0) as number : 0;
+                      const offsetX =
+                        offset && Array.isArray(offset)
+                          ? (getValue(offset[0], 0) as number)
+                          : 0;
+                      const offsetY =
+                        offset && Array.isArray(offset)
+                          ? (getValue(offset[1], 0) as number)
+                          : 0;
 
                       styles.push(
                         new Style({
@@ -1002,7 +1163,7 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
-  private async updateWKTLayer(layer: Layer, data: any): Promise<void> {
+  private async updateWKTLayer(layer: VectorLayer, data: any): Promise<void> {
     const [{ default: VectorSource }, { default: WKT }] = await Promise.all([
       import('ol/source/Vector'),
       import('ol/format/WKT'),
@@ -1011,10 +1172,14 @@ export class OpenLayersProvider implements MapProvider {
     const wktFormat = new WKT();
     let vectorSource: VectorSource = null;
 
+    // Get the view's projection to ensure correct coordinate transformation
+    const viewProjection = this.map?.getView()?.getProjection();
+
     if (data.wkt) {
       // Parse WKT string directly
       const feature = wktFormat.readFeature(data.wkt, {
-        featureProjection: this.projection,
+        dataProjection: 'EPSG:4326',
+        featureProjection: viewProjection,
       });
       vectorSource = new VectorSource({
         features: [feature],
@@ -1026,7 +1191,8 @@ export class OpenLayersProvider implements MapProvider {
         throw new Error(`Failed to fetch WKT: ${response.status}`);
       const wktText = await response.text();
       const feature = wktFormat.readFeature(wktText, {
-        featureProjection: this.projection,
+        dataProjection: 'EPSG:4326',
+        featureProjection: viewProjection,
       });
       vectorSource = new VectorSource({
         features: [feature],
@@ -1034,7 +1200,21 @@ export class OpenLayersProvider implements MapProvider {
     }
 
     if (vectorSource) {
-      (layer as VectorLayer).setSource(vectorSource);
+      layer.setSource(vectorSource);
+    }
+
+    let layerStyle;
+    if (data.geostylerStyle) {
+      layerStyle = await this.createGeostylerStyleFunction(data.geostylerStyle);
+    } else if (data.style) {
+      const styleFunction = async (feature: any) => {
+        const style = data.style || {};
+        return await this.createEnhancedStyleFunction(feature, style);
+      };
+      layerStyle = styleFunction;
+    }
+    if (layerStyle) {
+      layer.setStyle(layerStyle);
     }
   }
 
@@ -1045,35 +1225,25 @@ export class OpenLayersProvider implements MapProvider {
       { default: VectorLayer },
       { default: VectorSource },
       { default: WKT },
-      { default: Style },
-      { default: Fill },
-      { default: Stroke },
-      { default: Circle },
-      { default: Icon },
-      { default: Text },
     ] = await Promise.all([
       import('ol/layer/Vector'),
       import('ol/source/Vector'),
       import('ol/format/WKT'),
-      import('ol/style/Style'),
-      import('ol/style/Fill'),
-      import('ol/style/Stroke'),
-      import('ol/style/Circle'),
-      import('ol/style/Icon'),
-      import('ol/style/Text'),
     ]);
 
     const wktFormat = new WKT();
     let vectorSource: VectorSource = null;
 
-    const wktOptions = {
-      featureProjection: this.projection,
-    };
+    // Get the view's projection to ensure correct coordinate transformation
+    const viewProjection = this.map?.getView()?.getProjection();
 
     if (config.wkt) {
       // Parse WKT string directly
       try {
-        const feature = wktFormat.readFeature(config.wkt, wktOptions);
+        const feature = wktFormat.readFeature(config.wkt, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: viewProjection,
+        });
         vectorSource = new VectorSource({
           features: [feature],
         });
@@ -1088,7 +1258,10 @@ export class OpenLayersProvider implements MapProvider {
         if (!response.ok)
           throw new Error(`Failed to fetch WKT: ${response.status}`);
         const wktText = await response.text();
-        const feature = wktFormat.readFeature(wktText, wktOptions);
+        const feature = wktFormat.readFeature(wktText, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: viewProjection,
+        });
         vectorSource = new VectorSource({
           features: [feature],
         });
@@ -1100,110 +1273,115 @@ export class OpenLayersProvider implements MapProvider {
       vectorSource = new VectorSource({ features: [] });
     }
 
-    // Create enhanced style function (reuse the same logic as GeoJSON)
-    const styleFunction = (feature: any) => {
-      const styles = [];
-      const geometry = feature.getGeometry();
-      const geometryType = geometry.getType();
+    // // Create enhanced style function (reuse the same logic as GeoJSON)
+    // const styleFunction = (feature: any) => {
+    //   const styles = [];
+    //   const geometry = feature.getGeometry();
+    //   const geometryType = geometry.getType();
 
-      // Base style configuration
-      const style = config.style || {};
+    //   // Base style configuration
+    //   const style = config.style || {};
 
-      // Create fill style
-      const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
-      const fillOpacity = style.fillOpacity ?? 0.3;
-      const fill = new Fill({
-        color: this.applyOpacity(fillColor, fillOpacity),
-      });
+    //   // Create fill style
+    //   const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
+    //   const fillOpacity = style.fillOpacity ?? 0.3;
+    //   const fill = new Fill({
+    //     color: this.applyOpacity(fillColor, fillOpacity),
+    //   });
 
-      // Create stroke style
-      const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
-      const strokeOpacity = style.strokeOpacity ?? 1;
-      const strokeWidth = style.strokeWidth ?? 2;
-      const stroke = new Stroke({
-        color: this.applyOpacity(strokeColor, strokeOpacity),
-        width: strokeWidth,
-        lineDash: style.strokeDashArray,
-      });
+    //   // Create stroke style
+    //   const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
+    //   const strokeOpacity = style.strokeOpacity ?? 1;
+    //   const strokeWidth = style.strokeWidth ?? 2;
+    //   const stroke = new Stroke({
+    //     color: this.applyOpacity(strokeColor, strokeOpacity),
+    //     width: strokeWidth,
+    //     lineDash: style.strokeDashArray,
+    //   });
 
-      // Point styling
-      if (geometryType === 'Point') {
-        if (style.iconUrl) {
-          // Icon style for points
-          styles.push(
-            new Style({
-              image: new Icon({
-                src: style.iconUrl,
-                size: style.iconSize || [32, 32],
-                anchor: style.iconAnchor || [0.5, 1],
-              }),
-            }),
-          );
-        } else {
-          // Circle style for points
-          const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
-          const pointOpacity = style.pointOpacity ?? 1;
-          const pointRadius = style.pointRadius ?? 6;
+    //   // Point styling
+    //   if (geometryType === 'Point') {
+    //     if (style.iconUrl) {
+    //       // Icon style for points
+    //       styles.push(
+    //         new Style({
+    //           image: new Icon({
+    //             src: style.iconUrl,
+    //             size: style.iconSize || [32, 32],
+    //             anchor: style.iconAnchor || [0.5, 1],
+    //           }),
+    //         }),
+    //       );
+    //     } else {
+    //       // Circle style for points
+    //       const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
+    //       const pointOpacity = style.pointOpacity ?? 1;
+    //       const pointRadius = style.pointRadius ?? 6;
 
-          styles.push(
-            new Style({
-              image: new Circle({
-                radius: pointRadius,
-                fill: new Fill({
-                  color: this.applyOpacity(pointColor, pointOpacity),
-                }),
-                stroke: stroke,
-              }),
-            }),
-          );
-        }
-      } else {
-        // Polygon and line styling
-        styles.push(
-          new Style({
-            fill: geometryType.includes('Polygon') ? fill : undefined,
-            stroke: stroke,
-          }),
-        );
-      }
+    //       styles.push(
+    //         new Style({
+    //           image: new Circle({
+    //             radius: pointRadius,
+    //             fill: new Fill({
+    //               color: this.applyOpacity(pointColor, pointOpacity),
+    //             }),
+    //             stroke: stroke,
+    //           }),
+    //         }),
+    //       );
+    //     }
+    //   } else {
+    //     // Polygon and line styling
+    //     styles.push(
+    //       new Style({
+    //         fill: geometryType.includes('Polygon') ? fill : undefined,
+    //         stroke: stroke,
+    //       }),
+    //     );
+    //   }
 
-      // Text labeling
-      if (style.textProperty && feature.get(style.textProperty)) {
-        const textColor = style.textColor ?? '#000000';
-        const textSize = style.textSize ?? 12;
-        const textHaloColor = style.textHaloColor;
-        const textHaloWidth = style.textHaloWidth ?? 2;
-        const textOffset = style.textOffset || [0, 0];
+    //   // Text labeling
+    //   if (style.textProperty && feature.get(style.textProperty)) {
+    //     const textColor = style.textColor ?? '#000000';
+    //     const textSize = style.textSize ?? 12;
+    //     const textHaloColor = style.textHaloColor;
+    //     const textHaloWidth = style.textHaloWidth ?? 2;
+    //     const textOffset = style.textOffset || [0, 0];
 
-        styles.push(
-          new Style({
-            text: new Text({
-              text: String(feature.get(style.textProperty)),
-              font: `${textSize}px Arial`,
-              fill: new Fill({ color: textColor }),
-              stroke: textHaloColor
-                ? new Stroke({
-                    color: textHaloColor,
-                    width: textHaloWidth,
-                  })
-                : undefined,
-              offsetX: textOffset[0],
-              offsetY: textOffset[1],
-            }),
-          }),
-        );
-      }
+    //     styles.push(
+    //       new Style({
+    //         text: new Text({
+    //           text: String(feature.get(style.textProperty)),
+    //           font: `${textSize}px Arial`,
+    //           fill: new Fill({ color: textColor }),
+    //           stroke: textHaloColor
+    //             ? new Stroke({
+    //                 color: textHaloColor,
+    //                 width: textHaloWidth,
+    //               })
+    //             : undefined,
+    //           offsetX: textOffset[0],
+    //           offsetY: textOffset[1],
+    //         }),
+    //       }),
+    //     );
+    //   }
 
-      return styles;
-    };
+    //   return styles;
+    // };
 
     // Use geostyler style if available, otherwise use default style function
     let layerStyle;
-    if ((config as any).geostylerStyle) {
+    if (config.geostylerStyle) {
       layerStyle = await this.createGeostylerStyleFunction(
-        (config as any).geostylerStyle,
+        config.geostylerStyle,
       );
     } else if (config.style) {
+      // Create enhanced style function
+      const styleFunction = async (feature: any) => {
+        const style = config.style || {};
+        return await this.createEnhancedStyleFunction(feature, style);
+      };
       layerStyle = styleFunction;
     }
 
@@ -1289,11 +1467,12 @@ export class OpenLayersProvider implements MapProvider {
     return await response.json();
   }
 
-  private async createVectorSourceFromGeoJSON(geojson: any): Promise<VectorSource> {
-    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all([
-      import('ol/source/Vector'),
-      import('ol/format/GeoJSON'),
-    ]);
+  private async createVectorSourceFromGeoJSON(
+    geojson: any,
+  ): Promise<VectorSource> {
+    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all(
+      [import('ol/source/Vector'), import('ol/format/GeoJSON')],
+    );
 
     const format = new GeoJSON({ featureProjection: this.projection });
     return new VectorSource({
@@ -1301,11 +1480,7 @@ export class OpenLayersProvider implements MapProvider {
     });
   }
 
-  private mergeLayerConfig(
-    layer: Layer,
-    key: string,
-    data: any,
-  ) {
+  private mergeLayerConfig(layer: Layer, key: string, data: any) {
     const previous = (layer as any).get?.(key) ?? {};
     const merged = { ...previous, ...data };
     (layer as any).set?.(key, merged, false);
@@ -1326,12 +1501,8 @@ export class OpenLayersProvider implements MapProvider {
     return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
   }
 
-  private async createWcsSource(
-    config: Extract<LayerConfig, { type: 'wcs' }>,
-  ) {
-    const [
-      { default: ImageWMS },
-    ] = await Promise.all([
+  private async createWcsSource(config: Extract<LayerConfig, { type: 'wcs' }>) {
+    const [{ default: ImageWMS }] = await Promise.all([
       import('ol/source/ImageWMS'),
     ]);
 

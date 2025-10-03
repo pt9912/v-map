@@ -18,13 +18,13 @@ import { Style } from 'geostyler-style';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import {
-  StyleFormat,
-  Cesium3DTilesStyle,
+  type StyleFormat,
+  type Cesium3DTileStyle,
+  type ResolvedStyle,
+  StyleEvent,
 } from '../../types/styling';
 
 const MSG_COMPONENT = 'v-map-style';
-
-export type ResolvedStyle = Style | Cesium3DTilesStyle;
 
 @Component({
   tag: 'v-map-style',
@@ -63,7 +63,7 @@ export class VMapStyle {
   /**
    * Fired when style is successfully parsed and ready to apply.
    */
-  @Event() styleReady!: EventEmitter<ResolvedStyle>;
+  @Event() styleReady!: EventEmitter<StyleEvent>;
 
   /**
    * Fired when style parsing fails.
@@ -126,7 +126,11 @@ export class VMapStyle {
       const style = await this.parseStyle(styleContent);
 
       this.parsedStyle = style;
-      this.styleReady.emit(style);
+      const styleEvent: StyleEvent = {
+        style,
+        layerIds: this.getLayerTargets(),
+      };
+      this.styleReady.emit(styleEvent);
 
       log(MSG_COMPONENT + ' - Style successfully parsed', style);
       return style;
@@ -191,7 +195,9 @@ export class VMapStyle {
 
       return style;
     } catch (error) {
-      throw new Error(`Mapbox GL Style parsing failed: ${error?.message || error}`);
+      throw new Error(
+        `Mapbox GL Style parsing failed: ${error?.message || error}`,
+      );
     }
   }
 
@@ -245,7 +251,7 @@ export class VMapStyle {
 
   private async parseCesium3DTiles(
     jsonContent: string,
-  ): Promise<Cesium3DTilesStyle> {
+  ): Promise<Cesium3DTileStyle> {
     try {
       const style = JSON.parse(jsonContent);
 
@@ -253,10 +259,20 @@ export class VMapStyle {
         throw new Error('Parsed Cesium 3D Tiles style is not a valid object');
       }
 
-      return style as Cesium3DTilesStyle;
+      return style as Cesium3DTileStyle;
     } catch (error) {
-      throw new Error(`Cesium 3D Tiles style parsing failed: ${error?.message || error}`);
+      throw new Error(
+        `Cesium 3D Tiles style parsing failed: ${error?.message || error}`,
+      );
     }
+  }
+
+  /**
+   * Get the target layer IDs as array. async
+   */
+  @Method()
+  async getLayerTargetIds(): Promise<string[]> {
+    return this.getLayerTargets();
   }
 
   /**

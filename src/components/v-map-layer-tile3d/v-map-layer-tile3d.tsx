@@ -16,10 +16,10 @@ import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log, warn } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { VMapEvents } from '../../utils/events';
+import { type Cesium3DTileStyle } from '../../types/styling';
+import { isGeoStylerStyle, StyleEvent } from '../../types/styling';
 
 const MSG_COMPONENT = 'v-map-layer-tile3d - ';
-
-export type Cesium3DTileStyle = Record<string, unknown>;
 
 @Component({
   tag: 'v-map-layer-tile3d',
@@ -134,22 +134,36 @@ export class VMapLayerTile3d {
     await this.helper?.setZIndex(this.zIndex);
   }
 
+  /**
+   * Listen for style events from v-map-style components
+   */
   @Listen('styleReady', { target: 'document' })
-  async onStyleReady(event: CustomEvent<unknown>) {
-    const styleComponent = event.target as HTMLVMapStyleElement;
-    if (!this.isCesiumStyle(styleComponent)) return;
-    if (!this.isTargetedByStyle(styleComponent)) return;
-
-    const style = styleComponent.getStyle
-      ? await styleComponent.getStyle()
-      : event.detail;
-
-    if (!style || typeof style !== 'object') return;
+  async onStyleReady(event: CustomEvent<StyleEvent>) {
+    const { style, layerIds } = event.detail;
+    if (!style || isGeoStylerStyle(style)) return;
+    if (!this.isTargetedByStyle(layerIds)) return;
 
     log(MSG_COMPONENT + 'Applying Cesium 3D Tiles style');
     this.appliedCesiumStyle = style as Cesium3DTileStyle;
     await this.updateLayerWithCesiumStyle();
   }
+
+  // @Listen('styleReady', { target: 'document' })
+  // async onStyleReady(event: CustomEvent<unknown>) {
+  //   const styleComponent = event.target as HTMLVMapStyleElement;
+  //   if (!this.isCesiumStyle(styleComponent)) return;
+  //   if (!this.isTargetedByStyle(styleComponent)) return;
+
+  //   const style = styleComponent.getStyle
+  //     ? await styleComponent.getStyle()
+  //     : event.detail;
+
+  //   if (!style || typeof style !== 'object') return;
+
+  //   log(MSG_COMPONENT + 'Applying Cesium 3D Tiles style');
+  //   this.appliedCesiumStyle = style as Cesium3DTileStyle;
+  //   await this.updateLayerWithCesiumStyle();
+  // }
 
   private async applyExistingStyles() {
     const styleComponents = Array.from(
@@ -157,13 +171,17 @@ export class VMapLayerTile3d {
     ) as HTMLVMapStyleElement[];
 
     for (const styleComponent of styleComponents) {
-      if (!this.isCesiumStyle(styleComponent)) continue;
-      if (!this.isTargetedByStyle(styleComponent)) continue;
-
       const style = styleComponent.getStyle
         ? await styleComponent.getStyle()
         : undefined;
-      if (!style || typeof style !== 'object') continue;
+      if (!style) continue;
+      if (isGeoStylerStyle(style)) continue;
+
+      const layerTargetIds = styleComponent.getLayerTargetIds
+        ? await styleComponent.getLayerTargetIds()
+        : undefined;
+      if (!layerTargetIds) continue;
+      if (!this.isTargetedByStyle(layerTargetIds)) continue;
 
       log(MSG_COMPONENT + 'Applying existing Cesium 3D Tiles style');
       this.appliedCesiumStyle = style as Cesium3DTileStyle;
@@ -171,16 +189,12 @@ export class VMapLayerTile3d {
     }
   }
 
-  private isTargetedByStyle(styleComponent: HTMLVMapStyleElement): boolean {
-    const layerTargets = styleComponent.layerTargets;
-    if (!layerTargets) return false;
-
-    const targets = layerTargets.split(',').map(id => id.trim());
-    return targets.includes(this.el.id) || targets.length === 0;
-  }
-
-  private isCesiumStyle(styleComponent: HTMLVMapStyleElement): boolean {
-    return styleComponent.format?.toLowerCase() === 'cesium-3d-tiles';
+  /**
+   * Check if this layer is targeted by a style component
+   */
+  private isTargetedByStyle(layerIds?: string[]): boolean {
+    if (!layerIds) return false;
+    return layerIds.includes(this.el.id) || layerIds.length === 0;
   }
 
   private async updateLayerWithCesiumStyle() {

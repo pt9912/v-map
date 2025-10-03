@@ -1,14 +1,21 @@
 import { Style } from 'geostyler-style';
 
-export type Cesium3DTilesStyle = Record<string, unknown>;
+export type Cesium3DTileStyle = Record<string, unknown>;
 
-export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cesium-3d-tiles';
+export type StyleFormat =
+  | 'sld'
+  | 'mapbox-gl'
+  | 'qgis'
+  | 'lyrx'
+  | 'cesium-3d-tiles';
 
-export interface StyleConfig {
-  format: StyleFormat;
-  source: string;
-  layerTargets?: string[];
-}
+export type ResolvedStyle = Style | Cesium3DTileStyle;
+
+// export interface StyleConfig {
+//   format: StyleFormat;
+//   source: string;
+//   layerTargets?: string[];
+// }
 
 export interface StyleApplyOptions {
   /**
@@ -28,17 +35,40 @@ export interface StyleApplyOptions {
   priority?: number;
 }
 
-export interface ParsedStyleInfo {
-  style: Style | Cesium3DTilesStyle;
-  format: StyleFormat;
-  source: string;
-  appliedLayers: string[];
-  timestamp: number;
+// export interface ParsedStyleInfo {
+//   style: ResolvedStyle;
+//   format: StyleFormat;
+//   source: string;
+//   appliedLayers: string[];
+//   timestamp: number;
+// }
+
+// export interface StyleEvent {
+//   type: 'load' | 'apply' | 'error' | 'remove';
+//   style?: ResolvedStyle;
+//   error?: Error;
+//   layerIds?: string[];
+// }
+
+export type StyleEvent = {
+  style?: ResolvedStyle;
+  layerIds?: string[];
+};
+
+function isArrayLike(val: unknown): val is { length: number } {
+  return (
+    val != null &&
+    typeof (val as any).length === 'number' &&
+    (Array.isArray(val) || typeof (val as any)[0] !== 'undefined')
+  );
 }
 
-export interface StyleEvent {
-  type: 'load' | 'apply' | 'error' | 'remove';
-  style?: Style | Cesium3DTilesStyle;
-  error?: Error;
-  layerIds?: string[];
+export function isGeoStylerStyle(obj: unknown): obj is Style {
+  // Schnell‑Abbruch, wenn kein Objekt vorliegt
+  if (typeof obj !== 'object' || obj === null) return false;
+
+  const u = obj as Style;
+
+  // Pflichtfelder prüfen
+  return typeof u.name === 'string' && isArrayLike(u.rules);
 }

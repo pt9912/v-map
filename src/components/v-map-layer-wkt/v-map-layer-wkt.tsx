@@ -1,5 +1,14 @@
 // src/components/v-map-layer-wkt/v-map-layer-wkt.tsx
-import { Component, Prop, Element, Event, EventEmitter, Watch, Method, Listen } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  Element,
+  Event,
+  EventEmitter,
+  Watch,
+  Method,
+  Listen,
+} from '@stencil/core';
 
 import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
@@ -8,6 +17,8 @@ import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { Style } from 'geostyler-style';
+import { isGeoStylerStyle, StyleEvent } from '../../types/styling';
+import type { StyleConfig } from '../../types/styleconfig';
 
 const MSG_COMPONENT: string = 'v-map-layer-wkt - ';
 
@@ -204,25 +215,22 @@ export class VMapLayerWkt implements VMapLayer {
    * Listen for style events from v-map-style components
    */
   @Listen('styleReady', { target: 'document' })
-  async onStyleReady(event: CustomEvent<unknown>) {
-    const styleComponent = event.target as HTMLVMapStyleElement;
-    if (!this.isGeostylerFormat(styleComponent)) return;
-    if (this.isTargetedByStyle(styleComponent)) {
-      log(MSG_COMPONENT + 'Applying geostyler style');
-      this.appliedGeostylerStyle = event.detail as Style;
-      await this.updateLayerWithGeostylerStyle();
+  async onStyleReady(event: CustomEvent<StyleEvent>) {
+    if (isGeoStylerStyle(event.detail.style)) {
+      if (this.isTargetedByStyle(event.detail.layerIds)) {
+        log(MSG_COMPONENT + 'Applying geostyler style');
+        this.appliedGeostylerStyle = event.detail.style as Style;
+        await this.updateLayerWithGeostylerStyle();
+      }
     }
   }
 
   /**
    * Check if this layer is targeted by a style component
    */
-  private isTargetedByStyle(styleComponent: HTMLVMapStyleElement): boolean {
-    const layerTargets = styleComponent.layerTargets;
-    if (!layerTargets) return false;
-
-    const targets = layerTargets.split(',').map(id => id.trim());
-    return targets.includes(this.el.id) || targets.length === 0;
+  private isTargetedByStyle(layerIds?: string[]): boolean {
+    if (!layerIds) return false;
+    return layerIds.includes(this.el.id) || layerIds.length === 0;
   }
 
   private async applyExistingStyles() {
@@ -230,29 +238,25 @@ export class VMapLayerWkt implements VMapLayer {
       document.querySelectorAll('v-map-style'),
     ) as HTMLVMapStyleElement[];
 
+    this.appliedGeostylerStyle = undefined;
     for (const styleComponent of styleComponents) {
-      if (!this.isGeostylerFormat(styleComponent)) continue;
-      if (!this.isTargetedByStyle(styleComponent)) continue;
-
       const style = styleComponent.getStyle
         ? await styleComponent.getStyle()
         : undefined;
       if (!style) continue;
+      if (!isGeoStylerStyle(style)) continue;
+
+      const layerTargetIds = styleComponent.getLayerTargetIds
+        ? await styleComponent.getLayerTargetIds()
+        : undefined;
+      if (!layerTargetIds) continue;
+      if (!this.isTargetedByStyle(layerTargetIds)) continue;
 
       log(MSG_COMPONENT + 'Applying existing geostyler style');
       this.appliedGeostylerStyle = style as Style;
-      await this.updateLayerWithGeostylerStyle();
+      break;
     }
-  }
-
-  private isGeostylerFormat(styleComponent: HTMLVMapStyleElement): boolean {
-    const format = styleComponent.format?.toLowerCase();
-    return (
-      format === 'sld' ||
-      format === 'mapbox-gl' ||
-      format === 'qgis' ||
-      format === 'lyrx'
-    );
+    await this.updateLayerWithGeostylerStyle();
   }
 
   /**
@@ -266,6 +270,7 @@ export class VMapLayerWkt implements VMapLayer {
       data: {
         wkt: this.wkt,
         url: this.url,
+        geostylerStyle: this.appliedGeostylerStyle,
       },
     });
   }
@@ -289,9 +294,26 @@ export class VMapLayerWkt implements VMapLayer {
   private createLayerConfig(): LayerConfig {
     // Parse iconSize string to array
     const iconSizeArray = this.iconSize
-      ? this.iconSize.split(',').map(s => parseInt(s.trim(), 10)) as [number, number]
+      ? (this.iconSize.split(',').map(s => parseInt(s.trim(), 10)) as [
+          number,
+          number,
+        ])
       : undefined;
 
+    const style: StyleConfig = {
+      fillColor: this.fillColor,
+      fillOpacity: this.fillOpacity,
+      strokeColor: this.strokeColor,
+      strokeWidth: this.strokeWidth,
+      strokeOpacity: this.strokeOpacity,
+      pointRadius: this.pointRadius,
+      pointColor: this.pointColor,
+      iconUrl: this.iconUrl,
+      iconSize: iconSizeArray,
+      textProperty: this.textProperty,
+      textColor: this.textColor,
+      textSize: this.textSize,
+    };
     const config: LayerConfig = {
       type: 'wkt',
       wkt: this.wkt,
@@ -299,25 +321,12 @@ export class VMapLayerWkt implements VMapLayer {
       visible: this.visible,
       zIndex: this.zIndex,
       opacity: this.opacity,
-      style: {
-        fillColor: this.fillColor,
-        fillOpacity: this.fillOpacity,
-        strokeColor: this.strokeColor,
-        strokeWidth: this.strokeWidth,
-        strokeOpacity: this.strokeOpacity,
-        pointRadius: this.pointRadius,
-        pointColor: this.pointColor,
-        iconUrl: this.iconUrl,
-        iconSize: iconSizeArray,
-        textProperty: this.textProperty,
-        textColor: this.textColor,
-        textSize: this.textSize,
-      },
+      style,
     };
 
     // Add geostyler style if available (takes precedence over component style props)
     if (this.appliedGeostylerStyle) {
-      (config as any).geostylerStyle = this.appliedGeostylerStyle;
+      config.geostylerStyle = this.appliedGeostylerStyle;
     }
 
     return config;
