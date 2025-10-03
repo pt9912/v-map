@@ -8,7 +8,7 @@
 
 > **getLogLevel**(): `LogLevel`
 
-Defined in: [src/utils/logger.ts:127](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/utils/logger.ts#L127)
+Defined in: [src/utils/logger.ts:127](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/utils/logger.ts#L127)
 
 Aktuelles Log-Level abfragen (z. B. in DevTools)
 

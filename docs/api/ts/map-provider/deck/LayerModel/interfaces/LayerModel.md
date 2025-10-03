@@ -6,7 +6,7 @@
 
 # Interface: LayerModel\<L\>
 
-Defined in: [src/map-provider/deck/LayerModel.ts:3](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L3)
+Defined in: [src/map-provider/deck/LayerModel.ts:3](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L3)
 
 ## Type Parameters
 
@@ -20,7 +20,7 @@ Defined in: [src/map-provider/deck/LayerModel.ts:3](https://github.com/pt9912/v-
 
 > **elementId**: `string`
 
-Defined in: [src/map-provider/deck/LayerModel.ts:5](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L5)
+Defined in: [src/map-provider/deck/LayerModel.ts:5](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L5)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/map-provider/deck/LayerModel.ts:5](https://github.com/pt9912/v-
 
 > **enabled**: `boolean`
 
-Defined in: [src/map-provider/deck/LayerModel.ts:6](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L6)
+Defined in: [src/map-provider/deck/LayerModel.ts:6](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L6)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/map-provider/deck/LayerModel.ts:6](https://github.com/pt9912/v-
 
 > **id**: `string`
 
-Defined in: [src/map-provider/deck/LayerModel.ts:4](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L4)
+Defined in: [src/map-provider/deck/LayerModel.ts:4](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L4)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/map-provider/deck/LayerModel.ts:4](https://github.com/pt9912/v-
 
 > **make**: () => `L`
 
-Defined in: [src/map-provider/deck/LayerModel.ts:7](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L7)
+Defined in: [src/map-provider/deck/LayerModel.ts:7](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L7)
 
 #### Returns
 
@@ -56,4 +56,4 @@ Defined in: [src/map-provider/deck/LayerModel.ts:7](https://github.com/pt9912/v-
 
 > `optional` **meta**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/map-provider/deck/LayerModel.ts:8](https://github.com/pt9912/v-map/blob/f81ff1bbdf118b11c319c21963bbb30bc13345a6/src/map-provider/deck/LayerModel.ts#L8)
+Defined in: [src/map-provider/deck/LayerModel.ts:8](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/deck/LayerModel.ts#L8)

@@ -19,9 +19,10 @@
 | Event | Detail-Type | Beschreibung |
 | --- | --- | --- |
 | `styleError` | `Error` | Fired when style parsing fails. |
-| `styleReady` | `Style | { [x: string]: unknown; }` | Fired when style is successfully parsed and ready to apply. |
+| `styleReady` | `{ style?: ResolvedStyle; layerIds?: string[]; }` | Fired when style is successfully parsed and ready to apply. |
 
 ### Methods
 
+- `getLayerTargetIds() => Promise<string[]>` — Get the target layer IDs as array. async
 - `getStyle() => Promise<ResolvedStyle>` — Get the currently parsed style.
 
