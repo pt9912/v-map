@@ -171,7 +171,8 @@ const polygonGeoJSON = {
 
 // WKT data
 const pointWKT = 'POINT(11.57548 48.13743)';
-const polygonWKT = 'POLYGON((11.5 48.1, 11.6 48.1, 11.6 48.2, 11.5 48.2, 11.5 48.1))';
+const polygonWKT =
+  'POLYGON((11.5 48.1, 11.6 48.1, 11.6 48.2, 11.5 48.2, 11.5 48.1))';
 
 export const SLDWithWKTPoint: Story = {
   args: {
@@ -179,15 +180,13 @@ export const SLDWithWKTPoint: Story = {
     autoApply: true,
     layerTargets: 'styled-point',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="ol"
       zoom="12"
       center="11.57548,48.13743"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={simpleSLD}
@@ -195,8 +194,16 @@ export const SLDWithWKTPoint: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
-        <v-map-layer-wkt id="styled-point" wkt={pointWKT}></v-map-layer-wkt>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
+        <v-map-layer-wkt
+          id="styled-point"
+          wkt={pointWKT}
+          zIndex="100"
+        ></v-map-layer-wkt>
       </v-map-layergroup>
     </v-map>
   ),
@@ -208,15 +215,13 @@ export const SLDWithGeoJSONPolygon: Story = {
     autoApply: true,
     layerTargets: 'styled-polygon',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="ol"
       zoom="10"
       center="11.55,48.15"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={polygonSLD}
@@ -224,10 +229,15 @@ export const SLDWithGeoJSONPolygon: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
         <v-map-layer-geojson
           id="styled-polygon"
           geojson={JSON.stringify(polygonGeoJSON)}
+          zIndex="100"
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
@@ -240,15 +250,13 @@ export const MapboxGLStyle: Story = {
     autoApply: true,
     layerTargets: 'mapbox-layer',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="ol"
       zoom="12"
       center="11.57548,48.13743"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={JSON.stringify(mapboxStyle)}
@@ -256,10 +264,15 @@ export const MapboxGLStyle: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
         <v-map-layer-geojson
           id="mapbox-layer"
           geojson={JSON.stringify(pointGeoJSON)}
+          zIndex="100"
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
@@ -268,9 +281,12 @@ export const MapboxGLStyle: Story = {
 
 export const MultipleStylesMultipleLayers: Story = {
   render: () => (
-    <v-map flavour="ol" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '500px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-
+    <v-map
+      flavour="ol"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '500px' }}
+    >
       {/* Style for points */}
       <v-map-style
         format="sld"
@@ -279,17 +295,34 @@ export const MultipleStylesMultipleLayers: Story = {
       ></v-map-style>
 
       {/* Style for polygon */}
-      <v-map-style format="sld" content={polygonSLD} layer-targets="polygon-1"></v-map-style>
+      <v-map-style
+        format="sld"
+        content={polygonSLD}
+        layer-targets="polygon-1"
+      ></v-map-style>
 
-      <v-map-layergroup>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
         {/* Points with red circle style */}
-        <v-map-layer-wkt id="point-1" wkt="POINT(11.52 48.13)"></v-map-layer-wkt>
-        <v-map-layer-wkt id="point-2" wkt="POINT(11.58 48.17)"></v-map-layer-wkt>
+        <v-map-layer-wkt
+          id="point-1"
+          wkt="POINT(11.52 48.13)"
+          zIndex="100"
+        ></v-map-layer-wkt>
+        <v-map-layer-wkt
+          id="point-2"
+          wkt="POINT(11.58 48.17)"
+          zIndex="100"
+        ></v-map-layer-wkt>
 
         {/* Polygon with blue fill style */}
         <v-map-layer-geojson
           id="polygon-1"
           geojson={JSON.stringify(polygonGeoJSON)}
+          zIndex="80"
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
@@ -302,7 +335,7 @@ export const AutoApplyDisabled: Story = {
     autoApply: false,
     layerTargets: 'manual-point',
   },
-  render: (args) => (
+  render: args => (
     <div>
       <p
         style={{
@@ -312,9 +345,9 @@ export const AutoApplyDisabled: Story = {
           borderRadius: '4px',
         }}
       >
-        ℹ️ <strong>Auto-apply is disabled.</strong> The style is parsed but not automatically
-        applied to layers. You would need to manually call <code>loadAndParseStyle()</code> or set{' '}
-        <code>auto-apply="true"</code>.
+        ℹ️ <strong>Auto-apply is disabled.</strong> The style is parsed but not
+        automatically applied to layers. You would need to manually call{' '}
+        <code>loadAndParseStyle()</code> or set <code>auto-apply="true"</code>.
       </p>
       <v-map
         flavour="ol"
@@ -322,8 +355,6 @@ export const AutoApplyDisabled: Story = {
         center="11.57548,48.13743"
         style={{ width: '100%', height: '500px' }}
       >
-        <v-map-layer-osm></v-map-layer-osm>
-
         <v-map-style
           format={args.format}
           content={simpleSLD}
@@ -331,8 +362,16 @@ export const AutoApplyDisabled: Story = {
           auto-apply={args.autoApply}
         ></v-map-style>
 
-        <v-map-layergroup>
-          <v-map-layer-wkt id="manual-point" wkt={pointWKT}></v-map-layer-wkt>
+        <v-map-layergroup group-title="Base Layers">
+          <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+        </v-map-layergroup>
+
+        <v-map-layergroup group-title="Styled Layers">
+          <v-map-layer-wkt
+            id="manual-point"
+            wkt={pointWKT}
+            zIndex="100"
+          ></v-map-layer-wkt>
         </v-map-layergroup>
       </v-map>
     </div>
@@ -345,15 +384,13 @@ export const LeafletWithSLD: Story = {
     autoApply: true,
     layerTargets: 'leaflet-polygon',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="leaflet"
       zoom="10"
       center="11.55,48.15"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={polygonSLD}
@@ -361,8 +398,16 @@ export const LeafletWithSLD: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
-        <v-map-layer-wkt id="leaflet-polygon" wkt={polygonWKT}></v-map-layer-wkt>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0" opacity="0.7"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
+        <v-map-layer-wkt
+          id="leaflet-polygon"
+          wkt={polygonWKT}
+          zIndex="100"
+        ></v-map-layer-wkt>
       </v-map-layergroup>
     </v-map>
   ),
@@ -374,15 +419,13 @@ export const DeckGLWithSLD: Story = {
     autoApply: true,
     layerTargets: 'deck-point',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="deck"
       zoom="12"
       center="11.57548,48.13743"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={simpleSLD}
@@ -390,10 +433,43 @@ export const DeckGLWithSLD: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
         <v-map-layer-geojson
           id="deck-point"
           geojson={JSON.stringify(pointGeoJSON)}
+          zIndex="100"
+        ></v-map-layer-geojson>
+      </v-map-layergroup>
+    </v-map>
+  ),
+};
+
+export const CesiumWithoutSLD: Story = {
+  args: {
+    format: 'sld',
+    autoApply: true,
+    layerTargets: 'cesium-polygon',
+  },
+  render: args => (
+    <v-map
+      flavour="cesium"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '500px' }}
+    >
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
+        <v-map-layer-geojson
+          id="cesium-polygon"
+          geojson={JSON.stringify(polygonGeoJSON)}
+          zIndex="100"
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
@@ -406,15 +482,13 @@ export const CesiumWithSLD: Story = {
     autoApply: true,
     layerTargets: 'cesium-polygon',
   },
-  render: (args) => (
+  render: args => (
     <v-map
       flavour="cesium"
       zoom="10"
       center="11.55,48.15"
       style={{ width: '100%', height: '500px' }}
     >
-      <v-map-layer-osm></v-map-layer-osm>
-
       <v-map-style
         format={args.format}
         content={polygonSLD}
@@ -422,10 +496,15 @@ export const CesiumWithSLD: Story = {
         auto-apply={args.autoApply}
       ></v-map-style>
 
-      <v-map-layergroup>
+      <v-map-layergroup group-title="Base Layers">
+        <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+      </v-map-layergroup>
+
+      <v-map-layergroup group-title="Styled Layers">
         <v-map-layer-geojson
           id="cesium-polygon"
           geojson={JSON.stringify(polygonGeoJSON)}
+          zIndex="100"
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
@@ -440,15 +519,15 @@ export const ComplexSLDWithLineString: Story = {
   <NamedLayer>
     <Name>line-layer</Name>
     <UserStyle>
-      <Title>Dashed Line Style</Title>
+      <Title>Bold Red Line Style</Title>
       <FeatureTypeStyle>
         <Rule>
-          <Name>Dashed Line</Name>
+          <Name>Bold Red Line</Name>
           <LineSymbolizer>
             <Stroke>
-              <CssParameter name="stroke">#e67700</CssParameter>
-              <CssParameter name="stroke-width">4</CssParameter>
-              <CssParameter name="stroke-opacity">0.9</CssParameter>
+              <CssParameter name="stroke">#ff0000</CssParameter>
+              <CssParameter name="stroke-width">6</CssParameter>
+              <CssParameter name="stroke-opacity">1.0</CssParameter>
             </Stroke>
           </LineSymbolizer>
         </Rule>
@@ -457,16 +536,32 @@ export const ComplexSLDWithLineString: Story = {
   </NamedLayer>
 </StyledLayerDescriptor>`;
 
-    const lineWKT = 'LINESTRING(11.5 48.1, 11.55 48.14, 11.6 48.18, 11.65 48.15)';
+    const lineWKT =
+      'LINESTRING(11.5 48.1, 11.55 48.14, 11.6 48.18, 11.65 48.15)';
 
     return (
-      <v-map flavour="ol" zoom="11" center="11.575,48.14" style={{ width: '100%', height: '500px' }}>
-        <v-map-layer-osm></v-map-layer-osm>
+      <v-map
+        flavour="ol"
+        zoom="11"
+        center="11.575,48.14"
+        style={{ width: '100%', height: '500px' }}
+      >
+        <v-map-style
+          format="sld"
+          content={lineSLD}
+          layer-targets="line-layer"
+        ></v-map-style>
 
-        <v-map-style format="sld" content={lineSLD} layer-targets="line-layer"></v-map-style>
+        <v-map-layergroup group-title="Base Layers">
+          <v-map-layer-osm zIndex="0" opacity="0.7"></v-map-layer-osm>
+        </v-map-layergroup>
 
-        <v-map-layergroup>
-          <v-map-layer-wkt id="line-layer" wkt={lineWKT}></v-map-layer-wkt>
+        <v-map-layergroup group-title="Styled Layers">
+          <v-map-layer-wkt
+            id="line-layer"
+            wkt={lineWKT}
+            zIndex="100"
+          ></v-map-layer-wkt>
         </v-map-layergroup>
       </v-map>
     );
@@ -484,9 +579,9 @@ export const StyleWithoutTargets: Story = {
           borderRadius: '4px',
         }}
       >
-        ℹ️ <strong>No layer targets specified.</strong> The style is parsed and ready, but not
-        applied to any specific layers. It could be applied programmatically to all compatible
-        layers.
+        ℹ️ <strong>No layer targets specified.</strong> The style is parsed and
+        ready, but not applied to any specific layers. It could be applied
+        programmatically to all compatible layers.
       </p>
       <v-map
         flavour="ol"
@@ -494,12 +589,14 @@ export const StyleWithoutTargets: Story = {
         center="11.57548,48.13743"
         style={{ width: '100%', height: '500px' }}
       >
-        <v-map-layer-osm></v-map-layer-osm>
-
         <v-map-style format="sld" content={simpleSLD}></v-map-style>
 
-        <v-map-layergroup>
-          <v-map-layer-wkt wkt={pointWKT}></v-map-layer-wkt>
+        <v-map-layergroup group-title="Base Layers">
+          <v-map-layer-osm zIndex="0"></v-map-layer-osm>
+        </v-map-layergroup>
+
+        <v-map-layergroup group-title="Styled Layers">
+          <v-map-layer-wkt wkt={pointWKT} zIndex="100"></v-map-layer-wkt>
         </v-map-layergroup>
       </v-map>
     </div>

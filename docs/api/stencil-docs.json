@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-02T15:57:02",
+  "timestamp": "2025-10-03T15:35:22",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -4246,7 +4246,7 @@
             "parameters": [
               {
                 "name": "layerConfig",
-                "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; params?: Record<string, string | number | boolean>; token?: string; minZoom?: number; maxZoom?: number; options?: Record<string, unknown>; attributions?: string | string[]; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"google\"; apiKey: string; mapType?: googleMapType; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; extraParams?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; tileSize?: number; version?: \"1.1.1\" | \"1.3.0\"; crs?: string; format?: string; transparent?: string; styles?: string; minZoom?: number; maxZoom?: number; time?: string; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"wfs\"; url: string; typeName: string; version?: string; outputFormat?: string; srsName?: string; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wcs\"; url: string; coverageName: string; format?: string; version?: string; projection?: string; resolutions?: number[]; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wkt\"; wkt?: string; url?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"tile3d\"; url: string; tilesetOptions?: Record<string, unknown>; cesiumStyle?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; }",
+                "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; geostylerStyle?: Style; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; params?: Record<string, string | number | boolean>; token?: string; minZoom?: number; maxZoom?: number; options?: Record<string, unknown>; attributions?: string | string[]; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"google\"; apiKey: string; mapType?: googleMapType; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; extraParams?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; tileSize?: number; version?: \"1.1.1\" | \"1.3.0\"; crs?: string; format?: string; transparent?: string; styles?: string; minZoom?: number; maxZoom?: number; time?: string; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"wfs\"; url: string; typeName: string; version?: string; outputFormat?: string; srsName?: string; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wcs\"; url: string; coverageName: string; format?: string; version?: string; projection?: string; resolutions?: number[]; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wkt\"; wkt?: string; url?: string; style?: StyleConfig; geostylerStyle?: Style; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"tile3d\"; url: string; tilesetOptions?: Record<string, unknown>; cesiumStyle?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; }",
                 "docs": ""
               },
               {
@@ -4272,7 +4272,7 @@
           "parameters": [
             {
               "name": "layerConfig",
-              "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; params?: Record<string, string | number | boolean>; token?: string; minZoom?: number; maxZoom?: number; options?: Record<string, unknown>; attributions?: string | string[]; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"google\"; apiKey: string; mapType?: googleMapType; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; extraParams?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; tileSize?: number; version?: \"1.1.1\" | \"1.3.0\"; crs?: string; format?: string; transparent?: string; styles?: string; minZoom?: number; maxZoom?: number; time?: string; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"wfs\"; url: string; typeName: string; version?: string; outputFormat?: string; srsName?: string; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wcs\"; url: string; coverageName: string; format?: string; version?: string; projection?: string; resolutions?: number[]; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wkt\"; wkt?: string; url?: string; style?: StyleConfig; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"tile3d\"; url: string; tilesetOptions?: Record<string, unknown>; cesiumStyle?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; }",
+              "type": "{ type: \"geojson\"; url?: string; geojson?: string; style?: StyleConfig; geostylerStyle?: Style; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"osm\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"geotiff\"; groupId?: string; url?: string; opacity?: number; zIndex?: number; visible?: boolean; } | { type: \"xyz\"; url: string; attributions?: string | string[]; maxZoom?: number; options?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"arcgis\"; url: string; params?: Record<string, string | number | boolean>; token?: string; minZoom?: number; maxZoom?: number; options?: Record<string, unknown>; attributions?: string | string[]; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"google\"; apiKey: string; mapType?: googleMapType; scale?: \"scaleFactor1x\" | \"scaleFactor2x\"; highDpi?: boolean; opacity?: number; visible?: boolean; groupId?: string; zIndex?: number; maxZoom?: number; styles?: string; language?: string; libraries?: string[]; region?: string; } | { type: \"wms\"; url: string; layers: string; extraParams?: Record<string, string>; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; tileSize?: number; version?: \"1.1.1\" | \"1.3.0\"; crs?: string; format?: string; transparent?: string; styles?: string; minZoom?: number; maxZoom?: number; time?: string; } | { type: \"scatterplot\"; data?: any; getFillColor?: Color; getRadius?: number; opacity?: number; visible?: boolean; getTooltip?: (info: any) => any; onClick?: (info: any) => void; onHover?: (info: any) => void; groupId?: string; zIndex?: number; } | { type: \"terrain\"; elevationData: string; texture?: string; elevationDecoder?: { r: number; g: number; b: number; offset: number; }; wireframe?: boolean; color?: [number, number, number]; minZoom?: number; maxZoom?: number; meshMaxError?: number; groupId?: string; opacity?: number; visible?: boolean; zIndex?: number; } | { type: \"wfs\"; url: string; typeName: string; version?: string; outputFormat?: string; srsName?: string; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wcs\"; url: string; coverageName: string; format?: string; version?: string; projection?: string; resolutions?: number[]; params?: Record<string, string | number | boolean>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"wkt\"; wkt?: string; url?: string; style?: StyleConfig; geostylerStyle?: Style; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; } | { type: \"tile3d\"; url: string; tilesetOptions?: Record<string, unknown>; cesiumStyle?: Record<string, unknown>; groupId?: string; zIndex?: number; visible?: boolean; opacity?: number; }",
               "docs": ""
             },
             {
@@ -4467,6 +4467,28 @@
       ],
       "methods": [
         {
+          "name": "getLayerTargetIds",
+          "returns": {
+            "type": "Promise<string[]>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string[]>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string[]>"
+          },
+          "signature": "getLayerTargetIds() => Promise<string[]>",
+          "parameters": [],
+          "docs": "Get the target layer IDs as array. async",
+          "docsTags": []
+        },
+        {
           "name": "getStyle",
           "returns": {
             "type": "Promise<ResolvedStyle>",
@@ -4481,9 +4503,9 @@
                 "id": "global::Promise"
               },
               "ResolvedStyle": {
-                "location": "local",
-                "path": "/workspaces/v-map/src/components/v-map-style/v-map-style.tsx",
-                "id": "src/components/v-map-style/v-map-style.tsx::ResolvedStyle"
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::ResolvedStyle"
               }
             },
             "return": "Promise<ResolvedStyle>"
@@ -4516,16 +4538,16 @@
         },
         {
           "event": "styleReady",
-          "detail": "Style | { [x: string]: unknown; }",
+          "detail": "{ style?: ResolvedStyle; layerIds?: string[]; }",
           "bubbles": true,
           "complexType": {
-            "original": "ResolvedStyle",
-            "resolved": "Style | { [x: string]: unknown; }",
+            "original": "StyleEvent",
+            "resolved": "{ style?: ResolvedStyle; layerIds?: string[]; }",
             "references": {
-              "ResolvedStyle": {
-                "location": "local",
-                "path": "/workspaces/v-map/src/components/v-map-style/v-map-style.tsx",
-                "id": "src/components/v-map-style/v-map-style.tsx::ResolvedStyle"
+              "StyleEvent": {
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::StyleEvent"
               }
             }
           },
@@ -4556,16 +4578,6 @@
       "docstring": "",
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
     },
-    "src/types/styling.ts::StyleFormat": {
-      "declaration": "export type StyleFormat = 'sld' | 'mapbox-gl' | 'qgis' | 'lyrx' | 'cesium-3d-tiles';",
-      "docstring": "",
-      "path": "src/types/styling.ts"
-    },
-    "src/components/v-map-style/v-map-style.tsx::ResolvedStyle": {
-      "declaration": "export type ResolvedStyle = Style | Cesium3DTilesStyle;",
-      "docstring": "",
-      "path": "src/components/v-map-style/v-map-style.tsx"
-    },
     "src/types/flavour.ts::Flavour": {
       "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",
       "docstring": "",
@@ -4592,9 +4604,24 @@
       "path": "src/utils/diff.ts"
     },
     "src/types/layerconfig.ts::LayerConfig": {
-      "declaration": "export type LayerConfig =\n  | {\n      type: 'geojson';\n      url?: string;\n      geojson?: string;\n      style?: StyleConfig;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'osm';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'geotiff';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'arcgis';\n      url: string;\n      params?: Record<string, string | number | boolean>;\n      token?: string;\n      minZoom?: number;\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      attributions?: string | string[];\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: googleMapType;\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      opacity?: number;\n      visible?: boolean;\n      groupId?: string;\n      zIndex?: number;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      extraParams?: Record<string, string>;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n      tileSize?: number;\n      version?: '1.1.1' | '1.3.0';\n      crs?: string;\n      format?: string;\n      transparent?: string;\n      styles?: string;\n      minZoom?: number;\n      maxZoom?: number;\n      time?: string;\n    }\n  | {\n      type: 'scatterplot';\n\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n      zIndex?: number;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n    }\n  | {\n      type: 'wfs';\n      url: string;\n      typeName: string;\n      version?: string;\n      outputFormat?: string;\n      srsName?: string;\n      params?: Record<string, string | number | boolean>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'wcs';\n      url: string;\n      coverageName: string;\n      format?: string;\n      version?: string;\n      projection?: string;\n      resolutions?: number[];\n      params?: Record<string, string | number | boolean>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'wkt';\n      wkt?: string;\n      url?: string;\n      style?: StyleConfig;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'tile3d';\n      url: string;\n      tilesetOptions?: Record<string, unknown>;\n      cesiumStyle?: Record<string, unknown>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    };",
+      "declaration": "export type LayerConfig =\n  | {\n      type: 'geojson';\n      url?: string;\n      geojson?: string;\n      style?: StyleConfig;\n      geostylerStyle?: Style;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'osm';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'geotiff';\n      groupId?: string;\n      url?: string;\n      opacity?: number;\n      zIndex?: number;\n      visible?: boolean;\n    }\n  | {\n      type: 'xyz';\n      url: string;\n      attributions?: string | string[];\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'arcgis';\n      url: string;\n      params?: Record<string, string | number | boolean>;\n      token?: string;\n      minZoom?: number;\n      maxZoom?: number;\n      options?: Record<string, unknown>;\n      attributions?: string | string[];\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'google';\n      apiKey: string;\n      mapType?: googleMapType;\n      scale?: 'scaleFactor1x' | 'scaleFactor2x';\n      highDpi?: boolean;\n      opacity?: number;\n      visible?: boolean;\n      groupId?: string;\n      zIndex?: number;\n      maxZoom?: number;\n      styles?: string;\n      language?: string;\n      libraries?: string[];\n      region?: string; // nur wenn deine OL-Version das typisiert\n    }\n  | {\n      type: 'wms';\n      url: string;\n      layers: string;\n      extraParams?: Record<string, string>;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n      tileSize?: number;\n      version?: '1.1.1' | '1.3.0';\n      crs?: string;\n      format?: string;\n      transparent?: string;\n      styles?: string;\n      minZoom?: number;\n      maxZoom?: number;\n      time?: string;\n    }\n  | {\n      type: 'scatterplot';\n\n      data?: any; //dataSource,\n      getFillColor?: Color;\n      getRadius?: number;\n      opacity?: number;\n      visible?: boolean;\n\n      getTooltip?: (info: any) => any;\n      onClick?: (info: any) => void;\n      onHover?: (info: any) => void;\n      groupId?: string;\n      zIndex?: number;\n    }\n  | {\n      type: 'terrain';\n      elevationData: string;\n      texture?: string;\n      elevationDecoder?: { r: number; g: number; b: number; offset: number };\n      wireframe?: boolean;\n      color?: [number, number, number];\n      minZoom?: number;\n      maxZoom?: number;\n      meshMaxError?: number;\n      groupId?: string;\n      opacity?: number;\n      visible?: boolean;\n      zIndex?: number;\n    }\n  | {\n      type: 'wfs';\n      url: string;\n      typeName: string;\n      version?: string;\n      outputFormat?: string;\n      srsName?: string;\n      params?: Record<string, string | number | boolean>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'wcs';\n      url: string;\n      coverageName: string;\n      format?: string;\n      version?: string;\n      projection?: string;\n      resolutions?: number[];\n      params?: Record<string, string | number | boolean>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'wkt';\n      wkt?: string;\n      url?: string;\n      style?: StyleConfig;\n      geostylerStyle?: Style;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    }\n  | {\n      type: 'tile3d';\n      url: string;\n      tilesetOptions?: Record<string, unknown>;\n      cesiumStyle?: Record<string, unknown>;\n      groupId?: string;\n      zIndex?: number;\n      visible?: boolean;\n      opacity?: number;\n    };",
       "docstring": "",
       "path": "src/types/layerconfig.ts"
+    },
+    "src/types/styling.ts::StyleFormat": {
+      "declaration": "export type StyleFormat =\n  | 'sld'\n  | 'mapbox-gl'\n  | 'qgis'\n  | 'lyrx'\n  | 'cesium-3d-tiles';",
+      "docstring": "",
+      "path": "src/types/styling.ts"
+    },
+    "src/types/styling.ts::StyleEvent": {
+      "declaration": "{\n  style?: ResolvedStyle;\n  layerIds?: string[];\n}",
+      "docstring": "",
+      "path": "src/types/styling.ts"
+    },
+    "src/types/styling.ts::ResolvedStyle": {
+      "declaration": "export type ResolvedStyle = Style | Cesium3DTileStyle;",
+      "docstring": "",
+      "path": "src/types/styling.ts"
     }
   }
 }
