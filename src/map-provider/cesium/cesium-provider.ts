@@ -1049,7 +1049,7 @@ export class CesiumProvider implements MapProvider {
     options: any,
   ): Promise<GeoJsonDataSource> {
     // Fetch GeoJSON from WFS server
-    const geojson = await this.fetchWFSGeoJSON(config);
+    const geojson = await this.fetchWFSFromUrl(config);
 
     // Load GeoJSON into Cesium DataSource
     const dataSource: GeoJsonDataSource =
@@ -1584,7 +1584,7 @@ export class CesiumProvider implements MapProvider {
     });
   }
 
-  private async fetchWFSGeoJSON(
+  private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
   ): Promise<any> {
     const baseParams = {
@@ -1606,24 +1606,35 @@ export class CesiumProvider implements MapProvider {
       );
     }
 
-    // Try to parse as JSON first
-    const contentType = response.headers.get('content-type');
-    if (contentType?.includes('application/json')) {
-      return await response.json();
+    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+
+    // Handle JSON formats
+    if (
+      outputFormat.includes('json') ||
+      outputFormat.includes('geojson') ||
+      outputFormat === 'application/json'
+    ) {
+      const contentType = response.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        return await response.json();
+      }
+      // Try to parse as JSON anyway
+      const text = await response.text();
+      return JSON.parse(text);
     }
 
-    // If not JSON, try to parse the response as text and convert GML to GeoJSON
-    const text = await response.text();
-
-    // For GML responses, we need to parse them
-    // For now, throw an error if it's not JSON
-    if (text.includes('<?xml') || text.includes('<gml:') || text.includes('<wfs:')) {
-      throw new Error(
-        'GML response detected. Please use outputFormat="application/json" for WFS requests in Cesium.',
-      );
+    // Handle GML formats - parse XML to GeoJSON using gml2geojson
+    if (
+      outputFormat.includes('gml') ||
+      outputFormat.includes('xml')
+    ) {
+      const xml = await response.text();
+      const { parseGML } = await import('gml2geojson');
+      return parseGML(xml);
     }
 
-    return JSON.parse(text);
+    // Default: try to parse as JSON
+    return await response.json();
   }
 
   private appendParams(
