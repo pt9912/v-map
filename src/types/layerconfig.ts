@@ -134,6 +134,8 @@ export type LayerConfig =
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
+      geostylerStyle?: Style;
+      style?: StyleConfig;
     }
   | {
       type: 'wcs';
