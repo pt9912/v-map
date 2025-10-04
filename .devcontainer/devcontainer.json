@@ -4,19 +4,23 @@
     "dockerfile": "Dockerfile"
   },
   "mounts": [
-    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached"
   ],
-  "forwardPorts": [
-    3333,
-    6006
-  ],
+  "containerEnv": {
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "forwardPorts": [3333, 6006],
   "customizations": {
     "vscode": {
       "extensions": [
         "dbankier.vscode-stencil",
         "esbenp.prettier-vscode",
         "storybook.storybook",
-        "ms-vscode.vscode-typescript-next"
+        "ms-vscode.vscode-typescript-next",
+        "Anthropic.claude-code",
+        "openai.chatgpt"
       ],
       "settings": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",

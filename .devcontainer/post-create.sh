@@ -75,7 +75,10 @@ fi
 npx stencil telemetry off
 
 #claude code
-npm install -g @anthropic-ai/claude-code
+echo "claude -----------------------"
+ls -la /home/node/.claude
+claude --version
+
 
 # Chrome immer ohne Sandbox starten (für Tools, die Flags nicht durchreichen)
 echo "export PRESS_CHROMIUM_ARGS='--no-sandbox --disable-setuid-sandbox'" >> "${HOME}/.bashrc"
