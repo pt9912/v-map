@@ -140,6 +140,9 @@ importers:
       geotiff:
         specifier: 2.1.4-beta.0
         version: 2.1.4-beta.0
+      gml2geojson:
+        specifier: ^0.0.7
+        version: 0.0.7
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.1)
@@ -3527,6 +3530,9 @@ packages:
   globby@14.1.0:
     resolution: {integrity: sha512-0Ia46fDOaT7k4og1PDW4YbodWWr3scS2vAr2lTbsplOt2WkKp0vQbkI9wKis/T5LV/dqPjO3bpS/z6GTJB82LA==}
     engines: {node: '>=18'}
+
+  gml2geojson@0.0.7:
+    resolution: {integrity: sha512-GpOkkIDg8IIrb6H9tV987+LU8td3E0ycFZz+T48NNcj4vUYzowkT/gkxzGbzZjTKdEitXWL9AJJI4GSwAGStdw==}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -10575,6 +10581,8 @@ snapshots:
       path-type: 6.0.0
       slash: 5.1.0
       unicorn-magic: 0.3.0
+
+  gml2geojson@0.0.7: {}
 
   gopd@1.2.0: {}
 
