@@ -3,6 +3,7 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
+import { DEFAULT_STYLE } from '../../types/styleconfig';
 
 import { log, warn } from '../../utils/logger';
 
@@ -837,7 +838,8 @@ export class DeckProvider implements MapProvider {
           config.geostylerStyle,
         );
       } else {
-        deckStyle = this.createDeckGLStyle(config.style);
+        const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+        deckStyle = this.createDeckGLStyle(style);
       }
 
       layer = new GeoJsonLayer({
@@ -1022,6 +1024,11 @@ export type TileLoadProps = {
       case 'wms':
         return this.buildWmsTileLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
+          layerId,
+        );
+      case 'wfs':
+        return this.createWFSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wfs' }>,
           layerId,
         );
       case 'arcgis':
@@ -1258,6 +1265,11 @@ export type TileLoadProps = {
         }
         break;
       }
+      case 'wfs': {
+        const geojson = await this.fetchWFSFromUrl(update.data);
+        group.setModelOverrides(layerId, { data: geojson });
+        break;
+      }
     }
     this.layerGroups.applyToDeck();
   }
@@ -1332,7 +1344,8 @@ export type TileLoadProps = {
         config.geostylerStyle,
       );
     } else {
-      deckStyle = this.createDeckGLStyle(config.style);
+      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      deckStyle = this.createDeckGLStyle(style);
     }
 
     return new GeoJsonLayer({
@@ -1464,6 +1477,99 @@ export type TileLoadProps = {
       this.shadowRoot && this.injectedStyle?.remove();
       this.deck?.finalize();
     } catch {}
+  }
+
+  private async createWFSLayer(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    const geojson = await this.fetchWFSFromUrl(config);
+
+    const { GeoJsonLayer } = await import('@deck.gl/layers');
+
+    // Use geostyler style if available, otherwise use default style
+    let deckStyle: any;
+
+    if (config.geostylerStyle) {
+      deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
+    } else {
+      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      deckStyle = this.createDeckGLStyle(style);
+    }
+
+    const layer = new GeoJsonLayer({
+      id: layerId,
+      data: geojson,
+      filled: true,
+      stroked: true,
+      pointType: 'circle',
+      ...deckStyle,
+      pickable: true,
+      autoHighlight: true,
+    });
+
+    return layer;
+  }
+
+  private async fetchWFSFromUrl(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<any> {
+    const baseParams = {
+      service: 'WFS',
+      request: 'GetFeature',
+      version: config.version ?? '1.1.0',
+      typeName: config.typeName,
+      outputFormat: config.outputFormat ?? 'application/json',
+      srsName: config.srsName ?? 'EPSG:4326',
+    };
+
+    const params = { ...baseParams, ...(config.params ?? {}) };
+    const requestUrl = this.appendParams(config.url, params);
+
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      throw new Error(
+        `WFS request failed (${response.status} ${response.statusText})`,
+      );
+    }
+
+    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+
+    // Handle JSON formats
+    if (
+      outputFormat.includes('json') ||
+      outputFormat.includes('geojson') ||
+      outputFormat === 'application/json'
+    ) {
+      return await response.json();
+    }
+
+    // Handle GML formats - parse XML to GeoJSON using gml2geojson
+    if (
+      outputFormat.includes('gml') ||
+      outputFormat.includes('xml')
+    ) {
+      const xml = await response.text();
+      const { parseGML } = await import('gml2geojson');
+      return parseGML(xml);
+    }
+
+    // Default: try to parse as JSON
+    return await response.json();
+  }
+
+  private appendParams(
+    baseUrl: string,
+    params: Record<string, string | number | boolean>,
+  ): string {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        query.set(key, String(value));
+      }
+    });
+    if (!query.toString()) return baseUrl;
+    return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
   }
 
   getMap() {

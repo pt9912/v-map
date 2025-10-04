@@ -11,6 +11,7 @@ import * as L from 'leaflet';
 import { isBrowser } from '../../utils/dom-env';
 import { log, error } from '../../utils/logger';
 import type { StyleConfig } from '../../types/styleconfig';
+import { DEFAULT_STYLE } from '../../types/styleconfig';
 import {
   removeInjectedCss,
   ensureLeafletCss,
@@ -77,6 +78,9 @@ export class LeafletProvider implements MapProvider {
         break;
       case 'geotiff':
         await this.updateGeoTIFFLayer(layer, update.data);
+        break;
+      case 'wfs':
+        await this.updateWFSLayer(layer, update.data);
         break;
     }
   }
@@ -278,6 +282,10 @@ export class LeafletProvider implements MapProvider {
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
         );
+      case 'wfs':
+        return this.createWFSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wfs' }>,
+        );
       case 'arcgis':
         return this.createArcGISLayer(
           layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
@@ -330,20 +338,21 @@ export class LeafletProvider implements MapProvider {
       data = await res.json();
     }
     if (data) {
-      // Use geostyler style if available, otherwise use default style
+      // Use geostyler style if available, otherwise use provided style or default style
       let layerOptions: L.GeoJSONOptions = {};
 
       if (config.geostylerStyle) {
         layerOptions = await this.createGeostylerLeafletOptions(
           config.geostylerStyle,
         );
-      } else if (config.style) {
+      } else {
+        const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
         layerOptions = {
-          style: this.createLeafletStyle(config.style),
+          style: this.createLeafletStyle(style),
           pointToLayer: (feature, latlng) =>
-            this.createLeafletPoint(feature, latlng, config.style!),
+            this.createLeafletPoint(feature, latlng, style),
           onEachFeature: (feature, layer) =>
-            this.bindLeafletPopup(feature, layer, config.style!),
+            this.bindLeafletPopup(feature, layer, style),
         };
       }
 
@@ -707,14 +716,13 @@ export class LeafletProvider implements MapProvider {
         config.geostylerStyle,
       );
     } else {
-      // Use config.style if available, otherwise undefined (will use default styles)
-      const styleConfig = config.style || undefined;
+      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
       layerOptions = {
-        style: this.createLeafletStyle(styleConfig),
+        style: this.createLeafletStyle(style),
         pointToLayer: (feature, latlng) =>
-          this.createLeafletPoint(feature, latlng, styleConfig),
+          this.createLeafletPoint(feature, latlng, style),
         onEachFeature: (feature, layer) =>
-          this.bindLeafletPopup(feature, layer, styleConfig),
+          this.bindLeafletPopup(feature, layer, style),
       };
     }
 
@@ -1145,6 +1153,100 @@ export class LeafletProvider implements MapProvider {
         className: 'leaflet-tooltip-custom',
       });
     }
+  }
+
+  private async createWFSLayer(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<L.GeoJSON> {
+    const geojson = await this.fetchWFSFromUrl(config);
+
+    // Use geostyler style if available, otherwise use provided style or default style
+    let layerOptions: L.GeoJSONOptions = {};
+
+    if (config.geostylerStyle) {
+      layerOptions = await this.createGeostylerLeafletOptions(
+        config.geostylerStyle,
+      );
+    } else {
+      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      layerOptions = {
+        style: this.createLeafletStyle(style),
+        pointToLayer: (feature, latlng) =>
+          this.createLeafletPoint(feature, latlng, style),
+        onEachFeature: (feature, layer) =>
+          this.bindLeafletPopup(feature, layer, style),
+      };
+    }
+
+    const layer = L.geoJSON(geojson, layerOptions);
+    return layer;
+  }
+
+  private async updateWFSLayer(layer: L.GeoJSON, data: any): Promise<void> {
+    const geojson = await this.fetchWFSFromUrl(data);
+    layer.clearLayers();
+    layer.addData(geojson);
+  }
+
+  private async fetchWFSFromUrl(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<any> {
+    const baseParams = {
+      service: 'WFS',
+      request: 'GetFeature',
+      version: config.version ?? '1.1.0',
+      typeName: config.typeName,
+      outputFormat: config.outputFormat ?? 'application/json',
+      srsName: config.srsName ?? 'EPSG:4326',
+    };
+
+    const params = { ...baseParams, ...(config.params ?? {}) };
+    const requestUrl = this.appendParams(config.url, params);
+
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      throw new Error(
+        `WFS request failed (${response.status} ${response.statusText})`,
+      );
+    }
+
+    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+
+    // Handle JSON formats
+    if (
+      outputFormat.includes('json') ||
+      outputFormat.includes('geojson') ||
+      outputFormat === 'application/json'
+    ) {
+      return await response.json();
+    }
+
+    // Handle GML formats - parse XML to GeoJSON using gml2geojson
+    if (
+      outputFormat.includes('gml') ||
+      outputFormat.includes('xml')
+    ) {
+      const xml = await response.text();
+      const { parseGML } = await import('gml2geojson');
+      return parseGML(xml);
+    }
+
+    // Default: try to parse as JSON
+    return await response.json();
+  }
+
+  private appendParams(
+    baseUrl: string,
+    params: Record<string, string | number | boolean>,
+  ): string {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        query.set(key, String(value));
+      }
+    });
+    if (!query.toString()) return baseUrl;
+    return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
   }
 
   getMap() {
