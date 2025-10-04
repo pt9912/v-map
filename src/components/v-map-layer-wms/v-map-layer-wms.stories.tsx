@@ -63,6 +63,108 @@ export const Primary: Story = {
         zoom="4.5"
         style={{ display: 'block', height: '600px', width: '100%' }}
       >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WMS-Layer">
+          <v-map-layer-wms
+            url={args.url}
+            layers={args.layers}
+            opacity={args.opacity}
+            visible={args.visible}
+            zIndex={args.zIndex}
+          ></v-map-layer-wms>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const Leaflet: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wms',
+    layers: 'topp:states',
+    opacity: 1.0,
+    visible: true,
+    zIndex: 100,
+  },
+  render: (args: Args) => {
+    return (
+      <v-map
+        flavour="leaflet"
+        center="-96,36"
+        zoom="4.5"
+        style={{ display: 'block', height: '600px', width: '100%' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WMS-Layer">
+          <v-map-layer-wms
+            url={args.url}
+            layers={args.layers}
+            opacity={args.opacity}
+            visible={args.visible}
+            zIndex={args.zIndex}
+          ></v-map-layer-wms>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const DeckGL: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wms',
+    layers: 'opengeo:countries',
+    opacity: 1.0,
+    visible: true,
+    zIndex: 100,
+  },
+  render: (args: Args) => {
+    return (
+      <v-map
+        flavour="deck"
+        center="-96,36"
+        zoom="4.5"
+        style={{ display: 'block', height: '600px', width: '100%' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WMS-Layer">
+          <v-map-layer-wms
+            url={args.url}
+            layers={args.layers}
+            opacity={args.opacity}
+            visible={args.visible}
+            zIndex={args.zIndex}
+          ></v-map-layer-wms>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const Cesium: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wms',
+    layers: 'topp:states',
+    opacity: 1.0,
+    visible: true,
+    zIndex: 100,
+  },
+  render: (args: Args) => {
+    return (
+      <v-map
+        flavour="cesium"
+        center="-96,36"
+        zoom="4.5"
+        style={{ display: 'block', height: '600px', width: '100%' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
         <v-map-layergroup group-title="WMS-Layer">
           <v-map-layer-wms
             url={args.url}
