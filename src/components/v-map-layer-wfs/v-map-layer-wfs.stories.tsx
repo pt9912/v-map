@@ -134,8 +134,8 @@ export const Cesium: Story = {
     url: 'https://demo.mapserver.org/cgi-bin/wfs',
     typeName: 'continents',
     version: '1.1.0',
-    outputFormat: 'GML2',
-    srsName: 'EPSG:3857',
+    outputFormat: 'geojson',
+    srsName: 'EPSG:4326',
   },
   render: props => {
     return (

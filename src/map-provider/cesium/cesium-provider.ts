@@ -239,6 +239,14 @@ export class CesiumProvider implements MapProvider {
         //todo  wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
+      case 'wfs': {
+        const options = { clampToGround: true };
+        const wfsConfig = layerConfig as Extract<LayerConfig, { type: 'wfs' }>;
+        const ds = await this.createWFSLayer(wfsConfig, options);
+        wrapper = this.layerManager.addLayer(layerId, ds);
+        wrapper.setOptions(options);
+        break;
+      }
       case 'wkt': {
         const options = { clampToGround: true };
         const wktConfig = layerConfig as Extract<LayerConfig, { type: 'wkt' }>;
@@ -1036,6 +1044,27 @@ export class CesiumProvider implements MapProvider {
     return dataSource;
   }
 
+  private async createWFSLayer(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+    options: any,
+  ): Promise<GeoJsonDataSource> {
+    // Fetch GeoJSON from WFS server
+    const geojson = await this.fetchWFSGeoJSON(config);
+
+    // Load GeoJSON into Cesium DataSource
+    const dataSource: GeoJsonDataSource =
+      await this.Cesium.GeoJsonDataSource.load(geojson, options);
+
+    // Apply geostyler style if provided, otherwise use enhanced styling
+    if (config.geostylerStyle) {
+      this.applyGeostylerStyling(dataSource, config.geostylerStyle);
+    } else if (config.style) {
+      this.applyEnhancedStyling(dataSource, config.style);
+    }
+
+    return dataSource;
+  }
+
   private async createOSMLayer(
     cfg: Extract<LayerConfig, { type: 'osm' }>,
   ): Promise<ImageryLayer> {
@@ -1389,6 +1418,22 @@ export class CesiumProvider implements MapProvider {
             layer.setOptions(options);
           }
           break;
+        case 'wfs':
+          {
+            const data = update.data;
+            const options = oldLayer.getOptions();
+            const dataSource: GeoJsonDataSource = await this.createWFSLayer(
+              data as Extract<LayerConfig, { type: 'wfs' }>,
+              options,
+            );
+            const layer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              dataSource,
+            );
+            layer.setOptions(options);
+          }
+          break;
         case 'osm':
           {
             const osmOptions = oldLayer.getOptions();
@@ -1537,5 +1582,61 @@ export class CesiumProvider implements MapProvider {
       complete: () => log('v-map - provider - cesium - Fly‑to finished'),
       cancel: () => warn('v-map - provider - cesium - Fly‑to cancelled'),
     });
+  }
+
+  private async fetchWFSGeoJSON(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<any> {
+    const baseParams = {
+      service: 'WFS',
+      request: 'GetFeature',
+      version: config.version ?? '1.1.0',
+      typeName: config.typeName,
+      outputFormat: config.outputFormat ?? 'application/json',
+      srsName: config.srsName ?? 'EPSG:4326',
+    };
+
+    const params = { ...baseParams, ...(config.params ?? {}) };
+    const requestUrl = this.appendParams(config.url, params);
+
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      throw new Error(
+        `WFS request failed (${response.status} ${response.statusText})`,
+      );
+    }
+
+    // Try to parse as JSON first
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    }
+
+    // If not JSON, try to parse the response as text and convert GML to GeoJSON
+    const text = await response.text();
+
+    // For GML responses, we need to parse them
+    // For now, throw an error if it's not JSON
+    if (text.includes('<?xml') || text.includes('<gml:') || text.includes('<wfs:')) {
+      throw new Error(
+        'GML response detected. Please use outputFormat="application/json" for WFS requests in Cesium.',
+      );
+    }
+
+    return JSON.parse(text);
+  }
+
+  private appendParams(
+    baseUrl: string,
+    params: Record<string, string | number | boolean>,
+  ): string {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        query.set(key, String(value));
+      }
+    });
+    if (!query.toString()) return baseUrl;
+    return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
   }
 }
