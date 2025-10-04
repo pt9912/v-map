@@ -34,3 +34,26 @@ export interface StyleConfig {
   // Conditional styling
   styleFunction?: (feature: any) => Partial<StyleConfig>; // Dynamic styling based on feature properties
 }
+
+/**
+ * Default style configuration values
+ */
+export const DEFAULT_STYLE: Readonly<Required<Omit<StyleConfig, 'iconUrl' | 'iconSize' | 'iconAnchor' | 'textProperty' | 'textHaloColor' | 'textHaloWidth' | 'textOffset' | 'zOffset' | 'extrudeHeight' | 'styleFunction' | 'strokeDashArray'>>> = {
+  // Fill styling
+  fillColor: 'rgba(0, 100, 255, 0.3)',
+  fillOpacity: 0.3,
+
+  // Stroke styling
+  strokeColor: 'rgba(0, 100, 255, 1)',
+  strokeWidth: 2,
+  strokeOpacity: 1,
+
+  // Point styling
+  pointRadius: 6,
+  pointColor: 'rgba(0, 100, 255, 1)',
+  pointOpacity: 1,
+
+  // Text styling
+  textColor: '#000000',
+  textSize: 12,
+} as const;
