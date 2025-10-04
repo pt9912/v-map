@@ -49,8 +49,7 @@ type Story = StoryObj<Args>;
 export const Primary: Story = {
   args: {
     url: 'https://ahocevar.com/geoserver/wms',
-    layers:
-      'opengeo:countries,ne:ne_10m_admin_0_boundary_lines_land,topp:states,ne:ne_10m_populated_places',
+    layers: 'topp:states',
     opacity: 1.0,
     visible: true,
     zIndex: 100,
@@ -93,7 +92,7 @@ export const Leaflet: Story = {
       <v-map
         flavour="leaflet"
         center="-96,36"
-        zoom="4.5"
+        zoom="4.4"
         style={{ display: 'block', height: '600px', width: '100%' }}
       >
         <v-map-layergroup group-title="Base Layer">
@@ -116,7 +115,7 @@ export const Leaflet: Story = {
 export const DeckGL: Story = {
   args: {
     url: 'https://ahocevar.com/geoserver/wms',
-    layers: 'opengeo:countries',
+    layers: 'topp:states',
     opacity: 1.0,
     visible: true,
     zIndex: 100,
@@ -126,7 +125,7 @@ export const DeckGL: Story = {
       <v-map
         flavour="deck"
         center="-96,36"
-        zoom="4.5"
+        zoom="3.4"
         style={{ display: 'block', height: '600px', width: '100%' }}
       >
         <v-map-layergroup group-title="Base Layer">

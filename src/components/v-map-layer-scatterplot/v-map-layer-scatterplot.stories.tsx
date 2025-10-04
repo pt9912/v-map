@@ -15,9 +15,9 @@ type Story = StoryObj<VMapLayerScatterplot>;
 
 const sampleData = JSON.stringify([
   { position: [8.6821, 50.1109], name: 'Frankfurt' },
-  { position: [13.4050, 52.5200], name: 'Berlin' },
+  { position: [13.405, 52.52], name: 'Berlin' },
   { position: [9.9937, 53.5511], name: 'Hamburg' },
-  { position: [11.5820, 48.1351], name: 'München' },
+  { position: [11.582, 48.1351], name: 'München' },
   { position: [6.9603, 50.9375], name: 'Köln' },
 ]);
 
@@ -29,7 +29,7 @@ export const Primary: Story = {
   },
   render: props => {
     return (
-      <v-map flavour="ol" style={{ height: '600px', width: '600px' }}>
+      <v-map flavour="deck" style={{ height: '600px', width: '600px' }}>
         <v-map-layergroup group-title="Scatterplot Layer">
           <v-map-layer-scatterplot
             data={props.data}
@@ -51,7 +51,7 @@ export const CustomColors: Story = {
   },
   render: props => {
     return (
-      <v-map flavour="ol" style={{ height: '600px', width: '600px' }}>
+      <v-map flavour="deck" style={{ height: '600px', width: '600px' }}>
         <v-map-layergroup group-title="Scatterplot Layer">
           <v-map-layer-scatterplot
             data={props.data}

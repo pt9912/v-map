@@ -7,7 +7,7 @@ import '../v-map-layergroup/v-map-layergroup';
 import '../v-map-layer-osm/v-map-layer-osm';
 
 const meta = {
-  title: 'VMap',
+  title: 'Map/VMap',
   component: VMap,
   tags: ['autodocs'],
   argTypes: {

@@ -15,7 +15,7 @@ type Args = {
 };
 
 const meta: Meta<Args> = {
-  title: 'Map/Style',
+  title: 'Styles/Style',
   component: 'v-map-style',
   parameters: {
     docs: {
