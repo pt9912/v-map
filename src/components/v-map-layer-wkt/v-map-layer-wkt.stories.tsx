@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@stencil/storybook-plugin';
 import { h } from '@stencil/core';
 
 import '../v-map/v-map';
+import '../v-map-layergroup/v-map-layergroup';
 import '../v-map-layer-osm/v-map-layer-osm';
 import './v-map-layer-wkt';
 
@@ -26,7 +27,7 @@ type Args = {
 };
 
 const meta: Meta<Args> = {
-  title: 'Map/Layer/WKT',
+  title: 'Layers/WKT',
   component: 'v-map-layer-wkt',
   parameters: {
     docs: {
@@ -39,7 +40,8 @@ const meta: Meta<Args> = {
   argTypes: {
     wkt: {
       control: 'text',
-      description: 'WKT geometry string (e.g., "POINT(11.57 48.14)" or "POLYGON((...))")',
+      description:
+        'WKT geometry string (e.g., "POINT(11.57 48.14)" or "POLYGON((...))")',
     },
     url: {
       control: 'text',
@@ -119,15 +121,24 @@ export const Point: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="10"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -139,15 +150,24 @@ export const LineString: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="10" center="11.57,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="10"
+      center="11.57,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -159,15 +179,24 @@ export const Polygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -179,15 +208,24 @@ export const MunichArea: Story = {
     opacity: 0.5,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="9" center="11.541,48.154" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="9"
+      center="11.541,48.154"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -199,15 +237,24 @@ export const LeafletPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="leaflet" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="leaflet"
+      zoom="10"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -219,15 +266,24 @@ export const LeafletPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="leaflet" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="leaflet"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -239,15 +295,24 @@ export const DeckGLPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="deck" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="deck"
+      zoom="10"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -259,15 +324,24 @@ export const DeckGLPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="deck" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="deck"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -279,15 +353,24 @@ export const CesiumPoint: Story = {
     opacity: 1,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="cesium" zoom="10" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="cesium"
+      zoom="10"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -299,15 +382,24 @@ export const CesiumPolygon: Story = {
     opacity: 0.7,
     zIndex: 1000,
   },
-  render: (args) => (
-    <v-map flavour="cesium" zoom="10" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="cesium"
+      zoom="10"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -323,19 +415,28 @@ export const StyledPoint: Story = {
     strokeColor: '#ffffff',
     strokeWidth: 3,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-        point-radius={args.pointRadius}
-        point-color={args.pointColor}
-        stroke-color={args.strokeColor}
-        stroke-width={args.strokeWidth}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="12"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+          point-radius={args.pointRadius}
+          point-color={args.pointColor}
+          stroke-color={args.strokeColor}
+          stroke-width={args.strokeWidth}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -352,20 +453,29 @@ export const StyledPolygon: Story = {
     strokeWidth: 3,
     strokeOpacity: 0.8,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="11" center="11.55,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-        fill-color={args.fillColor}
-        fill-opacity={args.fillOpacity}
-        stroke-color={args.strokeColor}
-        stroke-width={args.strokeWidth}
-        stroke-opacity={args.strokeOpacity}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="11"
+      center="11.55,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+          fill-color={args.fillColor}
+          fill-opacity={args.fillOpacity}
+          stroke-color={args.strokeColor}
+          stroke-width={args.strokeWidth}
+          stroke-opacity={args.strokeOpacity}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -379,17 +489,26 @@ export const WithIcon: Story = {
     iconUrl: 'https://cdn-icons-png.flaticon.com/32/684/684908.png',
     iconSize: '32,32',
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="12" center="11.57548,48.13743" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-        icon-url={args.iconUrl}
-        icon-size={args.iconSize}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="12"
+      center="11.57548,48.13743"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+          icon-url={args.iconUrl}
+          icon-size={args.iconSize}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
@@ -404,52 +523,70 @@ export const DashedLine: Story = {
     strokeWidth: 4,
     strokeOpacity: 0.9,
   },
-  render: (args) => (
-    <v-map flavour="ol" zoom="11" center="11.575,48.15" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      <v-map-layer-wkt
-        wkt={args.wkt}
-        visible={args.visible}
-        opacity={args.opacity}
-        z-index={args.zIndex}
-        stroke-color={args.strokeColor}
-        stroke-width={args.strokeWidth}
-        stroke-opacity={args.strokeOpacity}
-      ></v-map-layer-wkt>
+  render: args => (
+    <v-map
+      flavour="ol"
+      zoom="11"
+      center="11.575,48.15"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layer">
+        <v-map-layer-wkt
+          wkt={args.wkt}
+          visible={args.visible}
+          opacity={args.opacity}
+          z-index={args.zIndex}
+          stroke-color={args.strokeColor}
+          stroke-width={args.strokeWidth}
+          stroke-opacity={args.strokeOpacity}
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
 
 export const MultipleGeometries: Story = {
   render: () => (
-    <v-map flavour="ol" zoom="9" center="11.541,48.154" style={{ width: '100%', height: '400px' }}>
-      <v-map-layer-osm></v-map-layer-osm>
-      {/* Red styled point */}
-      <v-map-layer-wkt
-        wkt="POINT(11.57548 48.13743)"
-        z-index="1001"
-        point-radius="10"
-        point-color="#e03131"
-        stroke-color="#ffffff"
-        stroke-width="2"
-      ></v-map-layer-wkt>
-      {/* Blue styled line */}
-      <v-map-layer-wkt
-        wkt="LINESTRING(11.5 48.1, 11.6 48.15, 11.65 48.2)"
-        z-index="1002"
-        stroke-color="#1971c2"
-        stroke-width="4"
-      ></v-map-layer-wkt>
-      {/* Green styled polygon */}
-      <v-map-layer-wkt
-        wkt="POLYGON((11.45 48.08, 11.55 48.08, 11.55 48.18, 11.45 48.18, 11.45 48.08))"
-        opacity="0.8"
-        z-index="1003"
-        fill-color="#51cf66"
-        fill-opacity="0.3"
-        stroke-color="#2f9e44"
-        stroke-width="2"
-      ></v-map-layer-wkt>
+    <v-map
+      flavour="ol"
+      zoom="9"
+      center="11.541,48.154"
+      style={{ width: '100%', height: '400px' }}
+    >
+      <v-map-layergroup group-title="Base Layer">
+        <v-map-layer-osm></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="WKT Layers">
+        {/* Red styled point */}
+        <v-map-layer-wkt
+          wkt="POINT(11.57548 48.13743)"
+          z-index="1001"
+          point-radius="10"
+          point-color="#e03131"
+          stroke-color="#ffffff"
+          stroke-width="2"
+        ></v-map-layer-wkt>
+        {/* Blue styled line */}
+        <v-map-layer-wkt
+          wkt="LINESTRING(11.5 48.1, 11.6 48.15, 11.65 48.2)"
+          z-index="1002"
+          stroke-color="#1971c2"
+          stroke-width="4"
+        ></v-map-layer-wkt>
+        {/* Green styled polygon */}
+        <v-map-layer-wkt
+          wkt="POLYGON((11.45 48.08, 11.55 48.08, 11.55 48.18, 11.45 48.18, 11.45 48.08))"
+          opacity="0.8"
+          z-index="1003"
+          fill-color="#51cf66"
+          fill-opacity="0.3"
+          stroke-color="#2f9e44"
+          stroke-width="2"
+        ></v-map-layer-wkt>
+      </v-map-layergroup>
     </v-map>
   ),
 };
