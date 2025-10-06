@@ -346,7 +346,9 @@ export class LeafletProvider implements MapProvider {
           config.geostylerStyle,
         );
       } else {
-        const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+        const style = config.style
+          ? { ...DEFAULT_STYLE, ...config.style }
+          : DEFAULT_STYLE;
         layerOptions = {
           style: this.createLeafletStyle(style),
           pointToLayer: (feature, latlng) =>
@@ -716,7 +718,9 @@ export class LeafletProvider implements MapProvider {
         config.geostylerStyle,
       );
     } else {
-      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      const style = config.style
+        ? { ...DEFAULT_STYLE, ...config.style }
+        : DEFAULT_STYLE;
       layerOptions = {
         style: this.createLeafletStyle(style),
         pointToLayer: (feature, latlng) =>
@@ -1084,7 +1088,9 @@ export class LeafletProvider implements MapProvider {
   ): L.Layer {
     let finalStyle: StyleConfig = { ...(style ?? {}) };
     if (style?.styleFunction) {
-      const conditionalStyle = style.styleFunction(feature) as StyleConfig | undefined;
+      const conditionalStyle = style.styleFunction(feature) as
+        | StyleConfig
+        | undefined;
       if (conditionalStyle) {
         finalStyle = {
           ...style,
@@ -1168,7 +1174,9 @@ export class LeafletProvider implements MapProvider {
         config.geostylerStyle,
       );
     } else {
-      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      const style = config.style
+        ? { ...DEFAULT_STYLE, ...config.style }
+        : DEFAULT_STYLE;
       layerOptions = {
         style: this.createLeafletStyle(style),
         pointToLayer: (feature, latlng) =>
@@ -1210,7 +1218,9 @@ export class LeafletProvider implements MapProvider {
       );
     }
 
-    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+    const outputFormat = (
+      config.outputFormat ?? 'application/json'
+    ).toLowerCase();
 
     // Handle JSON formats
     if (
@@ -1222,13 +1232,11 @@ export class LeafletProvider implements MapProvider {
     }
 
     // Handle GML formats - parse XML to GeoJSON using gml2geojson
-    if (
-      outputFormat.includes('gml') ||
-      outputFormat.includes('xml')
-    ) {
+    if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
       const xml = await response.text();
-      const { parseGML } = await import('gml2geojson');
-      return parseGML(xml);
+      const { GmlParser } = await import('@npm9912/s-gml');
+      const parser = new GmlParser();
+      return await parser.parse(xml);
     }
 
     // Default: try to parse as JSON
