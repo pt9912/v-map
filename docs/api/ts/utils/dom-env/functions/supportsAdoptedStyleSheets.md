@@ -8,7 +8,7 @@
 
 > **supportsAdoptedStyleSheets**(): `boolean`
 
-Defined in: [src/utils/dom-env.ts:4](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/utils/dom-env.ts#L4)
+Defined in: [src/utils/dom-env.ts:4](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/dom-env.ts#L4)
 
 ## Returns
 

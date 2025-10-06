@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogle
 
-Defined in: [src/components.d.ts:199](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L199)
+Defined in: [src/components.d.ts:193](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L193)
 
 Google Maps Basemap Layer
 
@@ -16,7 +16,7 @@ Google Maps Basemap Layer
 
 > `optional` **apiKey**: `string`
 
-Defined in: [src/components.d.ts:204](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L204)
+Defined in: [src/components.d.ts:198](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L198)
 
 Google Maps API-Schlüssel.
 
@@ -32,7 +32,7 @@ Google Maps API-Schlüssel.
 
 > `optional` **language**: `string`
 
-Defined in: [src/components.d.ts:209](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L209)
+Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L203)
 
 Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
 
@@ -48,7 +48,7 @@ Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
 
 > `optional` **libraries**: `string`
 
-Defined in: [src/components.d.ts:214](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L214)
+Defined in: [src/components.d.ts:208](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L208)
 
 Google Maps libraries to load (comma-separated string).
 
@@ -64,7 +64,7 @@ Google Maps libraries to load (comma-separated string).
 
 > **mapType**: `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
 
-Defined in: [src/components.d.ts:219](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L219)
+Defined in: [src/components.d.ts:213](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L213)
 
 Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
 
@@ -80,7 +80,7 @@ Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:226](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L226)
+Defined in: [src/components.d.ts:220](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L220)
 
 Maximum zoom level for the layer.
 
@@ -90,7 +90,7 @@ Maximum zoom level for the layer.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:231](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L231)
+Defined in: [src/components.d.ts:225](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L225)
 
 Opazität des Layers (0–1).
 
@@ -106,7 +106,7 @@ Opazität des Layers (0–1).
 
 > `optional` **region**: `string`
 
-Defined in: [src/components.d.ts:235](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L235)
+Defined in: [src/components.d.ts:229](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L229)
 
 Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.
 
@@ -116,7 +116,7 @@ Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebn
 
 > `optional` **scale**: `"scaleFactor1x"` \| `"scaleFactor2x"` \| `"scaleFactor4x"`
 
-Defined in: [src/components.d.ts:240](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L240)
+Defined in: [src/components.d.ts:234](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L234)
 
 Scale factor for tile display.
 
@@ -132,7 +132,7 @@ Scale factor for tile display.
 
 > `optional` **styles**: `string` \| `any`[]
 
-Defined in: [src/components.d.ts:244](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L244)
+Defined in: [src/components.d.ts:238](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L238)
 
 Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array.
 
@@ -142,7 +142,7 @@ Custom styles for the Google Map (JSON array of styling objects). Can be passed 
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:249](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L249)
+Defined in: [src/components.d.ts:243](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L243)
 
 Sichtbarkeit des Layers.
 

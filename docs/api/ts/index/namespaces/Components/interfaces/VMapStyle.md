@@ -6,7 +6,7 @@
 
 # Interface: VMapStyle
 
-Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L688)
+Defined in: [src/components.d.ts:682](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L682)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/6b290
 
 > **autoApply**: `boolean`
 
-Defined in: [src/components.d.ts:693](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L693)
+Defined in: [src/components.d.ts:687](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L687)
 
 Whether to automatically apply the style when loaded.
 
@@ -30,7 +30,7 @@ true
 
 > `optional` **content**: `string`
 
-Defined in: [src/components.d.ts:697](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L697)
+Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L691)
 
 Inline style content as string (alternative to src).
 
@@ -40,7 +40,7 @@ Inline style content as string (alternative to src).
 
 > **format**: [`StyleFormat`](../../../../types/styling/type-aliases/StyleFormat.md)
 
-Defined in: [src/components.d.ts:702](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L702)
+Defined in: [src/components.d.ts:696](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L696)
 
 The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').
 
@@ -56,7 +56,7 @@ The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesiu
 
 > **getLayerTargetIds**: () => `Promise`\<`string`[]\>
 
-Defined in: [src/components.d.ts:706](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L706)
+Defined in: [src/components.d.ts:700](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L700)
 
 Get the target layer IDs as array. async
 
@@ -70,7 +70,7 @@ Get the target layer IDs as array. async
 
 > **getStyle**: () => `Promise`\<[`ResolvedStyle`](../../../../types/styling/type-aliases/ResolvedStyle.md)\>
 
-Defined in: [src/components.d.ts:710](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L710)
+Defined in: [src/components.d.ts:704](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L704)
 
 Get the currently parsed style.
 
@@ -84,7 +84,7 @@ Get the currently parsed style.
 
 > `optional` **layerTargets**: `string`
 
-Defined in: [src/components.d.ts:714](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L714)
+Defined in: [src/components.d.ts:708](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L708)
 
 Target layer IDs to apply this style to. If not specified, applies to all compatible layers.
 
@@ -94,6 +94,6 @@ Target layer IDs to apply this style to. If not specified, applies to all compat
 
 > `optional` **src**: `string`
 
-Defined in: [src/components.d.ts:718](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L718)
+Defined in: [src/components.d.ts:712](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L712)
 
 The style source - can be a URL to fetch from or inline SLD/style content.

@@ -23,6 +23,5 @@
 ### Methods
 
 - `getMapProvider() => Promise<MapProvider>` — Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
-- `isMapProviderAvailable() => Promise<boolean>` — Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
 - `setView(coordinates: [number, number], zoom: number) => Promise<void>` — Setzt Kartenzentrum und Zoom (optional animiert).
 

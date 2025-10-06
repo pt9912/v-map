@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerXyz
 
-Defined in: [src/components.d.ts:626](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L626)
+Defined in: [src/components.d.ts:620](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L620)
 
 XYZ Tile Layer
 
@@ -16,7 +16,7 @@ XYZ Tile Layer
 
 > `optional` **attributions**: `string`
 
-Defined in: [src/components.d.ts:630](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L630)
+Defined in: [src/components.d.ts:624](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L624)
 
 Attributions-/Copyright-Text (HTML erlaubt).
 
@@ -26,7 +26,7 @@ Attributions-/Copyright-Text (HTML erlaubt).
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:635](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L635)
+Defined in: [src/components.d.ts:629](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L629)
 
 Maximaler Zoomlevel, den der Tile-Server liefert.
 
@@ -42,7 +42,7 @@ Maximaler Zoomlevel, den der Tile-Server liefert.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:640](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L640)
+Defined in: [src/components.d.ts:634](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L634)
 
 Opazität (0–1).
 
@@ -58,7 +58,7 @@ Opazität (0–1).
 
 > `optional` **subdomains**: `string`
 
-Defined in: [src/components.d.ts:644](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L644)
+Defined in: [src/components.d.ts:638](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L638)
 
 Subdomains für parallele Tile-Anfragen (z. B. "a,b,c").
 
@@ -68,7 +68,7 @@ Subdomains für parallele Tile-Anfragen (z. B. "a,b,c").
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/components.d.ts:649](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L649)
+Defined in: [src/components.d.ts:643](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L643)
 
 Größe einer Kachel in Pixeln.
 
@@ -84,7 +84,7 @@ Größe einer Kachel in Pixeln.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:653](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L653)
+Defined in: [src/components.d.ts:647](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L647)
 
 URL-Template für Kacheln, z. B. "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png".
 
@@ -94,7 +94,7 @@ URL-Template für Kacheln, z. B. "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:658](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L658)
+Defined in: [src/components.d.ts:652](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L652)
 
 Sichtbarkeit des XYZ-Layers.
 

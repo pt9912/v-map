@@ -6,7 +6,7 @@
 
 # Interface: DeckLike
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:6](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/map-provider/deck/LayerGroups.ts#L6)
+Defined in: [src/map-provider/deck/LayerGroups.ts:6](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/deck/LayerGroups.ts#L6)
 
 Kompatibel zu deck.gl Deck.setProps
 
@@ -16,7 +16,7 @@ Kompatibel zu deck.gl Deck.setProps
 
 > **setProps**(`props`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:7](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/map-provider/deck/LayerGroups.ts#L7)
+Defined in: [src/map-provider/deck/LayerGroups.ts:7](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/deck/LayerGroups.ts#L7)
 
 #### Parameters
 
