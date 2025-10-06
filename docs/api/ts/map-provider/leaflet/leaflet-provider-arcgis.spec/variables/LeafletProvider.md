@@ -8,4 +8,4 @@
 
 > **LeafletProvider**: `any`
 
-Defined in: [src/map-provider/leaflet/leaflet-provider-arcgis.spec.ts:3](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/map-provider/leaflet/leaflet-provider-arcgis.spec.ts#L3)
+Defined in: [src/map-provider/leaflet/leaflet-provider-arcgis.spec.ts:3](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/map-provider/leaflet/leaflet-provider-arcgis.spec.ts#L3)

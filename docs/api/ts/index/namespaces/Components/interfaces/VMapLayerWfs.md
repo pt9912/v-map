@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWfs
 
-Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L440)
+Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L440)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:440](https://github.com/pt9912/v-map/blob/65bd4
 
 > **isReady**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:444](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L444)
+Defined in: [src/components.d.ts:444](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L444)
 
 Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
@@ -28,7 +28,7 @@ Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:449](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L449)
+Defined in: [src/components.d.ts:449](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L449)
 
 Opazität (0–1).
 
@@ -44,7 +44,7 @@ Opazität (0–1).
 
 > **outputFormat**: `string`
 
-Defined in: [src/components.d.ts:454](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L454)
+Defined in: [src/components.d.ts:454](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L454)
 
 Ausgabeformat, z. B. application/json.
 
@@ -60,7 +60,7 @@ Ausgabeformat, z. B. application/json.
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:458](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L458)
+Defined in: [src/components.d.ts:458](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L458)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -70,7 +70,7 @@ Zusätzliche Parameter als JSON-String.
 
 > **srsName**: `string`
 
-Defined in: [src/components.d.ts:463](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L463)
+Defined in: [src/components.d.ts:463](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L463)
 
 Ziel-Referenzsystem, Standard EPSG:3857.
 
@@ -86,7 +86,7 @@ Ziel-Referenzsystem, Standard EPSG:3857.
 
 > **typeName**: `string`
 
-Defined in: [src/components.d.ts:467](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L467)
+Defined in: [src/components.d.ts:467](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L467)
 
 Feature-Typ (typeName) des WFS.
 
@@ -96,7 +96,7 @@ Feature-Typ (typeName) des WFS.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:471](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L471)
+Defined in: [src/components.d.ts:471](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L471)
 
 WFS Endpunkt (z. B. https://server/wfs).
 
@@ -106,7 +106,7 @@ WFS Endpunkt (z. B. https://server/wfs).
 
 > **version**: `string`
 
-Defined in: [src/components.d.ts:476](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L476)
+Defined in: [src/components.d.ts:476](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L476)
 
 WFS Version, Standard 1.1.0.
 
@@ -122,7 +122,7 @@ WFS Version, Standard 1.1.0.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:481](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L481)
+Defined in: [src/components.d.ts:481](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L481)
 
 Sichtbarkeit des Layers.
 
@@ -138,7 +138,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:486](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/components.d.ts#L486)
+Defined in: [src/components.d.ts:486](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/components.d.ts#L486)
 
 Z-Index für Rendering.
 

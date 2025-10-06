@@ -9,3 +9,7 @@
 ## Interfaces
 
 - [StyleConfig](interfaces/StyleConfig.md)
+
+## Variables
+
+- [DEFAULT\_STYLE](variables/DEFAULT_STYLE.md)

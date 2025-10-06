@@ -46,12 +46,6 @@ export namespace Components {
          */
         "getMapProvider": () => Promise<MapProvider>;
         /**
-          * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
-          * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
-          * @returns `true`, wenn verfügbar, sonst `false`.
-         */
-        "isMapProviderAvailable": () => Promise<boolean>;
-        /**
           * Setzt Kartenzentrum und Zoom (optional animiert).
           * @param center [lon, lat] in WGS84
           * @param zoom Zoomstufe

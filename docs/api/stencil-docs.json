@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-04T18:04:10",
+  "timestamp": "2025-10-06T10:34:45",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -237,37 +237,6 @@
             {
               "name": "returns",
               "text": "Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit."
-            }
-          ]
-        },
-        {
-          "name": "isMapProviderAvailable",
-          "returns": {
-            "type": "Promise<boolean>",
-            "docs": "`true`, wenn verfügbar, sonst `false`."
-          },
-          "complexType": {
-            "signature": "() => Promise<boolean>",
-            "parameters": [],
-            "references": {
-              "Promise": {
-                "location": "global",
-                "id": "global::Promise"
-              }
-            },
-            "return": "Promise<boolean>"
-          },
-          "signature": "isMapProviderAvailable() => Promise<boolean>",
-          "parameters": [],
-          "docs": "Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.",
-          "docsTags": [
-            {
-              "name": "param",
-              "text": "flavour Gewünschter Provider (optional; Standard ist `this.flavour`)"
-            },
-            {
-              "name": "returns",
-              "text": "`true`, wenn verfügbar, sonst `false`."
             }
           ]
         },

@@ -76,9 +76,9 @@
       "ol": true
     },
     "wfs": {
-      "cesium": false,
-      "deck": false,
-      "leaflet": false,
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
       "ol": true
     },
     "wkt": {

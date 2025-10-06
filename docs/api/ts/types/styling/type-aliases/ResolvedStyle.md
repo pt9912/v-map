@@ -8,4 +8,4 @@
 
 > **ResolvedStyle** = `Style` \| [`Cesium3DTileStyle`](Cesium3DTileStyle.md)
 
-Defined in: [src/types/styling.ts:12](https://github.com/pt9912/v-map/blob/65bd44681676885ec61d0b75dc361b6a52cea066/src/types/styling.ts#L12)
+Defined in: [src/types/styling.ts:12](https://github.com/pt9912/v-map/blob/6b290a40db5b75e5078536738543838d31746c41/src/types/styling.ts#L12)
