@@ -1544,14 +1544,15 @@ export type TileLoadProps = {
       return await response.json();
     }
 
-    // Handle GML formats - parse XML to GeoJSON using gml2geojson
+    // Handle GML formats - parse XML to GeoJSON using @npm9912/s-gml
     if (
       outputFormat.includes('gml') ||
       outputFormat.includes('xml')
     ) {
       const xml = await response.text();
-      const { parseGML } = await import('gml2geojson');
-      return parseGML(xml);
+      const { GmlParser } = await import('@npm9912/s-gml');
+      const parser = new GmlParser();
+      return await parser.parse(xml);
     }
 
     // Default: try to parse as JSON
