@@ -194,7 +194,46 @@ export const LeafletOSMWaterAreaJSON: Story = {
     srsName: 'EPSG:4326',
     params: JSON.stringify({
       maxFeatures: 2000,
-      bbox: ['-81', '41', '-75', '45', 'EPSG:4326'],
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
+    }),
+  },
+  render: props => {
+    return (
+      <v-map
+        zoom="10"
+        center="-79,43"
+        flavour="leaflet"
+        style={{ height: '600px', width: '600px' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WFS Layer">
+          <v-map-layer-wfs
+            zIndex="100"
+            url={props.url}
+            type-name={props.typeName}
+            version={props.version}
+            output-format={props.outputFormat}
+            srs-name={props.srsName}
+            params={props.params}
+          ></v-map-layer-wfs>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const LeafletOSMWaterAreaGML2: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wfs',
+    typeName: 'osm:water_areas',
+    version: '1.1.0',
+    outputFormat: 'GML2',
+    srsName: 'EPSG:4326',
+    params: JSON.stringify({
+      maxFeatures: 2000,
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
     }),
   },
   render: props => {
@@ -233,7 +272,7 @@ export const DeckOSMWaterAreaJSON: Story = {
     srsName: 'EPSG:4326',
     params: JSON.stringify({
       maxFeatures: 2000,
-      bbox: ['-81', '41', '-75', '45', 'EPSG:4326'],
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
     }),
   },
   render: props => {
@@ -242,6 +281,123 @@ export const DeckOSMWaterAreaJSON: Story = {
         zoom="9"
         center="-79,43"
         flavour="deck"
+        style={{ height: '600px', width: '600px' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WFS Layer">
+          <v-map-layer-wfs
+            zIndex="100"
+            url={props.url}
+            type-name={props.typeName}
+            version={props.version}
+            output-format={props.outputFormat}
+            srs-name={props.srsName}
+            params={props.params}
+          ></v-map-layer-wfs>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const DeckOSMWaterAreaGML3: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wfs',
+    typeName: 'osm:water_areas',
+    version: '1.1.0',
+    outputFormat: 'GML3',
+    srsName: 'EPSG:4326',
+    params: JSON.stringify({
+      maxFeatures: 2000,
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
+    }),
+  },
+  render: props => {
+    return (
+      <v-map
+        zoom="9"
+        center="-79,43"
+        flavour="deck"
+        style={{ height: '600px', width: '600px' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WFS Layer">
+          <v-map-layer-wfs
+            zIndex="100"
+            url={props.url}
+            type-name={props.typeName}
+            version={props.version}
+            output-format={props.outputFormat}
+            srs-name={props.srsName}
+            params={props.params}
+          ></v-map-layer-wfs>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const DeckOSMWaterAreaGML32: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wfs',
+    typeName: 'osm:water_areas',
+    version: '1.1.0',
+    outputFormat: 'GML32',
+    srsName: 'EPSG:4326',
+    params: JSON.stringify({
+      maxFeatures: 2000,
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
+    }),
+  },
+  render: props => {
+    return (
+      <v-map
+        zoom="9"
+        center="-79,43"
+        flavour="deck"
+        style={{ height: '600px', width: '600px' }}
+      >
+        <v-map-layergroup group-title="Base Layer">
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+        <v-map-layergroup group-title="WFS Layer">
+          <v-map-layer-wfs
+            zIndex="100"
+            url={props.url}
+            type-name={props.typeName}
+            version={props.version}
+            output-format={props.outputFormat}
+            srs-name={props.srsName}
+            params={props.params}
+          ></v-map-layer-wfs>
+        </v-map-layergroup>
+      </v-map>
+    );
+  },
+};
+
+export const CesiumOSMWaterAreaGML32: Story = {
+  args: {
+    url: 'https://ahocevar.com/geoserver/wfs',
+    typeName: 'osm:water_areas',
+    version: '1.1.0',
+    outputFormat: 'GML32',
+    srsName: 'EPSG:4326',
+    params: JSON.stringify({
+      maxFeatures: 2000,
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
+    }),
+  },
+  render: props => {
+    return (
+      <v-map
+        zoom="10"
+        center="-79,42"
+        flavour="cesium"
         style={{ height: '600px', width: '600px' }}
       >
         <v-map-layergroup group-title="Base Layer">
@@ -272,7 +428,7 @@ export const CesiumOSMWaterAreaJSON: Story = {
     srsName: 'EPSG:4326',
     params: JSON.stringify({
       maxFeatures: 2000,
-      bbox: ['-81', '41', '-75', '45', 'EPSG:4326'],
+      bbox: ['-79.5', '42.5', '-78.5', '43.5', 'EPSG:4326'],
     }),
   },
   render: props => {
