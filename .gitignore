@@ -43,3 +43,5 @@ v-map-cesium/
 v-map-test-harness*/
 
 docs/site.pdf
+
+.claude/
