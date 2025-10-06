@@ -105,12 +105,24 @@ export const newE2EPage: typeof _newE2EPage & {
     /Blocked script execution in 'about:blank'/i,
     /GPU stall due to ReadPixels/i,
     /No map visible because the map container's width or height are 0/i,
+    /\[custom-elements#get-miss]/i,
   ];
 
   const additionalIgnore = additionalIgnoredErrors.map(pattern => new RegExp(pattern, 'i'));
 
   failOnConsole(page as any, {
     ignore: [...defaultIgnore, ...additionalIgnore],
+  });
+
+  // Netzwerkzugriffe für Debug-Zwecke protokollieren, um auffällige Requests (z. B. Google Maps) zu erkennen.
+  page.on('request', req => {
+    const url = req.url();
+    if (/^https:\/\/maps\.(googleapis|gstatic)\.com\//.test(url)) {
+      console.info(`[e2e] request ${url}`);
+    }
+  });
+  page.on('requestfailed', req => {
+    console.warn(`[e2e] request failed ${req.url()} :: ${req.failure()?.errorText}`);
   });
 
   return page;

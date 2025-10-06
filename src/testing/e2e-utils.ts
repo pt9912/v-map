@@ -50,14 +50,20 @@ export function failOnConsole(page: E2EPage, opts?: { ignore?: RegExp[] }) {
     const text = parts.join('\n');
 
     const prefix = `[browser:${msg.type()}]`;
-    if (msg.type() !== 'error') {
-      console.log(`${prefix} ${text}`);
-    } else {
-      console.error(`${prefix} ${text}`);
+    const line = `${prefix} ${text}\n`;
+
+    const shouldIgnore = ignore.some(rx => rx.test(text));
+
+    if (!shouldIgnore) {
+      if (msg.type() === 'error') {
+        process.stderr.write(line);
+      } else if (msg.type() === 'warn') {
+        process.stdout.write(line);
+      }
     }
 
     if (msg.type() === 'error') {
-      if (ignore.some(rx => rx.test(text))) return;
+      if (shouldIgnore) return;
       throw new Error(`Console error in browser:\n${text}`);
     }
   });

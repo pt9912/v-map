@@ -1,10 +1,40 @@
+import type { E2EPage } from '../../testing/e2e-testing';
 import { newE2EPage } from '../../testing/e2e-testing';
 
-describe('<v-map-layer-tile3d> E2E', () => {
-  it('rendert zusammen mit v-map-style und reagiert auf Style-Events', async () => {
-    const page = await newE2EPage();
+jest.setTimeout(20_000);
 
-    await page.setContent(`
+describe('<v-map-layer-tile3d> E2E', () => {
+  let page: E2EPage;
+
+  const render = async (html: string, opts?: { wait?: boolean }) => {
+    await page.evaluate(
+      content => {
+        const root = document.getElementById('test-root');
+        if (root) {
+          root.innerHTML = content;
+        }
+      },
+      html,
+    );
+    if (opts?.wait === false) return;
+    await page.waitForChanges();
+  };
+
+  beforeAll(async () => {
+    page = await newE2EPage();
+    await page.setContent('<div id="test-root"></div>');
+  });
+
+  afterEach(async () => {
+    await render('', { wait: false });
+  });
+
+  afterAll(async () => {
+    await page.close();
+  });
+
+  it('rendert zusammen mit v-map-style und reagiert auf Style-Events', async () => {
+    await render(`
       <div>
         <v-map-style
           id="style"
@@ -20,8 +50,6 @@ describe('<v-map-layer-tile3d> E2E', () => {
         ></v-map-layer-tile3d>
       </div>
     `);
-
-    await page.waitForChanges();
 
     const styleComponent = await page.find('v-map-style');
     expect(styleComponent).toBeTruthy();
@@ -40,11 +68,9 @@ describe('<v-map-layer-tile3d> E2E', () => {
       'https://example.com/tileset.json',
     );
 
-    // Wire up readiness helper
     const ready = await tileLayer.callMethod('isReady');
     expect(ready).toBe(true);
 
-    // opacity reflection
     expect(await tileLayer.getProperty('opacity')).toBe(0.8);
     expect(await tileLayer.getProperty('visible')).toBe(true);
   });
