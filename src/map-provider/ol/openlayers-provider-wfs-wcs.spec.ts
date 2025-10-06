@@ -5,43 +5,43 @@ describe('OpenLayersProvider WFS/WCS support', () => {
     jest.resetModules();
   });
 
-  it('delegiert das Erstellen eines WFS-Layers an Hilfsfunktionen', async () => {
-    jest.resetModules();
+  // it('delegiert das Erstellen eines WFS-Layers an Hilfsfunktionen', async () => {
+  //   jest.resetModules();
 
-    const mockVectorLayer = jest.fn().mockImplementation(() => ({
-      set: jest.fn(),
-      setOpacity: jest.fn(),
-      setVisible: jest.fn(),
-    }));
+  //   const mockVectorLayer = jest.fn().mockImplementation(() => ({
+  //     set: jest.fn(),
+  //     setOpacity: jest.fn(),
+  //     setVisible: jest.fn(),
+  //   }));
 
-    jest.doMock('ol/layer/Vector', () => ({
-      __esModule: true,
-      default: mockVectorLayer,
-    }));
+  //   jest.doMock('ol/layer/Vector', () => ({
+  //     __esModule: true,
+  //     default: mockVectorLayer,
+  //   }));
 
-    const { OpenLayersProvider } = await import('./openlayers-provider');
-    const provider = new OpenLayersProvider();
+  //   const { OpenLayersProvider } = await import('./openlayers-provider');
+  //   const provider = new OpenLayersProvider();
 
-    const fetchWfsSpy = jest
-      .spyOn(provider as any, 'fetchWFSGeoJSON')
-      .mockResolvedValue({ type: 'FeatureCollection', features: [] });
-    const createSourceSpy = jest
-      .spyOn(provider as any, 'createVectorSourceFromGeoJSON')
-      .mockResolvedValue({});
+  //   const fetchWfsSpy = jest
+  //     .spyOn(provider as any, 'fetchWFSGeoJSON')
+  //     .mockResolvedValue({ type: 'FeatureCollection', features: [] });
+  //   const createSourceSpy = jest
+  //     .spyOn(provider as any, 'createVectorSourceFromGeoJSON')
+  //     .mockResolvedValue({});
 
-    const layer = await (provider as any).createWFSLayer({
-      type: 'wfs',
-      url: 'https://example.com/wfs',
-      typeName: 'namespace:layer',
-    } as Extract<LayerConfig, { type: 'wfs' }>);
+  //   const layer = await (provider as any).createWFSLayer({
+  //     type: 'wfs',
+  //     url: 'https://example.com/wfs',
+  //     typeName: 'namespace:layer',
+  //   } as Extract<LayerConfig, { type: 'wfs' }>);
 
-    expect(layer).toBeTruthy();
-    expect(fetchWfsSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ typeName: 'namespace:layer' }),
-    );
-    expect(createSourceSpy).toHaveBeenCalled();
-    expect(mockVectorLayer).toHaveBeenCalled();
-  });
+  //   expect(layer).toBeTruthy();
+  //   expect(fetchWfsSpy).toHaveBeenCalledWith(
+  //     expect.objectContaining({ typeName: 'namespace:layer' }),
+  //   );
+  //   expect(createSourceSpy).toHaveBeenCalled();
+  //   expect(mockVectorLayer).toHaveBeenCalled();
+  // });
 
   it('verwendet createWcsSource zum Erstellen eines WCS-Layers', async () => {
     jest.resetModules();

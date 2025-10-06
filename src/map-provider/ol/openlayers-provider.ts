@@ -373,8 +373,8 @@ export class OpenLayersProvider implements MapProvider {
 
   private async updateWFSLayer(layer: Layer, data: any) {
     const merged = this.mergeLayerConfig(layer, 'wfsConfig', data);
-    const geojson = await this.fetchWFSFromUrl(merged);
-    const vectorSource = await this.createVectorSourceFromGeoJSON(geojson);
+
+    const vectorSource = await this.createWFSSpource(merged);
     layer.setSource(vectorSource);
 
     // Apply style if provided
@@ -706,11 +706,10 @@ export class OpenLayersProvider implements MapProvider {
     return layer;
   }
 
-  private async createWFSLayer(
+  private async createWFSSpource(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): Promise<Layer> {
+  ): Promise<VectorSource> {
     const [
-      { default: VectorLayer },
       { default: VectorSource },
       { default: GeoJSON },
       { default: GML2 },
@@ -718,7 +717,6 @@ export class OpenLayersProvider implements MapProvider {
       { default: GML32 },
       { bbox: bboxStrategy },
     ] = await Promise.all([
-      import('ol/layer/Vector'),
       import('ol/source/Vector'),
       import('ol/format/GeoJSON'),
       import('ol/format/GML2'),
@@ -750,6 +748,17 @@ export class OpenLayersProvider implements MapProvider {
       url: urlFunction,
       strategy: bboxStrategy,
     });
+    return vectorSource;
+  }
+
+  private async createWFSLayer(
+    config: Extract<LayerConfig, { type: 'wfs' }>,
+  ): Promise<Layer> {
+    const [{ default: VectorLayer }] = await Promise.all([
+      import('ol/layer/Vector'),
+    ]);
+
+    const vectorSource = await this.createWFSSpource(config);
 
     // Use geostyler style if available, otherwise use default style function
     let layerStyle;
@@ -764,12 +773,12 @@ export class OpenLayersProvider implements MapProvider {
       layerStyle = await this.createEnhancedStyleFunction(style);
     }
 
-    const vector = new VectorLayer({
+    const layer = new VectorLayer({
       source: vectorSource,
       style: layerStyle,
     });
-
-    return vector;
+    layer.set('wfsConfig', config, false);
+    return layer;
   }
 
   // private async createWFSLayer2(
@@ -1358,103 +1367,6 @@ export class OpenLayersProvider implements MapProvider {
       vectorSource = new VectorSource({ features: [] });
     }
 
-    // // Create enhanced style function (reuse the same logic as GeoJSON)
-    // const styleFunction = (feature: any) => {
-    //   const styles = [];
-    //   const geometry = feature.getGeometry();
-    //   const geometryType = geometry.getType();
-
-    //   // Base style configuration
-    //   const style = config.style || {};
-
-    //   // Create fill style
-    //   const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
-    //   const fillOpacity = style.fillOpacity ?? 0.3;
-    //   const fill = new Fill({
-    //     color: this.applyOpacity(fillColor, fillOpacity),
-    //   });
-
-    //   // Create stroke style
-    //   const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
-    //   const strokeOpacity = style.strokeOpacity ?? 1;
-    //   const strokeWidth = style.strokeWidth ?? 2;
-    //   const stroke = new Stroke({
-    //     color: this.applyOpacity(strokeColor, strokeOpacity),
-    //     width: strokeWidth,
-    //     lineDash: style.strokeDashArray,
-    //   });
-
-    //   // Point styling
-    //   if (geometryType === 'Point') {
-    //     if (style.iconUrl) {
-    //       // Icon style for points
-    //       styles.push(
-    //         new Style({
-    //           image: new Icon({
-    //             src: style.iconUrl,
-    //             size: style.iconSize || [32, 32],
-    //             anchor: style.iconAnchor || [0.5, 1],
-    //           }),
-    //         }),
-    //       );
-    //     } else {
-    //       // Circle style for points
-    //       const pointColor = style.pointColor ?? 'rgba(0,100,255,1)';
-    //       const pointOpacity = style.pointOpacity ?? 1;
-    //       const pointRadius = style.pointRadius ?? 6;
-
-    //       styles.push(
-    //         new Style({
-    //           image: new Circle({
-    //             radius: pointRadius,
-    //             fill: new Fill({
-    //               color: this.applyOpacity(pointColor, pointOpacity),
-    //             }),
-    //             stroke: stroke,
-    //           }),
-    //         }),
-    //       );
-    //     }
-    //   } else {
-    //     // Polygon and line styling
-    //     styles.push(
-    //       new Style({
-    //         fill: geometryType.includes('Polygon') ? fill : undefined,
-    //         stroke: stroke,
-    //       }),
-    //     );
-    //   }
-
-    //   // Text labeling
-    //   if (style.textProperty && feature.get(style.textProperty)) {
-    //     const textColor = style.textColor ?? '#000000';
-    //     const textSize = style.textSize ?? 12;
-    //     const textHaloColor = style.textHaloColor;
-    //     const textHaloWidth = style.textHaloWidth ?? 2;
-    //     const textOffset = style.textOffset || [0, 0];
-
-    //     styles.push(
-    //       new Style({
-    //         text: new Text({
-    //           text: String(feature.get(style.textProperty)),
-    //           font: `${textSize}px Arial`,
-    //           fill: new Fill({ color: textColor }),
-    //           stroke: textHaloColor
-    //             ? new Stroke({
-    //                 color: textHaloColor,
-    //                 width: textHaloWidth,
-    //               })
-    //             : undefined,
-    //           offsetX: textOffset[0],
-    //           offsetY: textOffset[1],
-    //         }),
-    //       }),
-    //     );
-    //   }
-
-    //   return styles;
-    // };
-
     // Use geostyler style if available, otherwise use default style function
     let layerStyle;
     if (config.geostylerStyle) {
@@ -1547,103 +1459,103 @@ export class OpenLayersProvider implements MapProvider {
     };
   }
 
-  private async fetchWFSFromUrl(
-    config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): Promise<any> {
-    const wfsVersion = config.version ?? '1.1.0';
-    const baseParams = {
-      service: 'WFS',
-      request: 'GetFeature',
-      version: wfsVersion,
-      typeName: config.typeName,
-      outputFormat: config.outputFormat ?? 'application/json',
-      srsName: config.srsName ?? (this.projection as string),
-    };
+  // private async fetchWFSFromUrl(
+  //   config: Extract<LayerConfig, { type: 'wfs' }>,
+  // ): Promise<any> {
+  //   const wfsVersion = config.version ?? '1.1.0';
+  //   const baseParams = {
+  //     service: 'WFS',
+  //     request: 'GetFeature',
+  //     version: wfsVersion,
+  //     typeName: config.typeName,
+  //     outputFormat: config.outputFormat ?? 'application/json',
+  //     srsName: config.srsName ?? (this.projection as string),
+  //   };
 
-    const params = { ...baseParams, ...(config.params ?? {}) };
-    const requestUrl = this.appendParams(config.url, params);
+  //   const params = { ...baseParams, ...(config.params ?? {}) };
+  //   const requestUrl = this.appendParams(config.url, params);
 
-    const response = await fetch(requestUrl);
-    if (!response.ok) {
-      throw new Error(
-        `WFS request failed (${response.status} ${response.statusText})`,
-      );
-    }
+  //   const response = await fetch(requestUrl);
+  //   if (!response.ok) {
+  //     throw new Error(
+  //       `WFS request failed (${response.status} ${response.statusText})`,
+  //     );
+  //   }
 
-    const outputFormat = (
-      config.outputFormat ?? 'application/json'
-    ).toLowerCase();
+  //   const outputFormat = (
+  //     config.outputFormat ?? 'application/json'
+  //   ).toLowerCase();
 
-    // Handle JSON formats
-    if (
-      outputFormat.includes('json') ||
-      outputFormat.includes('geojson') ||
-      outputFormat === 'application/json'
-    ) {
-      return await response.json();
-    }
+  //   // Handle JSON formats
+  //   if (
+  //     outputFormat.includes('json') ||
+  //     outputFormat.includes('geojson') ||
+  //     outputFormat === 'application/json'
+  //   ) {
+  //     return await response.json();
+  //   }
 
-    // Handle GML formats using OpenLayers WFS parser
-    if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
-      const text = await response.text();
-      const [
-        { default: WFS },
-        { default: GeoJSON },
-        { default: GML2 },
-        { default: GML3 },
-        { default: GML32 },
-      ] = await Promise.all([
-        import('ol/format/WFS'),
-        import('ol/format/GeoJSON'),
-        import('ol/format/GML2'),
-        import('ol/format/GML3'),
-        import('ol/format/GML32'),
-      ]);
-      const wfsOptions: any = {};
-      wfsOptions.version = wfsVersion;
-      switch (outputFormat) {
-        case 'gml2':
-          wfsOptions.gmlFormat = new GML2();
-          break;
-        case 'gml3':
-          wfsOptions.gmlFormat = new GML3();
-          break;
-        case 'gml32':
-          wfsOptions.gmlFormat = new GML32();
-          break;
-      }
+  //   // Handle GML formats using OpenLayers WFS parser
+  //   if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
+  //     const text = await response.text();
+  //     const [
+  //       { default: WFS },
+  //       { default: GeoJSON },
+  //       { default: GML2 },
+  //       { default: GML3 },
+  //       { default: GML32 },
+  //     ] = await Promise.all([
+  //       import('ol/format/WFS'),
+  //       import('ol/format/GeoJSON'),
+  //       import('ol/format/GML2'),
+  //       import('ol/format/GML3'),
+  //       import('ol/format/GML32'),
+  //     ]);
+  //     const wfsOptions: any = {};
+  //     wfsOptions.version = wfsVersion;
+  //     switch (outputFormat) {
+  //       case 'gml2':
+  //         wfsOptions.gmlFormat = new GML2();
+  //         break;
+  //       case 'gml3':
+  //         wfsOptions.gmlFormat = new GML3();
+  //         break;
+  //       case 'gml32':
+  //         wfsOptions.gmlFormat = new GML32();
+  //         break;
+  //     }
 
-      const wfsFormat = new WFS(wfsOptions);
-      const features = wfsFormat.readFeatures(text);
+  //     const wfsFormat = new WFS(wfsOptions);
+  //     const features = wfsFormat.readFeatures(text);
 
-      // Convert features to GeoJSON
-      const geojsonFormat = new GeoJSON();
-      const geojson = JSON.parse(
-        geojsonFormat.writeFeatures(features, {
-          featureProjection: this.projection,
-          dataProjection: config.srsName ?? (this.projection as string),
-        }),
-      );
+  //     // Convert features to GeoJSON
+  //     const geojsonFormat = new GeoJSON();
+  //     const geojson = JSON.parse(
+  //       geojsonFormat.writeFeatures(features, {
+  //         featureProjection: this.projection,
+  //         dataProjection: config.srsName ?? (this.projection as string),
+  //       }),
+  //     );
 
-      return geojson;
-    }
+  //     return geojson;
+  //   }
 
-    // Default: try to parse as JSON
-    return await response.json();
-  }
+  //   // Default: try to parse as JSON
+  //   return await response.json();
+  // }
 
-  private async createVectorSourceFromGeoJSON(
-    geojson: any,
-  ): Promise<VectorSource> {
-    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all(
-      [import('ol/source/Vector'), import('ol/format/GeoJSON')],
-    );
+  // private async createVectorSourceFromGeoJSON(
+  //   geojson: any,
+  // ): Promise<VectorSource> {
+  //   const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all(
+  //     [import('ol/source/Vector'), import('ol/format/GeoJSON')],
+  //   );
 
-    const format = new GeoJSON({ featureProjection: this.projection });
-    return new VectorSource({
-      features: format.readFeatures(geojson),
-    });
-  }
+  //   const format = new GeoJSON({ featureProjection: this.projection });
+  //   return new VectorSource({
+  //     features: format.readFeatures(geojson),
+  //   });
+  // }
 
   private mergeLayerConfig(layer: Layer, key: string, data: any) {
     const previous = (layer as any).get?.(key) ?? {};
