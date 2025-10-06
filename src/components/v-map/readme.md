@@ -36,16 +36,6 @@ Type: `Promise<MapProvider>`
 
 Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
 
-### `isMapProviderAvailable() => Promise<boolean>`
-
-Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
-
-#### Returns
-
-Type: `Promise<boolean>`
-
-`true`, wenn verfügbar, sonst `false`.
-
 ### `setView(coordinates: [number, number], zoom: number) => Promise<void>`
 
 Setzt Kartenzentrum und Zoom (optional animiert).

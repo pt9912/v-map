@@ -20,7 +20,7 @@ export class VMapLayerHelper {
       this.layerId = null;
     }
 
-    const isMapProviderAvailable = await vmap.isMapProviderAvailable();
+    const isMapProviderAvailable = (await vmap.getMapProvider()) ? true : false;
 
     if (isMapProviderAvailable) {
       log(`${this.el.nodeName.toLowerCase()} - Layer wird hinzugefügt`);

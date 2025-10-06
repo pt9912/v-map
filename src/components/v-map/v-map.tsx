@@ -167,13 +167,24 @@ export class VMap {
       ensureImportMap();
     }
 
-    await this.createMap();
+    //await this.createMap();
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
     //test
+  }
+
+  async componentWillRender() {
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
+  }
+
+  async componentDidRender() {
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
+
+    await this.createMap();
+
     this.el.addEventListener(VMapEvents.MapProviderReady, ((
       event: CustomEvent<MapProviderDetail>,
     ) => {
@@ -216,16 +227,16 @@ export class VMap {
     return this.mapProvider;
   }
 
-  /**
-   * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
-   * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
-   * @returns `true`, wenn verfügbar, sonst `false`.
-   */
-  @Method()
-  async isMapProviderAvailable(): Promise<boolean> {
-    if (!this.mapProvider) return false;
-    return true;
-  }
+  // /**
+  //  * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
+  //  * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
+  //  * @returns `true`, wenn verfügbar, sonst `false`.
+  //  */
+  // @Method()
+  // async isMapProviderAvailable(): Promise<boolean> {
+  //   if (!this.mapProvider) return false;
+  //   return true;
+  // }
 
   /**
    * Setzt Kartenzentrum und Zoom (optional animiert).

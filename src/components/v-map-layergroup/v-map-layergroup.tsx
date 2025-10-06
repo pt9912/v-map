@@ -71,8 +71,9 @@ export class VMapLayerGroup {
     await customElements.whenDefined('v-map');
     const vmap = mapElement as HTMLVMapElement;
 
-    const mapProviderAvailable: boolean =
-      await mapElement?.isMapProviderAvailable?.();
+    const mapProviderAvailable: boolean = (await mapElement?.getMapProvider?.())
+      ? true
+      : false;
     if (mapProviderAvailable) {
       this.mapProvider = await mapElement?.getMapProvider?.();
       if (this.mapProvider?.ensureGroup) {
