@@ -56,6 +56,9 @@ importers:
       '@luma.gl/core':
         specifier: ^9.1.9
         version: 9.1.9
+      '@npm9912/s-gml':
+        specifier: ^1.2.0
+        version: 1.2.0(@types/node@22.18.1)
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.2.7(typescript@5.9.2))
@@ -140,9 +143,6 @@ importers:
       geotiff:
         specifier: 2.1.4-beta.0
         version: 2.1.4-beta.0
-      gml2geojson:
-        specifier: ^0.0.7
-        version: 0.0.7
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.1)
@@ -1203,6 +1203,11 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@npm9912/s-gml@1.2.0':
+    resolution: {integrity: sha512-zomRMIzj4EjlBWL7NepQE3jIQVtyQLZU6YF3rSI9b4uscqOBcxJE0aXQz15SCgg/40tLlCmLT83Tu6W/hT/AYg==}
+    engines: {node: '>=22.0.0', pnpm: '>=8.0.0'}
+    hasBin: true
 
   '@octokit/auth-token@5.1.2':
     resolution: {integrity: sha512-JcQDsBdg49Yky2w2ld20IHAlwr8d/d8N6NiOXbtuoPCqzbsiJgF633mVUw3x4mo0H5ypataQIX7SFu3yy44Mpw==}
@@ -2642,6 +2647,10 @@ packages:
   comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
 
+  commander@11.1.0:
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
+    engines: {node: '>=16'}
+
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
     engines: {node: '>=18'}
@@ -3530,9 +3539,6 @@ packages:
   globby@14.1.0:
     resolution: {integrity: sha512-0Ia46fDOaT7k4og1PDW4YbodWWr3scS2vAr2lTbsplOt2WkKp0vQbkI9wKis/T5LV/dqPjO3bpS/z6GTJB82LA==}
     engines: {node: '>=18'}
-
-  gml2geojson@0.0.7:
-    resolution: {integrity: sha512-GpOkkIDg8IIrb6H9tV987+LU8td3E0ycFZz+T48NNcj4vUYzowkT/gkxzGbzZjTKdEitXWL9AJJI4GSwAGStdw==}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -6485,6 +6491,12 @@ packages:
   xmlchars@2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
 
+  xmllint-wasm@5.0.0:
+    resolution: {integrity: sha512-vHgxKtU1ooKxlvaB/YcUj+bO+c53EvPXrk9my83/SZhcnf8D32GbACPiC3kyrMLqJQJzpkzSykmh23Cv21fvlg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@types/node': '>=16'
+
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
@@ -7737,6 +7749,14 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@npm9912/s-gml@1.2.0(@types/node@22.18.1)':
+    dependencies:
+      commander: 11.1.0
+      fast-xml-parser: 4.5.3
+      xmllint-wasm: 5.0.0(@types/node@22.18.1)
+    transitivePeerDependencies:
+      - '@types/node'
 
   '@octokit/auth-token@5.1.2': {}
 
@@ -9435,6 +9455,8 @@ snapshots:
 
   comma-separated-tokens@2.0.3: {}
 
+  commander@11.1.0: {}
+
   commander@12.1.0: {}
 
   commander@2.20.3: {}
@@ -10581,8 +10603,6 @@ snapshots:
       path-type: 6.0.0
       slash: 5.1.0
       unicorn-magic: 0.3.0
-
-  gml2geojson@0.0.7: {}
 
   gopd@1.2.0: {}
 
@@ -13853,6 +13873,10 @@ snapshots:
   xmlbuilder@11.0.1: {}
 
   xmlchars@2.2.0: {}
+
+  xmllint-wasm@5.0.0(@types/node@22.18.1):
+    dependencies:
+      '@types/node': 22.18.1
 
   xtend@4.0.2: {}
 
