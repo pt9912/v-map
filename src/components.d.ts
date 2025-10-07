@@ -11,7 +11,6 @@ import { MapProviderDetail } from "./utils/events";
 import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
-import { LayerConfig } from "./types/layerconfig";
 import { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
@@ -19,7 +18,6 @@ export { MapProviderDetail } from "./utils/events";
 export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
-export { LayerConfig } from "./types/layerconfig";
 export { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export namespace Components {
     interface VMap {
@@ -659,15 +657,11 @@ export namespace Components {
     }
     interface VMapLayergroup {
         /**
-          * Fügt ein Kind-Layer zur Gruppe hinzu.
-          * @param layer Layer-Element (Web Component)
-         */
-        "addLayer": (layerConfig: LayerConfig, layerElementId?: string) => Promise<string>;
-        /**
           * Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
           * @default null
          */
         "basemapid": string | null;
+        "getGroupId": () => Promise<string>;
         /**
           * Globale Opazität (0–1) für alle Kinder.
           * @default 1

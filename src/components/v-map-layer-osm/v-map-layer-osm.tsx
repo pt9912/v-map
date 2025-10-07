@@ -97,7 +97,7 @@ export class VMapLayerOSM implements VMapLayer {
    */
   @Method()
   async getLayerId() {
-    return this.helper.getLayerId();
+    return this.helper?.getLayerId();
   }
 
   private createLayerConfig(): LayerConfig {

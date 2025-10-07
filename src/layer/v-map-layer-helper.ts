@@ -1,4 +1,5 @@
-import { LayerConfig } from 'src/components';
+import type { LayerConfig } from '../types/layerconfig';
+
 import { VMapEvents, type MapProviderDetail } from '../utils/events';
 import type { MapProvider, LayerUpdate } from '../types/mapprovider';
 import { log, warn } from '../utils/logger';
@@ -8,6 +9,31 @@ export class VMapLayerHelper {
   private mapProvider: MapProvider = null;
 
   constructor(private el: HTMLElement) {}
+
+  private async addLayer(
+    basemapid: string,
+    groupId: string,
+    layerConfig: LayerConfig,
+    layerElementId?: string,
+  ): Promise<string> {
+    if (!this.mapProvider) throw new Error('Map-Provider nicht verfügbar.');
+    if (basemapid) {
+      return await this.mapProvider.addBaseLayer(
+        {
+          ...layerConfig,
+          groupId: groupId,
+        },
+        basemapid,
+        layerElementId,
+      );
+    }
+    return await this.mapProvider.addLayerToGroup(
+      {
+        ...layerConfig,
+      },
+      groupId,
+    );
+  }
 
   protected async addToMapInternal(
     group: Element,
@@ -20,15 +46,25 @@ export class VMapLayerHelper {
       this.layerId = null;
     }
 
+    const layerGroup: HTMLVMapLayergroupElement =
+      group as HTMLVMapLayergroupElement;
+
     const isMapProviderAvailable = (await vmap.getMapProvider()) ? true : false;
 
     if (isMapProviderAvailable) {
       log(`${this.el.nodeName.toLowerCase()} - Layer wird hinzugefügt`);
       this.mapProvider = await vmap.getMapProvider();
-      this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
+      const groupId: string = await layerGroup.getGroupId();
+      this.layerId = await this.addLayer(
+        layerGroup.basemapid,
+        groupId,
         createLayerConfig(),
         elementId,
       );
+      // await (group as HTMLVMapLayergroupElement).addLayer(
+      //   createLayerConfig(),
+      //   elementId,
+      // );
     } //else {
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
@@ -38,10 +74,17 @@ export class VMapLayerHelper {
       );
       const mapEvent = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
-      this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
+      const groupId: string = await layerGroup.getGroupId();
+      this.layerId = await this.addLayer(
+        layerGroup.basemapid,
+        groupId,
         createLayerConfig(),
         elementId,
       );
+      // this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
+      //   createLayerConfig(),
+      //   elementId,
+      // );
     }) as EventListener);
     //}
   }

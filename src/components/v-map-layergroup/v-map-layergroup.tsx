@@ -1,6 +1,5 @@
 import { Watch, Component, Prop, Element, h, Method } from '@stencil/core';
 import type { MapProvider } from '../../types/mapprovider';
-import type { LayerConfig } from '../../types/layerconfig';
 import { VMapEvents, type MapProviderDetail } from '../../utils/events';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
@@ -112,33 +111,37 @@ export class VMapLayerGroup {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
   }
 
-  /**
-   * Fügt ein Kind-Layer zur Gruppe hinzu.
-   * @param layer Layer-Element (Web Component)
-   */
   @Method()
-  async addLayer(
-    layerConfig: LayerConfig,
-    layerElementId?: string,
-  ): Promise<string> {
-    if (!this.mapProvider) throw new Error('Map-Provider nicht verfügbar.');
-    if (this.basemapid) {
-      return await this.mapProvider.addBaseLayer(
-        {
-          ...layerConfig,
-          groupId: this.groupId,
-        },
-        this.basemapid,
-        layerElementId,
-      );
-    }
-    return await this.mapProvider.addLayerToGroup(
-      {
-        ...layerConfig,
-      },
-      this.groupId,
-    );
+  async getGroupId(): Promise<string> {
+    return this.groupId;
   }
+  // /**
+  //  * Fügt ein Kind-Layer zur Gruppe hinzu.
+  //  * @param layer Layer-Element (Web Component)
+  //  */
+  // @Method()
+  // async addLayer(
+  //   layerConfig: LayerConfig,
+  //   layerElementId?: string,
+  // ): Promise<string> {
+  //   if (!this.mapProvider) throw new Error('Map-Provider nicht verfügbar.');
+  //   if (this.basemapid) {
+  //     return await this.mapProvider.addBaseLayer(
+  //       {
+  //         ...layerConfig,
+  //         groupId: this.groupId,
+  //       },
+  //       this.basemapid,
+  //       layerElementId,
+  //     );
+  //   }
+  //   return await this.mapProvider.addLayerToGroup(
+  //     {
+  //       ...layerConfig,
+  //     },
+  //     this.groupId,
+  //   );
+  // }
 
   render() {
     return <slot />;
