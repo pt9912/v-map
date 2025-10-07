@@ -112,10 +112,10 @@
     }
   },
   "devDependencies": {
-    "@deck.gl/core": "^9.1.0",
-    "@deck.gl/geo-layers": "^9.1.0",
-    "@deck.gl/json": "^9.1.0",
-    "@deck.gl/layers": "^9.1.0",
+    "@deck.gl/core": "^9.1.15",
+    "@deck.gl/geo-layers": "^9.1.15",
+    "@deck.gl/json": "^9.1.15",
+    "@deck.gl/layers": "^9.1.15",
     "@docsearch/js": "4.0.0-beta.8",
     "@docsearch/react": "4.0.0-beta.8",
     "@loaders.gl/core": "^4.3.4",
@@ -144,7 +144,7 @@
     "@ungap/global-this": "^0.4.4",
     "@vitest/ui": "^2.1.1",
     "caniuse-lite": "^1.0.30001741",
-    "cesium": "^1.133.1",
+    "cesium": "^1.134.0",
     "cross-env": "^10.0.0",
     "georaster": "1.6.0",
     "georaster-layer-for-leaflet": "4.1.2",
