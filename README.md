@@ -3,7 +3,7 @@
 **Eine moderne, provider-unabhängige Kartenkomponente für Webanwendungen.**  
 Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers.org/), [Cesium](https://cesium.com/), [Leaflet](https://leafletjs.com/) und [Deck.gl](https://deck.gl/).
 
-[![npm version](https://badge.fury.io/js/%40pt9912%2Fv-map.svg)](https://badge.fury.io/js/%40pt9912%2Fv-map)
+[![npm version](https://badge.fury.io/js/@npm9912%2Fv-map.svg)](https://badge.fury.io/js/@npm9912%2Fv-map)
 [![CI Status](https://github.com/pt9912/v-map/actions/workflows/test.yml/badge.svg)](https://github.com/pt9912/v-map/actions)
 [![Storybook](https://img.shields.io/badge/Storybook-%23FF4785?logo=storybook&logoColor=white)](https://pt9912.github.io/v-map/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
