@@ -57,8 +57,8 @@ importers:
         specifier: ^9.1.9
         version: 9.1.9
       '@npm9912/s-gml':
-        specifier: ^1.2.0
-        version: 1.2.0(@types/node@22.18.1)
+        specifier: ^1.3.0
+        version: 1.3.0(@types/node@22.18.1)
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.2.7(typescript@5.9.2))
@@ -1204,8 +1204,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@npm9912/s-gml@1.2.0':
-    resolution: {integrity: sha512-zomRMIzj4EjlBWL7NepQE3jIQVtyQLZU6YF3rSI9b4uscqOBcxJE0aXQz15SCgg/40tLlCmLT83Tu6W/hT/AYg==}
+  '@npm9912/s-gml@1.3.0':
+    resolution: {integrity: sha512-XmoYhM+cevHirdZVoygfNFW+qKNCABiVn+R7+i+27q4kIKKHQKMw9+KjMnG0TbZqp5+6GvPqFHz013I0QrjBJA==}
     engines: {node: '>=22.0.0', pnpm: '>=8.0.0'}
     hasBin: true
 
@@ -7750,7 +7750,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@npm9912/s-gml@1.2.0(@types/node@22.18.1)':
+  '@npm9912/s-gml@1.3.0(@types/node@22.18.1)':
     dependencies:
       commander: 11.1.0
       fast-xml-parser: 4.5.3
