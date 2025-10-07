@@ -7,15 +7,12 @@ describe('<v-map-layergroup> e2e', () => {
   let page: E2EPage;
 
   const render = async (html: string, opts?: { wait?: boolean }) => {
-    await page.evaluate(
-      content => {
-        const root = document.getElementById('test-root');
-        if (root) {
-          root.innerHTML = content;
-        }
-      },
-      html,
-    );
+    await page.evaluate(content => {
+      const root = document.getElementById('test-root');
+      if (root) {
+        root.innerHTML = content;
+      }
+    }, html);
     if (opts?.wait === false) return;
     await page.waitForChanges();
   };
@@ -81,9 +78,51 @@ describe('<v-map-layergroup> e2e', () => {
     expect(el.getAttribute('basemapid')).toBe('osm-layer');
   });
 
-  it('renders child layers', async () => {
+  it('renders child layers - ol', async () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
+        <v-map-layergroup>
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+      </v-map>
+    `);
+    const layerGroup = await page.find('v-map-layergroup');
+    const childLayer = await page.find('v-map-layer-osm');
+    expect(layerGroup).toBeTruthy();
+    expect(childLayer).toBeTruthy();
+  });
+
+  it.skip('renders child layers - deck', async () => {
+    await render(`
+      <v-map flavour="deck" style="display:block;width:300px;height:200px">
+        <v-map-layergroup>
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+      </v-map>
+    `);
+    const layerGroup = await page.find('v-map-layergroup');
+    const childLayer = await page.find('v-map-layer-osm');
+    expect(layerGroup).toBeTruthy();
+    expect(childLayer).toBeTruthy();
+  });
+
+  it('renders child layers - leaflet', async () => {
+    await render(`
+      <v-map flavour="leaflet" style="display:block;width:300px;height:200px">
+        <v-map-layergroup>
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+      </v-map>
+    `);
+    const layerGroup = await page.find('v-map-layergroup');
+    const childLayer = await page.find('v-map-layer-osm');
+    expect(layerGroup).toBeTruthy();
+    expect(childLayer).toBeTruthy();
+  });
+
+  it('renders child layers - cesium', async () => {
+    await render(`
+      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-osm></v-map-layer-osm>
         </v-map-layergroup>
