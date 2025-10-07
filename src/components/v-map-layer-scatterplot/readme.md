@@ -24,6 +24,19 @@
 | `ready` | Wird ausgelöst, sobald der Scatterplot registriert wurde. | `CustomEvent<void>` |
 
 
+## Dependencies
+
+### Used by
+
+ - [v-map-builder](../v-map-builder)
+
+### Graph
+```mermaid
+graph TD;
+  v-map-builder --> v-map-layer-scatterplot
+  style v-map-layer-scatterplot fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

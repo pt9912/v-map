@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-07T14:32:00",
+  "timestamp": "2025-10-07T14:59:55",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -438,6 +438,11 @@
         "v-map-layer-terrain",
         "v-map-layer-wfs",
         "v-map-layer-wcs",
+        "v-map-layer-google",
+        "v-map-layer-geotiff",
+        "v-map-layer-tile3d",
+        "v-map-layer-scatterplot",
+        "v-map-layer-wkt",
         "v-map"
       ],
       "dependencyGraph": {
@@ -451,6 +456,11 @@
           "v-map-layer-terrain",
           "v-map-layer-wfs",
           "v-map-layer-wcs",
+          "v-map-layer-google",
+          "v-map-layer-geotiff",
+          "v-map-layer-tile3d",
+          "v-map-layer-scatterplot",
+          "v-map-layer-wkt",
           "v-map"
         ]
       }
@@ -1151,9 +1161,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-geotiff"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-google/v-map-layer-google.tsx",
@@ -1484,9 +1500,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-google"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-osm/v-map-layer-osm.tsx",
@@ -1880,9 +1902,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-scatterplot"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-terrain/v-map-layer-terrain.tsx",
@@ -2406,9 +2434,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-tile3d"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-wcs/v-map-layer-wcs.tsx",
@@ -3543,9 +3577,15 @@
       "styles": [],
       "slots": [],
       "parts": [],
-      "dependents": [],
+      "dependents": [
+        "v-map-builder"
+      ],
       "dependencies": [],
-      "dependencyGraph": {}
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wkt"
+        ]
+      }
     },
     {
       "filePath": "src/components/v-map-layer-wms/v-map-layer-wms.tsx",

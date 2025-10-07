@@ -7,6 +7,11 @@ export type LayerType =
   | 'terrain'
   | 'wfs'
   | 'wcs'
+  | 'google'
+  | 'geotiff'
+  | 'tile3d'
+  | 'scatterplot'
+  | 'wkt'
   | 'custom';
 
 // interface BaseLayer {

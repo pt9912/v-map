@@ -32,6 +32,19 @@ Google Maps Basemap Layer
 | `ready` | Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten. | `CustomEvent<void>` |
 
 
+## Dependencies
+
+### Used by
+
+ - [v-map-builder](../v-map-builder)
+
+### Graph
+```mermaid
+graph TD;
+  v-map-builder --> v-map-layer-google
+  style v-map-layer-google fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

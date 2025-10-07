@@ -13,14 +13,13 @@ import type {
   NormalizedLayer,
   BuilderConfig,
   NormalizedStyle,
+  LayerType,
 } from '../../utils/diff';
 import { diffLayers } from '../../utils/diff';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 
 const MSG_COMPONENT: string = 'v-map-builder - ';
-
-type LayerType = 'osm' | 'wms' | 'wms-tiled' | 'geojson' | 'xyz' | 'custom';
 
 /**
  * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
@@ -94,6 +93,310 @@ export class VMapBuilder {
     }
   }
 
+  private normalizeLayerType(rawType: any): LayerType {
+    const type = String(rawType ?? '').toLowerCase();
+    switch (type) {
+      case 'osm':
+      case 'wms':
+      case 'wms-tiled':
+      case 'geojson':
+      case 'xyz':
+      case 'terrain':
+      case 'wfs':
+      case 'wcs':
+      case 'google':
+      case 'geotiff':
+      case 'tile3d':
+      case 'scatterplot':
+      case 'wkt':
+        return type as LayerType;
+      default:
+        return 'custom';
+    }
+  }
+
+  private toOptionalString(value: any): string | undefined {
+    if (value === undefined || value === null) return undefined;
+    return typeof value === 'string' ? value : String(value);
+  }
+
+  private toOptionalNumber(value: any): number | undefined {
+    if (value === undefined || value === null || value === '') return undefined;
+    const num = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(num) ? num : undefined;
+  }
+
+  private toOptionalBoolean(value: any): boolean | undefined {
+    if (value === undefined || value === null || value === '') return undefined;
+    if (typeof value === 'boolean') return value;
+    const normalized = String(value).trim().toLowerCase();
+    if (['true', '1', 'yes', 'y'].includes(normalized)) return true;
+    if (['false', '0', 'no', 'n'].includes(normalized)) return false;
+    return undefined;
+  }
+
+  private toCsv(value: any): string | undefined {
+    if (value === undefined || value === null) return undefined;
+    if (Array.isArray(value)) {
+      return value
+        .map(entry => this.toOptionalString(entry))
+        .filter((entry): entry is string => entry != null && entry !== '')
+        .join(',');
+    }
+    return this.toOptionalString(value);
+  }
+
+  private cleanRecord(
+    record?: Record<string, any>,
+  ): Record<string, any> | undefined {
+    if (!record) return undefined;
+    const result: Record<string, any> = {};
+    for (const [key, value] of Object.entries(record)) {
+      if (value !== undefined && value !== null) {
+        result[key] = value;
+      }
+    }
+    return Object.keys(result).length ? result : undefined;
+  }
+
+  private normalizeLayer(
+    rawLayer: any,
+    groupIndex: number,
+    layerIndex: number,
+  ): NormalizedLayer {
+    const type = this.normalizeLayerType(rawLayer?.type ?? rawLayer?.layerType);
+    const layerId = String(
+      rawLayer?.id ?? `${groupIndex + 1}-${layerIndex + 1}`,
+    );
+    const base: NormalizedLayer = {
+      id: layerId,
+      type,
+      visible: rawLayer?.visible,
+      opacity: rawLayer?.opacity,
+      zIndex: rawLayer?.zIndex,
+    };
+    if (rawLayer?.style != null) {
+      base.style = rawLayer.style;
+    }
+
+    const data: Record<string, any> = {};
+    const setBase = (key: string, value: any) => {
+      if (value !== undefined && value !== null) {
+        (base as any)[key] = value;
+      }
+    };
+
+    switch (type) {
+      case 'wms':
+      case 'wms-tiled': {
+        const url = this.toOptionalString(rawLayer?.url);
+        const layers = this.toOptionalString(
+          rawLayer?.layers ?? rawLayer?.sublayers,
+        );
+        const tiled =
+          type === 'wms-tiled'
+            ? true
+            : this.toOptionalBoolean(rawLayer?.tiled);
+
+        setBase('url', url);
+        setBase('layers', layers);
+        if (tiled !== undefined) setBase('tiled', tiled);
+
+        const params = rawLayer?.params ?? rawLayer?.extraParams;
+        Object.assign(
+          data,
+          this.cleanRecord({
+            styles: rawLayer?.styles,
+            format: rawLayer?.format,
+            transparent: this.toOptionalBoolean(rawLayer?.transparent),
+            tiled,
+            version: rawLayer?.version,
+            time: rawLayer?.time,
+            params,
+          }) ?? {},
+        );
+        break;
+      }
+      case 'geojson': {
+        setBase('url', this.toOptionalString(rawLayer?.url));
+        Object.assign(
+          data,
+          this.cleanRecord({
+            geojson: rawLayer?.geojson ?? rawLayer?.data,
+            fillColor: rawLayer?.fillColor,
+            fillOpacity: this.toOptionalNumber(rawLayer?.fillOpacity),
+            strokeColor: rawLayer?.strokeColor,
+            strokeWidth: this.toOptionalNumber(rawLayer?.strokeWidth),
+            strokeOpacity: this.toOptionalNumber(rawLayer?.strokeOpacity),
+            pointRadius: this.toOptionalNumber(rawLayer?.pointRadius),
+            pointColor: rawLayer?.pointColor,
+            iconUrl: rawLayer?.iconUrl,
+            iconSize: rawLayer?.iconSize,
+            textProperty: rawLayer?.textProperty,
+            textColor: rawLayer?.textColor,
+            textSize: this.toOptionalNumber(rawLayer?.textSize),
+          }) ?? {},
+        );
+        break;
+      }
+      case 'xyz': {
+        setBase('url', this.toOptionalString(rawLayer?.url));
+        Object.assign(
+          data,
+          this.cleanRecord({
+            attributions: rawLayer?.attributions,
+            maxZoom: this.toOptionalNumber(rawLayer?.maxZoom),
+            tileSize: this.toOptionalNumber(rawLayer?.tileSize),
+            subdomains: this.toCsv(rawLayer?.subdomains),
+          }) ?? {},
+        );
+        break;
+      }
+      case 'terrain': {
+        Object.assign(
+          data,
+          this.cleanRecord({
+            elevationData:
+              rawLayer?.elevationData ??
+              rawLayer?.url ??
+              rawLayer?.data?.elevationData,
+            texture: rawLayer?.texture ?? rawLayer?.data?.texture,
+            elevationDecoder:
+              rawLayer?.elevationDecoder ?? rawLayer?.data?.elevationDecoder,
+            wireframe: this.toOptionalBoolean(
+              rawLayer?.wireframe ?? rawLayer?.data?.wireframe,
+            ),
+            color: rawLayer?.color ?? rawLayer?.data?.color,
+            minZoom: this.toOptionalNumber(
+              rawLayer?.minZoom ?? rawLayer?.data?.minZoom,
+            ),
+            maxZoom: this.toOptionalNumber(
+              rawLayer?.maxZoom ?? rawLayer?.data?.maxZoom,
+            ),
+            meshMaxError: this.toOptionalNumber(
+              rawLayer?.meshMaxError ?? rawLayer?.data?.meshMaxError,
+            ),
+          }) ?? {},
+        );
+        break;
+      }
+      case 'wfs': {
+        const url = this.toOptionalString(rawLayer?.url);
+        setBase('url', url);
+        Object.assign(
+          data,
+          this.cleanRecord({
+            url,
+            typeName: rawLayer?.typeName ?? rawLayer?.layerName,
+            version: rawLayer?.version,
+            outputFormat: rawLayer?.outputFormat ?? rawLayer?.format,
+            srsName: rawLayer?.srsName ?? rawLayer?.crs,
+            params: rawLayer?.params,
+          }) ?? {},
+        );
+        break;
+      }
+      case 'wcs': {
+        const url = this.toOptionalString(rawLayer?.url);
+        setBase('url', url);
+        Object.assign(
+          data,
+          this.cleanRecord({
+            url,
+            coverageName: rawLayer?.coverageName,
+            format: rawLayer?.format,
+            version: rawLayer?.version,
+            projection: rawLayer?.projection,
+            resolutions: rawLayer?.resolutions,
+            params: rawLayer?.params,
+          }) ?? {},
+        );
+        break;
+      }
+      case 'google': {
+        Object.assign(
+          data,
+          this.cleanRecord({
+            apiKey: rawLayer?.apiKey ?? rawLayer?.api_key,
+            mapType: rawLayer?.mapType,
+            language: rawLayer?.language,
+            region: rawLayer?.region,
+            scale: rawLayer?.scale,
+            libraries: this.toCsv(rawLayer?.libraries),
+            maxZoom: this.toOptionalNumber(rawLayer?.maxZoom),
+            styles: rawLayer?.styles,
+          }) ?? {},
+        );
+        break;
+      }
+      case 'geotiff': {
+        setBase('url', this.toOptionalString(rawLayer?.url));
+        break;
+      }
+      case 'tile3d': {
+        setBase('url', this.toOptionalString(rawLayer?.url));
+        Object.assign(
+          data,
+          this.cleanRecord({
+            tilesetOptions:
+              rawLayer?.tilesetOptions ?? rawLayer?.options ?? rawLayer?.data,
+            style: rawLayer?.style ?? rawLayer?.cesiumStyle,
+          }) ?? {},
+        );
+        break;
+      }
+      case 'scatterplot': {
+        Object.assign(
+          data,
+          this.cleanRecord({
+            url: this.toOptionalString(rawLayer?.url),
+            data: rawLayer?.data,
+            getFillColor: rawLayer?.getFillColor,
+            getRadius: this.toOptionalNumber(rawLayer?.getRadius),
+          }) ?? {},
+        );
+        break;
+      }
+      case 'wkt': {
+        Object.assign(
+          data,
+          this.cleanRecord({
+            wkt: rawLayer?.wkt,
+            url: this.toOptionalString(rawLayer?.url),
+            fillColor: rawLayer?.fillColor,
+            fillOpacity: this.toOptionalNumber(rawLayer?.fillOpacity),
+            strokeColor: rawLayer?.strokeColor,
+            strokeWidth: this.toOptionalNumber(rawLayer?.strokeWidth),
+            strokeOpacity: this.toOptionalNumber(rawLayer?.strokeOpacity),
+            pointRadius: this.toOptionalNumber(rawLayer?.pointRadius),
+            pointColor: rawLayer?.pointColor,
+            iconUrl: rawLayer?.iconUrl,
+            iconSize: rawLayer?.iconSize,
+            textProperty: rawLayer?.textProperty,
+            textColor: rawLayer?.textColor,
+            textSize: this.toOptionalNumber(rawLayer?.textSize),
+          }) ?? {},
+        );
+        break;
+      }
+      case 'osm':
+        // already handled by base fields
+        break;
+      default: {
+        const payload =
+          rawLayer?.data && typeof rawLayer.data === 'object'
+            ? rawLayer.data
+            : rawLayer;
+        if (payload && typeof payload === 'object') {
+          Object.assign(data, this.cleanRecord(payload) ?? {});
+        }
+      }
+    }
+
+    base.data = this.cleanRecord(data);
+    return base;
+  }
+
   private normalize(raw: any): BuilderConfig {
     const map = raw?.map ?? raw ?? {};
     const norm: BuilderConfig = {
@@ -104,36 +407,11 @@ export class VMapBuilder {
         style: String(map.style ?? ''),
         styles: this.normalizeStyles(map.styles),
         layerGroups: (map.layerGroups ?? []).map((g: any, gi: number) => ({
-          groupTitle: g.groupTitle ?? g.group ?? g.title ?? `Gruppe ${gi + 1}`,
+          groupTitle: g.groupTitle ?? g.group ?? g.title ?? `Group ${gi + 1}`,
           visible: g.visible,
-          layers: (g.layers ?? []).map((l: any, li: number) => {
-            const type: LayerType = (l.type ??
-              l.layerType ??
-              'custom') as LayerType;
-            const base: any = {
-              id: String(l.id ?? `${gi + 1}-${li + 1}`),
-              type,
-              visible: l.visible,
-              opacity: l.opacity,
-              zIndex: l.zIndex,
-              style: l.style,
-            };
-            if (type === 'wms' || type === 'wms-tiled') {
-              const isTiled =
-                type === 'wms-tiled' || l.tiled === true || l.tiled === 'true';
-              return {
-                ...base,
-                url: String(l.url ?? ''),
-                layers: String(l.layers ?? l.sublayers ?? ''),
-                tiled: String(isTiled),
-              } as NormalizedLayer;
-            }
-            if (type === 'xyz')
-              return { ...base, url: String(l.url ?? '') } as NormalizedLayer;
-            if (type === 'geojson')
-              return { ...base, url: l.url, data: l.data } as NormalizedLayer;
-            return base as NormalizedLayer;
-          }),
+          layers: (g.layers ?? []).map((l: any, li: number) =>
+            this.normalizeLayer(l, gi, li),
+          ),
         })),
       },
     };
@@ -147,14 +425,15 @@ export class VMapBuilder {
       .filter((style): style is NormalizedStyle => Boolean(style));
   }
 
-  private normalizeStyle(entry: any, index: number): NormalizedStyle | undefined {
+  private normalizeStyle(
+    entry: any,
+    index: number,
+  ): NormalizedStyle | undefined {
     if (entry == null) return undefined;
 
     const raw = typeof entry === 'object' ? entry : { content: entry };
     const keySource = raw.key ?? raw.id ?? raw.name;
-    const key = String(
-      keySource != null ? keySource : `style-${index + 1}`,
-    );
+    const key = String(keySource != null ? keySource : `style-${index + 1}`);
 
     const format = String(raw.format ?? 'sld').toLowerCase();
 
@@ -176,8 +455,8 @@ export class VMapBuilder {
       raw.autoApply == null
         ? undefined
         : typeof raw.autoApply === 'boolean'
-          ? raw.autoApply
-          : String(raw.autoApply).toLowerCase() !== 'false';
+        ? raw.autoApply
+        : String(raw.autoApply).toLowerCase() !== 'false';
 
     let src: string | undefined =
       raw.src != null ? String(raw.src).trim() : undefined;
@@ -188,7 +467,12 @@ export class VMapBuilder {
     if (!src && !content && typeof raw.source === 'string') {
       const source = raw.source.trim();
       if (source) {
-        if (/^(https?:)?\/\//.test(source) || source.startsWith('/') || source.startsWith('./') || source.startsWith('../')) {
+        if (
+          /^(https?:)?\/\//.test(source) ||
+          source.startsWith('/') ||
+          source.startsWith('./') ||
+          source.startsWith('../')
+        ) {
           src = source;
         } else {
           content = source;
@@ -265,7 +549,8 @@ export class VMapBuilder {
       this.ensureAttr(el, 'src', style.src);
       this.ensureAttr(el, 'content', style.content);
 
-      const reference = anchor && anchor.parentElement === mapEl ? anchor : null;
+      const reference =
+        anchor && anchor.parentElement === mapEl ? anchor : null;
       if (!el.isConnected || el.parentElement !== mapEl) {
         mapEl.insertBefore(el, reference);
       } else if (reference) {
@@ -314,87 +599,251 @@ export class VMapBuilder {
     return el;
   }
 
+  private toKebabCase(value: string): string {
+    return value
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/[\s_]+/g, '-')
+      .toLowerCase();
+  }
+
   private createLayerEl(layer: NormalizedLayer): HTMLElement {
+    const data = (layer.data || {}) as Record<string, any>;
     const common: Record<string, any> = {
-      'id': layer.id,
-      'visible': layer.visible,
-      'opacity': layer.opacity,
+      id: layer.id,
+      visible: layer.visible,
+      opacity: layer.opacity,
       'z-index': layer.zIndex,
       ...(layer.style ? { style: JSON.stringify(layer.style) } : {}),
     };
+
+    const add = (attribute: string, value: any, opts?: { json?: boolean }) => {
+      if (value === undefined || value === null) return;
+      if (opts?.json && typeof value !== 'string') {
+        try {
+          common[attribute] = JSON.stringify(value);
+        } catch {
+          common[attribute] = String(value);
+        }
+      } else {
+        common[attribute] = value;
+      }
+    };
+
     let el: HTMLElement;
     switch (layer.type) {
       case 'osm':
         el = document.createElement('v-map-layer-osm') as HTMLElement;
         break;
       case 'wms':
-      case 'wms-tiled':
+      case 'wms-tiled': {
         el = document.createElement('v-map-layer-wms') as HTMLElement;
-        common.url = layer.url;
-        common.layers = layer.layers;
-        common.tiled = layer.tiled;
+        add('url', layer.url ?? data.url);
+        add('layers', layer.layers ?? data.layers);
+        const tiledValue =
+          layer.type === 'wms-tiled'
+            ? true
+            : data.tiled ?? layer.tiled ?? undefined;
+        add('tiled', tiledValue);
+        add('styles', data.styles);
+        add('format', data.format);
+        add('transparent', data.transparent);
+        add('version', data.version);
+        add('time', data.time);
+        if (data.params)
+          add(
+            'params',
+            typeof data.params === 'string'
+              ? data.params
+              : JSON.stringify(data.params),
+          );
         break;
-      case 'geojson':
+      }
+      case 'geojson': {
         el = document.createElement('v-map-layer-geojson') as HTMLElement;
-        common.url = layer.url;
-        common.data =
-          typeof layer.data === 'object'
-            ? JSON.stringify(layer.data)
-            : (layer.data as any);
+        add('url', layer.url ?? data.url);
+        const geojsonPayload = data.geojson ?? data.data;
+        if (geojsonPayload !== undefined) {
+          add(
+            'geojson',
+            typeof geojsonPayload === 'string'
+              ? geojsonPayload
+              : JSON.stringify(geojsonPayload),
+          );
+        }
+        add('fill-color', data.fillColor);
+        add('fill-opacity', data.fillOpacity);
+        add('stroke-color', data.strokeColor);
+        add('stroke-width', data.strokeWidth);
+        add('stroke-opacity', data.strokeOpacity);
+        add('point-radius', data.pointRadius);
+        add('point-color', data.pointColor);
+        add('icon-url', data.iconUrl);
+        add('icon-size', data.iconSize);
+        add('text-property', data.textProperty);
+        add('text-color', data.textColor);
+        add('text-size', data.textSize);
         break;
-      case 'xyz':
+      }
+      case 'xyz': {
         el = document.createElement('v-map-layer-xyz') as HTMLElement;
-        common.url = layer.url;
+        add('url', layer.url ?? data.url);
+        add('attributions', data.attributions);
+        add('max-zoom', data.maxZoom);
+        add('tile-size', data.tileSize);
+        add('subdomains', data.subdomains);
         break;
+      }
       case 'terrain': {
         el = document.createElement('v-map-layer-terrain') as HTMLElement;
-        const cfg = (layer.data || {}) as Record<string, any>;
-        common['elevation-data'] = cfg.elevationData;
-        common['texture'] = cfg.texture;
-        common['elevation-decoder'] = cfg.elevationDecoder
-          ? JSON.stringify(cfg.elevationDecoder)
-          : undefined;
-        common['wireframe'] = cfg.wireframe;
-        common['color'] = cfg.color
-          ? Array.isArray(cfg.color)
-            ? JSON.stringify(cfg.color)
-            : cfg.color
-          : undefined;
-        common['min-zoom'] = cfg.minZoom;
-        common['max-zoom'] = cfg.maxZoom;
-        common['mesh-max-error'] = cfg.meshMaxError;
+        add('elevation-data', data.elevationData);
+        add('texture', data.texture);
+        if (data.elevationDecoder)
+          add(
+            'elevation-decoder',
+            data.elevationDecoder,
+            { json: typeof data.elevationDecoder !== 'string' },
+          );
+        add('wireframe', data.wireframe);
+        if (data.color) {
+          add(
+            'color',
+            Array.isArray(data.color) ? JSON.stringify(data.color) : data.color,
+          );
+        }
+        add('min-zoom', data.minZoom);
+        add('max-zoom', data.maxZoom);
+        add('mesh-max-error', data.meshMaxError);
         break;
       }
       case 'wfs': {
         el = document.createElement('v-map-layer-wfs') as HTMLElement;
-        const cfg = (layer.data || {}) as Record<string, any>;
-        common['url'] = cfg.url ?? layer.url;
-        common['type-name'] = cfg.typeName;
-        common['version'] = cfg.version;
-        common['output-format'] = cfg.outputFormat;
-        common['srs-name'] = cfg.srsName;
-        common['params'] = cfg.params ? JSON.stringify(cfg.params) : undefined;
+        add('url', data.url ?? layer.url);
+        add('type-name', data.typeName);
+        add('version', data.version);
+        add('output-format', data.outputFormat);
+        add('srs-name', data.srsName);
+        if (data.params)
+          add(
+            'params',
+            typeof data.params === 'string'
+              ? data.params
+              : JSON.stringify(data.params),
+          );
         break;
       }
       case 'wcs': {
         el = document.createElement('v-map-layer-wcs') as HTMLElement;
-        const cfg = (layer.data || {}) as Record<string, any>;
-        common['url'] = cfg.url ?? layer.url;
-        common['coverage-name'] = cfg.coverageName;
-        common['format'] = cfg.format;
-        common['version'] = cfg.version;
-        common['projection'] = cfg.projection;
-        common['resolutions'] = cfg.resolutions
-          ? JSON.stringify(cfg.resolutions)
-          : undefined;
-        common['params'] = cfg.params ? JSON.stringify(cfg.params) : undefined;
+        add('url', data.url ?? layer.url);
+        add('coverage-name', data.coverageName);
+        add('format', data.format);
+        add('version', data.version);
+        add('projection', data.projection);
+        if (data.resolutions)
+          add(
+            'resolutions',
+            typeof data.resolutions === 'string'
+              ? data.resolutions
+              : JSON.stringify(data.resolutions),
+          );
+        if (data.params)
+          add(
+            'params',
+            typeof data.params === 'string'
+              ? data.params
+              : JSON.stringify(data.params),
+          );
         break;
       }
-      default:
+      case 'google': {
+        el = document.createElement('v-map-layer-google') as HTMLElement;
+        add('api-key', data.apiKey);
+        add('map-type', data.mapType);
+        add('language', data.language);
+        add('region', data.region);
+        add('scale', data.scale);
+        add('libraries', data.libraries);
+        add('max-zoom', data.maxZoom);
+        if (data.styles)
+          add(
+            'styles',
+            typeof data.styles === 'string'
+              ? data.styles
+              : JSON.stringify(data.styles),
+          );
+        break;
+      }
+      case 'geotiff': {
+        el = document.createElement('v-map-layer-geotiff') as HTMLElement;
+        add('url', layer.url ?? data.url);
+        break;
+      }
+      case 'tile3d': {
+        el = document.createElement('v-map-layer-tile3d') as HTMLElement;
+        add('url', layer.url ?? data.url);
+        if (data.tilesetOptions)
+          add(
+            'tileset-options',
+            typeof data.tilesetOptions === 'string'
+              ? data.tilesetOptions
+              : JSON.stringify(data.tilesetOptions),
+          );
+        break;
+      }
+      case 'scatterplot': {
+        el = document.createElement('v-map-layer-scatterplot') as HTMLElement;
+        add('url', data.url);
+        if (data.data)
+          add(
+            'data',
+            typeof data.data === 'string'
+              ? data.data
+              : JSON.stringify(data.data),
+          );
+        add('get-fill-color', data.getFillColor);
+        add('get-radius', data.getRadius);
+        break;
+      }
+      case 'wkt': {
+        el = document.createElement('v-map-layer-wkt') as HTMLElement;
+        if (data.wkt)
+          add(
+            'wkt',
+            typeof data.wkt === 'string' ? data.wkt : JSON.stringify(data.wkt),
+          );
+        add('url', data.url);
+        add('fill-color', data.fillColor);
+        add('fill-opacity', data.fillOpacity);
+        add('stroke-color', data.strokeColor);
+        add('stroke-width', data.strokeWidth);
+        add('stroke-opacity', data.strokeOpacity);
+        add('point-radius', data.pointRadius);
+        add('point-color', data.pointColor);
+        add('icon-url', data.iconUrl);
+        add('icon-size', data.iconSize);
+        add('text-property', data.textProperty);
+        add('text-color', data.textColor);
+        add('text-size', data.textSize);
+        break;
+      }
+      default: {
         el = document.createElement('v-map-layer-custom') as HTMLElement;
         el.setAttribute('type', layer.type);
+        if (data && typeof data === 'object') {
+          for (const [key, value] of Object.entries(data)) {
+            add(
+              this.toKebabCase(key),
+              typeof value === 'object' && value !== null
+                ? JSON.stringify(value)
+                : value,
+            );
+          }
+        }
+      }
     }
-    for (const [k, v] of Object.entries(common)) this.ensureAttr(el, k, v);
+
+    for (const [key, value] of Object.entries(common)) {
+      this.ensureAttr(el, key, value);
+    }
     return el;
   }
 
@@ -427,18 +876,32 @@ export class VMapBuilder {
         case 'style':
           this.ensureAttr(el, 'style', nv ? JSON.stringify(nv) : undefined);
           break;
-      case 'data':
-        if (['terrain', 'wfs', 'wcs'].includes(next.type)) {
-          const parent = el.parentElement!;
-          const newEl = this.createLayerEl(next);
-          parent.replaceChild(newEl, el);
-          return;
-        }
-        (el as any).setData?.(nv);
-        if (!(el as any).setData) {
-          const s = typeof nv === 'object' ? JSON.stringify(nv) : nv;
-          this.ensureAttr(el, 'data', s);
-        }
+        case 'data':
+          if (
+            [
+              'terrain',
+              'wfs',
+              'wcs',
+              'wms',
+              'wms-tiled',
+              'geojson',
+              'xyz',
+              'google',
+              'tile3d',
+              'scatterplot',
+              'wkt',
+            ].includes(next.type)
+          ) {
+            const parent = el.parentElement!;
+            const newEl = this.createLayerEl(next);
+            parent.replaceChild(newEl, el);
+            return;
+          }
+          (el as any).setData?.(nv);
+          if (!(el as any).setData) {
+            const s = typeof nv === 'object' ? JSON.stringify(nv) : nv;
+            this.ensureAttr(el, 'data', s);
+          }
           break;
         case 'type':
           const parent = el.parentElement!;

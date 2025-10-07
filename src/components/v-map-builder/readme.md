@@ -44,6 +44,11 @@ A component that builds map configurations dynamically from JSON/YAML configurat
 - [v-map-layer-terrain](../v-map-layer-terrain)
 - [v-map-layer-wfs](../v-map-layer-wfs)
 - [v-map-layer-wcs](../v-map-layer-wcs)
+- [v-map-layer-google](../v-map-layer-google)
+- [v-map-layer-geotiff](../v-map-layer-geotiff)
+- [v-map-layer-tile3d](../v-map-layer-tile3d)
+- [v-map-layer-scatterplot](../v-map-layer-scatterplot)
+- [v-map-layer-wkt](../v-map-layer-wkt)
 - [v-map](../v-map)
 
 ### Graph
@@ -58,6 +63,11 @@ graph TD;
   v-map-builder --> v-map-layer-terrain
   v-map-builder --> v-map-layer-wfs
   v-map-builder --> v-map-layer-wcs
+  v-map-builder --> v-map-layer-google
+  v-map-builder --> v-map-layer-geotiff
+  v-map-builder --> v-map-layer-tile3d
+  v-map-builder --> v-map-layer-scatterplot
+  v-map-builder --> v-map-layer-wkt
   v-map-builder --> v-map
   style v-map-builder fill:#f9f,stroke:#333,stroke-width:4px
 ```
