@@ -377,6 +377,7 @@ export class VMapLayerControl {
                       />
                       <input
                         type="number"
+                        min="0"
                         value={String(layer.info.zIndex)}
                         onChange={e =>
                           this.handleZIndexChange(
@@ -388,7 +389,6 @@ export class VMapLayerControl {
                           )
                         }
                         class="layer-item-zindex"
-                        min="0"
                         aria-label={`Z-Index ${layer.label}`}
                       />
                     </div>
