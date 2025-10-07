@@ -145,22 +145,6 @@ export class VMapLayerWms {
     });
   }
 
-  // private async attach() {
-  //   await this.mapProvider.addLayer({
-  //     type: 'wms',
-  //     url: this.url,
-  //     layers: this.layers,
-  //     params: {
-  //       styles: this.styles,
-  //       format: this.format,
-  //       transparent: this.transparent,
-  //       tiled: this.tiled,
-  //     },
-  //     visible: this.visible,
-  //     opacity: this.opacity,
-  //   } as any);
-  // }
-
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
   }
