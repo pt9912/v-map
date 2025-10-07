@@ -7,7 +7,7 @@ import {
   Watch,
   Listen,
 } from '@stencil/core';
-import { LayerConfig } from 'src/components';
+import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log, warn } from '../../utils/logger';
 import MSG from '../../utils/messages';

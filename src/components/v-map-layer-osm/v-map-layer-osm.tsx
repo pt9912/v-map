@@ -11,7 +11,7 @@ import {
 
 import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
-import { LayerConfig } from 'src/components';
+import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import MSG from '../../utils/messages';
 import { log } from '../../utils/logger';

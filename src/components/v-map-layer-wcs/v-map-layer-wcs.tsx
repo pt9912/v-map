@@ -1,5 +1,13 @@
-import { Component, Prop, Element, Method, State, Watch, h } from '@stencil/core';
-import { LayerConfig } from 'src/components';
+import {
+  Component,
+  Prop,
+  Element,
+  Method,
+  State,
+  Watch,
+  h,
+} from '@stencil/core';
+import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 
@@ -119,7 +127,10 @@ export class VMapLayerWcs {
     if (!this.resolutions) return undefined;
     try {
       const parsed = JSON.parse(this.resolutions);
-      if (Array.isArray(parsed) && parsed.every(value => typeof value === 'number')) {
+      if (
+        Array.isArray(parsed) &&
+        parsed.every(value => typeof value === 'number')
+      ) {
         return parsed as number[];
       }
     } catch (error) {

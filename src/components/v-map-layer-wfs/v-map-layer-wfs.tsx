@@ -1,5 +1,14 @@
-import { Component, Prop, Element, Method, State, Watch, Listen, h } from '@stencil/core';
-import { LayerConfig } from 'src/components';
+import {
+  Component,
+  Prop,
+  Element,
+  Method,
+  State,
+  Watch,
+  Listen,
+  h,
+} from '@stencil/core';
+import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 import { Style } from 'geostyler-style';

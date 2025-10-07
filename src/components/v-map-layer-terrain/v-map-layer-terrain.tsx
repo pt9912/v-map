@@ -1,5 +1,13 @@
-import { Component, Prop, Element, Method, State, Watch, h } from '@stencil/core';
-import { LayerConfig } from 'src/components';
+import {
+  Component,
+  Prop,
+  Element,
+  Method,
+  State,
+  Watch,
+  h,
+} from '@stencil/core';
+import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log, warn } from '../../utils/logger';
 
@@ -169,7 +177,10 @@ export class VMapLayerTerrain {
       ) {
         return parsed as ElevationDecoder;
       }
-      warn(MSG_COMPONENT + 'Invalid elevationDecoder, expected JSON object with r/g/b/offset');
+      warn(
+        MSG_COMPONENT +
+          'Invalid elevationDecoder, expected JSON object with r/g/b/offset',
+      );
     } catch (error) {
       warn(MSG_COMPONENT + 'Failed to parse elevationDecoder JSON', error);
     }
@@ -210,9 +221,13 @@ export class VMapLayerTerrain {
     if (value.startsWith('#')) {
       const hex = value.replace('#', '');
       if (hex.length === 3 || hex.length === 6) {
-        const normalized = hex.length === 3
-          ? hex.split('').map(ch => ch + ch).join('')
-          : hex;
+        const normalized =
+          hex.length === 3
+            ? hex
+                .split('')
+                .map(ch => ch + ch)
+                .join('')
+            : hex;
         const r = parseInt(normalized.slice(0, 2), 16);
         const g = parseInt(normalized.slice(2, 4), 16);
         const b = parseInt(normalized.slice(4, 6), 16);

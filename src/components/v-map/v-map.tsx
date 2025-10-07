@@ -181,7 +181,7 @@ export class VMap {
   }
 
   async componentDidRender() {
-    log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
+    log(MSG_COMPONENT + MSG.COMPONENT_DID_RENDER);
 
     await this.createMap();
 
