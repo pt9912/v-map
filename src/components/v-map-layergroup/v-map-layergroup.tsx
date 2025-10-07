@@ -85,7 +85,7 @@ export class VMapLayerGroup {
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
     ) => {
-      log(MSG_COMPONENT + 'Layer wird verzögert hinzugefügt');
+      log(MSG_COMPONENT + 'layer add deferred');
       const mapEvent = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
     }) as EventListener);
@@ -93,7 +93,7 @@ export class VMapLayerGroup {
     vmap.addEventListener(
       VMapEvents.MapProviderWillShutdown,
       async (_event: CustomEvent) => {
-        log(`${MSG_COMPONENT} map provider fährt herunter`);
+        log(`${MSG_COMPONENT}map provider shutting down`);
         this.mapProvider = null;
       },
     );
@@ -115,33 +115,6 @@ export class VMapLayerGroup {
   async getGroupId(): Promise<string> {
     return this.groupId;
   }
-  // /**
-  //  * Fügt ein Kind-Layer zur Gruppe hinzu.
-  //  * @param layer Layer-Element (Web Component)
-  //  */
-  // @Method()
-  // async addLayer(
-  //   layerConfig: LayerConfig,
-  //   layerElementId?: string,
-  // ): Promise<string> {
-  //   if (!this.mapProvider) throw new Error('Map-Provider nicht verfügbar.');
-  //   if (this.basemapid) {
-  //     return await this.mapProvider.addBaseLayer(
-  //       {
-  //         ...layerConfig,
-  //         groupId: this.groupId,
-  //       },
-  //       this.basemapid,
-  //       layerElementId,
-  //     );
-  //   }
-  //   return await this.mapProvider.addLayerToGroup(
-  //     {
-  //       ...layerConfig,
-  //     },
-  //     this.groupId,
-  //   );
-  // }
 
   render() {
     return <slot />;

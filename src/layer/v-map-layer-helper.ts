@@ -16,9 +16,13 @@ export class VMapLayerHelper {
     layerConfig: LayerConfig,
     layerElementId?: string,
   ): Promise<string> {
-    if (!this.mapProvider) throw new Error('Map-Provider nicht verfügbar.');
+    if (!this.mapProvider) {
+      //throw new Error('Map provider not available.');
+      warn('Map provider not available.');
+      return null;
+    }
     if (basemapid) {
-      return await this.mapProvider.addBaseLayer(
+      return await this.mapProvider?.addBaseLayer(
         {
           ...layerConfig,
           groupId: groupId,
@@ -27,7 +31,7 @@ export class VMapLayerHelper {
         layerElementId,
       );
     }
-    return await this.mapProvider.addLayerToGroup(
+    return await this.mapProvider?.addLayerToGroup(
       {
         ...layerConfig,
       },
@@ -52,41 +56,34 @@ export class VMapLayerHelper {
     const isMapProviderAvailable = (await vmap.getMapProvider()) ? true : false;
 
     if (isMapProviderAvailable) {
-      log(`${this.el.nodeName.toLowerCase()} - Layer wird hinzugefügt`);
+      log(`${this.el.nodeName.toLowerCase()} - layer is being added`);
       this.mapProvider = await vmap.getMapProvider();
       const groupId: string = await layerGroup.getGroupId();
-      this.layerId = await this.addLayer(
-        layerGroup.basemapid,
-        groupId,
-        createLayerConfig(),
-        elementId,
-      );
-      // await (group as HTMLVMapLayergroupElement).addLayer(
-      //   createLayerConfig(),
-      //   elementId,
-      // );
-    } //else {
+      if (this.layerId === null && this.mapProvider) {
+        this.layerId = await this.addLayer(
+          layerGroup.basemapid,
+          groupId,
+          createLayerConfig(),
+          elementId,
+        );
+      }
+    }
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
     ) => {
-      log(
-        `${this.el.nodeName.toLowerCase()} - Layer wird verzögert hinzugefügt`,
-      );
+      log(`${this.el.nodeName.toLowerCase()} - layer add deferred`);
       const mapEvent = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
-      const groupId: string = await layerGroup.getGroupId();
-      this.layerId = await this.addLayer(
-        layerGroup.basemapid,
-        groupId,
-        createLayerConfig(),
-        elementId,
-      );
-      // this.layerId = await (group as HTMLVMapLayergroupElement).addLayer(
-      //   createLayerConfig(),
-      //   elementId,
-      // );
+      if (this.layerId === null && this.mapProvider) {
+        const groupId: string = await layerGroup.getGroupId();
+        this.layerId = await this.addLayer(
+          layerGroup.basemapid,
+          groupId,
+          createLayerConfig(),
+          elementId,
+        );
+      }
     }) as EventListener);
-    //}
   }
 
   public async setVisible(visible: boolean): Promise<void> {
@@ -111,6 +108,7 @@ export class VMapLayerHelper {
 
   public async removeLayer() {
     await this.mapProvider?.removeLayer(this.layerId);
+    this.layerId = null;
   }
 
   public async updateLayer(update: LayerUpdate) {
@@ -124,7 +122,7 @@ export class VMapLayerHelper {
     const group = this.el.closest('v-map-layergroup');
     if (!group) {
       warn(
-        `${this.el.nodeName.toLowerCase()} ist nicht in einer v-map-layergroup enthalten`,
+        `${this.el.nodeName.toLowerCase()} is not inside a v-map-layergroup`,
       );
       return;
     }
@@ -132,7 +130,7 @@ export class VMapLayerHelper {
     const vmap = await this.getVMap();
     if (!vmap) {
       warn(
-        `Keine v-map Elternkomponente für ${this.el.nodeName.toLowerCase()} gefunden`,
+        `No parent v-map component found for ${this.el.nodeName.toLowerCase()}`,
       );
       return;
     }
@@ -141,7 +139,7 @@ export class VMapLayerHelper {
     vmap.addEventListener(
       VMapEvents.MapProviderWillShutdown,
       async (_event: CustomEvent) => {
-        log(`${this.el.nodeName.toLowerCase()} map provider fährt herunter`);
+        log(`${this.el.nodeName.toLowerCase()} - map provider shutting down`);
         this.mapProvider = null;
         this.layerId = null;
       },

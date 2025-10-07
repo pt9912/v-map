@@ -92,6 +92,9 @@ export class OpenLayersProvider implements MapProvider {
 
   private async _ensureGroup(groupId: string): Promise<LayerGroup> {
     const { default: LayerGroup } = await import('ol/layer/Group');
+    if (!this.map) {
+      return null;
+    }
     let group = this.layers.find(
       l => (l as LayerGroup).get?.('groupId') === groupId,
     ) as LayerGroup | undefined;
@@ -146,9 +149,15 @@ export class OpenLayersProvider implements MapProvider {
     }
 
     const group = await this._ensureGroup(layerConfig.groupId);
+    if (group == null) {
+      return null;
+    }
     group.set('basemap', true, false);
 
     const layer = await this.createLayer(layerConfig);
+    if (layer == null) {
+      return null;
+    }
 
     layer.set('group', group);
     this.baseLayers.push(layer);
@@ -186,9 +195,10 @@ export class OpenLayersProvider implements MapProvider {
     groupId: string,
   ): Promise<string> {
     const group = await this._ensureGroup(groupId);
-
+    if (group == null) {
+      return null;
+    }
     const layer = await this.createLayer(layerConfig);
-
     if (layer === null) {
       return null;
     }
@@ -211,54 +221,6 @@ export class OpenLayersProvider implements MapProvider {
     }
     return layerId;
   }
-
-  // async addLayer(layerConfig: LayerConfig): Promise<string> {
-  //   let layerId: string = null;
-  //   let layer: Layer = null;
-  //   if ('groupId' in layerConfig && layerConfig.groupId) {
-  //     try {
-  //       layer = await this.addLayerToGroup(
-  //         layerConfig as LayerConfig & { groupId: string },
-  //       );
-  //     } catch (ex) {
-  //       error('addLayer - Unerwarteter Fehler:', ex);
-  //       return null;
-  //     }
-  //   } else {
-  //     try {
-  //       layer = await this.addStandaloneLayer(layerConfig);
-  //     } catch (ex) {
-  //       error('addLayer - Unerwarteter Fehler:', ex);
-  //       return null;
-  //     }
-  //   }
-  //   if (layer) {
-  //     layerId = crypto.randomUUID();
-  //     layer.set('id', layerId, false);
-
-  //     if ((layerConfig as any).opacity !== undefined) {
-  //       layer.setOpacity((layerConfig as any).opacity);
-  //     }
-  //     if ((layerConfig as any).zIndex !== undefined) {
-  //       layer.setZIndex((layerConfig as any).zIndex);
-  //     }
-  //     if ((layerConfig as any).visible) {
-  //       layer.setVisible(true);
-  //     } else if ((layerConfig as any).visible === false) {
-  //       layer.setVisible(false);
-  //     }
-  //     return layerId;
-  //   }
-
-  //   return layerId;
-  // }
-
-  // private async addStandaloneLayer(layerConfig: LayerConfig): Promise<Layer> {
-  //   const layer = await this.createLayer(layerConfig);
-  //   this.map.addLayer(layer);
-  //   this.layers.push(layer);
-  //   return layer;
-  // }
 
   private async createLayer(layerConfig: LayerConfig): Promise<Layer> {
     switch (layerConfig.type) {
@@ -1149,15 +1111,6 @@ export class OpenLayersProvider implements MapProvider {
       }),
     });
   }
-
-  /*ensureGroup
-      if (mapProvider.flavour === 'ol') {
-      const { Group } = await import('ol/layer');
-      this.groupLayer = new Group({ layers: [] });
-      mapProvider.getMap().addLayer(this.groupLayer);
-    }
-
-    */
 
   async setView(center: LonLat, zoom: number) {
     const [{ fromLonLat }] = await Promise.all([import('ol/proj')]);

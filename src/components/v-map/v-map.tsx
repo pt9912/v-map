@@ -27,6 +27,26 @@ import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 
+const NOOP_PROVIDER: MapProvider = {
+  async init() {},
+  async destroy() {},
+  async setOpacity() {},
+  async setVisible() {},
+  async setZIndex() {},
+  async addLayerToGroup() {
+    return '';
+  },
+  async updateLayer() {},
+  async removeLayer() {},
+  async setView() {},
+  async addBaseLayer() {
+    return '';
+  },
+  async setBaseLayer() {},
+  async ensureGroup() {},
+  async setGroupVisible() {},
+};
+
 const MSG_COMPONENT: string = 'v-map - ';
 
 @Component({
@@ -101,8 +121,11 @@ export class VMap {
   private reset() {
     this.unsubscribeResize?.();
 
+    const mapProvider = this.mapProvider;
+    this.mapProvider = null;
+
     const payLoad: MapProviderDetail = {
-      mapProvider: this.mapProvider,
+      mapProvider: NOOP_PROVIDER,
     };
     // this.mapProviderReady.emit(payLoad);
     this.el.dispatchEvent(
@@ -114,7 +137,7 @@ export class VMap {
       }),
     );
 
-    this.mapProvider?.destroy();
+    mapProvider?.destroy();
   }
 
   private async createMap() {
@@ -142,8 +165,8 @@ export class VMap {
     };
     await this.mapProvider.init(opts);
 
-    this.unsubscribeResize = watchElementResize(this.el, () => {
-      this.mapProvider.setView(mapInitOpts.center, mapInitOpts.zoom);
+    this.unsubscribeResize = watchElementResize(this.el, async () => {
+      await this.mapProvider?.setView(mapInitOpts.center, mapInitOpts.zoom);
     });
 
     const payLoad: MapProviderDetail = {
@@ -166,15 +189,13 @@ export class VMap {
       log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD + ' - useDefaultImportMap');
       ensureImportMap();
     }
-
-    //await this.createMap();
   }
 
-  async componentDidLoad() {
-    log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
+  // async componentDidLoad() {
+  //   log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
-    //test
-  }
+  //   //test
+  // }
 
   async componentWillRender() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
@@ -197,22 +218,6 @@ export class VMap {
     this.reset();
   }
 
-  // //todo: remove
-  // /**
-  //  * Fügt ein Layer-Element (Web Component) zur Karte hinzu.
-  //  * Das Layer muss kompatibel mit dem aktiven Provider sein.
-  //  * @param layer Ein Kind-Element wie <v-map-layer-xyz> oder <v-map-layer-wms>
-  //  * @example
-  //  * const layer = document.createElement('v-map-layer-osm');
-  //  * await mapEl.addLayer(layer);
-  //  */
-  // @Method()
-  // async addLayer(layerConfig: any): Promise<void> {
-  //   if (!this.mapProvider)
-  //     throw new Error('Map-Provider noch nicht initialisiert.');
-  //   await Promise.resolve(this.mapProvider.addLayer(layerConfig));
-  // }
-
   /**
    * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
    * Nützlich für fortgeschrittene Integrationen.
@@ -220,23 +225,12 @@ export class VMap {
    */
   @Method()
   async getMapProvider(): Promise<MapProvider> {
-    if (!this.mapProvider) {
+    if (!this.mapProvider || this.mapProvider == NOOP_PROVIDER) {
       //throw new Error('Map-Provider noch nicht initialisiert.');
-      log('Map-Provider noch nicht initialisiert.');
+      log(MSG_COMPONENT + 'Map provider not yet ready.');
     }
     return this.mapProvider;
   }
-
-  // /**
-  //  * Prüft, ob ein bestimmter Provider im aktuellen Build/Runtime verfügbar ist.
-  //  * @param flavour Gewünschter Provider (optional; Standard ist `this.flavour`)
-  //  * @returns `true`, wenn verfügbar, sonst `false`.
-  //  */
-  // @Method()
-  // async isMapProviderAvailable(): Promise<boolean> {
-  //   if (!this.mapProvider) return false;
-  //   return true;
-  // }
 
   /**
    * Setzt Kartenzentrum und Zoom (optional animiert).
@@ -248,9 +242,9 @@ export class VMap {
    */
   @Method()
   async setView(coordinates: [number, number], zoom: number): Promise<void> {
-    if (!this.mapProvider)
-      throw new Error('Map-Provider noch nicht initialisiert.');
-    await Promise.resolve(this.mapProvider.setView(coordinates, zoom));
+    if (!this.mapProvider || this.mapProvider == NOOP_PROVIDER)
+      throw new Error(MSG_COMPONENT + 'Map-Provider noch nicht initialisiert.');
+    await Promise.resolve(this.mapProvider?.setView(coordinates, zoom));
   }
 
   private ensureContainer() {
