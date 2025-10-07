@@ -7,15 +7,12 @@ describe('<v-map-layer-terrain> e2e', () => {
   let page: E2EPage;
 
   const render = async (html: string, opts?: { wait?: boolean }) => {
-    await page.evaluate(
-      content => {
-        const root = document.getElementById('test-root');
-        if (root) {
-          root.innerHTML = content;
-        }
-      },
-      html,
-    );
+    await page.evaluate(content => {
+      const root = document.getElementById('test-root');
+      if (root) {
+        root.innerHTML = content;
+      }
+    }, html);
     if (opts?.wait === false) return;
     await page.waitForChanges();
   };
@@ -33,10 +30,9 @@ describe('<v-map-layer-terrain> e2e', () => {
     await page.close();
   });
 
-  it.skip('hydrates inside <v-map>', async () => {
-    // Skipped: terrain layer type not yet supported by OpenLayers provider
+  it('hydrates inside <v-map>', async () => {
     await render(`
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
+      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain elevationData="https://example.com/elevation.png"></v-map-layer-terrain>
         </v-map-layergroup>
@@ -46,23 +42,25 @@ describe('<v-map-layer-terrain> e2e', () => {
     expect(el).toHaveClass('hydrated');
   });
 
-  it.skip('accepts elevationData attribute', async () => {
+  it('accepts elevationData attribute', async () => {
     // Skipped: terrain layer type not yet supported by OpenLayers provider
     await render(`
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
+      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain elevationData="https://example.com/terrain.tif"></v-map-layer-terrain>
         </v-map-layergroup>
       </v-map>
     `);
     const el = await page.find('v-map-layer-terrain');
-    expect(el.getAttribute('elevationData')).toBe('https://example.com/terrain.tif');
+    expect(el.getAttribute('elevationData')).toBe(
+      'https://example.com/terrain.tif',
+    );
   });
 
   it.skip('accepts optional terrain parameters', async () => {
-    // Skipped: terrain layer type not yet supported by OpenLayers provider
+    // Skipped: need real url for elevationData
     await render(`
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
+      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain
             elevationData="https://example.com/elevation.png"
@@ -80,9 +78,9 @@ describe('<v-map-layer-terrain> e2e', () => {
   });
 
   it.skip('accepts common props', async () => {
-    // Skipped: terrain layer type not yet supported by OpenLayers provider
+    // Skipped: need real url for elevationData
     await render(`
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
+      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain elevationData="https://example.com/elevation.png"></v-map-layer-terrain>
         </v-map-layergroup>
