@@ -42,8 +42,12 @@ export class VMapLayerGeoTIFF implements VMapLayer {
   /**
    * Z-index for layer stacking order. Higher values render on top.
    */
-  @Prop() zIndex: number = 1000;
+  @Prop() zIndex: number = 100;
 
+  /**
+   * NoData Values to discard (overriding any nodata values in the metadata).
+   */
+  @Prop() nodata?: number = null;
   /**
    * Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
    * @event ready
@@ -61,6 +65,7 @@ export class VMapLayerGeoTIFF implements VMapLayer {
       type: 'geotiff',
       data: {
         url: this.url,
+        nodata: this.nodata,
       },
     });
   }
@@ -83,6 +88,21 @@ export class VMapLayerGeoTIFF implements VMapLayer {
     await this.helper?.setZIndex(this.zIndex);
   }
 
+  @Watch('nodata')
+  async onNodataChanged() {
+    log(MSG_COMPONENT + 'onNodataChanged');
+    if (isNaN(this.nodata)) {
+      this.nodata = null;
+    }
+    await this.helper?.updateLayer({
+      type: 'geotiff',
+      data: {
+        url: this.url,
+        nodata: this.nodata,
+      },
+    });
+  }
+
   isReady(): boolean {
     return this.didLoad;
   }
@@ -102,6 +122,7 @@ export class VMapLayerGeoTIFF implements VMapLayer {
       zIndex: this.zIndex,
       opacity: this.opacity,
       url: this.url,
+      nodata: this.nodata,
     };
   }
 

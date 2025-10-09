@@ -88,44 +88,7 @@ export function ensureLeafletCss(
   return null;
 }
 
-export async function ensureGoogleMutantLoaded(): Promise<void> {
-  if (!isBrowser()) return; // im SSR/Tests: noop
-  try {
-    await import('leaflet.gridlayer.googlemutant');
-  } catch {
-    // im Test (gemockt) oder wenn das Plugin nicht verfügbar ist → still
-  }
-}
-
-export async function loadGoogleMapsApi(
-  apiKey: string,
-  opts?: { language?: string; region?: string; libraries?: string[] },
-) {
-  if ((window as any).google?.maps) return;
-
-  await new Promise<void>((resolve, reject) => {
-    const cbName =
-      '___leafletGoogleInit___' + Math.random().toString(36).slice(2);
-    (window as any)[cbName] = () => resolve();
-
-    const script = document.createElement('script');
-    const params = new URLSearchParams({
-      key: apiKey,
-      callback: cbName,
-      v: 'weekly',
-    });
-    if (opts?.language) params.set('language', opts.language);
-    if (opts?.region) params.set('region', opts.region);
-    if (opts?.libraries?.length)
-      params.set('libraries', opts.libraries.join(','));
-
-    script.src = `https://maps.googleapis.com/maps/api/js?${params.toString()}`;
-    script.async = true;
-    script.onerror = () =>
-      reject(new Error('Google Maps JS API failed to load'));
-    document.head.appendChild(script);
-  });
-}
+// Die Google Maps JS API wird seit der Umstellung auf Map Tiles nicht mehr geladen.
 
 /** Fügt ein kleines Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit) */
 export function ensureGoogleLogo(map: L.Map, markAdded: () => void) {

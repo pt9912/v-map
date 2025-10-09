@@ -6,8 +6,6 @@ const config: Config = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/testing/setupTests.jest.ts'],
   moduleNameMapper: {
-    '^leaflet\\.gridlayer\\.googlemutant$':
-      '<rootDir>/src/testing/mocks/leaflet.gridlayer.googlemutant.ts',
     '^geostyler-sld-parser$':
       '<rootDir>/src/testing/mocks/geostyler-sld-parser.ts',
     '^geostyler-mapbox-parser$':

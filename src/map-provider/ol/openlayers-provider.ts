@@ -1,12 +1,15 @@
 import type Map from 'ol/Map';
 
 import type { ProjectionLike } from 'ol/proj';
+//import type Projection from 'ol/proj/Projection';
 import type VectorSource from 'ol/source/Vector';
 import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
 import type VectorLayer from 'ol/layer/Vector';
 
 import type LayerGroup from 'ol/layer/Group';
+
+import type { SourceInfo } from 'ol/source/GeoTIFF';
 
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
@@ -17,6 +20,8 @@ import { DEFAULT_STYLE } from '../../types/styleconfig';
 import { log, error } from '../../utils/logger';
 import { injectOlCss } from './openlayers-helper';
 import { Style } from 'geostyler-style';
+
+import { createCustomGeoTiff } from './CustomGeoTiff';
 
 type AnyLayer = BaseLayer | LayerGroup | VectorLayer;
 
@@ -1347,28 +1352,45 @@ export class OpenLayersProvider implements MapProvider {
   private async createGeoTIFFLayer(
     config: Extract<LayerConfig, { type: 'geotiff' }>,
   ): Promise<Layer> {
-    const [{ default: GeoTIFF }, { default: TileLayer }] = await Promise.all([
-      import('ol/source/GeoTIFF'),
-      import('ol/layer/Tile'),
-    ]);
+    const [/*{ default: GeoTIFF },*/ { default: TileLayer }] =
+      await Promise.all([
+        /* import('ol/source/GeoTIFF'),*/
+        import('ol/layer/WebGLTile'), //    import('ol/layer/Tile'),
+      ]);
 
     if (!config.url) {
       throw new Error('GeoTIFF layer requires a URL');
     }
 
-    const source = new GeoTIFF({
-      sources: [
-        {
-          url: config.url,
-        },
-      ],
+    //    const source = new GeoTIFF({
+    const srcInfo: SourceInfo = {
+      url: config.url,
+    };
+    if (config.nodata !== null && !isNaN(config.nodata)) {
+      srcInfo.nodata = config.nodata;
+    }
+    const CustomGeoTiff = await createCustomGeoTiff({
+      sources: [srcInfo],
     });
+    const source = new CustomGeoTiff();
+
+    // //test
+    // const viewOptions = await source.getView();
+    // const proj: Projection = viewOptions.projection as Projection;
+    // log(
+    //   `ol - createGeoTIFFLayer - code: ${proj?.getCode()}, center: ${
+    //     viewOptions.center
+    //   }, extent: ${viewOptions.extent}`,
+    // );
+    // //test
+
+    await source.registerProjectionIfNeeded();
 
     const layer = new TileLayer({
       source,
       opacity: config.opacity ?? 1,
       visible: config.visible ?? true,
-      zIndex: config.zIndex ?? 1000,
+      zIndex: config.zIndex ?? 100,
     });
 
     return layer;

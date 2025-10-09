@@ -95,17 +95,32 @@ let currentLevel: LogLevel = readPersistedLevel() ?? DEFAULT_LEVEL;
 class ConsoleTransport implements LogTransport {
   log(level: LogLevel, args: readonly unknown[], ns?: string) {
     const prefix = ns ? `[${ns}]` : undefined;
+    const enhancedArgs: unknown[] = [...args];
+    if (level === 'debug' || level === 'error') {
+      const showTrace = level === 'debug' || level === 'error';
+      const stackTrace = showTrace
+        ? new Error().stack?.split('\n')[4]?.trim()
+        : null;
+      if (stackTrace) {
+        enhancedArgs.push(`${stackTrace}`);
+      }
+    }
+
     // eslint-disable-next-line no-console
     switch (level) {
       case 'debug':
       case 'info':
-        prefix ? console.log(prefix, ...args) : console.log(...args);
+        prefix
+          ? console.log(prefix, ...enhancedArgs)
+          : console.log(...enhancedArgs);
         break;
       case 'warn':
         prefix ? console.warn(prefix, ...args) : console.warn(...args);
         break;
       case 'error':
-        prefix ? console.error(prefix, ...args) : console.error(...args);
+        prefix
+          ? console.error(prefix, ...enhancedArgs)
+          : console.error(...enhancedArgs);
         break;
       // 'none' wird nicht geroutet
     }

@@ -15,10 +15,9 @@ import { DEFAULT_STYLE } from '../../types/styleconfig';
 import {
   removeInjectedCss,
   ensureLeafletCss,
-  loadGoogleMapsApi,
-  ensureGoogleMutantLoaded,
   ensureGoogleLogo,
 } from './leaflet-helpers';
+import { GoogleMapTilesLayer } from './google-map-tiles-layer';
 
 type AnyLayer = L.Layer | L.LayerGroup;
 interface OpacityOptions {
@@ -469,28 +468,25 @@ export class LeafletProvider implements MapProvider {
     if (!config.apiKey)
       throw new Error("Google-Layer benötigt 'apiKey' (Google Maps Platform).");
 
-    await loadGoogleMapsApi(config.apiKey, {
-      language: config.language,
-      region: config.region,
-      libraries: config.libraries,
+    const parsedStyles =
+      typeof config.styles === 'string'
+        ? this.tryParseStyles(config.styles)
+        : config.styles;
+
+    const googleLayer = new GoogleMapTilesLayer({
+      apiKey: config.apiKey,
+      mapType: config.mapType ?? 'roadmap',
+      language: (config as any).language,
+      region: (config as any).region,
+      scale: config.scale as any,
+      highDpi: config.highDpi,
+      layerTypes: (config as any).layerTypes,
+      overlay: (config as any).overlay,
+      styles: Array.isArray(parsedStyles) ? parsedStyles : undefined,
+      imageFormat: (config as any).imageFormat,
+      apiOptions: (config as any).apiOptions,
+      maxZoom: config.maxZoom ?? 22,
     });
-
-    const type = (config.mapType ?? 'roadmap') as
-      | 'roadmap'
-      | 'satellite'
-      | 'terrain'
-      | 'hybrid';
-
-    await ensureGoogleMutantLoaded();
-
-    // googleMutant-Optionen
-    const mutantOpts: any = {
-      type,
-      maxZoom: config.maxZoom ?? 21,
-      styles: config.styles,
-    };
-
-    const gLayer = (L.gridLayer as any).googleMutant(mutantOpts) as L.GridLayer;
 
     ensureGoogleLogo(this.map, () => {
       this.googleLogoAdded = true;
@@ -499,7 +495,17 @@ export class LeafletProvider implements MapProvider {
         this.googleLogoAdded,
       );
     });
-    return gLayer;
+    return googleLayer;
+  }
+
+  private tryParseStyles(value: string): any[] | undefined {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : undefined;
+    } catch {
+      error('Failed to parse Google styles JSON');
+      return undefined;
+    }
   }
 
   async destroy() {
@@ -782,31 +788,105 @@ export class LeafletProvider implements MapProvider {
     }
 
     try {
-      // Dynamic import of georaster dependencies
-      const [{ default: parseGeoraster }, GeoRasterLayer] = await Promise.all([
+      // Dynamic import of georaster dependencies and proj4
+      const [
+        { default: parseGeoraster },
+        GeoRasterLayer,
+        proj4Module,
+        //     { fromArrayBuffer },
+        geokeysToProj4,
+      ] = await Promise.all([
         import('georaster' as any),
         import('georaster-layer-for-leaflet' as any),
+        import('proj4'),
+        //   import('geotiff'),
+        import('geotiff-geokeys-to-proj4'),
       ]);
 
-      // Fetch and parse the GeoTIFF
-      const response = await fetch(config.url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
+      // Make proj4 available globally for georaster-layer-for-leaflet
+      const proj4 = proj4Module.default || proj4Module;
+      (window as any).proj4 = proj4;
+
+      // // Fetch and parse the GeoTIFF
+      // const response = await fetch(config.url);
+      // if (!response.ok) {
+      //   throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
+      // }
+
+      // const arrayBuffer = await response.arrayBuffer();
+
+      // // Read GeoTIFF metadata to extract projection
+      // const tiff = await fromArrayBuffer(arrayBuffer);
+      // const image = await tiff.getImage();
+      // const geoKeys = image.getGeoKeys();
+
+      // const georaster = await parseGeoraster(arrayBuffer);
+      const georaster = await parseGeoraster(config.url);
+      const image = await georaster._geotiff.getImage();
+      const geoKeys = image.getGeoKeys();
+
+      georaster.noDataValue = 0;
+
+      // Convert GeoKeys to proj4 definition
+      if (georaster.projection && geoKeys) {
+        const projCode =
+          typeof georaster.projection === 'number'
+            ? georaster.projection
+            : parseInt(georaster.projection);
+        const epsgCode = `EPSG:${projCode}`;
+
+        // If projection not already defined, convert GeoKeys to proj4
+        if (!proj4.defs(epsgCode)) {
+          try {
+            const toProj4 =
+              geokeysToProj4.default?.toProj4 || geokeysToProj4.toProj4;
+            const projObj = toProj4(geoKeys);
+
+            if (projObj && projObj.proj4) {
+              // Register under multiple formats for compatibility
+              proj4.defs(epsgCode, projObj.proj4);
+              proj4.defs(projCode.toString(), projObj.proj4);
+              proj4.defs(`${projCode}`, projObj.proj4);
+
+              // georaster.projection = epsgCode; // Set as string for georaster-layer-for-leaflet
+              if (projCode === 32767) {
+                proj4.defs('EPSG:532767', projObj.proj4);
+                georaster.projection = '532767';
+              } else {
+                georaster.projection = projObj.proj4;
+              }
+              log(`Registered ${epsgCode} from GeoKeys:`, projObj.proj4);
+            }
+          } catch (e) {
+            log(`Could not convert GeoKeys to proj4 for ${epsgCode}:`, e);
+            if (projCode === 32767) {
+              georaster.projection = 4326;
+            }
+          }
+        } else {
+          // Projection already defined, use string format
+          georaster.projection = epsgCode;
+        }
       }
 
-      const arrayBuffer = await response.arrayBuffer();
-      const georaster = await parseGeoraster(arrayBuffer);
+      //var scale = chroma.scale(['black', 'cyan']).domain([-11022, 0]);
 
       // Create the layer using georaster-layer-for-leaflet
       const layer = new GeoRasterLayer.default({
         georaster: georaster,
         opacity: config.opacity ?? 1.0,
-        resolution: 256, // Adjust as needed
+        resolution: 512, // Adjust as needed
+        proj4: proj4, // Pass proj4 to the layer
+        // pixelValuesToColorFn: function (values) {
+        //   const elevation = values[0];
+        //   if (elevation > 0) return "rgb(34, 15, 50)";
+        //   return scale(elevation).hex();
+        // }
       }) as L.Layer;
 
       return layer;
-    } catch (error) {
-      error('Failed to create GeoTIFF layer:', error);
+    } catch (err) {
+      error('Failed to create GeoTIFF layer:', err);
       // Return a placeholder layer in case of error
       return L.layerGroup([]);
     }
@@ -825,13 +905,14 @@ export class LeafletProvider implements MapProvider {
       ]);
 
       // Fetch and parse the new GeoTIFF
-      const response = await fetch(data.url);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
-      }
+      // const response = await fetch(data.url);
+      // if (!response.ok) {
+      //   throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
+      // }
 
-      const arrayBuffer = await response.arrayBuffer();
-      const georaster = await parseGeoraster(arrayBuffer);
+      // const arrayBuffer = await response.arrayBuffer();
+      // const georaster = await parseGeoraster(arrayBuffer);
+      const georaster = await parseGeoraster(data.url);
 
       // Update the layer's georaster
       if ((layer as any).updateGeoraster) {

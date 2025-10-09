@@ -1186,6 +1186,11 @@ export class CesiumProvider implements MapProvider {
     apiKey: string,
     opts?: { language?: string; region?: string; libraries?: string[] },
   ): Promise<void> {
+    const mockLoader = (window as any).__mockGoogleMapsApi;
+    if (typeof mockLoader === 'function') {
+      await mockLoader(apiKey, opts);
+      return;
+    }
     if ((window as any).google?.maps) return;
 
     await new Promise<void>((resolve, reject) => {

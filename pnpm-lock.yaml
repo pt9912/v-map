@@ -12,10 +12,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      leaflet.gridlayer.googlemutant:
-        specifier: ^0.15.0
-        version: 0.15.0
     devDependencies:
       '@deck.gl/core':
         specifier: ^9.1.15
@@ -4234,9 +4230,6 @@ packages:
 
   ktx-parse@1.1.0:
     resolution: {integrity: sha512-mKp3y+FaYgR7mXWAbyyzpa/r1zDWeaunH+INJO4fou3hb45XuNSwar+7llrRyvpMWafxSIi99RNFJ05MHedaJQ==}
-
-  leaflet.gridlayer.googlemutant@0.15.0:
-    resolution: {integrity: sha512-kA5jCOBhCPigyue6YpZMhXMVYA1hM2pDIaJ6u0wSSiSZ2TQ4kZfKuhwkIexcadJfs0BP4FyhZIDZC7hmTlvjOA==}
 
   leaflet@1.9.4:
     resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
@@ -11507,8 +11500,6 @@ snapshots:
   ktx-parse@0.7.1: {}
 
   ktx-parse@1.1.0: {}
-
-  leaflet.gridlayer.googlemutant@0.15.0: {}
 
   leaflet@1.9.4: {}
 

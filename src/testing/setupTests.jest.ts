@@ -1,7 +1,5 @@
 //import '@stencil/core/testing';
 
-//jest.mock('leaflet.gridlayer.googlemutant', () => ({}));
-
 Object.defineProperty(document, 'createRange', {
   value: () => ({
     setStart: () => {},
@@ -48,9 +46,6 @@ jest.mock('geostyler-lyrx-parser', () =>
   require('./mocks/geostyler-lyrx-parser'),
 );
 jest.mock('geostyler-style', () => require('./mocks/geostyler-style'));
-// jest.mock('leaflet.gridlayer.googlemutant', () =>
-//   require('./mocks/leaflet.gridlayer.googlemutant'),
-// );
 
 // Polyfill für Node.js-Module im Browser
 globalThis.global = globalThis;

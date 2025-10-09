@@ -165,6 +165,11 @@ export namespace Components {
          */
         "getLayerId": () => Promise<string>;
         /**
+          * NoData Values to discard (overriding any nodata values in the metadata).
+          * @default null
+         */
+        "nodata"?: number;
+        /**
           * Opazität der GeoTIFF-Kacheln (0–1).
           * @default 1
          */
@@ -181,7 +186,7 @@ export namespace Components {
         "visible": boolean;
         /**
           * Z-index for layer stacking order. Higher values render on top.
-          * @default 1000
+          * @default 100
          */
         "zIndex": number;
     }
@@ -1152,6 +1157,11 @@ declare namespace LocalJSX {
     }
     interface VMapLayerGeotiff {
         /**
+          * NoData Values to discard (overriding any nodata values in the metadata).
+          * @default null
+         */
+        "nodata"?: number;
+        /**
           * Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
           * @event ready
          */
@@ -1173,7 +1183,7 @@ declare namespace LocalJSX {
         "visible"?: boolean;
         /**
           * Z-index for layer stacking order. Higher values render on top.
-          * @default 1000
+          * @default 100
          */
         "zIndex"?: number;
     }

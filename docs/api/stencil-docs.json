@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-07T14:59:55",
+  "timestamp": "2025-10-09T10:37:43",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -996,6 +996,35 @@
       "usage": {},
       "props": [
         {
+          "name": "nodata",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "nodata",
+          "reflectToAttr": false,
+          "docs": "NoData Values to discard (overriding any nodata values in the metadata).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "opacity",
           "type": "number",
           "complexType": {
@@ -1097,10 +1126,10 @@
           "docsTags": [
             {
               "name": "default",
-              "text": "1000"
+              "text": "100"
             }
           ],
-          "default": "1000",
+          "default": "100",
           "values": [
             {
               "type": "number"

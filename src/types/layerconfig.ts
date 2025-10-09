@@ -28,6 +28,7 @@ export type LayerConfig =
       type: 'geotiff';
       groupId?: string;
       url?: string;
+      nodata?: number;
       opacity?: number;
       zIndex?: number;
       visible?: boolean;
@@ -61,17 +62,21 @@ export type LayerConfig =
       type: 'google';
       apiKey: string;
       mapType?: googleMapType;
-      scale?: 'scaleFactor1x' | 'scaleFactor2x';
+      scale?: 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
       highDpi?: boolean;
       opacity?: number;
       visible?: boolean;
       groupId?: string;
       zIndex?: number;
       maxZoom?: number;
-      styles?: string;
+      styles?: any[] | string;
       language?: string;
       libraries?: string[];
       region?: string; // nur wenn deine OL-Version das typisiert
+      layerTypes?: string[];
+      overlay?: boolean;
+      imageFormat?: string;
+      apiOptions?: string[];
     }
   | {
       type: 'wms';

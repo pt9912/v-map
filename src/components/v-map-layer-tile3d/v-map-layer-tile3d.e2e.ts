@@ -35,20 +35,22 @@ describe('<v-map-layer-tile3d> E2E', () => {
 
   it('rendert zusammen mit v-map-style und reagiert auf Style-Events', async () => {
     await render(`
-      <div>
-        <v-map-style
-          id="style"
-          format="cesium-3d-tiles"
-          layer-targets="test-tileset"
-        ></v-map-style>
-        <v-map-layer-tile3d
-          id="test-tileset"
-          url="https://example.com/tileset.json"
-          opacity="0.8"
-          visible="true"
-          z-index="1200"
-        ></v-map-layer-tile3d>
-      </div>
+      <v-map flavour="cesium">
+        <v-map-layergroup>
+          <v-map-style
+            id="style"
+            format="cesium-3d-tiles"
+            layer-targets="test-tileset"
+          ></v-map-style>
+          <v-map-layer-tile3d
+            id="test-tileset"
+            url="https://example.com/tileset.json"
+            opacity="0.8"
+            visible="true"
+            z-index="1200"
+          ></v-map-layer-tile3d>
+        </v-map-layergroup>
+      </v-map>
     `);
 
     const styleComponent = await page.find('v-map-style');

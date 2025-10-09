@@ -45,8 +45,15 @@ jest.mock('leaflet', () => ({
   circleMarker: mockCircleMarker,
   marker: mockMarker,
   icon: mockIcon,
+  GridLayer: class {
+    options: any = {};
+    constructor() {}
+  },
   Util: {
     stamp: jest.fn(() => 'layer-id-123'),
+    setOptions: jest.fn((instance: any, opts: any) => {
+      instance.options = { ...(instance.options ?? {}), ...opts };
+    }),
   },
 }));
 

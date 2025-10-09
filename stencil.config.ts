@@ -280,7 +280,6 @@ export const config: Config = {
               /^leaflet\//,
               'ol',
               /^ol\//,
-              'leaflet.gridlayer.googlemutant',
 
               // Node.js-spezifische Module (NEU)
               'path',

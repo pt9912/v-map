@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property  | Attribute | Description                                                    | Type      | Default |
-| --------- | --------- | -------------------------------------------------------------- | --------- | ------- |
-| `opacity` | `opacity` | Opazität der GeoTIFF-Kacheln (0–1).                            | `number`  | `1.0`   |
-| `url`     | `url`     | URL to the GeoTIFF file to be displayed on the map.            | `string`  | `null`  |
-| `visible` | `visible` | Sichtbarkeit des Layers                                        | `boolean` | `true`  |
-| `zIndex`  | `z-index` | Z-index for layer stacking order. Higher values render on top. | `number`  | `1000`  |
+| Property  | Attribute | Description                                                              | Type      | Default |
+| --------- | --------- | ------------------------------------------------------------------------ | --------- | ------- |
+| `nodata`  | `nodata`  | NoData Values to discard (overriding any nodata values in the metadata). | `number`  | `null`  |
+| `opacity` | `opacity` | Opazität der GeoTIFF-Kacheln (0–1).                                      | `number`  | `1.0`   |
+| `url`     | `url`     | URL to the GeoTIFF file to be displayed on the map.                      | `string`  | `null`  |
+| `visible` | `visible` | Sichtbarkeit des Layers                                                  | `boolean` | `true`  |
+| `zIndex`  | `z-index` | Z-index for layer stacking order. Higher values render on top.           | `number`  | `100`   |
 
 
 ## Events

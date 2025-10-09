@@ -30,8 +30,15 @@ const setupModule = async () => {
       basemap: false,
       getLayers: jest.fn(() => []),
     })),
+    GridLayer: class {
+      options: any = {};
+      constructor() {}
+    },
     Util: {
       stamp: jest.fn(() => 'leaflet-layer-id'),
+      setOptions: jest.fn((instance, opts) => {
+        instance.options = { ...(instance.options ?? {}), ...opts };
+      }),
     },
   }));
 

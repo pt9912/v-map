@@ -1,6 +1,6 @@
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  //staticDirs: ['../dist/esm-es5'],
+  staticDirs: ['../public'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-docs',
@@ -13,13 +13,35 @@ const config = {
     name: '@stencil/storybook-plugin',
   },
   async viteFinal(config) {
+    config.server = {
+      proxy: {
+        '/gcp-public-data-landsat': {
+          target: 'https://storage.googleapis.com',
+          secure: true,
+          changeOrigin: true,
+        },
+        '/sentinel-s2-l2a-cogs': {
+          target: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/',
+          secure: true,
+          changeOrigin: true,
+        },
+
+        '/echo': {
+          target: 'https://echo.free.beeceptor.com/',
+          secure: true,
+          changeOrigin: true,
+        },
+      },
+    };
     // Configure Vite to handle external dependencies
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
 
     // Add aliases to resolve external modules from node_modules
-    config.resolve.alias['@loaders.gl/core'] = require.resolve('@loaders.gl/core');
-    config.resolve.alias['@loaders.gl/gltf'] = require.resolve('@loaders.gl/gltf');
+    config.resolve.alias['@loaders.gl/core'] =
+      require.resolve('@loaders.gl/core');
+    config.resolve.alias['@loaders.gl/gltf'] =
+      require.resolve('@loaders.gl/gltf');
 
     // Optimize dependencies
     config.optimizeDeps = config.optimizeDeps || {};
