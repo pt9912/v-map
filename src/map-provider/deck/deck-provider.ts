@@ -1434,34 +1434,38 @@ export type TileLoadProps = {
     }
 
     try {
-      // Using BitmapLayer for basic GeoTIFF display
-      // For more advanced GeoTIFF support, consider using deck.gl-raster or similar
-      const { BitmapLayer } = await import('@deck.gl/layers');
+      const geolibModule: any = await import('@gisatcz/deckgl-geolib');
+      const geolib = geolibModule.default ?? geolibModule;
+      const CogBitmapLayer =
+        geolib?.CogBitmapLayer ?? geolibModule?.CogBitmapLayer;
 
-      // For now, we'll create a basic bitmap layer
-      // Note: This assumes the GeoTIFF can be displayed directly as an image
-      // For COG (Cloud Optimized GeoTIFF) support, you might want to use
-      // specialized libraries like deck.gl-raster
+      if (!CogBitmapLayer) {
+        throw new Error('CogBitmapLayer not available in @gisatcz/deckgl-geolib');
+      }
 
-      const layer = new BitmapLayer({
+      const cogBitmapOptions: Record<string, any> = {
+        type: 'image',
+        useHeatMap: false,
+      };
+
+      if (config.nodata !== undefined && config.nodata !== null) {
+        cogBitmapOptions.noDataValue = config.nodata;
+        cogBitmapOptions.nullColor = [0, 0, 0, 0];
+      }
+
+      const layer = new CogBitmapLayer({
         id: layerId,
-        image: config.url,
-        bounds: [
-          // Default bounds - ideally these should come from GeoTIFF metadata
-          -180, -85.051129, 180, 85.051129,
-        ],
+        rasterData: config.url,
+        isTiled: true,
         opacity: config.opacity ?? 1.0,
         visible: config.visible ?? true,
-        parameters: {
-          depthTest: false,
-        },
+        cogBitmapOptions,
       });
 
       return layer;
     } catch (error) {
       log('v-map - provider - deck - Failed to create GeoTIFF layer:', error);
 
-      // Return a placeholder/empty layer in case of error
       const { GeoJsonLayer } = await import('@deck.gl/layers');
       return new GeoJsonLayer({
         id: layerId,

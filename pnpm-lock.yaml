@@ -35,6 +35,9 @@ importers:
       '@docsearch/react':
         specifier: 4.0.0-beta.8
         version: 4.0.0-beta.8(@algolia/client-search@5.37.0)(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(search-insights@2.17.3)(zod@3.25.76)
+      '@gisatcz/deckgl-geolib':
+        specifier: ^1.11.2
+        version: 1.11.2(@deck.gl/widgets@9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9))(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@loaders.gl/core':
         specifier: ^4.3.4
         version: 4.3.4
@@ -143,6 +146,9 @@ importers:
       geotiff:
         specifier: 2.1.4-beta.0
         version: 2.1.4-beta.0
+      geotiff-geokeys-to-proj4:
+        specifier: ^2024.4.13
+        version: 2024.4.13
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@22.18.1)
@@ -164,6 +170,9 @@ importers:
       ol:
         specifier: ^10.6.1
         version: 10.6.1
+      proj4:
+        specifier: ^2.19.10
+        version: 2.19.10
       puppeteer:
         specifier: ^24.3.0
         version: 24.19.0(typescript@5.9.2)
@@ -494,6 +503,18 @@ packages:
     resolution: {integrity: sha512-LfYNnyZFqnxkyc4MkukALMvLUOKC8dpZWf71dEx/dvqrKmniRtsiAL2XuQhJmaBNaH7KpuX7rSnf/t7s+Id9pw==}
     engines: {node: '>=20.19.0'}
 
+  '@chunkd/source-http@11.1.0':
+    resolution: {integrity: sha512-vKCR/MwFuj7fAglym3BiSYromIFR65K9cIY3Z459B7HQR7aLATxQiQcxTfXNwFy+1/Xooe/6UXHrGs4EKcg6Vw==}
+    engines: {node: '>=18.0.0'}
+
+  '@chunkd/source@11.1.0':
+    resolution: {integrity: sha512-3BcrHK4XDm3t4vDx1OisgcOZ05+EarEqwaGVIL7IMHUmkXwN/Aprlnr7aVP3BYcltgcCcfMd1pXQicbSrP563g==}
+    engines: {node: '>=16.0.0'}
+
+  '@cogeotiff/core@9.1.0':
+    resolution: {integrity: sha512-nkSiD+AY/6+jWux4imXnVJGA4xZWWho5zzjLUo6PlHdRryxxsJpl+okDleoAcIVMdmdQVLQx5E6C/b7gnBCV2Q==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
@@ -575,6 +596,20 @@ packages:
       '@deck.gl/core': ^9.1.0
       '@luma.gl/core': ~9.1.9
       '@luma.gl/engine': ~9.1.9
+
+  '@deck.gl/react@9.2.1':
+    resolution: {integrity: sha512-obcE/lf70QpIrc91Pco9QLbXqbHLepCKOcNBcHO7bIfFSpTSGWbqSNHDcGSMwp3ZVp7sgfn+j/THOe3li35TMw==}
+    peerDependencies:
+      '@deck.gl/core': ^9.1.0
+      '@deck.gl/widgets': ^9.1.0
+      react: '>=16.3.0'
+      react-dom: '>=16.3.0'
+
+  '@deck.gl/widgets@9.2.1':
+    resolution: {integrity: sha512-0qoykxCScX8HbCOFRX9T1jCUPo+qd5keOK5cumFn+fU5erEs9+WN07guEfzlx0uEVSI3Q08n7Mfnzs8yXOPFAQ==}
+    peerDependencies:
+      '@deck.gl/core': ^9.1.0
+      '@luma.gl/core': ^9.1.9
 
   '@docsearch/css@4.0.0-beta.8':
     resolution: {integrity: sha512-/ZlyvZCjIJM4aaOYoJpVNHPJckX7J5KIbt6IWjnZXvo0QAUI1aH976vKEJUC9olgUbE3LWafB8yuX4qoqahIQg==}
@@ -898,6 +933,9 @@ packages:
 
   '@gerrit0/mini-shiki@3.12.2':
     resolution: {integrity: sha512-HKZPmO8OSSAAo20H2B3xgJdxZaLTwtlMwxg0967scnrDlPwe6j5+ULGHyIqwgTbFCn9yv/ff8CmfWZLE9YKBzA==}
+
+  '@gisatcz/deckgl-geolib@1.11.2':
+    resolution: {integrity: sha512-K6UuxQfF5RfROPlM8ZhE81lJaT+oh/jybl3FKk4Hvc908IsLkOxEARVcGFFE5P3jwH9cncKlTNUPpnmIoKGrOA==}
 
   '@iconify-json/simple-icons@1.2.50':
     resolution: {integrity: sha512-Z2ggRwKYEBB9eYAEi4NqEgIzyLhu0Buh4+KGzMPD6+xG7mk52wZJwLT/glDPtfslV503VtJbqzWqBUGkCMKOFA==}
@@ -2541,6 +2579,9 @@ packages:
   chownr@1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
 
+  chroma-js@2.6.0:
+    resolution: {integrity: sha512-BLHvCB9s8Z1EV4ethr6xnkl/P2YRFOGqfgvuMG/MyCbZPrTA+NeiByY6XvgF0zP4/2deU2CXnWyMa3zu1LqQ3A==}
+
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
@@ -3414,6 +3455,9 @@ packages:
   geotiff-epsg-code@0.3.1:
     resolution: {integrity: sha512-VzzFNfeCG5eTtc14J24Anr8lPFmn3bSYED/JL5JEEZbioYkDrTf6f1eHSkJ6w6dboXygXCe2Zq3314FmYuEYyg==}
 
+  geotiff-geokeys-to-proj4@2024.4.13:
+    resolution: {integrity: sha512-Jgtm/lcPkgB44wCqQHaVQx5/fyhmiVDRUKQcI/vMolsED8/GRWBnn5qkQo/CgutQg9xkGzig21DY9Px9mFRdvg==}
+
   geotiff-geotransform@0.0.1:
     resolution: {integrity: sha512-qLoIwcGIHvUOD25hN3T5FSVnceJlqu4nZhIqJPReJvaaF3VgMBTNtLa8mk218nG0vX8rkwrlyAfaaees7OLqEA==}
 
@@ -4102,6 +4146,9 @@ packages:
     peerDependenciesMeta:
       node-notifier:
         optional: true
+
+  jpeg-js@0.4.4:
+    resolution: {integrity: sha512-WZzeDOEtTOBK4Mdsar0IqEU5sMr3vSV2RqkAIzUEV2BHnUfKGyswWFPFwK5EeDo93K3FohSHbLAjj0s1Wzd+dg==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -6938,6 +6985,14 @@ snapshots:
       '@cesium/engine': 21.0.0
       nosleep.js: 0.12.0
 
+  '@chunkd/source-http@11.1.0':
+    dependencies:
+      '@chunkd/source': 11.1.0
+
+  '@chunkd/source@11.1.0': {}
+
+  '@cogeotiff/core@9.1.0': {}
+
   '@colors/colors@1.5.0':
     optional: true
 
@@ -7073,6 +7128,19 @@ snapshots:
       '@luma.gl/shadertools': 9.1.9(@luma.gl/core@9.1.9)
     transitivePeerDependencies:
       - '@loaders.gl/core'
+
+  '@deck.gl/react@9.2.1(@deck.gl/core@9.1.15)(@deck.gl/widgets@9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@deck.gl/core': 9.1.15
+      '@deck.gl/widgets': 9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9)
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+
+  '@deck.gl/widgets@9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9)':
+    dependencies:
+      '@deck.gl/core': 9.1.15
+      '@luma.gl/core': 9.1.9
+      preact: 10.27.1
 
   '@docsearch/css@4.0.0-beta.8': {}
 
@@ -7250,6 +7318,33 @@ snapshots:
       '@shikijs/themes': 3.12.2
       '@shikijs/types': 3.12.2
       '@shikijs/vscode-textmate': 10.0.2
+
+  '@gisatcz/deckgl-geolib@1.11.2(@deck.gl/widgets@9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9))(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@chunkd/source-http': 11.1.0
+      '@cogeotiff/core': 9.1.0
+      '@deck.gl/core': 9.1.15
+      '@deck.gl/extensions': 9.1.14(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
+      '@deck.gl/geo-layers': 9.1.15(@deck.gl/core@9.1.15)(@deck.gl/extensions@9.1.14(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9))))(@deck.gl/layers@9.1.15(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9))))(@deck.gl/mesh-layers@9.1.14(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9))))(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
+      '@deck.gl/layers': 9.1.15(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
+      '@deck.gl/mesh-layers': 9.1.14(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
+      '@deck.gl/react': 9.2.1(@deck.gl/core@9.1.15)(@deck.gl/widgets@9.2.1(@deck.gl/core@9.1.15)(@luma.gl/core@9.1.9))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@loaders.gl/loader-utils': 4.3.4(@loaders.gl/core@4.3.4)
+      '@loaders.gl/schema': 4.3.4(@loaders.gl/core@4.3.4)
+      '@luma.gl/constants': 9.1.9
+      '@mapbox/martini': 0.2.0
+      '@math.gl/web-mercator': 4.1.0
+      chroma-js: 2.6.0
+      geotiff: 2.1.3
+      jpeg-js: 0.4.4
+      pako: 2.1.0
+    transitivePeerDependencies:
+      - '@deck.gl/widgets'
+      - '@loaders.gl/core'
+      - '@luma.gl/core'
+      - '@luma.gl/engine'
+      - react
+      - react-dom
 
   '@iconify-json/simple-icons@1.2.50':
     dependencies:
@@ -9341,6 +9436,8 @@ snapshots:
 
   chownr@1.1.4: {}
 
+  chroma-js@2.6.0: {}
+
   chrome-trace-event@1.0.4: {}
 
   chromium-bidi@0.6.3(devtools-protocol@0.0.1312386):
@@ -10395,6 +10492,8 @@ snapshots:
     dependencies:
       get-epsg-code: 1.2.0
 
+  geotiff-geokeys-to-proj4@2024.4.13: {}
+
   geotiff-geotransform@0.0.1: {}
 
   geotiff-no-data@0.2.0:
@@ -11316,6 +11415,8 @@ snapshots:
       - babel-plugin-macros
       - supports-color
       - ts-node
+
+  jpeg-js@0.4.4: {}
 
   js-tokens@4.0.0: {}
 
