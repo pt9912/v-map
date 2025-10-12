@@ -45,12 +45,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           'chunk-ol': [
-            'ol',
-            'ol/Map',
-            'ol/View',
-            'ol/proj',
-            'ol/layer/Tile',
-            'ol/source/OSM',
+            // 'ol',
+            // 'ol/Map',
+            // 'ol/View',
+            // 'ol/proj',
+            // 'ol/layer/Tile',
+            // 'ol/source/OSM',
           ],
           'chunk-leaflet': ['leaflet'],
         },
@@ -65,20 +65,55 @@ export default defineConfig({
     global: 'window', // Polyfill global for browser
   },
   optimizeDeps: {
-    exclude: ['cesium'],
+    exclude: [
+      'cesium',
+      '@loaders.gl/wms',
+      '@loaders.gl/tiles',
+      '@loaders.gl/gltf',
+      '@loaders.gl/schema',
+      '@loaders.gl/terrain',
+      '@loaders.gl/images',
+      '@loaders.gl/geojson',
+      '@deck.gl/core',
+      '@deck.gl/layers',
+      '@deck.gl/geo-layers',
+    ],
     include: [
       'geostyler-sld-parser > memfs', // Force bundle memfs
-      // '@loaders.gl/core',
-      // '@loaders.gl/gltf',
-      // '@deck.gl/core',
-      // '@deck.gl/layers',
-      // '@deck.gl/geo-layers',
+      'ol', // Pre-bundle the entire OpenLayers package
+      '@stencil/core',
+      '@stencil/core/internal/client',
+      'leaflet',
+      'ol',
+      'geotiff',
+      'proj4',
+      'geotiff-geokeys-to-proj4',
+      'jszip',
+      'pako',
+      'snappyjs',
+      'pbf',
+      'lie',
+      'setimmediate',
+      'readable-stream',
+      '@loaders.gl/core',
+      '@loaders.gl/loader-utils',
+      '@loaders.gl/compression',
+      '@loaders.gl/zip',
+      '@loaders.gl/3d-tiles',
+      '@loaders.gl/mvt',
+      '@loaders.gl/gis',
     ],
   },
   resolve: {
     alias: {
-      // Ensure @loaders.gl modules resolve correctly
-      '@loaders.gl/core': '@loaders.gl/core',
+      jszip: new URL(
+        './node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
+        import.meta.url,
+      ).pathname,
+      pako: new URL(
+        './node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
+        import.meta.url,
+      ).pathname,
     },
   },
 });

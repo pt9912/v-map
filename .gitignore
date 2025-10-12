@@ -46,3 +46,9 @@ docs/site.pdf
 
 .claude/
 test-results/
+
+.vite-cache/
+.storybook/.vite-cache/
+node_modules/.cache/storybook/
+
+todos.md

@@ -18,6 +18,10 @@ import {
   ensureGoogleLogo,
 } from './leaflet-helpers';
 import { GoogleMapTilesLayer } from './google-map-tiles-layer';
+import { GeoTIFFGridLayer } from './GeoTIFFGridLayer';
+import { getColorStops } from '../geotiff/utils/colormap-utils';
+import { wellknown } from 'wellknown';
+import { GmlParser } from '@npm9912/s-gml';
 
 type AnyLayer = L.Layer | L.LayerGroup;
 interface OpacityOptions {
@@ -90,11 +94,11 @@ export class LeafletProvider implements MapProvider {
   //   this.layers.push(layer);
   // }
 
-  async addLayerToGroup(
-    layerConfig: LayerConfig,
-    groupId: string,
-  ): Promise<string> {
-    const group = await this._ensureGroup(groupId);
+  async addLayerToGroup(layerConfig: LayerConfig): Promise<string> {
+    const group = await this._ensureGroup(
+      layerConfig.groupId,
+      layerConfig.groupVisible,
+    );
 
     const layer = await this.createLayer(layerConfig);
 
@@ -177,7 +181,10 @@ export class LeafletProvider implements MapProvider {
       log('leaflet - addBaseLayer - basemapid not set.');
     }
 
-    const group = await this._ensureGroup(layerConfig.groupId);
+    const group = await this._ensureGroup(
+      layerConfig.groupId,
+      layerConfig.groupVisible,
+    );
     group.basemap = true;
 
     const layer = await this.createLayer(layerConfig);
@@ -211,7 +218,9 @@ export class LeafletProvider implements MapProvider {
         group.clearLayers();
       }
       group.addLayer(layer);
-      layer.addTo(this.map!);
+      if (group.visible) {
+        layer.addTo(this.map!);
+      }
       //group.layerId = layerId;
     }
     return layerId;
@@ -243,7 +252,7 @@ export class LeafletProvider implements MapProvider {
       group.clearLayers();
     }
     group.addLayer(layer);
-    layer.addTo(this.map!);
+    ////layer.addTo(this.map!);
     //group.layerId = layerId;
 
     //group.set('layerId', layerId, false);
@@ -611,15 +620,30 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  private async _ensureGroup(groupId: string): Promise<L.LayerGroup> {
+  async ensureGroup(
+    groupId: string,
+    visible: boolean,
+    _opts?: { basemapid?: string },
+  ): Promise<void> {
+    await this._ensureGroup(groupId, visible);
+  }
+
+  private async _ensureGroup(
+    groupId: string,
+    visible?: boolean,
+  ): Promise<L.LayerGroup> {
     let group = await this._getLayerGroupById(groupId);
     if (!group) {
       group = L.layerGroup();
       (group as any)._groupId = groupId;
-      group.addTo(this.map!);
       group.visible = true;
+      group.addTo(this.map!);
       this.layers.push(group);
     }
+    this.setGroupVisible(
+      groupId,
+      typeof visible !== undefined ? visible : true,
+    );
     return group;
   }
 
@@ -751,7 +775,6 @@ export class LeafletProvider implements MapProvider {
   private async wktToGeoJSON(wkt: string): Promise<any> {
     try {
       // Use wellknown library to parse WKT into GeoJSON (browser-compatible)
-      const wellknown = await import('wellknown');
       const geoJSON = wellknown.parse(wkt);
 
       if (!geoJSON) {
@@ -788,102 +811,21 @@ export class LeafletProvider implements MapProvider {
     }
 
     try {
-      // Dynamic import of georaster dependencies and proj4
-      const [
-        { default: parseGeoraster },
-        GeoRasterLayer,
-        proj4Module,
-        //     { fromArrayBuffer },
-        geokeysToProj4,
-      ] = await Promise.all([
-        import('georaster' as any),
-        import('georaster-layer-for-leaflet' as any),
-        import('proj4'),
-        //   import('geotiff'),
-        import('geotiff-geokeys-to-proj4'),
-      ]);
-
-      // Make proj4 available globally for georaster-layer-for-leaflet
-      const proj4 = proj4Module.default || proj4Module;
-      (window as any).proj4 = proj4;
-
-      // // Fetch and parse the GeoTIFF
-      // const response = await fetch(config.url);
-      // if (!response.ok) {
-      //   throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
-      // }
-
-      // const arrayBuffer = await response.arrayBuffer();
-
-      // // Read GeoTIFF metadata to extract projection
-      // const tiff = await fromArrayBuffer(arrayBuffer);
-      // const image = await tiff.getImage();
-      // const geoKeys = image.getGeoKeys();
-
-      // const georaster = await parseGeoraster(arrayBuffer);
-      const georaster = await parseGeoraster(config.url);
-      const image = await georaster._geotiff.getImage();
-      const geoKeys = image.getGeoKeys();
-
-      georaster.noDataValue = 0;
-
-      // Convert GeoKeys to proj4 definition
-      if (georaster.projection && geoKeys) {
-        const projCode =
-          typeof georaster.projection === 'number'
-            ? georaster.projection
-            : parseInt(georaster.projection);
-        const epsgCode = `EPSG:${projCode}`;
-
-        // If projection not already defined, convert GeoKeys to proj4
-        if (!proj4.defs(epsgCode)) {
-          try {
-            const toProj4 =
-              geokeysToProj4.default?.toProj4 || geokeysToProj4.toProj4;
-            const projObj = toProj4(geoKeys);
-
-            if (projObj && projObj.proj4) {
-              // Register under multiple formats for compatibility
-              proj4.defs(epsgCode, projObj.proj4);
-              proj4.defs(projCode.toString(), projObj.proj4);
-              proj4.defs(`${projCode}`, projObj.proj4);
-
-              // georaster.projection = epsgCode; // Set as string for georaster-layer-for-leaflet
-              if (projCode === 32767) {
-                proj4.defs('EPSG:532767', projObj.proj4);
-                georaster.projection = '532767';
-              } else {
-                georaster.projection = projObj.proj4;
-              }
-              log(`Registered ${epsgCode} from GeoKeys:`, projObj.proj4);
-            }
-          } catch (e) {
-            log(`Could not convert GeoKeys to proj4 for ${epsgCode}:`, e);
-            if (projCode === 32767) {
-              georaster.projection = 4326;
-            }
-          }
-        } else {
-          // Projection already defined, use string format
-          georaster.projection = epsgCode;
-        }
+      const layer = new GeoTIFFGridLayer({
+        url: config.url,
+        tileSize: 256,
+        colorMap: config.colorMap as Parameters<typeof getColorStops>[0],
+        valueRange: config.valueRange,
+        nodata: config.nodata,
+        resolution: (config as any).resolution,
+        resampleMethod: (config as any).resampleMethod,
+      });
+      if (config.opacity !== undefined) {
+        (layer as any).setOpacity(config.opacity);
       }
-
-      //var scale = chroma.scale(['black', 'cyan']).domain([-11022, 0]);
-
-      // Create the layer using georaster-layer-for-leaflet
-      const layer = new GeoRasterLayer.default({
-        georaster: georaster,
-        opacity: config.opacity ?? 1.0,
-        resolution: 512, // Adjust as needed
-        proj4: proj4, // Pass proj4 to the layer
-        // pixelValuesToColorFn: function (values) {
-        //   const elevation = values[0];
-        //   if (elevation > 0) return "rgb(34, 15, 50)";
-        //   return scale(elevation).hex();
-        // }
-      }) as L.Layer;
-
+      if (config.zIndex !== undefined) {
+        (layer as any).setZIndex(config.zIndex);
+      }
       return layer;
     } catch (err) {
       error('Failed to create GeoTIFF layer:', err);
@@ -897,45 +839,15 @@ export class LeafletProvider implements MapProvider {
       throw new Error('GeoTIFF update requires a URL');
     }
 
-    try {
-      // Dynamic import of georaster dependencies
-      const [{ default: parseGeoraster }, GeoRasterLayer] = await Promise.all([
-        import('georaster' as any),
-        import('georaster-layer-for-leaflet' as any),
-      ]);
-
-      // Fetch and parse the new GeoTIFF
-      // const response = await fetch(data.url);
-      // if (!response.ok) {
-      //   throw new Error(`Failed to fetch GeoTIFF: ${response.status}`);
-      // }
-
-      // const arrayBuffer = await response.arrayBuffer();
-      // const georaster = await parseGeoraster(arrayBuffer);
-      const georaster = await parseGeoraster(data.url);
-
-      // Update the layer's georaster
-      if ((layer as any).updateGeoraster) {
-        (layer as any).updateGeoraster(georaster);
-      } else {
-        // If update method not available, remove and re-add
-        if (this.map && layer && this.map.hasLayer(layer)) {
-          this.map.removeLayer(layer);
-        }
-
-        const newLayer = new GeoRasterLayer.default({
-          georaster: georaster,
-          opacity: 1.0,
-          resolution: 256,
-        });
-
-        if (this.map) {
-          newLayer.addTo(this.map);
-        }
-      }
-    } catch (error) {
-      error('Failed to update GeoTIFF layer:', error);
-    }
+    if (!('updateSource' in (layer as any))) return;
+    await (layer as any).updateSource({
+      url: data.url,
+      colorMap: data.colorMap as Parameters<typeof getColorStops>[0],
+      valueRange: data.valueRange,
+      nodata: data.nodata,
+      resolution: data.resolution,
+      resampleMethod: data.resampleMethod,
+    });
   }
 
   // ========== Enhanced Styling Methods ==========
@@ -1315,7 +1227,6 @@ export class LeafletProvider implements MapProvider {
     // Handle GML formats - parse XML to GeoJSON using gml2geojson
     if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
       const xml = await response.text();
-      const { GmlParser } = await import('@npm9912/s-gml');
       const parser = new GmlParser();
       return await parser.parse(xml);
     }

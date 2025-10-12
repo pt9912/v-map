@@ -10,6 +10,7 @@ import { CssMode } from "./types/cssmode";
 import { MapProviderDetail } from "./utils/events";
 import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
+import { ColorMap as GeoStylerColorMap } from "geostyler-style";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export { Flavour } from "./types/flavour";
@@ -17,6 +18,7 @@ export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
 export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
+export { ColorMap as GeoStylerColorMap } from "geostyler-style";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 export { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export namespace Components {
@@ -161,6 +163,11 @@ export namespace Components {
     }
     interface VMapLayerGeotiff {
         /**
+          * ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
+          * @default null
+         */
+        "colorMap"?: string | GeoStylerColorMap;
+        /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
@@ -179,6 +186,11 @@ export namespace Components {
           * @default null
          */
         "url": string;
+        /**
+          * Value range for colormap normalization [min, max].
+          * @default null
+         */
+        "valueRange"?: [number, number];
         /**
           * Sichtbarkeit des Layers
           * @default true
@@ -1157,6 +1169,11 @@ declare namespace LocalJSX {
     }
     interface VMapLayerGeotiff {
         /**
+          * ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
+          * @default null
+         */
+        "colorMap"?: string | GeoStylerColorMap;
+        /**
           * NoData Values to discard (overriding any nodata values in the metadata).
           * @default null
          */
@@ -1176,6 +1193,11 @@ declare namespace LocalJSX {
           * @default null
          */
         "url"?: string;
+        /**
+          * Value range for colormap normalization [min, max].
+          * @default null
+         */
+        "valueRange"?: [number, number];
         /**
           * Sichtbarkeit des Layers
           * @default true

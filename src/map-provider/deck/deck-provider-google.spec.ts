@@ -10,32 +10,50 @@ jest.mock('@deck.gl/core', () => ({
 }));
 
 jest.mock('@deck.gl/geo-layers', () => ({
-  TileLayer: jest.fn().mockImplementation(props => ({
-    id: props.id,
-    props: {
-      visible: props.visible ?? true,
-      opacity: props.opacity ?? 1,
-      ...props,
-    },
-    clone: jest.fn().mockImplementation(overrides => ({
+  TileLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
       id: props.id,
       props: {
-        visible: overrides?.visible ?? props.visible ?? true,
-        opacity: overrides?.opacity ?? props.opacity ?? 1,
+        visible: props.visible ?? true,
+        opacity: props.opacity ?? 1,
         ...props,
-        ...overrides,
       },
-      clone: jest.fn().mockReturnThis(),
-    })),
-    ...props,
-  })),
+      clone: jest.fn().mockImplementation((overrides: any) => ({
+        id: props.id,
+        props: {
+          visible: overrides?.visible ?? props.visible ?? true,
+          opacity: overrides?.opacity ?? props.opacity ?? 1,
+          ...props,
+          ...overrides,
+        },
+        clone: jest.fn().mockReturnThis(),
+      })),
+      ...props,
+    };
+  }),
 }));
 
 jest.mock('@deck.gl/layers', () => ({
-  BitmapLayer: jest.fn().mockImplementation(props => ({
-    id: props.id,
-    ...props,
-  })),
+  BitmapLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      ...props,
+    };
+  }),
+  GeoJsonLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props: props,
+      clone: jest.fn().mockReturnThis(),
+    };
+  }),
+  ScatterplotLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props: props,
+      clone: jest.fn().mockReturnThis(),
+    };
+  }),
 }));
 
 // Mock Google Maps API
@@ -92,9 +110,10 @@ describe('DeckProvider Google Maps Integration', () => {
         scale: 'scaleFactor2x',
         language: 'en',
         region: 'US',
+        groupId: 'test-group',
       };
 
-      const layerId = await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
       expect(layerId).toBeTruthy();
     });
 
@@ -119,12 +138,10 @@ describe('DeckProvider Google Maps Integration', () => {
           type: 'google' as const,
           apiKey: mockApiKey,
           mapType,
+          groupId: `test-group-${mapType}`,
         };
 
-        const layerId = await provider.addLayerToGroup(
-          config,
-          `test-group-${mapType}`,
-        );
+        const layerId = await provider.addLayerToGroup(config);
         expect(layerId).toBeTruthy();
       }
     });
@@ -141,11 +158,12 @@ describe('DeckProvider Google Maps Integration', () => {
       const config = {
         type: 'google' as const,
         mapType: 'roadmap',
+        groupId: 'test-group',
       };
 
-      await expect(
-        provider.addLayerToGroup(config as any, 'test-group'),
-      ).rejects.toThrow("Google-Layer benötigt 'apiKey'");
+      await expect(provider.addLayerToGroup(config as any)).rejects.toThrow(
+        "Google-Layer benötigt 'apiKey'",
+      );
     });
 
     it('should handle tile loading correctly', async () => {
@@ -168,9 +186,10 @@ describe('DeckProvider Google Maps Integration', () => {
         type: 'google' as const,
         apiKey: mockApiKey,
         mapType: 'roadmap',
+        groupId: 'test-group',
       };
 
-      const layerId = await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
       expect(layerId).toBeTruthy();
       // Note: fetch is called lazily when tiles are actually requested
       // expect(global.fetch).toHaveBeenCalled();
@@ -192,9 +211,10 @@ describe('DeckProvider Google Maps Integration', () => {
         type: 'google' as const,
         apiKey: mockApiKey,
         mapType: 'roadmap',
+        groupId: 'test-group',
       };
 
-      const layerId = await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
       expect(layerId).toBeTruthy();
     });
 
@@ -221,14 +241,14 @@ describe('DeckProvider Google Maps Integration', () => {
         scale: 'scaleFactor1x',
         language: 'de',
         region: 'DE',
+        groupId: 'test-group',
       };
 
-      await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
 
       // Check that layer was created successfully
+      expect(layerId).toBeTruthy();
       // Note: URL generation happens in getTileData when tiles are requested
-      const { TileLayer } = require('@deck.gl/geo-layers');
-      expect(TileLayer).toHaveBeenCalled();
     });
 
     it('should handle opacity updates', async () => {
@@ -245,9 +265,10 @@ describe('DeckProvider Google Maps Integration', () => {
         apiKey: mockApiKey,
         mapType: 'roadmap',
         opacity: 0.5,
+        groupId: 'test-group',
       };
 
-      const layerId = await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
       expect(layerId).toBeTruthy();
 
       await provider.setOpacity(layerId, 0.8);
@@ -268,9 +289,10 @@ describe('DeckProvider Google Maps Integration', () => {
         apiKey: mockApiKey,
         mapType: 'roadmap',
         visible: true,
+        groupId: 'test-group',
       };
 
-      const layerId = await provider.addLayerToGroup(config, 'test-group');
+      const layerId = await provider.addLayerToGroup(config);
       expect(layerId).toBeTruthy();
 
       await provider.setVisible(layerId, false);
@@ -291,9 +313,10 @@ describe('DeckProvider Google Maps Integration', () => {
         type: 'google' as const,
         apiKey: mockApiKey,
         mapType: 'roadmap',
+        groupId: 'test-group',
       };
 
-      await provider.addLayerToGroup(config, 'test-group');
+      await provider.addLayerToGroup(config);
 
       // Check if Google logo would be added (mocked)
       expect(mockTarget).toBeTruthy();

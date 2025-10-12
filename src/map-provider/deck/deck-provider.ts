@@ -5,6 +5,18 @@ import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 import { DEFAULT_STYLE } from '../../types/styleconfig';
 
+import { GmlParser } from '@npm9912/s-gml';
+import { wellknownModule } from 'wellknown';
+
+import { createDeckGLGeoTIFFLayer } from './DeckGLGeoTIFFLayer';
+
+import { Deck } from '@deck.gl/core';
+import type { Layer, MapViewState } from '@deck.gl/core';
+import { GeoJsonLayer, BitmapLayer, ScatterplotLayer } from '@deck.gl/layers';
+import type { BitmapBoundingBox } from '@deck.gl/layers';
+import { TerrainLayer, TileLayer } from '@deck.gl/geo-layers';
+import type { _TileLoadProps, GeoBoundingBox } from '@deck.gl/geo-layers';
+
 import { log, warn } from '../../utils/logger';
 
 import { formatBbox, buildQuery } from '../../utils/spatial-utils';
@@ -14,16 +26,8 @@ import { LayerGroups } from './LayerGroups';
 import { LayerGroupWithModel } from './LayerGroupWithModel';
 import { type LayerModel } from './LayerModel';
 
-import type { Layer, MapViewState } from '@deck.gl/core';
-import type {
-  TileLayer,
-  _TileLoadProps,
-  GeoBoundingBox,
-} from '@deck.gl/geo-layers';
-import type { BitmapBoundingBox } from '@deck.gl/layers';
-
 export class DeckProvider implements MapProvider {
-  private deck!: import('@deck.gl/core').Deck;
+  private deck!: Deck;
   private target!: HTMLDivElement;
   private shadowRoot!: ShadowRoot;
   private injectedStyle!: HTMLStyleElement;
@@ -42,8 +46,6 @@ export class DeckProvider implements MapProvider {
       sr?.appendChild(style);
       return style;
     })(this.shadowRoot);
-
-    const [{ Deck }] = await Promise.all([import('@deck.gl/core')]);
 
     const lon = opts.mapInitOptions?.center?.[0] ?? 8.5417;
     const lat = opts.mapInitOptions?.center?.[1] ?? 49.0069;
@@ -119,8 +121,6 @@ export class DeckProvider implements MapProvider {
     cfg: any,
     layerId: string,
   ): Promise<TileLayer> {
-    const { BitmapLayer } = await import('@deck.gl/layers');
-    const { TileLayer } = await import('@deck.gl/geo-layers');
     const tileSize = cfg.tileSize ?? 256;
     /*
     const subdomains: string[] = Array.isArray(cfg.subdomains)
@@ -257,7 +257,6 @@ export class DeckProvider implements MapProvider {
     cfg: Extract<LayerConfig, { type: 'terrain' }>,
     layerId: string,
   ): Promise<Layer> {
-    const { TerrainLayer } = await import('@deck.gl/geo-layers');
     const elevationDecoder = this.normalizeElevationDecoder(
       cfg.elevationDecoder,
     );
@@ -626,8 +625,6 @@ export class DeckProvider implements MapProvider {
 
     // For deck.gl, we'll use a simplified approach with TileLayer
     // that uses Google Static Maps API for better compatibility
-    const { TileLayer } = await import('@deck.gl/geo-layers');
-    const { BitmapLayer } = await import('@deck.gl/layers');
 
     const mapType = cfg.mapType || 'roadmap';
     const googleMapTypeId = this.getGoogleMapTypeId(mapType);
@@ -792,7 +789,6 @@ export class DeckProvider implements MapProvider {
     layerConfig: Extract<LayerConfig, { type: 'scatterplot' }>,
     layerId: string,
   ): Promise<Layer> {
-    const { ScatterplotLayer } = await import('@deck.gl/layers');
     const data = layerConfig.data;
     const scatterLayer: Layer = new ScatterplotLayer<any>({
       id: layerId,
@@ -825,7 +821,6 @@ export class DeckProvider implements MapProvider {
     config: Extract<LayerConfig, { type: 'geojson' }>,
     layerId: string,
   ): Promise<Layer> {
-    const { GeoJsonLayer } = await import('@deck.gl/layers');
     let layer = null;
 
     let geojson_or_url = null;
@@ -839,11 +834,11 @@ export class DeckProvider implements MapProvider {
       let deckStyle: any;
 
       if (config.geostylerStyle) {
-        deckStyle = this.createGeostylerDeckGLStyle(
-          config.geostylerStyle,
-        );
+        deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
       } else {
-        const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+        const style = config.style
+          ? { ...DEFAULT_STYLE, ...config.style }
+          : DEFAULT_STYLE;
         deckStyle = this.createDeckGLStyle(style);
       }
 
@@ -893,12 +888,10 @@ export class DeckProvider implements MapProvider {
     // },
     layerId: string,
   ) {
-    const { BitmapLayer } = await import('@deck.gl/layers');
-    const { TileLayer } = await import('@deck.gl/geo-layers');
-
     const tileSize = cfg.tileSize ?? 256;
     const version = cfg.version ?? '1.3.0';
-    const crs: string = cfg.crs ?? 'EPSG:3857';
+    //    const crs: string = cfg.crs ?? 'EPSG:3857';
+    const crs: string = 'EPSG:3857';
     const format = cfg.format ?? 'image/png';
     const transparent = cfg.transparent ?? true;
 
@@ -1102,11 +1095,8 @@ export type TileLoadProps = {
   //   return layerId;
   // }
 
-  async addLayerToGroup(
-    layerConfig: LayerConfig,
-    groupId: string,
-  ): Promise<string> {
-    const group = this.ensureModelGroup(groupId);
+  async addLayerToGroup(layerConfig: LayerConfig): Promise<string> {
+    const group = this.ensureModelGroup(layerConfig.groupId);
     const layerId = crypto.randomUUID();
     const template = await this.createLayer(layerConfig, layerId);
     if (!template) return null;
@@ -1115,6 +1105,9 @@ export type TileLoadProps = {
       () => template.clone({}),
       (layerConfig as any).visible ?? true, // Model-Visibility (enabled)
     );
+    if (typeof layerConfig.groupVisible !== undefined) {
+      group.visible = layerConfig.groupVisible;
+    }
     group.addModel(model);
 
     const ov: any = {};
@@ -1174,6 +1167,41 @@ export type TileLoadProps = {
     const group = this.ensureModelGroup(groupId);
     group.basemap = layerElementId ?? null;
     this.layerGroups.applyToDeck();
+  }
+
+  async ensureGroup(
+    groupId: string,
+    visible: boolean,
+    _opts?: { basemapid?: string },
+  ): Promise<void> {
+    await this._ensureGroup(groupId, visible, _opts);
+  }
+
+  private async _ensureGroup(
+    groupId: string,
+    visible?: boolean,
+    opts?: { basemapid?: string },
+  ): Promise<LayerGroupWithModel<Layer>> {
+    const existed = this.layerGroups.hasGroup(groupId);
+    const group = this.ensureModelGroup(groupId);
+
+    if (typeof visible === 'boolean' && group.visible !== visible) {
+      group.visible = visible;
+    }
+
+    if (opts?.basemapid !== undefined && group.basemap !== opts.basemapid) {
+      group.basemap = opts.basemapid ?? null;
+    }
+
+    if (
+      !existed ||
+      typeof visible === 'boolean' ||
+      opts?.basemapid !== undefined
+    ) {
+      this.layerGroups.applyToDeck();
+    }
+
+    return group;
   }
 
   // ------ Updates: ausschließlich via Model-Overrides / Model-Factory ------
@@ -1339,17 +1367,15 @@ export type TileLoadProps = {
   ): Promise<Layer> {
     const geoJsonData = await this.resolveWktToGeoJSON(config);
 
-    const { GeoJsonLayer } = await import('@deck.gl/layers');
-
     // Use geostyler style if available, otherwise use default style
     let deckStyle: any;
 
     if (config.geostylerStyle) {
-      deckStyle = this.createGeostylerDeckGLStyle(
-        config.geostylerStyle,
-      );
+      deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
     } else {
-      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      const style = config.style
+        ? { ...DEFAULT_STYLE, ...config.style }
+        : DEFAULT_STYLE;
       deckStyle = this.createDeckGLStyle(style);
     }
 
@@ -1403,7 +1429,6 @@ export type TileLoadProps = {
   }
 
   private async wktToGeoJSON(wkt: string): Promise<any> {
-    const wellknownModule = await import('wellknown');
     const parseFn =
       typeof wellknownModule.default === 'function'
         ? wellknownModule.default
@@ -1439,39 +1464,38 @@ export type TileLoadProps = {
     }
 
     try {
-      const geolibModule: any = await import('@gisatcz/deckgl-geolib');
-      const geolib = geolibModule.default ?? geolibModule;
-      const CogBitmapLayer =
-        geolib?.CogBitmapLayer ?? geolibModule?.CogBitmapLayer;
+      // const { createReprojectedCogBitmapLayer } = await import(
+      //   './reprojected-cog-bitmaplayer'
+      // );
+      // const cogBitmapOptions: Record<string, any> = {
+      //   type: 'image',
+      //   useHeatMap: false,
+      // };
 
-      if (!CogBitmapLayer) {
-        throw new Error('CogBitmapLayer not available in @gisatcz/deckgl-geolib');
-      }
+      // if (config.nodata !== undefined && config.nodata !== null) {
+      //   cogBitmapOptions.noDataValue = config.nodata;
+      //   cogBitmapOptions.nullColor = [0, 0, 0, 0];
+      // }
+      // //
+      // const layer = await createReprojectedCogBitmapLayer(layerId, config.url, {
+      //   ...cogBitmapOptions,
+      //   opacity: config.opacity ?? 1.0,
+      //   visible: config.visible ?? true,
+      // });
 
-      const cogBitmapOptions: Record<string, any> = {
-        type: 'image',
-        useHeatMap: false,
-      };
-
-      if (config.nodata !== undefined && config.nodata !== null) {
-        cogBitmapOptions.noDataValue = config.nodata;
-        cogBitmapOptions.nullColor = [0, 0, 0, 0];
-      }
-
-      const layer = new CogBitmapLayer({
+      const layer = await createDeckGLGeoTIFFLayer({
         id: layerId,
-        rasterData: config.url,
-        isTiled: true,
+        url: config.url,
         opacity: config.opacity ?? 1.0,
         visible: config.visible ?? true,
-        cogBitmapOptions,
+        noDataValue: config.nodata,
+        nullColor: [0, 0, 0, 0],
       });
 
       return layer;
     } catch (error) {
       log('v-map - provider - deck - Failed to create GeoTIFF layer:', error);
 
-      const { GeoJsonLayer } = await import('@deck.gl/layers');
       return new GeoJsonLayer({
         id: layerId,
         data: { type: 'FeatureCollection', features: [] },
@@ -1494,15 +1518,15 @@ export type TileLoadProps = {
   ): Promise<Layer> {
     const geojson = await this.fetchWFSFromUrl(config);
 
-    const { GeoJsonLayer } = await import('@deck.gl/layers');
-
     // Use geostyler style if available, otherwise use default style
     let deckStyle: any;
 
     if (config.geostylerStyle) {
       deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
     } else {
-      const style = config.style ? { ...DEFAULT_STYLE, ...config.style } : DEFAULT_STYLE;
+      const style = config.style
+        ? { ...DEFAULT_STYLE, ...config.style }
+        : DEFAULT_STYLE;
       deckStyle = this.createDeckGLStyle(style);
     }
 
@@ -1542,7 +1566,9 @@ export type TileLoadProps = {
       );
     }
 
-    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+    const outputFormat = (
+      config.outputFormat ?? 'application/json'
+    ).toLowerCase();
 
     // Handle JSON formats
     if (
@@ -1554,12 +1580,9 @@ export type TileLoadProps = {
     }
 
     // Handle GML formats - parse XML to GeoJSON using @npm9912/s-gml
-    if (
-      outputFormat.includes('gml') ||
-      outputFormat.includes('xml')
-    ) {
+    if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
       const xml = await response.text();
-      const { GmlParser } = await import('@npm9912/s-gml');
+
       const parser = new GmlParser();
       return await parser.parse(xml);
     }

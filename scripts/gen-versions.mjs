@@ -15,6 +15,7 @@ const CESIUM_VERSION = get('cesium') || '1.133.0';
 const OL_VERSION = get('ol') || '10.6.1';
 const LEAFLET_VERSION = get('leaflet') || '1.9.4';
 const DECK_VERSION = get('deck') || '9.1.14';
+const LOADERS_GL_VERSION = get('@loaders.gl/core') || '4.3.4';
 
 const importMap = {
   imports: {
@@ -22,6 +23,17 @@ const importMap = {
     'ol': `https://esm.sh/ol@${OL_VERSION}`,
     'leaflet': `https://esm.sh/leaflet@${LEAFLET_VERSION}`,
     'deck': `https://esm.sh/deck@${DECK_VERSION}`,
+    '@loaders.gl/core': `https://esm.sh/@loaders.gl/core@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/3d-tiles': `https://esm.sh/@loaders.gl/3d-tiles@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/gis': `https://esm.sh/@loaders.gl/gis@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/gltf': `https://esm.sh/@loaders.gl/gltf@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/images': `https://esm.sh/@loaders.gl/images@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/loader-utils': `https://esm.sh/@loaders.gl/loader-utils@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/mvt': `https://esm.sh/@loaders.gl/mvt@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/schema': `https://esm.sh/@loaders.gl/schema@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/terrain': `https://esm.sh/@loaders.gl/terrain@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/tiles': `https://esm.sh/@loaders.gl/tiles@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/wms': `https://esm.sh/@loaders.gl/wms@${LOADERS_GL_VERSION}`,
   },
 };
 

@@ -106,6 +106,7 @@ export class VMap {
 
   // KEIN @State – keine Re-Renders nötig
   private mapProvider!: MapProvider;
+  private mapState: string = 'unavailable';
   private mapContainer!: HTMLDivElement;
   private unsubscribeResize: Unsubscribe;
 
@@ -114,7 +115,7 @@ export class VMap {
     log(MSG_COMPONENT + 'onFlavourChanged');
     if (oldValue !== newValue) {
       this.reset();
-      await this.createMap();
+      // await this.createMap();
     }
   }
 
@@ -138,10 +139,16 @@ export class VMap {
     );
 
     mapProvider?.destroy();
+    this.mapState = 'unavailable';
   }
 
   private async createMap() {
     this.mapContainer = this.ensureContainer();
+    if (this.mapState === 'creating') {
+      log('Map already in creating state.');
+      return;
+    }
+    this.mapState = 'creating';
     this.mapProvider = await createProvider(this.flavour);
     let mapInitOpts: MapInitOptions = { zoom: this.zoom };
     if (this.center) {
@@ -164,7 +171,7 @@ export class VMap {
       cssMode: this.cssMode,
     };
     await this.mapProvider.init(opts);
-
+    this.mapState = 'available';
     this.unsubscribeResize = watchElementResize(this.el, async () => {
       await this.mapProvider?.setView(mapInitOpts.center, mapInitOpts.zoom);
     });

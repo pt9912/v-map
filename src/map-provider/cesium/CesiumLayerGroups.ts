@@ -143,8 +143,12 @@ export class CesiumLayerGroups {
     return g;
   }
 
-  addLayerToGroup(groupId: string, ref: CesiumLayerRef): void {
-    const g = this.ensureGroup(groupId);
+  addLayerToGroup(
+    groupId: string,
+    visible: boolean,
+    ref: CesiumLayerRef,
+  ): void {
+    const g = this.ensureGroup(groupId, visible);
     g.addLayer(ref);
     this._dirty = true;
   }

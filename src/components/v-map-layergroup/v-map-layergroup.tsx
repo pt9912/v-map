@@ -51,7 +51,7 @@ export class VMapLayerGroup {
   async onVisibleChanged() {
     log(MSG_COMPONENT + 'onVisibleChanged');
     if (this.mapProvider?.setGroupVisible) {
-      await this.mapProvider?.setGroupVisible(this.groupId, this.visible);
+      await this.mapProvider.setGroupVisible(this.groupId, this.visible);
     }
   }
 
@@ -59,12 +59,26 @@ export class VMapLayerGroup {
   async onBaseMapIdChanged() {
     log(MSG_COMPONENT + 'onBaseMapIdChanged');
     if (this.mapProvider?.setBaseLayer) {
-      await this.mapProvider?.setBaseLayer(this.groupId, this.basemapid);
+      await this.mapProvider.setBaseLayer(this.groupId, this.basemapid);
     }
   }
 
+  private async init(mapProvider: MapProvider) {
+    if (this.mapProvider != null) return;
+    this.mapProvider = mapProvider;
+    if (this.mapProvider === null) return;
+
+    if (this.mapProvider?.ensureGroup) {
+      await this.mapProvider.ensureGroup(this.groupId, this.visible, {
+        basemapid: this.basemapid,
+      });
+    }
+    await this.mapProvider?.setGroupVisible(this.groupId, this.visible);
+    await this.mapProvider?.setBaseLayer(this.groupId, this.basemapid);
+  }
+
   async connectedCallback() {
-    log(MSG_COMPONENT + 'connectedCallback');
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
     const mapElement = this.el.closest('v-map') as HTMLVMapElement | null;
 
     await customElements.whenDefined('v-map');
@@ -74,20 +88,15 @@ export class VMapLayerGroup {
       ? true
       : false;
     if (mapProviderAvailable) {
-      this.mapProvider = await mapElement?.getMapProvider?.();
-      if (this.mapProvider?.ensureGroup) {
-        // schöne, explizite API im Provider
-        //await Promise.resolve(
-        //          this.mapProvider.ensureGroup(this.groupId, { basemap: this.basemap }),
-        //      );
-      }
+      const mapProvider = await mapElement?.getMapProvider?.();
+      await this.init(mapProvider);
     }
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
     ) => {
-      log(MSG_COMPONENT + 'layer add deferred');
+      log(`${MSG_COMPONENT}map provider ready`);
       const mapEvent = event.detail as MapProviderDetail;
-      this.mapProvider = mapEvent.mapProvider;
+      await this.init(mapEvent.mapProvider);
     }) as EventListener);
 
     vmap.addEventListener(

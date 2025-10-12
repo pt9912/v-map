@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-09T10:37:43",
+  "timestamp": "2025-10-12T08:47:25",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -996,6 +996,44 @@
       "usage": {},
       "props": [
         {
+          "name": "colorMap",
+          "type": "ColorMap | string",
+          "complexType": {
+            "original": "string | GeoStylerColorMap",
+            "resolved": "ColorMap | string",
+            "references": {
+              "GeoStylerColorMap": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::ColorMap"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "color-map",
+          "reflectToAttr": false,
+          "docs": "ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "ColorMap"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "nodata",
           "type": "number",
           "complexType": {
@@ -1078,6 +1116,35 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "valueRange",
+          "type": "[number, number]",
+          "complexType": {
+            "original": "[number, number]",
+            "resolved": "[number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "value-range",
+          "reflectToAttr": false,
+          "docs": "Value range for colormap normalization [min, max].",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number]"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -4607,7 +4674,7 @@
       "path": "src/utils/events.ts"
     },
     "src/types/mapprovider.ts::MapProvider": {
-      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  setOpacity(layerId: string, opacity: number): Promise<void>;\n  setVisible(layerId: string, visible: boolean): Promise<void>;\n  setZIndex(layerId: string, zIndex: number): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayerToGroup(layer: LayerConfig, groupId: string): Promise<string>;\n  updateLayer(layerId: string, update: LayerUpdate): Promise<void>;\n  removeLayer(layerId: string): Promise<void>;\n\n  addBaseLayer?(\n    layerConfig: LayerConfig,\n    basemapid: string,\n    layerElementId: string,\n  ): Promise<string>;\n  setBaseLayer?(groupId: string, layerElementId: string): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  /** Optional: von v-map-layergroup genutzt, wenn vorhanden */\n  ensureGroup?(\n    groupId: string,\n    opts?: { basemap?: boolean; zIndex?: number },\n  ): Promise<void>;\n\n  setGroupVisible?(groupId: string, visible: boolean): Promise<void>;\n}",
+      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  setOpacity(layerId: string, opacity: number): Promise<void>;\n  setVisible(layerId: string, visible: boolean): Promise<void>;\n  setZIndex(layerId: string, zIndex: number): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayerToGroup(layer: LayerConfig): Promise<string>;\n  updateLayer(layerId: string, update: LayerUpdate): Promise<void>;\n  removeLayer(layerId: string): Promise<void>;\n\n  addBaseLayer?(\n    layerConfig: LayerConfig,\n    basemapid: string,\n    layerElementId: string,\n  ): Promise<string>;\n  setBaseLayer?(groupId: string, layerElementId: string): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  ensureGroup(\n    groupId: string,\n    visible: boolean,\n    opts?: { basemapid?: string },\n  ): Promise<void>;\n\n  setGroupVisible?(groupId: string, visible: boolean): Promise<void>;\n}",
       "docstring": "",
       "path": "src/types/mapprovider.ts"
     },

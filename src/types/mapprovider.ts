@@ -16,7 +16,7 @@ export interface MapProvider {
   setZIndex(layerId: string, zIndex: number): Promise<void>;
 
   /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */
-  addLayerToGroup(layer: LayerConfig, groupId: string): Promise<string>;
+  addLayerToGroup(layer: LayerConfig): Promise<string>;
   updateLayer(layerId: string, update: LayerUpdate): Promise<void>;
   removeLayer(layerId: string): Promise<void>;
 
@@ -30,10 +30,10 @@ export interface MapProvider {
   /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */
   setView(center: LonLat, zoom: number): Promise<void>;
 
-  /** Optional: von v-map-layergroup genutzt, wenn vorhanden */
-  ensureGroup?(
+  ensureGroup(
     groupId: string,
-    opts?: { basemap?: boolean; zIndex?: number },
+    visible: boolean,
+    opts?: { basemapid?: string },
   ): Promise<void>;
 
   setGroupVisible?(groupId: string, visible: boolean): Promise<void>;

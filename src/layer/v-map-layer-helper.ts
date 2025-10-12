@@ -13,6 +13,7 @@ export class VMapLayerHelper {
   private async addLayer(
     basemapid: string,
     groupId: string,
+    groupVisible: boolean,
     layerConfig: LayerConfig,
     layerElementId?: string,
   ): Promise<string> {
@@ -26,17 +27,17 @@ export class VMapLayerHelper {
         {
           ...layerConfig,
           groupId: groupId,
+          groupVisible: groupVisible,
         },
         basemapid,
         layerElementId,
       );
     }
-    return await this.mapProvider?.addLayerToGroup(
-      {
-        ...layerConfig,
-      },
-      groupId,
-    );
+    return await this.mapProvider?.addLayerToGroup({
+      ...layerConfig,
+      groupId: groupId,
+      groupVisible: groupVisible,
+    });
   }
 
   protected async addToMapInternal(
@@ -59,10 +60,12 @@ export class VMapLayerHelper {
       log(`${this.el.nodeName.toLowerCase()} - layer is being added`);
       this.mapProvider = await vmap.getMapProvider();
       const groupId: string = await layerGroup.getGroupId();
+      const groupVisible: boolean = await layerGroup.visible;
       if (this.layerId === null && this.mapProvider) {
         this.layerId = await this.addLayer(
           layerGroup.basemapid,
           groupId,
+          groupVisible,
           createLayerConfig(),
           elementId,
         );
@@ -76,9 +79,11 @@ export class VMapLayerHelper {
       this.mapProvider = mapEvent.mapProvider;
       if (this.layerId === null && this.mapProvider) {
         const groupId: string = await layerGroup.getGroupId();
+        const groupVisible: boolean = await layerGroup.visible;
         this.layerId = await this.addLayer(
           layerGroup.basemapid,
           groupId,
+          groupVisible,
           createLayerConfig(),
           elementId,
         );

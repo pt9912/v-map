@@ -81,9 +81,10 @@ describe('CesiumProvider XYZ layer support', () => {
       visible: false,
       maxZoom: 18,
       options: { subdomains: ['a', 'b'] },
+      groupId: 'test-group',
     };
 
-    const layerId = await provider.addLayerToGroup(config, 'test-group');
+    const layerId = await provider.addLayerToGroup(config);
 
     expect(layerId).toBe('layer-id');
     expect(mockUrlTemplateImageryProvider).toHaveBeenCalledWith(

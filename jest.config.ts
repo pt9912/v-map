@@ -15,9 +15,11 @@ const config: Config = {
     '^geostyler-lyrx-parser$':
       '<rootDir>/src/testing/mocks/geostyler-lyrx-parser.ts',
     '^geostyler-style$': '<rootDir>/src/testing/mocks/geostyler-style.ts',
+    '^@mapbox/tiny-sdf$': '<rootDir>/src/testing/mocks/mapbox-tiny-sdf.ts',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(ol|leaflet|@loaders\\.gl)/)', // Transpile geostyler parsers
+    // Transpile ol, leaflet, @loaders.gl, @mapbox, @deck.gl packages (works with pnpm structure)
+    'node_modules/(?!(.pnpm|ol|leaflet|@loaders\\.gl|@mapbox|@deck\\.gl))',
   ],
   extensionsToTreatAsEsm: ['.ts', '.tsx', '.js'],
 

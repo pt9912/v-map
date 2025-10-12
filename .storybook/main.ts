@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 const config = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
   staticDirs: ['../public'],
@@ -33,39 +35,131 @@ const config = {
         },
       },
     };
-    // Configure Vite to handle external dependencies
-    config.resolve = config.resolve || {};
-    config.resolve.alias = config.resolve.alias || {};
+    config.cacheDir = '.storybook/.vite-cache';
 
-    // Add aliases to resolve external modules from node_modules
-    config.resolve.alias['@loaders.gl/core'] =
-      require.resolve('@loaders.gl/core');
-    config.resolve.alias['@loaders.gl/gltf'] =
-      require.resolve('@loaders.gl/gltf');
+    const fastXmlParserEsm = path.resolve(
+      process.cwd(),
+      'node_modules/fast-xml-parser/src/fxp.js',
+    );
 
-    // Optimize dependencies
-    config.optimizeDeps = config.optimizeDeps || {};
-    config.optimizeDeps.include = config.optimizeDeps.include || [];
-    config.optimizeDeps.include.push(
-      // Deck.gl & Luma.gl
+    config.resolve = config.resolve ?? {};
+    config.resolve.alias = {
+      ...(config.resolve.alias ?? {}),
+      'fast-xml-parser/src/fxp.js': fastXmlParserEsm,
+      'fast-xml-parser': fastXmlParserEsm,
+      'geotiff': path.resolve(
+        process.cwd(),
+        'node_modules/.pnpm/geotiff@2.1.4-beta.0/node_modules/geotiff/dist-browser/geotiff.js',
+      ),
+      'jszip': path.resolve(
+        process.cwd(),
+        'node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
+      ),
+      'pako': path.resolve(
+        process.cwd(),
+        'node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
+      ),
+    };
+
+    // Configure conditions to prefer browser builds
+    config.resolve.conditions = ['browser', 'import', 'module', 'default'];
+
+    config.optimizeDeps = config.optimizeDeps ?? {};
+
+    // Tell Vite to scan these files for dynamic imports BEFORE starting
+    config.optimizeDeps.entries = [
+      '../src/**/*.tsx',
+      '../src/**/*.ts',
+      '../src/**/*.stories.tsx',
+      '../.storybook/**/*.ts',
+      '../.storybook/**/*.tsx',
+    ];
+
+    // Wait until all entry points are scanned before starting server
+    config.optimizeDeps.holdUntilCrawlEnd = true;
+
+    config.optimizeDeps.include = [
+      ...(config.optimizeDeps.include ?? []),
+      '@stencil/core',
+      '@stencil/core/internal/client',
+      'geotiff',
+      'proj4',
+      'ol',
+      'geotiff-geokeys-to-proj4',
+      'jszip',
+      'pako',
+      'snappyjs',
+      'pbf',
+      'lie',
+      'setimmediate',
+      'readable-stream',
+      '@loaders.gl/core',
+      '@loaders.gl/loader-utils',
+      '@loaders.gl/compression',
+      '@loaders.gl/zip',
+      '@loaders.gl/3d-tiles',
+      '@loaders.gl/mvt',
+      '@loaders.gl/gis',
+      // Storybook dependencies
+      '@mdx-js/react',
+      // OpenLayers sub-paths
+      // 'ol/Map',
+      // 'ol/View',
+      // 'ol/proj',
+      // 'ol/layer/Group',
+      // 'ol/layer/Tile',
+      // 'ol/layer/Vector',
+      // 'ol/layer/WebGLTile',
+      // 'ol/layer/Image',
+      // 'ol/source/OSM',
+      // 'ol/source/TileWMS',
+      // 'ol/source/Vector',
+      // 'ol/source/XYZ',
+      // 'ol/source/Google',
+      // 'ol/source/TileArcGISRest',
+      // 'ol/source/GeoTIFF',
+      // 'ol/source/ImageWMS',
+      // 'ol/format/GeoJSON',
+      // 'ol/format/GML2',
+      // 'ol/format/GML3',
+      // 'ol/format/GML32',
+      // 'ol/format/WKT',
+      // 'ol/style/Style',
+      // 'ol/style/Fill',
+      // 'ol/style/Stroke',
+      // 'ol/style/Circle',
+      // 'ol/style/Icon',
+      // 'ol/style/Text',
+      // 'ol/control/Control',
+      // 'ol/loadingstrategy',
+    ];
+    config.optimizeDeps.exclude = [
+      ...(config.optimizeDeps.exclude ?? []),
+      '@loaders.gl/wms',
+      '@loaders.gl/tiles',
+      '@loaders.gl/gltf',
+      '@loaders.gl/schema',
+      '@loaders.gl/terrain',
+      '@loaders.gl/images',
+      '@loaders.gl/geojson',
       '@deck.gl/core',
       '@deck.gl/layers',
       '@deck.gl/geo-layers',
-      '@luma.gl/core',
-      // Loaders.gl
-      '@loaders.gl/core',
-      '@loaders.gl/gltf',
-      '@loaders.gl/images',
-      '@loaders.gl/schema',
-      '@loaders.gl/terrain',
-      // Geo-related
-      'georaster',
-      'georaster-layer-for-leaflet',
-      'tiff-imagery-provider',
-      'geotiff',
-      'snap-bbox',
-      'uuid',
-    );
+    ];
+
+    // Unterdrücke Node.js-Modul-Warnungen für externalisierte Module
+    config.build = config.build ?? {};
+    config.build.rollupOptions = config.build.rollupOptions ?? {};
+    config.build.rollupOptions.onwarn = (warning, warn) => {
+      // Ignoriere Warnungen über externalisierte Node.js-Module
+      if (
+        warning.code === 'UNRESOLVED_IMPORT' &&
+        ['http', 'https', 'url', 'fs', 'path'].includes(warning.source)
+      ) {
+        return;
+      }
+      warn(warning);
+    };
 
     return config;
   },

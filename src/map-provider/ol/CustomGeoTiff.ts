@@ -4,34 +4,31 @@ import { error, warn } from '../../utils/logger';
 
 import type { GeoTIFFImage } from 'geotiff';
 import type { Options as GeoTIFFOptions } from 'ol/source/GeoTIFF';
+import GeoTIFF from 'ol/source/GeoTIFF';
 import type { GeoKeys, ProjectionParameters } from 'geotiff-geokeys-to-proj4';
-import type { Projection } from 'ol/proj';
 
 import geokeysToProj4 from 'geotiff-geokeys-to-proj4';
 
-type ProjectionHelpers = {
-  getProjection: typeof import('ol/proj').get;
-  register: typeof import('ol/proj/proj4').register;
-};
+import type { Projection } from 'ol/proj';
 
-let projectionHelpersPromise: Promise<ProjectionHelpers> | null = null;
+import { get as getProjection } from 'ol/proj';
+import { register } from 'ol/proj/proj4';
 
-async function loadProjectionHelpers(): Promise<ProjectionHelpers> {
-  if (!projectionHelpersPromise) {
-    projectionHelpersPromise = Promise.all([
-      import('ol/proj'),
-      import('ol/proj/proj4'),
-    ]).then(([projModule, proj4Module]) => ({
-      getProjection: projModule.get,
-      register: proj4Module.register,
-    }));
-  }
-  return projectionHelpersPromise;
-}
+// let projectionHelpersPromise: Promise<ProjectionHelpers> | null = null;
+// async function loadProjectionHelpers(): Promise<ProjectionHelpers> {
+//   if (!projectionHelpersPromise) {
+//     projectionHelpersPromise = Promise.all([
+//       import('ol/proj'),
+//       import('ol/proj/proj4'),
+//     ]).then(([projModule, proj4Module]) => ({
+//       getProjection: getProjection,
+//       register: register,
+//     }));
+//   }
+//   return projectionHelpersPromise;
+// }
 
 export async function createCustomGeoTiff(options: GeoTIFFOptions) {
-  const { default: GeoTIFF } = await import('ol/source/GeoTIFF');
-
   /**
    * Gibt die GeoKeys eines GeoTIFF-Bildes zurück.
    * @param image Das GeoTIFF-Bild.
@@ -148,7 +145,7 @@ export async function createCustomGeoTiff(options: GeoTIFFOptions) {
      */
     public async registerProjectionIfNeeded(): Promise<Projection | null> {
       try {
-        const { getProjection, register } = await loadProjectionHelpers();
+        //const { getProjection, register } = await loadProjectionHelpers();
         const proj4String = await this.getProj4String();
         const code = this.getProjection()?.getCode();
         const existingProjection = getProjection(code);

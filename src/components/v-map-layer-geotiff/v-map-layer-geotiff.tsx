@@ -15,6 +15,9 @@ import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
+import type { StyleEvent } from '../../types/styling';
+import { isGeoStylerStyle } from '../../types/styling';
+import type { Style, RasterSymbolizer, ColorMap as GeoStylerColorMap } from 'geostyler-style';
 
 const MSG_COMPONENT: string = 'v-map-layer-geotiff - ';
 
@@ -48,6 +51,17 @@ export class VMapLayerGeoTIFF implements VMapLayer {
    * NoData Values to discard (overriding any nodata values in the metadata).
    */
   @Prop() nodata?: number = null;
+
+  /**
+   * ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
+   */
+  @Prop() colorMap?: string | GeoStylerColorMap = null;
+
+  /**
+   * Value range for colormap normalization [min, max].
+   */
+  @Prop() valueRange?: [number, number] = null;
+
   /**
    * Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
    * @event ready
@@ -66,6 +80,8 @@ export class VMapLayerGeoTIFF implements VMapLayer {
       data: {
         url: this.url,
         nodata: this.nodata,
+        colorMap: this.colorMap,
+        valueRange: this.valueRange,
       },
     });
   }
@@ -99,6 +115,36 @@ export class VMapLayerGeoTIFF implements VMapLayer {
       data: {
         url: this.url,
         nodata: this.nodata,
+        colorMap: this.colorMap,
+        valueRange: this.valueRange,
+      },
+    });
+  }
+
+  @Watch('colorMap')
+  async onColorMapChanged() {
+    log(MSG_COMPONENT + 'onColorMapChanged');
+    await this.helper?.updateLayer({
+      type: 'geotiff',
+      data: {
+        url: this.url,
+        nodata: this.nodata,
+        colorMap: this.colorMap,
+        valueRange: this.valueRange,
+      },
+    });
+  }
+
+  @Watch('valueRange')
+  async onValueRangeChanged() {
+    log(MSG_COMPONENT + 'onValueRangeChanged');
+    await this.helper?.updateLayer({
+      type: 'geotiff',
+      data: {
+        url: this.url,
+        nodata: this.nodata,
+        colorMap: this.colorMap,
+        valueRange: this.valueRange,
       },
     });
   }
@@ -123,6 +169,8 @@ export class VMapLayerGeoTIFF implements VMapLayer {
       opacity: this.opacity,
       url: this.url,
       nodata: this.nodata,
+      colorMap: this.colorMap,
+      valueRange: this.valueRange,
     };
   }
 
@@ -136,7 +184,78 @@ export class VMapLayerGeoTIFF implements VMapLayer {
 
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
-    //await this.addToMapInternal();
+
+    // Listen for styleReady events from v-map-style component
+    document.addEventListener('styleReady', this.handleStyleReady.bind(this) as EventListener);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('styleReady', this.handleStyleReady.bind(this) as EventListener);
+  }
+
+  /**
+   * Handle styleReady event from v-map-style component
+   */
+  private async handleStyleReady(event: CustomEvent<StyleEvent>) {
+    log(MSG_COMPONENT + 'handleStyleReady');
+
+    const styleEvent = event.detail;
+
+    // Check if this layer is targeted (if layerIds is specified)
+    if (styleEvent.layerIds && styleEvent.layerIds.length > 0) {
+      const layerId = this.helper?.getLayerId();
+      const targetIds = styleEvent.layerIds;
+
+      // Check if this layer is in the target list
+      if (layerId && !targetIds.includes(layerId) && !targetIds.includes(this.el.id)) {
+        log(MSG_COMPONENT + 'style not targeted for this layer');
+        return;
+      }
+    }
+
+    // Check if it's a GeoStyler Style
+    if (!isGeoStylerStyle(styleEvent.style)) {
+      log(MSG_COMPONENT + 'not a GeoStyler style');
+      return;
+    }
+
+    const style = styleEvent.style as Style;
+
+    // Extract RasterSymbolizer from the first matching rule
+    const rasterSymbolizer = this.extractRasterSymbolizer(style);
+
+    if (rasterSymbolizer) {
+      log(MSG_COMPONENT + 'applying RasterSymbolizer from style');
+
+      // Apply colorMap if present
+      if (rasterSymbolizer.colorMap) {
+        this.colorMap = rasterSymbolizer.colorMap;
+      }
+
+      // Apply opacity if present (and not already set)
+      if (rasterSymbolizer.opacity !== undefined && typeof rasterSymbolizer.opacity === 'number') {
+        this.opacity = rasterSymbolizer.opacity;
+      }
+
+      // Apply visibility if present
+      if (rasterSymbolizer.visibility !== undefined && typeof rasterSymbolizer.visibility === 'boolean') {
+        this.visible = rasterSymbolizer.visibility;
+      }
+    }
+  }
+
+  /**
+   * Extract RasterSymbolizer from GeoStyler Style
+   */
+  private extractRasterSymbolizer(style: Style): RasterSymbolizer | null {
+    for (const rule of style.rules) {
+      for (const symbolizer of rule.symbolizers) {
+        if (symbolizer.kind === 'Raster') {
+          return symbolizer as RasterSymbolizer;
+        }
+      }
+    }
+    return null;
   }
 
   async componentWillLoad() {

@@ -18,12 +18,15 @@ const mockGeoJSON = jest.fn(() => ({
   setStyle: jest.fn(),
 }));
 
-const mockLayerGroup = jest.fn(() => ({
-  addTo: jest.fn().mockReturnThis(),
-  addLayer: jest.fn(),
-  clearLayers: jest.fn(),
-  getLayers: jest.fn(() => []),
-}));
+class MockLayerGroup {
+  _groupId?: string;
+  addTo = jest.fn().mockReturnThis();
+  addLayer = jest.fn();
+  clearLayers = jest.fn();
+  getLayers = jest.fn(() => []);
+}
+
+const mockLayerGroup = jest.fn(() => new MockLayerGroup());
 
 const mockTileLayer = jest.fn(() => ({
   addTo: jest.fn().mockReturnThis(),
@@ -41,6 +44,7 @@ jest.mock('leaflet', () => ({
   map: mockMap,
   geoJSON: mockGeoJSON,
   layerGroup: mockLayerGroup,
+  LayerGroup: MockLayerGroup,
   tileLayer: mockTileLayer,
   circleMarker: mockCircleMarker,
   marker: mockMarker,
@@ -84,7 +88,9 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
       const geostylerStyle: Style = {
@@ -105,17 +111,15 @@ describe('LeafletProvider GeoStyler Integration', () => {
         ],
       };
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'geojson',
-          geojson: JSON.stringify({
-            type: 'FeatureCollection',
-            features: [],
-          }),
-          geostylerStyle,
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+        geostylerStyle,
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
       expect(mockGeoJSON).toHaveBeenCalled();
@@ -125,7 +129,9 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
       const geostylerStyle: Style = {
@@ -146,17 +152,15 @@ describe('LeafletProvider GeoStyler Integration', () => {
         ],
       };
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'geojson',
-          geojson: JSON.stringify({
-            type: 'FeatureCollection',
-            features: [],
-          }),
-          geostylerStyle,
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+        geostylerStyle,
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
     });
@@ -165,7 +169,9 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
       const geostylerStyle: Style = {
@@ -185,17 +191,15 @@ describe('LeafletProvider GeoStyler Integration', () => {
         ],
       };
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'geojson',
-          geojson: JSON.stringify({
-            type: 'FeatureCollection',
-            features: [],
-          }),
-          geostylerStyle,
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+        geostylerStyle,
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
     });
@@ -204,7 +208,9 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
       const geostylerStyle: Style = {
@@ -226,17 +232,15 @@ describe('LeafletProvider GeoStyler Integration', () => {
         ],
       };
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'geojson',
-          geojson: JSON.stringify({
-            type: 'FeatureCollection',
-            features: [],
-          }),
-          geostylerStyle,
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+        geostylerStyle,
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
     });
@@ -245,7 +249,9 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
       const geostylerStyle: Style = {
@@ -264,14 +270,12 @@ describe('LeafletProvider GeoStyler Integration', () => {
         ],
       };
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'wkt',
-          wkt: 'POINT(0 0)',
-          geostylerStyle,
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'wkt',
+        wkt: 'POINT(0 0)',
+        geostylerStyle,
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
     });
@@ -280,19 +284,19 @@ describe('LeafletProvider GeoStyler Integration', () => {
       const mockTarget = document.createElement('div');
       await provider.init({
         target: mockTarget,
-        shadowRoot: document.createElement('div').attachShadow({ mode: 'open' }),
+        shadowRoot: document
+          .createElement('div')
+          .attachShadow({ mode: 'open' }),
       });
 
-      const layerId = await provider.addLayerToGroup(
-        {
-          type: 'geojson',
-          geojson: JSON.stringify({
-            type: 'FeatureCollection',
-            features: [],
-          }),
-        } as any,
-        'test-group',
-      );
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+        groupId: 'test-group',
+      } as any);
 
       expect(layerId).toBeTruthy();
     });

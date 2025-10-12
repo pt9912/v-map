@@ -256,8 +256,9 @@ export const config: Config = {
       '^geostyler-lyrx-parser$':
         '<rootDir>/src/testing/mocks/geostyler-lyrx-parser.ts',
       '^geostyler-style$': '<rootDir>/src/testing/mocks/geostyler-style.ts',
+      '^@mapbox/tiny-sdf$': '<rootDir>/src/testing/mocks/mapbox-tiny-sdf.ts',
     },
-    transformIgnorePatterns: ['/node_modules/(?!(ol|geostyler-style|geostyler-sld-parser)/)'],
+    transformIgnorePatterns: ['node_modules/(?!(.pnpm|ol|leaflet|@loaders\\.gl|@mapbox|@deck\\.gl|geostyler-style|geostyler-sld-parser))'],
     browserHeadless: 'shell',
     browserArgs: [
       '--no-sandbox',
@@ -268,7 +269,26 @@ export const config: Config = {
     ],
   },
   rollupPlugins: {
-    before: [createTestingNodePolyfills()],
+    before: [
+      createTestingNodePolyfills(),
+      {
+        name: 'resolve-geotiff-browser',
+        resolveId(source) {
+          // Leite geotiff zur Browser-Version um
+          if (source === 'geotiff') {
+            const path = require('path');
+            return {
+              id: path.resolve(
+                __dirname,
+                'node_modules/.pnpm/geotiff@2.1.4-beta.0/node_modules/geotiff/dist-browser/geotiff.js'
+              ),
+              external: false,
+            };
+          }
+          return null;
+        },
+      },
+    ],
     after: [
       {
         name: 'externalize-map-libs',

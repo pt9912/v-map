@@ -137,9 +137,9 @@ export const DeckGLGeoTIFF: Story = {
   render: args => (
     <v-map
       flavour="deck"
-      zoom="14"
-      center="9.002,52.0"
-      style={{ width: '100%', height: '400px' }}
+      zoom="10"
+      center="-0.2,51.5"
+      style={{ width: '100%', height: '600px' }}
     >
       <v-map-layergroup group-title="base-layer">
         <v-map-layer-osm></v-map-layer-osm>
@@ -167,8 +167,8 @@ export const CesiumGeoTIFF: Story = {
     <v-map
       flavour="cesium"
       zoom="14"
-      center="9.002,52.0"
-      style={{ width: '100%', height: '400px' }}
+      center="-0.2,51.5"
+      style={{ width: '100%', height: '800px' }}
     >
       <v-map-layergroup group-title="base-layer">
         <v-map-layer-osm></v-map-layer-osm>

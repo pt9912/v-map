@@ -3,6 +3,15 @@ const setUrlMock = jest.fn();
 let LeafletProvider: any;
 let mockTileLayer: jest.Mock;
 
+class MockLayerGroup {
+  _groupId?: string;
+  addLayer = jest.fn();
+  clearLayers = jest.fn();
+  addTo = jest.fn().mockReturnThis();
+  basemap = false;
+  getLayers = jest.fn(() => []);
+}
+
 const setupModule = async () => {
   jest.resetModules();
   setUrlMock.mockClear();
@@ -23,13 +32,8 @@ const setupModule = async () => {
       eachLayer: jest.fn(),
       invalidateSize: jest.fn(),
     })),
-    layerGroup: jest.fn(() => ({
-      addLayer: jest.fn(),
-      clearLayers: jest.fn(),
-      addTo: jest.fn().mockReturnThis(),
-      basemap: false,
-      getLayers: jest.fn(() => []),
-    })),
+    layerGroup: jest.fn(() => new MockLayerGroup()),
+    LayerGroup: MockLayerGroup,
     GridLayer: class {
       options: any = {};
       constructor() {}

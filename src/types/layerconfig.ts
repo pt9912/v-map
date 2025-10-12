@@ -1,6 +1,6 @@
 import type { StyleConfig } from './styleconfig';
 import type { Color } from './color';
-import type { Style } from 'geostyler-style';
+import type { Style, ColorMap as GeoStylerColorMap } from 'geostyler-style';
 
 export type googleMapType = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
 
@@ -12,6 +12,7 @@ export type LayerConfig =
       style?: StyleConfig;
       geostylerStyle?: Style;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -19,6 +20,7 @@ export type LayerConfig =
   | {
       type: 'osm';
       groupId?: string;
+      groupVisible?: boolean;
       url?: string;
       opacity?: number;
       zIndex?: number;
@@ -27,8 +29,11 @@ export type LayerConfig =
   | {
       type: 'geotiff';
       groupId?: string;
+      groupVisible?: boolean;
       url?: string;
       nodata?: number;
+      colorMap?: string | GeoStylerColorMap;
+      valueRange?: [number, number];
       opacity?: number;
       zIndex?: number;
       visible?: boolean;
@@ -40,6 +45,7 @@ export type LayerConfig =
       maxZoom?: number;
       options?: Record<string, unknown>;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -54,6 +60,7 @@ export type LayerConfig =
       options?: Record<string, unknown>;
       attributions?: string | string[];
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -67,6 +74,7 @@ export type LayerConfig =
       opacity?: number;
       visible?: boolean;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       maxZoom?: number;
       styles?: any[] | string;
@@ -84,6 +92,7 @@ export type LayerConfig =
       layers: string;
       extraParams?: Record<string, string>;
       groupId?: string;
+      groupVisible?: boolean;
       opacity?: number;
       visible?: boolean;
       zIndex?: number;
@@ -110,6 +119,7 @@ export type LayerConfig =
       onClick?: (info: any) => void;
       onHover?: (info: any) => void;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
     }
   | {
@@ -123,6 +133,7 @@ export type LayerConfig =
       maxZoom?: number;
       meshMaxError?: number;
       groupId?: string;
+      groupVisible?: boolean;
       opacity?: number;
       visible?: boolean;
       zIndex?: number;
@@ -136,6 +147,7 @@ export type LayerConfig =
       srsName?: string;
       params?: Record<string, string | number | boolean>;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -152,6 +164,7 @@ export type LayerConfig =
       resolutions?: number[];
       params?: Record<string, string | number | boolean>;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -163,6 +176,7 @@ export type LayerConfig =
       style?: StyleConfig;
       geostylerStyle?: Style;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
@@ -173,6 +187,7 @@ export type LayerConfig =
       tilesetOptions?: Record<string, unknown>;
       cesiumStyle?: Record<string, unknown>;
       groupId?: string;
+      groupVisible?: boolean;
       zIndex?: number;
       visible?: boolean;
       opacity?: number;

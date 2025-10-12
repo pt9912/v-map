@@ -1,18 +1,40 @@
-import { DeckProvider } from './deck-provider';
-
-const mockTerrainLayer = jest.fn().mockImplementation(props => ({
-  id: props.id,
-  props,
-  clone: jest.fn().mockReturnValue({ id: props.id, props }),
-}));
-
-jest.mock('@deck.gl/geo-layers', () => ({
-  TerrainLayer: mockTerrainLayer,
-  TileLayer: jest.fn().mockImplementation(props => ({
+const mockTerrainLayer = jest.fn().mockImplementation(function(this: any, props: any) {
+  return {
     id: props.id,
     props,
     clone: jest.fn().mockReturnValue({ id: props.id, props }),
-  })),
+  };
+});
+
+jest.mock('@deck.gl/geo-layers', () => ({
+  TerrainLayer: mockTerrainLayer,
+  TileLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props,
+      clone: jest.fn().mockReturnValue({ id: props.id, props }),
+    };
+  }),
+}));
+
+jest.mock('@deck.gl/layers', () => ({
+  GeoJsonLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props: props,
+      clone: jest.fn().mockReturnThis(),
+    };
+  }),
+  BitmapLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return { id: props.id, props };
+  }),
+  ScatterplotLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props: props,
+      clone: jest.fn().mockReturnThis(),
+    };
+  }),
 }));
 
 jest.mock('@deck.gl/core', () => ({
@@ -21,6 +43,8 @@ jest.mock('@deck.gl/core', () => ({
     finalize: jest.fn(),
   })),
 }));
+
+import { DeckProvider } from './deck-provider';
 
 describe('DeckProvider terrain support', () => {
   afterEach(() => {

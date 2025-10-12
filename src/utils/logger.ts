@@ -96,8 +96,9 @@ class ConsoleTransport implements LogTransport {
   log(level: LogLevel, args: readonly unknown[], ns?: string) {
     const prefix = ns ? `[${ns}]` : undefined;
     const enhancedArgs: unknown[] = [...args];
-    if (level === 'debug' || level === 'error') {
-      const showTrace = level === 'debug' || level === 'error';
+    if (level === 'debug' || level === 'warn' || level === 'error') {
+      const showTrace =
+        level === 'debug' || level === 'warn' || level === 'error';
       const stackTrace = showTrace
         ? new Error().stack?.split('\n')[4]?.trim()
         : null;
@@ -115,7 +116,9 @@ class ConsoleTransport implements LogTransport {
           : console.log(...enhancedArgs);
         break;
       case 'warn':
-        prefix ? console.warn(prefix, ...args) : console.warn(...args);
+        prefix
+          ? console.warn(prefix, ...enhancedArgs)
+          : console.warn(...enhancedArgs);
         break;
       case 'error':
         prefix

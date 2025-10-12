@@ -3,7 +3,7 @@ import { CesiumLayerGroups, AnyLayer } from './CesiumLayerGroups';
 import type { ILayer } from './i-layer';
 import { LayerManager } from './layer-manager';
 
-import { log, warn } from '../../utils/logger';
+import { log, warn, error } from '../../utils/logger';
 import { loadCesium, injectWidgetsCss } from '../../lib/cesium-loader';
 
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
@@ -14,6 +14,10 @@ import type { Style } from 'geostyler-style';
 import type { StyleConfig } from '../../types/styleconfig';
 
 import { AsyncMutex } from '../../utils/async-mutex';
+import { getColorStops, type ColorStop } from '../geotiff/utils/colormap-utils';
+import { GeoTIFFTileProcessor } from '../geotiff/utils/GeoTIFFTileProcessor';
+import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
+import { GeoTIFFImageryProvider } from './GeoTIFFImageryProvider';
 
 type CesiumModule = typeof import('cesium');
 import {
@@ -291,10 +295,7 @@ export class CesiumProvider implements MapProvider {
   }
 
   // ---------- Layer anlegen (mit Group & Basemap-Key) ----------
-  async addLayerToGroup(
-    layerConfig: LayerConfig,
-    groupId: string,
-  ): Promise<string> {
+  async addLayerToGroup(layerConfig: LayerConfig): Promise<string> {
     return await this.layerManagerMutex.runExclusive(async () => {
       const layerId = crypto.randomUUID();
       let wrapper = await this.createLayer(layerConfig, layerId);
@@ -305,11 +306,17 @@ export class CesiumProvider implements MapProvider {
         (layerConfig as any).elementId ??
         null;
 
-      this.layerGroups.addLayerToGroup(groupId, {
-        id: layerId,
-        elementId,
-        layer: wrapper,
-      });
+      this.layerGroups.addLayerToGroup(
+        layerConfig.groupId,
+        typeof layerConfig.groupVisible !== undefined
+          ? layerConfig.groupVisible
+          : true,
+        {
+          id: layerId,
+          elementId,
+          layer: wrapper,
+        },
+      );
 
       // Regeln anwenden (sichtbar/basemap)
       this.layerGroups.apply();
@@ -336,16 +343,30 @@ export class CesiumProvider implements MapProvider {
       const layerId = crypto.randomUUID();
       let wrapper = await this.createLayer(layerConfig, layerId);
 
-      this.layerGroups.addLayerToGroup(layerConfig.groupId, {
-        id: layerId,
-        elementId: layerElementId,
-        layer: wrapper,
-      });
+      this.layerGroups.addLayerToGroup(
+        layerConfig.groupId,
+        typeof layerConfig.groupVisible !== undefined
+          ? layerConfig.groupVisible
+          : true,
+        {
+          id: layerId,
+          elementId: layerElementId,
+          layer: wrapper,
+        },
+      );
 
       this.layerGroups.setBasemap(layerConfig.groupId ?? 'basemap', basemapid);
       this.layerGroups.apply();
       return layerId;
     });
+  }
+
+  async ensureGroup(
+    groupId: string,
+    visible: boolean,
+    _opts?: { basemapid?: string },
+  ): Promise<void> {
+    this.layerGroups.ensureGroup(groupId, visible);
   }
 
   // ---------- Sichtbarkeit/Z-Index/Opacity bleiben wie gehabt ----------
@@ -1331,40 +1352,101 @@ export class CesiumProvider implements MapProvider {
     }
 
     try {
-      // Use TIFFImageryProvider if available, otherwise fallback to SingleTileImageryProvider
-      // Note: This implementation assumes you have TIFFImageryProvider available
-      // For a more robust solution, you might want to dynamically import it
+      const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
+        import('geotiff'),
+        import('proj4'),
+        import('geotiff-geokeys-to-proj4'),
+      ]);
 
-      // Option 1: Try using TIFFImageryProvider (requires tiff-imagery-provider package)
-      try {
-        const TIFFImageryProvider = (
-          await import('tiff-imagery-provider' as any)
-        ).default;
-        const provider = await TIFFImageryProvider.fromUrl(config.url);
+      const proj4 = (proj4Module as any).default ?? proj4Module;
 
-        return new this.Cesium.ImageryLayer(provider, {
-          alpha: config.opacity ?? 1.0,
-          show: config.visible ?? true,
-        });
-      } catch (tiffError) {
-        console.warn(
-          'TIFFImageryProvider not available, falling back to SingleTileImageryProvider',
+      const source = await loadGeoTIFFSource(
+        config.url,
+        {
+          projection: (config as any).projection,
+          forceProjection: Boolean((config as any).forceProjection),
+          nodata: config.nodata,
+        },
+        {
+          geotiff: geotiffModule,
+          proj4,
+          geokeysToProj4: geokeysModule,
+        },
+      );
+
+      // Transform from Mercator to Source projection
+      const transformViewToSourceMapFn = (
+        coord: [number, number],
+      ): [number, number] => {
+        const result = proj4(source.toProjection, source.fromProjection, coord);
+        return [Number(result[0]), Number(result[1])];
+      };
+
+      // Inverse: Transform from Source projection to Mercator
+      const transformSourceMapToViewFn = (
+        coord: [number, number],
+      ): [number, number] => {
+        const result = proj4(source.fromProjection, source.toProjection, coord);
+        return [Number(result[0]), Number(result[1])];
+      };
+
+      const tileProcessor = new GeoTIFFTileProcessor({
+        transformViewToSourceMapFn,
+        transformSourceMapToViewFn,
+        sourceBounds: source.sourceBounds,
+        sourceRef: source.sourceRef,
+        resolution: source.resolution,
+        imageWidth: source.width,
+        imageHeight: source.height,
+        fromProjection: source.fromProjection,
+        toProjection: source.toProjection,
+        baseImage: source.baseImage,
+        overviewImages: source.overviewImages ?? [],
+      });
+      tileProcessor.createGlobalTriangulation();
+
+      let colorStops: ColorStop[] | undefined;
+      if (config.colorMap) {
+        const { stops } = getColorStops(
+          config.colorMap as Parameters<typeof getColorStops>[0],
+          config.valueRange,
         );
-
-        // Option 2: Fallback to SingleTileImageryProvider
-        // This assumes the GeoTIFF can be displayed as a simple image
-        const provider = new this.Cesium.SingleTileImageryProvider({
-          url: config.url,
-          rectangle: this.Cesium.Rectangle.fromDegrees(-180, -90, 180, 90), // Default world bounds
-        });
-
-        return new this.Cesium.ImageryLayer(provider, {
-          alpha: config.opacity ?? 1.0,
-          show: config.visible ?? true,
-        });
+        colorStops = stops;
       }
-    } catch (error) {
-      console.error('Failed to create GeoTIFF layer:', error);
+
+      const tileSize = ((config as any).tileSize as number | undefined) ?? 256;
+      const resolution =
+        ((config as any).resolution as number | undefined) ?? 1.0;
+      const resampleMethod =
+        ((config as any).resampleMethod as 'near' | 'bilinear' | undefined) ??
+        'bilinear';
+
+      const imageryProvider = new GeoTIFFImageryProvider({
+        Cesium: this.Cesium,
+        rectangleDegrees: source.wgs84Bounds,
+        tileProcessor,
+        tileSize,
+        resolution,
+        resampleMethod,
+        colorStops,
+      });
+
+      const layer = new this.Cesium.ImageryLayer(imageryProvider, {
+        alpha: config.opacity ?? 1.0,
+        show: config.visible ?? true,
+      });
+
+      (layer as any).__vmapGeoTIFFMeta = {
+        url: config.url,
+        width: source.width,
+        height: source.height,
+        samplesPerPixel: source.samplesPerPixel,
+        noData: source.noDataValue,
+      };
+
+      return layer;
+    } catch (err) {
+      error('v-map - provider - cesium - Failed to create GeoTIFF layer', err);
 
       // Return a placeholder layer in case of error
       const provider = new this.Cesium.SingleTileImageryProvider({
@@ -1611,7 +1693,9 @@ export class CesiumProvider implements MapProvider {
       );
     }
 
-    const outputFormat = (config.outputFormat ?? 'application/json').toLowerCase();
+    const outputFormat = (
+      config.outputFormat ?? 'application/json'
+    ).toLowerCase();
 
     // Handle JSON formats
     if (
@@ -1629,10 +1713,7 @@ export class CesiumProvider implements MapProvider {
     }
 
     // Handle GML formats - parse XML to GeoJSON using @npm9912/s-gml
-    if (
-      outputFormat.includes('gml') ||
-      outputFormat.includes('xml')
-    ) {
+    if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
       const xml = await response.text();
       const { GmlParser } = await import('@npm9912/s-gml');
       const parser = new GmlParser();

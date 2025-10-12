@@ -1,15 +1,33 @@
-import type Map from 'ol/Map';
-
-import type { ProjectionLike } from 'ol/proj';
-//import type Projection from 'ol/proj/Projection';
-import type VectorSource from 'ol/source/Vector';
+import Map from 'ol/Map';
+import View from 'ol/View';
 import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
-import type VectorLayer from 'ol/layer/Vector';
-
-import type LayerGroup from 'ol/layer/Group';
-
-import type { SourceInfo } from 'ol/source/GeoTIFF';
+import VectorLayer from 'ol/layer/Vector';
+import LayerGroup from 'ol/layer/Group';
+import TileLayer from 'ol/layer/Tile';
+import ImageLayer from 'ol/layer/Image';
+import VectorSource from 'ol/source/Vector';
+import TileWMS from 'ol/source/TileWMS';
+import OSM from 'ol/source/OSM';
+import XYZ from 'ol/source/XYZ';
+import Google from 'ol/source/Google';
+import TileArcGISRest from 'ol/source/TileArcGISRest';
+import ImageWMS from 'ol/source/ImageWMS';
+import GeoJSON from 'ol/format/GeoJSON';
+import GML2 from 'ol/format/GML2';
+import GML3 from 'ol/format/GML3';
+import GML32 from 'ol/format/GML32';
+import WKT from 'ol/format/WKT';
+import GeoTIFF from 'ol/source/GeoTIFF';
+import Control from 'ol/control/Control';
+import OlStyle from 'ol/style/Style';
+import OlFill from 'ol/style/Fill';
+import OlStroke from 'ol/style/Stroke';
+import OlCircle from 'ol/style/Circle';
+import OlIcon from 'ol/style/Icon';
+import OlText from 'ol/style/Text';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { fromLonLat, type ProjectionLike } from 'ol/proj';
 
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
@@ -19,9 +37,12 @@ import type { StyleConfig } from '../../types/styleconfig';
 import { DEFAULT_STYLE } from '../../types/styleconfig';
 import { log, error } from '../../utils/logger';
 import { injectOlCss } from './openlayers-helper';
-import { Style } from 'geostyler-style';
+import type { Style as GeoStylerStyle } from 'geostyler-style';
 
 import { createCustomGeoTiff } from './CustomGeoTiff';
+
+import WebGLTileLayer from 'ol/layer/WebGLTile';
+import type { SourceInfo } from 'ol/source/GeoTIFF';
 
 type AnyLayer = BaseLayer | LayerGroup | VectorLayer;
 
@@ -33,10 +54,6 @@ export class OpenLayersProvider implements MapProvider {
   private projection: ProjectionLike = 'EPSG:3857';
 
   async init(options: ProviderOptions) {
-    const [{ default: View }] = await Promise.all([import('ol/View')]);
-    const [{ default: Map }] = await Promise.all([import('ol/Map')]);
-    const [{ fromLonLat }] = await Promise.all([import('ol/proj')]);
-
     await injectOlCss(options.shadowRoot);
 
     Object.assign(options.target.style, {
@@ -95,8 +112,18 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
-  private async _ensureGroup(groupId: string): Promise<LayerGroup> {
-    const { default: LayerGroup } = await import('ol/layer/Group');
+  async ensureGroup(
+    groupId: string,
+    visible: boolean,
+    _opts?: { basemapid?: string },
+  ): Promise<void> {
+    await this._ensureGroup(groupId, visible);
+  }
+
+  private async _ensureGroup(
+    groupId: string,
+    visible?: boolean,
+  ): Promise<LayerGroup> {
     if (!this.map) {
       return null;
     }
@@ -107,7 +134,10 @@ export class OpenLayersProvider implements MapProvider {
     if (!group) {
       group = new LayerGroup({
         layers: [],
-        properties: { groupId: groupId },
+        properties: {
+          groupId: groupId,
+          visible: typeof visible !== undefined ? visible : true,
+        },
       });
       this.map.addLayer(group);
       this.layers.push(group);
@@ -153,7 +183,10 @@ export class OpenLayersProvider implements MapProvider {
       log('ol - addBaseLayer - basemapid not set.');
     }
 
-    const group = await this._ensureGroup(layerConfig.groupId);
+    const group = await this._ensureGroup(
+      layerConfig.groupId,
+      layerConfig.groupVisible,
+    );
     if (group == null) {
       return null;
     }
@@ -195,11 +228,11 @@ export class OpenLayersProvider implements MapProvider {
     return layerId;
   }
 
-  async addLayerToGroup(
-    layerConfig: LayerConfig,
-    groupId: string,
-  ): Promise<string> {
-    const group = await this._ensureGroup(groupId);
+  async addLayerToGroup(layerConfig: LayerConfig): Promise<string> {
+    const group = await this._ensureGroup(
+      layerConfig.groupId,
+      layerConfig.groupVisible,
+    );
     if (group == null) {
       return null;
     }
@@ -275,10 +308,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async updateWMSLayer(layer: Layer, data: any): Promise<void> {
-    const [{ default: TileWMS }] = await Promise.all([
-      import('ol/source/TileWMS'),
-    ]);
-
     layer.setSource(
       new TileWMS({
         url: data.url,
@@ -292,8 +321,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async updateOSMLayer(layer: Layer, data: any): Promise<void> {
-    const [{ default: OSM }] = await Promise.all([import('ol/source/OSM')]);
-
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     if (data.url) {
       url = data.url + '/{z}/{x}/{y}.png';
@@ -311,9 +338,6 @@ export class OpenLayersProvider implements MapProvider {
     const geojsonOptions = {
       featureProjection: this.projection,
     };
-    const [{ default: VectorSource }, { default: GeoJSON }] = await Promise.all(
-      [import('ol/source/Vector'), import('ol/format/GeoJSON')],
-    );
     if (data.geojson) {
       const geojsonObject = JSON.parse(data.geojson);
       vectorSource = new VectorSource({
@@ -365,10 +389,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async updateArcGISLayer(layer: Layer, data: any): Promise<void> {
-    const [{ default: TileArcGISRest }] = await Promise.all([
-      import('ol/source/TileArcGISRest'),
-    ]);
-
     const currentSource: any = (layer as any).getSource?.();
     const params = {
       ...(currentSource?.getParams?.() ?? {}),
@@ -393,21 +413,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async createEnhancedStyleFunction(style: StyleConfig) {
-    const [
-      { default: Style },
-      { default: Fill },
-      { default: Stroke },
-      { default: Circle },
-      { default: Icon },
-      { default: Text },
-    ] = await Promise.all([
-      import('ol/style/Style'),
-      import('ol/style/Fill'),
-      import('ol/style/Stroke'),
-      import('ol/style/Circle'),
-      import('ol/style/Icon'),
-      import('ol/style/Text'),
-    ]);
     // Helper method to apply opacity to colors
     function applyOpacity(color: string, opacity: number): string {
       if (color.startsWith('rgba')) {
@@ -442,7 +447,7 @@ export class OpenLayersProvider implements MapProvider {
       // Create fill style
       const fillColor = style.fillColor ?? 'rgba(0,100,255,0.3)';
       const fillOpacity = style.fillOpacity ?? 0.3;
-      const fill = new Fill({
+      const fill = new OlFill({
         color: applyOpacity(fillColor, fillOpacity),
       });
 
@@ -450,7 +455,7 @@ export class OpenLayersProvider implements MapProvider {
       const strokeColor = style.strokeColor ?? 'rgba(0,100,255,1)';
       const strokeOpacity = style.strokeOpacity ?? 1;
       const strokeWidth = style.strokeWidth ?? 2;
-      const stroke = new Stroke({
+      const stroke = new OlStroke({
         color: applyOpacity(strokeColor, strokeOpacity),
         width: strokeWidth,
         lineDash: style.strokeDashArray,
@@ -461,8 +466,8 @@ export class OpenLayersProvider implements MapProvider {
         if (style.iconUrl) {
           // Icon style for points
           styles.push(
-            new Style({
-              image: new Icon({
+            new OlStyle({
+              image: new OlIcon({
                 src: style.iconUrl,
                 size: style.iconSize || [32, 32],
                 anchor: style.iconAnchor || [0.5, 1],
@@ -476,10 +481,10 @@ export class OpenLayersProvider implements MapProvider {
           const pointRadius = style.pointRadius ?? 6;
 
           styles.push(
-            new Style({
-              image: new Circle({
+            new OlStyle({
+              image: new OlCircle({
                 radius: pointRadius,
-                fill: new Fill({
+                fill: new OlFill({
                   color: applyOpacity(pointColor, pointOpacity),
                 }),
                 stroke: stroke,
@@ -490,7 +495,7 @@ export class OpenLayersProvider implements MapProvider {
       } else {
         // Polygon and line styling
         styles.push(
-          new Style({
+          new OlStyle({
             fill: geometryType.includes('Polygon') ? fill : undefined,
             stroke: stroke,
           }),
@@ -506,13 +511,13 @@ export class OpenLayersProvider implements MapProvider {
         const textOffset = style.textOffset || [0, 0];
 
         styles.push(
-          new Style({
-            text: new Text({
+          new OlStyle({
+            text: new OlText({
               text: String(feature.get(style.textProperty)),
               font: `${textSize}px Arial`,
-              fill: new Fill({ color: textColor }),
+              fill: new OlFill({ color: textColor }),
               stroke: textHaloColor
-                ? new Stroke({
+                ? new OlStroke({
                     color: textHaloColor,
                     width: textHaloWidth,
                   })
@@ -530,16 +535,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createGeoJSONLayer(
     config: Extract<LayerConfig, { type: 'geojson' }>,
   ): Promise<Layer> {
-    const [
-      { default: VectorLayer },
-      { default: VectorSource },
-      { default: GeoJSON },
-    ] = await Promise.all([
-      import('ol/layer/Vector'),
-      import('ol/source/Vector'),
-      import('ol/format/GeoJSON'),
-    ]);
-
     let vectorSource: VectorSource = null;
     const geojsonOptions = {
       featureProjection: this.projection,
@@ -676,22 +671,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createWFSSpource(
     config: Extract<LayerConfig, { type: 'wfs' }>,
   ): Promise<VectorSource> {
-    const [
-      { default: VectorSource },
-      { default: GeoJSON },
-      { default: GML2 },
-      { default: GML3 },
-      { default: GML32 },
-      { bbox: bboxStrategy },
-    ] = await Promise.all([
-      import('ol/source/Vector'),
-      import('ol/format/GeoJSON'),
-      import('ol/format/GML2'),
-      import('ol/format/GML3'),
-      import('ol/format/GML32'),
-      import('ol/loadingstrategy'),
-    ]);
-
     const outputFormat = (
       config.outputFormat ?? 'application/json'
     ).toLowerCase();
@@ -721,10 +700,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createWFSLayer(
     config: Extract<LayerConfig, { type: 'wfs' }>,
   ): Promise<Layer> {
-    const [{ default: VectorLayer }] = await Promise.all([
-      import('ol/layer/Vector'),
-    ]);
-
     const vectorSource = await this.createWFSSpource(config);
 
     // Use geostyler style if available, otherwise use default style function
@@ -783,23 +758,7 @@ export class OpenLayersProvider implements MapProvider {
   /**
    * Convert a Geostyler style to OpenLayers style function
    */
-  private async createGeostylerStyleFunction(geostylerStyle: Style) {
-    const [
-      { default: Style },
-      { default: Fill },
-      { default: Stroke },
-      { default: Circle },
-      { default: Icon },
-      { default: Text },
-    ] = await Promise.all([
-      import('ol/style/Style'),
-      import('ol/style/Fill'),
-      import('ol/style/Stroke'),
-      import('ol/style/Circle'),
-      import('ol/style/Icon'),
-      import('ol/style/Text'),
-    ]);
-
+  private async createGeostylerStyleFunction(geostylerStyle: GeoStylerStyle) {
     // Helper to extract static value from GeoStyler property (could be function or value)
     const getValue = (prop: any, defaultValue: any = undefined) => {
       if (prop === undefined || prop === null) return defaultValue;
@@ -836,12 +795,12 @@ export class OpenLayersProvider implements MapProvider {
                     ) as number;
 
                     styles.push(
-                      new Style({
-                        fill: new Fill({
+                      new OlStyle({
+                        fill: new OlFill({
                           color: fillColor,
                         }),
                         stroke: outlineColor
-                          ? new Stroke({
+                          ? new OlStroke({
                               color: outlineColor,
                               width: outlineWidth,
                             })
@@ -867,8 +826,8 @@ export class OpenLayersProvider implements MapProvider {
                       : undefined;
 
                     styles.push(
-                      new Style({
-                        stroke: new Stroke({
+                      new OlStyle({
+                        stroke: new OlStroke({
                           color: lineColor,
                           width: lineWidth,
                           lineDash: dashArray,
@@ -894,14 +853,14 @@ export class OpenLayersProvider implements MapProvider {
                     ) as number;
 
                     styles.push(
-                      new Style({
-                        image: new Circle({
+                      new OlStyle({
+                        image: new OlCircle({
                           radius: markRadius,
-                          fill: new Fill({
+                          fill: new OlFill({
                             color: markColor,
                           }),
                           stroke: strokeColor
-                            ? new Stroke({
+                            ? new OlStroke({
                                 color: strokeColor,
                                 width: strokeWidth,
                               })
@@ -925,8 +884,8 @@ export class OpenLayersProvider implements MapProvider {
 
                     if (iconSrc && typeof iconSrc === 'string') {
                       styles.push(
-                        new Style({
-                          image: new Icon({
+                        new OlStyle({
+                          image: new OlIcon({
                             src: iconSrc,
                             size: [iconSize, iconSize],
                             opacity: iconOpacity,
@@ -968,15 +927,15 @@ export class OpenLayersProvider implements MapProvider {
                           : 0;
 
                       styles.push(
-                        new Style({
-                          text: new Text({
+                        new OlStyle({
+                          text: new OlText({
                             text: String(feature.get(labelProp)),
                             font: `${textSize}px ${textFont}`,
-                            fill: new Fill({
+                            fill: new OlFill({
                               color: textColor,
                             }),
                             stroke: haloColor
-                              ? new Stroke({
+                              ? new OlStroke({
                                   color: haloColor,
                                   width: haloWidth,
                                 })
@@ -1001,10 +960,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createXYZLayer(
     config: Extract<LayerConfig, { type: 'xyz' }>,
   ): Promise<Layer> {
-    const [{ default: TileLayer }, { default: XYZ }] = await Promise.all([
-      import('ol/layer/Tile'),
-      import('ol/source/XYZ'),
-    ]);
     return new TileLayer({
       source: new XYZ({
         url: config.url,
@@ -1018,11 +973,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createGoogleLayer(
     config: Extract<LayerConfig, { type: 'google' }>,
   ): Promise<Layer> {
-    const [{ default: TileLayer }, { default: Google }] = await Promise.all([
-      import('ol/layer/Tile'),
-      import('ol/source/Google'),
-    ]);
-
     if (!config.apiKey) {
       throw new Error("Google-Layer benötigt 'apiKey' (Google Maps Platform).");
     }
@@ -1054,9 +1004,6 @@ export class OpenLayersProvider implements MapProvider {
 
     // Google Logo/Branding: als Control ergänzen (unten links)
     if (!this.googleLogoAdded) {
-      const [{ default: Control }] = await Promise.all([
-        import('ol/control/Control'),
-      ]);
       class GoogleLogoControl extends Control {
         constructor() {
           const el = document.createElement('img');
@@ -1081,11 +1028,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createOSMLayer(
     config: Extract<LayerConfig, { type: 'osm' }>,
   ): Promise<Layer> {
-    const [{ default: TileLayer }, { default: OSM }] = await Promise.all([
-      import('ol/layer/Tile'),
-      import('ol/source/OSM'),
-    ]);
-
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     if (config.url) {
       url = config.url + '/{z}/{x}/{y}.png';
@@ -1101,10 +1043,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createWMSLayer(
     config: Extract<LayerConfig, { type: 'wms' }>,
   ): Promise<Layer> {
-    const [{ default: TileLayer }, { default: TileWMS }] = await Promise.all([
-      import('ol/layer/Tile'),
-      import('ol/source/TileWMS'),
-    ]);
     return new TileLayer({
       source: new TileWMS({
         url: config.url,
@@ -1118,7 +1056,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   async setView(center: LonLat, zoom: number) {
-    const [{ fromLonLat }] = await Promise.all([import('ol/proj')]);
     if (!this.map) return;
     this.map
       .getView()
@@ -1126,7 +1063,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async _forEachLayer(layerOrGroup, callback): Promise<boolean> {
-    const { default: LayerGroup } = await import('ol/layer/Group');
     // Wenn das aktuelle Objekt eine LayerGroup ist, rufen wir die Funktion für jedes Kind erneut auf
     if (layerOrGroup instanceof LayerGroup) {
       const layers = layerOrGroup.getLayers().getArray(); // Array der Unter‑Layer
@@ -1220,11 +1156,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async updateWKTLayer(layer: VectorLayer, data: any): Promise<void> {
-    const [{ default: VectorSource }, { default: WKT }] = await Promise.all([
-      import('ol/source/Vector'),
-      import('ol/format/WKT'),
-    ]);
-
     const wktFormat = new WKT();
     let vectorSource: VectorSource = null;
 
@@ -1273,16 +1204,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
   ): Promise<Layer> {
-    const [
-      { default: VectorLayer },
-      { default: VectorSource },
-      { default: WKT },
-    ] = await Promise.all([
-      import('ol/layer/Vector'),
-      import('ol/source/Vector'),
-      import('ol/format/WKT'),
-    ]);
-
     const wktFormat = new WKT();
     let vectorSource: VectorSource = null;
 
@@ -1352,17 +1273,10 @@ export class OpenLayersProvider implements MapProvider {
   private async createGeoTIFFLayer(
     config: Extract<LayerConfig, { type: 'geotiff' }>,
   ): Promise<Layer> {
-    const [/*{ default: GeoTIFF },*/ { default: TileLayer }] =
-      await Promise.all([
-        /* import('ol/source/GeoTIFF'),*/
-        import('ol/layer/WebGLTile'), //    import('ol/layer/Tile'),
-      ]);
-
     if (!config.url) {
       throw new Error('GeoTIFF layer requires a URL');
     }
 
-    //    const source = new GeoTIFF({
     const srcInfo: SourceInfo = {
       url: config.url,
     };
@@ -1373,20 +1287,9 @@ export class OpenLayersProvider implements MapProvider {
       sources: [srcInfo],
     });
     const source = new CustomGeoTiff();
-
-    // //test
-    // const viewOptions = await source.getView();
-    // const proj: Projection = viewOptions.projection as Projection;
-    // log(
-    //   `ol - createGeoTIFFLayer - code: ${proj?.getCode()}, center: ${
-    //     viewOptions.center
-    //   }, extent: ${viewOptions.extent}`,
-    // );
-    // //test
-
     await source.registerProjectionIfNeeded();
 
-    const layer = new TileLayer({
+    const layer = new WebGLTileLayer({
       source,
       opacity: config.opacity ?? 1,
       visible: config.visible ?? true,
@@ -1396,13 +1299,34 @@ export class OpenLayersProvider implements MapProvider {
     return layer;
   }
 
+  // private async createGeoTIFFLayer(
+  //   config: Extract<LayerConfig, { type: 'geotiff' }>,
+  // ): Promise<Layer> {
+  //   if (!config.url) {
+  //     throw new Error('GeoTIFF layer requires a URL');
+  //   }
+  //   createCustomGeoTiff;
+  //   const source = new GeoTIFF({
+  //     sources: [
+  //       {
+  //         url: config.url,
+  //       },
+  //     ],
+  //   });
+
+  //   const layer = new TileLayer({
+  //     source,
+  //     opacity: config.opacity ?? 1,
+  //     visible: config.visible ?? true,
+  //     zIndex: config.zIndex ?? 1000,
+  //   });
+
+  //   return layer;
+  // }
+
   private async createWCSLayer(
     config: Extract<LayerConfig, { type: 'wcs' }>,
   ): Promise<Layer> {
-    const [{ default: ImageLayer }] = await Promise.all([
-      import('ol/layer/Image'),
-    ]);
-
     const source = await this.createWcsSource(config);
     const layer = new ImageLayer({
       source,
@@ -1554,10 +1478,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async createWcsSource(config: Extract<LayerConfig, { type: 'wcs' }>) {
-    const [{ default: ImageWMS }] = await Promise.all([
-      import('ol/source/ImageWMS'),
-    ]);
-
     const params = {
       SERVICE: 'WCS',
       REQUEST: 'GetCoverage',
@@ -1582,13 +1502,6 @@ export class OpenLayersProvider implements MapProvider {
   private async createArcGISLayer(
     config: Extract<LayerConfig, { type: 'arcgis' }>,
   ): Promise<Layer> {
-    const [{ default: TileLayer }] = await Promise.all([
-      import('ol/layer/Tile'),
-    ]);
-    const [{ default: TileArcGISRest }] = await Promise.all([
-      import('ol/source/TileArcGISRest'),
-    ]);
-
     const params = {
       ...(config.params ?? {}),
     } as Record<string, any>;
@@ -1612,10 +1525,6 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   private async updateGeoTIFFLayer(layer: Layer, data: any): Promise<void> {
-    const [{ default: GeoTIFF }] = await Promise.all([
-      import('ol/source/GeoTIFF'),
-    ]);
-
     if (!data.url) {
       throw new Error('GeoTIFF update requires a URL');
     }
