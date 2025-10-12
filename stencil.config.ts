@@ -257,6 +257,7 @@ export const config: Config = {
         '<rootDir>/src/testing/mocks/geostyler-lyrx-parser.ts',
       '^geostyler-style$': '<rootDir>/src/testing/mocks/geostyler-style.ts',
       '^@mapbox/tiny-sdf$': '<rootDir>/src/testing/mocks/mapbox-tiny-sdf.ts',
+      '^@npm9912/s-gml$': '<rootDir>/src/testing/mocks/s-gml.ts',
     },
     transformIgnorePatterns: ['node_modules/(?!(.pnpm|ol|leaflet|@loaders\\.gl|@mapbox|@deck\\.gl|geostyler-style|geostyler-sld-parser))'],
     browserHeadless: 'shell',
