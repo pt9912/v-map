@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWcs
 
-Defined in: [src/components.d.ts:1412](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1412)
+Defined in: [src/components.d.ts:1412](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1412)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1412](https://github.com/pt9912/v-map/blob/2a78
 
 > **coverageName**: `string`
 
-Defined in: [src/components.d.ts:1416](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1416)
+Defined in: [src/components.d.ts:1416](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1416)
 
 Coverage-Name/ID.
 
@@ -24,7 +24,7 @@ Coverage-Name/ID.
 
 > `optional` **format**: `string`
 
-Defined in: [src/components.d.ts:1421](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1421)
+Defined in: [src/components.d.ts:1421](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1421)
 
 Ausgabeformat, z. B. image/tiff.
 
@@ -40,7 +40,7 @@ Ausgabeformat, z. B. image/tiff.
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1426](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1426)
+Defined in: [src/components.d.ts:1426](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1426)
 
 Opazität (0–1).
 
@@ -56,7 +56,7 @@ Opazität (0–1).
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:1430](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1430)
+Defined in: [src/components.d.ts:1430](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1430)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -66,7 +66,7 @@ Zusätzliche Parameter als JSON-String.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/components.d.ts:1434](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1434)
+Defined in: [src/components.d.ts:1434](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1434)
 
 Projektion (Projection) für die Quelle.
 
@@ -76,7 +76,7 @@ Projektion (Projection) für die Quelle.
 
 > `optional` **resolutions**: `string`
 
-Defined in: [src/components.d.ts:1438](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1438)
+Defined in: [src/components.d.ts:1438](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1438)
 
 Auflösungen als JSON-Array, z. B. [1000,500].
 
@@ -86,7 +86,7 @@ Auflösungen als JSON-Array, z. B. [1000,500].
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:1442](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1442)
+Defined in: [src/components.d.ts:1442](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1442)
 
 Basis-URL des WCS-Dienstes.
 
@@ -96,7 +96,7 @@ Basis-URL des WCS-Dienstes.
 
 > `optional` **version**: `string`
 
-Defined in: [src/components.d.ts:1447](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1447)
+Defined in: [src/components.d.ts:1447](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1447)
 
 WCS-Version.
 
@@ -112,7 +112,7 @@ WCS-Version.
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1452](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1452)
+Defined in: [src/components.d.ts:1452](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1452)
 
 Sichtbarkeit des Layers.
 
@@ -128,7 +128,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1457](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L1457)
+Defined in: [src/components.d.ts:1457](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L1457)
 
 Z-Index für die Darstellung.
 

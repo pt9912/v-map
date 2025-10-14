@@ -6,7 +6,7 @@
 
 # Class: BVHNode2D
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:4](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L4)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:4](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L4)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:4](https://github.com/p
 
 > **new BVHNode2D**(`bbox`, `triangles`, `left`, `right`): `BVHNode2D`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:5](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L5)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:5](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L5)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:5](https://github.com/p
 
 > **bbox**: [`AABB2D`](../../AABB2D/classes/AABB2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:6](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L6)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:6](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L6)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:6](https://github.com/p
 
 > **left**: `BVHNode2D` = `null`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:8](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L8)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:8](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L8)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:8](https://github.com/p
 
 > **right**: `BVHNode2D` = `null`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:9](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L9)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:9](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L9)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:9](https://github.com/p
 
 > **triangles**: [`Triangle2D`](../../AABB2D/type-aliases/Triangle2D.md)[] = `[]`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:7](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L7)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:7](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L7)
 
 ## Methods
 
@@ -76,7 +76,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:7](https://github.com/p
 
 > **findContainingTriangle**(`point`): [`Triangle2D`](../../AABB2D/type-aliases/Triangle2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:56](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L56)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:56](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L56)
 
 Finds the triangle containing the given point.
 
@@ -100,7 +100,7 @@ The containing triangle or `null`.
 
 > **getStats**(): `object`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:153](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L153)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:153](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L153)
 
 Get statistics about the BVH tree
 
@@ -140,7 +140,7 @@ Object with tree statistics
 
 > **toString**(`indent`): `string`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:110](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L110)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:110](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L110)
 
 Returns a string representation of the BVH tree structure
 
@@ -164,7 +164,7 @@ Formatted string showing tree structure
 
 > `static` **build**(`triangles`, `depth`, `maxDepth`): `BVHNode2D`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:12](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L12)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:12](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L12)
 
 #### Parameters
 
@@ -190,7 +190,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:12](https://github.com/
 
 > `static` **punktInDreieck2D**(`p`, `triangle`): `boolean`
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:75](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L75)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:75](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L75)
 
 #### Parameters
 
@@ -212,7 +212,7 @@ Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:75](https://github.com/
 
 > `static` **toTriangle2D**(`triangle`): [`Triangle2D`](../../AABB2D/type-aliases/Triangle2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:95](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/BVHNode2D.ts#L95)
+Defined in: [src/map-provider/geotiff/utils/BVHNode2D.ts:95](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/BVHNode2D.ts#L95)
 
 #### Parameters
 

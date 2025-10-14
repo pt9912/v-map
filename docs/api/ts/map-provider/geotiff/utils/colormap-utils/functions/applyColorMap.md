@@ -8,7 +8,7 @@
 
 > **applyColorMap**(`normalizedValue`, `colorStops`): \[`number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:168](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/colormap-utils.ts#L168)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:168](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/colormap-utils.ts#L168)
 
 Apply colormap to a normalized value using interpolation
 

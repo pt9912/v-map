@@ -6,7 +6,7 @@
 
 # Interface: VMapLayergroup
 
-Defined in: [src/components.d.ts:675](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L675)
+Defined in: [src/components.d.ts:675](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L675)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:675](https://github.com/pt9912/v-map/blob/2a78c
 
 > **basemapid**: `string`
 
-Defined in: [src/components.d.ts:680](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L680)
+Defined in: [src/components.d.ts:680](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L680)
 
 Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
 
@@ -30,7 +30,7 @@ null
 
 > **getGroupId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:681](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L681)
+Defined in: [src/components.d.ts:681](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L681)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/components.d.ts:681](https://github.com/pt9912/v-map/blob/2a78c
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L686)
+Defined in: [src/components.d.ts:686](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L686)
 
 Globale Opazität (0–1) für alle Kinder.
 
@@ -58,7 +58,7 @@ Globale Opazität (0–1) für alle Kinder.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/components.d.ts#L691)
+Defined in: [src/components.d.ts:691](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/components.d.ts#L691)
 
 Sichtbarkeit der gesamten Gruppe.
 

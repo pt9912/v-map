@@ -8,7 +8,7 @@
 
 > **getColorStops**(`colorMap`, `valueRange?`): `object`
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:228](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/colormap-utils.ts#L228)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:228](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/colormap-utils.ts#L228)
 
 Get ColorStop array from ColorMapName or GeoStyler ColorMap
 
