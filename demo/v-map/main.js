@@ -237,9 +237,11 @@ function setGeoJSON({ mode, layer, slotDiv, data }) {
 function samplesGeoTIFF(kind) {
   switch (kind) {
     case 'geotiff1':
+      // Sentinel-2 COG from AWS (used in OpenLayers examples)
       return 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/36/Q/WD/2020/7/S2A_36QWD_20200701_0_L2A/TCI.tif';
     case 'geotiff2':
-      return 'https://s3.amazonaws.com/raster-foundry-production-data-us-east-1/gdal-public-test-data/cog/elevation_tiled.tif';
+      // OpenLayers test data (CORS-enabled)
+      return 'https://openlayers.org/data/raster/no-overviews.tif';
     default:
       return '';
   }
