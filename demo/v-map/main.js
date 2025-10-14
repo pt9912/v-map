@@ -130,6 +130,26 @@ async function createMap(flavour) {
 
   map.appendChild(groupBaseMap);
 
+  //raster group
+  const groupRaster = document.createElement('v-map-layergroup');
+  groupRaster.setAttribute('group-title', 'Raster-Layer');
+
+  //geotiff
+  const layerGeoTIFF = document.createElement('v-map-layer-geotiff');
+  layerGeoTIFF.setAttribute('id', 'GEOTIFF-1');
+  layerGeoTIFF.setAttribute('label', 'GeoTIFF');
+  layerGeoTIFF.setAttribute('opacity', '1.0');
+  layerGeoTIFF.setAttribute('z-index', '10');
+  layerGeoTIFF.setAttribute('visible', 'false');
+  layerGeoTIFF.setAttribute('nodata', '0');
+  layerGeoTIFF.setAttribute(
+    'url',
+    'https://mikenunn.net/data/MiniScale_(std_with_grid)_R23.tif',
+  );
+
+  groupRaster.appendChild(layerGeoTIFF);
+  map.appendChild(groupRaster);
+
   //wms
   const groupMap = document.createElement('v-map-layergroup');
   groupMap.setAttribute('group-title', 'WMS-Layer');
@@ -183,19 +203,21 @@ async function createMap(flavour) {
   mo.observe(slotDiv, { childList: true, characterData: true, subtree: true });
   mo.observe(layer, { attributes: true });
 
-  return { map, group, layer, layerOsm, slotDiv };
+  return { map, group, layer, layerOsm, slotDiv, layerGeoTIFF };
 }
 
-function setOpacity(layer, val) {
-  layer.setAttribute('opacity', String(val));
-  $('#opacityValue').textContent = Number(val).toFixed(2);
-  log('layer', 'opacity → ' + val, 'tag-layer');
-}
-
-function setOpacityOSM(layer, val) {
-  layer.setAttribute('opacity', String(val));
-  $('#opacityValueOSM').textContent = Number(val).toFixed(2);
-  log('layer', 'osm opacity → ' + val, 'tag-layer');
+function setGeoTIFFUrl(layer, url) {
+  if (url) {
+    layer.setAttribute('url', url);
+    layer.setAttribute('visible', 'true');
+    $('#geotiffUrl').value = url;
+    log('layer', 'GeoTIFF URL gesetzt: ' + url, 'tag-layer');
+  } else {
+    layer.removeAttribute('url');
+    layer.setAttribute('visible', 'false');
+    $('#geotiffUrl').value = '';
+    log('layer', 'GeoTIFF Layer deaktiviert', 'tag-layer');
+  }
 }
 
 function setGeoJSON({ mode, layer, slotDiv, data }) {
@@ -209,6 +231,17 @@ function setGeoJSON({ mode, layer, slotDiv, data }) {
     // Property-Mode: direkt auf die CE-Instanz setzen
     layer.geojson = data;
     log('layer', 'layer.geojson (Property) gesetzt', 'tag-layer');
+  }
+}
+
+function samplesGeoTIFF(kind) {
+  switch (kind) {
+    case 'geotiff1':
+      return 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/36/Q/WD/2020/7/S2A_36QWD_20200701_0_L2A/TCI.tif';
+    case 'geotiff2':
+      return 'https://s3.amazonaws.com/raster-foundry-production-data-us-east-1/gdal-public-test-data/cog/elevation_tiled.tif';
+    default:
+      return '';
   }
 }
 
@@ -350,7 +383,7 @@ async function main() {
   await ensureCustomElementsDefined();
 
   const host = $('#map-host');
-  let { map, group, layer, layerOsm, slotDiv } = await createMap(
+  let { map, group, layer, layerOsm, slotDiv, layerGeoTIFF } = await createMap(
     $('#flavour').value,
   );
   host.appendChild(map);
@@ -369,11 +402,11 @@ async function main() {
     } else {
       // Map neu aufbauen, Layer & Slot bleiben frisch
       host.innerHTML = '';
-      ({ map, group, layer, layerOsm, slotDiv } = await createMap(flavour));
+      ({ map, group, layer, layerOsm, slotDiv, layerGeoTIFF } = await createMap(
+        flavour,
+      ));
       host.appendChild(map);
-      // Opacity und aktuelles GeoJSON wieder setzen
-      setOpacityOSM(layerOsm, $('#opacityOSM').value);
-      setOpacity(layer, $('#opacity').value);
+      // Aktuelles GeoJSON wieder setzen
       try {
         const data = JSON.parse($('#geojsonInput').value);
         setGeoJSON({
@@ -385,13 +418,6 @@ async function main() {
       } catch {}
     }
   });
-
-  $('#opacityOSM').addEventListener('input', e =>
-    setOpacityOSM(layerOsm, e.target.value),
-  );
-  $('#opacity').addEventListener('input', e =>
-    setOpacity(layer, e.target.value),
-  );
 
   $$('#samplePointBtn')[0].addEventListener('click', () => {
     const init = samples('point');
@@ -415,6 +441,28 @@ async function main() {
     const init = samples('cluster');
     $('#geojsonInput').value = JSON.stringify(init, null, 2);
     setGeoJSON({ mode: 'slot', layer, slotDiv, data: init });
+  });
+
+  // GeoTIFF Controls
+  $('#sampleGeoTiffBtn1').addEventListener('click', () => {
+    const url = samplesGeoTIFF('geotiff1');
+    setGeoTIFFUrl(layerGeoTIFF, url);
+  });
+
+  $('#sampleGeoTiffBtn2').addEventListener('click', () => {
+    const url = samplesGeoTIFF('geotiff2');
+    setGeoTIFFUrl(layerGeoTIFF, url);
+  });
+
+  $('#applyGeoTiffBtn').addEventListener('click', () => {
+    const url = $('#geotiffUrl').value.trim();
+    if (url) {
+      setGeoTIFFUrl(layerGeoTIFF, url);
+    }
+  });
+
+  $('#clearGeoTiffBtn').addEventListener('click', () => {
+    setGeoTIFFUrl(layerGeoTIFF, null);
   });
 
   $$('#applyBtn')[0].addEventListener('click', () => {
@@ -450,14 +498,10 @@ async function main() {
   $('#resetBtn').addEventListener('click', async () => {
     log('sys', 'Reset Map angefordert', 'tag-sys');
     host.innerHTML = '';
-    ({ map, group, layer, layerOsm, slotDiv } = await createMap(
+    ({ map, group, layer, layerOsm, slotDiv, layerGeoTIFF } = await createMap(
       $('#flavour').value,
     ));
     host.appendChild(map);
-    $('#opacityOSM').value = 1.0;
-    $('#opacity').value = 1.0;
-    setOpacityOSM(layerOsm, $('#opacityOSM').value);
-    setOpacity(layer, $('#opacity').value);
     try {
       const data = JSON.parse($('#geojsonInput').value);
       setGeoJSON({
