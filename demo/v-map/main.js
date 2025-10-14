@@ -242,6 +242,9 @@ function samplesGeoTIFF(kind) {
     case 'geotiff2':
       // OpenLayers test data (CORS-enabled)
       return 'https://openlayers.org/data/raster/no-overviews.tif';
+    case 'geotiff3':
+      // MiniScale UK map
+      return 'https://mikenunn.net/data/MiniScale_(std_with_grid)_R23.tif';
     default:
       return '';
   }
@@ -453,6 +456,11 @@ async function main() {
 
   $('#sampleGeoTiffBtn2').addEventListener('click', () => {
     const url = samplesGeoTIFF('geotiff2');
+    setGeoTIFFUrl(layerGeoTIFF, url);
+  });
+
+  $('#sampleGeoTiffBtn3').addEventListener('click', () => {
+    const url = samplesGeoTIFF('geotiff3');
     setGeoTIFFUrl(layerGeoTIFF, url);
   });
 
