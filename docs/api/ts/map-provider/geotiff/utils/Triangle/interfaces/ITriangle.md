@@ -6,7 +6,7 @@
 
 # Interface: ITriangle
 
-Defined in: [src/map-provider/geotiff/utils/Triangle.ts:3](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangle.ts#L3)
+Defined in: [src/map-provider/geotiff/utils/Triangle.ts:3](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangle.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangle.ts:3](https://github.com/pt
 
 > **source**: [`Triangle`](../type-aliases/Triangle.md)
 
-Defined in: [src/map-provider/geotiff/utils/Triangle.ts:4](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangle.ts#L4)
+Defined in: [src/map-provider/geotiff/utils/Triangle.ts:4](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangle.ts#L4)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/map-provider/geotiff/utils/Triangle.ts:4](https://github.com/pt
 
 > **target**: [`Triangle`](../type-aliases/Triangle.md)
 
-Defined in: [src/map-provider/geotiff/utils/Triangle.ts:5](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangle.ts#L5)
+Defined in: [src/map-provider/geotiff/utils/Triangle.ts:5](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangle.ts#L5)

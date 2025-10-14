@@ -11,5 +11,6 @@
   "tsconfig": "tsconfig.json",
   "plugin": ["typedoc-plugin-markdown"],
   "readme": "none",
-  "out": "docs/api/ts"
+  "out": "docs/api/ts",
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }

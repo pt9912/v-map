@@ -8,7 +8,7 @@
 
 > **injectWidgetsCss**(`shadowRoot?`): `Promise`\<`void`\>
 
-Defined in: [src/lib/cesium-loader.ts:52](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/lib/cesium-loader.ts#L52)
+Defined in: [src/lib/cesium-loader.ts:52](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/lib/cesium-loader.ts#L52)
 
 ## Parameters
 

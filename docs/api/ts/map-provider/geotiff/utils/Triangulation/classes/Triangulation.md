@@ -6,7 +6,7 @@
 
 # Class: Triangulation
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:120](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L120)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:120](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L120)
 
 Class for triangulation of the given target extent
 Used for determining source data and the reprojection itself
@@ -17,7 +17,7 @@ Used for determining source data and the reprojection itself
 
 > **new Triangulation**(`transformFn`, `targetExtent`, `errorThreshold`, `sourceRef`, `resolution`, `step`): `Triangulation`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:132](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L132)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:132](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L132)
 
 #### Parameters
 
@@ -61,7 +61,7 @@ Maximum allowed error in pixels (default: 0.5)
 
 > **applyAffineTransform**(`x`, `y`, `transform`): \[`number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:471](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L471)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:471](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L471)
 
 Apply affine transformation to a point
 
@@ -111,7 +111,7 @@ Apply affine transformation to a point
 
 > **buildBVH**(): `void`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:401](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L401)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:401](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L401)
 
 #### Returns
 
@@ -123,7 +123,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:401](https://github
 
 > **calculateAffineTransform**(`triangle`): `object`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:433](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L433)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:433](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L433)
 
 Calculate affine transformation matrix for a triangle
 Maps from target triangle to source triangle
@@ -168,7 +168,7 @@ Maps from target triangle to source triangle
 
 > **calculateSourceExtent**(): \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:379](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L379)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:379](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L379)
 
 Calculate the bounding extent of all source coordinates
 
@@ -182,7 +182,7 @@ Calculate the bounding extent of all source coordinates
 
 > **findSourceTriangleForTargetPoint**(`point`, `extraTri`): [`TriResult`](../type-aliases/TriResult.md)
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:406](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L406)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:406](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L406)
 
 #### Parameters
 
@@ -204,7 +204,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:406](https://github
 
 > **getBounds**(): [`Bounds`](../type-aliases/Bounds.md)
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:183](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L183)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:183](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L183)
 
 #### Returns
 
@@ -216,7 +216,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:183](https://github
 
 > **getTriangles**(): [`ITriangle`](../../Triangle/interfaces/ITriangle.md)[]
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:372](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/geotiff/utils/Triangulation.ts#L372)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:372](https://github.com/pt9912/v-map/blob/2a78c45e554a5a587112b3a4df3615fe7d611f93/src/map-provider/geotiff/utils/Triangulation.ts#L372)
 
 Get all triangles
 
