@@ -116,6 +116,119 @@ export class GeoTIFFImageryProvider implements ImageryProvider {
     return undefined;
   }
 
+  /**
+   * Flips a canvas vertically (Y-axis inversion) for Cesium.
+   * Creates a new canvas with the flipped content.
+   *
+   * @param sourceCanvas - The canvas to flip
+   * @param width - Width of the canvas
+   * @param height - Height of the canvas
+   * @returns A new canvas with vertically flipped content, or the source canvas if flipping fails
+   */
+  private flipCanvasVertically(
+    sourceCanvas: HTMLCanvasElement,
+    width: number,
+    height: number,
+  ): HTMLCanvasElement {
+    const flippedCanvas = document.createElement('canvas');
+    flippedCanvas.width = width;
+    flippedCanvas.height = height;
+    const flippedCtx = flippedCanvas.getContext('2d');
+
+    if (!flippedCtx) {
+      warn('v-map - cesium - failed to get 2d context for flip');
+      return sourceCanvas; // Fallback to source canvas
+    }
+
+    flippedCtx.translate(0, height);
+    flippedCtx.scale(1, -1);
+    flippedCtx.drawImage(sourceCanvas, 0, 0);
+
+    return flippedCanvas;
+  }
+
+  /**
+   * Creates a flipped ImageBitmap from RGBA data.
+   * Uses ImageBitmap for better performance when available.
+   *
+   * @param rgbaData - The RGBA pixel data
+   * @param sampleSize - Size of the tile (width and height)
+   * @returns A flipped ImageBitmap, or undefined if creation fails
+   */
+  private async createFlippedImageBitmap(
+    rgbaData: Uint8ClampedArray,
+    sampleSize: number,
+  ): Promise<ImageBitmap | undefined> {
+    if (typeof createImageBitmap !== 'function') {
+      return undefined;
+    }
+
+    try {
+      // Create temporary canvas for Y-axis flip
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = sampleSize;
+      tempCanvas.height = sampleSize;
+      const tempCtx = tempCanvas.getContext('2d');
+      if (!tempCtx) {
+        throw new Error('Failed to get 2d context');
+      }
+      const imageData = tempCtx.createImageData(sampleSize, sampleSize);
+      imageData.data.set(rgbaData);
+      tempCtx.putImageData(imageData, 0, 0);
+
+      // Flip vertically for Cesium
+      const flippedCanvas = this.flipCanvasVertically(
+        tempCanvas,
+        sampleSize,
+        sampleSize,
+      );
+
+      return await createImageBitmap(flippedCanvas);
+    } catch (err) {
+      warn('v-map - cesium - createImageBitmap failed, falling back', err);
+      return undefined;
+    }
+  }
+
+  /**
+   * Creates a flipped image (ImageBitmap or Canvas) from RGBA data.
+   * Prefers ImageBitmap for better performance, falls back to Canvas.
+   *
+   * @param rgbaData - The RGBA pixel data
+   * @returns A flipped ImageBitmap or Canvas, or undefined if creation fails
+   */
+  private async createFlippedImageFromRGBA(
+    rgbaData: Uint8ClampedArray,
+  ): Promise<HTMLCanvasElement | ImageBitmap | undefined> {
+    // Calculate actual sample size (may differ from tileWidth due to resolution)
+    const sampleSize = Math.ceil(this.tileWidth * this.resolution);
+
+    // Prefer ImageBitmap when available for better performance
+    const imageBitmap = await this.createFlippedImageBitmap(
+      rgbaData,
+      sampleSize,
+    );
+    if (imageBitmap) {
+      return imageBitmap;
+    }
+
+    // Fallback to Canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = sampleSize;
+    canvas.height = sampleSize;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      warn('v-map - cesium - unable to acquire canvas 2d context');
+      return undefined;
+    }
+    const imageData = ctx.createImageData(sampleSize, sampleSize);
+    imageData.data.set(rgbaData);
+    ctx.putImageData(imageData, 0, 0);
+
+    // Flip the canvas vertically for Cesium (Y-axis inversion)
+    return this.flipCanvasVertically(canvas, sampleSize, sampleSize);
+  }
+
   async requestImage(
     x: number,
     y: number,
@@ -139,76 +252,26 @@ export class GeoTIFFImageryProvider implements ImageryProvider {
       colorStops: this.colorStops,
     };
 
+    let rgbaData: Uint8ClampedArray = null;
     try {
-      const rgbaData = await this.tileProcessor.getTileData(params);
+      rgbaData = await this.tileProcessor.getTileData(params);
       if (!rgbaData) {
         return undefined;
       }
-
-      // Calculate actual sample size (may differ from tileWidth due to resolution)
-      const sampleSize = Math.ceil(this.tileWidth * this.resolution);
-
-      // Prefer ImageBitmap when available for better performance
-      if (typeof createImageBitmap === 'function') {
-        try {
-          // Create temporary canvas for Y-axis flip
-          const tempCanvas = document.createElement('canvas');
-          tempCanvas.width = sampleSize;
-          tempCanvas.height = sampleSize;
-          const tempCtx = tempCanvas.getContext('2d');
-          if (!tempCtx) {
-            throw new Error('Failed to get 2d context');
-          }
-          const imageData = tempCtx.createImageData(sampleSize, sampleSize);
-          imageData.data.set(rgbaData);
-          tempCtx.putImageData(imageData, 0, 0);
-
-          // Flip vertically for Cesium
-          const flippedCanvas = document.createElement('canvas');
-          flippedCanvas.width = sampleSize;
-          flippedCanvas.height = sampleSize;
-          const flippedCtx = flippedCanvas.getContext('2d');
-          if (!flippedCtx) {
-            throw new Error('Failed to get 2d context for flip');
-          }
-          flippedCtx.translate(0, sampleSize);
-          flippedCtx.scale(1, -1);
-          flippedCtx.drawImage(tempCanvas, 0, 0);
-
-          return await createImageBitmap(flippedCanvas);
-        } catch (err) {
-          warn('v-map - cesium - createImageBitmap failed, falling back', err);
-        }
-      }
-
-      const canvas = document.createElement('canvas');
-      canvas.width = sampleSize;
-      canvas.height = sampleSize;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        warn('v-map - cesium - unable to acquire canvas 2d context');
-        return undefined;
-      }
-      const imageData = ctx.createImageData(sampleSize, sampleSize);
-      imageData.data.set(rgbaData);
-      ctx.putImageData(imageData, 0, 0);
-
-      // Flip the canvas vertically for Cesium (Y-axis inversion)
-      const flippedCanvas = document.createElement('canvas');
-      flippedCanvas.width = sampleSize;
-      flippedCanvas.height = sampleSize;
-      const flippedCtx = flippedCanvas.getContext('2d');
-      if (!flippedCtx) {
-        return canvas; // Fallback to non-flipped
-      }
-      flippedCtx.translate(0, sampleSize);
-      flippedCtx.scale(1, -1);
-      flippedCtx.drawImage(canvas, 0, 0);
-
-      return flippedCanvas;
     } catch (err) {
       this.errorEvent.raiseEvent(err);
-      warn('v-map - cesium - GeoTIFF tile request failed', err);
+      warn('v-map - cesium - getTileData - GeoTIFF tile request failed', err);
+      return undefined;
+    }
+
+    try {
+      return await this.createFlippedImageFromRGBA(rgbaData);
+    } catch (err) {
+      this.errorEvent.raiseEvent(err);
+      warn(
+        'v-map - cesium - createFlippedImageFromRGBA - GeoTIFF tile request failed',
+        err,
+      );
       return undefined;
     }
   }
