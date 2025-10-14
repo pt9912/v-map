@@ -839,6 +839,7 @@ export class LeafletProvider implements MapProvider {
       throw new Error('GeoTIFF update requires a URL');
     }
 
+    if (!layer) return;
     if (!('updateSource' in (layer as any))) return;
     await (layer as any).updateSource({
       url: data.url,
