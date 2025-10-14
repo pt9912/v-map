@@ -1298,6 +1298,19 @@ export type TileLoadProps = {
         }
         break;
       }
+      case 'geotiff': {
+        const data = update.data ?? {};
+        const ov: any = { data };
+        if ('url' in data) ov.url = data.url;
+        if ('nodata' in data) ov.noDataValue = data.nodata;
+        if ('colorMap' in data) ov.colorMap = data.colorMap;
+        if ('valueRange' in data) ov.valueRange = data.valueRange;
+        if ('resolution' in data) ov.resolution = data.resolution;
+        if ('resampleMethod' in data)
+          ov.resampleMethod = data.resampleMethod;
+        group.setModelOverrides(layerId, ov);
+        break;
+      }
       case 'wfs': {
         const geojson = await this.fetchWFSFromUrl(update.data);
         group.setModelOverrides(layerId, { data: geojson });
