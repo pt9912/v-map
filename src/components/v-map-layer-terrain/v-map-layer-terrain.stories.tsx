@@ -15,7 +15,9 @@ type Story = StoryObj<VMapLayerTerrain>;
 
 export const Primary: Story = {
   args: {
-    elevationData: 'https://example.com/terrain/elevation.tif',
+    elevationData:
+      'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+    elevationDecoder: '{"r":256,"g":1,"b":0.00390625,"offset":-32768}',
     visible: true,
     opacity: 1,
   },
@@ -25,6 +27,7 @@ export const Primary: Story = {
         <v-map-layergroup group-title="Terrain Layer">
           <v-map-layer-terrain
             elevation-data={props.elevationData}
+            elevation-decoder={props.elevationDecoder}
             visible={props.visible}
             opacity={props.opacity}
           ></v-map-layer-terrain>
@@ -36,8 +39,10 @@ export const Primary: Story = {
 
 export const WithTexture: Story = {
   args: {
-    elevationData: 'https://example.com/terrain/elevation.tif',
-    texture: 'https://example.com/terrain/texture.png',
+    elevationData:
+      'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/terrain.png',
+    texture:
+      'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/terrain-mask.png',
     visible: true,
     opacity: 1,
   },
@@ -59,7 +64,9 @@ export const WithTexture: Story = {
 
 export const Wireframe: Story = {
   args: {
-    elevationData: 'https://example.com/terrain/elevation.tif',
+    elevationData:
+      'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+    elevationDecoder: '{"r":256,"g":1,"b":0.00390625,"offset":-32768}',
     wireframe: true,
     color: '#00ff00',
     visible: true,
@@ -71,6 +78,7 @@ export const Wireframe: Story = {
         <v-map-layergroup group-title="Terrain Layer">
           <v-map-layer-terrain
             elevation-data={props.elevationData}
+            elevation-decoder={props.elevationDecoder}
             wireframe={props.wireframe}
             color={props.color}
             visible={props.visible}
