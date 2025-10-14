@@ -163,7 +163,9 @@ export class GeoTIFFTileProcessor {
   }
 
   /**
-   * Convert tile coordinates to Web Mercator bounds in meters
+   * Convert tile coordinates to View projection bounds
+   * For Web Mercator (deck.gl/Leaflet/Cesium): returns bounds in meters
+   * Note: This assumes Web Mercator tiling scheme. Override for other projections.
    */
   private getTileBounds(
     x: number,
@@ -236,29 +238,30 @@ export class GeoTIFFTileProcessor {
 
   /**
    * Calculate source bounds for a tile after transformation
+   * @param viewBounds - Tile bounds in View projection
    */
   private calculateTileSourceBounds(
-    mercatorBounds: [number, number, number, number],
+    viewBounds: [number, number, number, number],
   ): {
     tileSrcWest: number;
     tileSrcEast: number;
     tileSrcSouth: number;
     tileSrcNorth: number;
   } {
-    const [mercWest, mercSouth, mercEast, mercNorth] = mercatorBounds;
+    const [viewWest, viewSouth, viewEast, viewNorth] = viewBounds;
 
     const { source: bounds } = calculateBounds(
       this.config.sourceRef,
       this.config.resolution,
-      [mercWest, mercSouth, mercEast, mercNorth],
+      [viewWest, viewSouth, viewEast, viewNorth],
       this.config.transformViewToSourceMapFn,
     );
 
-    // Transform tile corners from Mercator to Source projection
-    const sw = this.config.transformViewToSourceMapFn([mercWest, mercSouth]);
-    const ne = this.config.transformViewToSourceMapFn([mercEast, mercNorth]);
-    const nw = this.config.transformViewToSourceMapFn([mercWest, mercNorth]);
-    const se = this.config.transformViewToSourceMapFn([mercEast, mercSouth]);
+    // Transform tile corners from View to Source projection
+    const sw = this.config.transformViewToSourceMapFn([viewWest, viewSouth]);
+    const ne = this.config.transformViewToSourceMapFn([viewEast, viewNorth]);
+    const nw = this.config.transformViewToSourceMapFn([viewWest, viewNorth]);
+    const se = this.config.transformViewToSourceMapFn([viewEast, viewSouth]);
 
     // Calculate bounding box from transformed corners
     const tileSrcWest = Math.min(bounds.minX, sw[0], ne[0], nw[0], se[0]);
@@ -512,6 +515,38 @@ export class GeoTIFFTileProcessor {
   }
 
   /**
+   * Check if tile intersects with GeoTIFF source bounds
+   * @param viewBounds - Tile bounds in View projection (e.g., Web Mercator for deck.gl/Leaflet/Cesium)
+   */
+  private tileIntersectsSource(
+    viewBounds: [number, number, number, number],
+  ): boolean {
+    const [viewWest, viewSouth, viewEast, viewNorth] = viewBounds;
+    const [srcWest, srcSouth, srcEast, srcNorth] = this.config.sourceBounds;
+
+    // Transform tile corners from View to Source projection
+    const sw = this.config.transformViewToSourceMapFn([viewWest, viewSouth]);
+    const ne = this.config.transformViewToSourceMapFn([viewEast, viewNorth]);
+    const nw = this.config.transformViewToSourceMapFn([viewWest, viewNorth]);
+    const se = this.config.transformViewToSourceMapFn([viewEast, viewSouth]);
+
+    // Calculate bounding box of transformed tile in source projection
+    const tileMinX = Math.min(sw[0], ne[0], nw[0], se[0]);
+    const tileMaxX = Math.max(sw[0], ne[0], nw[0], se[0]);
+    const tileMinY = Math.min(sw[1], ne[1], nw[1], se[1]);
+    const tileMaxY = Math.max(sw[1], ne[1], nw[1], se[1]);
+
+    // Check for intersection
+    const intersects =
+      tileMaxX >= srcWest &&
+      tileMinX <= srcEast &&
+      tileMaxY >= srcSouth &&
+      tileMinY <= srcNorth;
+
+    return intersects;
+  }
+
+  /**
    * Generate tile data with triangulation-based reprojection
    *
    * This is the main method that orchestrates the entire tile rendering process.
@@ -522,29 +557,36 @@ export class GeoTIFFTileProcessor {
     const { x, y, z, tileSize, resolution, resampleMethod, colorStops } =
       params;
 
-    // 1. Calculate Web Mercator bounds for the tile
-    const mercatorBounds = this.getTileBounds(x, y, z);
+    // 1. Calculate View projection bounds for the tile
+    const viewBounds = this.getTileBounds(x, y, z);
 
-    // 2. Calculate sampling resolution
+    // 2. Early exit: Check if tile intersects with source bounds
+    if (!this.tileIntersectsSource(viewBounds)) {
+      // Tile is completely outside source bounds - return transparent tile
+      const sampleSize = Math.ceil(tileSize * resolution);
+      return new Uint8ClampedArray(sampleSize * sampleSize * 4);
+    }
+
+    // 3. Calculate sampling resolution
     const sampleSize = Math.ceil(tileSize * resolution);
 
-    // 3. Get or create triangulation
+    // 4. Get or create triangulation
     let triangulation: Triangulation;
     if (!this.globalTriangulation) {
       warn('Global triangulation not available, creating fallback for tile');
       triangulation = new Triangulation(
         this.config.transformViewToSourceMapFn,
-        mercatorBounds,
+        viewBounds,
         0.5,
       );
     } else {
       triangulation = this.globalTriangulation;
     }
 
-    // 4. Calculate source bounds for this tile
-    const tileSrcBounds = this.calculateTileSourceBounds(mercatorBounds);
+    // 5. Calculate source bounds for this tile
+    const tileSrcBounds = this.calculateTileSourceBounds(viewBounds);
 
-    // 5. Select best overview image based on zoom
+    // 6. Select best overview image based on zoom
     const { bestImage, bestResolution, imageLevel } = this.selectOverviewImage(
       z,
       tileSize,
@@ -552,7 +594,7 @@ export class GeoTIFFTileProcessor {
     const ovWidth = bestImage.getWidth();
     const ovHeight = bestImage.getHeight();
 
-    // 6. Calculate pixel window for reading
+    // 7. Calculate pixel window for reading
     const readWindow = this.calculateReadWindow(
       tileSrcBounds,
       ovWidth,
@@ -562,7 +604,7 @@ export class GeoTIFFTileProcessor {
       return new Uint8ClampedArray(sampleSize * sampleSize * 4);
     }
 
-    // 7. Load and convert raster data
+    // 8. Load and convert raster data
     const { rasterBands, arrayType } = await this.loadAndConvertRasterData(
       bestImage,
       readWindow,
@@ -573,10 +615,10 @@ export class GeoTIFFTileProcessor {
       `Read window: [${readWindow.readXMin}, ${readWindow.readYMin}, ${readWindow.readXMax}, ${readWindow.readYMax}] (${readWindow.readWidth}x${readWindow.readHeight} pixels), ${bandCount} bands, type: ${arrayType}, imageLevel: ${imageLevel}, resolution: ${bestResolution}`,
     );
 
-    // 8. Render tile pixels
+    // 9. Render tile pixels
     const outputData = this.renderTilePixels({
       sampleSize,
-      mercatorBounds,
+      mercatorBounds: viewBounds, // Pass View bounds (kept name for backward compat)
       triangulation,
       rasterBands,
       arrayType,

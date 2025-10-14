@@ -18,7 +18,6 @@ import GML2 from 'ol/format/GML2';
 import GML3 from 'ol/format/GML3';
 import GML32 from 'ol/format/GML32';
 import WKT from 'ol/format/WKT';
-import GeoTIFF from 'ol/source/GeoTIFF';
 import Control from 'ol/control/Control';
 import OlStyle from 'ol/style/Style';
 import OlFill from 'ol/style/Fill';
@@ -1285,6 +1284,7 @@ export class OpenLayersProvider implements MapProvider {
     }
     const CustomGeoTiff = await createCustomGeoTiff({
       sources: [srcInfo],
+      wrapX: false, // Prevent rendering tiles beyond extent
     });
     const source = new CustomGeoTiff();
     await source.registerProjectionIfNeeded();
@@ -1529,15 +1529,22 @@ export class OpenLayersProvider implements MapProvider {
       throw new Error('GeoTIFF update requires a URL');
     }
 
-    const newSource = new GeoTIFF({
-      sources: [
-        {
-          url: data.url,
-        },
-      ],
-    });
+    const srcInfo: SourceInfo = {
+      url: data.url,
+    };
+    if (data.nodata !== null && !isNaN(data.nodata)) {
+      srcInfo.nodata = data.nodata;
+    }
 
-    (layer as any).setSource(newSource);
+    const CustomGeoTiff = await createCustomGeoTiff({
+      sources: [srcInfo],
+      wrapX: false, // Prevent rendering tiles beyond extent
+    });
+    const source = new CustomGeoTiff();
+    await source.registerProjectionIfNeeded();
+
+    // Update source on the layer
+    (layer as any).setSource(source);
   }
 
   getMap() {

@@ -320,6 +320,101 @@ export async function createDeckGLGeoTIFFLayer(
       this.tileProcessor.createGlobalTriangulation();
     }
 
+    /**
+     * Calculate View extent from source bounds
+     * Returns [minLng, minLat, maxLng, maxLat] in WGS84 coordinates
+     *
+     * For deck.gl: TileLayer expects extent in Longitude/Latitude (WGS84)
+     * This is used by TileLayer to restrict tile loading to the GeoTIFF coverage area.
+     */
+    private getViewExtent(): [number, number, number, number] | null {
+      if (!this.sourceBounds || !this.tileProcessor) return null;
+
+      const [srcWest, srcSouth, srcEast, srcNorth] = this.sourceBounds;
+
+      // WGS84 (EPSG:4326) limits
+      const MAX_LAT = 85.05112878; // Web Mercator latitude limit
+      const MIN_LAT = -85.05112878;
+      const MAX_LNG = 180;
+      const MIN_LNG = -180;
+
+      try {
+        // Transform from Source projection to WGS84 (Lat/Lng)
+        // deck.gl TileLayer expects extent in longitude/latitude coordinates
+        const transformSourceToWGS84 = (coord: [number, number]): [number, number] => {
+          return proj4(this.fromProjection, 'EPSG:4326', coord) as [number, number];
+        };
+
+        // Helper to validate coordinates
+        const isValidCoord = (coord: [number, number]): boolean => {
+          return (
+            coord &&
+            coord.length === 2 &&
+            Number.isFinite(coord[0]) &&
+            Number.isFinite(coord[1]) &&
+            !Number.isNaN(coord[0]) &&
+            !Number.isNaN(coord[1])
+          );
+        };
+
+        // Helper to clamp to valid WGS84 ranges
+        const clampLng = (value: number): number => {
+          return Math.max(MIN_LNG, Math.min(MAX_LNG, value));
+        };
+
+        const clampLat = (value: number): number => {
+          return Math.max(MIN_LAT, Math.min(MAX_LAT, value));
+        };
+
+        // Transform all four corners from Source to WGS84
+        const sw = transformSourceToWGS84([srcWest, srcSouth]);
+        const se = transformSourceToWGS84([srcEast, srcSouth]);
+        const nw = transformSourceToWGS84([srcWest, srcNorth]);
+        const ne = transformSourceToWGS84([srcEast, srcNorth]);
+
+        // Validate all transformed coordinates
+        if (!isValidCoord(sw) || !isValidCoord(se) || !isValidCoord(nw) || !isValidCoord(ne)) {
+          warn('[deck][geotiff] Invalid coordinates after transformation:', { sw, se, nw, ne });
+          return null;
+        }
+
+        // Calculate bounding box in WGS84 coordinates (lng, lat)
+        // Note: sw[0] = lng, sw[1] = lat
+        let minLng = Math.min(sw[0], se[0], nw[0], ne[0]);
+        let maxLng = Math.max(sw[0], se[0], nw[0], ne[0]);
+        let minLat = Math.min(sw[1], se[1], nw[1], ne[1]);
+        let maxLat = Math.max(sw[1], se[1], nw[1], ne[1]);
+
+        // Clamp to valid WGS84 ranges
+        minLng = clampLng(minLng);
+        maxLng = clampLng(maxLng);
+        minLat = clampLat(minLat);
+        maxLat = clampLat(maxLat);
+
+        // Final validation
+        if (!Number.isFinite(minLng) || !Number.isFinite(maxLng) ||
+            !Number.isFinite(minLat) || !Number.isFinite(maxLat)) {
+          warn('[deck][geotiff] Invalid extent calculated:', { minLng, minLat, maxLng, maxLat });
+          return null;
+        }
+
+        // Check if extent was clamped
+        const wasClamped =
+          minLng === MIN_LNG || maxLng === MAX_LNG ||
+          minLat === MIN_LAT || maxLat === MAX_LAT;
+
+        if (wasClamped) {
+          warn('[deck][geotiff] GeoTIFF extent exceeds valid bounds - clamped to valid range');
+        }
+
+        // Return in deck.gl extent format: [minX, minY, maxX, maxY] = [minLng, minLat, maxLng, maxLat]
+        return [minLng, minLat, maxLng, maxLat];
+      } catch (err) {
+        warn('[deck][geotiff] Failed to calculate extent from source bounds:', err);
+        return null;
+      }
+    }
+
     // ============================================================================
     // TILE DATA GENERATION
     // ============================================================================
@@ -377,16 +472,24 @@ export async function createDeckGLGeoTIFFLayer(
       if (!this.image) return null;
 
       const { minZoom, maxZoom, tileSize } = this.props;
+      const extent = this.getViewExtent();
 
-      return new TileLayer({
+      // Log extent for debugging
+      if (extent) {
+        log(`[deck][geotiff] View extent: [${extent.map(v => v.toFixed(2)).join(', ')}]`);
+      } else {
+        warn('[deck][geotiff] View extent is null - tiles will load globally');
+      }
+
+      // Only pass extent if it's valid, otherwise let TileLayer use global extent
+      const layerConfig: any = {
         id: `${this.props.id}-tiles`,
         minZoom,
         maxZoom,
         tileSize,
         getTileData: this.getTileData.bind(this),
-        //        getTileData: (tileProps: any) => this.getTileData(tileProps),
-        onTileError: err => {
-          log(`[deck][tilelayer] Error: ${err}`);
+        onTileError: (err: Error) => {
+          warn(`[deck][tilelayer] Error: ${err.message}`);
         },
         renderSubLayers: (subProps: any) => {
           const { tile } = subProps;
@@ -414,7 +517,14 @@ export async function createDeckGLGeoTIFFLayer(
             },
           });
         },
-      });
+      };
+
+      // Only add extent if it's valid
+      if (extent) {
+        layerConfig.extent = extent;
+      }
+
+      return new TileLayer(layerConfig);
     }
 
     // ============================================================================

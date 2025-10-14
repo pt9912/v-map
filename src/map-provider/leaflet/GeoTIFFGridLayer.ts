@@ -154,6 +154,9 @@ export class GeoTIFFGridLayer extends L.GridLayer {
     });
     this.tileProcessor.createGlobalTriangulation();
 
+    // Set bounds to restrict tile loading to GeoTIFF coverage area
+    this.setViewBounds(source.sourceBounds, transformSourceMapToViewFn);
+
     if (this.geotiffOptions.colorMap) {
       const { stops } = getColorStops(
         this.geotiffOptions.colorMap,
@@ -161,5 +164,35 @@ export class GeoTIFFGridLayer extends L.GridLayer {
       );
       this.colorStops = stops;
     }
+  }
+
+  /**
+   * Set Leaflet bounds from GeoTIFF source bounds
+   * Restricts tile loading to the GeoTIFF coverage area
+   */
+  private setViewBounds(
+    sourceBounds: [number, number, number, number],
+    transformSourceToView: (coord: [number, number]) => [number, number],
+  ): void {
+    const [srcWest, srcSouth, srcEast, srcNorth] = sourceBounds;
+
+    // Transform corners from Source to View (Web Mercator for Leaflet)
+    const sw = transformSourceToView([srcWest, srcSouth]);
+    const se = transformSourceToView([srcEast, srcSouth]);
+    const nw = transformSourceToView([srcWest, srcNorth]);
+    const ne = transformSourceToView([srcEast, srcNorth]);
+
+    // Calculate bounds in View coordinates
+    const minX = Math.min(sw[0], se[0], nw[0], ne[0]);
+    const maxX = Math.max(sw[0], se[0], nw[0], ne[0]);
+    const minY = Math.min(sw[1], se[1], nw[1], ne[1]);
+    const maxY = Math.max(sw[1], se[1], nw[1], ne[1]);
+
+    // Convert to Leaflet LatLngBounds (Web Mercator meters to lat/lng)
+    const southWest = L.CRS.EPSG3857.unproject(L.point(minX, maxY));
+    const northEast = L.CRS.EPSG3857.unproject(L.point(maxX, minY));
+
+    // Set bounds option - Leaflet will use this to restrict tile loading
+    (this as any).options.bounds = L.latLngBounds(southWest, northEast);
   }
 }
