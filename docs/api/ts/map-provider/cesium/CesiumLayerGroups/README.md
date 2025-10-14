@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / map-provider/cesium/CesiumLayerGroups
+[@npm9912/v-map](../../../README.md) / map-provider/cesium/CesiumLayerGroups
 
 # map-provider/cesium/CesiumLayerGroups
 

@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [index](../../README.md) / Components
+[@npm9912/v-map](../../../README.md) / [index](../../README.md) / Components
 
 # Components
 

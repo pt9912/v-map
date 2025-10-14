@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [utils/diff](../README.md) / LayerGroup
+[@npm9912/v-map](../../../README.md) / [utils/diff](../README.md) / LayerGroup
 
 # Interface: LayerGroup
 
-Defined in: [src/utils/diff.ts:24](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L24)
+Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L29)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/diff.ts:24](https://github.com/pt9912/v-map/blob/20407f37
 
 > **groupTitle**: `string`
 
-Defined in: [src/utils/diff.ts:25](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L25)
+Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L30)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/diff.ts:25](https://github.com/pt9912/v-map/blob/20407f37
 
 > **layers**: [`NormalizedLayer`](NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:27](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L27)
+Defined in: [src/utils/diff.ts:32](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L32)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/utils/diff.ts:27](https://github.com/pt9912/v-map/blob/20407f37
 
 > `optional` **visible**: `string` \| `boolean`
 
-Defined in: [src/utils/diff.ts:26](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L26)
+Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L31)

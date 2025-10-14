@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../../README.md) / [index](../../../README.md) / [Components](../README.md) / VMapLayerWcs
+[@npm9912/v-map](../../../../README.md) / [index](../../../README.md) / [Components](../README.md) / VMapLayerWcs
 
 # Interface: VMapLayerWcs
 
-Defined in: [src/components.d.ts:383](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L383)
+Defined in: [src/components.d.ts:398](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L398)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:383](https://github.com/pt9912/v-map/blob/20407
 
 > **coverageName**: `string`
 
-Defined in: [src/components.d.ts:387](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L387)
+Defined in: [src/components.d.ts:402](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L402)
 
 Coverage-Name/ID.
 
@@ -24,7 +24,7 @@ Coverage-Name/ID.
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:392](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L392)
+Defined in: [src/components.d.ts:407](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L407)
 
 Ausgabeformat, z. B. image/tiff.
 
@@ -40,7 +40,7 @@ Ausgabeformat, z. B. image/tiff.
 
 > **isReady**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:396](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L396)
+Defined in: [src/components.d.ts:411](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L411)
 
 Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
@@ -54,7 +54,7 @@ Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:401](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L401)
+Defined in: [src/components.d.ts:416](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L416)
 
 Opazität (0–1).
 
@@ -70,7 +70,7 @@ Opazität (0–1).
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:405](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L405)
+Defined in: [src/components.d.ts:420](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L420)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -80,7 +80,7 @@ Zusätzliche Parameter als JSON-String.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/components.d.ts:409](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L409)
+Defined in: [src/components.d.ts:424](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L424)
 
 Projektion (Projection) für die Quelle.
 
@@ -90,7 +90,7 @@ Projektion (Projection) für die Quelle.
 
 > `optional` **resolutions**: `string`
 
-Defined in: [src/components.d.ts:413](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L413)
+Defined in: [src/components.d.ts:428](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L428)
 
 Auflösungen als JSON-Array, z. B. [1000,500].
 
@@ -100,7 +100,7 @@ Auflösungen als JSON-Array, z. B. [1000,500].
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:417](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L417)
+Defined in: [src/components.d.ts:432](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L432)
 
 Basis-URL des WCS-Dienstes.
 
@@ -110,7 +110,7 @@ Basis-URL des WCS-Dienstes.
 
 > **version**: `string`
 
-Defined in: [src/components.d.ts:422](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L422)
+Defined in: [src/components.d.ts:437](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L437)
 
 WCS-Version.
 
@@ -126,7 +126,7 @@ WCS-Version.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:427](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L427)
+Defined in: [src/components.d.ts:442](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L442)
 
 Sichtbarkeit des Layers.
 
@@ -142,7 +142,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:432](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/components.d.ts#L432)
+Defined in: [src/components.d.ts:447](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/components.d.ts#L447)
 
 Z-Index für die Darstellung.
 

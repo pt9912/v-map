@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../../README.md) / [map-provider/ol/openlayers-provider](../README.md) / OpenLayersProvider
+[@npm9912/v-map](../../../../README.md) / [map-provider/ol/openlayers-provider](../README.md) / OpenLayersProvider
 
 # Class: OpenLayersProvider
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:23](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L23)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:49](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L49)
 
 ## Implements
 
@@ -28,7 +28,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:23](https://github.com/p
 
 > **addBaseLayer**(`layerConfig`, `basemapid`, `layerElementId`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:135](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L135)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:173](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L173)
 
 #### Parameters
 
@@ -56,9 +56,9 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:135](https://github.com/
 
 ### addLayerToGroup()
 
-> **addLayerToGroup**(`layerConfig`, `groupId`): `Promise`\<`string`\>
+> **addLayerToGroup**(`layerConfig`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:184](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L184)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:231](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L231)
 
 Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
 
@@ -67,10 +67,6 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 ##### layerConfig
 
 [`LayerConfig`](../../../../types/layerconfig/type-aliases/LayerConfig.md)
-
-##### groupId
-
-`string`
 
 #### Returns
 
@@ -86,7 +82,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:58](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L58)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:80](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L80)
 
 #### Returns
 
@@ -98,11 +94,43 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:58](https://github.com/p
 
 ***
 
+### ensureGroup()
+
+> **ensureGroup**(`groupId`, `visible`, `_opts?`): `Promise`\<`void`\>
+
+Defined in: [src/map-provider/ol/openlayers-provider.ts:115](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L115)
+
+#### Parameters
+
+##### groupId
+
+`string`
+
+##### visible
+
+`boolean`
+
+##### \_opts?
+
+###### basemapid?
+
+`string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Implementation of
+
+[`MapProvider`](../../../../types/mapprovider/interfaces/MapProvider.md).[`ensureGroup`](../../../../types/mapprovider/interfaces/MapProvider.md#ensuregroup)
+
+***
+
 ### getMap()
 
 > **getMap**(): `Map`
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1659](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1659)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1543](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1543)
 
 #### Returns
 
@@ -114,7 +142,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1659](https://github.com
 
 > **init**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:30](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L30)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:56](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L56)
 
 #### Parameters
 
@@ -136,7 +164,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:30](https://github.com/p
 
 > **removeLayer**(`layerId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1218](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1218)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1112](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1112)
 
 #### Parameters
 
@@ -158,7 +186,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1218](https://github.com
 
 > **setBaseLayer**(`groupId`, `layerElementId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:110](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L110)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:148](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L148)
 
 #### Parameters
 
@@ -184,7 +212,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:110](https://github.com/
 
 > **setGroupVisible**(`groupId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1257](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1257)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1151](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1151)
 
 #### Parameters
 
@@ -210,7 +238,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1257](https://github.com
 
 > **setOpacity**(`layerId`, `opacity`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1230](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1230)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1124](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1124)
 
 #### Parameters
 
@@ -236,7 +264,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1230](https://github.com
 
 > **setView**(`center`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1162](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1162)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1058](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1058)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
@@ -264,7 +292,7 @@ View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promis
 
 > **setVisible**(`layerId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1250](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1250)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1144](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1144)
 
 #### Parameters
 
@@ -290,7 +318,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1250](https://github.com
 
 > **setZIndex**(`layerId`, `zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:1240](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L1240)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:1134](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L1134)
 
 #### Parameters
 
@@ -316,7 +344,7 @@ Defined in: [src/map-provider/ol/openlayers-provider.ts:1240](https://github.com
 
 > **updateLayer**(`layerId`, `update`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/ol/openlayers-provider.ts:63](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/map-provider/ol/openlayers-provider.ts#L63)
+Defined in: [src/map-provider/ol/openlayers-provider.ts:85](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/map-provider/ol/openlayers-provider.ts#L85)
 
 #### Parameters
 

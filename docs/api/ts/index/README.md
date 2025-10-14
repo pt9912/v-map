@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../README.md)
+[**@npm9912/v-map**](../README.md)
 
 ***
 
-[@pt9912/v-map](../README.md) / index
+[@npm9912/v-map](../README.md) / index
 
 # index
 
@@ -13,6 +13,7 @@
 
 ## Interfaces
 
+- [GeoStylerColorMap](interfaces/GeoStylerColorMap.md)
 - [VMapBuilderCustomEvent](interfaces/VMapBuilderCustomEvent.md)
 - [VMapCustomEvent](interfaces/VMapCustomEvent.md)
 - [VMapLayerGeotiffCustomEvent](interfaces/VMapLayerGeotiffCustomEvent.md)
@@ -46,12 +47,6 @@ Re-exports [CssMode](../types/cssmode/type-aliases/CssMode.md)
 ### Flavour
 
 Re-exports [Flavour](../types/flavour/type-aliases/Flavour.md)
-
-***
-
-### LayerConfig
-
-Re-exports [LayerConfig](../types/layerconfig/type-aliases/LayerConfig.md)
 
 ***
 

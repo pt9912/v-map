@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../../README.md)
+[**@npm9912/v-map**](../../README.md)
 
 ***
 
-[@pt9912/v-map](../../README.md) / utils/spatial-utils
+[@npm9912/v-map](../../README.md) / utils/spatial-utils
 
 # utils/spatial-utils
 

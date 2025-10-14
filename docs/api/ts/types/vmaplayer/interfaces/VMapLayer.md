@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [types/vmaplayer](../README.md) / VMapLayer
+[@npm9912/v-map](../../../README.md) / [types/vmaplayer](../README.md) / VMapLayer
 
 # Interface: VMapLayer
 
-Defined in: [src/types/vmaplayer.ts:4](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/vmaplayer.ts#L4)
+Defined in: [src/types/vmaplayer.ts:4](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/vmaplayer.ts#L4)
 
 Gemeinsame API für alle Map‑Layer‑Components.
 
@@ -16,7 +16,7 @@ Gemeinsame API für alle Map‑Layer‑Components.
 
 > **opacity**: `number`
 
-Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/vmaplayer.ts#L7)
+Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/vmaplayer.ts#L7)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/2040
 
 > **visible**: `boolean`
 
-Defined in: [src/types/vmaplayer.ts:6](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/vmaplayer.ts#L6)
+Defined in: [src/types/vmaplayer.ts:6](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/vmaplayer.ts#L6)
 
 Sichtbarkeit des Layers
 
@@ -34,7 +34,7 @@ Sichtbarkeit des Layers
 
 > **zIndex**: `number`
 
-Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/vmaplayer.ts#L8)
+Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/vmaplayer.ts#L8)
 
 ## Methods
 
@@ -42,7 +42,7 @@ Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/2040
 
 > `optional` **isReady**(): `boolean`
 
-Defined in: [src/types/vmaplayer.ts:10](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/vmaplayer.ts#L10)
+Defined in: [src/types/vmaplayer.ts:10](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/vmaplayer.ts#L10)
 
 #### Returns
 

@@ -1,10 +1,14 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / map-provider/leaflet/leaflet-provider-arcgis.spec
+[@npm9912/v-map](../../../README.md) / map-provider/leaflet/leaflet-provider-arcgis.spec
 
 # map-provider/leaflet/leaflet-provider-arcgis.spec
+
+## Classes
+
+- [MockLayerGroup](classes/MockLayerGroup.md)
 
 ## Variables
 

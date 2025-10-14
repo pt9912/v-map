@@ -1,14 +1,14 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [utils/diff](../README.md) / diffLayers
+[@npm9912/v-map](../../../README.md) / [utils/diff](../README.md) / diffLayers
 
 # Function: diffLayers()
 
 > **diffLayers**(`oldLayers`, `newLayers`): [`LayersDiff`](../type-aliases/LayersDiff.md)
 
-Defined in: [src/utils/diff.ts:201](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L201)
+Defined in: [src/utils/diff.ts:206](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L206)
 
 Computes added/removed/updated/moved/unchanged
 

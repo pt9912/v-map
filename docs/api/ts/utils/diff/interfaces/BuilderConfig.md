@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [utils/diff](../README.md) / BuilderConfig
+[@npm9912/v-map](../../../README.md) / [utils/diff](../README.md) / BuilderConfig
 
 # Interface: BuilderConfig
 
-Defined in: [src/utils/diff.ts:48](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L48)
+Defined in: [src/utils/diff.ts:53](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L53)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/utils/diff.ts:48](https://github.com/pt9912/v-map/blob/20407f37
 
 > **map**: [`MapConfig`](MapConfig.md)
 
-Defined in: [src/utils/diff.ts:49](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L49)
+Defined in: [src/utils/diff.ts:54](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L54)

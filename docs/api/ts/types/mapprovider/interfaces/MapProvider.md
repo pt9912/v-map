@@ -1,12 +1,12 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [types/mapprovider](../README.md) / MapProvider
+[@npm9912/v-map](../../../README.md) / [types/mapprovider](../README.md) / MapProvider
 
 # Interface: MapProvider
 
-Defined in: [src/types/mapprovider.ts:10](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L10)
+Defined in: [src/types/mapprovider.ts:10](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L10)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/types/mapprovider.ts:10](https://github.com/pt9912/v-map/blob/2
 
 > `optional` **addBaseLayer**(`layerConfig`, `basemapid`, `layerElementId`): `Promise`\<`string`\>
 
-Defined in: [src/types/mapprovider.ts:23](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L23)
+Defined in: [src/types/mapprovider.ts:23](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L23)
 
 #### Parameters
 
@@ -38,9 +38,9 @@ Defined in: [src/types/mapprovider.ts:23](https://github.com/pt9912/v-map/blob/2
 
 ### addLayerToGroup()
 
-> **addLayerToGroup**(`layer`, `groupId`): `Promise`\<`string`\>
+> **addLayerToGroup**(`layer`): `Promise`\<`string`\>
 
-Defined in: [src/types/mapprovider.ts:19](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L19)
+Defined in: [src/types/mapprovider.ts:19](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L19)
 
 Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
 
@@ -49,10 +49,6 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 ##### layer
 
 [`LayerConfig`](../../layerconfig/type-aliases/LayerConfig.md)
-
-##### groupId
-
-`string`
 
 #### Returns
 
@@ -64,7 +60,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:12](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L12)
+Defined in: [src/types/mapprovider.ts:12](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L12)
 
 #### Returns
 
@@ -72,13 +68,11 @@ Defined in: [src/types/mapprovider.ts:12](https://github.com/pt9912/v-map/blob/2
 
 ***
 
-### ensureGroup()?
+### ensureGroup()
 
-> `optional` **ensureGroup**(`groupId`, `opts?`): `Promise`\<`void`\>
+> **ensureGroup**(`groupId`, `visible`, `opts?`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:34](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L34)
-
-Optional: von v-map-layergroup genutzt, wenn vorhanden
+Defined in: [src/types/mapprovider.ts:33](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L33)
 
 #### Parameters
 
@@ -86,15 +80,15 @@ Optional: von v-map-layergroup genutzt, wenn vorhanden
 
 `string`
 
-##### opts?
-
-###### basemap?
+##### visible
 
 `boolean`
 
-###### zIndex?
+##### opts?
 
-`number`
+###### basemapid?
+
+`string`
 
 #### Returns
 
@@ -106,7 +100,7 @@ Optional: von v-map-layergroup genutzt, wenn vorhanden
 
 > **init**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:11](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L11)
+Defined in: [src/types/mapprovider.ts:11](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L11)
 
 #### Parameters
 
@@ -124,7 +118,7 @@ Defined in: [src/types/mapprovider.ts:11](https://github.com/pt9912/v-map/blob/2
 
 > **removeLayer**(`layerId`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:21](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L21)
+Defined in: [src/types/mapprovider.ts:21](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L21)
 
 #### Parameters
 
@@ -142,7 +136,7 @@ Defined in: [src/types/mapprovider.ts:21](https://github.com/pt9912/v-map/blob/2
 
 > `optional` **setBaseLayer**(`groupId`, `layerElementId`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:28](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L28)
+Defined in: [src/types/mapprovider.ts:28](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L28)
 
 #### Parameters
 
@@ -164,7 +158,7 @@ Defined in: [src/types/mapprovider.ts:28](https://github.com/pt9912/v-map/blob/2
 
 > `optional` **setGroupVisible**(`groupId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:39](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L39)
+Defined in: [src/types/mapprovider.ts:39](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L39)
 
 #### Parameters
 
@@ -186,7 +180,7 @@ Defined in: [src/types/mapprovider.ts:39](https://github.com/pt9912/v-map/blob/2
 
 > **setOpacity**(`layerId`, `opacity`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:14](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L14)
+Defined in: [src/types/mapprovider.ts:14](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L14)
 
 #### Parameters
 
@@ -208,7 +202,7 @@ Defined in: [src/types/mapprovider.ts:14](https://github.com/pt9912/v-map/blob/2
 
 > **setView**(`center`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:31](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L31)
+Defined in: [src/types/mapprovider.ts:31](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L31)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
@@ -232,7 +226,7 @@ View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promis
 
 > **setVisible**(`layerId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:15](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L15)
+Defined in: [src/types/mapprovider.ts:15](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L15)
 
 #### Parameters
 
@@ -254,7 +248,7 @@ Defined in: [src/types/mapprovider.ts:15](https://github.com/pt9912/v-map/blob/2
 
 > **setZIndex**(`layerId`, `zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:16](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L16)
+Defined in: [src/types/mapprovider.ts:16](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L16)
 
 #### Parameters
 
@@ -276,7 +270,7 @@ Defined in: [src/types/mapprovider.ts:16](https://github.com/pt9912/v-map/blob/2
 
 > **updateLayer**(`layerId`, `update`): `Promise`\<`void`\>
 
-Defined in: [src/types/mapprovider.ts:20](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/types/mapprovider.ts#L20)
+Defined in: [src/types/mapprovider.ts:20](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/types/mapprovider.ts#L20)
 
 #### Parameters
 

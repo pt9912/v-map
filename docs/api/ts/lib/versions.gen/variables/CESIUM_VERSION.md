@@ -1,11 +1,11 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [lib/versions.gen](../README.md) / CESIUM\_VERSION
+[@npm9912/v-map](../../../README.md) / [lib/versions.gen](../README.md) / CESIUM\_VERSION
 
 # Variable: CESIUM\_VERSION
 
-> `const` **CESIUM\_VERSION**: `"1.133.1"`
+> `const` **CESIUM\_VERSION**: `"1.134.0"`
 
-Defined in: [src/lib/versions.gen.ts:2](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/lib/versions.gen.ts#L2)
+Defined in: [src/lib/versions.gen.ts:2](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/lib/versions.gen.ts#L2)

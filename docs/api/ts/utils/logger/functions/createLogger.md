@@ -1,14 +1,14 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [utils/logger](../README.md) / createLogger
+[@npm9912/v-map](../../../README.md) / [utils/logger](../README.md) / createLogger
 
 # Function: createLogger()
 
 > **createLogger**(`namespace`): `object`
 
-Defined in: [src/utils/logger.ts:168](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/logger.ts#L168)
+Defined in: [src/utils/logger.ts:186](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/logger.ts#L186)
 
 Erzeugt eine Logger-Instanz mit Namespace-Präfix.
 Ideal für Komponenten: `const log = createLogger('MyComponent');`

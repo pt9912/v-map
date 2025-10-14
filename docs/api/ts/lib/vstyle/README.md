@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../../README.md)
+[**@npm9912/v-map**](../../README.md)
 
 ***
 
-[@pt9912/v-map](../../README.md) / lib/vstyle
+[@npm9912/v-map](../../README.md) / lib/vstyle
 
 # lib/vstyle
 

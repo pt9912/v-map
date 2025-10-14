@@ -1,14 +1,14 @@
-[**@pt9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../README.md)
 
 ***
 
-[@pt9912/v-map](../../../README.md) / [utils/diff](../README.md) / LayersDiff
+[@npm9912/v-map](../../../README.md) / [utils/diff](../README.md) / LayersDiff
 
 # Type Alias: LayersDiff
 
 > **LayersDiff** = `object`
 
-Defined in: [src/utils/diff.ts:84](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L84)
+Defined in: [src/utils/diff.ts:89](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L89)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/diff.ts:84](https://github.com/pt9912/v-map/blob/20407f37
 
 > **added**: [`NormalizedLayer`](../interfaces/NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:85](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L85)
+Defined in: [src/utils/diff.ts:90](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L90)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/diff.ts:85](https://github.com/pt9912/v-map/blob/20407f37
 
 > **moved**: `object`[]
 
-Defined in: [src/utils/diff.ts:88](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L88)
+Defined in: [src/utils/diff.ts:93](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L93)
 
 #### from
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/diff.ts:88](https://github.com/pt9912/v-map/blob/20407f37
 
 > **removed**: [`NormalizedLayer`](../interfaces/NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:86](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L86)
+Defined in: [src/utils/diff.ts:91](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L91)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/diff.ts:86](https://github.com/pt9912/v-map/blob/20407f37
 
 > **unchangedIds**: `string`[]
 
-Defined in: [src/utils/diff.ts:89](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L89)
+Defined in: [src/utils/diff.ts:94](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L94)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/diff.ts:89](https://github.com/pt9912/v-map/blob/20407f37
 
 > **updated**: [`LayerPatch`](LayerPatch.md)[]
 
-Defined in: [src/utils/diff.ts:87](https://github.com/pt9912/v-map/blob/20407f373f7ebc2682ca79717d899afeb8b11ae8/src/utils/diff.ts#L87)
+Defined in: [src/utils/diff.ts:92](https://github.com/pt9912/v-map/blob/e518137190bb28e24057fa358ac57a05d246037f/src/utils/diff.ts#L92)

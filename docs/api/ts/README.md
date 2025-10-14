@@ -1,8 +1,8 @@
-**@pt9912/v-map**
+**@npm9912/v-map**
 
 ***
 
-# @pt9912/v-map
+# @npm9912/v-map
 
 ## Modules
 
@@ -17,6 +17,7 @@
 - [map-provider/cesium/cesium-provider-google.spec](map-provider/cesium/cesium-provider-google.spec/README.md)
 - [map-provider/cesium/cesium-provider-xyz.spec](map-provider/cesium/cesium-provider-xyz.spec/README.md)
 - [map-provider/cesium/CesiumLayerGroups](map-provider/cesium/CesiumLayerGroups/README.md)
+- [map-provider/cesium/GeoTIFFImageryProvider](map-provider/cesium/GeoTIFFImageryProvider/README.md)
 - [map-provider/cesium/i-layer](map-provider/cesium/i-layer/README.md)
 - [map-provider/cesium/layer-manager](map-provider/cesium/layer-manager/README.md)
 - [map-provider/deck/deck-provider](map-provider/deck/deck-provider/README.md)
@@ -24,14 +25,36 @@
 - [map-provider/deck/deck-provider-geostyler.spec](map-provider/deck/deck-provider-geostyler.spec/README.md)
 - [map-provider/deck/deck-provider-google.spec](map-provider/deck/deck-provider-google.spec/README.md)
 - [map-provider/deck/deck-provider-terrain.spec](map-provider/deck/deck-provider-terrain.spec/README.md)
+- [map-provider/deck/DeckGLGeoTIFFLayer](map-provider/deck/DeckGLGeoTIFFLayer/README.md)
 - [map-provider/deck/LayerGroups](map-provider/deck/LayerGroups/README.md)
 - [map-provider/deck/LayerGroupWithModel](map-provider/deck/LayerGroupWithModel/README.md)
 - [map-provider/deck/LayerModel](map-provider/deck/LayerModel/README.md)
 - [map-provider/deck/RenderableGroup](map-provider/deck/RenderableGroup/README.md)
+- [map-provider/deck/reprojected-cog-bitmaplayer](map-provider/deck/reprojected-cog-bitmaplayer/README.md)
+- [map-provider/geotiff/geotiff-source](map-provider/geotiff/geotiff-source/README.md)
+- [map-provider/geotiff/utils/AABB2D](map-provider/geotiff/utils/AABB2D/README.md)
+- [map-provider/geotiff/utils/AABB2D.spec](map-provider/geotiff/utils/AABB2D.spec/README.md)
+- [map-provider/geotiff/utils/BVHNode2D](map-provider/geotiff/utils/BVHNode2D/README.md)
+- [map-provider/geotiff/utils/BVHNode2D.spec](map-provider/geotiff/utils/BVHNode2D.spec/README.md)
+- [map-provider/geotiff/utils/colormap-utils](map-provider/geotiff/utils/colormap-utils/README.md)
+- [map-provider/geotiff/utils/colormap-utils.spec](map-provider/geotiff/utils/colormap-utils.spec/README.md)
+- [map-provider/geotiff/utils/GeoTIFFTileProcessor](map-provider/geotiff/utils/GeoTIFFTileProcessor/README.md)
+- [map-provider/geotiff/utils/GeoTIFFTileProcessor.spec](map-provider/geotiff/utils/GeoTIFFTileProcessor.spec/README.md)
+- [map-provider/geotiff/utils/normalization-utils](map-provider/geotiff/utils/normalization-utils/README.md)
+- [map-provider/geotiff/utils/normalization-utils.spec](map-provider/geotiff/utils/normalization-utils.spec/README.md)
+- [map-provider/geotiff/utils/sampling-utils](map-provider/geotiff/utils/sampling-utils/README.md)
+- [map-provider/geotiff/utils/sampling-utils.spec](map-provider/geotiff/utils/sampling-utils.spec/README.md)
+- [map-provider/geotiff/utils/Triangle](map-provider/geotiff/utils/Triangle/README.md)
+- [map-provider/geotiff/utils/Triangulation](map-provider/geotiff/utils/Triangulation/README.md)
+- [map-provider/geotiff/utils/Triangulation.ext.spec](map-provider/geotiff/utils/Triangulation.ext.spec/README.md)
+- [map-provider/geotiff/utils/Triangulation.spec](map-provider/geotiff/utils/Triangulation.spec/README.md)
+- [map-provider/leaflet/GeoTIFFGridLayer](map-provider/leaflet/GeoTIFFGridLayer/README.md)
+- [map-provider/leaflet/google-map-tiles-layer](map-provider/leaflet/google-map-tiles-layer/README.md)
 - [map-provider/leaflet/leaflet-helpers](map-provider/leaflet/leaflet-helpers/README.md)
 - [map-provider/leaflet/leaflet-provider](map-provider/leaflet/leaflet-provider/README.md)
 - [map-provider/leaflet/leaflet-provider-arcgis.spec](map-provider/leaflet/leaflet-provider-arcgis.spec/README.md)
 - [map-provider/leaflet/leaflet-provider-geostyler.spec](map-provider/leaflet/leaflet-provider-geostyler.spec/README.md)
+- [map-provider/ol/CustomGeoTiff](map-provider/ol/CustomGeoTiff/README.md)
 - [map-provider/ol/openlayers-helper](map-provider/ol/openlayers-helper/README.md)
 - [map-provider/ol/openlayers-provider](map-provider/ol/openlayers-provider/README.md)
 - [map-provider/ol/openlayers-provider-arcgis.spec](map-provider/ol/openlayers-provider-arcgis.spec/README.md)

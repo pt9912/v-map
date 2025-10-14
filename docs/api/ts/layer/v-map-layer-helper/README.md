@@ -1,8 +1,8 @@
-[**@pt9912/v-map**](../../README.md)
+[**@npm9912/v-map**](../../README.md)
 
 ***
 
-[@pt9912/v-map](../../README.md) / layer/v-map-layer-helper
+[@npm9912/v-map](../../README.md) / layer/v-map-layer-helper
 
 # layer/v-map-layer-helper
 
