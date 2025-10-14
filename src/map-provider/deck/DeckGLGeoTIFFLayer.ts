@@ -173,6 +173,11 @@ export async function createDeckGLGeoTIFFLayer(
       super(layerProps);
     }
 
+    private async _loadAsync() {
+      await this.loadGeoTIFF();
+      this.setState({ init: true });
+      log(this.state);
+    }
     // ============================================================================
     // LIFECYCLE METHODS
     // ============================================================================
@@ -182,11 +187,8 @@ export async function createDeckGLGeoTIFFLayer(
      */
     async initializeState(_context?: any): Promise<void> {
       log(this.state);
-
       this.setState({ init: false });
-      await this.loadGeoTIFF();
-
-      this.setState({ init: true });
+      this._loadAsync();
       log(this.state);
     }
 
@@ -209,17 +211,45 @@ export async function createDeckGLGeoTIFFLayer(
       oldProps,
       changeFlags,
     }: UpdateParameters<any>): void {
-      // Wenn sich die Data-URL geändert hat, lade GeoTIFF neu
-      if (changeFlags.dataChanged || newProps.data !== oldProps.data) {
-        this.loadGeoTIFF();
-        this.setState({});
+      const reloadPropsChanged =
+        newProps.url !== oldProps.url ||
+        newProps.projection !== oldProps.projection ||
+        newProps.forceProjection !== oldProps.forceProjection ||
+        newProps.noDataValue !== oldProps.noDataValue;
+
+      const valueRangeChanged =
+        Array.isArray(newProps.valueRange) || Array.isArray(oldProps.valueRange)
+          ? !(
+              Array.isArray(newProps.valueRange) &&
+              Array.isArray(oldProps.valueRange) &&
+              newProps.valueRange.length === oldProps.valueRange.length &&
+              newProps.valueRange.every(
+                (val, idx) => val === oldProps.valueRange![idx],
+              )
+            )
+          : false;
+
+      const invalidatePropsChanged =
+        newProps.colorMap !== oldProps.colorMap ||
+        valueRangeChanged ||
+        newProps.resolution !== oldProps.resolution ||
+        newProps.resampleMethod !== oldProps.resampleMethod ||
+        changeFlags.updateTriggersChanged;
+
+      if (
+        changeFlags.dataChanged ||
+        newProps.data !== oldProps.data ||
+        reloadPropsChanged
+      ) {
+        this.setState({ init: false });
+        this._loadAsync();
+        return;
       }
 
-      // Wenn sich die Projektion geändert hat
-      else if (newProps.projection !== oldProps.projection) {
-        this.loadGeoTIFF();
-        this.setState({});
+      if (invalidatePropsChanged) {
+        this.triggerLayerUpdate();
       }
+
       log(this.state);
     }
 
@@ -341,8 +371,13 @@ export async function createDeckGLGeoTIFFLayer(
       try {
         // Transform from Source projection to WGS84 (Lat/Lng)
         // deck.gl TileLayer expects extent in longitude/latitude coordinates
-        const transformSourceToWGS84 = (coord: [number, number]): [number, number] => {
-          return proj4(this.fromProjection, 'EPSG:4326', coord) as [number, number];
+        const transformSourceToWGS84 = (
+          coord: [number, number],
+        ): [number, number] => {
+          return proj4(this.fromProjection, 'EPSG:4326', coord) as [
+            number,
+            number,
+          ];
         };
 
         // Helper to validate coordinates
@@ -373,8 +408,18 @@ export async function createDeckGLGeoTIFFLayer(
         const ne = transformSourceToWGS84([srcEast, srcNorth]);
 
         // Validate all transformed coordinates
-        if (!isValidCoord(sw) || !isValidCoord(se) || !isValidCoord(nw) || !isValidCoord(ne)) {
-          warn('[deck][geotiff] Invalid coordinates after transformation:', { sw, se, nw, ne });
+        if (
+          !isValidCoord(sw) ||
+          !isValidCoord(se) ||
+          !isValidCoord(nw) ||
+          !isValidCoord(ne)
+        ) {
+          warn('[deck][geotiff] Invalid coordinates after transformation:', {
+            sw,
+            se,
+            nw,
+            ne,
+          });
           return null;
         }
 
@@ -392,25 +437,41 @@ export async function createDeckGLGeoTIFFLayer(
         maxLat = clampLat(maxLat);
 
         // Final validation
-        if (!Number.isFinite(minLng) || !Number.isFinite(maxLng) ||
-            !Number.isFinite(minLat) || !Number.isFinite(maxLat)) {
-          warn('[deck][geotiff] Invalid extent calculated:', { minLng, minLat, maxLng, maxLat });
+        if (
+          !Number.isFinite(minLng) ||
+          !Number.isFinite(maxLng) ||
+          !Number.isFinite(minLat) ||
+          !Number.isFinite(maxLat)
+        ) {
+          warn('[deck][geotiff] Invalid extent calculated:', {
+            minLng,
+            minLat,
+            maxLng,
+            maxLat,
+          });
           return null;
         }
 
         // Check if extent was clamped
         const wasClamped =
-          minLng === MIN_LNG || maxLng === MAX_LNG ||
-          minLat === MIN_LAT || maxLat === MAX_LAT;
+          minLng === MIN_LNG ||
+          maxLng === MAX_LNG ||
+          minLat === MIN_LAT ||
+          maxLat === MAX_LAT;
 
         if (wasClamped) {
-          warn('[deck][geotiff] GeoTIFF extent exceeds valid bounds - clamped to valid range');
+          warn(
+            '[deck][geotiff] GeoTIFF extent exceeds valid bounds - clamped to valid range',
+          );
         }
 
         // Return in deck.gl extent format: [minX, minY, maxX, maxY] = [minLng, minLat, maxLng, maxLat]
         return [minLng, minLat, maxLng, maxLat];
       } catch (err) {
-        warn('[deck][geotiff] Failed to calculate extent from source bounds:', err);
+        warn(
+          '[deck][geotiff] Failed to calculate extent from source bounds:',
+          err,
+        );
         return null;
       }
     }
@@ -476,7 +537,11 @@ export async function createDeckGLGeoTIFFLayer(
 
       // Log extent for debugging
       if (extent) {
-        log(`[deck][geotiff] View extent: [${extent.map(v => v.toFixed(2)).join(', ')}]`);
+        log(
+          `[deck][geotiff] View extent: [${extent
+            .map(v => v.toFixed(2))
+            .join(', ')}]`,
+        );
       } else {
         warn('[deck][geotiff] View extent is null - tiles will load globally');
       }
