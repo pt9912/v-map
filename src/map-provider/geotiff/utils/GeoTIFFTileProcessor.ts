@@ -1,4 +1,4 @@
-import type { GeoTIFFImage } from 'geotiff';
+import type { GeoTIFFImage, ReadRasterResult } from 'geotiff';
 import { Triangulation, TriResult, calculateBounds } from './Triangulation';
 import { log, warn } from '../../../utils/logger';
 import {
@@ -337,17 +337,35 @@ export class GeoTIFFTileProcessor {
    */
   private async loadAndConvertRasterData(
     image: GeoTIFFImage,
-    window: ReadWindow,
+    readWindow: ReadWindow,
   ): Promise<{
     rasterBands: TypedArray[];
     arrayType: string;
   }> {
-    const { readXMin, readYMin, readXMax, readYMax } = window;
+    const { readXMin, readYMin, readXMax, readYMax } = readWindow;
 
-    // Read only the needed area from GeoTIFF (COG-optimized!)
-    const rasters = await image.readRasters({
-      window: [readXMin, readYMin, readXMax, readYMax],
-    });
+    let rasters: ReadRasterResult = null;
+    let lasterr = null;
+    for (let i = 0; i <= 2; i++) {
+      try {
+        // Read only the needed area from GeoTIFF (COG-optimized!)
+        rasters = await image.readRasters({
+          window: [readXMin, readYMin, readXMax, readYMax],
+        });
+      } catch (err) {
+        //   warn('Error - readRasters - read window: ', readWindow);
+        lasterr = err;
+      }
+      if (rasters != null) {
+        lasterr = null;
+        break;
+      }
+    }
+    if (lasterr != null) {
+      log(lasterr);
+      warn('Error - readRasters - read window: ', readWindow);
+      throw lasterr;
+    }
 
     // Convert to TypedArray array and detect type
     const rasterBands: TypedArray[] = [];
