@@ -12,7 +12,8 @@ import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
 import Google from 'ol/source/Google';
 import TileArcGISRest from 'ol/source/TileArcGISRest';
-import ImageWMS from 'ol/source/ImageWMS';
+import OlImageWrapper from 'ol/Image';
+import ImageSource from 'ol/source/Image';
 import GeoJSON from 'ol/format/GeoJSON';
 import GML2 from 'ol/format/GML2';
 import GML3 from 'ol/format/GML3';
@@ -1358,6 +1359,87 @@ export class OpenLayersProvider implements MapProvider {
     };
   }
 
+  /**
+   * Erstellt eine WCS GetCoverage URL mit dynamischem BBOX für WCS 2.0.1 und 1.x.x
+   */
+  private getWCSGetCoverageUrl(
+    config: Extract<LayerConfig, { type: 'wcs' }>,
+    resolution: number,
+  ): any {
+    return (extent: number[]) => {
+      const wcsVersion = config.version ?? '2.0.1';
+      const format = config.format ?? 'image/tiff';
+      const projection = config.projection ?? (this.projection as string);
+
+      let params: Record<string, string | number> = {
+        SERVICE: 'WCS',
+        REQUEST: 'GetCoverage',
+        VERSION: wcsVersion,
+        FORMAT: format,
+      };
+
+      // WCS 2.0.1 verwendet andere Parameter als 1.x.x
+      if (wcsVersion.startsWith('2.0')) {
+        // WCS 2.0.1: coverageId und subset Parameter
+        params.coverageId = config.coverageName;
+
+        // BBOX als subset Parameter für WCS 2.0.1
+        // subset=X(minx,maxx)&subset=Y(miny,maxy)
+        const [minx, miny, maxx, maxy] = extent;
+        params['subset'] = `X(${minx},${maxx})`;
+        params['subset2'] = `Y(${miny},${maxy})`;
+
+        // Ausgabeformat-Optionen für GeoTIFF FLOAT32
+        if (format.includes('tiff') || format.includes('geotiff')) {
+          // Für GeoTIFF können wir geotiff:compression etc. in params übergeben
+          params['geotiff:compression'] = 'LZW';
+        }
+      } else {
+        // WCS 1.x.x: COVERAGE und BBOX Parameter
+        params.COVERAGE = config.coverageName;
+        params.BBOX = extent.join(',');
+        params.CRS = projection;
+
+        // Width und Height für 1.x.x berechnen
+        const width = Math.round((extent[2] - extent[0]) / resolution);
+        const height = Math.round((extent[3] - extent[1]) / resolution);
+        params.WIDTH = width;
+        params.HEIGHT = height;
+      }
+
+      // Zusätzliche Parameter aus config hinzufügen (nur string/number)
+      if (config.params) {
+        Object.entries(config.params).forEach(([key, value]) => {
+          if (typeof value === 'string' || typeof value === 'number') {
+            params[key] = value;
+          }
+        });
+      }
+
+      // Für WCS 2.0.1 müssen subset Parameter speziell behandelt werden
+      if (wcsVersion.startsWith('2.0')) {
+        const subset2 = params['subset2'];
+        delete params['subset2'];
+
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            query.append(key, String(value));
+          }
+        });
+        // Zweiten subset Parameter hinzufügen
+        if (subset2) {
+          query.append('subset', String(subset2));
+        }
+
+        const baseUrl = config.url;
+        return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
+      } else {
+        return this.appendParams(config.url, params);
+      }
+    };
+  }
+
   // private async fetchWFSFromUrl(
   //   config: Extract<LayerConfig, { type: 'wfs' }>,
   // ): Promise<any> {
@@ -1477,26 +1559,54 @@ export class OpenLayersProvider implements MapProvider {
     return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${query.toString()}`;
   }
 
+  /**
+   * Erstellt eine WCS Image Source mit dynamischem BBOX-basierten Loading
+   * Unterstützt WCS 2.0.1 und 1.x.x mit GeoTIFF FLOAT32
+   */
   private async createWcsSource(config: Extract<LayerConfig, { type: 'wcs' }>) {
-    const params = {
-      SERVICE: 'WCS',
-      REQUEST: 'GetCoverage',
-      VERSION: config.version ?? '1.1.0',
-      FORMAT: config.format ?? 'image/tiff',
-      COVERAGE: config.coverageName,
-      coverageId: config.coverageName,
-      ...((config.params as any) ?? {}),
-    };
+    const projection = config.projection ?? this.projection;
+    const resolution = this.map?.getView()?.getResolution() ?? 1;
+    const urlFunction = this.getWCSGetCoverageUrl(config, resolution);
 
-    const query = this.appendParams(config.url, params);
+    // Custom Image Source für WCS mit dynamischem BBOX
+    class WCSImageSource extends ImageSource {
+      private urlFunction_: (extent: number[]) => string;
 
-    return new ImageWMS({
-      url: query,
-      params: {},
-      projection: config.projection ?? this.projection,
-      resolutions: config.resolutions,
-      ratio: 1,
-    });
+      constructor(urlFunction: (extent: number[]) => string) {
+        super({
+          projection: projection,
+          resolutions: config.resolutions,
+          // imageLoadFunction wird automatisch verwendet wenn url() implementiert ist
+        });
+        this.urlFunction_ = urlFunction;
+      }
+
+      // Überschreibe url()-Methode für dynamische URL-Generierung
+      getImageInternal(
+        extent: number[],
+        resolution: number,
+        pixelRatio: number,
+        _projection: any,
+      ): any {
+        const url = this.urlFunction_(extent);
+
+        // Erstelle Image mit der generierten URL
+        const image = new OlImageWrapper(extent, resolution, pixelRatio, url);
+
+        // Setze Custom Loader für CORS
+        (image as any).load = () => {
+          const img = (image as any).getImage() as HTMLImageElement;
+          if (img.src !== url) {
+            img.crossOrigin = 'anonymous';
+            img.src = url;
+          }
+        };
+
+        return image;
+      }
+    }
+
+    return new WCSImageSource(urlFunction);
   }
 
   private async createArcGISLayer(
