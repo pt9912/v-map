@@ -176,7 +176,7 @@ describe('WCSGridLayer', () => {
       const coords = { x: 1, y: 2, z: 3 } as any;
       const done = jest.fn();
 
-      const tile = layer.createTile(coords, done);
+      const tile = layer.createTile(coords, done) as HTMLImageElement;
 
       expect(tile.tagName).toBe('IMG');
       expect(tile.crossOrigin).toBe('anonymous');
@@ -201,7 +201,7 @@ describe('WCSGridLayer', () => {
       const coords = { x: 1, y: 2, z: 3 } as any;
       const done = jest.fn();
 
-      const imgTile = layer.createTile(coords, done);
+      const imgTile = layer.createTile(coords, done) as HTMLImageElement;
 
       // Trigger onload handler directly
       if (imgTile.onload) {
@@ -228,7 +228,7 @@ describe('WCSGridLayer', () => {
       const coords = { x: 1, y: 2, z: 3 } as any;
       const done = jest.fn();
 
-      const imgTile = layer.createTile(coords, done);
+      const imgTile = layer.createTile(coords, done) as HTMLImageElement;
 
       // Trigger onerror handler directly
       const errorEvent = new Event('error');

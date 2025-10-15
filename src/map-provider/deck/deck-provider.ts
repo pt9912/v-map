@@ -1006,6 +1006,142 @@ export type TileLoadProps = {
     } as any);
   }
 
+  /**
+   * Build WCS (Web Coverage Service) TileLayer for deck.gl
+   * Supports WCS 2.0.1 (subset) and 1.x.x (BBOX) versions
+   */
+  private async buildWcsTileLayer(
+    cfg: Extract<LayerConfig, { type: 'wcs' }>,
+    layerId: string,
+  ) {
+    const tileSize = cfg.tileSize ?? 256;
+    const version = cfg.version ?? '2.0.1';
+    const format = cfg.format ?? 'image/tiff';
+    const projection = cfg.projection ?? 'EPSG:4326';
+
+    const baseParams: Record<string, string | number> = {
+      SERVICE: 'WCS',
+      REQUEST: 'GetCoverage',
+      VERSION: version,
+      FORMAT: format,
+    };
+
+    return new TileLayer<ImageBitmap | HTMLCanvasElement>({
+      id: layerId,
+      data: [cfg.url],
+      zIndex: 100,
+      tileSize,
+      minZoom: cfg.minZoom ?? 0,
+      maxZoom: cfg.maxZoom ?? 19,
+      opacity: cfg.opacity,
+      maxRequests: 20,
+
+      getTileData: async (tile: _TileLoadProps) => {
+        const { west, south, east, north } = tile.bbox as GeoBoundingBox;
+
+        let params: Record<string, string | number>;
+
+        // WCS 2.0.1 uses subset parameters
+        if (version.startsWith('2.0')) {
+          params = {
+            ...baseParams,
+            coverageId: cfg.coverageName,
+            ...cfg.params,
+          };
+
+          // Add GeoTIFF compression if format is tiff
+          if (format.includes('tiff') || format.includes('geotiff')) {
+            params['geotiff:compression'] = 'LZW';
+          }
+
+          // Build query string with subset parameters
+          const queryString = buildQuery(params);
+          const subsetX = `subset=X(${west},${east})`;
+          const subsetY = `subset=Y(${south},${north})`;
+          const url = `${cfg.url}${queryString}&${subsetX}&${subsetY}`;
+
+          try {
+            const res = await fetch(url, { mode: 'cors' as RequestMode });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const blob = await res.blob();
+            return await createImageBitmap(blob);
+          } catch (e) {
+            // Return transparent fallback tile
+            const canvas = document.createElement('canvas');
+            canvas.width = tileSize;
+            canvas.height = tileSize;
+            const ctx = canvas.getContext('2d');
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
+            return canvas;
+          }
+        }
+        // WCS 1.x.x uses BBOX parameter
+        else {
+          params = {
+            ...baseParams,
+            COVERAGE: cfg.coverageName,
+            BBOX: `${west},${south},${east},${north}`,
+            CRS: projection,
+            WIDTH: tileSize,
+            HEIGHT: tileSize,
+            ...cfg.params,
+          };
+
+          const url = `${cfg.url}${buildQuery(params)}`;
+
+          try {
+            const res = await fetch(url, { mode: 'cors' as RequestMode });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const blob = await res.blob();
+            return await createImageBitmap(blob);
+          } catch (e) {
+            // Return transparent fallback tile
+            const canvas = document.createElement('canvas');
+            canvas.width = tileSize;
+            canvas.height = tileSize;
+            const ctx = canvas.getContext('2d');
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
+            return canvas;
+          }
+        }
+      },
+
+      onTileError: err => {
+        log(`v-map - provider - deck - WCS Tile Error: ${err}`);
+      },
+
+      renderSubLayers: sl => {
+        const { west, south, east, north } = sl.tile.bbox;
+        if (sl.data instanceof HTMLCanvasElement) {
+          return new BitmapLayer({
+            id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`,
+            image: sl.data,
+            coordinates: 'pixel',
+            bounds: [0, 0, sl.tile.width, sl.tile.height],
+          });
+        }
+        return new BitmapLayer({
+          id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`,
+          image: [sl.data],
+          bounds: [west, south, east, north],
+          opacity: sl.opacity ?? 1,
+          pickable: false,
+        });
+      },
+
+      updateTriggers: {
+        getTileData: [
+          cfg.coverageName,
+          cfg.format,
+          cfg.version,
+          cfg.projection,
+          JSON.stringify(cfg.params ?? {}),
+        ],
+        renderSubLayers: ['sl.props.opacity'],
+      },
+    } as any);
+  }
+
   private async createLayer(
     layerConfig: LayerConfig,
     layerId: string,
@@ -1023,6 +1159,11 @@ export type TileLoadProps = {
       case 'wms':
         return this.buildWmsTileLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
+          layerId,
+        );
+      case 'wcs':
+        return this.buildWcsTileLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wcs' }>,
           layerId,
         );
       case 'wfs':
@@ -1255,6 +1396,20 @@ export type TileLoadProps = {
         if (update.data?.crs) ov.crs = update.data.crs;
         if (update.data?.time !== undefined) ov.time = update.data.time;
         if (update.data?.extraParams) ov.extraParams = update.data.extraParams;
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
+        break;
+      }
+      case 'wcs': {
+        const ov: any = {};
+        if (update.data?.url) ov.url = update.data.url;
+        if (update.data?.coverageName) ov.coverageName = update.data.coverageName;
+        if (update.data?.format) ov.format = update.data.format;
+        if (update.data?.version) ov.version = update.data.version;
+        if (update.data?.projection) ov.projection = update.data.projection;
+        if (update.data?.params) ov.params = update.data.params;
+        if (update.data?.tileSize !== undefined) ov.tileSize = update.data.tileSize;
+        if (update.data?.minZoom !== undefined) ov.minZoom = update.data.minZoom;
+        if (update.data?.maxZoom !== undefined) ov.maxZoom = update.data.maxZoom;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
