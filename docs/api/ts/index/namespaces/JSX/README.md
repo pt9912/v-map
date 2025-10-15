@@ -19,6 +19,7 @@
 - [VMapLayerOsm](interfaces/VMapLayerOsm.md)
 - [VMapLayerScatterplot](interfaces/VMapLayerScatterplot.md)
 - [VMapLayerTerrain](interfaces/VMapLayerTerrain.md)
+- [VMapLayerTerrainGeotiff](interfaces/VMapLayerTerrainGeotiff.md)
 - [VMapLayerTile3d](interfaces/VMapLayerTile3d.md)
 - [VMapLayerWcs](interfaces/VMapLayerWcs.md)
 - [VMapLayerWfs](interfaces/VMapLayerWfs.md)

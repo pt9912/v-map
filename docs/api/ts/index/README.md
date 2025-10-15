@@ -20,6 +20,7 @@
 - [VMapLayerGoogleCustomEvent](interfaces/VMapLayerGoogleCustomEvent.md)
 - [VMapLayerOsmCustomEvent](interfaces/VMapLayerOsmCustomEvent.md)
 - [VMapLayerScatterplotCustomEvent](interfaces/VMapLayerScatterplotCustomEvent.md)
+- [VMapLayerTerrainGeotiffCustomEvent](interfaces/VMapLayerTerrainGeotiffCustomEvent.md)
 - [VMapLayerTile3dCustomEvent](interfaces/VMapLayerTile3dCustomEvent.md)
 - [VMapLayerWktCustomEvent](interfaces/VMapLayerWktCustomEvent.md)
 - [VMapLayerWmsCustomEvent](interfaces/VMapLayerWmsCustomEvent.md)

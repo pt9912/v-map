@@ -8,7 +8,7 @@
 
 > **Triangle2D** = `object`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L5)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L5)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt99
 
 > **a**: [`Point2D`](Point2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L6)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L6)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt99
 
 > **b**: [`Point2D`](Point2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L7)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L7)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt99
 
 > **c**: [`Point2D`](Point2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L8)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L8)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt99
 
 > **transform**: `any`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:10](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L10)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:10](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L10)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:10](https://github.com/pt9
 
 > **triangle**: [`ITriangle`](../../Triangle/interfaces/ITriangle.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:9](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/AABB2D.ts#L9)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:9](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/AABB2D.ts#L9)

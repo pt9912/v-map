@@ -8,4 +8,4 @@
 
 > **ColorMapName** = `"grayscale"` \| `"viridis"` \| `"terrain"` \| `"turbo"` \| `"rainbow"`
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:14](https://github.com/pt9912/v-map/blob/fc8df37978e2b7a27dfa37d5760ac799515a8780/src/map-provider/geotiff/utils/colormap-utils.ts#L14)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:14](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/colormap-utils.ts#L14)
