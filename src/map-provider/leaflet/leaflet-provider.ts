@@ -19,6 +19,7 @@ import {
 } from './leaflet-helpers';
 import { GoogleMapTilesLayer } from './google-map-tiles-layer';
 import { GeoTIFFGridLayer } from './GeoTIFFGridLayer';
+import { WCSGridLayer } from './WCSGridLayer';
 import { getColorStops } from '../geotiff/utils/colormap-utils';
 import { wellknown } from 'wellknown';
 import { GmlParser } from '@npm9912/s-gml';
@@ -81,6 +82,9 @@ export class LeafletProvider implements MapProvider {
         break;
       case 'geotiff':
         await this.updateGeoTIFFLayer(layer, update.data);
+        break;
+      case 'wcs':
+        await this.updateWCSLayer(layer, update.data);
         break;
       case 'wfs':
         await this.updateWFSLayer(layer, update.data);
@@ -289,6 +293,10 @@ export class LeafletProvider implements MapProvider {
       case 'wms':
         return this.createWMSLayer(
           layerConfig as Extract<LayerConfig, { type: 'wms' }>,
+        );
+      case 'wcs':
+        return this.createWCSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wcs' }>,
         );
       case 'wfs':
         return this.createWFSLayer(
@@ -849,6 +857,67 @@ export class LeafletProvider implements MapProvider {
       resolution: data.resolution,
       resampleMethod: data.resampleMethod,
     });
+  }
+
+  private async createWCSLayer(
+    config: Extract<LayerConfig, { type: 'wcs' }>,
+  ): Promise<L.GridLayer> {
+    if (!config.url) {
+      throw new Error('WCS layer requires a URL');
+    }
+
+    if (!config.coverageName) {
+      throw new Error('WCS layer requires a coverageName');
+    }
+
+    try {
+      const wcsOptions: any = {
+        url: config.url,
+        coverageName: config.coverageName,
+        version: config.version ?? '2.0.1',
+        format: config.format ?? 'image/tiff',
+        projection: config.projection ?? 'EPSG:4326',
+        params: config.params,
+      };
+
+      // Add GridLayer options
+      if (config.tileSize) wcsOptions.tileSize = config.tileSize;
+      if (config.minZoom !== undefined) wcsOptions.minZoom = config.minZoom;
+      if (config.maxZoom !== undefined) wcsOptions.maxZoom = config.maxZoom;
+
+      const layer = new WCSGridLayer(wcsOptions);
+
+      if (config.opacity !== undefined) {
+        (layer as any).setOpacity(config.opacity);
+      }
+
+      if (config.zIndex !== undefined) {
+        (layer as any).setZIndex(config.zIndex);
+      }
+
+      return layer;
+    } catch (err) {
+      error('[Leaflet WCS] Failed to create WCS layer:', err);
+      // Return a placeholder layer in case of error
+      return L.layerGroup([]) as any;
+    }
+  }
+
+  private async updateWCSLayer(layer: L.Layer, data: any): Promise<void> {
+    if (!layer) return;
+
+    if (layer instanceof WCSGridLayer) {
+      const updateOptions: Partial<any> = {};
+
+      if (data.url) updateOptions.url = data.url;
+      if (data.coverageName) updateOptions.coverageName = data.coverageName;
+      if (data.version) updateOptions.version = data.version;
+      if (data.format) updateOptions.format = data.format;
+      if (data.projection) updateOptions.projection = data.projection;
+      if (data.params) updateOptions.params = data.params;
+
+      layer.updateOptions(updateOptions);
+    }
   }
 
   // ========== Enhanced Styling Methods ==========
