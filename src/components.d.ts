@@ -366,6 +366,97 @@ export namespace Components {
          */
         "zIndex": number;
     }
+    interface VMapLayerTerrainGeotiff {
+        /**
+          * Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.
+          * @default [255, 255, 255]
+         */
+        "color"?: [number, number, number];
+        /**
+          * ColorMap for elevation data visualization. Only relevant when no texture is set.
+          * @default null
+         */
+        "colorMap"?: string | GeoStylerColorMap;
+        /**
+          * Elevation exaggeration factor.
+          * @default 1.0
+         */
+        "elevationScale"?: number;
+        /**
+          * Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
+          * @default false
+         */
+        "forceProjection"?: boolean;
+        /**
+          * Returns the internal layer ID used by the map provider.
+         */
+        "getLayerId": () => Promise<string>;
+        /**
+          * Maximum zoom level.
+          * @default 24
+         */
+        "maxZoom"?: number;
+        /**
+          * Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, but slower.
+          * @default 4.0
+         */
+        "meshMaxError"?: number;
+        /**
+          * Minimum zoom level.
+          * @default 0
+         */
+        "minZoom"?: number;
+        /**
+          * NoData value to discard (overriding any nodata values in the metadata).
+          * @default null
+         */
+        "nodata"?: number;
+        /**
+          * Opacity of the terrain layer (0–1).
+          * @default 1
+         */
+        "opacity": number;
+        /**
+          * Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
+          * @default null
+         */
+        "projection"?: string;
+        /**
+          * Optional texture URL (can be an image or tile URL).
+          * @default null
+         */
+        "texture"?: string;
+        /**
+          * Tile size in pixels.
+          * @default 256
+         */
+        "tileSize"?: number;
+        /**
+          * URL to the GeoTIFF file containing elevation data.
+          * @default null
+         */
+        "url": string;
+        /**
+          * Value range for colormap normalization [min, max].
+          * @default null
+         */
+        "valueRange"?: [number, number];
+        /**
+          * Sichtbarkeit des Layers
+          * @default true
+         */
+        "visible": boolean;
+        /**
+          * Enable wireframe mode (show only mesh lines).
+          * @default false
+         */
+        "wireframe"?: boolean;
+        /**
+          * Z-index for layer stacking order. Higher values render on top.
+          * @default 100
+         */
+        "zIndex": number;
+    }
     interface VMapLayerTile3d {
         /**
           * Indicates whether the tileset has been initialised and added to the map.
@@ -747,6 +838,10 @@ export interface VMapLayerScatterplotCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerScatterplotElement;
 }
+export interface VMapLayerTerrainGeotiffCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLVMapLayerTerrainGeotiffElement;
+}
 export interface VMapLayerTile3dCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLVMapLayerTile3dElement;
@@ -892,6 +987,23 @@ declare global {
         prototype: HTMLVMapLayerTerrainElement;
         new (): HTMLVMapLayerTerrainElement;
     };
+    interface HTMLVMapLayerTerrainGeotiffElementEventMap {
+        "ready": void;
+    }
+    interface HTMLVMapLayerTerrainGeotiffElement extends Components.VMapLayerTerrainGeotiff, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLVMapLayerTerrainGeotiffElementEventMap>(type: K, listener: (this: HTMLVMapLayerTerrainGeotiffElement, ev: VMapLayerTerrainGeotiffCustomEvent<HTMLVMapLayerTerrainGeotiffElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLVMapLayerTerrainGeotiffElementEventMap>(type: K, listener: (this: HTMLVMapLayerTerrainGeotiffElement, ev: VMapLayerTerrainGeotiffCustomEvent<HTMLVMapLayerTerrainGeotiffElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLVMapLayerTerrainGeotiffElement: {
+        prototype: HTMLVMapLayerTerrainGeotiffElement;
+        new (): HTMLVMapLayerTerrainGeotiffElement;
+    };
     interface HTMLVMapLayerTile3dElementEventMap {
         "ready": void;
     }
@@ -1017,6 +1129,7 @@ declare global {
         "v-map-layer-osm": HTMLVMapLayerOsmElement;
         "v-map-layer-scatterplot": HTMLVMapLayerScatterplotElement;
         "v-map-layer-terrain": HTMLVMapLayerTerrainElement;
+        "v-map-layer-terrain-geotiff": HTMLVMapLayerTerrainGeotiffElement;
         "v-map-layer-tile3d": HTMLVMapLayerTile3dElement;
         "v-map-layer-wcs": HTMLVMapLayerWcsElement;
         "v-map-layer-wfs": HTMLVMapLayerWfsElement;
@@ -1377,6 +1490,98 @@ declare namespace LocalJSX {
         /**
           * Z-Index für die Darstellung.
           * @default 1000
+         */
+        "zIndex"?: number;
+    }
+    interface VMapLayerTerrainGeotiff {
+        /**
+          * Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.
+          * @default [255, 255, 255]
+         */
+        "color"?: [number, number, number];
+        /**
+          * ColorMap for elevation data visualization. Only relevant when no texture is set.
+          * @default null
+         */
+        "colorMap"?: string | GeoStylerColorMap;
+        /**
+          * Elevation exaggeration factor.
+          * @default 1.0
+         */
+        "elevationScale"?: number;
+        /**
+          * Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
+          * @default false
+         */
+        "forceProjection"?: boolean;
+        /**
+          * Maximum zoom level.
+          * @default 24
+         */
+        "maxZoom"?: number;
+        /**
+          * Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, but slower.
+          * @default 4.0
+         */
+        "meshMaxError"?: number;
+        /**
+          * Minimum zoom level.
+          * @default 0
+         */
+        "minZoom"?: number;
+        /**
+          * NoData value to discard (overriding any nodata values in the metadata).
+          * @default null
+         */
+        "nodata"?: number;
+        /**
+          * Fired when the terrain layer is ready.
+          * @event ready
+         */
+        "onReady"?: (event: VMapLayerTerrainGeotiffCustomEvent<void>) => void;
+        /**
+          * Opacity of the terrain layer (0–1).
+          * @default 1
+         */
+        "opacity"?: number;
+        /**
+          * Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
+          * @default null
+         */
+        "projection"?: string;
+        /**
+          * Optional texture URL (can be an image or tile URL).
+          * @default null
+         */
+        "texture"?: string;
+        /**
+          * Tile size in pixels.
+          * @default 256
+         */
+        "tileSize"?: number;
+        /**
+          * URL to the GeoTIFF file containing elevation data.
+          * @default null
+         */
+        "url"?: string;
+        /**
+          * Value range for colormap normalization [min, max].
+          * @default null
+         */
+        "valueRange"?: [number, number];
+        /**
+          * Sichtbarkeit des Layers
+          * @default true
+         */
+        "visible"?: boolean;
+        /**
+          * Enable wireframe mode (show only mesh lines).
+          * @default false
+         */
+        "wireframe"?: boolean;
+        /**
+          * Z-index for layer stacking order. Higher values render on top.
+          * @default 100
          */
         "zIndex"?: number;
     }
@@ -1747,6 +1952,7 @@ declare namespace LocalJSX {
         "v-map-layer-osm": VMapLayerOsm;
         "v-map-layer-scatterplot": VMapLayerScatterplot;
         "v-map-layer-terrain": VMapLayerTerrain;
+        "v-map-layer-terrain-geotiff": VMapLayerTerrainGeotiff;
         "v-map-layer-tile3d": VMapLayerTile3d;
         "v-map-layer-wcs": VMapLayerWcs;
         "v-map-layer-wfs": VMapLayerWfs;
@@ -1776,6 +1982,7 @@ declare module "@stencil/core" {
             "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
             "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
             "v-map-layer-terrain": LocalJSX.VMapLayerTerrain & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainElement>;
+            "v-map-layer-terrain-geotiff": LocalJSX.VMapLayerTerrainGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainGeotiffElement>;
             "v-map-layer-tile3d": LocalJSX.VMapLayerTile3d & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
             "v-map-layer-wcs": LocalJSX.VMapLayerWcs & JSXBase.HTMLAttributes<HTMLVMapLayerWcsElement>;
             "v-map-layer-wfs": LocalJSX.VMapLayerWfs & JSXBase.HTMLAttributes<HTMLVMapLayerWfsElement>;
