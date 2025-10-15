@@ -13,6 +13,7 @@
 - [lib/versions.gen](lib/versions.gen/README.md)
 - [lib/vstyle](lib/vstyle/README.md)
 - [map-provider/cesium/cesium-provider](map-provider/cesium/cesium-provider/README.md)
+- [map-provider/cesium/CesiumGeoTIFFTerrainProvider](map-provider/cesium/CesiumGeoTIFFTerrainProvider/README.md)
 - [map-provider/cesium/CesiumLayerGroups](map-provider/cesium/CesiumLayerGroups/README.md)
 - [map-provider/cesium/GeoTIFFImageryProvider](map-provider/cesium/GeoTIFFImageryProvider/README.md)
 - [map-provider/cesium/i-layer](map-provider/cesium/i-layer/README.md)

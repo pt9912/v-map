@@ -8,7 +8,7 @@
 
 > **sampleBilinear**(`x`, `y`, `rasterBands`, `arrayType`, `width`, `height`, `offsetX`, `offsetY`, `colorStops?`): \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:79](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/sampling-utils.ts#L79)
+Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:79](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/sampling-utils.ts#L79)
 
 Bilinear Interpolation with window-based reading and multi-band support
 Returns [R, G, B, A] values (0-255)

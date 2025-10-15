@@ -6,7 +6,7 @@
 
 # Interface: TileDataParams
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:42](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L42)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:42](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L42)
 
 Parameters for tile data generation
 
@@ -16,7 +16,7 @@ Parameters for tile data generation
 
 > `optional` **colorStops**: [`ColorStop`](../../colormap-utils/interfaces/ColorStop.md)[]
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:49](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L49)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:49](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L49)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:49](https://
 
 > **resampleMethod**: `"near"` \| `"bilinear"`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:48](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L48)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:48](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L48)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:48](https://
 
 > **resolution**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:47](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L47)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:47](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L47)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:47](https://
 
 > **tileSize**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:46](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L46)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:46](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L46)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:46](https://
 
 > **x**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:43](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L43)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:43](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L43)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:43](https://
 
 > **y**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:44](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L44)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:44](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L44)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:44](https://
 
 > **z**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:45](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L45)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:45](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L45)

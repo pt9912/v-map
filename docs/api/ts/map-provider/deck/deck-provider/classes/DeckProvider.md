@@ -6,7 +6,7 @@
 
 # Class: DeckProvider
 
-Defined in: [src/map-provider/deck/deck-provider.ts:30](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L30)
+Defined in: [src/map-provider/deck/deck-provider.ts:30](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L30)
 
 ## Implements
 
@@ -28,7 +28,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:30](https://github.com/pt991
 
 > **addBaseLayer**(`layerConfig`, `basemapid`, `layerElementId`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1273](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1273)
+Defined in: [src/map-provider/deck/deck-provider.ts:1273](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1273)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1273](https://github.com/pt9
 
 > **addLayerToGroup**(`layerConfig`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1245](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1245)
+Defined in: [src/map-provider/deck/deck-provider.ts:1245](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1245)
 
 Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
 
@@ -82,7 +82,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **buildScatterPlot**(`layerConfig`, `layerId`): `Promise`\<`Layer`\<\{ \}\>\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:789](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L789)
+Defined in: [src/map-provider/deck/deck-provider.ts:789](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L789)
 
 #### Parameters
 
@@ -150,7 +150,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:789](https://github.com/pt99
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1743](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1743)
+Defined in: [src/map-provider/deck/deck-provider.ts:1743](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1743)
 
 #### Returns
 
@@ -166,7 +166,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1743](https://github.com/pt9
 
 > **ensureGroup**(`groupId`, `visible`, `_opts?`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1319](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1319)
+Defined in: [src/map-provider/deck/deck-provider.ts:1319](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1319)
 
 #### Parameters
 
@@ -198,7 +198,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1319](https://github.com/pt9
 
 > **getMap**(): `Deck`\<`null`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1844](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1844)
+Defined in: [src/map-provider/deck/deck-provider.ts:1844](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1844)
 
 #### Returns
 
@@ -210,7 +210,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1844](https://github.com/pt9
 
 > **init**(`opts`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:40](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L40)
+Defined in: [src/map-provider/deck/deck-provider.ts:40](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L40)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:40](https://github.com/pt991
 
 > **removeLayer**(`layerId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1502](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1502)
+Defined in: [src/map-provider/deck/deck-provider.ts:1502](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1502)
 
 #### Parameters
 
@@ -254,7 +254,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1502](https://github.com/pt9
 
 > **setBaseLayer**(`groupId`, `layerElementId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1313](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1313)
+Defined in: [src/map-provider/deck/deck-provider.ts:1313](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1313)
 
 #### Parameters
 
@@ -280,7 +280,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1313](https://github.com/pt9
 
 > **setGroupVisible**(`groupId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1546](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1546)
+Defined in: [src/map-provider/deck/deck-provider.ts:1546](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1546)
 
 #### Parameters
 
@@ -306,7 +306,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1546](https://github.com/pt9
 
 > **setOpacity**(`layerId`, `opacity`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1517](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1517)
+Defined in: [src/map-provider/deck/deck-provider.ts:1517](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1517)
 
 #### Parameters
 
@@ -332,7 +332,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1517](https://github.com/pt9
 
 > **setView**(`__namedParameters`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1550](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1550)
+Defined in: [src/map-provider/deck/deck-provider.ts:1550](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1550)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
@@ -360,7 +360,7 @@ View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promis
 
 > **setVisible**(`layerId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1535](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1535)
+Defined in: [src/map-provider/deck/deck-provider.ts:1535](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1535)
 
 #### Parameters
 
@@ -386,7 +386,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1535](https://github.com/pt9
 
 > **setZIndex**(`layerId`, `zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1526](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1526)
+Defined in: [src/map-provider/deck/deck-provider.ts:1526](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1526)
 
 #### Parameters
 
@@ -412,7 +412,7 @@ Defined in: [src/map-provider/deck/deck-provider.ts:1526](https://github.com/pt9
 
 > **updateLayer**(`layerId`, `update`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/deck/deck-provider.ts:1356](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/deck-provider.ts#L1356)
+Defined in: [src/map-provider/deck/deck-provider.ts:1356](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/deck-provider.ts#L1356)
 
 #### Parameters
 

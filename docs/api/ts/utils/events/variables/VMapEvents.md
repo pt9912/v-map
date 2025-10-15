@@ -8,7 +8,7 @@
 
 > `const` **VMapEvents**: `object`
 
-Defined in: [src/utils/events.ts:4](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/utils/events.ts#L4)
+Defined in: [src/utils/events.ts:4](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/utils/events.ts#L4)
 
 ## Type Declaration
 

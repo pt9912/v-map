@@ -6,7 +6,7 @@
 
 # Class: LayerGroupWithModel\<L\>
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:18](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L18)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:18](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L18)
 
 Gemeinsames Interface, das sowohl von der klassischen LayerGroup als auch
 von der modellbasierten LayerGroupWithModel implementiert wird.
@@ -27,7 +27,7 @@ von der modellbasierten LayerGroupWithModel implementiert wird.
 
 > **new LayerGroupWithModel**\<`L`\>(`opts`): `LayerGroupWithModel`\<`L`\>
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:32](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L32)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:32](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L32)
 
 #### Parameters
 
@@ -63,7 +63,7 @@ readonly [`LayerModel`](../../LayerModel/interfaces/LayerModel.md)\<`L`\>[]
 
 > `readonly` **id**: `string`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:21](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L21)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:21](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L21)
 
 #### Implementation of
 
@@ -77,7 +77,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:21](https://github.com
 
 > **get** **basemap**(): `string`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:75](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L75)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:75](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L75)
 
 ##### Returns
 
@@ -87,7 +87,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:75](https://github.com
 
 > **set** **basemap**(`b`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:67](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L67)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:67](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L67)
 
 ##### Parameters
 
@@ -107,7 +107,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:67](https://github.com
 
 > **get** **syncMode**(): [`SyncMode`](../type-aliases/SyncMode.md)
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:58](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L58)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:58](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L58)
 
 ##### Returns
 
@@ -117,7 +117,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:58](https://github.com
 
 > **set** **syncMode**(`m`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:61](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L61)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:61](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L61)
 
 ##### Parameters
 
@@ -137,7 +137,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:61](https://github.com
 
 > **get** **visible**(): `boolean`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:46](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L46)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:46](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L46)
 
 ##### Returns
 
@@ -147,7 +147,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:46](https://github.com
 
 > **set** **visible**(`v`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:49](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L49)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:49](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L49)
 
 ##### Parameters
 
@@ -169,7 +169,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:49](https://github.com
 
 > **addModel**(`model`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:82](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L82)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:82](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L82)
 
 #### Parameters
 
@@ -187,7 +187,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:82](https://github.com
 
 > **addModels**(`models`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:87](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L87)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:87](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L87)
 
 #### Parameters
 
@@ -205,7 +205,7 @@ readonly [`LayerModel`](../../LayerModel/interfaces/LayerModel.md)\<`L`\>[]
 
 > **clear**(): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:101](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L101)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:101](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L101)
 
 #### Returns
 
@@ -217,7 +217,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:101](https://github.co
 
 > **clearModelOverrides**(`id`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:132](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L132)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:132](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L132)
 
 #### Parameters
 
@@ -235,7 +235,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:132](https://github.co
 
 > **destroy**(): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:197](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L197)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:197](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L197)
 
 Optionale Ressourcenfreigabe
 
@@ -253,7 +253,7 @@ Optionale Ressourcenfreigabe
 
 > **getLayers**(): readonly `L`[]
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:136](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L136)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:136](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L136)
 
 Liefert die Deck-Layer zur Darstellung.
 groups/LayerGroups reichen intern options weiter (falls benötigt).
@@ -272,7 +272,7 @@ readonly `L`[]
 
 > **getModel**(`id`): `object`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:90](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L90)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:90](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L90)
 
 #### Parameters
 
@@ -314,7 +314,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:90](https://github.com
 
 > **isDirty**(): `boolean`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:78](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L78)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:78](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L78)
 
 true, wenn ein Rebuild der Ausgabe-Layer nötig ist
 
@@ -332,7 +332,7 @@ true, wenn ein Rebuild der Ausgabe-Layer nötig ist
 
 > **removeModel**(`id`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:94](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L94)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:94](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L94)
 
 #### Parameters
 
@@ -350,7 +350,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:94](https://github.com
 
 > **replaceModel**(`model`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:118](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L118)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:118](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L118)
 
 #### Parameters
 
@@ -368,7 +368,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:118](https://github.co
 
 > **setModelEnabled**(`id`, `enabled`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:108](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L108)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:108](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L108)
 
 #### Parameters
 
@@ -390,7 +390,7 @@ Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:108](https://github.co
 
 > **setModelOverrides**(`id`, `overrides`): `void`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:124](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/LayerGroupWithModel.ts#L124)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:124](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/LayerGroupWithModel.ts#L124)
 
 #### Parameters
 

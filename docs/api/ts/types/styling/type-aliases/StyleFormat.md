@@ -8,4 +8,4 @@
 
 > **StyleFormat** = `"sld"` \| `"mapbox-gl"` \| `"qgis"` \| `"lyrx"` \| `"cesium-3d-tiles"`
 
-Defined in: [src/types/styling.ts:5](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/types/styling.ts#L5)
+Defined in: [src/types/styling.ts:5](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/types/styling.ts#L5)

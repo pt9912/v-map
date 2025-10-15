@@ -14,7 +14,7 @@
 | `osm` | ✅ | ✅ | ✅ | ✅ |
 | `scatterplot` | ❌ | ✅ | ❌ | ❌ |
 | `terrain` | ✅ | ✅ | ❌ | ❌ |
-| `terrain-geotiff` | ❌ | ✅ | ❌ | ❌ |
+| `terrain-geotiff` | ✅ | ✅ | ❌ | ❌ |
 | `tile3d` | ✅ | ❌ | ❌ | ❌ |
 | `wcs` | ✅ | ✅ | ✅ | ✅ |
 | `wfs` | ✅ | ✅ | ✅ | ✅ |

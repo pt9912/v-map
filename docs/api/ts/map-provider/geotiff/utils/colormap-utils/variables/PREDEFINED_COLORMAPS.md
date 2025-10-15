@@ -8,6 +8,6 @@
 
 > `const` **PREDEFINED\_COLORMAPS**: `Record`\<[`ColorMapName`](../type-aliases/ColorMapName.md), [`ColorStop`](../interfaces/ColorStop.md)[]\>
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:24](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/colormap-utils.ts#L24)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:24](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/geotiff/utils/colormap-utils.ts#L24)
 
 Predefined color maps
