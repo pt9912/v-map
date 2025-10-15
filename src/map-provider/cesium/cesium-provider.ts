@@ -18,6 +18,7 @@ import { getColorStops, type ColorStop } from '../geotiff/utils/colormap-utils';
 import { GeoTIFFTileProcessor } from '../geotiff/utils/GeoTIFFTileProcessor';
 import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
 import { GeoTIFFImageryProvider } from './GeoTIFFImageryProvider';
+import { createCesiumGeoTIFFTerrainProvider } from './CesiumGeoTIFFTerrainProvider';
 
 type CesiumModule = typeof import('cesium');
 import {
@@ -282,6 +283,13 @@ export class CesiumProvider implements MapProvider {
         if ((layerConfig as any).cesiumStyle && 'setStyle' in wrapper) {
           (wrapper as any).setStyle((layerConfig as any).cesiumStyle);
         }
+        break;
+      }
+      case 'terrain-geotiff': {
+        const terrainLayer = await this.createGeoTIFFTerrainLayer(
+          layerConfig as Extract<LayerConfig, { type: 'terrain-geotiff' }>,
+        );
+        wrapper = this.layerManager.addCustomLayer(layerId, terrainLayer);
         break;
       }
       default:
@@ -1329,6 +1337,60 @@ export class CesiumProvider implements MapProvider {
     return layer;
   }
 
+  /**
+   * Create GeoTIFF Terrain Layer
+   * Loads GeoTIFF elevation data and provides it as terrain
+   */
+  private async createGeoTIFFTerrainLayer(
+    config: Extract<LayerConfig, { type: 'terrain-geotiff' }>,
+  ): Promise<CesiumTerrainLayer> {
+    if (!config.url) {
+      throw new Error('GeoTIFF Terrain layer requires a URL');
+    }
+
+    try {
+      log(`[cesium-terrain-geotiff] Creating terrain layer from ${config.url}`);
+
+      // Create the custom GeoTIFF terrain provider
+      const provider = await createCesiumGeoTIFFTerrainProvider({
+        url: config.url,
+        projection: config.projection,
+        forceProjection: config.forceProjection,
+        nodata: config.nodata,
+        Cesium: this.Cesium,
+      });
+
+      // Wrap it in a CesiumTerrainLayer
+      // Cast config to terrain type since CesiumTerrainLayer expects it
+      const layer = new CesiumTerrainLayer(
+        this.Cesium,
+        this.viewer,
+        provider,
+        config as any,
+      );
+
+      if (config.visible !== undefined) {
+        layer.setVisible(config.visible);
+      }
+      if (config.opacity !== undefined) {
+        layer.setOpacity(config.opacity);
+      }
+
+      log('[cesium-terrain-geotiff] Terrain layer created successfully');
+      return layer;
+    } catch (err) {
+      error('[cesium-terrain-geotiff] Failed to create terrain layer:', err);
+      // Return a fallback with EllipsoidTerrainProvider
+      const fallbackProvider = new this.Cesium.EllipsoidTerrainProvider();
+      return new CesiumTerrainLayer(
+        this.Cesium,
+        this.viewer,
+        fallbackProvider,
+        config as any,
+      );
+    }
+  }
+
   private async addWMSLayer(
     config: Extract<LayerConfig, { type: 'wms' }>,
   ): Promise<ImageryLayer> {
@@ -1782,6 +1844,27 @@ export class CesiumProvider implements MapProvider {
               const stylePayload = data.style ?? {};
               (oldLayer as any).setStyle(stylePayload);
             }
+          }
+          break;
+        case 'terrain-geotiff':
+          {
+            const previousOptions = oldLayer.getOptions();
+            const visible = oldLayer.getVisible();
+            const opacity = oldLayer.getOpacity();
+            oldLayer.remove();
+
+            const terrainLayer = await this.createGeoTIFFTerrainLayer({
+              type: 'terrain-geotiff',
+              ...previousOptions,
+              ...(update.data ?? {}),
+            } as Extract<LayerConfig, { type: 'terrain-geotiff' }>);
+
+            const wrapped = this.layerManager.addCustomLayer(
+              layerId,
+              terrainLayer,
+            );
+            wrapped.setVisible(visible);
+            wrapped.setOpacity(opacity);
           }
           break;
       }

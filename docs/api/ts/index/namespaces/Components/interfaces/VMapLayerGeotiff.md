@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L164)
+Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L164)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/03894
 
 > `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
 
-Defined in: [src/components.d.ts:169](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L169)
+Defined in: [src/components.d.ts:169](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L169)
 
 ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
 
@@ -30,7 +30,7 @@ null
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:173](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L173)
+Defined in: [src/components.d.ts:173](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L173)
 
 Returns the internal layer ID used by the map provider.
 
@@ -44,7 +44,7 @@ Returns the internal layer ID used by the map provider.
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/components.d.ts:178](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L178)
+Defined in: [src/components.d.ts:178](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L178)
 
 NoData Values to discard (overriding any nodata values in the metadata).
 
@@ -60,7 +60,7 @@ null
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L183)
+Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L183)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -76,7 +76,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:188](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L188)
+Defined in: [src/components.d.ts:188](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L188)
 
 URL to the GeoTIFF file to be displayed on the map.
 
@@ -92,7 +92,7 @@ null
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/components.d.ts:193](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L193)
+Defined in: [src/components.d.ts:193](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L193)
 
 Value range for colormap normalization [min, max].
 
@@ -108,7 +108,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:198](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L198)
+Defined in: [src/components.d.ts:198](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L198)
 
 Sichtbarkeit des Layers
 
@@ -124,7 +124,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/components.d.ts#L203)
+Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/components.d.ts#L203)
 
 Z-index for layer stacking order. Higher values render on top.
 

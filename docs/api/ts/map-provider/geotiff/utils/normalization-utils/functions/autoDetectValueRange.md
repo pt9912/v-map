@@ -8,7 +8,7 @@
 
 > **autoDetectValueRange**(`data`, `sampleSize`): \[`number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:93](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/geotiff/utils/normalization-utils.ts#L93)
+Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:93](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/normalization-utils.ts#L93)
 
 Auto-detect value range from a Float32/Float64 array sample
 Useful when valueRange is not provided

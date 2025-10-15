@@ -10,6 +10,7 @@
 - [`v-map-layer-osm`](./v-map-layer-osm.md) — 
 - [`v-map-layer-scatterplot`](./v-map-layer-scatterplot.md) — 
 - [`v-map-layer-terrain`](./v-map-layer-terrain.md) — 
+- [`v-map-layer-terrain-geotiff`](./v-map-layer-terrain-geotiff.md) — The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.
 - [`v-map-layer-tile3d`](./v-map-layer-tile3d.md) — 
 - [`v-map-layer-wcs`](./v-map-layer-wcs.md) — 
 - [`v-map-layer-wfs`](./v-map-layer-wfs.md) — 

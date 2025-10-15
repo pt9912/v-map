@@ -8,7 +8,7 @@
 
 > **createReprojectedCogBitmapLayer**(`layerId`, `url`, `cogBitmapOptions?`): `Promise`\<`Layer`\<\{ \}\>\>
 
-Defined in: [src/map-provider/deck/reprojected-cog-bitmaplayer.ts:14](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/reprojected-cog-bitmaplayer.ts#L14)
+Defined in: [src/map-provider/deck/reprojected-cog-bitmaplayer.ts:14](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/deck/reprojected-cog-bitmaplayer.ts#L14)
 
 Erstellt einen reprojizierten CogBitmapLayer für deck.gl.
 

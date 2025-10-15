@@ -8,4 +8,4 @@
 
 > **googleMapType** = `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
 
-Defined in: [src/types/layerconfig.ts:5](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/types/layerconfig.ts#L5)
+Defined in: [src/types/layerconfig.ts:5](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/types/layerconfig.ts#L5)

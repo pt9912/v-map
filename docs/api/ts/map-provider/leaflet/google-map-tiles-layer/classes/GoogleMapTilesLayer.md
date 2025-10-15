@@ -6,7 +6,7 @@
 
 # Class: GoogleMapTilesLayer
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/google-map-tiles-layer.ts#L75)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/leaflet/google-map-tiles-layer.ts#L75)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://gith
 
 > **new GoogleMapTilesLayer**(`options`): `GoogleMapTilesLayer`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:89](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/google-map-tiles-layer.ts#L89)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:89](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/leaflet/google-map-tiles-layer.ts#L89)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:89](https://gith
 
 > **createTile**(`coords`, `done`): `HTMLElement`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:174](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/google-map-tiles-layer.ts#L174)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:174](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/leaflet/google-map-tiles-layer.ts#L174)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:174](https://git
 
 > **onAdd**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:155](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/google-map-tiles-layer.ts#L155)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:155](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/leaflet/google-map-tiles-layer.ts#L155)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:155](https://git
 
 > **onRemove**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:165](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/google-map-tiles-layer.ts#L165)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:165](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/leaflet/google-map-tiles-layer.ts#L165)
 
 #### Parameters
 

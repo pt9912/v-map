@@ -8,7 +8,7 @@
 
 > **normalizeToColorMapRange**(`rawValue`, `valueRange?`): `number`
 
-Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:66](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/geotiff/utils/normalization-utils.ts#L66)
+Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:66](https://github.com/pt9912/v-map/blob/70860852b715a2bc9918cc3118d1d87cbfe98e50/src/map-provider/geotiff/utils/normalization-utils.ts#L66)
 
 Normalize a raw value to 0-1 range for colormap application
 
