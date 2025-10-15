@@ -191,4 +191,26 @@ export type LayerConfig =
       zIndex?: number;
       visible?: boolean;
       opacity?: number;
+    }
+  | {
+      type: 'terrain-geotiff';
+      url: string;
+      projection?: string;
+      forceProjection?: boolean;
+      nodata?: number;
+      minZoom?: number;
+      maxZoom?: number;
+      tileSize?: number;
+      meshMaxError?: number;
+      wireframe?: boolean;
+      texture?: string;
+      color?: [number, number, number];
+      colorMap?: string | GeoStylerColorMap;
+      valueRange?: [number, number];
+      elevationScale?: number;
+      groupId?: string;
+      groupVisible?: boolean;
+      zIndex?: number;
+      visible?: boolean;
+      opacity?: number;
     };
