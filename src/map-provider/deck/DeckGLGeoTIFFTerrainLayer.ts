@@ -103,13 +103,11 @@ export async function createDeckGLGeoTIFFTerrainLayer(
   const [
     { CompositeLayer },
     { TerrainLayer },
-    { TileLayer },
     proj4Module,
     geotiffModule,
     geokeysModule,
   ] = await Promise.all([
     import('@deck.gl/core'),
-    import('@deck.gl/geo-layers'),
     import('@deck.gl/geo-layers'),
     import('proj4'),
     import('geotiff'),
@@ -139,11 +137,6 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     private fromProjection: string = 'EPSG:4326';
     private toProjection: string = 'EPSG:3857';
     private sourceBounds: [number, number, number, number] = [0, 0, 0, 0];
-    private sourceRef: [number, number] = [0, 0];
-    private resolution: number = 1.0;
-    private imageWidth: number = 0;
-    private imageHeight: number = 0;
-    private overviewImages?: GeoTIFFImage[];
 
     constructor(layerProps: DeckGLGeoTIFFTerrainLayerProps) {
       super(layerProps);
@@ -211,7 +204,6 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         this.tiff = null;
       }
       this.image = null;
-      this.overviewImages = undefined;
     }
 
     // ============================================================================
@@ -239,14 +231,10 @@ export async function createDeckGLGeoTIFFTerrainLayer(
 
         this.tiff = source.tiff;
         this.image = source.baseImage;
-        this.overviewImages = source.overviewImages;
-        this.imageWidth = source.width;
-        this.imageHeight = source.height;
+        // Note: sourceRef, resolution, width, height, and overviewImages are not used
         this.fromProjection = source.fromProjection;
         this.toProjection = source.toProjection;
         this.sourceBounds = source.sourceBounds;
-        this.sourceRef = source.sourceRef;
-        this.resolution = source.resolution;
 
         log('[terrain-geotiff] GeoTIFF loaded successfully');
         log(`[terrain-geotiff] Projection: ${this.fromProjection} -> ${this.toProjection}`);

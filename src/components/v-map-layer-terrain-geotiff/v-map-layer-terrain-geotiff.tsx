@@ -132,7 +132,10 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
   @Watch('url')
   async onUrlChanged() {
     log(MSG_COMPONENT + 'onUrlChanged');
-    await this.helper?.updateLayer(this.createLayerConfig());
+    await this.helper?.updateLayer({
+      type: 'terrain-geotiff',
+      data: this.createLayerConfig(),
+    });
   }
 
   @Watch('visible')
@@ -168,7 +171,10 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
   @Watch('tileSize')
   async onPropertyChanged() {
     log(MSG_COMPONENT + 'onPropertyChanged');
-    await this.helper?.updateLayer(this.createLayerConfig());
+    await this.helper?.updateLayer({
+      type: 'terrain-geotiff',
+      data: this.createLayerConfig(),
+    });
   }
 
   isReady(): boolean {

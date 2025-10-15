@@ -1563,7 +1563,7 @@ export type TileLoadProps = {
         wireframe: config.wireframe,
         texture: config.texture,
         color: config.color,
-        colorMap: config.colorMap,
+        colorMap: config.colorMap as any, // Type cast for colorMap - handled internally
         valueRange: config.valueRange,
         elevationScale: config.elevationScale,
         opacity: config.opacity ?? 1.0,
