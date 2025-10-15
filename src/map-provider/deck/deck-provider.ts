@@ -9,6 +9,7 @@ import { GmlParser } from '@npm9912/s-gml';
 import { wellknownModule } from 'wellknown';
 
 import { createDeckGLGeoTIFFLayer } from './DeckGLGeoTIFFLayer';
+import { createDeckGLGeoTIFFTerrainLayer } from './DeckGLGeoTIFFTerrainLayer';
 
 import { Deck } from '@deck.gl/core';
 import type { Layer, MapViewState } from '@deck.gl/core';
@@ -1039,6 +1040,11 @@ export type TileLoadProps = {
           layerConfig as Extract<LayerConfig, { type: 'terrain' }>,
           layerId,
         );
+      case 'terrain-geotiff':
+        return this.createGeoTIFFTerrainLayer(
+          layerConfig as Extract<LayerConfig, { type: 'terrain-geotiff' }>,
+          layerId,
+        );
       case 'xyz':
         return this.buildXyzTileLayer(layerConfig as any, layerId);
       case 'scatterplot':
@@ -1311,6 +1317,24 @@ export type TileLoadProps = {
         group.setModelOverrides(layerId, ov);
         break;
       }
+      case 'terrain-geotiff': {
+        const data = update.data ?? {};
+        const ov: any = { data };
+        if ('url' in data) ov.url = data.url;
+        if ('projection' in data) ov.projection = data.projection;
+        if ('forceProjection' in data)
+          ov.forceProjection = data.forceProjection;
+        if ('nodata' in data) ov.noDataValue = data.nodata;
+        if ('meshMaxError' in data) ov.meshMaxError = data.meshMaxError;
+        if ('wireframe' in data) ov.wireframe = data.wireframe;
+        if ('texture' in data) ov.texture = data.texture;
+        if ('color' in data) ov.color = data.color;
+        if ('colorMap' in data) ov.colorMap = data.colorMap;
+        if ('valueRange' in data) ov.valueRange = data.valueRange;
+        if ('elevationScale' in data) ov.elevationScale = data.elevationScale;
+        group.setModelOverrides(layerId, ov);
+        break;
+      }
       case 'wfs': {
         const geojson = await this.fetchWFSFromUrl(update.data);
         group.setModelOverrides(layerId, { data: geojson });
@@ -1508,6 +1532,50 @@ export type TileLoadProps = {
       return layer;
     } catch (error) {
       log('v-map - provider - deck - Failed to create GeoTIFF layer:', error);
+
+      return new GeoJsonLayer({
+        id: layerId,
+        data: { type: 'FeatureCollection', features: [] },
+        opacity: 0,
+      });
+    }
+  }
+
+  private async createGeoTIFFTerrainLayer(
+    config: Extract<LayerConfig, { type: 'terrain-geotiff' }>,
+    layerId: string,
+  ): Promise<Layer> {
+    if (!config.url) {
+      throw new Error('GeoTIFF Terrain layer requires a URL');
+    }
+
+    try {
+      const layer = await createDeckGLGeoTIFFTerrainLayer({
+        id: layerId,
+        url: config.url,
+        projection: config.projection,
+        forceProjection: config.forceProjection,
+        noDataValue: config.nodata,
+        minZoom: config.minZoom,
+        maxZoom: config.maxZoom,
+        tileSize: config.tileSize,
+        meshMaxError: config.meshMaxError,
+        wireframe: config.wireframe,
+        texture: config.texture,
+        color: config.color,
+        colorMap: config.colorMap,
+        valueRange: config.valueRange,
+        elevationScale: config.elevationScale,
+        opacity: config.opacity ?? 1.0,
+        visible: config.visible ?? true,
+      });
+
+      return layer;
+    } catch (error) {
+      log(
+        'v-map - provider - deck - Failed to create GeoTIFF Terrain layer:',
+        error,
+      );
 
       return new GeoJsonLayer({
         id: layerId,
