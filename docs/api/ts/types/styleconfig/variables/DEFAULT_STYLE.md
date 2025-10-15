@@ -8,6 +8,6 @@
 
 > `const` **DEFAULT\_STYLE**: `Readonly`\<`Required`\<`Omit`\<[`StyleConfig`](../interfaces/StyleConfig.md), `"iconUrl"` \| `"iconSize"` \| `"iconAnchor"` \| `"textProperty"` \| `"textHaloColor"` \| `"textHaloWidth"` \| `"textOffset"` \| `"zOffset"` \| `"extrudeHeight"` \| `"styleFunction"` \| `"strokeDashArray"`\>\>\>
 
-Defined in: [src/types/styleconfig.ts:41](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/types/styleconfig.ts#L41)
+Defined in: [src/types/styleconfig.ts:41](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/types/styleconfig.ts#L41)
 
 Default style configuration values

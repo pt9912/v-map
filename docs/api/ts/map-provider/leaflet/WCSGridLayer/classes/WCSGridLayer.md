@@ -6,7 +6,7 @@
 
 # Class: WCSGridLayer
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:22](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/leaflet/WCSGridLayer.ts#L22)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:22](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/WCSGridLayer.ts#L22)
 
 Custom Leaflet GridLayer for WCS (Web Coverage Service) support
 
@@ -26,7 +26,7 @@ Supports:
 
 > **new WCSGridLayer**(`options`): `WCSGridLayer`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:25](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/leaflet/WCSGridLayer.ts#L25)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:25](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/WCSGridLayer.ts#L25)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:25](https://github.com/pt9
 
 > **createTile**(`coords`, `done`): `HTMLElement`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:115](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/leaflet/WCSGridLayer.ts#L115)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:115](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/WCSGridLayer.ts#L115)
 
 Create tile element (required by GridLayer)
 
@@ -72,7 +72,7 @@ Create tile element (required by GridLayer)
 
 > **updateOptions**(`newOptions`): `void`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:141](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/leaflet/WCSGridLayer.ts#L141)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:141](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/leaflet/WCSGridLayer.ts#L141)
 
 Update WCS options and redraw
 

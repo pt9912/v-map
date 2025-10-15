@@ -6,7 +6,7 @@
 
 # Interface: DeckGLGeoTIFFTerrainLayerProps
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:15](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L15)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:15](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L15)
 
 ## Extends
 
@@ -66,7 +66,7 @@ Enable GPU-based object highlighting. Default false.
 
 > `optional` **color**: \[`number`, `number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:70](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L70)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:70](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L70)
 
 Farbe für das Terrain (wenn keine Textur vorhanden)
 [r, g, b] mit Werten 0-255
@@ -91,7 +91,7 @@ The format of colors, default 'RGBA'.
 
 > `optional` **colorMap**: [`GeoStylerColorMap`](../../../../index/interfaces/GeoStylerColorMap.md) \| [`ColorMapName`](../../../geotiff/utils/colormap-utils/type-aliases/ColorMapName.md)
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:76](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L76)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:76](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L76)
 
 ColorMap für Höhendaten-Visualisierung
 Nur relevant wenn keine texture gesetzt ist
@@ -212,7 +212,7 @@ Callback to manipulate remote data when it's fetched and parsed.
 
 > `optional` **elevationScale**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:88](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L88)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:88](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L88)
 
 Höhen-Überhöhung (Exaggeration Factor)
 Default: 1.0
@@ -283,7 +283,7 @@ Custom implementation to fetch and parse content from URLs.
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:26](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L26)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:26](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L26)
 
 Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
 
@@ -389,7 +389,7 @@ Options to customize the behavior of loaders
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:41](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L41)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:41](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L41)
 
 Maximale Zoom-Stufe
 
@@ -399,7 +399,7 @@ Maximale Zoom-Stufe
 
 > `optional` **meshMaxError**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:53](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L53)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:53](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L53)
 
 Mesh-Fehlertoleranz in Metern (Martini)
 Kleinere Werte = detaillierteres Mesh, aber langsamer
@@ -411,7 +411,7 @@ Default: 4.0
 
 > `optional` **minZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:36](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L36)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:36](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L36)
 
 Minimale Zoom-Stufe
 
@@ -435,7 +435,7 @@ A 4x4 matrix to transform local coordianates to the world space.
 
 > `optional` **noDataValue**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:31](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L31)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:31](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L31)
 
 NoData-Wert für ungültige Höhendaten
 
@@ -983,7 +983,7 @@ The format of positions, default 'XYZ'.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:21](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L21)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:21](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L21)
 
 Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
 
@@ -1007,7 +1007,7 @@ Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core
 
 > `optional` **texture**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:64](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L64)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:64](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L64)
 
 Textur-URL (optional) - kann ein Bild oder tile-URL sein
 
@@ -1017,7 +1017,7 @@ Textur-URL (optional) - kann ein Bild oder tile-URL sein
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:46](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L46)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:46](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L46)
 
 Tile-Größe in Pixeln
 
@@ -1055,7 +1055,7 @@ The dependencies used to trigger re-evaluation of functional accessors (get*).
 
 > **url**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:16](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L16)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:16](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L16)
 
 ***
 
@@ -1063,7 +1063,7 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:16](https://gith
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:82](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L82)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:82](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L82)
 
 Wertebereich für Normalisierung [min, max]
 Wird für ColorMap-Mapping verwendet
@@ -1088,7 +1088,7 @@ If the layer should be rendered. Default true.
 
 > `optional` **wireframe**: `boolean`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:59](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L59)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:59](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L59)
 
 Wireframe-Modus (nur Mesh-Linien anzeigen)
 Default: false

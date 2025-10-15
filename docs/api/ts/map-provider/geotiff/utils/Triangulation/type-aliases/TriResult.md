@@ -8,7 +8,7 @@
 
 > **TriResult** = `object`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/Triangulation.ts#L21)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/geotiff/utils/Triangulation.ts#L21)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.
 
 > **transform**: `any`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/Triangulation.ts#L21)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/geotiff/utils/Triangulation.ts#L21)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.
 
 > **tri**: [`ITriangle`](../../Triangle/interfaces/ITriangle.md)
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/1175289add5c3e3c3e3db864e7d963d76fef85d6/src/map-provider/geotiff/utils/Triangulation.ts#L21)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:21](https://github.com/pt9912/v-map/blob/03894669c71ecfe4c835f7e2d5b23a755c975811/src/map-provider/geotiff/utils/Triangulation.ts#L21)
