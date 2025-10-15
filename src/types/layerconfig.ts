@@ -163,6 +163,9 @@ export type LayerConfig =
       projection?: string;
       resolutions?: number[];
       params?: Record<string, string | number | boolean>;
+      tileSize?: number;
+      minZoom?: number;
+      maxZoom?: number;
       groupId?: string;
       groupVisible?: boolean;
       zIndex?: number;
