@@ -238,6 +238,13 @@ export class CesiumProvider implements MapProvider {
         wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
+      case 'wcs': {
+        const iLayer = await this.createWCSLayer(
+          layerConfig as Extract<LayerConfig, { type: 'wcs' }>,
+        );
+        wrapper = this.layerManager.addLayer(layerId, iLayer);
+        break;
+      }
       case 'arcgis': {
         await this.addArcGISLayer(layerConfig as any);
         //todo  wrapper = this.layerManager.addLayer(layerId, iLayer);
@@ -1334,6 +1341,119 @@ export class CesiumProvider implements MapProvider {
     );
   }
 
+  /**
+   * Create WCS (Web Coverage Service) ImageryLayer
+   * Supports WCS 2.0.1 (subset) and 1.x.x (BBOX) versions
+   */
+  private async createWCSLayer(
+    config: Extract<LayerConfig, { type: 'wcs' }>,
+  ): Promise<ImageryLayer> {
+    if (!config.url || !config.coverageName) {
+      throw new Error('WCS layer requires url and coverageName');
+    }
+
+    const version = config.version ?? '2.0.1';
+    const format = config.format ?? 'image/tiff';
+    const projection = config.projection ?? 'EPSG:4326';
+    const tileSize = config.tileSize ?? 256;
+
+    const Cesium = this.Cesium;
+
+    // Create a custom URL template - will be overridden by buildImageResource
+    const customUrlTemplate = `${config.url}?wcs_placeholder`;
+
+    const wcsImageryProvider = new Cesium.UrlTemplateImageryProvider({
+      url: customUrlTemplate,
+      maximumLevel: config.maxZoom ?? 18,
+      minimumLevel: config.minZoom ?? 0,
+      tileWidth: tileSize,
+      tileHeight: tileSize,
+      tilingScheme: new Cesium.GeographicTilingScheme(),
+      credit: 'WCS',
+    });
+
+    // Override the buildImageResource method to generate WCS GetCoverage URLs
+    (wcsImageryProvider as any).buildImageResource = function (
+      x: number,
+      y: number,
+      level: number,
+    ) {
+      const tilingScheme = new Cesium.GeographicTilingScheme();
+      const rectangle = tilingScheme.tileXYToRectangle(x, y, level);
+
+      // Convert to degrees
+      const west = Cesium.Math.toDegrees(rectangle.west);
+      const south = Cesium.Math.toDegrees(rectangle.south);
+      const east = Cesium.Math.toDegrees(rectangle.east);
+      const north = Cesium.Math.toDegrees(rectangle.north);
+
+      const baseParams: Record<string, string> = {
+        SERVICE: 'WCS',
+        REQUEST: 'GetCoverage',
+        VERSION: version,
+        FORMAT: format,
+      };
+
+      let url: string;
+
+      // WCS 2.0.1 uses subset parameters
+      if (version.startsWith('2.0')) {
+        const params = {
+          ...baseParams,
+          coverageId: config.coverageName,
+          ...(config.params || {}),
+        };
+
+        // Add GeoTIFF compression if format is tiff
+        if (format.includes('tiff') || format.includes('geotiff')) {
+          params['geotiff:compression'] = 'LZW';
+        }
+
+        // Build query string
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            query.set(key, String(value));
+          }
+        });
+
+        const queryString = query.toString();
+        const subsetX = `subset=X(${west},${east})`;
+        const subsetY = `subset=Y(${south},${north})`;
+
+        url = `${config.url}${config.url.includes('?') ? '&' : '?'}${queryString}&${subsetX}&${subsetY}`;
+      }
+      // WCS 1.x.x uses BBOX parameter
+      else {
+        const params = {
+          ...baseParams,
+          COVERAGE: config.coverageName,
+          BBOX: `${west},${south},${east},${north}`,
+          CRS: projection,
+          WIDTH: String(tileSize),
+          HEIGHT: String(tileSize),
+          ...(config.params || {}),
+        };
+
+        const query = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            query.set(key, String(value));
+          }
+        });
+
+        url = `${config.url}${config.url.includes('?') ? '&' : '?'}${query.toString()}`;
+      }
+
+      return new Cesium.Resource({ url });
+    };
+
+    return new this.Cesium.ImageryLayer(wcsImageryProvider, {
+      alpha: config.opacity ?? 1,
+      show: config.visible ?? true,
+    });
+  }
+
   private async addArcGISLayer(
     config: Extract<LayerConfig, { type: 'arcgis' }>,
   ) {
@@ -1584,6 +1704,20 @@ export class CesiumProvider implements MapProvider {
               xyzLayer,
             );
             updatedXyzLayer.setOptions(xyzOptions);
+          }
+          break;
+        case 'wcs':
+          {
+            const wcsOptions = oldLayer.getOptions();
+            const wcsLayer = await this.createWCSLayer(
+              update.data as Extract<LayerConfig, { type: 'wcs' }>,
+            );
+            const updatedWcsLayer = this.layerManager.replaceLayer(
+              layerId,
+              oldLayer,
+              wcsLayer,
+            );
+            updatedWcsLayer.setOptions(wcsOptions);
           }
           break;
         case 'wkt':
