@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-14T17:17:44",
+  "timestamp": "2025-10-15T06:06:19",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.37.1",
@@ -2327,6 +2327,571 @@
           "v-map-layer-terrain"
         ]
       }
+    },
+    {
+      "filePath": "src/components/v-map-layer-terrain-geotiff/v-map-layer-terrain-geotiff.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-terrain-geotiff",
+      "readme": "# v-map-layer-terrain-geotiff\n\nThe `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.\n\n## Features\n\n- ✅ Load elevation data from GeoTIFF files\n- ✅ Support for different projections via proj4\n- ✅ 3D mesh generation with Martini (configurable detail level)\n- ✅ Optional texture overlay\n- ✅ Wireframe mode\n- ✅ Elevation exaggeration\n- ✅ Reactive property updates\n\n## Usage\n\n### Basic Example\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### With Texture Overlay\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    texture=\"https://tile.openstreetmap.org/{z}/{x}/{y}.png\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### Wireframe Mode\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    wireframe=\"true\"\n    elevation-scale=\"3.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### High Detail Terrain\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"12\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    mesh-max-error=\"1.0\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n## Properties\n\n| Property           | Type                                  | Default     | Description                                                    |\n| ------------------ | ------------------------------------- | ----------- | -------------------------------------------------------------- |\n| `url`              | `string`                              | `null`      | URL to the GeoTIFF file containing elevation data (required)   |\n| `projection`       | `string`                              | `null`      | Source projection (e.g., \"EPSG:32632\"), auto-detected if null |\n| `forceProjection`  | `boolean`                             | `false`     | Force projection prop, ignore GeoKeys                          |\n| `visible`          | `boolean`                             | `true`      | Layer visibility                                               |\n| `opacity`          | `number`                              | `1.0`       | Layer opacity (0-1)                                            |\n| `zIndex`           | `number`                              | `100`       | Z-index for layer stacking                                     |\n| `nodata`           | `number`                              | `null`      | NoData value to discard from elevation                         |\n| `meshMaxError`     | `number`                              | `4.0`       | Mesh error tolerance in meters (smaller = more detailed)       |\n| `wireframe`        | `boolean`                             | `false`     | Enable wireframe mode                                          |\n| `texture`          | `string`                              | `null`      | Optional texture URL (image or tile URL)                       |\n| `color`            | `[number, number, number]`            | `null`      | Terrain color [r, g, b] when no texture                        |\n| `colorMap`         | `string \\| GeoStylerColorMap`         | `null`      | ColorMap for elevation visualization                           |\n| `valueRange`       | `[number, number]`                    | `null`      | Value range for colormap normalization [min, max]              |\n| `elevationScale`   | `number`                              | `1.0`       | Elevation exaggeration factor                                  |\n| `minZoom`          | `number`                              | `0`         | Minimum zoom level                                             |\n| `maxZoom`          | `number`                              | `24`        | Maximum zoom level                                             |\n| `tileSize`         | `number`                              | `256`       | Tile size in pixels                                            |\n\n## Events\n\n| Event   | Description                          |\n| ------- | ------------------------------------ |\n| `ready` | Fired when the layer is initialized  |\n\n## Methods\n\n| Method        | Returns  | Description                                    |\n| ------------- | -------- | ---------------------------------------------- |\n| `getLayerId`  | `string` | Returns the internal layer ID                  |\n| `isReady`     | `boolean`| Returns true if the layer is ready             |\n\n## Performance Tips\n\n1. **meshMaxError**: Use larger values (4-10) for better performance, smaller values (0.5-2) for more detail\n2. **elevationScale**: Adjust to exaggerate or flatten terrain features\n3. **tileSize**: Smaller tiles load faster but increase requests\n4. **Projection**: Auto-detection works for most GeoTIFFs, but manual projection can be faster\n\n## GeoTIFF Requirements\n\n- **Elevation data**: Single-band GeoTIFF with elevation values in meters\n- **Coordinate system**: Should have proper GeoKeys or use `projection` prop\n- **Cloud-Optimized**: COG format recommended for better performance\n\n## Examples of Compatible GeoTIFF Sources\n\n- Sentinel-2 DEM tiles (Copernicus)\n- SRTM elevation data\n- Custom DEM files with proper georeferencing\n\n## Browser Support\n\nSame as deck.gl requirements:\n- Chrome/Edge 79+\n- Firefox 78+\n- Safari 14+\n\n## Dependencies\n\n- deck.gl (@deck.gl/core, @deck.gl/geo-layers)\n- geotiff\n- proj4\n- geotiff-geokeys-to-proj4\n",
+      "docs": "The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "color",
+          "type": "[number, number, number]",
+          "complexType": {
+            "original": "[number, number, number]",
+            "resolved": "[number, number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "color",
+          "reflectToAttr": false,
+          "docs": "Color for the terrain (if no texture is provided).\n[r, g, b] with values 0-255.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "[255, 255, 255]"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number, number]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "colorMap",
+          "type": "ColorMap | string",
+          "complexType": {
+            "original": "string | GeoStylerColorMap",
+            "resolved": "ColorMap | string",
+            "references": {
+              "GeoStylerColorMap": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::ColorMap"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "color-map",
+          "reflectToAttr": false,
+          "docs": "ColorMap for elevation data visualization.\nOnly relevant when no texture is set.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "ColorMap"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationScale",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-scale",
+          "reflectToAttr": false,
+          "docs": "Elevation exaggeration factor.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "forceProjection",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "force-projection",
+          "reflectToAttr": false,
+          "docs": "Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": false,
+          "docs": "Maximum zoom level.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "24"
+            }
+          ],
+          "default": "24",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "meshMaxError",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "mesh-max-error",
+          "reflectToAttr": false,
+          "docs": "Mesh error tolerance in meters (Martini).\nSmaller values = more detailed mesh, but slower.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "4.0"
+            }
+          ],
+          "default": "4.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "minZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min-zoom",
+          "reflectToAttr": false,
+          "docs": "Minimum zoom level.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "0"
+            }
+          ],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "nodata",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "nodata",
+          "reflectToAttr": false,
+          "docs": "NoData value to discard (overriding any nodata values in the metadata).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "Opacity of the terrain layer (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "projection",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "projection",
+          "reflectToAttr": false,
+          "docs": "Quell-Projektion des GeoTIFF (z. B. \"EPSG:32632\" oder proj4-String)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "texture",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "texture",
+          "reflectToAttr": false,
+          "docs": "Optional texture URL (can be an image or tile URL).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tileSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tile-size",
+          "reflectToAttr": false,
+          "docs": "Tile size in pixels.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "256"
+            }
+          ],
+          "default": "256",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "URL to the GeoTIFF file containing elevation data.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "valueRange",
+          "type": "[number, number]",
+          "complexType": {
+            "original": "[number, number]",
+            "resolved": "[number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "value-range",
+          "reflectToAttr": false,
+          "docs": "Value range for colormap normalization [min, max].",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wireframe",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wireframe",
+          "reflectToAttr": false,
+          "docs": "Enable wireframe mode (show only mesh lines).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "100"
+            }
+          ],
+          "default": "100",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when the terrain layer is ready.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/v-map-layer-tile3d/v-map-layer-tile3d.tsx",
