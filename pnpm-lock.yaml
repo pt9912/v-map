@@ -92,11 +92,11 @@ importers:
         specifier: ^14.0.1
         version: 14.1.0(semantic-release@24.2.7(typescript@5.9.2))
       '@stencil/core':
-        specifier: ^4.37.1
-        version: 4.37.1
+        specifier: ^4.43.3
+        version: 4.43.3
       '@stencil/storybook-plugin':
         specifier: 0.4.2
-        version: 0.4.2(@stencil/core@4.37.1)(esbuild@0.25.9)(preact@10.27.1)(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)
+        version: 0.4.2(@stencil/core@4.43.3)(esbuild@0.25.9)(preact@10.27.1)(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)
       '@storybook/addon-docs':
         specifier: ^9.1.7
         version: 9.1.7(@types/react@19.1.12)(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))
@@ -1446,8 +1446,8 @@ packages:
     cpu: [arm64]
     os: [android]
 
-  '@rollup/rollup-darwin-arm64@4.34.9':
-    resolution: {integrity: sha512-0CY3/K54slrzLDjOA7TOjN1NuLKERBgk9nY5V34mhmuu673YNb+7ghaDUs6N0ujXR7fz5XaS5Aa6d2TNxZd0OQ==}
+  '@rollup/rollup-darwin-arm64@4.44.0':
+    resolution: {integrity: sha512-VGF3wy0Eq1gcEIkSCr8Ke03CWT+Pm2yveKLaDvq51pPpZza3JX/ClxXOCmTYYq3us5MvEuNRTaeyFThCKRQhOA==}
     cpu: [arm64]
     os: [darwin]
 
@@ -1456,8 +1456,8 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@rollup/rollup-darwin-x64@4.34.9':
-    resolution: {integrity: sha512-eOojSEAi/acnsJVYRxnMkPFqcxSMFfrw7r2iD9Q32SGkb/Q9FpUY1UlAu1DH9T7j++gZ0lHjnm4OyH2vCI7l7Q==}
+  '@rollup/rollup-darwin-x64@4.44.0':
+    resolution: {integrity: sha512-fBkyrDhwquRvrTxSGH/qqt3/T0w5Rg0L7ZIDypvBPc1/gzjJle6acCpZ36blwuwcKD/u6oCE/sRWlUAcxLWQbQ==}
     cpu: [x64]
     os: [darwin]
 
@@ -1486,8 +1486,8 @@ packages:
     cpu: [arm]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-gnu@4.34.9':
-    resolution: {integrity: sha512-6TZjPHjKZUQKmVKMUowF3ewHxctrRR09eYyvT5eFv8w/fXarEra83A2mHTVJLA5xU91aCNOUnM+DWFMSbQ0Nxw==}
+  '@rollup/rollup-linux-arm64-gnu@4.44.0':
+    resolution: {integrity: sha512-ZTR2mxBHb4tK4wGf9b8SYg0Y6KQPjGpR4UWwTFdnmjB4qRtoATZ5dWn3KsDwGa5Z2ZBOE7K52L36J9LueKBdOQ==}
     cpu: [arm64]
     os: [linux]
 
@@ -1496,8 +1496,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@rollup/rollup-linux-arm64-musl@4.34.9':
-    resolution: {integrity: sha512-LD2fytxZJZ6xzOKnMbIpgzFOuIKlxVOpiMAXawsAZ2mHBPEYOnLRK5TTEsID6z4eM23DuO88X0Tq1mErHMVq0A==}
+  '@rollup/rollup-linux-arm64-musl@4.44.0':
+    resolution: {integrity: sha512-GFWfAhVhWGd4r6UxmnKRTBwP1qmModHtd5gkraeW2G490BpFOZkFtem8yuX2NyafIP/mGpRJgTJ2PwohQkUY/Q==}
     cpu: [arm64]
     os: [linux]
 
@@ -1531,8 +1531,8 @@ packages:
     cpu: [s390x]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.34.9':
-    resolution: {integrity: sha512-FwBHNSOjUTQLP4MG7y6rR6qbGw4MFeQnIBrMe161QGaQoBQLqSUEKlHIiVgF3g/mb3lxlxzJOpIBhaP+C+KP2A==}
+  '@rollup/rollup-linux-x64-gnu@4.44.0':
+    resolution: {integrity: sha512-iUVJc3c0o8l9Sa/qlDL2Z9UP92UZZW1+EmQ4xfjTc1akr0iUFZNfxrXJ/R1T90h/ILm9iXEY6+iPrmYB3pXKjw==}
     cpu: [x64]
     os: [linux]
 
@@ -1541,8 +1541,8 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-musl@4.34.9':
-    resolution: {integrity: sha512-cYRpV4650z2I3/s6+5/LONkjIz8MBeqrk+vPXV10ORBnshpn8S32bPqQ2Utv39jCiDcO2eJTuSlPXpnvmaIgRA==}
+  '@rollup/rollup-linux-x64-musl@4.44.0':
+    resolution: {integrity: sha512-PQUobbhLTQT5yz/SPg116VJBgz+XOtXt8D1ck+sfJJhuEsMj2jSej5yTdp8CvWBSceu+WW+ibVL6dm0ptG5fcA==}
     cpu: [x64]
     os: [linux]
 
@@ -1556,8 +1556,8 @@ packages:
     cpu: [arm64]
     os: [openharmony]
 
-  '@rollup/rollup-win32-arm64-msvc@4.34.9':
-    resolution: {integrity: sha512-z4mQK9dAN6byRA/vsSgQiPeuO63wdiDxZ9yg9iyX2QTzKuQM7T4xlBoeUP/J8uiFkqxkcWndWi+W7bXdPbt27Q==}
+  '@rollup/rollup-win32-arm64-msvc@4.44.0':
+    resolution: {integrity: sha512-M0CpcHf8TWn+4oTxJfh7LQuTuaYeXGbk0eageVjQCKzYLsajWS/lFC94qlRqOlyC2KvRT90ZrfXULYmukeIy7w==}
     cpu: [arm64]
     os: [win32]
 
@@ -1571,8 +1571,8 @@ packages:
     cpu: [ia32]
     os: [win32]
 
-  '@rollup/rollup-win32-x64-msvc@4.34.9':
-    resolution: {integrity: sha512-AyleYRPU7+rgkMWbEh71fQlrzRfeP6SyMnRf9XX4fCdDPAJumdSBqYEcWPMzVQ4ScAl7E4oFfK0GUVn77xSwbw==}
+  '@rollup/rollup-win32-x64-msvc@4.44.0':
+    resolution: {integrity: sha512-Q2Mgwt+D8hd5FIPUuPDsvPR7Bguza6yTkJxspDGkZj7tBRn2y4KSWYuIXpftFSjBra76TbKerCV7rgFPQrn+wQ==}
     cpu: [x64]
     os: [win32]
 
@@ -1689,8 +1689,8 @@ packages:
     resolution: {integrity: sha512-sbStwMHb/MIE29st7rRuMYWqhX1UmLSFzdpyGtUZUXLkFNIuYKblzjQdtiet8bau8sUf21uL1DQ451zuySGmcA==}
     engines: {node: '>=16', pnpm: '>=8'}
 
-  '@stencil/core@4.37.1':
-    resolution: {integrity: sha512-s4ZroxdYc2HU0b7V3n59RVtMKdNlTvWWBN8KofaP64eCzvg1qRh6SKMet7MJ069F1lx/FxDvsYfOv7pZRiMWmQ==}
+  '@stencil/core@4.43.3':
+    resolution: {integrity: sha512-w41W6txhGULvvEfa5AEgwfNGAbK3YGowQYMTWuRvXSIbnkiyRDGLogsYSYtHDlz1JJe645JJIK9Lvh5uquFiSw==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
 
@@ -8077,13 +8077,13 @@ snapshots:
   '@rollup/rollup-android-arm64@4.50.0':
     optional: true
 
-  '@rollup/rollup-darwin-arm64@4.34.9':
+  '@rollup/rollup-darwin-arm64@4.44.0':
     optional: true
 
   '@rollup/rollup-darwin-arm64@4.50.0':
     optional: true
 
-  '@rollup/rollup-darwin-x64@4.34.9':
+  '@rollup/rollup-darwin-x64@4.44.0':
     optional: true
 
   '@rollup/rollup-darwin-x64@4.50.0':
@@ -8101,13 +8101,13 @@ snapshots:
   '@rollup/rollup-linux-arm-musleabihf@4.50.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-gnu@4.34.9':
+  '@rollup/rollup-linux-arm64-gnu@4.44.0':
     optional: true
 
   '@rollup/rollup-linux-arm64-gnu@4.50.0':
     optional: true
 
-  '@rollup/rollup-linux-arm64-musl@4.34.9':
+  '@rollup/rollup-linux-arm64-musl@4.44.0':
     optional: true
 
   '@rollup/rollup-linux-arm64-musl@4.50.0':
@@ -8128,13 +8128,13 @@ snapshots:
   '@rollup/rollup-linux-s390x-gnu@4.50.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.34.9':
+  '@rollup/rollup-linux-x64-gnu@4.44.0':
     optional: true
 
   '@rollup/rollup-linux-x64-gnu@4.50.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-musl@4.34.9':
+  '@rollup/rollup-linux-x64-musl@4.44.0':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.50.0':
@@ -8143,7 +8143,7 @@ snapshots:
   '@rollup/rollup-openharmony-arm64@4.50.0':
     optional: true
 
-  '@rollup/rollup-win32-arm64-msvc@4.34.9':
+  '@rollup/rollup-win32-arm64-msvc@4.44.0':
     optional: true
 
   '@rollup/rollup-win32-arm64-msvc@4.50.0':
@@ -8152,7 +8152,7 @@ snapshots:
   '@rollup/rollup-win32-ia32-msvc@4.50.0':
     optional: true
 
-  '@rollup/rollup-win32-x64-msvc@4.34.9':
+  '@rollup/rollup-win32-x64-msvc@4.44.0':
     optional: true
 
   '@rollup/rollup-win32-x64-msvc@4.50.0':
@@ -8339,20 +8339,20 @@ snapshots:
 
   '@spz-loader/core@0.3.0': {}
 
-  '@stencil/core@4.37.1':
+  '@stencil/core@4.43.3':
     optionalDependencies:
-      '@rollup/rollup-darwin-arm64': 4.34.9
-      '@rollup/rollup-darwin-x64': 4.34.9
-      '@rollup/rollup-linux-arm64-gnu': 4.34.9
-      '@rollup/rollup-linux-arm64-musl': 4.34.9
-      '@rollup/rollup-linux-x64-gnu': 4.34.9
-      '@rollup/rollup-linux-x64-musl': 4.34.9
-      '@rollup/rollup-win32-arm64-msvc': 4.34.9
-      '@rollup/rollup-win32-x64-msvc': 4.34.9
+      '@rollup/rollup-darwin-arm64': 4.44.0
+      '@rollup/rollup-darwin-x64': 4.44.0
+      '@rollup/rollup-linux-arm64-gnu': 4.44.0
+      '@rollup/rollup-linux-arm64-musl': 4.44.0
+      '@rollup/rollup-linux-x64-gnu': 4.44.0
+      '@rollup/rollup-linux-x64-musl': 4.44.0
+      '@rollup/rollup-win32-arm64-msvc': 4.44.0
+      '@rollup/rollup-win32-x64-msvc': 4.44.0
 
-  '@stencil/storybook-plugin@0.4.2(@stencil/core@4.37.1)(esbuild@0.25.9)(preact@10.27.1)(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)':
+  '@stencil/storybook-plugin@0.4.2(@stencil/core@4.43.3)(esbuild@0.25.9)(preact@10.27.1)(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))(typescript@5.9.2)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)':
     dependencies:
-      '@stencil/core': 4.37.1
+      '@stencil/core': 4.43.3
       '@storybook/addon-actions': 9.0.8
       '@storybook/builder-vite': 9.1.8(storybook@9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1)))(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))
       '@storybook/global': 5.0.0
@@ -8360,7 +8360,7 @@ snapshots:
       preact-render-to-string: 6.6.1(preact@10.27.1)
       react-docgen-typescript: 2.4.0(typescript@5.9.2)
       storybook: 9.1.7(@testing-library/dom@10.4.1)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))
-      unplugin-stencil: 0.3.5(@stencil/core@4.37.1)(esbuild@0.25.9)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)
+      unplugin-stencil: 0.3.5(@stencil/core@4.43.3)(esbuild@0.25.9)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0)
     transitivePeerDependencies:
       - '@nuxt/kit'
       - '@nuxt/schema'
@@ -13578,9 +13578,9 @@ snapshots:
 
   unorm@1.6.0: {}
 
-  unplugin-stencil@0.3.5(@stencil/core@4.37.1)(esbuild@0.25.9)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0):
+  unplugin-stencil@0.3.5(@stencil/core@4.43.3)(esbuild@0.25.9)(vite@7.1.7(@types/node@22.18.1)(yaml@2.8.1))(webpack@4.47.0):
     dependencies:
-      '@stencil/core': 4.37.1
+      '@stencil/core': 4.43.3
       mlly: 1.8.0
       unplugin: 2.3.10
     optionalDependencies:
