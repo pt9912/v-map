@@ -827,6 +827,7 @@ export class LeafletProvider implements MapProvider {
         nodata: config.nodata,
         resolution: (config as any).resolution,
         resampleMethod: (config as any).resampleMethod,
+        viewProjection: this.map.options.crs.code,
       });
       if (config.opacity !== undefined) {
         (layer as any).setOpacity(config.opacity);

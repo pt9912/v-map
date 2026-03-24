@@ -14,7 +14,7 @@ import {
   GeoTIFFTileProcessor,
   type GeoTIFFTileProcessorConfig,
 } from '../geotiff/utils/GeoTIFFTileProcessor';
-import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
+import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
 // Import utility modules
 import {
@@ -158,7 +158,7 @@ export async function createDeckGLGeoTIFFLayer(
     private tiff?: GeoTIFF;
     private image?: GeoTIFFImage;
     private fromProjection: string = 'EPSG:4326';
-    private toProjection: string = 'EPSG:3857';
+    private viewProjection: string = 'EPSG:3857';
     private sourceBounds: [number, number, number, number] = [0, 0, 0, 0];
     private sourceRef: [number, number] = [0, 0];
     private resolution: number = 1.0;
@@ -276,7 +276,7 @@ export async function createDeckGLGeoTIFFLayer(
 
       log(`loadGeoTIFF - init: ${this.state.init}`);
       try {
-        const source = await loadGeoTIFFSource(
+        const source: GeoTIFFSource = await loadGeoTIFFSource(
           url,
           {
             projection,
@@ -296,7 +296,7 @@ export async function createDeckGLGeoTIFFLayer(
         this.imageWidth = source.width;
         this.imageHeight = source.height;
         this.fromProjection = source.fromProjection;
-        this.toProjection = source.toProjection;
+        //   this.toProjection = source.toProjection;
         this.sourceBounds = source.sourceBounds;
         this.sourceRef = source.sourceRef;
         this.resolution = source.resolution;
@@ -320,7 +320,7 @@ export async function createDeckGLGeoTIFFLayer(
       const transformViewToSourceMapFn = (
         coord: [number, number],
       ): [number, number] => {
-        const result = proj4(this.toProjection, this.fromProjection, coord);
+        const result = proj4(this.viewProjection, this.fromProjection, coord);
         return result as [number, number];
       };
 
@@ -328,7 +328,7 @@ export async function createDeckGLGeoTIFFLayer(
       const transformSourceMapToViewFn = (
         coord: [number, number],
       ): [number, number] => {
-        const result = proj4(this.fromProjection, this.toProjection, coord);
+        const result = proj4(this.fromProjection, this.viewProjection, coord);
         return result as [number, number];
       };
 
@@ -341,7 +341,7 @@ export async function createDeckGLGeoTIFFLayer(
         imageWidth: this.imageWidth,
         imageHeight: this.imageHeight,
         fromProjection: this.fromProjection,
-        toProjection: this.toProjection,
+        toProjection: this.viewProjection,
         baseImage: this.image!,
         overviewImages: this.overviewImages || [],
       };

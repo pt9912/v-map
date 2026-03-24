@@ -24,7 +24,7 @@ export interface GeoTIFFSource {
   height: number;
   samplesPerPixel: number;
   fromProjection: string;
-  toProjection: string;
+  // toProjection: string;
   sourceBounds: [number, number, number, number];
   sourceRef: [number, number];
   resolution: number;
@@ -34,7 +34,7 @@ export interface GeoTIFFSource {
   transformToWgs84: (coord: [number, number]) => [number, number];
 }
 
-const DEFAULT_TO_PROJECTION = 'EPSG:3857';
+//const DEFAULT_TO_PROJECTION = 'EPSG:3857';
 
 export async function loadGeoTIFFSource(
   url: string,
@@ -49,10 +49,27 @@ export async function loadGeoTIFFSource(
     throw new Error('geotiff.fromUrl is not available in this environment.');
   }
 
-  const tiff = await fromUrl(url, {
-    allowFullFile: true,
-    cache: true,
-  });
+  let tiff: GeoTIFF = null;
+  let lasterr = null;
+  for (let i = 0; i <= 2; i++) {
+    try {
+      tiff = await fromUrl(url, {
+        allowFullFile: true,
+        cache: true,
+      });
+    } catch (err) {
+      lasterr = err;
+    }
+    if (tiff != null) {
+      lasterr = null;
+      break;
+    }
+  }
+  if (lasterr != null) {
+    log(lasterr);
+    warn('Error - loadGeoTIFFSource - fromUrl: ', url);
+    throw lasterr;
+  }
 
   const baseImage = await tiff.getImage(0);
   const imageCount = await tiff.getImageCount();
@@ -142,10 +159,12 @@ export async function loadGeoTIFFSource(
     options.nodata !== undefined && options.nodata !== null
       ? Number(options.nodata)
       : typeof baseImage.getGDALNoData === 'function'
-        ? baseImage.getGDALNoData()
-        : undefined;
+      ? baseImage.getGDALNoData()
+      : undefined;
   const noDataValue =
-    rawNoData !== undefined && rawNoData !== null ? Number(rawNoData) : undefined;
+    rawNoData !== undefined && rawNoData !== null
+      ? Number(rawNoData)
+      : undefined;
 
   const clampLon = (lon: number) =>
     Math.max(-180, Math.min(180, Number.isFinite(lon) ? lon : 0));
@@ -197,7 +216,7 @@ export async function loadGeoTIFFSource(
     height,
     samplesPerPixel,
     fromProjection,
-    toProjection: DEFAULT_TO_PROJECTION,
+    //toProjection: DEFAULT_TO_PROJECTION,
     sourceBounds,
     sourceRef,
     resolution,
@@ -206,4 +225,34 @@ export async function loadGeoTIFFSource(
     wgs84Bounds: [west, south, east, north],
     transformToWgs84,
   };
+}
+
+export async function getGeoTIFFSource(
+  url: string,
+  projection: string,
+  forceProjection: boolean,
+  nodata: number,
+): Promise<GeoTIFFSource> {
+  const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
+    import('geotiff'),
+    import('proj4'),
+    import('geotiff-geokeys-to-proj4'),
+  ]);
+
+  const proj4 = (proj4Module as any).default ?? proj4Module;
+
+  const source: GeoTIFFSource = await loadGeoTIFFSource(
+    url,
+    {
+      projection: projection,
+      forceProjection: forceProjection,
+      nodata: nodata,
+    },
+    {
+      geotiff: geotiffModule,
+      proj4,
+      geokeysToProj4: geokeysModule,
+    },
+  );
+  return source;
 }

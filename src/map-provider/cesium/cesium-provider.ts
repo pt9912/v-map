@@ -15,17 +15,22 @@ import type { StyleConfig } from '../../types/styleconfig';
 
 import { AsyncMutex } from '../../utils/async-mutex';
 import { getColorStops, type ColorStop } from '../geotiff/utils/colormap-utils';
-import { GeoTIFFTileProcessor } from '../geotiff/utils/GeoTIFFTileProcessor';
-import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
+import {
+  GeoTIFFTileProcessor,
+  GeoTIFFTileProcessorConfig,
+  getTileProcessorConfig,
+} from '../geotiff/utils/GeoTIFFTileProcessor';
+import { getGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 import { GeoTIFFImageryProvider } from './GeoTIFFImageryProvider';
 import { createCesiumGeoTIFFTerrainProvider } from './CesiumGeoTIFFTerrainProvider';
 
 type CesiumModule = typeof import('cesium');
-import {
-  type Viewer,
-  type ImageryLayer,
-  type GeoJsonDataSource,
-  type Cesium3DTileset,
+import type {
+  Viewer,
+  ImageryLayer,
+  GeoJsonDataSource,
+  Cesium3DTileset,
+  TerrainProvider,
 } from 'cesium';
 
 type UrlTemplateOptions = ConstructorParameters<
@@ -57,20 +62,20 @@ function removeCesiumWidgetsCss(shadowRoot: ShadowRoot): void {
 class CesiumTerrainLayer implements ILayer {
   private options: any;
   private opacity = 1;
-  private previousProvider: any;
+  private previousProvider: TerrainProvider;
 
   constructor(
     private Cesium: CesiumModule,
     private viewer: Viewer,
-    private provider: any,
-    options: Partial<Extract<LayerConfig, { type: 'terrain' }>>,
+    private provider: TerrainProvider,
+    options: any, //Partial<Extract<LayerConfig, { type: 'terrain' }>>,
   ) {
     this.options = options ?? {};
     this.previousProvider = viewer.terrainProvider;
     this.viewer.terrainProvider = this.provider;
   }
 
-  getOptions() {
+  getOptions(): any {
     return this.options;
   }
 
@@ -1344,8 +1349,21 @@ export class CesiumProvider implements MapProvider {
   private async createGeoTIFFTerrainLayer(
     config: Extract<LayerConfig, { type: 'terrain-geotiff' }>,
   ): Promise<CesiumTerrainLayer> {
+    // If no URL is set, return a fallback layer with EllipsoidTerrainProvider
     if (!config.url) {
-      throw new Error('GeoTIFF Terrain layer requires a URL');
+      log(
+        '[cesium-terrain-geotiff] GeoTIFF Terrain layer created without URL (will load when URL is set)',
+      );
+      const fallbackProvider = new this.Cesium.EllipsoidTerrainProvider();
+      const layer = new CesiumTerrainLayer(
+        this.Cesium,
+        this.viewer,
+        fallbackProvider,
+        config as any,
+      );
+      // Set to invisible since there's no terrain data
+      layer.setVisible(false);
+      return layer;
     }
 
     try {
@@ -1483,7 +1501,9 @@ export class CesiumProvider implements MapProvider {
         const subsetX = `subset=X(${west},${east})`;
         const subsetY = `subset=Y(${south},${north})`;
 
-        url = `${config.url}${config.url.includes('?') ? '&' : '?'}${queryString}&${subsetX}&${subsetY}`;
+        url = `${config.url}${
+          config.url.includes('?') ? '&' : '?'
+        }${queryString}&${subsetX}&${subsetY}`;
       }
       // WCS 1.x.x uses BBOX parameter
       else {
@@ -1504,7 +1524,9 @@ export class CesiumProvider implements MapProvider {
           }
         });
 
-        url = `${config.url}${config.url.includes('?') ? '&' : '?'}${query.toString()}`;
+        url = `${config.url}${
+          config.url.includes('?') ? '&' : '?'
+        }${query.toString()}`;
       }
 
       return new Cesium.Resource({ url });
@@ -1533,58 +1555,23 @@ export class CesiumProvider implements MapProvider {
       throw new Error('GeoTIFF layer requires a URL');
     }
 
+    let viewProjection = 'EPSG:4326';
+    const projection = this.viewer.scene.mapProjection;
+    if (projection instanceof Cesium.WebMercatorProjection) {
+      viewProjection = 'EPSG:3857'; // Web Mercator
+    }
+
     try {
-      const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
-        import('geotiff'),
-        import('proj4'),
-        import('geotiff-geokeys-to-proj4'),
-      ]);
-
-      const proj4 = (proj4Module as any).default ?? proj4Module;
-
-      const source = await loadGeoTIFFSource(
+      const source: GeoTIFFSource = await getGeoTIFFSource(
         config.url,
-        {
-          projection: (config as any).projection,
-          forceProjection: Boolean((config as any).forceProjection),
-          nodata: config.nodata,
-        },
-        {
-          geotiff: geotiffModule,
-          proj4,
-          geokeysToProj4: geokeysModule,
-        },
+        (config as any).projection,
+        (config as any).forceProjection,
+        config.nodata,
       );
+      const tileProcessorConfig: GeoTIFFTileProcessorConfig =
+        await getTileProcessorConfig(source, viewProjection);
 
-      // Transform from Mercator to Source projection
-      const transformViewToSourceMapFn = (
-        coord: [number, number],
-      ): [number, number] => {
-        const result = proj4(source.toProjection, source.fromProjection, coord);
-        return [Number(result[0]), Number(result[1])];
-      };
-
-      // Inverse: Transform from Source projection to Mercator
-      const transformSourceMapToViewFn = (
-        coord: [number, number],
-      ): [number, number] => {
-        const result = proj4(source.fromProjection, source.toProjection, coord);
-        return [Number(result[0]), Number(result[1])];
-      };
-
-      const tileProcessor = new GeoTIFFTileProcessor({
-        transformViewToSourceMapFn,
-        transformSourceMapToViewFn,
-        sourceBounds: source.sourceBounds,
-        sourceRef: source.sourceRef,
-        resolution: source.resolution,
-        imageWidth: source.width,
-        imageHeight: source.height,
-        fromProjection: source.fromProjection,
-        toProjection: source.toProjection,
-        baseImage: source.baseImage,
-        overviewImages: source.overviewImages ?? [],
-      });
+      const tileProcessor = new GeoTIFFTileProcessor(tileProcessorConfig);
       tileProcessor.createGlobalTriangulation();
 
       let colorStops: ColorStop[] | undefined;
@@ -1733,27 +1720,6 @@ export class CesiumProvider implements MapProvider {
             updatedGoogleLayer.setOptions(googleOptions);
           }
           break;
-        case 'terrain':
-          {
-            const previousOptions = oldLayer.getOptions();
-            const visible = oldLayer.getVisible();
-            const opacity = oldLayer.getOpacity();
-            oldLayer.remove();
-
-            const terrainLayer = await this.createTerrainLayer({
-              type: 'terrain',
-              ...previousOptions,
-              ...(update.data ?? {}),
-            } as Extract<LayerConfig, { type: 'terrain' }>);
-
-            const wrapped = this.layerManager.addCustomLayer(
-              layerId,
-              terrainLayer,
-            );
-            wrapped.setVisible(visible);
-            wrapped.setOpacity(opacity);
-          }
-          break;
         case 'xyz':
           {
             const xyzOptions = oldLayer.getOptions();
@@ -1846,18 +1812,18 @@ export class CesiumProvider implements MapProvider {
             }
           }
           break;
-        case 'terrain-geotiff':
+        case 'terrain':
           {
             const previousOptions = oldLayer.getOptions();
             const visible = oldLayer.getVisible();
             const opacity = oldLayer.getOpacity();
             oldLayer.remove();
 
-            const terrainLayer = await this.createGeoTIFFTerrainLayer({
-              type: 'terrain-geotiff',
+            const terrainLayer = await this.createTerrainLayer({
+              type: 'terrain',
               ...previousOptions,
               ...(update.data ?? {}),
-            } as Extract<LayerConfig, { type: 'terrain-geotiff' }>);
+            } as Extract<LayerConfig, { type: 'terrain' }>);
 
             const wrapped = this.layerManager.addCustomLayer(
               layerId,
@@ -1865,6 +1831,23 @@ export class CesiumProvider implements MapProvider {
             );
             wrapped.setVisible(visible);
             wrapped.setOpacity(opacity);
+          }
+          break;
+        case 'terrain-geotiff':
+          {
+            //const previousOptions = oldLayer.getOptions();
+            //const visible = oldLayer.getVisible();
+            //const opacity = oldLayer.getOpacity();
+            oldLayer.remove();
+
+            const terrainLayer = await this.createGeoTIFFTerrainLayer({
+              type: 'terrain-geotiff',
+              ...(update.data ?? {}),
+            } as Extract<LayerConfig, { type: 'terrain-geotiff' }>);
+
+            this.layerManager.addCustomLayer(layerId, terrainLayer);
+            //wrapped.setVisible(visible);
+            //wrapped.setOpacity(opacity);
           }
           break;
       }

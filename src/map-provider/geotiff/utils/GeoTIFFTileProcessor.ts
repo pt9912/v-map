@@ -8,7 +8,7 @@ import {
 } from './sampling-utils';
 import { type ColorStop } from './colormap-utils';
 import { type TypedArrayType } from './normalization-utils';
-
+import { GeoTIFFSource } from '../geotiff-source';
 /**
  * Configuration for the GeoTIFF Tile Processor
  */
@@ -631,4 +631,43 @@ export class GeoTIFFTileProcessor {
 
     return outputData;
   }
+}
+
+export async function getTileProcessorConfig(
+  tiffSource: GeoTIFFSource,
+  viewProjection: string,
+): Promise<GeoTIFFTileProcessorConfig> {
+  const [proj4Module] = await Promise.all([import('proj4')]);
+  const proj4 = (proj4Module as any).default ?? proj4Module;
+
+  // Transform from View projection to Source projection
+  const transformViewToSourceMapFn = (
+    coord: [number, number],
+  ): [number, number] => {
+    const result = proj4(viewProjection, tiffSource.fromProjection, coord);
+    return [Number(result[0]), Number(result[1])];
+  };
+
+  // Inverse: Transform from Source projection to View projection
+  const transformSourceMapToViewFn = (
+    coord: [number, number],
+  ): [number, number] => {
+    const result = proj4(tiffSource.fromProjection, viewProjection, coord);
+    return [Number(result[0]), Number(result[1])];
+  };
+
+  const config: GeoTIFFTileProcessorConfig = {
+    transformViewToSourceMapFn,
+    transformSourceMapToViewFn,
+    sourceBounds: tiffSource.sourceBounds,
+    sourceRef: tiffSource.sourceRef,
+    resolution: tiffSource.resolution,
+    imageWidth: tiffSource.width,
+    imageHeight: tiffSource.height,
+    fromProjection: tiffSource.fromProjection,
+    toProjection: viewProjection,
+    baseImage: tiffSource.baseImage,
+    overviewImages: tiffSource.overviewImages ?? [],
+  };
+  return config;
 }

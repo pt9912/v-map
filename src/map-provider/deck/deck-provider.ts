@@ -1402,14 +1402,18 @@ export type TileLoadProps = {
       case 'wcs': {
         const ov: any = {};
         if (update.data?.url) ov.url = update.data.url;
-        if (update.data?.coverageName) ov.coverageName = update.data.coverageName;
+        if (update.data?.coverageName)
+          ov.coverageName = update.data.coverageName;
         if (update.data?.format) ov.format = update.data.format;
         if (update.data?.version) ov.version = update.data.version;
         if (update.data?.projection) ov.projection = update.data.projection;
         if (update.data?.params) ov.params = update.data.params;
-        if (update.data?.tileSize !== undefined) ov.tileSize = update.data.tileSize;
-        if (update.data?.minZoom !== undefined) ov.minZoom = update.data.minZoom;
-        if (update.data?.maxZoom !== undefined) ov.maxZoom = update.data.maxZoom;
+        if (update.data?.tileSize !== undefined)
+          ov.tileSize = update.data.tileSize;
+        if (update.data?.minZoom !== undefined)
+          ov.minZoom = update.data.minZoom;
+        if (update.data?.maxZoom !== undefined)
+          ov.maxZoom = update.data.maxZoom;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
@@ -1461,20 +1465,19 @@ export type TileLoadProps = {
       }
       case 'geotiff': {
         const data = update.data ?? {};
-        const ov: any = { data };
+        const ov: any = {};
         if ('url' in data) ov.url = data.url;
         if ('nodata' in data) ov.noDataValue = data.nodata;
         if ('colorMap' in data) ov.colorMap = data.colorMap;
         if ('valueRange' in data) ov.valueRange = data.valueRange;
         if ('resolution' in data) ov.resolution = data.resolution;
-        if ('resampleMethod' in data)
-          ov.resampleMethod = data.resampleMethod;
-        group.setModelOverrides(layerId, ov);
+        if ('resampleMethod' in data) ov.resampleMethod = data.resampleMethod;
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
       case 'terrain-geotiff': {
         const data = update.data ?? {};
-        const ov: any = { data };
+        const ov: any = {};
         if ('url' in data) ov.url = data.url;
         if ('projection' in data) ov.projection = data.projection;
         if ('forceProjection' in data)
@@ -1487,7 +1490,7 @@ export type TileLoadProps = {
         if ('colorMap' in data) ov.colorMap = data.colorMap;
         if ('valueRange' in data) ov.valueRange = data.valueRange;
         if ('elevationScale' in data) ov.elevationScale = data.elevationScale;
-        group.setModelOverrides(layerId, ov);
+        if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
       case 'wfs': {
@@ -1656,25 +1659,6 @@ export type TileLoadProps = {
     }
 
     try {
-      // const { createReprojectedCogBitmapLayer } = await import(
-      //   './reprojected-cog-bitmaplayer'
-      // );
-      // const cogBitmapOptions: Record<string, any> = {
-      //   type: 'image',
-      //   useHeatMap: false,
-      // };
-
-      // if (config.nodata !== undefined && config.nodata !== null) {
-      //   cogBitmapOptions.noDataValue = config.nodata;
-      //   cogBitmapOptions.nullColor = [0, 0, 0, 0];
-      // }
-      // //
-      // const layer = await createReprojectedCogBitmapLayer(layerId, config.url, {
-      //   ...cogBitmapOptions,
-      //   opacity: config.opacity ?? 1.0,
-      //   visible: config.visible ?? true,
-      // });
-
       const layer = await createDeckGLGeoTIFFLayer({
         id: layerId,
         url: config.url,
@@ -1699,11 +1683,7 @@ export type TileLoadProps = {
   private async createGeoTIFFTerrainLayer(
     config: Extract<LayerConfig, { type: 'terrain-geotiff' }>,
     layerId: string,
-  ): Promise<Layer> {
-    if (!config.url) {
-      throw new Error('GeoTIFF Terrain layer requires a URL');
-    }
-
+  ): Promise<Layer | null> {
     try {
       const layer = await createDeckGLGeoTIFFTerrainLayer({
         id: layerId,
@@ -1731,12 +1711,7 @@ export type TileLoadProps = {
         'v-map - provider - deck - Failed to create GeoTIFF Terrain layer:',
         error,
       );
-
-      return new GeoJsonLayer({
-        id: layerId,
-        data: { type: 'FeatureCollection', features: [] },
-        opacity: 0,
-      });
+      return null;
     }
   }
 

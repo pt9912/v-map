@@ -4,7 +4,7 @@ import type { Coords, DoneCallback } from 'leaflet';
 import { GeoTIFFTileProcessor } from '../geotiff/utils/GeoTIFFTileProcessor';
 import type { ColorStop } from '../geotiff/utils/colormap-utils';
 import { getColorStops } from '../geotiff/utils/colormap-utils';
-import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
+import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
 export interface GeoTIFFGridLayerOptions extends L.GridLayerOptions {
   url: string;
@@ -16,6 +16,7 @@ export interface GeoTIFFGridLayerOptions extends L.GridLayerOptions {
   tileSize?: number;
   opacity?: number;
   zIndex?: number;
+  viewProjection?: string;
 }
 
 export class GeoTIFFGridLayer extends L.GridLayer {
@@ -39,7 +40,10 @@ export class GeoTIFFGridLayer extends L.GridLayer {
 
   createTile(coords: Coords, done: DoneCallback): HTMLCanvasElement {
     const size = (this as any).getTileSize();
-    const canvas = L.DomUtil.create('canvas', 'leaflet-tile') as HTMLCanvasElement;
+    const canvas = L.DomUtil.create(
+      'canvas',
+      'leaflet-tile',
+    ) as HTMLCanvasElement;
     canvas.width = size.x;
     canvas.height = size.y;
 
@@ -56,8 +60,10 @@ export class GeoTIFFGridLayer extends L.GridLayer {
             y: coords.y,
             z: coords.z,
             tileSize: size.x,
-            resolution: this.geotiffOptions.resolution ?? this.defaultResolution,
-            resampleMethod: this.geotiffOptions.resampleMethod ?? this.defaultResample,
+            resolution:
+              this.geotiffOptions.resolution ?? this.defaultResolution,
+            resampleMethod:
+              this.geotiffOptions.resampleMethod ?? this.defaultResample,
             colorStops: this.colorStops,
           });
 
@@ -112,7 +118,7 @@ export class GeoTIFFGridLayer extends L.GridLayer {
 
     const proj4 = (proj4Module as any).default ?? proj4Module;
 
-    const source = await loadGeoTIFFSource(
+    const source: GeoTIFFSource = await loadGeoTIFFSource(
       this.geotiffOptions.url,
       {
         projection: undefined,
@@ -129,13 +135,21 @@ export class GeoTIFFGridLayer extends L.GridLayer {
     const transformViewToSourceMapFn = (
       coord: [number, number],
     ): [number, number] => {
-      const result = source.proj4(source.toProjection, source.fromProjection, coord);
+      const result = source.proj4(
+        this.geotiffOptions.viewProjection, //source.toProjection,
+        source.fromProjection,
+        coord,
+      );
       return [Number(result[0]), Number(result[1])];
     };
     const transformSourceMapToViewFn = (
       coord: [number, number],
     ): [number, number] => {
-      const result = source.proj4(source.fromProjection, source.toProjection, coord);
+      const result = source.proj4(
+        source.fromProjection,
+        this.geotiffOptions.viewProjection, //source.toProjection,
+        coord,
+      );
       return [Number(result[0]), Number(result[1])];
     };
 
@@ -148,7 +162,7 @@ export class GeoTIFFGridLayer extends L.GridLayer {
       imageWidth: source.width,
       imageHeight: source.height,
       fromProjection: source.fromProjection,
-      toProjection: source.toProjection,
+      toProjection: this.geotiffOptions.viewProjection, //source.toProjection,
       baseImage: source.baseImage,
       overviewImages: source.overviewImages ?? [],
     });

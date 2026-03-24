@@ -1,6 +1,9 @@
 import type { GeoTIFFImage } from 'geotiff';
 import { log, warn, error } from '../../utils/logger';
-import { loadGeoTIFFSource } from '../geotiff/geotiff-source';
+import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
+
+type CesiumModule = typeof import('cesium');
+import type { TerrainProvider, TilingScheme, TerrainData } from 'cesium';
 
 export interface CesiumGeoTIFFTerrainProviderOptions {
   url: string;
@@ -16,11 +19,10 @@ export interface CesiumGeoTIFFTerrainProviderOptions {
  * This provider loads a GeoTIFF file containing elevation data and provides
  * it to Cesium's terrain system as a heightmap.
  */
-export class CesiumGeoTIFFTerrainProvider {
-  private Cesium: any;
+export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
+  private Cesium: CesiumModule;
   private image?: GeoTIFFImage;
   private fromProjection: string = 'EPSG:4326';
-  private toProjection: string = 'EPSG:3857';
   private sourceBounds: [number, number, number, number] = [0, 0, 0, 0];
   private wgs84Bounds: [number, number, number, number] = [0, 0, 0, 0];
   private width: number = 0;
@@ -28,9 +30,11 @@ export class CesiumGeoTIFFTerrainProvider {
   private noDataValue: number = 0;
   private ready: boolean = false;
   private _readyPromise: Promise<boolean>;
-  private tilingScheme: any;
   private heightmapWidth: number = 65;
   private heightmapHeight: number = 65;
+  private proj4: typeof import('proj4');
+
+  tilingScheme: TilingScheme;
 
   constructor(options: CesiumGeoTIFFTerrainProviderOptions) {
     this.Cesium = options.Cesium;
@@ -42,7 +46,9 @@ export class CesiumGeoTIFFTerrainProvider {
     this._readyPromise = this.initialize(options);
   }
 
-  private async initialize(options: CesiumGeoTIFFTerrainProviderOptions): Promise<boolean> {
+  private async initialize(
+    options: CesiumGeoTIFFTerrainProviderOptions,
+  ): Promise<boolean> {
     try {
       log(`[cesium-terrain-geotiff] Loading GeoTIFF from ${options.url}`);
 
@@ -54,7 +60,7 @@ export class CesiumGeoTIFFTerrainProvider {
 
       const proj4 = (proj4Module as any).default ?? proj4Module;
 
-      const source = await loadGeoTIFFSource(
+      const source: GeoTIFFSource = await loadGeoTIFFSource(
         options.url,
         {
           projection: options.projection,
@@ -70,15 +76,17 @@ export class CesiumGeoTIFFTerrainProvider {
 
       this.image = source.baseImage;
       this.fromProjection = source.fromProjection;
-      this.toProjection = source.toProjection;
       this.sourceBounds = source.sourceBounds;
       this.wgs84Bounds = source.wgs84Bounds;
       this.width = source.width;
       this.height = source.height;
       this.noDataValue = source.noDataValue ?? 0;
+      this.proj4 = source.proj4; // Store proj4 instance with registered projections
 
       log('[cesium-terrain-geotiff] GeoTIFF loaded successfully');
-      log(`[cesium-terrain-geotiff] Projection: ${this.fromProjection} -> ${this.toProjection}`);
+      log(
+        `[cesium-terrain-geotiff] Source projection: ${this.fromProjection}`,
+      );
       log(`[cesium-terrain-geotiff] Bounds: ${this.sourceBounds}`);
       log(`[cesium-terrain-geotiff] WGS84 Bounds: ${this.wgs84Bounds}`);
       log(`[cesium-terrain-geotiff] Dimensions: ${this.width}x${this.height}`);
@@ -111,7 +119,7 @@ export class CesiumGeoTIFFTerrainProvider {
     x: number,
     y: number,
     level: number,
-  ): Promise<any> {
+  ): Promise<TerrainData> {
     if (!this.ready || !this.image) {
       return undefined;
     }
@@ -119,25 +127,45 @@ export class CesiumGeoTIFFTerrainProvider {
     try {
       // Get tile bounds in WGS84
       const rectangle = this.tilingScheme.tileXYToRectangle(x, y, level);
-      const west = this.Cesium.Math.toDegrees(rectangle.west);
-      const south = this.Cesium.Math.toDegrees(rectangle.south);
-      const east = this.Cesium.Math.toDegrees(rectangle.east);
-      const north = this.Cesium.Math.toDegrees(rectangle.north);
+      let west = this.Cesium.Math.toDegrees(rectangle.west);
+      let south = this.Cesium.Math.toDegrees(rectangle.south);
+      let east = this.Cesium.Math.toDegrees(rectangle.east);
+      let north = this.Cesium.Math.toDegrees(rectangle.north);
+
+      // Get GeoTIFF bounds in WGS84
+      const [geoWest, geoSouth, geoEast, geoNorth] = this.wgs84Bounds;
 
       // Check if tile intersects with GeoTIFF bounds
-      const [geoWest, geoSouth, geoEast, geoNorth] = this.wgs84Bounds;
-      if (east < geoWest || west > geoEast || north < geoSouth || south > geoNorth) {
-        // Tile is outside GeoTIFF bounds, return flat heightmap
+      if (
+        east < geoWest ||
+        west > geoEast ||
+        north < geoSouth ||
+        south > geoNorth
+      ) {
+        // Tile is completely outside GeoTIFF bounds, return flat heightmap
         return this.createFlatHeightmap();
       }
 
-      // Load elevation data for this tile
-      const proj4Module = await import('proj4');
-      const proj4 = (proj4Module as any).default ?? proj4Module;
+      // Clamp tile bounds to GeoTIFF coverage area
+      // This prevents transformation errors when the GeoTIFF projection
+      // doesn't support the full WGS84 range (e.g., Mercator and poles)
+      west = Math.max(geoWest, Math.min(geoEast, west));
+      east = Math.max(geoWest, Math.min(geoEast, east));
+      south = Math.max(geoSouth, Math.min(geoNorth, south));
+      north = Math.max(geoSouth, Math.min(geoNorth, north));
 
       // Transform tile bounds to source projection
+      // Use the stored proj4 instance that has the projection definitions
       const transformToSource = (coord: [number, number]): [number, number] => {
-        return proj4('EPSG:4326', this.fromProjection, coord) as [number, number];
+        try {
+          return this.proj4('EPSG:4326', this.fromProjection, coord) as [
+            number,
+            number,
+          ];
+        } catch (err) {
+          warn('[cesium-terrain-geotiff] Transform failed:', err);
+          return coord;
+        }
       };
 
       const swSource = transformToSource([west, south]);
@@ -152,9 +180,13 @@ export class CesiumGeoTIFFTerrainProvider {
       const pixelHeight = srcNorth - srcSouth;
 
       const x0 = Math.floor(((swSource[0] - srcWest) / pixelWidth) * srcWidth);
-      const y0 = Math.floor(((srcNorth - neSource[1]) / pixelHeight) * srcHeight);
+      const y0 = Math.floor(
+        ((srcNorth - neSource[1]) / pixelHeight) * srcHeight,
+      );
       const x1 = Math.ceil(((neSource[0] - srcWest) / pixelWidth) * srcWidth);
-      const y1 = Math.ceil(((srcNorth - swSource[1]) / pixelHeight) * srcHeight);
+      const y1 = Math.ceil(
+        ((srcNorth - swSource[1]) / pixelHeight) * srcHeight,
+      );
 
       // Clamp to image bounds
       const windowX = Math.max(0, Math.min(x0, srcWidth));
@@ -164,15 +196,25 @@ export class CesiumGeoTIFFTerrainProvider {
 
       // Read elevation data from GeoTIFF
       const rasterData = await this.image.readRasters({
-        window: [windowX, windowY, windowX + windowWidth, windowY + windowHeight],
+        window: [
+          windowX,
+          windowY,
+          windowX + windowWidth,
+          windowY + windowHeight,
+        ],
         width: this.heightmapWidth,
         height: this.heightmapHeight,
         resampleMethod: 'bilinear',
       });
 
       // Convert to heightmap array (first band contains elevation)
-      const elevationData = rasterData[0] as Float32Array | Int16Array | Uint16Array;
-      const buffer = new Float32Array(this.heightmapWidth * this.heightmapHeight);
+      const elevationData = rasterData[0] as
+        | Float32Array
+        | Int16Array
+        | Uint16Array;
+      const buffer = new Float32Array(
+        this.heightmapWidth * this.heightmapHeight,
+      );
 
       for (let i = 0; i < buffer.length; i++) {
         let value = elevationData[i];
@@ -206,7 +248,7 @@ export class CesiumGeoTIFFTerrainProvider {
   /**
    * Create a flat heightmap for tiles outside the GeoTIFF bounds
    */
-  private createFlatHeightmap(): any {
+  private createFlatHeightmap(): TerrainData {
     const buffer = new Float32Array(this.heightmapWidth * this.heightmapHeight);
     buffer.fill(0);
 
@@ -231,8 +273,64 @@ export class CesiumGeoTIFFTerrainProvider {
   /**
    * Get the tiling scheme
    */
-  getTilingScheme(): any {
+  getTilingScheme(): TilingScheme {
     return this.tilingScheme;
+  }
+
+  /**
+   * Get the maximum geometric error allowed at a specific level
+   * Required by Cesium's TerrainProvider interface
+   *
+   * The geometric error is the difference (in meters) between the actual terrain
+   * and the terrain approximation at this level. Higher levels have lower error.
+   */
+  getLevelMaximumGeometricError(level: number): number {
+    // Standard geometric error calculation for terrain providers
+    // Based on Cesium's approach: error decreases exponentially with level
+    // Formula: maximumRadius / (tileWidth * (2^level))
+    const ellipsoid = this.tilingScheme.ellipsoid;
+    const maximumRadius = ellipsoid.maximumRadius;
+    const tileWidth = 65; // Standard heightmap width
+    return maximumRadius / (tileWidth * Math.pow(2, level));
+  }
+
+  loadTileDataAvailability(
+    _x: number,
+    _y: number,
+    _level: number,
+  ): undefined | Promise<void> {
+    return undefined;
+  }
+
+  /**
+   * Check if tile data is available for a specific tile
+   * Required by Cesium's TerrainProvider interface
+   */
+  getTileDataAvailable(
+    x: number,
+    y: number,
+    level: number,
+  ): boolean | undefined {
+    if (!this.ready) {
+      return false;
+    }
+
+    // Check if tile intersects with GeoTIFF bounds
+    const rectangle = this.tilingScheme.tileXYToRectangle(x, y, level);
+    const west = this.Cesium.Math.toDegrees(rectangle.west);
+    const south = this.Cesium.Math.toDegrees(rectangle.south);
+    const east = this.Cesium.Math.toDegrees(rectangle.east);
+    const north = this.Cesium.Math.toDegrees(rectangle.north);
+
+    const [geoWest, geoSouth, geoEast, geoNorth] = this.wgs84Bounds;
+
+    // Return true if tile intersects with GeoTIFF bounds
+    return !(
+      east < geoWest ||
+      west > geoEast ||
+      north < geoSouth ||
+      south > geoNorth
+    );
   }
 
   /**
@@ -276,7 +374,7 @@ export class CesiumGeoTIFFTerrainProvider {
  */
 export async function createCesiumGeoTIFFTerrainProvider(
   options: CesiumGeoTIFFTerrainProviderOptions,
-): Promise<CesiumGeoTIFFTerrainProvider> {
+): Promise<TerrainProvider> {
   const provider = new CesiumGeoTIFFTerrainProvider(options);
   await provider.readyPromise;
   return provider;
