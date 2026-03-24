@@ -8,7 +8,7 @@
 
 > **StyleEvent** = `object`
 
-Defined in: [src/types/styling.ts:53](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/types/styling.ts#L53)
+Defined in: [src/types/styling.ts:53](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/styling.ts#L53)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/types/styling.ts:53](https://github.com/pt9912/v-map/blob/a0b7e
 
 > `optional` **layerIds**: `string`[]
 
-Defined in: [src/types/styling.ts:55](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/types/styling.ts#L55)
+Defined in: [src/types/styling.ts:55](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/styling.ts#L55)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/types/styling.ts:55](https://github.com/pt9912/v-map/blob/a0b7e
 
 > `optional` **style**: [`ResolvedStyle`](ResolvedStyle.md)
 
-Defined in: [src/types/styling.ts:54](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/types/styling.ts#L54)
+Defined in: [src/types/styling.ts:54](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/styling.ts#L54)

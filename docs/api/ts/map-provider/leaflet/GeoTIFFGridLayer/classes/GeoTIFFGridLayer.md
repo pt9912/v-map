@@ -6,7 +6,7 @@
 
 # Class: GeoTIFFGridLayer
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:21](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L21)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:22](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L22)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:21](https://github.com
 
 > **new GeoTIFFGridLayer**(`options`): `GeoTIFFGridLayer`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:29](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L29)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:30](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L30)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:29](https://github.com
 
 > **createTile**(`coords`, `done`): `HTMLCanvasElement`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:40](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L40)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:41](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L41)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:40](https://github.com
 
 > **onAdd**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:34](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L34)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:35](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L35)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:34](https://github.com
 
 > **updateSource**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:95](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L95)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:101](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L101)
 
 #### Parameters
 

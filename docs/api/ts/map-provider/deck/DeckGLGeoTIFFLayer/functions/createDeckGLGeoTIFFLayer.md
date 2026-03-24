@@ -8,7 +8,7 @@
 
 > **createDeckGLGeoTIFFLayer**(`props`): `Promise`\<`Layer`\<\{ \}\>\>
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:119](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L119)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:119](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L119)
 
 Factory-Funktion zum Erstellen eines DeckGLGeoTIFFLayer
 

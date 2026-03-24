@@ -25,7 +25,6 @@
 - [map-provider/deck/LayerGroupWithModel](map-provider/deck/LayerGroupWithModel/README.md)
 - [map-provider/deck/LayerModel](map-provider/deck/LayerModel/README.md)
 - [map-provider/deck/RenderableGroup](map-provider/deck/RenderableGroup/README.md)
-- [map-provider/deck/reprojected-cog-bitmaplayer](map-provider/deck/reprojected-cog-bitmaplayer/README.md)
 - [map-provider/geotiff/geotiff-source](map-provider/geotiff/geotiff-source/README.md)
 - [map-provider/geotiff/utils/AABB2D](map-provider/geotiff/utils/AABB2D/README.md)
 - [map-provider/geotiff/utils/BVHNode2D](map-provider/geotiff/utils/BVHNode2D/README.md)

@@ -6,12 +6,16 @@
 
 # Class: CesiumGeoTIFFTerrainProvider
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:19](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L19)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:22](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L22)
 
 Custom Cesium Terrain Provider for GeoTIFF elevation data
 
 This provider loads a GeoTIFF file containing elevation data and provides
 it to Cesium's terrain system as a heightmap.
+
+## Implements
+
+- `TerrainProvider`
 
 ## Constructors
 
@@ -19,7 +23,7 @@ it to Cesium's terrain system as a heightmap.
 
 > **new CesiumGeoTIFFTerrainProvider**(`options`): `CesiumGeoTIFFTerrainProvider`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:35](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L35)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:39](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L39)
 
 #### Parameters
 
@@ -31,6 +35,20 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:35](https:/
 
 `CesiumGeoTIFFTerrainProvider`
 
+## Properties
+
+### tilingScheme
+
+> **tilingScheme**: `TilingScheme`
+
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:37](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L37)
+
+Gets the tiling scheme used by the provider.
+
+#### Implementation of
+
+`TerrainProvider.tilingScheme`
+
 ## Accessors
 
 ### availability
@@ -39,13 +57,17 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:35](https:/
 
 > **get** **availability**(): `any`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:224](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L224)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:266](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L266)
 
 Get the availability of tiles
 
 ##### Returns
 
 `any`
+
+#### Implementation of
+
+`TerrainProvider.availability`
 
 ***
 
@@ -55,13 +77,17 @@ Get the availability of tiles
 
 > **get** **credit**(): `any`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:248](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L248)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:346](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L346)
 
 Get the credit to display
 
 ##### Returns
 
 `any`
+
+#### Implementation of
+
+`TerrainProvider.credit`
 
 ***
 
@@ -71,13 +97,17 @@ Get the credit to display
 
 > **get** **errorEvent**(): `any`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:269](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L269)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:367](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L367)
 
 Get the error event
 
 ##### Returns
 
 `any`
+
+#### Implementation of
+
+`TerrainProvider.errorEvent`
 
 ***
 
@@ -87,13 +117,17 @@ Get the error event
 
 > **get** **hasVertexNormals**(): `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:262](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L262)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:360](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L360)
 
 Check if the provider has vertex normals
 
 ##### Returns
 
 `boolean`
+
+#### Implementation of
+
+`TerrainProvider.hasVertexNormals`
 
 ***
 
@@ -103,13 +137,17 @@ Check if the provider has vertex normals
 
 > **get** **hasWaterMask**(): `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:255](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L255)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:353](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L353)
 
 Check if the provider has water mask
 
 ##### Returns
 
 `boolean`
+
+#### Implementation of
+
+`TerrainProvider.hasWaterMask`
 
 ***
 
@@ -119,7 +157,7 @@ Check if the provider has water mask
 
 > **get** **readyPromise**(): `Promise`\<`boolean`\>
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:241](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L241)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:339](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L339)
 
 Check if the provider is ready
 
@@ -135,7 +173,7 @@ Check if the provider is ready
 
 > **get** **rectangle**(): `any`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:98](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L98)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:106](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L106)
 
 Get the coverage rectangle in WGS84 coordinates
 
@@ -145,25 +183,120 @@ Get the coverage rectangle in WGS84 coordinates
 
 ## Methods
 
+### getLevelMaximumGeometricError()
+
+> **getLevelMaximumGeometricError**(`level`): `number`
+
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:287](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L287)
+
+Get the maximum geometric error allowed at a specific level
+Required by Cesium's TerrainProvider interface
+
+The geometric error is the difference (in meters) between the actual terrain
+and the terrain approximation at this level. Higher levels have lower error.
+
+#### Parameters
+
+##### level
+
+`number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+`TerrainProvider.getLevelMaximumGeometricError`
+
+***
+
+### getTileDataAvailable()
+
+> **getTileDataAvailable**(`x`, `y`, `level`): `boolean`
+
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:309](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L309)
+
+Check if tile data is available for a specific tile
+Required by Cesium's TerrainProvider interface
+
+#### Parameters
+
+##### x
+
+`number`
+
+##### y
+
+`number`
+
+##### level
+
+`number`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+`TerrainProvider.getTileDataAvailable`
+
+***
+
 ### getTilingScheme()
 
-> **getTilingScheme**(): `any`
+> **getTilingScheme**(): `TilingScheme`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:234](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L234)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:276](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L276)
 
 Get the tiling scheme
 
 #### Returns
 
-`any`
+`TilingScheme`
+
+***
+
+### loadTileDataAvailability()
+
+> **loadTileDataAvailability**(`_x`, `_y`, `_level`): `Promise`\<`void`\>
+
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:297](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L297)
+
+Makes sure we load availability data for a tile
+
+#### Parameters
+
+##### \_x
+
+`number`
+
+##### \_y
+
+`number`
+
+##### \_level
+
+`number`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Undefined if nothing need to be loaded or a Promise that resolves when all required tiles are loaded
+
+#### Implementation of
+
+`TerrainProvider.loadTileDataAvailability`
 
 ***
 
 ### requestTileGeometry()
 
-> **requestTileGeometry**(`x`, `y`, `level`): `Promise`\<`any`\>
+> **requestTileGeometry**(`x`, `y`, `level`): `Promise`\<`TerrainData`\>
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:110](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L110)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:118](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L118)
 
 Request tile geometry for a specific tile
 
@@ -183,4 +316,8 @@ Request tile geometry for a specific tile
 
 #### Returns
 
-`Promise`\<`any`\>
+`Promise`\<`TerrainData`\>
+
+#### Implementation of
+
+`TerrainProvider.requestTileGeometry`

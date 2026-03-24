@@ -6,9 +6,9 @@
 
 # Function: createCesiumGeoTIFFTerrainProvider()
 
-> **createCesiumGeoTIFFTerrainProvider**(`options`): `Promise`\<[`CesiumGeoTIFFTerrainProvider`](../classes/CesiumGeoTIFFTerrainProvider.md)\>
+> **createCesiumGeoTIFFTerrainProvider**(`options`): `Promise`\<`TerrainProvider`\>
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:277](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L277)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:375](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L375)
 
 Factory function to create a CesiumGeoTIFFTerrainProvider
 
@@ -20,4 +20,4 @@ Factory function to create a CesiumGeoTIFFTerrainProvider
 
 ## Returns
 
-`Promise`\<[`CesiumGeoTIFFTerrainProvider`](../classes/CesiumGeoTIFFTerrainProvider.md)\>
+`Promise`\<`TerrainProvider`\>

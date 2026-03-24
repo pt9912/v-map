@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-10-15T06:47:19",
+  "timestamp": "2026-03-24T14:25:13",
   "compiler": {
     "name": "@stencil/core",
-    "version": "4.37.1",
-    "typescriptVersion": "5.5.4"
+    "version": "4.43.3",
+    "typescriptVersion": "5.8.3"
   },
   "components": [
     {
@@ -58,7 +58,8 @@
               "CssMode": {
                 "location": "import",
                 "path": "../../types/cssmode",
-                "id": "src/types/cssmode.ts::CssMode"
+                "id": "src/types/cssmode.ts::CssMode",
+                "referenceLocation": "CssMode"
               }
             }
           },
@@ -106,7 +107,8 @@
               "Flavour": {
                 "location": "import",
                 "path": "../../types/flavour",
-                "id": "src/types/flavour.ts::Flavour"
+                "id": "src/types/flavour.ts::Flavour",
+                "referenceLocation": "Flavour"
               }
             }
           },
@@ -225,7 +227,8 @@
               "MapProvider": {
                 "location": "import",
                 "path": "../../types/mapprovider",
-                "id": "src/types/mapprovider.ts::MapProvider"
+                "id": "src/types/mapprovider.ts::MapProvider",
+                "referenceLocation": "MapProvider"
               }
             },
             "return": "Promise<MapProvider>"
@@ -314,7 +317,8 @@
               "MapProviderDetail": {
                 "location": "import",
                 "path": "../../utils/events",
-                "id": "src/utils/events.ts::MapProviderDetail"
+                "id": "src/utils/events.ts::MapProviderDetail",
+                "referenceLocation": "MapProviderDetail"
               }
             }
           },
@@ -333,6 +337,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -366,7 +371,6 @@
             "references": {}
           },
           "mutable": true,
-          "attr": "mapconfig",
           "reflectToAttr": false,
           "docs": "Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.",
           "docsTags": [],
@@ -408,7 +412,8 @@
               "BuilderConfig": {
                 "location": "import",
                 "path": "../../utils/diff",
-                "id": "src/utils/diff.ts::BuilderConfig"
+                "id": "src/utils/diff.ts::BuilderConfig",
+                "referenceLocation": "BuilderConfig"
               }
             }
           },
@@ -427,6 +432,7 @@
           "docs": "The container element where the generated map and layers are mounted."
         }
       ],
+      "states": [],
       "dependents": [],
       "dependencies": [
         "v-map-style",
@@ -539,7 +545,6 @@
             "references": {}
           },
           "mutable": true,
-          "attr": "geojson",
           "reflectToAttr": false,
           "docs": "Prop, die du intern nutzt/weiterverarbeitest",
           "docsTags": [],
@@ -976,6 +981,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -1005,7 +1011,8 @@
               "GeoStylerColorMap": {
                 "location": "import",
                 "path": "geostyler-style",
-                "id": "node_modules::ColorMap"
+                "id": "node_modules::ColorMap",
+                "referenceLocation": "ColorMap"
               }
             }
           },
@@ -1129,7 +1136,6 @@
             "references": {}
           },
           "mutable": false,
-          "attr": "value-range",
           "reflectToAttr": false,
           "docs": "Value range for colormap normalization [min, max].",
           "docsTags": [
@@ -1257,6 +1263,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -1596,6 +1603,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -1781,6 +1789,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -1998,6 +2007,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -2318,6 +2328,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -2346,7 +2357,6 @@
             "references": {}
           },
           "mutable": false,
-          "attr": "color",
           "reflectToAttr": false,
           "docs": "Color for the terrain (if no texture is provided).\n[r, g, b] with values 0-255.",
           "docsTags": [
@@ -2376,7 +2386,8 @@
               "GeoStylerColorMap": {
                 "location": "import",
                 "path": "geostyler-style",
-                "id": "node_modules::ColorMap"
+                "id": "node_modules::ColorMap",
+                "referenceLocation": "ColorMap"
               }
             }
           },
@@ -2732,7 +2743,6 @@
             "references": {}
           },
           "mutable": false,
-          "attr": "value-range",
           "reflectToAttr": false,
           "docs": "Value range for colormap normalization [min, max].",
           "docsTags": [
@@ -2889,6 +2899,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
@@ -2933,10 +2944,10 @@
         },
         {
           "name": "tilesetOptions",
-          "type": "string | { [x: string]: unknown; }",
+          "type": "string | unknown",
           "complexType": {
             "original": "string | Record<string, unknown>",
-            "resolved": "string | { [x: string]: unknown; }",
+            "resolved": "string | unknown",
             "references": {
               "Record": {
                 "location": "global",
@@ -2954,7 +2965,7 @@
               "type": "string"
             },
             {
-              "type": "{ [x: string]: unknown; }"
+              "type": "unknown"
             }
           ],
           "optional": true,
@@ -3095,6 +3106,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -3404,6 +3416,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -3703,6 +3716,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -4238,6 +4252,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -4532,6 +4547,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -4761,6 +4777,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -4810,6 +4827,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
@@ -4940,6 +4958,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],
@@ -5021,7 +5040,8 @@
               "StyleFormat": {
                 "location": "import",
                 "path": "../../types/styling",
-                "id": "src/types/styling.ts::StyleFormat"
+                "id": "src/types/styling.ts::StyleFormat",
+                "referenceLocation": "StyleFormat"
               }
             }
           },
@@ -5150,7 +5170,8 @@
               "ResolvedStyle": {
                 "location": "import",
                 "path": "../../types/styling",
-                "id": "src/types/styling.ts::ResolvedStyle"
+                "id": "src/types/styling.ts::ResolvedStyle",
+                "referenceLocation": "ResolvedStyle"
               }
             },
             "return": "Promise<ResolvedStyle>"
@@ -5192,7 +5213,8 @@
               "StyleEvent": {
                 "location": "import",
                 "path": "../../types/styling",
-                "id": "src/types/styling.ts::StyleEvent"
+                "id": "src/types/styling.ts::StyleEvent",
+                "referenceLocation": "StyleEvent"
               }
             }
           },
@@ -5206,6 +5228,7 @@
       "styles": [],
       "slots": [],
       "parts": [],
+      "states": [],
       "dependents": [
         "v-map-builder"
       ],

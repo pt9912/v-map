@@ -6,7 +6,7 @@
 
 # Interface: MapProviderDetail
 
-Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/utils/events.ts#L14)
+Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/utils/events.ts#L14)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/a0b7ed
 
 > **mapProvider**: [`MapProvider`](../../../types/mapprovider/interfaces/MapProvider.md)
 
-Defined in: [src/utils/events.ts:15](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/utils/events.ts#L15)
+Defined in: [src/utils/events.ts:15](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/utils/events.ts#L15)

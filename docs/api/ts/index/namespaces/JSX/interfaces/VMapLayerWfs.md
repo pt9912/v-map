@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWfs
 
-Defined in: [src/components.d.ts:1664](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1664)
+Defined in: [src/components.d.ts:1666](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1666)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1664](https://github.com/pt9912/v-map/blob/a0b7
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1669](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1669)
+Defined in: [src/components.d.ts:1671](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1671)
 
 Opazität (0–1).
 
@@ -30,7 +30,7 @@ Opazität (0–1).
 
 > `optional` **outputFormat**: `string`
 
-Defined in: [src/components.d.ts:1674](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1674)
+Defined in: [src/components.d.ts:1676](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1676)
 
 Ausgabeformat, z. B. application/json.
 
@@ -46,7 +46,7 @@ Ausgabeformat, z. B. application/json.
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:1678](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1678)
+Defined in: [src/components.d.ts:1680](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1680)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -56,7 +56,7 @@ Zusätzliche Parameter als JSON-String.
 
 > `optional` **srsName**: `string`
 
-Defined in: [src/components.d.ts:1683](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1683)
+Defined in: [src/components.d.ts:1685](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1685)
 
 Ziel-Referenzsystem, Standard EPSG:3857.
 
@@ -72,7 +72,7 @@ Ziel-Referenzsystem, Standard EPSG:3857.
 
 > **typeName**: `string`
 
-Defined in: [src/components.d.ts:1687](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1687)
+Defined in: [src/components.d.ts:1689](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1689)
 
 Feature-Typ (typeName) des WFS.
 
@@ -82,7 +82,7 @@ Feature-Typ (typeName) des WFS.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:1691](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1691)
+Defined in: [src/components.d.ts:1693](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1693)
 
 WFS Endpunkt (z. B. https://server/wfs).
 
@@ -92,7 +92,7 @@ WFS Endpunkt (z. B. https://server/wfs).
 
 > `optional` **version**: `string`
 
-Defined in: [src/components.d.ts:1696](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1696)
+Defined in: [src/components.d.ts:1698](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1698)
 
 WFS Version, Standard 1.1.0.
 
@@ -108,7 +108,7 @@ WFS Version, Standard 1.1.0.
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1701](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1701)
+Defined in: [src/components.d.ts:1703](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1703)
 
 Sichtbarkeit des Layers.
 
@@ -124,7 +124,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1706](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1706)
+Defined in: [src/components.d.ts:1708](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1708)
 
 Z-Index für Rendering.
 

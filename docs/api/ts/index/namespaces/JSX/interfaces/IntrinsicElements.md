@@ -6,15 +6,81 @@
 
 # Interface: IntrinsicElements
 
-Defined in: [src/components.d.ts:1946](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1946)
+Defined in: [src/components.d.ts:2126](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2126)
 
 ## Properties
 
 ### v-map
 
-> **v-map**: [`VMap`](VMap.md)
+> **v-map**: `Omit`\<[`VMap`](VMap.md), keyof [`VMapAttributes`](VMapAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1947](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1947)
+Defined in: [src/components.d.ts:2127](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2127)
+
+#### Type Declaration
+
+##### center?
+
+> `optional` **center**: `string`
+
+##### cssMode?
+
+> `optional` **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
+
+##### flavour?
+
+> `optional` **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
+
+##### useDefaultImportMap?
+
+> `optional` **useDefaultImportMap**: `boolean`
+
+##### zoom?
+
+> `optional` **zoom**: `number`
+
+#### Type Declaration
+
+##### attr:center?
+
+> `optional` **attr:center**: `string`
+
+##### attr:cssMode?
+
+> `optional` **attr:cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
+
+##### attr:flavour?
+
+> `optional` **attr:flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
+
+##### attr:useDefaultImportMap?
+
+> `optional` **attr:useDefaultImportMap**: `boolean`
+
+##### attr:zoom?
+
+> `optional` **attr:zoom**: `number`
+
+#### Type Declaration
+
+##### prop:center?
+
+> `optional` **prop:center**: `string`
+
+##### prop:cssMode?
+
+> `optional` **prop:cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
+
+##### prop:flavour?
+
+> `optional` **prop:flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
+
+##### prop:useDefaultImportMap?
+
+> `optional` **prop:useDefaultImportMap**: `boolean`
+
+##### prop:zoom?
+
+> `optional` **prop:zoom**: `number`
 
 ***
 
@@ -22,132 +88,1522 @@ Defined in: [src/components.d.ts:1947](https://github.com/pt9912/v-map/blob/a0b7
 
 > **v-map-builder**: [`VMapBuilder`](VMapBuilder.md)
 
-Defined in: [src/components.d.ts:1948](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1948)
+Defined in: [src/components.d.ts:2128](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2128)
 
 ***
 
 ### v-map-layer-geojson
 
-> **v-map-layer-geojson**: [`VMapLayerGeojson`](VMapLayerGeojson.md)
+> **v-map-layer-geojson**: `Omit`\<[`VMapLayerGeojson`](VMapLayerGeojson.md), keyof [`VMapLayerGeojsonAttributes`](VMapLayerGeojsonAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1949](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1949)
+Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2129)
+
+#### Type Declaration
+
+##### fillColor?
+
+> `optional` **fillColor**: `string`
+
+##### fillOpacity?
+
+> `optional` **fillOpacity**: `number`
+
+##### iconSize?
+
+> `optional` **iconSize**: `string`
+
+##### iconUrl?
+
+> `optional` **iconUrl**: `string`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### pointColor?
+
+> `optional` **pointColor**: `string`
+
+##### pointRadius?
+
+> `optional` **pointRadius**: `number`
+
+##### strokeColor?
+
+> `optional` **strokeColor**: `string`
+
+##### strokeOpacity?
+
+> `optional` **strokeOpacity**: `number`
+
+##### strokeWidth?
+
+> `optional` **strokeWidth**: `number`
+
+##### textColor?
+
+> `optional` **textColor**: `string`
+
+##### textProperty?
+
+> `optional` **textProperty**: `string`
+
+##### textSize?
+
+> `optional` **textSize**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:fillColor?
+
+> `optional` **attr:fillColor**: `string`
+
+##### attr:fillOpacity?
+
+> `optional` **attr:fillOpacity**: `number`
+
+##### attr:iconSize?
+
+> `optional` **attr:iconSize**: `string`
+
+##### attr:iconUrl?
+
+> `optional` **attr:iconUrl**: `string`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:pointColor?
+
+> `optional` **attr:pointColor**: `string`
+
+##### attr:pointRadius?
+
+> `optional` **attr:pointRadius**: `number`
+
+##### attr:strokeColor?
+
+> `optional` **attr:strokeColor**: `string`
+
+##### attr:strokeOpacity?
+
+> `optional` **attr:strokeOpacity**: `number`
+
+##### attr:strokeWidth?
+
+> `optional` **attr:strokeWidth**: `number`
+
+##### attr:textColor?
+
+> `optional` **attr:textColor**: `string`
+
+##### attr:textProperty?
+
+> `optional` **attr:textProperty**: `string`
+
+##### attr:textSize?
+
+> `optional` **attr:textSize**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
+
+#### Type Declaration
+
+##### prop:fillColor?
+
+> `optional` **prop:fillColor**: `string`
+
+##### prop:fillOpacity?
+
+> `optional` **prop:fillOpacity**: `number`
+
+##### prop:iconSize?
+
+> `optional` **prop:iconSize**: `string`
+
+##### prop:iconUrl?
+
+> `optional` **prop:iconUrl**: `string`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:pointColor?
+
+> `optional` **prop:pointColor**: `string`
+
+##### prop:pointRadius?
+
+> `optional` **prop:pointRadius**: `number`
+
+##### prop:strokeColor?
+
+> `optional` **prop:strokeColor**: `string`
+
+##### prop:strokeOpacity?
+
+> `optional` **prop:strokeOpacity**: `number`
+
+##### prop:strokeWidth?
+
+> `optional` **prop:strokeWidth**: `number`
+
+##### prop:textColor?
+
+> `optional` **prop:textColor**: `string`
+
+##### prop:textProperty?
+
+> `optional` **prop:textProperty**: `string`
+
+##### prop:textSize?
+
+> `optional` **prop:textSize**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
+
+##### prop:zIndex?
+
+> `optional` **prop:zIndex**: `number`
 
 ***
 
 ### v-map-layer-geotiff
 
-> **v-map-layer-geotiff**: [`VMapLayerGeotiff`](VMapLayerGeotiff.md)
+> **v-map-layer-geotiff**: `Omit`\<[`VMapLayerGeotiff`](VMapLayerGeotiff.md), keyof [`VMapLayerGeotiffAttributes`](VMapLayerGeotiffAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1950](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1950)
+Defined in: [src/components.d.ts:2130](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2130)
+
+#### Type Declaration
+
+##### colorMap?
+
+> `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### nodata?
+
+> `optional` **nodata**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:colorMap?
+
+> `optional` **attr:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### attr:nodata?
+
+> `optional` **attr:nodata**: `number`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
+
+#### Type Declaration
+
+##### prop:colorMap?
+
+> `optional` **prop:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### prop:nodata?
+
+> `optional` **prop:nodata**: `number`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
+
+##### prop:zIndex?
+
+> `optional` **prop:zIndex**: `number`
 
 ***
 
 ### v-map-layer-google
 
-> **v-map-layer-google**: [`VMapLayerGoogle`](VMapLayerGoogle.md)
+> **v-map-layer-google**: `Omit`\<[`VMapLayerGoogle`](VMapLayerGoogle.md), keyof [`VMapLayerGoogleAttributes`](VMapLayerGoogleAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1951](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1951)
+Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2131)
+
+#### Type Declaration
+
+##### apiKey?
+
+> `optional` **apiKey**: `string`
+
+##### language?
+
+> `optional` **language**: `string`
+
+##### libraries?
+
+> `optional` **libraries**: `string`
+
+##### mapType?
+
+> `optional` **mapType**: `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
+
+##### maxZoom?
+
+> `optional` **maxZoom**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### region?
+
+> `optional` **region**: `string`
+
+##### scale?
+
+> `optional` **scale**: `"scaleFactor1x"` \| `"scaleFactor2x"` \| `"scaleFactor4x"`
+
+##### styles?
+
+> `optional` **styles**: `string` \| `any`[]
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+#### Type Declaration
+
+##### attr:apiKey?
+
+> `optional` **attr:apiKey**: `string`
+
+##### attr:language?
+
+> `optional` **attr:language**: `string`
+
+##### attr:libraries?
+
+> `optional` **attr:libraries**: `string`
+
+##### attr:mapType?
+
+> `optional` **attr:mapType**: `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
+
+##### attr:maxZoom?
+
+> `optional` **attr:maxZoom**: `number`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:region?
+
+> `optional` **attr:region**: `string`
+
+##### attr:scale?
+
+> `optional` **attr:scale**: `"scaleFactor1x"` \| `"scaleFactor2x"` \| `"scaleFactor4x"`
+
+##### attr:styles?
+
+> `optional` **attr:styles**: `string` \| `any`[]
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+#### Type Declaration
+
+##### prop:apiKey?
+
+> `optional` **prop:apiKey**: `string`
+
+##### prop:language?
+
+> `optional` **prop:language**: `string`
+
+##### prop:libraries?
+
+> `optional` **prop:libraries**: `string`
+
+##### prop:mapType?
+
+> `optional` **prop:mapType**: `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
+
+##### prop:maxZoom?
+
+> `optional` **prop:maxZoom**: `number`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:region?
+
+> `optional` **prop:region**: `string`
+
+##### prop:scale?
+
+> `optional` **prop:scale**: `"scaleFactor1x"` \| `"scaleFactor2x"` \| `"scaleFactor4x"`
+
+##### prop:styles?
+
+> `optional` **prop:styles**: `string` \| `any`[]
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
 
 ***
 
 ### v-map-layer-osm
 
-> **v-map-layer-osm**: [`VMapLayerOsm`](VMapLayerOsm.md)
+> **v-map-layer-osm**: `Omit`\<[`VMapLayerOsm`](VMapLayerOsm.md), keyof [`VMapLayerOsmAttributes`](VMapLayerOsmAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1952](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1952)
+Defined in: [src/components.d.ts:2132](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2132)
+
+#### Type Declaration
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
+
+#### Type Declaration
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
+
+##### prop:zIndex?
+
+> `optional` **prop:zIndex**: `number`
 
 ***
 
 ### v-map-layer-scatterplot
 
-> **v-map-layer-scatterplot**: [`VMapLayerScatterplot`](VMapLayerScatterplot.md)
+> **v-map-layer-scatterplot**: `Omit`\<[`VMapLayerScatterplot`](VMapLayerScatterplot.md), keyof [`VMapLayerScatterplotAttributes`](VMapLayerScatterplotAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1953](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1953)
+Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2133)
+
+#### Type Declaration
+
+##### data?
+
+> `optional` **data**: `string`
+
+##### getFillColor?
+
+> `optional` **getFillColor**: [`Color`](../../../type-aliases/Color.md)
+
+##### getRadius?
+
+> `optional` **getRadius**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+#### Type Declaration
+
+##### attr:data?
+
+> `optional` **attr:data**: `string`
+
+##### attr:getFillColor?
+
+> `optional` **attr:getFillColor**: [`Color`](../../../type-aliases/Color.md)
+
+##### attr:getRadius?
+
+> `optional` **attr:getRadius**: `number`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+#### Type Declaration
+
+##### prop:data?
+
+> `optional` **prop:data**: `string`
+
+##### prop:getFillColor?
+
+> `optional` **prop:getFillColor**: [`Color`](../../../type-aliases/Color.md)
+
+##### prop:getRadius?
+
+> `optional` **prop:getRadius**: `number`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
 
 ***
 
 ### v-map-layer-terrain
 
-> **v-map-layer-terrain**: [`VMapLayerTerrain`](VMapLayerTerrain.md)
+> **v-map-layer-terrain**: `Omit`\<[`VMapLayerTerrain`](VMapLayerTerrain.md), keyof VMapLayerTerrainAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:color"?: string; "attr:maxZoom"?: number; "attr:minZoom"?: number; "attr:meshMaxError"?: number; "attr:wireframe"?: boolean; "attr:texture"?: string; "attr:elevationDecoder"?: string; "attr:elevationData"?: string; \} & (\{ ...; \} & One...
 
-Defined in: [src/components.d.ts:1954](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1954)
+Defined in: [src/components.d.ts:2134](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2134)
+
+#### Type Declaration
+
+##### color?
+
+> `optional` **color**: `string`
+
+##### elevationData?
+
+> `optional` **elevationData**: `string`
+
+##### elevationDecoder?
+
+> `optional` **elevationDecoder**: `string`
+
+##### maxZoom?
+
+> `optional` **maxZoom**: `number`
+
+##### meshMaxError?
+
+> `optional` **meshMaxError**: `number`
+
+##### minZoom?
+
+> `optional` **minZoom**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### texture?
+
+> `optional` **texture**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### wireframe?
+
+> `optional` **wireframe**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
 
 ***
 
 ### v-map-layer-terrain-geotiff
 
-> **v-map-layer-terrain-geotiff**: [`VMapLayerTerrainGeotiff`](VMapLayerTerrainGeotiff.md)
+> **v-map-layer-terrain-geotiff**: `Omit`\<[`VMapLayerTerrainGeotiff`](VMapLayerTerrainGeotiff.md), keyof [`VMapLayerTerrainGeotiffAttributes`](VMapLayerTerrainGeotiffAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1955](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1955)
+Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2135)
+
+#### Type Declaration
+
+##### colorMap?
+
+> `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### elevationScale?
+
+> `optional` **elevationScale**: `number`
+
+##### forceProjection?
+
+> `optional` **forceProjection**: `boolean`
+
+##### maxZoom?
+
+> `optional` **maxZoom**: `number`
+
+##### meshMaxError?
+
+> `optional` **meshMaxError**: `number`
+
+##### minZoom?
+
+> `optional` **minZoom**: `number`
+
+##### nodata?
+
+> `optional` **nodata**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### projection?
+
+> `optional` **projection**: `string`
+
+##### texture?
+
+> `optional` **texture**: `string`
+
+##### tileSize?
+
+> `optional` **tileSize**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### wireframe?
+
+> `optional` **wireframe**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:colorMap?
+
+> `optional` **attr:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### attr:elevationScale?
+
+> `optional` **attr:elevationScale**: `number`
+
+##### attr:forceProjection?
+
+> `optional` **attr:forceProjection**: `boolean`
+
+##### attr:maxZoom?
+
+> `optional` **attr:maxZoom**: `number`
+
+##### attr:meshMaxError?
+
+> `optional` **attr:meshMaxError**: `number`
+
+##### attr:minZoom?
+
+> `optional` **attr:minZoom**: `number`
+
+##### attr:nodata?
+
+> `optional` **attr:nodata**: `number`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:projection?
+
+> `optional` **attr:projection**: `string`
+
+##### attr:texture?
+
+> `optional` **attr:texture**: `string`
+
+##### attr:tileSize?
+
+> `optional` **attr:tileSize**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:wireframe?
+
+> `optional` **attr:wireframe**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
+
+#### Type Declaration
+
+##### prop:colorMap?
+
+> `optional` **prop:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### prop:elevationScale?
+
+> `optional` **prop:elevationScale**: `number`
+
+##### prop:forceProjection?
+
+> `optional` **prop:forceProjection**: `boolean`
+
+##### prop:maxZoom?
+
+> `optional` **prop:maxZoom**: `number`
+
+##### prop:meshMaxError?
+
+> `optional` **prop:meshMaxError**: `number`
+
+##### prop:minZoom?
+
+> `optional` **prop:minZoom**: `number`
+
+##### prop:nodata?
+
+> `optional` **prop:nodata**: `number`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:projection?
+
+> `optional` **prop:projection**: `string`
+
+##### prop:texture?
+
+> `optional` **prop:texture**: `string`
+
+##### prop:tileSize?
+
+> `optional` **prop:tileSize**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
+
+##### prop:wireframe?
+
+> `optional` **prop:wireframe**: `boolean`
+
+##### prop:zIndex?
+
+> `optional` **prop:zIndex**: `number`
 
 ***
 
 ### v-map-layer-tile3d
 
-> **v-map-layer-tile3d**: [`VMapLayerTile3d`](VMapLayerTile3d.md)
+> **v-map-layer-tile3d**: `Omit`\<[`VMapLayerTile3d`](VMapLayerTile3d.md), keyof VMapLayerTile3dAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:url"?: string; "attr:tilesetOptions"?: string \| Record\<string, unknown\>; \} & (\{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:tilesetOptions"?: string \| Record\<...\>; \} & OneOf\<.....
 
-Defined in: [src/components.d.ts:1956](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1956)
+Defined in: [src/components.d.ts:2136](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2136)
+
+#### Type Declaration
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### tilesetOptions?
+
+> `optional` **tilesetOptions**: `string` \| `Record`\<`string`, `unknown`\>
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
 
 ***
 
 ### v-map-layer-wcs
 
-> **v-map-layer-wcs**: [`VMapLayerWcs`](VMapLayerWcs.md)
+> **v-map-layer-wcs**: `Omit`\<[`VMapLayerWcs`](VMapLayerWcs.md), keyof VMapLayerWcsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:params"?: string; "prop:version"?: string; "prop:format"?: string; "prop:projection"?: string; "prop:coverageName"?: string; "prop:resolutions"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:1957](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1957)
+Defined in: [src/components.d.ts:2137](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2137)
+
+#### Type Declaration
+
+##### coverageName?
+
+> `optional` **coverageName**: `string`
+
+##### format?
+
+> `optional` **format**: `string`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### params?
+
+> `optional` **params**: `string`
+
+##### projection?
+
+> `optional` **projection**: `string`
+
+##### resolutions?
+
+> `optional` **resolutions**: `string`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### version?
+
+> `optional` **version**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:coverageName?
+
+> `optional` **attr:coverageName**: `string`
+
+##### attr:format?
+
+> `optional` **attr:format**: `string`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:params?
+
+> `optional` **attr:params**: `string`
+
+##### attr:projection?
+
+> `optional` **attr:projection**: `string`
+
+##### attr:resolutions?
+
+> `optional` **attr:resolutions**: `string`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:version?
+
+> `optional` **attr:version**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
 
 ***
 
 ### v-map-layer-wfs
 
-> **v-map-layer-wfs**: [`VMapLayerWfs`](VMapLayerWfs.md)
+> **v-map-layer-wfs**: `Omit`\<[`VMapLayerWfs`](VMapLayerWfs.md), keyof VMapLayerWfsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:params"?: string; "prop:version"?: string; "prop:typeName"?: string; "prop:outputFormat"?: string; "prop:srsName"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:1958](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1958)
+Defined in: [src/components.d.ts:2138](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2138)
+
+#### Type Declaration
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### outputFormat?
+
+> `optional` **outputFormat**: `string`
+
+##### params?
+
+> `optional` **params**: `string`
+
+##### srsName?
+
+> `optional` **srsName**: `string`
+
+##### typeName?
+
+> `optional` **typeName**: `string`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### version?
+
+> `optional` **version**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:outputFormat?
+
+> `optional` **attr:outputFormat**: `string`
+
+##### attr:params?
+
+> `optional` **attr:params**: `string`
+
+##### attr:srsName?
+
+> `optional` **attr:srsName**: `string`
+
+##### attr:typeName?
+
+> `optional` **attr:typeName**: `string`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:version?
+
+> `optional` **attr:version**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
 
 ***
 
 ### v-map-layer-wkt
 
-> **v-map-layer-wkt**: [`VMapLayerWkt`](VMapLayerWkt.md)
+> **v-map-layer-wkt**: `Omit`\<[`VMapLayerWkt`](VMapLayerWkt.md), keyof [`VMapLayerWktAttributes`](VMapLayerWktAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1959](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1959)
+Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2139)
+
+#### Type Declaration
+
+##### fillColor?
+
+> `optional` **fillColor**: `string`
+
+##### fillOpacity?
+
+> `optional` **fillOpacity**: `number`
+
+##### iconSize?
+
+> `optional` **iconSize**: `string`
+
+##### iconUrl?
+
+> `optional` **iconUrl**: `string`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### pointColor?
+
+> `optional` **pointColor**: `string`
+
+##### pointRadius?
+
+> `optional` **pointRadius**: `number`
+
+##### strokeColor?
+
+> `optional` **strokeColor**: `string`
+
+##### strokeOpacity?
+
+> `optional` **strokeOpacity**: `number`
+
+##### strokeWidth?
+
+> `optional` **strokeWidth**: `number`
+
+##### textColor?
+
+> `optional` **textColor**: `string`
+
+##### textProperty?
+
+> `optional` **textProperty**: `string`
+
+##### textSize?
+
+> `optional` **textSize**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### wkt?
+
+> `optional` **wkt**: `string`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:fillColor?
+
+> `optional` **attr:fillColor**: `string`
+
+##### attr:fillOpacity?
+
+> `optional` **attr:fillOpacity**: `number`
+
+##### attr:iconSize?
+
+> `optional` **attr:iconSize**: `string`
+
+##### attr:iconUrl?
+
+> `optional` **attr:iconUrl**: `string`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:pointColor?
+
+> `optional` **attr:pointColor**: `string`
+
+##### attr:pointRadius?
+
+> `optional` **attr:pointRadius**: `number`
+
+##### attr:strokeColor?
+
+> `optional` **attr:strokeColor**: `string`
+
+##### attr:strokeOpacity?
+
+> `optional` **attr:strokeOpacity**: `number`
+
+##### attr:strokeWidth?
+
+> `optional` **attr:strokeWidth**: `number`
+
+##### attr:textColor?
+
+> `optional` **attr:textColor**: `string`
+
+##### attr:textProperty?
+
+> `optional` **attr:textProperty**: `string`
+
+##### attr:textSize?
+
+> `optional` **attr:textSize**: `number`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:wkt?
+
+> `optional` **attr:wkt**: `string`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
+
+#### Type Declaration
+
+##### prop:fillColor?
+
+> `optional` **prop:fillColor**: `string`
+
+##### prop:fillOpacity?
+
+> `optional` **prop:fillOpacity**: `number`
+
+##### prop:iconSize?
+
+> `optional` **prop:iconSize**: `string`
+
+##### prop:iconUrl?
+
+> `optional` **prop:iconUrl**: `string`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:pointColor?
+
+> `optional` **prop:pointColor**: `string`
+
+##### prop:pointRadius?
+
+> `optional` **prop:pointRadius**: `number`
+
+##### prop:strokeColor?
+
+> `optional` **prop:strokeColor**: `string`
+
+##### prop:strokeOpacity?
+
+> `optional` **prop:strokeOpacity**: `number`
+
+##### prop:strokeWidth?
+
+> `optional` **prop:strokeWidth**: `number`
+
+##### prop:textColor?
+
+> `optional` **prop:textColor**: `string`
+
+##### prop:textProperty?
+
+> `optional` **prop:textProperty**: `string`
+
+##### prop:textSize?
+
+> `optional` **prop:textSize**: `number`
+
+##### prop:url?
+
+> `optional` **prop:url**: `string`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
+
+##### prop:wkt?
+
+> `optional` **prop:wkt**: `string`
+
+##### prop:zIndex?
+
+> `optional` **prop:zIndex**: `number`
 
 ***
 
 ### v-map-layer-wms
 
-> **v-map-layer-wms**: [`VMapLayerWms`](VMapLayerWms.md)
+> **v-map-layer-wms**: `Omit`\<[`VMapLayerWms`](VMapLayerWms.md), keyof VMapLayerWmsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:layers"?: string; "prop:tiled"?: boolean; "prop:format"?: string; "prop:styles"?: string; "prop:transparent"?: boolean; \} & (OneOf\<...\> & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:1960](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1960)
+Defined in: [src/components.d.ts:2140](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2140)
+
+#### Type Declaration
+
+##### format?
+
+> `optional` **format**: `string`
+
+##### layers?
+
+> `optional` **layers**: `string`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### styles?
+
+> `optional` **styles**: `string`
+
+##### tiled?
+
+> `optional` **tiled**: `boolean`
+
+##### transparent?
+
+> `optional` **transparent**: `boolean`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+##### zIndex?
+
+> `optional` **zIndex**: `number`
+
+#### Type Declaration
+
+##### attr:format?
+
+> `optional` **attr:format**: `string`
+
+##### attr:layers?
+
+> `optional` **attr:layers**: `string`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:styles?
+
+> `optional` **attr:styles**: `string`
+
+##### attr:tiled?
+
+> `optional` **attr:tiled**: `boolean`
+
+##### attr:transparent?
+
+> `optional` **attr:transparent**: `boolean`
+
+##### attr:url?
+
+> `optional` **attr:url**: `string`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+##### attr:zIndex?
+
+> `optional` **attr:zIndex**: `number`
 
 ***
 
 ### v-map-layer-xyz
 
-> **v-map-layer-xyz**: [`VMapLayerXyz`](VMapLayerXyz.md)
+> **v-map-layer-xyz**: `Omit`\<[`VMapLayerXyz`](VMapLayerXyz.md), keyof VMapLayerXyzAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:url"?: string; "attr:tileSize"?: number; "attr:maxZoom"?: number; "attr:subdomains"?: string; "attr:attributions"?: string; \} & (\{ "prop:visible"?: boolean; ... 5 more ...; "prop:attributions"?: string; \} & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:1961](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1961)
+Defined in: [src/components.d.ts:2141](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2141)
+
+#### Type Declaration
+
+##### attributions?
+
+> `optional` **attributions**: `string`
+
+##### maxZoom?
+
+> `optional` **maxZoom**: `number`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### subdomains?
+
+> `optional` **subdomains**: `string`
+
+##### tileSize?
+
+> `optional` **tileSize**: `number`
+
+##### url?
+
+> `optional` **url**: `string`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
 
 ***
 
 ### v-map-layercontrol
 
-> **v-map-layercontrol**: [`VMapLayercontrol`](VMapLayercontrol.md)
+> **v-map-layercontrol**: `Omit`\<[`VMapLayercontrol`](VMapLayercontrol.md), `"for"`\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1962](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1962)
+Defined in: [src/components.d.ts:2142](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2142)
+
+#### Type Declaration
+
+##### for?
+
+> `optional` **for**: `string`
+
+#### Type Declaration
+
+##### attr:for?
+
+> `optional` **attr:for**: `string`
+
+#### Type Declaration
+
+##### prop:for?
+
+> `optional` **prop:for**: `string`
 
 ***
 
 ### v-map-layergroup
 
-> **v-map-layergroup**: [`VMapLayergroup`](VMapLayergroup.md)
+> **v-map-layergroup**: `Omit`\<[`VMapLayergroup`](VMapLayergroup.md), keyof [`VMapLayergroupAttributes`](VMapLayergroupAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1963](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1963)
+Defined in: [src/components.d.ts:2143](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2143)
+
+#### Type Declaration
+
+##### basemapid?
+
+> `optional` **basemapid**: `string`
+
+##### opacity?
+
+> `optional` **opacity**: `number`
+
+##### visible?
+
+> `optional` **visible**: `boolean`
+
+#### Type Declaration
+
+##### attr:basemapid?
+
+> `optional` **attr:basemapid**: `string`
+
+##### attr:opacity?
+
+> `optional` **attr:opacity**: `number`
+
+##### attr:visible?
+
+> `optional` **attr:visible**: `boolean`
+
+#### Type Declaration
+
+##### prop:basemapid?
+
+> `optional` **prop:basemapid**: `string`
+
+##### prop:opacity?
+
+> `optional` **prop:opacity**: `number`
+
+##### prop:visible?
+
+> `optional` **prop:visible**: `boolean`
 
 ***
 
 ### v-map-style
 
-> **v-map-style**: [`VMapStyle`](VMapStyle.md)
+> **v-map-style**: `Omit`\<[`VMapStyle`](VMapStyle.md), keyof [`VMapStyleAttributes`](VMapStyleAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:1964](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1964)
+Defined in: [src/components.d.ts:2144](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2144)
+
+#### Type Declaration
+
+##### autoApply?
+
+> `optional` **autoApply**: `boolean`
+
+##### content?
+
+> `optional` **content**: `string`
+
+##### format?
+
+> `optional` **format**: [`StyleFormat`](../../../../types/styling/type-aliases/StyleFormat.md)
+
+##### layerTargets?
+
+> `optional` **layerTargets**: `string`
+
+##### src?
+
+> `optional` **src**: `string`
+
+#### Type Declaration
+
+##### attr:autoApply?
+
+> `optional` **attr:autoApply**: `boolean`
+
+##### attr:content?
+
+> `optional` **attr:content**: `string`
+
+##### attr:format?
+
+> `optional` **attr:format**: [`StyleFormat`](../../../../types/styling/type-aliases/StyleFormat.md)
+
+##### attr:layerTargets?
+
+> `optional` **attr:layerTargets**: `string`
+
+##### attr:src?
+
+> `optional` **attr:src**: `string`
+
+#### Type Declaration
+
+##### prop:autoApply?
+
+> `optional` **prop:autoApply**: `boolean`
+
+##### prop:content?
+
+> `optional` **prop:content**: `string`
+
+##### prop:format?
+
+> `optional` **prop:format**: [`StyleFormat`](../../../../types/styling/type-aliases/StyleFormat.md)
+
+##### prop:layerTargets?
+
+> `optional` **prop:layerTargets**: `string`
+
+##### prop:src?
+
+> `optional` **prop:src**: `string`

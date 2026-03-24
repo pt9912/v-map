@@ -6,7 +6,7 @@
 
 # Interface: VMapBuilder
 
-Defined in: [src/components.d.ts:1182](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1182)
+Defined in: [src/components.d.ts:1184](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1184)
 
 A component that builds map configurations dynamically from JSON/YAML configuration scripts.
 
@@ -16,7 +16,7 @@ A component that builds map configurations dynamically from JSON/YAML configurat
 
 > `optional` **mapconfig**: `unknown`
 
-Defined in: [src/components.d.ts:1186](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1186)
+Defined in: [src/components.d.ts:1188](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1188)
 
 Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.
 
@@ -26,7 +26,7 @@ Configuration object for the map builder. Can be any structure that will be norm
 
 > `optional` **onConfigError**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1190](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1190)
+Defined in: [src/components.d.ts:1192](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1192)
 
 Event emitted when there is an error parsing the map configuration.
 
@@ -46,7 +46,7 @@ Event emitted when there is an error parsing the map configuration.
 
 > `optional` **onConfigReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1197](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1197)
+Defined in: [src/components.d.ts:1199](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1199)
 
 Event emitted when the map configuration has been successfully parsed and is ready to use.
 

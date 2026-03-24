@@ -14,4 +14,5 @@
 
 ## Functions
 
+- [getGeoTIFFSource](functions/getGeoTIFFSource.md)
 - [loadGeoTIFFSource](functions/loadGeoTIFFSource.md)

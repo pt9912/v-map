@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWkt
 
-Defined in: [src/components.d.ts:1708](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1708)
+Defined in: [src/components.d.ts:1710](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1710)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1708](https://github.com/pt9912/v-map/blob/a0b7
 
 > `optional` **fillColor**: `string`
 
-Defined in: [src/components.d.ts:1713](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1713)
+Defined in: [src/components.d.ts:1715](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1715)
 
 Fill color for polygon geometries (CSS color value)
 
@@ -30,7 +30,7 @@ Fill color for polygon geometries (CSS color value)
 
 > `optional` **fillOpacity**: `number`
 
-Defined in: [src/components.d.ts:1718](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1718)
+Defined in: [src/components.d.ts:1720](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1720)
 
 Fill opacity for polygon geometries (0-1)
 
@@ -46,7 +46,7 @@ Fill opacity for polygon geometries (0-1)
 
 > `optional` **iconSize**: `string`
 
-Defined in: [src/components.d.ts:1723](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1723)
+Defined in: [src/components.d.ts:1725](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1725)
 
 Icon size as [width, height] in pixels (comma-separated string like "32,32")
 
@@ -62,7 +62,7 @@ Icon size as [width, height] in pixels (comma-separated string like "32,32")
 
 > `optional` **iconUrl**: `string`
 
-Defined in: [src/components.d.ts:1727](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1727)
+Defined in: [src/components.d.ts:1729](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1729)
 
 Icon URL for point features (alternative to pointColor/pointRadius)
 
@@ -72,7 +72,7 @@ Icon URL for point features (alternative to pointColor/pointRadius)
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1737](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1737)
+Defined in: [src/components.d.ts:1739](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1739)
 
 Globale Opazität (0–1).
 
@@ -88,7 +88,7 @@ Globale Opazität (0–1).
 
 > `optional` **pointColor**: `string`
 
-Defined in: [src/components.d.ts:1742](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1742)
+Defined in: [src/components.d.ts:1744](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1744)
 
 Point color for point geometries (CSS color value)
 
@@ -104,7 +104,7 @@ Point color for point geometries (CSS color value)
 
 > `optional` **pointRadius**: `number`
 
-Defined in: [src/components.d.ts:1747](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1747)
+Defined in: [src/components.d.ts:1749](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1749)
 
 Point radius for point geometries in pixels
 
@@ -120,7 +120,7 @@ Point radius for point geometries in pixels
 
 > `optional` **strokeColor**: `string`
 
-Defined in: [src/components.d.ts:1752](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1752)
+Defined in: [src/components.d.ts:1754](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1754)
 
 Stroke color for lines and polygon outlines (CSS color value)
 
@@ -136,7 +136,7 @@ Stroke color for lines and polygon outlines (CSS color value)
 
 > `optional` **strokeOpacity**: `number`
 
-Defined in: [src/components.d.ts:1757](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1757)
+Defined in: [src/components.d.ts:1759](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1759)
 
 Stroke opacity (0-1)
 
@@ -152,7 +152,7 @@ Stroke opacity (0-1)
 
 > `optional` **strokeWidth**: `number`
 
-Defined in: [src/components.d.ts:1762](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1762)
+Defined in: [src/components.d.ts:1764](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1764)
 
 Stroke width in pixels
 
@@ -168,7 +168,7 @@ Stroke width in pixels
 
 > `optional` **textColor**: `string`
 
-Defined in: [src/components.d.ts:1767](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1767)
+Defined in: [src/components.d.ts:1769](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1769)
 
 Text color for labels (CSS color value)
 
@@ -184,7 +184,7 @@ Text color for labels (CSS color value)
 
 > `optional` **textProperty**: `string`
 
-Defined in: [src/components.d.ts:1771](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1771)
+Defined in: [src/components.d.ts:1773](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1773)
 
 Text property name from feature properties to display as label
 
@@ -194,7 +194,7 @@ Text property name from feature properties to display as label
 
 > `optional` **textSize**: `number`
 
-Defined in: [src/components.d.ts:1776](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1776)
+Defined in: [src/components.d.ts:1778](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1778)
 
 Text size for labels in pixels
 
@@ -210,7 +210,7 @@ Text size for labels in pixels
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:1780](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1780)
+Defined in: [src/components.d.ts:1782](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1782)
 
 URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
@@ -220,7 +220,7 @@ URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1785](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1785)
+Defined in: [src/components.d.ts:1787](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1787)
 
 Sichtbarkeit des Layers.
 
@@ -236,7 +236,7 @@ true
 
 > `optional` **wkt**: `string`
 
-Defined in: [src/components.d.ts:1789](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1789)
+Defined in: [src/components.d.ts:1791](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1791)
 
 WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
 
@@ -246,7 +246,7 @@ WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1794](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1794)
+Defined in: [src/components.d.ts:1796](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1796)
 
 Z-index for layer stacking order. Higher values render on top.
 
@@ -262,7 +262,7 @@ Z-index for layer stacking order. Higher values render on top.
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1732](https://github.com/pt9912/v-map/blob/a0b7ed7232508c59f39e36e564e7b87147889359/src/components.d.ts#L1732)
+Defined in: [src/components.d.ts:1734](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1734)
 
 Signalisiert, dass das WKT-Layer initialisiert ist.
  ready

@@ -8,7 +8,7 @@ The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF ele
 
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
-| `color` | `[number, number, number]` | `color` | `null` | Color for the terrain (if no texture is provided). [r, g, b] with values 0-255. |
+| `color` | `[number, number, number]` |  | `null` | Color for the terrain (if no texture is provided). [r, g, b] with values 0-255. |
 | `colorMap` | `ColorMap \| string` | `color-map` | `null` | ColorMap for elevation data visualization. Only relevant when no texture is set. |
 | `elevationScale` | `number` | `elevation-scale` | `1.0` | Elevation exaggeration factor. |
 | `forceProjection` | `boolean` | `force-projection` | `false` | Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys |
@@ -21,7 +21,7 @@ The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF ele
 | `texture` | `string` | `texture` | `null` | Optional texture URL (can be an image or tile URL). |
 | `tileSize` | `number` | `tile-size` | `256` | Tile size in pixels. |
 | `url` | `string` | `url` | `null` | URL to the GeoTIFF file containing elevation data. |
-| `valueRange` | `[number, number]` | `value-range` | `null` | Value range for colormap normalization [min, max]. |
+| `valueRange` | `[number, number]` |  | `null` | Value range for colormap normalization [min, max]. |
 | `visible` | `boolean` | `visible` | `true` | Sichtbarkeit des Layers |
 | `wireframe` | `boolean` | `wireframe` | `false` | Enable wireframe mode (show only mesh lines). |
 | `zIndex` | `number` | `z-index` | `100` | Z-index for layer stacking order. Higher values render on top. |

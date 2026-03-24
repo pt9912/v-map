@@ -9,7 +9,7 @@
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
 | `opacity` | `number` | `opacity` | `1` | Global opacity factor (0-1). |
-| `tilesetOptions` | `string \| { [x: string]: unknown; }` | `tileset-options` |  | Optional JSON string or object with Cesium3DTileset options. |
+| `tilesetOptions` | `string \| unknown` | `tileset-options` |  | Optional JSON string or object with Cesium3DTileset options. |
 | `url` | `string` | `url` |  | URL pointing to the Cesium 3D Tileset. |
 | `visible` | `boolean` | `visible` | `true` | Whether the tileset should be visible. |
 | `zIndex` | `number` | `z-index` | `1000` | Z-index used for ordering tilesets. |

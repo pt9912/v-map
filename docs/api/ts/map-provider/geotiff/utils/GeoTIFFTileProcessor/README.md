@@ -14,3 +14,7 @@
 
 - [GeoTIFFTileProcessorConfig](interfaces/GeoTIFFTileProcessorConfig.md)
 - [TileDataParams](interfaces/TileDataParams.md)
+
+## Functions
+
+- [getTileProcessorConfig](functions/getTileProcessorConfig.md)
