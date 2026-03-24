@@ -20,7 +20,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 # Standardbenutzer einrichten (nur Berechtigungen setzen, da Benutzer bereits existiert)
 RUN mkdir -p /workspaces && chown -R node /workspaces
 
-RUN npm install -g @anthropic-ai/claude-code@2.0.9
+#RUN npm install -g @anthropic-ai/claude-code@2.0.9
 
 USER node
+
+RUN curl -fsSL https://claude.ai/install.sh | bash -s stable
+
 WORKDIR /workspaces/v-map
