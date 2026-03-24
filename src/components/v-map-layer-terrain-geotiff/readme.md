@@ -140,7 +140,7 @@ Same as deck.gl requirements:
 
 | Property          | Attribute          | Description                                                                                | Type                       | Default |
 | ----------------- | ------------------ | ------------------------------------------------------------------------------------------ | -------------------------- | ------- |
-| `color`           | `color`            | Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.            | `[number, number, number]` | `null`  |
+| `color`           | --                 | Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.            | `[number, number, number]` | `null`  |
 | `colorMap`        | `color-map`        | ColorMap for elevation data visualization. Only relevant when no texture is set.           | `ColorMap \| string`       | `null`  |
 | `elevationScale`  | `elevation-scale`  | Elevation exaggeration factor.                                                             | `number`                   | `1.0`   |
 | `forceProjection` | `force-projection` | Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys                             | `boolean`                  | `false` |
@@ -153,7 +153,7 @@ Same as deck.gl requirements:
 | `texture`         | `texture`          | Optional texture URL (can be an image or tile URL).                                        | `string`                   | `null`  |
 | `tileSize`        | `tile-size`        | Tile size in pixels.                                                                       | `number`                   | `256`   |
 | `url`             | `url`              | URL to the GeoTIFF file containing elevation data.                                         | `string`                   | `null`  |
-| `valueRange`      | `value-range`      | Value range for colormap normalization [min, max].                                         | `[number, number]`         | `null`  |
+| `valueRange`      | --                 | Value range for colormap normalization [min, max].                                         | `[number, number]`         | `null`  |
 | `visible`         | `visible`          | Sichtbarkeit des Layers                                                                    | `boolean`                  | `true`  |
 | `wireframe`       | `wireframe`        | Enable wireframe mode (show only mesh lines).                                              | `boolean`                  | `false` |
 | `zIndex`          | `z-index`          | Z-index for layer stacking order. Higher values render on top.                             | `number`                   | `100`   |

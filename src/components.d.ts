@@ -1142,6 +1142,8 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
+
     interface VMap {
         /**
           * Mittelpunkt der Karte im **WGS84**-Koordinatensystem. Erwartet [lon, lat] (Längengrad, Breitengrad).
@@ -1943,61 +1945,239 @@ declare namespace LocalJSX {
          */
         "src"?: string;
     }
+
+    interface VMapAttributes {
+        "flavour": Flavour;
+        "center": string;
+        "zoom": number;
+        "useDefaultImportMap": boolean;
+        "cssMode": CssMode;
+    }
+    interface VMapLayerGeojsonAttributes {
+        "url": string;
+        "visible": boolean;
+        "zIndex": number;
+        "opacity": number;
+        "fillColor": string;
+        "fillOpacity": number;
+        "strokeColor": string;
+        "strokeWidth": number;
+        "strokeOpacity": number;
+        "pointRadius": number;
+        "pointColor": string;
+        "iconUrl": string;
+        "iconSize": string;
+        "textProperty": string;
+        "textColor": string;
+        "textSize": number;
+    }
+    interface VMapLayerGeotiffAttributes {
+        "url": string;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+        "nodata": number;
+        "colorMap": string | GeoStylerColorMap;
+    }
+    interface VMapLayerGoogleAttributes {
+        "mapType": | 'roadmap'
+    | 'satellite'
+    | 'terrain'
+    | 'hybrid';
+        "apiKey": string;
+        "language": string;
+        "region": string;
+        "visible": boolean;
+        "opacity": number;
+        "scale": 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
+        "maxZoom": number;
+        "styles": any[] | string;
+        "libraries": string;
+    }
+    interface VMapLayerOsmAttributes {
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+        "url": string;
+    }
+    interface VMapLayerScatterplotAttributes {
+        "data": string;
+        "url": string;
+        "getFillColor": Color;
+        "getRadius": number;
+        "opacity": number;
+        "visible": boolean;
+    }
+    interface VMapLayerTerrainAttributes {
+        "elevationData": string;
+        "texture": string;
+        "elevationDecoder": string;
+        "wireframe": boolean;
+        "color": string;
+        "minZoom": number;
+        "maxZoom": number;
+        "meshMaxError": number;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+    }
+    interface VMapLayerTerrainGeotiffAttributes {
+        "url": string;
+        "projection": string;
+        "forceProjection": boolean;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+        "nodata": number;
+        "meshMaxError": number;
+        "wireframe": boolean;
+        "texture": string;
+        "colorMap": string | GeoStylerColorMap;
+        "elevationScale": number;
+        "minZoom": number;
+        "maxZoom": number;
+        "tileSize": number;
+    }
+    interface VMapLayerTile3dAttributes {
+        "url": string;
+        "tilesetOptions": string | Record<string, unknown>;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+    }
+    interface VMapLayerWcsAttributes {
+        "url": string;
+        "coverageName": string;
+        "format": string;
+        "version": string;
+        "projection": string;
+        "resolutions": string;
+        "params": string;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+    }
+    interface VMapLayerWfsAttributes {
+        "url": string;
+        "typeName": string;
+        "version": string;
+        "outputFormat": string;
+        "srsName": string;
+        "params": string;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+    }
+    interface VMapLayerWktAttributes {
+        "wkt": string;
+        "url": string;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+        "fillColor": string;
+        "fillOpacity": number;
+        "strokeColor": string;
+        "strokeWidth": number;
+        "strokeOpacity": number;
+        "pointRadius": number;
+        "pointColor": string;
+        "iconUrl": string;
+        "iconSize": string;
+        "textProperty": string;
+        "textColor": string;
+        "textSize": number;
+    }
+    interface VMapLayerWmsAttributes {
+        "url": string;
+        "layers": string;
+        "styles": string;
+        "format": string;
+        "transparent": boolean;
+        "tiled": boolean;
+        "visible": boolean;
+        "opacity": number;
+        "zIndex": number;
+    }
+    interface VMapLayerXyzAttributes {
+        "url": string;
+        "attributions": string;
+        "maxZoom": number;
+        "tileSize": number;
+        "subdomains": string;
+        "visible": boolean;
+        "opacity": number;
+    }
+    interface VMapLayercontrolAttributes {
+        "for": string;
+    }
+    interface VMapLayergroupAttributes {
+        "visible": boolean;
+        "opacity": number;
+        "basemapid": string | null;
+    }
+    interface VMapStyleAttributes {
+        "format": StyleFormat;
+        "src": string;
+        "content": string;
+        "layerTargets": string;
+        "autoApply": boolean;
+    }
+
     interface IntrinsicElements {
-        "v-map": VMap;
+        "v-map": Omit<VMap, keyof VMapAttributes> & { [K in keyof VMap & keyof VMapAttributes]?: VMap[K] } & { [K in keyof VMap & keyof VMapAttributes as `attr:${K}`]?: VMapAttributes[K] } & { [K in keyof VMap & keyof VMapAttributes as `prop:${K}`]?: VMap[K] };
         "v-map-builder": VMapBuilder;
-        "v-map-layer-geojson": VMapLayerGeojson;
-        "v-map-layer-geotiff": VMapLayerGeotiff;
-        "v-map-layer-google": VMapLayerGoogle;
-        "v-map-layer-osm": VMapLayerOsm;
-        "v-map-layer-scatterplot": VMapLayerScatterplot;
-        "v-map-layer-terrain": VMapLayerTerrain;
-        "v-map-layer-terrain-geotiff": VMapLayerTerrainGeotiff;
-        "v-map-layer-tile3d": VMapLayerTile3d;
-        "v-map-layer-wcs": VMapLayerWcs;
-        "v-map-layer-wfs": VMapLayerWfs;
-        "v-map-layer-wkt": VMapLayerWkt;
-        "v-map-layer-wms": VMapLayerWms;
-        "v-map-layer-xyz": VMapLayerXyz;
-        "v-map-layercontrol": VMapLayercontrol;
-        "v-map-layergroup": VMapLayergroup;
-        "v-map-style": VMapStyle;
+        "v-map-layer-geojson": Omit<VMapLayerGeojson, keyof VMapLayerGeojsonAttributes> & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes]?: VMapLayerGeojson[K] } & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes as `attr:${K}`]?: VMapLayerGeojsonAttributes[K] } & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes as `prop:${K}`]?: VMapLayerGeojson[K] };
+        "v-map-layer-geotiff": Omit<VMapLayerGeotiff, keyof VMapLayerGeotiffAttributes> & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes]?: VMapLayerGeotiff[K] } & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes as `attr:${K}`]?: VMapLayerGeotiffAttributes[K] } & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes as `prop:${K}`]?: VMapLayerGeotiff[K] };
+        "v-map-layer-google": Omit<VMapLayerGoogle, keyof VMapLayerGoogleAttributes> & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes]?: VMapLayerGoogle[K] } & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes as `attr:${K}`]?: VMapLayerGoogleAttributes[K] } & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes as `prop:${K}`]?: VMapLayerGoogle[K] };
+        "v-map-layer-osm": Omit<VMapLayerOsm, keyof VMapLayerOsmAttributes> & { [K in keyof VMapLayerOsm & keyof VMapLayerOsmAttributes]?: VMapLayerOsm[K] } & { [K in keyof VMapLayerOsm & keyof VMapLayerOsmAttributes as `attr:${K}`]?: VMapLayerOsmAttributes[K] } & { [K in keyof VMapLayerOsm & keyof VMapLayerOsmAttributes as `prop:${K}`]?: VMapLayerOsm[K] };
+        "v-map-layer-scatterplot": Omit<VMapLayerScatterplot, keyof VMapLayerScatterplotAttributes> & { [K in keyof VMapLayerScatterplot & keyof VMapLayerScatterplotAttributes]?: VMapLayerScatterplot[K] } & { [K in keyof VMapLayerScatterplot & keyof VMapLayerScatterplotAttributes as `attr:${K}`]?: VMapLayerScatterplotAttributes[K] } & { [K in keyof VMapLayerScatterplot & keyof VMapLayerScatterplotAttributes as `prop:${K}`]?: VMapLayerScatterplot[K] };
+        "v-map-layer-terrain": Omit<VMapLayerTerrain, keyof VMapLayerTerrainAttributes> & { [K in keyof VMapLayerTerrain & keyof VMapLayerTerrainAttributes]?: VMapLayerTerrain[K] } & { [K in keyof VMapLayerTerrain & keyof VMapLayerTerrainAttributes as `attr:${K}`]?: VMapLayerTerrainAttributes[K] } & { [K in keyof VMapLayerTerrain & keyof VMapLayerTerrainAttributes as `prop:${K}`]?: VMapLayerTerrain[K] } & OneOf<"elevationData", VMapLayerTerrain["elevationData"], VMapLayerTerrainAttributes["elevationData"]>;
+        "v-map-layer-terrain-geotiff": Omit<VMapLayerTerrainGeotiff, keyof VMapLayerTerrainGeotiffAttributes> & { [K in keyof VMapLayerTerrainGeotiff & keyof VMapLayerTerrainGeotiffAttributes]?: VMapLayerTerrainGeotiff[K] } & { [K in keyof VMapLayerTerrainGeotiff & keyof VMapLayerTerrainGeotiffAttributes as `attr:${K}`]?: VMapLayerTerrainGeotiffAttributes[K] } & { [K in keyof VMapLayerTerrainGeotiff & keyof VMapLayerTerrainGeotiffAttributes as `prop:${K}`]?: VMapLayerTerrainGeotiff[K] };
+        "v-map-layer-tile3d": Omit<VMapLayerTile3d, keyof VMapLayerTile3dAttributes> & { [K in keyof VMapLayerTile3d & keyof VMapLayerTile3dAttributes]?: VMapLayerTile3d[K] } & { [K in keyof VMapLayerTile3d & keyof VMapLayerTile3dAttributes as `attr:${K}`]?: VMapLayerTile3dAttributes[K] } & { [K in keyof VMapLayerTile3d & keyof VMapLayerTile3dAttributes as `prop:${K}`]?: VMapLayerTile3d[K] } & OneOf<"url", VMapLayerTile3d["url"], VMapLayerTile3dAttributes["url"]>;
+        "v-map-layer-wcs": Omit<VMapLayerWcs, keyof VMapLayerWcsAttributes> & { [K in keyof VMapLayerWcs & keyof VMapLayerWcsAttributes]?: VMapLayerWcs[K] } & { [K in keyof VMapLayerWcs & keyof VMapLayerWcsAttributes as `attr:${K}`]?: VMapLayerWcsAttributes[K] } & { [K in keyof VMapLayerWcs & keyof VMapLayerWcsAttributes as `prop:${K}`]?: VMapLayerWcs[K] } & OneOf<"url", VMapLayerWcs["url"], VMapLayerWcsAttributes["url"]> & OneOf<"coverageName", VMapLayerWcs["coverageName"], VMapLayerWcsAttributes["coverageName"]>;
+        "v-map-layer-wfs": Omit<VMapLayerWfs, keyof VMapLayerWfsAttributes> & { [K in keyof VMapLayerWfs & keyof VMapLayerWfsAttributes]?: VMapLayerWfs[K] } & { [K in keyof VMapLayerWfs & keyof VMapLayerWfsAttributes as `attr:${K}`]?: VMapLayerWfsAttributes[K] } & { [K in keyof VMapLayerWfs & keyof VMapLayerWfsAttributes as `prop:${K}`]?: VMapLayerWfs[K] } & OneOf<"url", VMapLayerWfs["url"], VMapLayerWfsAttributes["url"]> & OneOf<"typeName", VMapLayerWfs["typeName"], VMapLayerWfsAttributes["typeName"]>;
+        "v-map-layer-wkt": Omit<VMapLayerWkt, keyof VMapLayerWktAttributes> & { [K in keyof VMapLayerWkt & keyof VMapLayerWktAttributes]?: VMapLayerWkt[K] } & { [K in keyof VMapLayerWkt & keyof VMapLayerWktAttributes as `attr:${K}`]?: VMapLayerWktAttributes[K] } & { [K in keyof VMapLayerWkt & keyof VMapLayerWktAttributes as `prop:${K}`]?: VMapLayerWkt[K] };
+        "v-map-layer-wms": Omit<VMapLayerWms, keyof VMapLayerWmsAttributes> & { [K in keyof VMapLayerWms & keyof VMapLayerWmsAttributes]?: VMapLayerWms[K] } & { [K in keyof VMapLayerWms & keyof VMapLayerWmsAttributes as `attr:${K}`]?: VMapLayerWmsAttributes[K] } & { [K in keyof VMapLayerWms & keyof VMapLayerWmsAttributes as `prop:${K}`]?: VMapLayerWms[K] } & OneOf<"url", VMapLayerWms["url"], VMapLayerWmsAttributes["url"]> & OneOf<"layers", VMapLayerWms["layers"], VMapLayerWmsAttributes["layers"]>;
+        "v-map-layer-xyz": Omit<VMapLayerXyz, keyof VMapLayerXyzAttributes> & { [K in keyof VMapLayerXyz & keyof VMapLayerXyzAttributes]?: VMapLayerXyz[K] } & { [K in keyof VMapLayerXyz & keyof VMapLayerXyzAttributes as `attr:${K}`]?: VMapLayerXyzAttributes[K] } & { [K in keyof VMapLayerXyz & keyof VMapLayerXyzAttributes as `prop:${K}`]?: VMapLayerXyz[K] } & OneOf<"url", VMapLayerXyz["url"], VMapLayerXyzAttributes["url"]>;
+        "v-map-layercontrol": Omit<VMapLayercontrol, keyof VMapLayercontrolAttributes> & { [K in keyof VMapLayercontrol & keyof VMapLayercontrolAttributes]?: VMapLayercontrol[K] } & { [K in keyof VMapLayercontrol & keyof VMapLayercontrolAttributes as `attr:${K}`]?: VMapLayercontrolAttributes[K] } & { [K in keyof VMapLayercontrol & keyof VMapLayercontrolAttributes as `prop:${K}`]?: VMapLayercontrol[K] };
+        "v-map-layergroup": Omit<VMapLayergroup, keyof VMapLayergroupAttributes> & { [K in keyof VMapLayergroup & keyof VMapLayergroupAttributes]?: VMapLayergroup[K] } & { [K in keyof VMapLayergroup & keyof VMapLayergroupAttributes as `attr:${K}`]?: VMapLayergroupAttributes[K] } & { [K in keyof VMapLayergroup & keyof VMapLayergroupAttributes as `prop:${K}`]?: VMapLayergroup[K] };
+        "v-map-style": Omit<VMapStyle, keyof VMapStyleAttributes> & { [K in keyof VMapStyle & keyof VMapStyleAttributes]?: VMapStyle[K] } & { [K in keyof VMapStyle & keyof VMapStyleAttributes as `attr:${K}`]?: VMapStyleAttributes[K] } & { [K in keyof VMapStyle & keyof VMapStyleAttributes as `prop:${K}`]?: VMapStyle[K] };
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "v-map": LocalJSX.VMap & JSXBase.HTMLAttributes<HTMLVMapElement>;
+            "v-map": LocalJSX.IntrinsicElements["v-map"] & JSXBase.HTMLAttributes<HTMLVMapElement>;
             /**
              * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
              */
-            "v-map-builder": LocalJSX.VMapBuilder & JSXBase.HTMLAttributes<HTMLVMapBuilderElement>;
-            "v-map-layer-geojson": LocalJSX.VMapLayerGeojson & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
-            "v-map-layer-geotiff": LocalJSX.VMapLayerGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
+            "v-map-builder": LocalJSX.IntrinsicElements["v-map-builder"] & JSXBase.HTMLAttributes<HTMLVMapBuilderElement>;
+            "v-map-layer-geojson": LocalJSX.IntrinsicElements["v-map-layer-geojson"] & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
+            "v-map-layer-geotiff": LocalJSX.IntrinsicElements["v-map-layer-geotiff"] & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
             /**
              * Google Maps Basemap Layer
              */
-            "v-map-layer-google": LocalJSX.VMapLayerGoogle & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
-            "v-map-layer-osm": LocalJSX.VMapLayerOsm & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
-            "v-map-layer-scatterplot": LocalJSX.VMapLayerScatterplot & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
-            "v-map-layer-terrain": LocalJSX.VMapLayerTerrain & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainElement>;
-            "v-map-layer-terrain-geotiff": LocalJSX.VMapLayerTerrainGeotiff & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainGeotiffElement>;
-            "v-map-layer-tile3d": LocalJSX.VMapLayerTile3d & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
-            "v-map-layer-wcs": LocalJSX.VMapLayerWcs & JSXBase.HTMLAttributes<HTMLVMapLayerWcsElement>;
-            "v-map-layer-wfs": LocalJSX.VMapLayerWfs & JSXBase.HTMLAttributes<HTMLVMapLayerWfsElement>;
-            "v-map-layer-wkt": LocalJSX.VMapLayerWkt & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
+            "v-map-layer-google": LocalJSX.IntrinsicElements["v-map-layer-google"] & JSXBase.HTMLAttributes<HTMLVMapLayerGoogleElement>;
+            "v-map-layer-osm": LocalJSX.IntrinsicElements["v-map-layer-osm"] & JSXBase.HTMLAttributes<HTMLVMapLayerOsmElement>;
+            "v-map-layer-scatterplot": LocalJSX.IntrinsicElements["v-map-layer-scatterplot"] & JSXBase.HTMLAttributes<HTMLVMapLayerScatterplotElement>;
+            "v-map-layer-terrain": LocalJSX.IntrinsicElements["v-map-layer-terrain"] & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainElement>;
+            "v-map-layer-terrain-geotiff": LocalJSX.IntrinsicElements["v-map-layer-terrain-geotiff"] & JSXBase.HTMLAttributes<HTMLVMapLayerTerrainGeotiffElement>;
+            "v-map-layer-tile3d": LocalJSX.IntrinsicElements["v-map-layer-tile3d"] & JSXBase.HTMLAttributes<HTMLVMapLayerTile3dElement>;
+            "v-map-layer-wcs": LocalJSX.IntrinsicElements["v-map-layer-wcs"] & JSXBase.HTMLAttributes<HTMLVMapLayerWcsElement>;
+            "v-map-layer-wfs": LocalJSX.IntrinsicElements["v-map-layer-wfs"] & JSXBase.HTMLAttributes<HTMLVMapLayerWfsElement>;
+            "v-map-layer-wkt": LocalJSX.IntrinsicElements["v-map-layer-wkt"] & JSXBase.HTMLAttributes<HTMLVMapLayerWktElement>;
             /**
              * OGC WMS Layer
              */
-            "v-map-layer-wms": LocalJSX.VMapLayerWms & JSXBase.HTMLAttributes<HTMLVMapLayerWmsElement>;
+            "v-map-layer-wms": LocalJSX.IntrinsicElements["v-map-layer-wms"] & JSXBase.HTMLAttributes<HTMLVMapLayerWmsElement>;
             /**
              * XYZ Tile Layer
              */
-            "v-map-layer-xyz": LocalJSX.VMapLayerXyz & JSXBase.HTMLAttributes<HTMLVMapLayerXyzElement>;
-            "v-map-layercontrol": LocalJSX.VMapLayercontrol & JSXBase.HTMLAttributes<HTMLVMapLayercontrolElement>;
-            "v-map-layergroup": LocalJSX.VMapLayergroup & JSXBase.HTMLAttributes<HTMLVMapLayergroupElement>;
-            "v-map-style": LocalJSX.VMapStyle & JSXBase.HTMLAttributes<HTMLVMapStyleElement>;
+            "v-map-layer-xyz": LocalJSX.IntrinsicElements["v-map-layer-xyz"] & JSXBase.HTMLAttributes<HTMLVMapLayerXyzElement>;
+            "v-map-layercontrol": LocalJSX.IntrinsicElements["v-map-layercontrol"] & JSXBase.HTMLAttributes<HTMLVMapLayercontrolElement>;
+            "v-map-layergroup": LocalJSX.IntrinsicElements["v-map-layergroup"] & JSXBase.HTMLAttributes<HTMLVMapLayergroupElement>;
+            "v-map-style": LocalJSX.IntrinsicElements["v-map-style"] & JSXBase.HTMLAttributes<HTMLVMapStyleElement>;
         }
     }
 }

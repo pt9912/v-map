@@ -11,9 +11,9 @@ A component that builds map configurations dynamically from JSON/YAML configurat
 
 ## Properties
 
-| Property    | Attribute   | Description                                                                                              | Type      | Default     |
-| ----------- | ----------- | -------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `mapconfig` | `mapconfig` | Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig. | `unknown` | `undefined` |
+| Property    | Attribute | Description                                                                                              | Type      | Default     |
+| ----------- | --------- | -------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `mapconfig` | --        | Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig. | `unknown` | `undefined` |
 
 
 ## Events

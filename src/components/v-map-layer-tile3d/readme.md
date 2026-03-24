@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property           | Attribute         | Description                                                  | Type                                  | Default     |
-| ------------------ | ----------------- | ------------------------------------------------------------ | ------------------------------------- | ----------- |
-| `opacity`          | `opacity`         | Global opacity factor (0-1).                                 | `number`                              | `1`         |
-| `tilesetOptions`   | `tileset-options` | Optional JSON string or object with Cesium3DTileset options. | `string \| { [x: string]: unknown; }` | `undefined` |
-| `url` _(required)_ | `url`             | URL pointing to the Cesium 3D Tileset.                       | `string`                              | `undefined` |
-| `visible`          | `visible`         | Whether the tileset should be visible.                       | `boolean`                             | `true`      |
-| `zIndex`           | `z-index`         | Z-index used for ordering tilesets.                          | `number`                              | `1000`      |
+| Property           | Attribute         | Description                                                  | Type                | Default     |
+| ------------------ | ----------------- | ------------------------------------------------------------ | ------------------- | ----------- |
+| `opacity`          | `opacity`         | Global opacity factor (0-1).                                 | `number`            | `1`         |
+| `tilesetOptions`   | `tileset-options` | Optional JSON string or object with Cesium3DTileset options. | `string \| unknown` | `undefined` |
+| `url` _(required)_ | `url`             | URL pointing to the Cesium 3D Tileset.                       | `string`            | `undefined` |
+| `visible`          | `visible`         | Whether the tileset should be visible.                       | `boolean`           | `true`      |
+| `zIndex`           | `z-index`         | Z-index used for ordering tilesets.                          | `number`            | `1000`      |
 
 
 ## Events
