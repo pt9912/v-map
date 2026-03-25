@@ -422,6 +422,11 @@ export namespace Components {
          */
         "projection"?: string;
         /**
+          * Rendering mode for GeoTIFF terrain.
+          * @default terrain
+         */
+        "renderMode"?: 'terrain' | 'colormap';
+        /**
           * Optional texture URL (can be an image or tile URL).
           * @default null
          */
@@ -769,6 +774,9 @@ export namespace Components {
           * @default null
          */
         "basemapid": string | null;
+        /**
+          * Returns the internal group identifier used by the map provider.
+         */
         "getGroupId": () => Promise<string>;
         /**
           * Globale Opazität (0–1) für alle Kinder.
@@ -1552,6 +1560,11 @@ declare namespace LocalJSX {
          */
         "projection"?: string;
         /**
+          * Rendering mode for GeoTIFF terrain.
+          * @default terrain
+         */
+        "renderMode"?: 'terrain' | 'colormap';
+        /**
           * Optional texture URL (can be an image or tile URL).
           * @default null
          */
@@ -2034,6 +2047,7 @@ declare namespace LocalJSX {
         "texture": string;
         "colorMap": string | GeoStylerColorMap;
         "elevationScale": number;
+        "renderMode": 'terrain' | 'colormap';
         "minZoom": number;
         "maxZoom": number;
         "tileSize": number;

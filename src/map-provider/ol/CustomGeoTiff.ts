@@ -14,6 +14,17 @@ import type { Projection } from 'ol/proj';
 import { get as getProjection } from 'ol/proj';
 import { register } from 'ol/proj/proj4';
 
+type GeoKeysLike = Partial<GeoKeys>;
+
+export interface CustomGeoTiffInstance extends GeoTIFF {
+  getGeoKeys(): Promise<GeoKeysLike | null>;
+  getProjectionParameters(): Promise<ProjectionParameters | null>;
+  getProj4String(): Promise<string | null>;
+  registerProjectionIfNeeded(): Promise<Projection | null>;
+}
+
+export type CustomGeoTiffConstructor = new () => CustomGeoTiffInstance;
+
 // let projectionHelpersPromise: Promise<ProjectionHelpers> | null = null;
 // async function loadProjectionHelpers(): Promise<ProjectionHelpers> {
 //   if (!projectionHelpersPromise) {
@@ -28,18 +39,23 @@ import { register } from 'ol/proj/proj4';
 //   return projectionHelpersPromise;
 // }
 
-export async function createCustomGeoTiff(options: GeoTIFFOptions) {
+export async function createCustomGeoTiff(
+  options: GeoTIFFOptions,
+): Promise<CustomGeoTiffConstructor> {
   /**
    * Gibt die GeoKeys eines GeoTIFF-Bildes zurück.
    * @param image Das GeoTIFF-Bild.
    * @returns Die GeoKeys oder `null`, falls keine vorhanden sind.
    */
-  function getGeoKeys(image: GeoTIFFImage): GeoKeys | null {
-    return image.geoKeys || null;
+  function getGeoKeys(image: GeoTIFFImage): GeoKeysLike | null {
+    if (typeof image.getGeoKeys === 'function') {
+      return image.getGeoKeys() || null;
+    }
+    return (image as GeoTIFFImage & { geoKeys?: GeoKeysLike | null }).geoKeys || null;
   }
 
   return class CustomGeoTiff extends GeoTIFF {
-    private geoKeys_: GeoKeys | null = null;
+    private geoKeys_: GeoKeysLike | null = null;
 
     constructor() {
       super(options);
@@ -49,7 +65,7 @@ export async function createCustomGeoTiff(options: GeoTIFFOptions) {
      * Gibt die GeoKeys der ersten Quelle zurück.
      * @returns Ein Promise, das die GeoKeys oder `null` zurückgibt.
      */
-    public async getGeoKeys(): Promise<GeoKeys | null> {
+    public async getGeoKeys(): Promise<GeoKeysLike | null> {
       if (this.geoKeys_ !== null) {
         return this.geoKeys_;
       }
@@ -97,7 +113,7 @@ export async function createCustomGeoTiff(options: GeoTIFFOptions) {
         return null;
       }
 
-      return geokeysToProj4.toProj4(geoKeys);
+      return geokeysToProj4.toProj4(geoKeys as GeoKeys);
     }
 
     /**
@@ -181,5 +197,5 @@ export async function createCustomGeoTiff(options: GeoTIFFOptions) {
 
     //     return this.registerProjectionIfNeeded(proj4String, code);
     //   }
-  };
+  } as CustomGeoTiffConstructor;
 }

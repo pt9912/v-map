@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T14:25:13",
+  "timestamp": "2026-03-25T12:31:26",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -1841,7 +1841,7 @@
             "references": {
               "Color": {
                 "location": "local",
-                "path": "/workspaces/v-map/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
+                "path": "/Development/v-map/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
                 "id": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx::Color"
               }
             }
@@ -2639,6 +2639,40 @@
           "default": "null",
           "values": [
             {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "renderMode",
+          "type": "\"colormap\" | \"terrain\"",
+          "complexType": {
+            "original": "'terrain' | 'colormap'",
+            "resolved": "\"colormap\" | \"terrain\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "render-mode",
+          "reflectToAttr": false,
+          "docs": "Rendering mode for GeoTIFF terrain.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "terrain"
+            }
+          ],
+          "default": "'terrain'",
+          "values": [
+            {
+              "value": "colormap",
+              "type": "string"
+            },
+            {
+              "value": "terrain",
               "type": "string"
             }
           ],
@@ -4949,7 +4983,7 @@
           },
           "signature": "getGroupId() => Promise<string>",
           "parameters": [],
-          "docs": "",
+          "docs": "Returns the internal group identifier used by the map provider.",
           "docsTags": []
         }
       ],

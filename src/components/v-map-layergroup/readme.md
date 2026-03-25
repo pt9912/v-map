@@ -18,7 +18,7 @@
 
 ### `getGroupId() => Promise<string>`
 
-
+Returns the internal group identifier used by the map provider.
 
 #### Returns
 

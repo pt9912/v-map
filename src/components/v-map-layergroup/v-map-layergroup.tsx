@@ -120,6 +120,9 @@ export class VMapLayerGroup {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_RENDER);
   }
 
+  /**
+   * Returns the internal group identifier used by the map provider.
+   */
   @Method()
   async getGroupId(): Promise<string> {
     return this.groupId;
