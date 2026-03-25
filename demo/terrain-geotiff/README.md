@@ -41,10 +41,12 @@ Die Dateien werden 24 Stunden gecacht.
 Im Projekt-Root:
 
 ```bash
-pnpm dlx http-server -p 4174
+pnpm dlx http-server . -p 4174
 ```
 
 Oder einen anderen statischen Server verwenden.
+
+Wichtig: In diesem Repo kann `pnpm dlx http-server -p 4174` je nach Umgebung `./public` statt des Repo-Roots serven. Das explizite `.` ist hier erforderlich.
 
 ## Start
 
@@ -108,6 +110,7 @@ Rechts werden alle relevanten Events und Änderungen protokolliert:
 ## Hinweise
 
 - **Lokale DEMs**: Die Test-DEMs werden über HTTP bereitgestellt (via Symlink `test-dems/` → `/tmp/v-map-test-dems/`). Browser blockieren direkte `file://` URLs aus Sicherheitsgründen.
+- **Download-Button**: In der statisch servierten Demo kann kein Shell-Script direkt ausgeführt werden. Der Button kopiert deshalb den benötigten Befehl `bash ../../scripts/download-test-dems.sh`.
 - **Performance**: Große GeoTIFFs können lange Ladezeiten haben. Verwende COGs für bessere Performance
 - **Cesium**: Benötigt Cesium-Assets (werden automatisch geladen, wenn Cesium-Provider aktiv ist)
 

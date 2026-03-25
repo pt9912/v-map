@@ -41,9 +41,8 @@ function log(scope, msg, tagClass = 'tag-sys') {
   logs.scrollTop = logs.scrollHeight;
 }
 
-//http://127.0.0.1:5502/demo/v-map/?bundle=esm
-//http://127.0.0.1:5502/demo/v-map/?loader=../../../www/build/v-map.esm.js
-//http://127.0.0.1:5502/demo/v-map/?loader=../../../loader/index.es2017.js
+  //http://127.0.0.1:5502/demo/v-map/?bundle=esm
+  //http://127.0.0.1:5502/demo/v-map/?loader=../../loader/index.es2017.js
 
 async function ensureCustomElementsDefined() {
   log('sys', 'ensureCustomElementsDefined');
@@ -58,28 +57,25 @@ async function ensureCustomElementsDefined() {
   // }
 
   if (bundle === 'esm') {
-    await import('../../../dist/esm/v-map.js');
-    log('sys', 'dist esm-es5 geladen', 'tag-sys');
+    await import('../../dist/esm/v-map.js');
+    log('sys', 'dist esm geladen', 'tag-sys');
     return;
   }
 
   if (bundle === 'vmap') {
-    await import('../../../dist/v-map/v-map.js');
+    await import('../../dist/v-map/v-map.js');
     log('sys', 'v-map geladen', 'tag-sys');
     return;
   }
 
   if (bundle === 'cjs') {
-    await import('../../../dist/cjs/v-map.cjs.js');
+    await import('../../dist/cjs/v-map.cjs.js');
     log('sys', 'cjs geladen', 'tag-sys');
     return;
   }
 
   if (bundle === 'custom') {
-    // Dist-Custom-Elements: definiert CE direkt, KEIN Hydrator
-    await import('../../../dist-custom-elements/index.js');
-    log('sys', 'dist-custom-elements geladen', 'tag-sys');
-    return;
+    throw new Error('bundle=custom wird in diesem Demo-Setup nicht unterstützt');
   }
 
   // Standard: Loader/Hydrator
@@ -91,7 +87,7 @@ async function ensureCustomElementsDefined() {
   }
 
   let loader;
-  loader = await import('../../../loader/index.es2017.js');
+  loader = await import('../../loader/index.es2017.js');
   loader.defineCustomElements?.();
   log('sys', 'defineCustomElements() aufgerufen', 'tag-sys');
 }
@@ -351,7 +347,7 @@ function samples(kind) {
       // persist
       const widthPx = getComputedStyle(
         document.querySelector('.stage'),
-      ).gridTemplateColumns.split(' ')[1];
+      ).gridTemplateColumns.split(' ')[2];
       const parsed = parseFloat(widthPx);
       if (!Number.isNaN(parsed)) {
         localStorage.setItem(STORAGE_KEY, String(parsed));
@@ -363,7 +359,7 @@ function samples(kind) {
       const cols = getComputedStyle(
         document.querySelector('.stage'),
       ).gridTemplateColumns.split(' ');
-      startW = parseFloat(cols[1]); // second column
+      startW = parseFloat(cols[2]); // third column is the log sidebar
       resizer.classList.add('active');
       document.addEventListener('pointermove', onPointerMove);
       document.addEventListener('pointerup', onPointerUp);
@@ -373,7 +369,7 @@ function samples(kind) {
       const current = parseFloat(
         getComputedStyle(
           document.querySelector('.stage'),
-        ).gridTemplateColumns.split(' ')[1],
+        ).gridTemplateColumns.split(' ')[2],
       );
       const next = current < 360 ? 480 : 320;
       root.style.setProperty('--log-width', next + 'px');
@@ -383,8 +379,6 @@ function samples(kind) {
 })();
 
 async function main() {
-  console.log('main');
-
   await ensureCustomElementsDefined();
 
   const host = $('#map-host');

@@ -34,7 +34,7 @@ async function ensureCustomElementsDefined() {
   }
 
   let loader;
-  loader = await import('../../../loader/index.es2017.js');
+  loader = await import('../../loader/index.es2017.js');
   loader.defineCustomElements?.();
   log('sys', 'defineCustomElements() aufgerufen', 'tag-sys');
 }
@@ -202,23 +202,21 @@ async function main() {
 
   // Download DEMs
   $('#downloadDems').addEventListener('click', async () => {
-    log('sys', 'Starte DEM-Download...', 'tag-sys');
-    $('#status').textContent = 'Downloading...';
-    $('#status').style.color = 'var(--yellow, #ffa500)';
+    const command = 'bash ../../scripts/download-test-dems.sh';
 
     try {
-      const response = await fetch('/download-dems', { method: 'POST' });
-      if (response.ok) {
-        log('sys', 'DEMs erfolgreich heruntergeladen', 'tag-sys');
-        $('#status').textContent = 'Download erfolgreich!';
-        $('#status').style.color = 'var(--ok, #0f0)';
-      } else {
-        throw new Error('Download fehlgeschlagen');
-      }
+      await navigator.clipboard.writeText(command);
+      log('sys', 'Download-Befehl in Zwischenablage kopiert', 'tag-sys');
+      $('#status').textContent = `Kopiert: ${command}`;
+      $('#status').style.color = 'var(--ok, #0f0)';
     } catch (err) {
-      log('sys', 'DEM-Download fehlgeschlagen: ' + err.message, 'tag-sys');
-      $('#status').textContent = 'Download fehlgeschlagen! Bitte manuell ausführen: bash ../../scripts/download-test-dems.sh';
-      $('#status').style.color = 'var(--err, #f00)';
+      log(
+        'sys',
+        'Zwischenablage nicht verfügbar, manueller Download nötig',
+        'tag-sys',
+      );
+      $('#status').textContent = `Bitte manuell ausführen: ${command}`;
+      $('#status').style.color = 'var(--warn, #ffa500)';
     }
   });
 

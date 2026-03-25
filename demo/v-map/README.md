@@ -14,10 +14,10 @@ Diese kleine, frameworkfreie Test-Seite erlaubt es dir, **Property- und Slot-Upd
    ```bash
    pnpm build
    ```
-2. **Pfadannahme:** Die Test-Seite liegt in `./demo/v-map/` neben deinem `dist/` Ordner, sodass der Loader unter `../../../dist/loader/index.js` erreichbar ist.  
+2. **Pfadannahme:** Die Test-Seite liegt in `./demo/v-map/` neben deinen `loader/`- und `dist/`-Ordnern, sodass der Loader unter `../../loader/index.js` erreichbar ist.  
    Alternativ kannst du den Loader-Pfad via Query-Param setzen:
    ```
-   http://localhost:4174/demo/v-map/?loader=/absolute/pfad/zu/dist/loader/index.js
+   http://localhost:4174/demo/v-map/?loader=/absoluter/pfad/zu/loader/index.js
    ```
 
 ## Start
@@ -25,10 +25,12 @@ Diese kleine, frameworkfreie Test-Seite erlaubt es dir, **Property- und Slot-Upd
 Statisch serven:
 
 ```bash
-# im Ordner, der sowohl dist/ als auch demo/v-map/ enthält
-pnpm dlx ./ http-server -p 4174
+# im Projekt-Root
+pnpm dlx http-server . -p 4174
 # dann http://localhost:4174/demo/v-map/ öffnen
 ```
+
+Wichtig: In diesem Repo kann `pnpm dlx http-server -p 4174` je nach Umgebung `./public` statt des Repo-Roots serven. Das explizite `.` ist hier erforderlich.
 
 oder direkt die `index.html` im Browser öffnen (beachte CORS-Beschränkungen für ES-Module bei file://).
 

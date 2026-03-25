@@ -93,11 +93,15 @@
       <!-- Map Stage -->
       <div id="map-host">
         <!-- v-map + children werden dynamisch via JS angelegt -->
+        <v-map-layercontrol for="map1"></v-map-layercontrol>
       </div>
-      <v-map-layercontrol for="map1"></v-map-layercontrol>
-      <!-- v
-    <div id="resizer" class="resizer" role="separator" aria-orientation="vertical" aria-label="Resize logs"></div>
-  -->
+      <div
+        id="resizer"
+        class="resizer"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize logs"
+      ></div>
       <aside class="log">
         <div class="log-head">
           <h2>Events & Logs</h2>
@@ -121,9 +125,10 @@
       <p>
         <strong>Hinweis:</strong> Stelle sicher, dass du vor dem Öffnen dieser
         Seite <code>pnpm build</code> im V-Map-Projekt ausgeführt hast, sodass
-        <code>../../dist/loader</code> existiert. Alternativ kannst du den
+        <code>../../loader</code> existiert. Alternativ kannst du den
         Loader-Pfad via Query-Param setzen, z. B.
-        <code>?loader=../loader/index.es2017.js</code>.
+        <code>?loader=../../loader/index.es2017.js</code>. Starte den Server im
+        Projekt-Root mit <code>pnpm dlx http-server . -p 4174</code>.
       </p>
     </footer>
 
