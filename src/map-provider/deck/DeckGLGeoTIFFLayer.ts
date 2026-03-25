@@ -12,7 +12,7 @@ import type { ColorMap as GeoStylerColorMap } from 'geostyler-style';
 import { log, warn, error } from '../../utils/logger';
 import {
   GeoTIFFTileProcessor,
-  type GeoTIFFTileProcessorConfig,
+  getTileProcessorConfig,
 } from '../geotiff/utils/GeoTIFFTileProcessor';
 import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
@@ -160,11 +160,6 @@ export async function createDeckGLGeoTIFFLayer(
     private fromProjection: string = 'EPSG:4326';
     private viewProjection: string = 'EPSG:3857';
     private sourceBounds: [number, number, number, number] = [0, 0, 0, 0];
-    private sourceRef: [number, number] = [0, 0];
-    private resolution: number = 1.0;
-    private imageWidth: number = 0;
-    private imageHeight: number = 0;
-    private overviewImages?: GeoTIFFImage[];
 
     // Tile processor with triangulation
     private tileProcessor?: GeoTIFFTileProcessor;
@@ -257,14 +252,10 @@ export async function createDeckGLGeoTIFFLayer(
      * Called before layer is removed - cleanup resources
      */
     finalizeState(_context?: any): void {
-      // Cleanup
       if (this.tiff) {
-        // GeoTIFF cleanup falls nötig
         this.tiff = null;
       }
-
       this.image = null;
-      this.overviewImages = undefined;
     }
 
     // ============================================================================
@@ -292,17 +283,13 @@ export async function createDeckGLGeoTIFFLayer(
 
         this.tiff = source.tiff;
         this.image = source.baseImage;
-        this.overviewImages = source.overviewImages;
-        this.imageWidth = source.width;
-        this.imageHeight = source.height;
         this.fromProjection = source.fromProjection;
-        //   this.toProjection = source.toProjection;
         this.sourceBounds = source.sourceBounds;
-        this.sourceRef = source.sourceRef;
-        this.resolution = source.resolution;
 
-        // Initialize tile processor with triangulation
-        this.initializeTileProcessor();
+        // Initialize tile processor using shared utility
+        const config = await getTileProcessorConfig(source, this.viewProjection);
+        this.tileProcessor = new GeoTIFFTileProcessor(config);
+        this.tileProcessor.createGlobalTriangulation();
 
         // Invalidate layer um neu zu rendern
         this.triggerLayerUpdate();
@@ -310,44 +297,6 @@ export async function createDeckGLGeoTIFFLayer(
         error('Fehler beim Laden des GeoTIFF:', err);
         this.raiseError(err as Error, 'Failed to load GeoTIFF');
       }
-    }
-
-    /**
-     * Initialize tile processor with configuration
-     */
-    private initializeTileProcessor(): void {
-      // Transform from Mercator to Source projection
-      const transformViewToSourceMapFn = (
-        coord: [number, number],
-      ): [number, number] => {
-        const result = proj4(this.viewProjection, this.fromProjection, coord);
-        return result as [number, number];
-      };
-
-      // Inverse: Transform from Source projection to Mercator
-      const transformSourceMapToViewFn = (
-        coord: [number, number],
-      ): [number, number] => {
-        const result = proj4(this.fromProjection, this.viewProjection, coord);
-        return result as [number, number];
-      };
-
-      const config: GeoTIFFTileProcessorConfig = {
-        transformViewToSourceMapFn,
-        transformSourceMapToViewFn,
-        sourceBounds: this.sourceBounds,
-        sourceRef: this.sourceRef,
-        resolution: this.resolution,
-        imageWidth: this.imageWidth,
-        imageHeight: this.imageHeight,
-        fromProjection: this.fromProjection,
-        toProjection: this.viewProjection,
-        baseImage: this.image!,
-        overviewImages: this.overviewImages || [],
-      };
-
-      this.tileProcessor = new GeoTIFFTileProcessor(config);
-      this.tileProcessor.createGlobalTriangulation();
     }
 
     /**
