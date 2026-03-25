@@ -34,13 +34,13 @@ const NOOP_PROVIDER: MapProvider = {
   async setVisible() {},
   async setZIndex() {},
   async addLayerToGroup() {
-    return '';
+    return null;
   },
   async updateLayer() {},
   async removeLayer() {},
   async setView() {},
   async addBaseLayer() {
-    return '';
+    return null;
   },
   async setBaseLayer() {},
   async ensureGroup() {},

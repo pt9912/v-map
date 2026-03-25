@@ -24,7 +24,16 @@ import { getColorStops } from '../geotiff/utils/colormap-utils';
 import { wellknown } from 'wellknown';
 import { GmlParser } from '@npm9912/s-gml';
 
-type AnyLayer = L.Layer | L.LayerGroup;
+type ManagedLeafletLayer = L.Layer & {
+  setZIndex?: (zIndex: number) => unknown;
+  setOpacity?: (opacity: number) => unknown;
+};
+type ManagedLayerGroup = L.LayerGroup & {
+  _groupId?: string;
+  visible?: boolean;
+  basemap?: boolean;
+};
+type AnyLayer = ManagedLeafletLayer | ManagedLayerGroup;
 interface OpacityOptions {
   opacity?: number;
   fillOpacity?: number;
@@ -33,8 +42,8 @@ interface OpacityOptions {
 export class LeafletProvider implements MapProvider {
   private map?: L.Map;
   private layers: AnyLayer[] = [];
-  private baseLayers: L.Layer[] = [];
-  private hiddenLayerGroups: L.LayerGroup[] = [];
+  private baseLayers: ManagedLeafletLayer[] = [];
+  private hiddenLayerGroups: ManagedLayerGroup[] = [];
   private googleLogoAdded: boolean = false;
   private unsubscribeResize: Unsubscribe;
   private shadowRoot: ShadowRoot;
@@ -87,7 +96,9 @@ export class LeafletProvider implements MapProvider {
         await this.updateWCSLayer(layer, update.data);
         break;
       case 'wfs':
-        await this.updateWFSLayer(layer, update.data);
+        if (layer instanceof L.GeoJSON) {
+          await this.updateWFSLayer(layer, update.data);
+        }
         break;
     }
   }
@@ -111,7 +122,7 @@ export class LeafletProvider implements MapProvider {
     }
     group.addLayer(layer);
 
-    const layerId = L.Util.stamp(layer); //layer._leaflet_id;
+    const layerId = this.getLayerId(layer);
     layer.vmapVisible = true;
     layer.vmapOpacity = 1.0;
 
@@ -119,7 +130,7 @@ export class LeafletProvider implements MapProvider {
       this.setOpacityByLayer(layer, (layerConfig as any).opacity);
     }
     if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex((layerConfig as any).zIndex);
+      layer.setZIndex?.((layerConfig as any).zIndex);
     }
     if ((layerConfig as any).visible) {
       this.setVisibleByLayer(layer, true);
@@ -200,7 +211,7 @@ export class LeafletProvider implements MapProvider {
     }
     layer.layerElementId = layerElementId;
 
-    const layerId = L.Util.stamp(layer); //layer._leaflet_id;
+    const layerId = this.getLayerId(layer);
     layer.vmapVisible = true;
     layer.vmapOpacity = 1.0;
 
@@ -208,7 +219,7 @@ export class LeafletProvider implements MapProvider {
       this.setOpacityByLayer(layer, (layerConfig as any).opacity);
     }
     if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex((layerConfig as any).zIndex);
+      layer.setZIndex?.((layerConfig as any).zIndex);
     }
     if ((layerConfig as any).visible) {
       this.setVisibleByLayer(layer, true);
@@ -236,8 +247,8 @@ export class LeafletProvider implements MapProvider {
       return;
     }
     let group = this.layers.find(
-      l => (l as L.LayerGroup)?._groupId === groupId,
-    ) as L.LayerGroup | undefined;
+      l => (l as ManagedLayerGroup)._groupId === groupId,
+    ) as ManagedLayerGroup | undefined;
 
     const layer = this.baseLayers.find(
       l => l.layerElementId === layerElementId,
@@ -247,6 +258,9 @@ export class LeafletProvider implements MapProvider {
         'leaflet - setBaseLayer - layer not found. layerElementId: ' +
           layerElementId,
       );
+      return;
+    }
+    if (!group) {
       return;
     }
 
@@ -262,21 +276,39 @@ export class LeafletProvider implements MapProvider {
     //group.set('layerId', layerId, false);
   }
 
-  private async _getLayerById(layerId): Promise<L.Layer> {
-    let layerFound = null;
-    this.map.eachLayer(layer => {
-      if (layer._leaflet_id === layerId) {
-        layerFound = layer;
+  private getLayerId(layer: L.Layer): string {
+    return String(L.Util.stamp(layer));
+  }
+
+  private normalizeAttribution(
+    attribution?: string | string[],
+  ): string | undefined {
+    if (Array.isArray(attribution)) {
+      return attribution.join(', ');
+    }
+    return attribution;
+  }
+
+  private async _getLayerById(
+    layerId: string,
+  ): Promise<ManagedLeafletLayer | null> {
+    let layerFound: ManagedLeafletLayer | null = null;
+    this.map?.eachLayer(layer => {
+      if (this.getLayerId(layer) === layerId) {
+        layerFound = layer as ManagedLeafletLayer;
       }
     });
     if (layerFound) return layerFound;
 
-    layerFound = this.baseLayers.find(l => l._leaflet_id === layerId);
+    layerFound =
+      this.baseLayers.find(l => this.getLayerId(l) === layerId) ?? null;
     if (layerFound === undefined) return null;
     return layerFound;
   }
 
-  private async createLayer(layerConfig: LayerConfig): Promise<L.Layer> {
+  private async createLayer(
+    layerConfig: LayerConfig,
+  ): Promise<ManagedLeafletLayer | null> {
     switch (layerConfig.type) {
       case 'geojson':
         return this.createGeoJSONLayer(
@@ -324,6 +356,8 @@ export class LeafletProvider implements MapProvider {
   }
 
   private async updateGeoJSONLayer(layer: L.Layer, data: any) {
+    if (!(layer instanceof L.GeoJSON)) return;
+
     let geoJsonData = null;
     if (data.geojson) {
       geoJsonData = JSON.parse(data.geojson);
@@ -384,7 +418,7 @@ export class LeafletProvider implements MapProvider {
     config: Extract<LayerConfig, { type: 'xyz' }>,
   ): Promise<L.TileLayer> {
     const layer = L.tileLayer(config.url, {
-      attribution: config.attributions,
+      attribution: this.normalizeAttribution(config.attributions),
       maxZoom: (config as any).maxZoom ?? 19,
       ...(config.options ?? {}),
     } as L.TileLayerOptions);
@@ -392,6 +426,8 @@ export class LeafletProvider implements MapProvider {
   }
 
   private async updateOSMLayer(layer: L.Layer, data: any) {
+    if (!('setUrl' in layer) || typeof layer.setUrl !== 'function') return;
+
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     if (data.url) {
       url = data.url + '/{z}/{x}/{y}.png';
@@ -452,7 +488,7 @@ export class LeafletProvider implements MapProvider {
     const arcgisUrl = this.buildArcGISUrl(config.url, params);
 
     const options: L.TileLayerOptions = {
-      attribution: config.attributions,
+      attribution: this.normalizeAttribution(config.attributions),
       minZoom: config.minZoom,
       maxZoom: config.maxZoom,
       ...(config.options ?? {}),
@@ -569,7 +605,10 @@ export class LeafletProvider implements MapProvider {
     this.setOpacityByLayer(layer, opacity);
   }
 
-  private setOpacityByLayer(layer: L.Layer, opacity: number): Promise<void> {
+  private setOpacityByLayer(
+    layer: ManagedLeafletLayer | null,
+    opacity: number,
+  ): Promise<void> {
     if (!layer) return;
 
     // 1. Speichere die Ziel-Opazität (auch wenn Layer unsichtbar)
@@ -591,7 +630,10 @@ export class LeafletProvider implements MapProvider {
     this.setVisibleByLayer(layer, visible);
   }
 
-  private setVisibleByLayer(layer: L.Layer, visible: boolean): Promise<void> {
+  private setVisibleByLayer(
+    layer: ManagedLeafletLayer | null,
+    visible: boolean,
+  ): Promise<void> {
     if (!layer) return;
 
     // 1. Aktualisiere den Sichtbarkeitszustand
@@ -642,26 +684,28 @@ export class LeafletProvider implements MapProvider {
   ): Promise<L.LayerGroup> {
     let group = await this._getLayerGroupById(groupId);
     if (!group) {
-      group = L.layerGroup();
-      (group as any)._groupId = groupId;
+      group = L.layerGroup() as ManagedLayerGroup;
+      group._groupId = groupId;
       group.visible = true;
       group.addTo(this.map!);
       this.layers.push(group);
     }
     this.setGroupVisible(
       groupId,
-      typeof visible !== undefined ? visible : true,
+      visible !== undefined ? visible : true,
     );
     return group;
   }
 
-  private async _getLayerGroupById(groupId): Promise<L.LayerGroup> {
+  private async _getLayerGroupById(
+    groupId,
+  ): Promise<ManagedLayerGroup | null> {
     if (!this.map) {
       return null;
     }
     let group = this.layers.find(
-      l => l instanceof L.LayerGroup && (l as any)._groupId === groupId,
-    ) as L.LayerGroup | undefined;
+      l => l instanceof L.LayerGroup && l._groupId === groupId,
+    ) as ManagedLayerGroup | undefined;
     if (!group) {
       group = this.hiddenLayerGroups.find(lg => lg._groupId === groupId);
       if (!group) return null;
@@ -725,7 +769,7 @@ export class LeafletProvider implements MapProvider {
 
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
-  ): Promise<L.Layer> {
+  ): Promise<ManagedLeafletLayer | null> {
     let geoJsonData = null;
 
     if (config.wkt) {
@@ -813,7 +857,7 @@ export class LeafletProvider implements MapProvider {
 
   private async createGeoTIFFLayer(
     config: Extract<LayerConfig, { type: 'geotiff' }>,
-  ): Promise<L.Layer> {
+  ): Promise<ManagedLeafletLayer | null> {
     if (!config.url) {
       throw new Error('GeoTIFF layer requires a URL');
     }
@@ -839,7 +883,7 @@ export class LeafletProvider implements MapProvider {
     } catch (err) {
       error('Failed to create GeoTIFF layer:', err);
       // Return a placeholder layer in case of error
-      return L.layerGroup([]);
+      return L.layerGroup([]) as ManagedLeafletLayer;
     }
   }
 
@@ -862,7 +906,7 @@ export class LeafletProvider implements MapProvider {
 
   private async createWCSLayer(
     config: Extract<LayerConfig, { type: 'wcs' }>,
-  ): Promise<L.GridLayer> {
+  ): Promise<ManagedLeafletLayer> {
     if (!config.url) {
       throw new Error('WCS layer requires a URL');
     }
@@ -900,7 +944,7 @@ export class LeafletProvider implements MapProvider {
     } catch (err) {
       error('[Leaflet WCS] Failed to create WCS layer:', err);
       // Return a placeholder layer in case of error
-      return L.layerGroup([]) as any;
+      return L.layerGroup([]) as unknown as ManagedLeafletLayer;
     }
   }
 
