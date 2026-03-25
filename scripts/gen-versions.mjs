@@ -32,6 +32,7 @@ const importMap = {
     '@loaders.gl/mvt': `https://esm.sh/@loaders.gl/mvt@${LOADERS_GL_VERSION}`,
     '@loaders.gl/schema': `https://esm.sh/@loaders.gl/schema@${LOADERS_GL_VERSION}`,
     '@loaders.gl/terrain': `https://esm.sh/@loaders.gl/terrain@${LOADERS_GL_VERSION}`,
+    '@loaders.gl/textures': `https://esm.sh/@loaders.gl/textures@${LOADERS_GL_VERSION}`,
     '@loaders.gl/tiles': `https://esm.sh/@loaders.gl/tiles@${LOADERS_GL_VERSION}`,
     '@loaders.gl/wms': `https://esm.sh/@loaders.gl/wms@${LOADERS_GL_VERSION}`,
   },

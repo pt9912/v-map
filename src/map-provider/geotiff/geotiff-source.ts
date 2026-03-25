@@ -28,7 +28,7 @@ export interface GeoTIFFSource {
   sourceBounds: [number, number, number, number];
   sourceRef: [number, number];
   resolution: number;
-  proj4: typeof import('proj4');
+  proj4: typeof proj4Type;
   noDataValue?: number;
   wgs84Bounds: [number, number, number, number];
   transformToWgs84: (coord: [number, number]) => [number, number];
@@ -42,12 +42,8 @@ export async function loadGeoTIFFSource(
   deps: GeoTIFFLoaderDeps,
 ): Promise<GeoTIFFSource> {
   const { geotiff, proj4, geokeysToProj4 } = deps;
-  const fromUrl: typeof geotiff.fromUrl | undefined =
-    (geotiff as any).fromUrl ?? (geotiff as any).default?.fromUrl;
-
-  if (!fromUrl) {
-    throw new Error('geotiff.fromUrl is not available in this environment.');
-  }
+  const { fromUrl } = geotiff;
+  const { toProj4 } = geokeysToProj4;
 
   let tiff: GeoTIFF = null;
   let lasterr = null;
@@ -55,7 +51,6 @@ export async function loadGeoTIFFSource(
     try {
       tiff = await fromUrl(url, {
         allowFullFile: true,
-        cache: true,
       });
     } catch (err) {
       lasterr = err;
@@ -89,36 +84,31 @@ export async function loadGeoTIFFSource(
   let proj4String: string | null = null;
 
   if (!options.forceProjection) {
-    const geoKeys: GeoKeys | null =
+    const geoKeys: Partial<GeoKeys> | null =
       typeof baseImage.getGeoKeys === 'function'
-        ? (await baseImage.getGeoKeys()) ?? null
+        ? baseImage.getGeoKeys() ?? null
         : null;
 
     if (geoKeys) {
-      const toProj4 =
-        (geokeysToProj4 as any).toProj4 ??
-        (geokeysToProj4 as any).default?.toProj4;
-      if (toProj4) {
-        try {
-          const projParams: ProjectionParameters = toProj4(geoKeys);
-          const epsg =
-            geoKeys.ProjectedCSTypeGeoKey ?? geoKeys.GeographicTypeGeoKey;
-          if (epsg) {
-            fromProjection = `EPSG:${epsg}`;
-          }
-          if (projParams?.proj4) {
-            proj4String = projParams.proj4;
-            const numericCode = String(epsg);
-            if (epsg && !proj4.defs(fromProjection)) {
-              proj4.defs(fromProjection, projParams.proj4);
-            }
-            if (epsg && !proj4.defs(numericCode)) {
-              proj4.defs(numericCode, projParams.proj4);
-            }
-          }
-        } catch (err) {
-          warn('v-map - geotiff - failed to parse GeoKeys', err);
+      try {
+        const projParams: ProjectionParameters = toProj4(geoKeys as GeoKeys);
+        const epsg =
+          geoKeys.ProjectedCSTypeGeoKey ?? geoKeys.GeographicTypeGeoKey;
+        if (epsg) {
+          fromProjection = `EPSG:${epsg}`;
         }
+        if (projParams?.proj4) {
+          proj4String = projParams.proj4;
+          const numericCode = String(epsg);
+          if (epsg && !proj4.defs(fromProjection)) {
+            proj4.defs(fromProjection, projParams.proj4);
+          }
+          if (epsg && !proj4.defs(numericCode)) {
+            proj4.defs(numericCode, projParams.proj4);
+          }
+        }
+      } catch (err) {
+        warn('v-map - geotiff - failed to parse GeoKeys', err);
       }
     }
   }
@@ -233,13 +223,11 @@ export async function getGeoTIFFSource(
   forceProjection: boolean,
   nodata: number,
 ): Promise<GeoTIFFSource> {
-  const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
+  const [geotiffModule, { default: proj4 }, geokeysModule] = await Promise.all([
     import('geotiff'),
     import('proj4'),
     import('geotiff-geokeys-to-proj4'),
   ]);
-
-  const proj4 = (proj4Module as any).default ?? proj4Module;
 
   const source: GeoTIFFSource = await loadGeoTIFFSource(
     url,

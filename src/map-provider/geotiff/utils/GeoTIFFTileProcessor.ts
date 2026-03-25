@@ -756,8 +756,7 @@ export async function getTileProcessorConfig(
   tiffSource: GeoTIFFSource,
   viewProjection: string,
 ): Promise<GeoTIFFTileProcessorConfig> {
-  const [proj4Module] = await Promise.all([import('proj4')]);
-  const proj4 = (proj4Module as any).default ?? proj4Module;
+  const { default: proj4 } = await import('proj4');
 
   // Transform from View projection to Source projection
   const transformViewToSourceMapFn = (

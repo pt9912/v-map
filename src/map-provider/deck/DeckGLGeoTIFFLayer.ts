@@ -125,7 +125,7 @@ export async function createDeckGLGeoTIFFLayer(
     { CompositeLayer },
     { TileLayer },
     { BitmapLayer },
-    proj4Module,
+    { default: proj4 },
     geotiffModule,
     geokeysModule,
   ] = await Promise.all([
@@ -136,8 +136,6 @@ export async function createDeckGLGeoTIFFLayer(
     import('geotiff'),
     import('geotiff-geokeys-to-proj4'),
   ]);
-
-  const proj4 = (proj4Module as any).default ?? proj4Module;
 
   // Klassen-Definition innerhalb der Factory
   class DeckGLGeoTIFFLayer extends CompositeLayer<DeckGLGeoTIFFLayerProps> {

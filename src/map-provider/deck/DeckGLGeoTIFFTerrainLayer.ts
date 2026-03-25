@@ -121,7 +121,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     { BitmapLayer },
     { SimpleMeshLayer },
     MartiniModule,
-    proj4Module,
+    { default: proj4 },
     geotiffModule,
     geokeysModule,
   ] = await Promise.all([
@@ -134,8 +134,6 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     import('geotiff'),
     import('geotiff-geokeys-to-proj4'),
   ]);
-
-  const proj4 = (proj4Module as any).default ?? proj4Module;
   const Martini = (MartiniModule as any).default ?? MartiniModule;
 
   class DeckGLGeoTIFFTerrainLayer extends CompositeLayer<DeckGLGeoTIFFTerrainLayerProps> {

@@ -110,13 +110,11 @@ export class GeoTIFFGridLayer extends L.GridLayer {
   private async initializeProcessor(): Promise<void> {
     if (this.tileProcessor) return;
 
-    const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
+    const [geotiffModule, { default: proj4 }, geokeysModule] = await Promise.all([
       import('geotiff'),
       import('proj4'),
       import('geotiff-geokeys-to-proj4'),
     ]);
-
-    const proj4 = (proj4Module as any).default ?? proj4Module;
 
     const source: GeoTIFFSource = await loadGeoTIFFSource(
       this.geotiffOptions.url,

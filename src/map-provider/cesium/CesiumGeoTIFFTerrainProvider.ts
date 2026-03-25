@@ -1,4 +1,5 @@
 import type { GeoTIFFImage } from 'geotiff';
+import type proj4Type from 'proj4';
 import { log, warn, error } from '../../utils/logger';
 import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
@@ -32,7 +33,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
   private _readyPromise: Promise<boolean>;
   private heightmapWidth: number = 65;
   private heightmapHeight: number = 65;
-  private proj4: typeof import('proj4');
+  private proj4: typeof proj4Type;
 
   tilingScheme: TilingScheme;
 
@@ -52,13 +53,11 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
     try {
       log(`[cesium-terrain-geotiff] Loading GeoTIFF from ${options.url}`);
 
-      const [geotiffModule, proj4Module, geokeysModule] = await Promise.all([
+      const [geotiffModule, { default: proj4 }, geokeysModule] = await Promise.all([
         import('geotiff'),
         import('proj4'),
         import('geotiff-geokeys-to-proj4'),
       ]);
-
-      const proj4 = (proj4Module as any).default ?? proj4Module;
 
       const source: GeoTIFFSource = await loadGeoTIFFSource(
         options.url,

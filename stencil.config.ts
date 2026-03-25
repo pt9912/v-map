@@ -278,11 +278,10 @@ export const config: Config = {
           // Leite geotiff zur Browser-Version um
           if (source === 'geotiff') {
             const path = require('path');
+            const geotiffEntryPath = require.resolve('geotiff');
+            const geotiffPackageDir = path.dirname(path.dirname(geotiffEntryPath));
             return {
-              id: path.resolve(
-                __dirname,
-                'node_modules/.pnpm/geotiff@2.1.4-beta.0/node_modules/geotiff/dist-browser/geotiff.js'
-              ),
+              id: path.join(geotiffPackageDir, 'dist-browser', 'geotiff.js'),
               external: false,
             };
           }

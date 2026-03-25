@@ -701,7 +701,7 @@ describe('GeoTIFFTileProcessor', () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 jest.mock('proj4', () => ({
-  default: jest.fn((fromProj: string, toProj: string, coord: [number, number]) => coord),
+  default: jest.fn((_fromProj: string, _toProj: string, coord: [number, number]) => coord),
 }));
 
 describe('getTileProcessorConfig', () => {

@@ -107,7 +107,7 @@ jest.mock('@deck.gl/core', () => {
   return { CompositeLayer: MockCompositeLayer };
 });
 
-jest.mock('proj4', () => ({ default: jest.fn((from: any, to: any, c: any) => c) }));
+jest.mock('proj4', () => ({ default: jest.fn((_from: any, _to: any, c: any) => c) }));
 jest.mock('geotiff', () => ({}));
 jest.mock('geotiff-geokeys-to-proj4', () => ({}));
 

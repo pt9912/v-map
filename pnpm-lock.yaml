@@ -168,8 +168,8 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
       geotiff:
-        specifier: 2.1.4-beta.0
-        version: 2.1.4-beta.0
+        specifier: 3.0.5
+        version: 3.0.5
       geotiff-geokeys-to-proj4:
         specifier: ^2024.4.13
         version: 2024.4.13
@@ -1375,6 +1375,9 @@ packages:
 
   '@petamoriken/float16@3.9.2':
     resolution: {integrity: sha512-VgffxawQde93xKxT3qap3OH+meZf7VaSB5Sqd4Rqc+FP5alWbpOyan/7tRbOAvynjpG3GpdtAuGU/NdhQpmrog==}
+
+  '@petamoriken/float16@3.9.3':
+    resolution: {integrity: sha512-8awtpHXCx/bNpFt4mt2xdkgtgVvKqty8VbjHI/WWWQuEw+KLzFot3f4+LkQY9YmOtq7A5GdOnqoIC8Pdygjk2g==}
 
   '@pnpm/config.env-replace@1.1.0':
     resolution: {integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w==}
@@ -3511,8 +3514,8 @@ packages:
     resolution: {integrity: sha512-PT6uoF5a1+kbC3tHmZSUsLHBp2QJlHasxxxxPW47QIY1VBKpFB+FcDvX+MxER6UzgLQZ0xDzJ9s48B9JbOCTqA==}
     engines: {node: '>=10.19'}
 
-  geotiff@2.1.4-beta.0:
-    resolution: {integrity: sha512-jb6SYvHMyiCqwqgGGLDAxtig9h1g6O+n1wEyNEE4QgVEXOItYaWrEgPg9SAnwdoZm2yx6DpFtilbGG65hvZgpQ==}
+  geotiff@3.0.5:
+    resolution: {integrity: sha512-OWcL9S9+yDZ6iAlXMt32T1iwUApJM8UiD47xbm6ZP1h33d10fqkPs14EG/ttT5EnefpZSx3G15iDFC5FxUNUwA==}
     engines: {node: '>=10.19'}
 
   geowarp-canvas@0.2.0:
@@ -6632,8 +6635,8 @@ packages:
   zstddec@0.1.0:
     resolution: {integrity: sha512-w2NTI8+3l3eeltKAdK8QpiLo/flRAr2p8AGeakfMZOXBxOg9HIu4LVDxBi81sYgVhFhdJjv1OrB5ssI8uFPoLg==}
 
-  zstddec@0.2.0-alpha.3:
-    resolution: {integrity: sha512-uHyE3TN8jRFOaMVwdhERfrcaabyoUUawIRDKXE6x0nCU7mzyIZO0LndJ3AtVUiKLF0lC+8F5bMSySWEF586PSA==}
+  zstddec@0.2.0:
+    resolution: {integrity: sha512-oyPnDa1X5c13+Y7mA/FDMNJrn4S8UNBe0KCqtDmor40Re7ALrPN6npFwyYVRRh+PqozZQdeg23QtbcamZnG5rA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -8001,6 +8004,8 @@ snapshots:
       pako: 1.0.11
 
   '@petamoriken/float16@3.9.2': {}
+
+  '@petamoriken/float16@3.9.3': {}
 
   '@pnpm/config.env-replace@1.1.0': {}
 
@@ -10575,16 +10580,16 @@ snapshots:
       xml-utils: 1.10.2
       zstddec: 0.1.0
 
-  geotiff@2.1.4-beta.0:
+  geotiff@3.0.5:
     dependencies:
-      '@petamoriken/float16': 3.9.2
+      '@petamoriken/float16': 3.9.3
       lerc: 3.0.0
       pako: 2.1.0
       parse-headers: 2.0.6
       quick-lru: 6.1.2
       web-worker: 1.5.0
       xml-utils: 1.10.2
-      zstddec: 0.2.0-alpha.3
+      zstddec: 0.2.0
 
   geowarp-canvas@0.2.0:
     dependencies:
@@ -14056,6 +14061,6 @@ snapshots:
 
   zstddec@0.1.0: {}
 
-  zstddec@0.2.0-alpha.3: {}
+  zstddec@0.2.0: {}
 
   zwitch@2.0.4: {}

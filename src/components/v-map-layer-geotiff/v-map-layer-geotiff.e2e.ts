@@ -121,7 +121,6 @@ describe('<v-map-layer-geotiff> e2e', () => {
     });
 
     it('emittiert ready-Event nach Initialisierung', async () => {
-      const readyEvents: any[] = [];
       await page.evaluate(() => {
         (window as any).__geotiffReady = false;
         document.addEventListener('ready', () => {
