@@ -1,5 +1,5 @@
 /* AUTO-GENERATED: DO NOT EDIT. Run "pnpm build" to regenerate. */
-export const CESIUM_VERSION  = '1.134.0' as const;
+export const CESIUM_VERSION  = '1.139.1' as const;
 export const OL_VERSION      = '10.8.0' as const;
 export const LEAFLET_VERSION = '1.9.4' as const;
 export const DECK_VERSION = '9.2.11' as const;
