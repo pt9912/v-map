@@ -104,6 +104,12 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
   @Prop() elevationScale?: number = 1.0;
 
   /**
+   * Rendering mode for GeoTIFF terrain.
+   * @default terrain
+   */
+  @Prop() renderMode?: 'terrain' | 'colormap' = 'terrain';
+
+  /**
    * Minimum zoom level.
    */
   @Prop() minZoom?: number = 0;
@@ -166,6 +172,7 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
   @Watch('colorMap')
   @Watch('valueRange')
   @Watch('elevationScale')
+  @Watch('renderMode')
   @Watch('minZoom')
   @Watch('maxZoom')
   @Watch('tileSize')
@@ -206,6 +213,7 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
       colorMap: this.colorMap,
       valueRange: this.valueRange,
       elevationScale: this.elevationScale,
+      renderMode: this.renderMode,
       minZoom: this.minZoom,
       maxZoom: this.maxZoom,
       tileSize: this.tileSize,

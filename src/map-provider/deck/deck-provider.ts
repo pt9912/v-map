@@ -1490,6 +1490,7 @@ export type TileLoadProps = {
         if ('colorMap' in data) ov.colorMap = data.colorMap;
         if ('valueRange' in data) ov.valueRange = data.valueRange;
         if ('elevationScale' in data) ov.elevationScale = data.elevationScale;
+        if ('renderMode' in data) ov.renderMode = data.renderMode;
         if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
         break;
       }
@@ -1701,6 +1702,7 @@ export type TileLoadProps = {
         colorMap: config.colorMap as any, // Type cast for colorMap - handled internally
         valueRange: config.valueRange,
         elevationScale: config.elevationScale,
+        renderMode: config.renderMode,
         opacity: config.opacity ?? 1.0,
         visible: config.visible ?? true,
       });

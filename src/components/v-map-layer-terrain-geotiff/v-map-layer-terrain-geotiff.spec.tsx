@@ -53,4 +53,21 @@ describe('v-map-layer-terrain-geotiff', () => {
     expect(page.rootInstance.wireframe).toBe(true);
     expect(page.rootInstance.elevationScale).toBe(2.5);
   });
+
+  it('accepts renderMode and includes it in the layer config', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerTerrainGeotiff],
+      html: `<v-map-layer-terrain-geotiff
+        url="https://example.com/elevation.tif"
+        render-mode="colormap"
+      ></v-map-layer-terrain-geotiff>`,
+    });
+
+    expect(page.rootInstance.renderMode).toBe('colormap');
+    expect((page.rootInstance as any).createLayerConfig()).toEqual(
+      expect.objectContaining({
+        renderMode: 'colormap',
+      }),
+    );
+  });
 });

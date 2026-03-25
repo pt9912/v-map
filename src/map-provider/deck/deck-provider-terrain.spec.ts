@@ -5,6 +5,11 @@ const mockTerrainLayer = jest.fn().mockImplementation(function(this: any, props:
     clone: jest.fn().mockReturnValue({ id: props.id, props }),
   };
 });
+const mockCreateDeckGLGeoTIFFTerrainLayer = jest.fn().mockResolvedValue({
+  id: 'terrain-geotiff-layer',
+  props: {},
+  clone: jest.fn().mockReturnThis(),
+});
 
 jest.mock('@deck.gl/geo-layers', () => ({
   TerrainLayer: mockTerrainLayer,
@@ -42,6 +47,10 @@ jest.mock('@deck.gl/core', () => ({
     setProps: jest.fn(),
     finalize: jest.fn(),
   })),
+}));
+
+jest.mock('./DeckGLGeoTIFFTerrainLayer', () => ({
+  createDeckGLGeoTIFFTerrainLayer: mockCreateDeckGLGeoTIFFTerrainLayer,
 }));
 
 import { DeckProvider } from './deck-provider';
@@ -85,5 +94,67 @@ describe('DeckProvider terrain support', () => {
         visible: false,
       }),
     );
+  });
+
+  it('leitet renderMode an den GeoTIFF-Terrain-Layer weiter', async () => {
+    const provider = new DeckProvider();
+
+    await (provider as any).createGeoTIFFTerrainLayer(
+      {
+        type: 'terrain-geotiff',
+        url: 'https://example.com/elevation.tif',
+        renderMode: 'colormap',
+        colorMap: 'terrain',
+        opacity: 0.7,
+        visible: false,
+      } as any,
+      'terrain-geotiff-layer',
+    );
+
+    expect(mockCreateDeckGLGeoTIFFTerrainLayer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'terrain-geotiff-layer',
+        url: 'https://example.com/elevation.tif',
+        renderMode: 'colormap',
+        colorMap: 'terrain',
+        opacity: 0.7,
+        visible: false,
+      }),
+    );
+  });
+
+  it('leitet renderMode auch bei terrain-geotiff Updates an die Model-Overrides weiter', async () => {
+    const provider = new DeckProvider();
+    const setModelOverrides = jest.fn();
+    const applyToDeck = jest.fn();
+
+    (provider as any).layerGroups = {
+      groups: [
+        {
+          getModel: jest.fn().mockImplementation((layerId: string) =>
+            layerId === 'terrain-geotiff-layer' ? { id: layerId } : undefined,
+          ),
+          setModelOverrides,
+        },
+      ],
+      applyToDeck,
+    };
+
+    await provider.updateLayer('terrain-geotiff-layer', {
+      type: 'terrain-geotiff',
+      data: {
+        renderMode: 'colormap',
+        colorMap: 'terrain',
+      },
+    } as any);
+
+    expect(setModelOverrides).toHaveBeenCalledWith(
+      'terrain-geotiff-layer',
+      expect.objectContaining({
+        renderMode: 'colormap',
+        colorMap: 'terrain',
+      }),
+    );
+    expect(applyToDeck).toHaveBeenCalled();
   });
 });

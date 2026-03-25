@@ -211,6 +211,7 @@ export type LayerConfig =
       colorMap?: string | GeoStylerColorMap;
       valueRange?: [number, number];
       elevationScale?: number;
+      renderMode?: 'terrain' | 'colormap';
       groupId?: string;
       groupVisible?: boolean;
       zIndex?: number;
