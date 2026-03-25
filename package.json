@@ -102,6 +102,7 @@
     "@deck.gl/geo-layers": "^9.1.0",
     "@deck.gl/json": "^9.1.0",
     "@deck.gl/layers": "^9.1.0",
+    "@deck.gl/mesh-layers": "^9.1.0",
     "cesium": "^1.133",
     "leaflet": "^1.9",
     "ol": "^10.6"
@@ -117,11 +118,15 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "@mapbox/martini": "^0.2.0"
+  },
   "devDependencies": {
     "@deck.gl/core": "^9.1.15",
     "@deck.gl/geo-layers": "^9.1.15",
     "@deck.gl/json": "^9.1.15",
     "@deck.gl/layers": "^9.1.15",
+    "@deck.gl/mesh-layers": "^9.1.14",
     "@docsearch/js": "4.0.0-beta.8",
     "@docsearch/react": "4.0.0-beta.8",
     "@gisatcz/deckgl-geolib": "^1.11.2",

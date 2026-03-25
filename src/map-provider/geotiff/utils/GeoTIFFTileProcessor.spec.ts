@@ -1,5 +1,6 @@
 import {
   GeoTIFFTileProcessor,
+  getTileProcessorConfig,
   type GeoTIFFTileProcessorConfig,
 } from './GeoTIFFTileProcessor';
 import type { GeoTIFFImage } from 'geotiff';
@@ -604,5 +605,169 @@ describe('GeoTIFFTileProcessor', () => {
         expect(result.length % 4).toBe(0);
       }
     });
+  });
+
+  describe('getElevationData', () => {
+    it('returns Float32Array of size (tileSize+1)^2', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({ x: 0, y: 0, z: 1, tileSize: 16 });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.length).toBe(17 * 17); // (16+1)^2
+    });
+
+    it('returns Float32Array of zeros when tile does not intersect source', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      processor.createGlobalTriangulation();
+
+      // Tile far outside source bounds [0,0,100,100]
+      const result = await processor.getElevationData({ x: 9999, y: 9999, z: 5, tileSize: 16 });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.length).toBe(17 * 17);
+      expect(result!.every(v => v === 0)).toBe(true);
+    });
+
+    it('backfills right border column', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      processor.createGlobalTriangulation();
+
+      const tileSize = 16;
+      const gridSize = tileSize + 1;
+      const result = await processor.getElevationData({ x: 0, y: 0, z: 1, tileSize });
+
+      expect(result).not.toBeNull();
+      // Right border: column index tileSize should equal tileSize-1 for each row
+      for (let row = 0; row < tileSize; row++) {
+        expect(result![row * gridSize + tileSize]).toBe(result![row * gridSize + tileSize - 1]);
+      }
+    });
+
+    it('backfills bottom border row', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      processor.createGlobalTriangulation();
+
+      const tileSize = 16;
+      const gridSize = tileSize + 1;
+      const result = await processor.getElevationData({ x: 0, y: 0, z: 1, tileSize });
+
+      expect(result).not.toBeNull();
+      // Bottom border: row tileSize should equal row tileSize-1
+      for (let col = 0; col <= tileSize; col++) {
+        expect(result![tileSize * gridSize + col]).toBe(result![(tileSize - 1) * gridSize + col]);
+      }
+    });
+
+    it('returns different size for different tileSize', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      processor.createGlobalTriangulation();
+
+      const result256 = await processor.getElevationData({ x: 0, y: 0, z: 1, tileSize: 256 });
+      const result512 = await processor.getElevationData({ x: 0, y: 0, z: 1, tileSize: 512 });
+
+      expect(result256!.length).toBe(257 * 257);
+      expect(result512!.length).toBe(513 * 513);
+    });
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+jest.mock('proj4', () => ({
+  default: jest.fn((fromProj: string, toProj: string, coord: [number, number]) => coord),
+}));
+
+describe('getTileProcessorConfig', () => {
+  const createMockSource = () => ({
+    tiff: {} as any,
+    baseImage: {
+      getWidth: () => 256,
+      getHeight: () => 256,
+      getResolution: () => [1.0, 1.0],
+      readRasters: jest.fn().mockResolvedValue([new Uint8Array(256 * 256)]),
+    } as any,
+    fromProjection: 'EPSG:25832',
+    sourceBounds: [300000, 5000000, 400000, 5100000] as [number, number, number, number],
+    sourceRef: [350000, 5050000] as [number, number],
+    resolution: 2.5,
+    width: 256,
+    height: 256,
+    overviewImages: [],
+  });
+
+  it('gibt eine GeoTIFFTileProcessorConfig zurück', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config).toBeDefined();
+    expect(config).toHaveProperty('transformViewToSourceMapFn');
+    expect(config).toHaveProperty('transformSourceMapToViewFn');
+    expect(config).toHaveProperty('sourceBounds');
+    expect(config).toHaveProperty('sourceRef');
+    expect(config).toHaveProperty('resolution');
+    expect(config).toHaveProperty('imageWidth');
+    expect(config).toHaveProperty('imageHeight');
+    expect(config).toHaveProperty('fromProjection');
+    expect(config).toHaveProperty('toProjection');
+    expect(config).toHaveProperty('baseImage');
+    expect(config).toHaveProperty('overviewImages');
+  });
+
+  it('übernimmt sourceBounds, sourceRef und resolution aus der Quelle', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config.sourceBounds).toEqual([300000, 5000000, 400000, 5100000]);
+    expect(config.sourceRef).toEqual([350000, 5050000]);
+    expect(config.resolution).toBe(2.5);
+  });
+
+  it('setzt fromProjection und toProjection korrekt', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config.fromProjection).toBe('EPSG:25832');
+    expect(config.toProjection).toBe('EPSG:3857');
+  });
+
+  it('setzt imageWidth und imageHeight aus dem Basisbild', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config.imageWidth).toBe(256);
+    expect(config.imageHeight).toBe(256);
+  });
+
+  it('übernimmt overviewImages aus der Quelle', async () => {
+    const source = createMockSource();
+    source.overviewImages = [];
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config.overviewImages).toEqual([]);
+  });
+
+  it('transformViewToSourceMapFn ist eine Funktion', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(typeof config.transformViewToSourceMapFn).toBe('function');
+  });
+
+  it('transformSourceMapToViewFn ist eine Funktion (inverse)', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(typeof config.transformSourceMapToViewFn).toBe('function');
+  });
+
+  it('funktioniert mit verschiedenen viewProjections', async () => {
+    const source = createMockSource();
+    const config4326 = await getTileProcessorConfig(source as any, 'EPSG:4326');
+    const config3857 = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config4326.toProjection).toBe('EPSG:4326');
+    expect(config3857.toProjection).toBe('EPSG:3857');
   });
 });

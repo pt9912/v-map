@@ -12,6 +12,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      '@mapbox/martini':
+        specifier: ^0.2.0
+        version: 0.2.0
     devDependencies:
       '@deck.gl/core':
         specifier: ^9.1.15
@@ -25,6 +29,9 @@ importers:
       '@deck.gl/layers':
         specifier: ^9.1.15
         version: 9.1.15(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
+      '@deck.gl/mesh-layers':
+        specifier: ^9.1.14
+        version: 9.1.14(@deck.gl/core@9.1.15)(@loaders.gl/core@4.3.4)(@luma.gl/core@9.1.9)(@luma.gl/engine@9.1.9(@luma.gl/core@9.1.9)(@luma.gl/shadertools@9.1.9(@luma.gl/core@9.1.9)))
       '@docsearch/js':
         specifier: 4.0.0-beta.8
         version: 4.0.0-beta.8

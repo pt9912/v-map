@@ -631,6 +631,102 @@ export class GeoTIFFTileProcessor {
 
     return outputData;
   }
+
+  /**
+   * Get raw elevation values for a tile as Float32Array.
+   *
+   * Returns a (tileSize+1) × (tileSize+1) float array suitable for Martini
+   * terrain mesh generation. Border pixels are backfilled for Martini compatibility.
+   * Band 0 of the GeoTIFF is used as the elevation source.
+   */
+  public async getElevationData(params: {
+    x: number;
+    y: number;
+    z: number;
+    tileSize: number;
+  }): Promise<Float32Array | null> {
+    const { x, y, z, tileSize } = params;
+    const gridSize = tileSize + 1; // Martini requires (2^n + 1)^2 grid
+
+    const viewBounds = this.getTileBounds(x, y, z);
+
+    if (!this.tileIntersectsSource(viewBounds)) {
+      return new Float32Array(gridSize * gridSize);
+    }
+
+    let triangulation: Triangulation;
+    if (!this.globalTriangulation) {
+      warn('Global triangulation not available, creating fallback for elevation tile');
+      triangulation = new Triangulation(
+        this.config.transformViewToSourceMapFn,
+        viewBounds,
+        0.5,
+      );
+    } else {
+      triangulation = this.globalTriangulation;
+    }
+
+    const tileSrcBounds = this.calculateTileSourceBounds(viewBounds);
+    const { bestImage } = this.selectOverviewImage(z, tileSize);
+    const ovWidth = bestImage.getWidth();
+    const ovHeight = bestImage.getHeight();
+
+    const readWindow = this.calculateReadWindow(tileSrcBounds, ovWidth, ovHeight);
+    if (!readWindow) {
+      return new Float32Array(gridSize * gridSize);
+    }
+
+    const { rasterBands } = await this.loadAndConvertRasterData(bestImage, readWindow);
+
+    const [mercWest, mercSouth, mercEast, mercNorth] = viewBounds;
+    const [srcWest, srcSouth, srcEast, srcNorth] = this.config.sourceBounds;
+    const srcWidth = srcEast - srcWest;
+    const srcHeight = srcNorth - srcSouth;
+
+    const output = new Float32Array(gridSize * gridSize);
+    let tri: TriResult = null;
+
+    for (let py = 0; py < tileSize; py++) {
+      for (let px = 0; px < tileSize; px++) {
+        const mercX = mercWest + (px / tileSize) * (mercEast - mercWest);
+        const mercY = mercNorth - (py / tileSize) * (mercNorth - mercSouth);
+
+        const targetPoint: [number, number] = [mercX, mercY];
+        tri = triangulation.findSourceTriangleForTargetPoint(targetPoint, tri);
+
+        if (tri) {
+          const [srcX, srcY] = triangulation.applyAffineTransform(mercX, mercY, tri.transform);
+
+          if (srcX >= srcWest && srcX <= srcEast && srcY >= srcSouth && srcY <= srcNorth) {
+            const imgX = ((srcX - srcWest) / srcWidth) * ovWidth;
+            const imgY = ((srcNorth - srcY) / srcHeight) * ovHeight;
+
+            const sampleX = Math.round(imgX) - readWindow.readXMin;
+            const sampleY = Math.round(imgY) - readWindow.readYMin;
+
+            if (
+              sampleX >= 0 && sampleX < readWindow.readWidth &&
+              sampleY >= 0 && sampleY < readWindow.readHeight
+            ) {
+              output[py * gridSize + px] =
+                rasterBands[0][sampleY * readWindow.readWidth + sampleX] as number;
+            }
+          }
+        }
+      }
+    }
+
+    // Backfill right border column (Martini requirement)
+    for (let row = 0; row < tileSize; row++) {
+      output[row * gridSize + tileSize] = output[row * gridSize + tileSize - 1];
+    }
+    // Backfill bottom border row (Martini requirement)
+    for (let col = 0; col <= tileSize; col++) {
+      output[tileSize * gridSize + col] = output[(tileSize - 1) * gridSize + col];
+    }
+
+    return output;
+  }
 }
 
 export async function getTileProcessorConfig(

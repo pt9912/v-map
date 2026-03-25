@@ -265,6 +265,11 @@ export async function createDeckGLGeoTIFFLayer(
     async loadGeoTIFF() {
       const { url, projection, forceProjection } = this.props;
 
+      if (!url) {
+        log('[deck][geotiff] No URL provided, skipping GeoTIFF loading');
+        return;
+      }
+
       log(`loadGeoTIFF - init: ${this.state.init}`);
       try {
         const source: GeoTIFFSource = await loadGeoTIFFSource(
