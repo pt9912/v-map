@@ -204,7 +204,7 @@ export class DeckProvider implements MapProvider {
         }
         return new BitmapLayer(otherProps, {
           //pickable
-          image: [data], //(d: any) => d.url,
+          image: data,
           bounds,
           opacity: sl.opacity ?? 1,
         });
@@ -982,7 +982,7 @@ export type TileLoadProps = {
         }
         return new BitmapLayer({
           id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`,
-          image: [sl.data], // ImageBitmap | Canvas
+          image: sl.data,
           bounds: [west, south, east, north],
           opacity: sl.opacity ?? 1,
           pickable: false,
@@ -1122,7 +1122,7 @@ export type TileLoadProps = {
         }
         return new BitmapLayer({
           id: `${layerId}-bmp-${sl.tile.index.x}-${sl.tile.index.y}-${sl.tile.index.z}`,
-          image: [sl.data],
+          image: sl.data,
           bounds: [west, south, east, north],
           opacity: sl.opacity ?? 1,
           pickable: false,

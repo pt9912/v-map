@@ -14,7 +14,7 @@ const get = name =>
 const CESIUM_VERSION = get('cesium') || '1.133.0';
 const OL_VERSION = get('ol') || '10.8.0';
 const LEAFLET_VERSION = get('leaflet') || '1.9.4';
-const DECK_VERSION = get('deck') || '9.1.14';
+const DECK_VERSION = get('@deck.gl/core') || '9.2.11';
 const LOADERS_GL_VERSION = get('@loaders.gl/core') || '4.3.4';
 
 const importMap = {
