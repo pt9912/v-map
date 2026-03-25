@@ -996,7 +996,13 @@ export class OpenLayersProvider implements MapProvider {
         // Fehler transparent machen (z.B. ungültiger Key / Billing)
         const err = (source as any).getError?.();
         error('Google source error', err);
-        alert(err ?? 'Google source error');
+        this.map.getTargetElement()?.dispatchEvent(
+          new CustomEvent('google-source-error', {
+            detail: { message: err ?? 'Google source error' },
+            bubbles: true,
+            composed: true,
+          }),
+        );
       }
     });
 

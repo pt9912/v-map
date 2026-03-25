@@ -6,6 +6,70 @@ import {
   polygonGeoJSON,
   pointGeoJSON,
 } from './v-map-style.e2e-utils';
+import { newE2EPage } from '../../testing/e2e-testing';
+
+// Parse errors are expected in the error-state integration test
+newE2EPage.setIgnoreError('Style parsing failed');
+
+describe('<v-map-style> E2E (advanced scenarios) — integration', () => {
+  it('emits styleError event and shows error state in shadow DOM on parse failure', async () => {
+    await useMapStylePage(async ({ page, render }) => {
+      await page.evaluate(() => {
+        (window as any).__styleErrorMessage = null;
+        document.addEventListener(
+          'styleError',
+          (e: Event) => {
+            const ce = e as CustomEvent;
+            (window as any).__styleErrorMessage =
+              ce.detail?.message ?? 'error';
+          },
+          { once: true },
+        );
+      });
+
+      await render(`
+        <v-map zoom="10" center-lat="47.4" center-lon="8.5">
+          <v-map-style
+            format="mapbox-gl"
+            content="this is not valid json"
+            layer-targets="test-layer">
+          </v-map-style>
+
+          <v-map-layergroup>
+            <v-map-layer-wkt id="test-layer" wkt="${pointWKT}">
+            </v-map-layer-wkt>
+          </v-map-layergroup>
+        </v-map>
+      `);
+
+      const errorMessage = await page.evaluate(
+        () => (window as any).__styleErrorMessage,
+      );
+      expect(errorMessage).toBeTruthy();
+
+      const errorDiv = await page.find('v-map-style >>> .error');
+      expect(errorDiv).toBeTruthy();
+    });
+  });
+
+  it('getStyle() returns undefined before style is loaded', async () => {
+    await useMapStylePage(async ({ page, render }) => {
+      await render(`
+        <v-map zoom="10" center-lat="47.4" center-lon="8.5">
+          <v-map-style
+            format="sld"
+            auto-apply="false">
+          </v-map-style>
+        </v-map>
+      `);
+
+      const styleComponent = await page.find('v-map-style');
+      const style = await styleComponent.callMethod('getStyle');
+
+      expect(style).toBeUndefined();
+    });
+  });
+});
 
 describe('<v-map-style> E2E (advanced scenarios)', () => {
   it('handles multiple styles for different layer types', async () => {
