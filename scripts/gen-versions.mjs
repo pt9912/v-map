@@ -12,7 +12,7 @@ const get = name =>
   clean(pkg.devDependencies?.[name] ?? pkg.peerDependencies?.[name] ?? '');
 
 const CESIUM_VERSION = get('cesium') || '1.133.0';
-const OL_VERSION = get('ol') || '10.6.1';
+const OL_VERSION = get('ol') || '10.8.0';
 const LEAFLET_VERSION = get('leaflet') || '1.9.4';
 const DECK_VERSION = get('deck') || '9.1.14';
 const LOADERS_GL_VERSION = get('@loaders.gl/core') || '4.3.4';
