@@ -67,6 +67,8 @@ export const polygonSLD = `<?xml version="1.0" encoding="UTF-8"?>
 export const pointWKT = 'POINT(8.5 47.4)';
 export const polygonWKT =
   'POLYGON((8.5 47.4, 8.6 47.4, 8.6 47.5, 8.5 47.5, 8.5 47.4))';
+export const simpleSLDStyleName = 'test-layer';
+export const polygonSLDStyleName = 'polygon-layer';
 
 export const pointGeoJSON = {
   type: 'Feature',

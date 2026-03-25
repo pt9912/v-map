@@ -1,6 +1,7 @@
 import {
   useMapStylePage,
   simpleSLD,
+  simpleSLDStyleName,
   polygonSLD,
   pointWKT,
   polygonWKT,
@@ -49,7 +50,7 @@ describe('<v-map-style> E2E (WKT layers) — integration', () => {
       );
       expect(detail).toBeTruthy();
       expect(detail.style).toBeTruthy();
-      expect(detail.style.name).toBe('Mock SLD Style');
+      expect(detail.style.name).toBe(simpleSLDStyleName);
       expect(detail.layerIds).toContain('wkt-points');
     });
   });
@@ -77,7 +78,7 @@ describe('<v-map-style> E2E (WKT layers) — integration', () => {
       const style = await styleComponent.callMethod('getStyle');
 
       expect(style).toBeTruthy();
-      expect(style.name).toBe('Mock SLD Style');
+      expect(style.name).toBe(simpleSLDStyleName);
     });
   });
 

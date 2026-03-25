@@ -1,6 +1,7 @@
 import {
   useMapStylePage,
   simpleSLD,
+  simpleSLDStyleName,
   polygonSLD,
   pointGeoJSON,
   polygonGeoJSON,
@@ -49,7 +50,7 @@ describe('<v-map-style> E2E (GeoJSON layers) — integration', () => {
       );
       expect(detail).toBeTruthy();
       expect(detail.style).toBeTruthy();
-      expect(detail.style.name).toBe('Mock SLD Style');
+      expect(detail.style.name).toBe(simpleSLDStyleName);
       expect(detail.layerIds).toContain('geojson-points');
     });
   });
