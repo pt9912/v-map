@@ -212,6 +212,28 @@ describe('createDeckGLGeoTIFFLayer', () => {
       expect(mockLoadGeoTIFFSource).not.toHaveBeenCalled();
     });
 
+    it('raeumt bestehenden Zustand auf wenn die URL entfernt wird', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      expect((layer as any).image).toBeTruthy();
+      expect((layer as any).tileProcessor).toBeTruthy();
+
+      (layer as any).props.url = undefined;
+      await (layer as any).loadGeoTIFF();
+
+      expect((layer as any).tiff).toBeUndefined();
+      expect((layer as any).image).toBeUndefined();
+      expect((layer as any).tileProcessor).toBeUndefined();
+      expect((layer as any).sourceBounds).toEqual([0, 0, 0, 0]);
+      expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+      expect((layer as any).renderLayers()).toBeNull();
+    });
+
     it('behandelt Ladefehler und leitet sie an raiseError weiter', async () => {
       mockLoadGeoTIFFSource.mockRejectedValueOnce(new Error('Network error'));
 

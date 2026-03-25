@@ -31,6 +31,7 @@ export interface GeoTIFFTileProcessorConfig {
   // Images
   baseImage: GeoTIFFImage;
   overviewImages: GeoTIFFImage[];
+  noDataValue?: number;
 
   // World size for tile calculations (Web Mercator)
   worldSize?: number;
@@ -153,6 +154,25 @@ export class GeoTIFFTileProcessor {
    */
   public getGlobalTriangulation(): Triangulation | undefined {
     return this.globalTriangulation;
+  }
+
+  /**
+   * Normalize terrain samples so mesh generation does not create spikes
+   * for nodata or otherwise invalid height values.
+   */
+  private sanitizeElevationValue(value: number): number {
+    if (!Number.isFinite(value)) {
+      return 0;
+    }
+
+    if (
+      this.config.noDataValue !== undefined &&
+      value === this.config.noDataValue
+    ) {
+      return 0;
+    }
+
+    return value;
   }
 
   /**
@@ -708,8 +728,11 @@ export class GeoTIFFTileProcessor {
               sampleX >= 0 && sampleX < readWindow.readWidth &&
               sampleY >= 0 && sampleY < readWindow.readHeight
             ) {
+              const sampleValue = Number(
+                rasterBands[0][sampleY * readWindow.readWidth + sampleX],
+              );
               output[py * gridSize + px] =
-                rasterBands[0][sampleY * readWindow.readWidth + sampleX] as number;
+                this.sanitizeElevationValue(sampleValue);
             }
           }
         }
@@ -764,6 +787,7 @@ export async function getTileProcessorConfig(
     toProjection: viewProjection,
     baseImage: tiffSource.baseImage,
     overviewImages: tiffSource.overviewImages ?? [],
+    noDataValue: tiffSource.noDataValue,
   };
   return config;
 }

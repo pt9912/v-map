@@ -10,12 +10,13 @@ const createMockImage = (
   width: number,
   height: number,
   resolution: number[] = [1.0, 1.0],
+  rasterData: any = new Uint8Array(width * height),
 ): GeoTIFFImage => {
   return {
     getWidth: () => width,
     getHeight: () => height,
     getResolution: () => resolution,
-    readRasters: jest.fn().mockResolvedValue([new Uint8Array(width * height)]),
+    readRasters: jest.fn().mockResolvedValue([rasterData]),
   } as unknown as GeoTIFFImage;
 };
 
@@ -630,6 +631,30 @@ describe('GeoTIFFTileProcessor', () => {
       expect(result!.every(v => v === 0)).toBe(true);
     });
 
+    it('replaces nodata elevation samples with zero', async () => {
+      const processor = new GeoTIFFTileProcessor({
+        ...mockConfig,
+        noDataValue: -9999,
+        baseImage: createMockImage(
+          100,
+          100,
+          [1.0, 1.0],
+          new Float32Array(100 * 100).fill(-9999),
+        ),
+      });
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 1,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.every(v => v === 0)).toBe(true);
+    });
+
     it('backfills right border column', async () => {
       const processor = new GeoTIFFTileProcessor(mockConfig);
       processor.createGlobalTriangulation();
@@ -695,6 +720,7 @@ describe('getTileProcessorConfig', () => {
     width: 256,
     height: 256,
     overviewImages: [],
+    noDataValue: -9999,
   });
 
   it('gibt eine GeoTIFFTileProcessorConfig zurück', async () => {
@@ -713,6 +739,7 @@ describe('getTileProcessorConfig', () => {
     expect(config).toHaveProperty('toProjection');
     expect(config).toHaveProperty('baseImage');
     expect(config).toHaveProperty('overviewImages');
+    expect(config).toHaveProperty('noDataValue', -9999);
   });
 
   it('übernimmt sourceBounds, sourceRef und resolution aus der Quelle', async () => {

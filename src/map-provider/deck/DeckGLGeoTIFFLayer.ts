@@ -266,7 +266,12 @@ export async function createDeckGLGeoTIFFLayer(
       const { url, projection, forceProjection } = this.props;
 
       if (!url) {
+        this.tiff = undefined;
+        this.image = undefined;
+        this.tileProcessor = undefined;
+        this.sourceBounds = [0, 0, 0, 0];
         log('[deck][geotiff] No URL provided, skipping GeoTIFF loading');
+        this.triggerLayerUpdate();
         return;
       }
 
