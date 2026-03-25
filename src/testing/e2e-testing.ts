@@ -66,7 +66,7 @@ async function patchConsoleOnNewDocument(page: any) {
         const ctor = origGet(name);
         if (!ctor && !seenMissing.has(name)) {
           seenMissing.add(name);
-          console.warn(`[custom-elements#get-miss] ${name}`);
+          console.info(`[custom-elements#get-miss] ${name}`);
         } else if (ctor && !seenDefines.has(name)) {
           console.info(`[custom-elements#get-hit] ${name}`);
         }
