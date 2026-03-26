@@ -293,6 +293,23 @@ export const config: Config = {
     before: [
       createTestingNodePolyfills(),
       {
+        // jimp (transitive dep of geostyler-lyrx-parser) uses eval;
+        // replace with empty stub so the bundle stays clean
+        name: 'stub-jimp',
+        resolveId(source) {
+          if (source === 'jimp' || source.startsWith('@jimp/')) {
+            return '\0jimp-stub';
+          }
+          return null;
+        },
+        load(id) {
+          if (id === '\0jimp-stub') {
+            return 'export const Jimp = {}; export default Jimp;';
+          }
+          return null;
+        },
+      },
+      {
         name: 'resolve-geotiff-browser',
         resolveId(source) {
           // Leite geotiff zur Browser-Version um
@@ -346,9 +363,6 @@ export const config: Config = {
               '@loaders.gl/textures',
               /^@loaders\.gl\//,
 
-              // jimp (transitive dep of geostyler-lyrx-parser) uses eval
-              'jimp',
-              /^@jimp\//,
             ],
           };
         },
