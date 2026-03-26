@@ -203,6 +203,7 @@
     "tiff-imagery-provider": "^2.17.1",
     "typedoc": "^0.28.12",
     "typedoc-plugin-markdown": "^4.8.1",
+    "typescript": "5.9.2",
     "typescript-eslint": "^8.57.2",
     "uuid": "^13.0.0",
     "vite": "^7.1.7",
