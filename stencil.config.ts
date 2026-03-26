@@ -345,6 +345,10 @@ export const config: Config = {
               // @loaders.gl packages that try to import Node.js modules
               '@loaders.gl/textures',
               /^@loaders\.gl\//,
+
+              // jimp (transitive dep of geostyler-lyrx-parser) uses eval
+              'jimp',
+              /^@jimp\//,
             ],
           };
         },
