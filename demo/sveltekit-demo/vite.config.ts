@@ -10,8 +10,12 @@ export default defineConfig({
 		}),
 	],
 	optimizeDeps: {
-		// Don't pre-bundle v-map — let Vite serve it as-is so changes
-		// from `pnpm build` in the root are picked up without cache issues.
-		exclude: ['@npm9912/v-map'],
+		include: ['@npm9912/v-map/loader'],
+	},
+	server: {
+		// Watch the parent v-map dist directory for changes after `pnpm run build`
+		watch: {
+			ignored: ['!**/node_modules/@npm9912/v-map/dist/**'],
+		},
 	},
 });

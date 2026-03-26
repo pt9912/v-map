@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let provider = $state<'ol' | 'leaflet' | 'deck' | 'cesium'>('ol');
+	let provider = $state<'ol' | 'leaflet' | 'deck' | 'cesium'>('deck');
 	let geotiffUrl = $state('');
 	let geotiffVisible = $state(false);
 	let geotiffOpacity = $state(1.0);

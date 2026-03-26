@@ -300,6 +300,10 @@ export async function createDeckGLGeoTIFFLayer(
         this.tileProcessor = new GeoTIFFTileProcessor(config);
         this.tileProcessor.createGlobalTriangulation();
 
+        log(
+          `v-map - deck - geotiff - loaded: projection=${source.fromProjection}→${this.viewProjection}, bounds=[${source.sourceBounds.map(v => v.toFixed(0)).join(',')}], wgs84=[${source.wgs84Bounds.map(v => v.toFixed(4)).join(',')}], size=${source.width}x${source.height}, bands=${source.samplesPerPixel}`,
+        );
+
         // Invalidate layer um neu zu rendern
         this.triggerLayerUpdate();
       } catch (err) {
@@ -439,6 +443,7 @@ export async function createDeckGLGeoTIFFLayer(
     // ============================================================================
 
     async getTileData(tile: TileLoadProps): Promise<TextureSource> {
+      log(`v-map - deck - geotiff - getTileData ENTER(${tile.index.x},${tile.index.y},${tile.index.z}): image=${!!this.image}, processor=${!!this.tileProcessor}`);
       if (!this.image || !this.tileProcessor) return null;
 
       const x = tile.index.x;
@@ -467,7 +472,20 @@ export async function createDeckGLGeoTIFFLayer(
           colorStops,
         });
 
-        if (!rgbaData) return null;
+        if (!rgbaData) {
+          log(`v-map - deck - geotiff - getTileData(${x},${y},${z}): no data returned`);
+          return null;
+        }
+
+        // Check for non-zero pixels (detect all-transparent tiles)
+        let nonZeroPixels = 0;
+        for (let i = 3; i < rgbaData.length; i += 4) {
+          if (rgbaData[i] > 0) { nonZeroPixels++; break; }
+        }
+
+        log(
+          `v-map - deck - geotiff - getTileData(${x},${y},${z}): rgba ${rgbaData.length} bytes, tileSize=${tileSize}, hasContent=${nonZeroPixels > 0}`,
+        );
 
         return {
           data: rgbaData,
@@ -475,7 +493,7 @@ export async function createDeckGLGeoTIFFLayer(
           height: tileSize!,
         };
       } catch (error) {
-        warn(`Kachel [${z}/${x}/${y}] konnte nicht geladen werden:`, error);
+        warn(`v-map - deck - geotiff - Kachel [${z}/${x}/${y}] Fehler:`, error);
         return null;
       }
     }
@@ -524,6 +542,10 @@ export async function createDeckGLGeoTIFFLayer(
           const { data, width, height } = tile.data;
           const { west, south, east, north } = subProps.tile.bbox;
           const bounds: BitmapBoundingBox = [west, south, east, north];
+
+          log(
+            `v-map - deck - geotiff - renderSubLayer(${tile.index.x},${tile.index.y},${tile.index.z}): data=${data?.length ?? 'null'}, w=${width}, h=${height}, bounds=[${west?.toFixed(2)},${south?.toFixed(2)},${east?.toFixed(2)},${north?.toFixed(2)}]`,
+          );
 
           return new BitmapLayer({
             ...subProps,
