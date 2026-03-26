@@ -58,8 +58,8 @@ export type StyleEvent = {
 function isArrayLike(val: unknown): val is { length: number } {
   return (
     val != null &&
-    typeof (val as any).length === 'number' &&
-    (Array.isArray(val) || typeof (val as any)[0] !== 'undefined')
+    typeof (val as { length?: unknown }).length === 'number' &&
+    (Array.isArray(val) || typeof (val as Record<number, unknown>)[0] !== 'undefined')
   );
 }
 

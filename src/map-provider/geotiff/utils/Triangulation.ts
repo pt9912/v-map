@@ -12,13 +12,13 @@
 
 import { ITriangle } from './Triangle';
 import { BVHNode2D } from './BVHNode2D';
-import { Point2D } from './AABB2D';
+import { AffineTransform, Point2D } from './AABB2D';
 
 interface TransformFunction {
   (coord: [number, number]): [number, number];
 }
 
-export type TriResult = { tri: ITriangle; transform: any };
+export type TriResult = { tri: ITriangle; transform: AffineTransform | null };
 
 export type Bounds = {
   minX: number;

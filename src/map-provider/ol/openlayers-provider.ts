@@ -28,6 +28,10 @@ import OlIcon from 'ol/style/Icon';
 import OlText from 'ol/style/Text';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 import { fromLonLat, type ProjectionLike } from 'ol/proj';
+import type Projection from 'ol/proj/Projection';
+import type { FeatureLike } from 'ol/Feature';
+import type FeatureFormat from 'ol/format/Feature';
+import type { Extent } from 'ol/extent';
 
 import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
@@ -37,7 +41,10 @@ import type { StyleConfig } from '../../types/styleconfig';
 import { DEFAULT_STYLE } from '../../types/styleconfig';
 import { log, error } from '../../utils/logger';
 import { injectOlCss } from './openlayers-helper';
-import type { Style as GeoStylerStyle } from 'geostyler-style';
+import type {
+  Style as GeoStylerStyle,
+  TextSymbolizer,
+} from 'geostyler-style';
 
 import { createCustomGeoTiff } from './CustomGeoTiff';
 
@@ -45,6 +52,13 @@ import WebGLTileLayer from 'ol/layer/WebGLTile';
 import type { SourceInfo } from 'ol/source/GeoTIFF';
 
 type AnyLayer = BaseLayer | LayerGroup | VectorLayer;
+
+/** Properties common to every LayerConfig variant */
+interface LayerConfigCommon {
+  opacity?: number;
+  zIndex?: number;
+  visible?: boolean;
+}
 
 export class OpenLayersProvider implements MapProvider {
   private map!: Map;
@@ -78,8 +92,8 @@ export class OpenLayersProvider implements MapProvider {
   }
 
   async destroy() {
-    this.map?.setTarget(undefined as any);
-    this.map = undefined;
+    this.map?.setTarget(undefined);
+    this.map = undefined as unknown as Map;
   }
 
   async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
@@ -150,7 +164,7 @@ export class OpenLayersProvider implements MapProvider {
       log('ol - setBaseLayer - layerElementId is null.');
       return;
     }
-    let group = this.layers.find(
+    const group = this.layers.find(
       l => (l as LayerGroup).get?.('groupId') === groupId,
     ) as LayerGroup | undefined;
 
@@ -207,15 +221,16 @@ export class OpenLayersProvider implements MapProvider {
 
       layer.set('layerElementId', layerElementId, false);
 
-      if ((layerConfig as any).opacity !== undefined) {
-        layer.setOpacity((layerConfig as any).opacity);
+      const common = layerConfig as LayerConfigCommon;
+      if (common.opacity !== undefined) {
+        layer.setOpacity(common.opacity);
       }
-      if ((layerConfig as any).zIndex !== undefined) {
-        layer.setZIndex((layerConfig as any).zIndex);
+      if (common.zIndex !== undefined) {
+        layer.setZIndex(common.zIndex);
       }
-      if ((layerConfig as any).visible) {
+      if (common.visible) {
         layer.setVisible(true);
-      } else if ((layerConfig as any).visible === false) {
+      } else if (common.visible === false) {
         layer.setVisible(false);
       }
 
@@ -246,15 +261,16 @@ export class OpenLayersProvider implements MapProvider {
     const layerId = crypto.randomUUID();
     layer.set('id', layerId, false);
 
-    if ((layerConfig as any).opacity !== undefined) {
-      layer.setOpacity((layerConfig as any).opacity);
+    const common = layerConfig as LayerConfigCommon;
+    if (common.opacity !== undefined) {
+      layer.setOpacity(common.opacity);
     }
-    if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex((layerConfig as any).zIndex);
+    if (common.zIndex !== undefined) {
+      layer.setZIndex(common.zIndex);
     }
-    if ((layerConfig as any).visible) {
+    if (common.visible) {
       layer.setVisible(true);
-    } else if ((layerConfig as any).visible === false) {
+    } else if (common.visible === false) {
       layer.setVisible(false);
     }
     return layerId;
@@ -303,24 +319,24 @@ export class OpenLayersProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
         );
       default:
-        throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
+        throw new Error(`Unsupported layer type: ${(layerConfig as Record<string, unknown>).type}`);
     }
   }
 
-  private async updateWMSLayer(layer: Layer, data: any): Promise<void> {
+  private async updateWMSLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'wms' }>>): Promise<void> {
     layer.setSource(
       new TileWMS({
         url: data.url,
         params: {
           LAYERS: data.layers,
           TILED: true,
-          ...(data.params ?? {}),
+          ...(data.extraParams ?? {}),
         },
       }),
     );
   }
 
-  private async updateOSMLayer(layer: Layer, data: any): Promise<void> {
+  private async updateOSMLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'osm' }>>): Promise<void> {
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     if (data.url) {
       url = data.url + '/{z}/{x}/{y}.png';
@@ -333,7 +349,7 @@ export class OpenLayersProvider implements MapProvider {
     );
   }
 
-  private async updateGeoJSONLayer(layer: VectorLayer, data: any) {
+  private async updateGeoJSONLayer(layer: VectorLayer, data: Partial<Extract<LayerConfig, { type: 'geojson' }>>) {
     let vectorSource: VectorSource = null;
     const geojsonOptions = {
       featureProjection: this.projection,
@@ -362,8 +378,8 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
-  private async updateWFSLayer(layer: Layer, data: any) {
-    const merged = this.mergeLayerConfig(layer, 'wfsConfig', data);
+  private async updateWFSLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'wfs' }>>) {
+    const merged = this.mergeLayerConfig(layer, 'wfsConfig', data) as unknown as Extract<LayerConfig, { type: 'wfs' }>;
 
     const vectorSource = await this.createWFSSpource(merged);
     layer.setSource(vectorSource);
@@ -378,38 +394,38 @@ export class OpenLayersProvider implements MapProvider {
       layerStyle = await this.createEnhancedStyleFunction(merged.style);
     }
     if (layerStyle) {
-      (layer as any).setStyle(layerStyle);
+      (layer as VectorLayer).setStyle(layerStyle);
     }
   }
 
-  private async updateWCSLayer(layer: Layer, data: any) {
+  private async updateWCSLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'wcs' }>>) {
     const merged = this.mergeLayerConfig(layer, 'wcsConfig', data);
-    const source = await this.createWcsSource(merged);
-    (layer as any).setSource(source);
+    const source = await this.createWcsSource(merged as Extract<LayerConfig, { type: 'wcs' }>);
+    (layer as ImageLayer<ImageSource>).setSource(source);
   }
 
-  private async updateArcGISLayer(layer: Layer, data: any): Promise<void> {
-    const currentSource: any = (layer as any).getSource?.();
+  private async updateArcGISLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'arcgis' }>>): Promise<void> {
+    const tileLayer = layer as TileLayer;
+    const currentSource = tileLayer.getSource() as TileArcGISRest | null;
     const params = {
       ...(currentSource?.getParams?.() ?? {}),
       ...(data?.params ?? {}),
-    } as Record<string, any>;
+    } as Record<string, string | number | boolean>;
 
     if (data?.token) {
       params.token = data.token;
     }
 
-    const sourceOptions: Record<string, any> = {
+    const sourceOptions: Record<string, unknown> = {
       url:
         data?.url ??
-        currentSource?.getUrls?.()?.[0] ??
-        currentSource?.getUrl?.(),
+        currentSource?.getUrls?.()?.[0],
       params,
       ...(data?.options ?? {}),
     };
 
     const arcgisSource = new TileArcGISRest(sourceOptions);
-    (layer as any).setSource?.(arcgisSource);
+    tileLayer.setSource(arcgisSource);
   }
 
   private async createEnhancedStyleFunction(style: StyleConfig) {
@@ -439,8 +455,8 @@ export class OpenLayersProvider implements MapProvider {
       return color; // Return original if can't parse
     }
 
-    return (feature: any) => {
-      const styles = [];
+    return (feature: FeatureLike) => {
+      const styles: OlStyle[] = [];
       const geometry = feature.getGeometry();
       const geometryType = geometry.getType();
 
@@ -674,7 +690,7 @@ export class OpenLayersProvider implements MapProvider {
     const outputFormat = (
       config.outputFormat ?? 'application/json'
     ).toLowerCase();
-    let format: any = new GeoJSON();
+    let format: FeatureFormat = new GeoJSON();
     switch (outputFormat) {
       case 'gml2':
         format = new GML2();
@@ -760,15 +776,15 @@ export class OpenLayersProvider implements MapProvider {
    */
   private async createGeostylerStyleFunction(geostylerStyle: GeoStylerStyle) {
     // Helper to extract static value from GeoStyler property (could be function or value)
-    const getValue = (prop: any, defaultValue: any = undefined) => {
+    const getValue = (prop: unknown, defaultValue: unknown = undefined): unknown => {
       if (prop === undefined || prop === null) return defaultValue;
       // If it's a GeoStyler function object, we can't evaluate it here - return default
-      if (typeof prop === 'object' && prop.name) return defaultValue;
+      if (typeof prop === 'object' && (prop as Record<string, unknown>).name) return defaultValue;
       return prop;
     };
 
-    return (feature: any) => {
-      const styles = [];
+    return (feature: FeatureLike) => {
+      const styles: OlStyle[] = [];
       const geometry = feature.getGeometry();
       const geometryType = geometry.getType();
 
@@ -898,25 +914,26 @@ export class OpenLayersProvider implements MapProvider {
 
                 case 'Text':
                   {
-                    const labelProp = (symbolizer as any).label;
+                    const textSym = symbolizer as TextSymbolizer;
+                    const labelProp = getValue(textSym.label) as string | undefined;
                     if (labelProp && feature.get(labelProp)) {
                       const textColor = getValue(
-                        symbolizer.color,
+                        textSym.color,
                         '#000000',
                       ) as string;
-                      const textSize = getValue(symbolizer.size, 12) as number;
+                      const textSize = getValue(textSym.size, 12) as number;
                       const textFont = getValue(
-                        (symbolizer as any).font,
+                        textSym.font?.[0],
                         'Arial',
                       ) as string;
                       const haloColor = getValue(
-                        (symbolizer as any).haloColor,
+                        textSym.haloColor,
                       ) as string | undefined;
                       const haloWidth = getValue(
-                        (symbolizer as any).haloWidth,
+                        textSym.haloWidth,
                         1,
                       ) as number;
-                      const offset = (symbolizer as any).offset;
+                      const offset = textSym.offset;
                       const offsetX =
                         offset && Array.isArray(offset)
                           ? (getValue(offset[0], 0) as number)
@@ -984,17 +1001,17 @@ export class OpenLayersProvider implements MapProvider {
       // optional:
       scale: config.scale ?? 'scaleFactor2x', // 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x'
       highDpi: config.highDpi ?? true,
-      language: (config as any).language, // falls ihr's im Typ ergänzt
-      region: (config as any).region,
-      imageFormat: (config as any).imageFormat, // 'png' | 'png8' | ...
-      styles: (config as any).styles, // MapStyleArray
-      layerTypes: (config as any).layerTypes, // z. B. ['LayerRoadmap']
+      language: config.language,
+      region: config.region,
+      imageFormat: config.imageFormat,
+      styles: config.styles as Record<string, unknown>[],
+      layerTypes: config.layerTypes,
     });
 
     source.on('change', () => {
       if (source.getState() === 'error') {
         // Fehler transparent machen (z.B. ungültiger Key / Billing)
-        const err = (source as any).getError?.();
+        const err = source.getError();
         error('Google source error', err);
         this.map.getTargetElement()?.dispatchEvent(
           new CustomEvent('google-source-error', {
@@ -1068,7 +1085,7 @@ export class OpenLayersProvider implements MapProvider {
       .animate({ center: fromLonLat(center), zoom, duration: 0 });
   }
 
-  private async _forEachLayer(layerOrGroup, callback): Promise<boolean> {
+  private async _forEachLayer(layerOrGroup: AnyLayer, callback: (layer: AnyLayer) => boolean): Promise<boolean> {
     // Wenn das aktuelle Objekt eine LayerGroup ist, rufen wir die Funktion für jedes Kind erneut auf
     if (layerOrGroup instanceof LayerGroup) {
       const layers = layerOrGroup.getLayers().getArray(); // Array der Unter‑Layer
@@ -1086,7 +1103,7 @@ export class OpenLayersProvider implements MapProvider {
     return false;
   }
 
-  private async _getLayerById(layerId): Promise<Layer> {
+  private async _getLayerById(layerId: string): Promise<Layer> {
     if (!this.map) {
       return null;
     }
@@ -1104,11 +1121,11 @@ export class OpenLayersProvider implements MapProvider {
     return layerFound;
   }
 
-  private async _getLayerGroupById(groupId): Promise<LayerGroup> {
+  private async _getLayerGroupById(groupId: string): Promise<LayerGroup> {
     if (!this.map) {
       return null;
     }
-    let group = this.layers.find(
+    const group = this.layers.find(
       l => (l as LayerGroup).get?.('groupId') === groupId,
     ) as LayerGroup | undefined;
     if (group !== undefined) return group;
@@ -1161,7 +1178,7 @@ export class OpenLayersProvider implements MapProvider {
     }
   }
 
-  private async updateWKTLayer(layer: VectorLayer, data: any): Promise<void> {
+  private async updateWKTLayer(layer: VectorLayer, data: Partial<Extract<LayerConfig, { type: 'wkt' }>>): Promise<void> {
     const wktFormat = new WKT();
     let vectorSource: VectorSource = null;
 
@@ -1346,8 +1363,8 @@ export class OpenLayersProvider implements MapProvider {
 
   private getWFSGetFeatureUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): any {
-    return extent => {
+  ): (extent: Extent) => string {
+    return (extent: Extent) => {
       const wfsVersion = config.version ?? '1.1.0';
       const baseParams = {
         service: 'WFS',
@@ -1371,13 +1388,13 @@ export class OpenLayersProvider implements MapProvider {
   private getWCSGetCoverageUrl(
     config: Extract<LayerConfig, { type: 'wcs' }>,
     resolution: number,
-  ): any {
+  ): (extent: number[]) => string {
     return (extent: number[]) => {
       const wcsVersion = config.version ?? '2.0.1';
       const format = config.format ?? 'image/tiff';
       const projection = config.projection ?? (this.projection as string);
 
-      let params: Record<string, string | number> = {
+      const params: Record<string, string | number> = {
         SERVICE: 'WCS',
         REQUEST: 'GetCoverage',
         VERSION: wcsVersion,
@@ -1544,10 +1561,10 @@ export class OpenLayersProvider implements MapProvider {
   //   });
   // }
 
-  private mergeLayerConfig(layer: Layer, key: string, data: any) {
-    const previous = (layer as any).get?.(key) ?? {};
+  private mergeLayerConfig(layer: Layer, key: string, data: Record<string, unknown>): Record<string, unknown> {
+    const previous = (layer.get(key) as Record<string, unknown>) ?? {};
     const merged = { ...previous, ...data };
-    (layer as any).set?.(key, merged, false);
+    layer.set(key, merged, false);
     return merged;
   }
 
@@ -1589,19 +1606,19 @@ export class OpenLayersProvider implements MapProvider {
 
       // Überschreibe url()-Methode für dynamische URL-Generierung
       getImageInternal(
-        extent: number[],
+        extent: Extent,
         resolution: number,
         pixelRatio: number,
-        _projection: any,
-      ): any {
+        _projection: Projection,
+      ): OlImageWrapper {
         const url = this.urlFunction_(extent);
 
         // Erstelle Image mit der generierten URL
         const image = new OlImageWrapper(extent, resolution, pixelRatio, url);
 
         // Setze Custom Loader für CORS
-        (image as any).load = () => {
-          const img = (image as any).getImage() as HTMLImageElement;
+        image.load = () => {
+          const img = image.getImage() as HTMLImageElement;
           if (img.src !== url) {
             img.crossOrigin = 'anonymous';
             img.src = url;
@@ -1618,15 +1635,15 @@ export class OpenLayersProvider implements MapProvider {
   private async createArcGISLayer(
     config: Extract<LayerConfig, { type: 'arcgis' }>,
   ): Promise<Layer> {
-    const params = {
+    const params: Record<string, string | number | boolean> = {
       ...(config.params ?? {}),
-    } as Record<string, any>;
+    };
 
     if (config.token) {
       params.token = config.token;
     }
 
-    const sourceOptions: Record<string, any> = {
+    const sourceOptions: Record<string, unknown> = {
       url: config.url,
       params,
       ...(config.options ?? {}),
@@ -1640,7 +1657,7 @@ export class OpenLayersProvider implements MapProvider {
     return layer as unknown as Layer;
   }
 
-  private async updateGeoTIFFLayer(layer: Layer, data: any): Promise<void> {
+  private async updateGeoTIFFLayer(layer: Layer, data: Partial<Extract<LayerConfig, { type: 'geotiff' }>>): Promise<void> {
     if (!data.url) {
       throw new Error('GeoTIFF update requires a URL');
     }
@@ -1648,7 +1665,7 @@ export class OpenLayersProvider implements MapProvider {
     const srcInfo: SourceInfo = {
       url: data.url,
     };
-    if (data.nodata !== null && !isNaN(data.nodata)) {
+    if (data.nodata !== null && data.nodata !== undefined && !isNaN(data.nodata)) {
       srcInfo.nodata = data.nodata;
     }
 
@@ -1660,7 +1677,7 @@ export class OpenLayersProvider implements MapProvider {
     await source.registerProjectionIfNeeded();
 
     // Update source on the layer
-    (layer as any).setSource(source);
+    (layer as WebGLTileLayer).setSource(source);
   }
 
   getMap() {

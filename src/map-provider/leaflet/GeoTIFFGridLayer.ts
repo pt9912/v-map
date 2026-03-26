@@ -34,12 +34,12 @@ export class GeoTIFFGridLayer extends L.GridLayer {
 
   onAdd(map: L.Map): this {
     super.onAdd(map);
-    void this.ensureReady().then(() => (this as any).redraw());
+    void this.ensureReady().then(() => this.redraw());
     return this;
   }
 
   createTile(coords: Coords, done: DoneCallback): HTMLCanvasElement {
-    const size = (this as any).getTileSize();
+    const size = this.getTileSize();
     const canvas = L.DomUtil.create(
       'canvas',
       'leaflet-tile',
@@ -104,7 +104,7 @@ export class GeoTIFFGridLayer extends L.GridLayer {
     this.colorStops = undefined;
     this.loadingPromise = undefined;
     await this.ensureReady();
-    (this as any).redraw();
+    this.redraw();
   }
 
   private async initializeProcessor(): Promise<void> {
@@ -205,6 +205,6 @@ export class GeoTIFFGridLayer extends L.GridLayer {
     const northEast = L.CRS.EPSG3857.unproject(L.point(maxX, minY));
 
     // Set bounds option - Leaflet will use this to restrict tile loading
-    (this as any).options.bounds = L.latLngBounds(southWest, northEast);
+    (this.options as L.GridLayerOptions).bounds = L.latLngBounds(southWest, northEast);
   }
 }

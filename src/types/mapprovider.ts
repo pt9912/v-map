@@ -2,10 +2,14 @@ import type { ProviderOptions } from './provideroptions';
 import type { LayerConfig } from './layerconfig';
 import type { LonLat } from './lonlat';
 
-export type LayerUpdate = {
-  type: string;
-  data: any;
-};
+export type LayerUpdate =
+  | {
+      [K in LayerConfig['type']]: {
+        type: K;
+        data: Partial<Extract<LayerConfig, { type: K }>>;
+      };
+    }[LayerConfig['type']]
+  | { type: 'tile3d-style'; data: { style?: Record<string, unknown> } };
 
 export interface MapProvider {
   init(options: ProviderOptions): Promise<void>;

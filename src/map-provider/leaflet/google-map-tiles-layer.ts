@@ -23,7 +23,7 @@ interface SessionTokenRequest {
   highDpi?: boolean;
   layerTypes?: string[];
   overlay?: boolean;
-  styles?: any[];
+  styles?: Record<string, unknown>[];
   apiOptions?: string[];
 }
 
@@ -45,7 +45,7 @@ interface GoogleMapTilesOptions {
   highDpi?: boolean;
   layerTypes?: string[];
   overlay?: boolean;
-  styles?: any[];
+  styles?: Record<string, unknown>[];
   apiOptions?: string[];
   maxZoom?: number;
   minZoom?: number;
@@ -460,28 +460,31 @@ export class GoogleMapTilesLayer extends L.GridLayer {
   }
 
   private setGridOptions(options: Record<string, unknown>): void {
-    const setOptionsFn = (L.Util as any)?.setOptions;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- L.Util.setOptions is typed as (obj: any, options: any) => any in Leaflet
+    const setOptionsFn: ((obj: L.Layer, opts: Record<string, unknown>) => void) | undefined = (L.Util as any)?.setOptions;
     if (typeof setOptionsFn === 'function') {
       setOptionsFn(this, options);
     } else {
-      (this as any).options = {
-        ...(this as any).options,
+      const self = this as unknown as { options: Record<string, unknown> };
+      self.options = {
+        ...self.options,
         ...options,
       };
     }
   }
 
   private resolveTileSize(): L.Point {
-    const raw = (this as any)?.options?.tileSize;
+    const raw = (this as unknown as { options?: L.GridLayerOptions }).options?.tileSize;
     if (raw && typeof raw === 'object') {
       if (Array.isArray(raw) && raw.length === 2) {
-        const [x, y] = raw;
+        const [x, y] = raw as unknown as [unknown, unknown];
         return L.point(Number(x) || FALLBACK_TILE_SIZE, Number(y) || FALLBACK_TILE_SIZE);
       }
       if ('x' in raw && 'y' in raw) {
+        const point = raw as L.Point;
         return L.point(
-          Number((raw as any).x) || FALLBACK_TILE_SIZE,
-          Number((raw as any).y) || FALLBACK_TILE_SIZE,
+          Number(point.x) || FALLBACK_TILE_SIZE,
+          Number(point.y) || FALLBACK_TILE_SIZE,
         );
       }
     }
@@ -492,9 +495,6 @@ export class GoogleMapTilesLayer extends L.GridLayer {
   }
 
   private redrawLayer(): void {
-    const redraw = (this as any)?.redraw;
-    if (typeof redraw === 'function') {
-      redraw.call(this);
-    }
+    this.redraw();
   }
 }

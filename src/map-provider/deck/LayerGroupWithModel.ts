@@ -11,7 +11,7 @@ type LayerOverrides<L extends Layer> = Partial<L['props']> & {
   opacity?: number;
   visible?: boolean;
   zIndex?: number;
-  data?: any;
+  data?: unknown;
   url?: string;
 };
 
@@ -175,7 +175,7 @@ export class LayerGroupWithModel<L extends Layer = Layer>
       const ov = this._overrides.get(id);
       if (ov && Object.keys(ov).length) {
         const needClone = Object.entries(ov).some(
-          ([k, v]) => (inst!.props as any)[k] !== v,
+          ([k, v]) => (inst!.props as unknown as Record<string, unknown>)[k] !== v,
         );
         if (needClone) {
           inst = inst.clone(ov) as L;

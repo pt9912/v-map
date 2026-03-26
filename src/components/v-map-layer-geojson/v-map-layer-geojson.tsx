@@ -25,7 +25,7 @@ export class VMapLayerGeoJSON {
   @Element() el!: HTMLElement;
 
   /** Prop, die du intern nutzt/weiterverarbeitest */
-  @Prop({ mutable: true }) geojson?: unknown;
+  @Prop({ mutable: true }) geojson?: string;
 
   /**
    * URL to fetch GeoJSON data from. Alternative to providing data via slot.

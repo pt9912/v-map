@@ -13,9 +13,9 @@ function injectInlineMin(root?: ShadowRoot): HTMLStyleElement | null {
   if (supportsAdoptedStyleSheets()) {
     const sheet = new CSSStyleSheet();
     sheet.replaceSync(css);
-    const target: any = root ?? document;
-    const current = target.adoptedStyleSheets ?? [];
-    target.adoptedStyleSheets = [...current, sheet];
+    const target = (root ?? document) as ShadowRoot | Document;
+    const current = (target as unknown as { adoptedStyleSheets: CSSStyleSheet[] }).adoptedStyleSheets ?? [];
+    (target as unknown as { adoptedStyleSheets: CSSStyleSheet[] }).adoptedStyleSheets = [...current, sheet];
     return null;
   } else {
     const style = document.createElement('style');
@@ -92,7 +92,7 @@ export function ensureLeafletCss(
 
 /** Fügt ein kleines Google-Logo als Leaflet-Control hinzu (Branding-Sicherheit) */
 export function ensureGoogleLogo(map: L.Map, markAdded: () => void) {
-  if ((map as any)._googleLogoAdded) return;
+  if ((map as unknown as Record<string, unknown>)._googleLogoAdded) return;
   const Logo = L.Control.extend({
     onAdd() {
       const img = L.DomUtil.create('img') as HTMLImageElement;
@@ -107,6 +107,6 @@ export function ensureGoogleLogo(map: L.Map, markAdded: () => void) {
     onRemove() {},
   });
   new Logo({ position: 'bottomleft' as L.ControlPosition }).addTo(map);
-  (map as any)._googleLogoAdded = true;
+  (map as unknown as Record<string, unknown>)._googleLogoAdded = true;
   markAdded();
 }

@@ -236,7 +236,7 @@ describe('WCSGridLayer', () => {
         (imgTile.onerror as any)(errorEvent);
       }
 
-      expect(done).toHaveBeenCalledWith(errorEvent, imgTile);
+      expect(done).toHaveBeenCalledWith(expect.any(Error), imgTile);
     });
   });
 

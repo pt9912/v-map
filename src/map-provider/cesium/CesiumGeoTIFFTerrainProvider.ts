@@ -4,14 +4,14 @@ import { log, warn, error } from '../../utils/logger';
 import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
 type CesiumModule = typeof import('cesium');
-import type { TerrainProvider, TilingScheme, TerrainData } from 'cesium';
+import type { TerrainProvider, TilingScheme, TerrainData, Rectangle, Credit, TileAvailability, Event as CesiumEvent } from 'cesium';
 
 export interface CesiumGeoTIFFTerrainProviderOptions {
   url: string;
   projection?: string;
   forceProjection?: boolean;
   nodata?: number;
-  Cesium: any;
+  Cesium: CesiumModule;
 }
 
 /**
@@ -102,7 +102,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
   /**
    * Get the coverage rectangle in WGS84 coordinates
    */
-  get rectangle(): any {
+  get rectangle(): Rectangle {
     if (!this.ready || !this.wgs84Bounds) {
       return this.Cesium.Rectangle.MAX_VALUE;
     }
@@ -262,7 +262,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
   /**
    * Get the availability of tiles
    */
-  get availability(): any {
+  get availability(): TileAvailability | undefined {
     // For now, we say all tiles are available
     // In a more sophisticated implementation, we'd track which tiles
     // intersect with the GeoTIFF bounds
@@ -342,7 +342,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
   /**
    * Get the credit to display
    */
-  get credit(): any {
+  get credit(): Credit {
     return new this.Cesium.Credit('GeoTIFF Terrain');
   }
 
@@ -363,7 +363,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
   /**
    * Get the error event
    */
-  get errorEvent(): any {
+  get errorEvent(): CesiumEvent<TerrainProvider.ErrorEvent> {
     return new this.Cesium.Event();
   }
 }

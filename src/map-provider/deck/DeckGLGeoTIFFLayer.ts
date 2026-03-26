@@ -4,6 +4,7 @@ import type {
   UpdateParameters,
   DefaultProps,
   TextureSource,
+  LayerContext,
 } from '@deck.gl/core';
 import type { _TileLoadProps as TileLoadProps } from '@deck.gl/geo-layers';
 import type { BitmapBoundingBox } from '@deck.gl/layers';
@@ -178,7 +179,7 @@ export async function createDeckGLGeoTIFFLayer(
     /**
      * Called once when layer is first created
      */
-    async initializeState(_context?: any): Promise<void> {
+    async initializeState(_context?: LayerContext): Promise<void> {
       log(this.state);
       this.setState({ init: false });
       this._loadAsync();
@@ -189,7 +190,7 @@ export async function createDeckGLGeoTIFFLayer(
      * Called when layer props or context has changed
      * Returns true if layer needs to be updated
      */
-    shouldUpdateState({ changeFlags }: UpdateParameters<any>): boolean {
+    shouldUpdateState({ changeFlags }: UpdateParameters<Layer<DeckGLGeoTIFFLayerProps>>): boolean {
       // Update wenn data, props oder updateTriggers sich ändern
       return Boolean(
         changeFlags.propsOrDataChanged || changeFlags.updateTriggersChanged,
@@ -203,7 +204,7 @@ export async function createDeckGLGeoTIFFLayer(
       props: newProps,
       oldProps,
       changeFlags,
-    }: UpdateParameters<any>): void {
+    }: UpdateParameters<Layer<DeckGLGeoTIFFLayerProps>>): void {
       const reloadPropsChanged =
         newProps.url !== oldProps.url ||
         newProps.projection !== oldProps.projection ||
@@ -249,7 +250,7 @@ export async function createDeckGLGeoTIFFLayer(
     /**
      * Called before layer is removed - cleanup resources
      */
-    finalizeState(_context?: any): void {
+    finalizeState(_context?: LayerContext): void {
       if (this.tiff) {
         this.tiff = null;
       }
@@ -504,7 +505,8 @@ export async function createDeckGLGeoTIFFLayer(
       }
 
       // Only pass extent if it's valid, otherwise let TileLayer use global extent
-      const layerConfig: any = {
+      // deck.gl TileLayer config with dynamic properties (extent added conditionally)
+      const layerConfig: Record<string, unknown> = {
         id: `${this.props.id}-tiles`,
         minZoom,
         maxZoom,
@@ -513,6 +515,7 @@ export async function createDeckGLGeoTIFFLayer(
         onTileError: (err: Error) => {
           warn(`[deck][tilelayer] Error: ${err.message}`);
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl sub-layer prop forwarding requires any
         renderSubLayers: (subProps: any) => {
           const { tile } = subProps;
 

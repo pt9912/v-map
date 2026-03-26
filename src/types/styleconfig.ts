@@ -32,7 +32,7 @@ export interface StyleConfig {
   extrudeHeight?: number; // Extrusion height for 3D polygons
 
   // Conditional styling
-  styleFunction?: (feature: any) => Partial<StyleConfig>; // Dynamic styling based on feature properties
+  styleFunction?: (feature: unknown) => Partial<StyleConfig>; // Dynamic styling based on feature properties
 }
 
 /**

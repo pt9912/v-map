@@ -1,5 +1,5 @@
 // CesiumProvider.ts – relevante Ergänzungen
-import { CesiumLayerGroups, AnyLayer } from './CesiumLayerGroups';
+import { CesiumLayerGroups, AnyLayer, I3DTilesLayer } from './CesiumLayerGroups';
 import type { ILayer } from './i-layer';
 import { LayerManager } from './layer-manager';
 
@@ -10,7 +10,7 @@ import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
-import type { Style } from 'geostyler-style';
+import type { Style, TextSymbolizer } from 'geostyler-style';
 import type { StyleConfig } from '../../types/styleconfig';
 
 import { AsyncMutex } from '../../utils/async-mutex';
@@ -31,11 +31,41 @@ import type {
   GeoJsonDataSource,
   Cesium3DTileset,
   TerrainProvider,
+  Globe,
+  Color as CesiumColor,
 } from 'cesium';
 
 type UrlTemplateOptions = ConstructorParameters<
   CesiumModule['UrlTemplateImageryProvider']
 >[0];
+
+type TerrainConfig = Extract<LayerConfig, { type: 'terrain' }>;
+type TerrainGeoTIFFConfig = Extract<LayerConfig, { type: 'terrain-geotiff' }>;
+
+/** GeoJSON FeatureCollection structure returned by WKT/WFS parsers */
+interface GeoJSONFeatureCollection {
+  type: 'FeatureCollection';
+  features: Array<{
+    type: 'Feature';
+    properties: Record<string, unknown>;
+    geometry: Record<string, unknown>;
+  }>;
+}
+
+/** Augmented window for Google Maps loader and test mocks */
+interface WindowWithGoogleMaps extends Window {
+  __mockGoogleMapsApi?: (
+    apiKey: string,
+    opts?: { language?: string; region?: string; libraries?: string[] },
+  ) => Promise<void>;
+  google?: { maps?: unknown };
+  [key: string]: unknown;
+}
+
+/** Augmented HTMLElement that tracks whether Google logo was added */
+interface ContainerWithGoogleLogo extends HTMLElement {
+  _googleLogoAdded?: boolean;
+}
 
 /**
  * Entfernt das von Cesium injectWidgetsCss() eingefügte CSS.
@@ -60,7 +90,7 @@ function removeCesiumWidgetsCss(shadowRoot: ShadowRoot): void {
 }
 
 class CesiumTerrainLayer implements ILayer {
-  private options: any;
+  private options: Record<string, unknown>;
   private opacity = 1;
   private previousProvider: TerrainProvider;
 
@@ -68,18 +98,18 @@ class CesiumTerrainLayer implements ILayer {
     private Cesium: CesiumModule,
     private viewer: Viewer,
     private provider: TerrainProvider,
-    options: any, //Partial<Extract<LayerConfig, { type: 'terrain' }>>,
+    options: TerrainConfig | TerrainGeoTIFFConfig,
   ) {
-    this.options = options ?? {};
+    this.options = (options as Record<string, unknown>) ?? {};
     this.previousProvider = viewer.terrainProvider;
     this.viewer.terrainProvider = this.provider;
   }
 
-  getOptions(): any {
+  getOptions(): Record<string, unknown> {
     return this.options;
   }
 
-  setOptions(options: any): void {
+  setOptions(options: Record<string, unknown>): void {
     this.options = options;
   }
 
@@ -97,13 +127,13 @@ class CesiumTerrainLayer implements ILayer {
 
   setOpacity(value: number): void {
     this.opacity = value;
-    const globe: any = this.viewer.scene.globe;
+    const globe: Globe = this.viewer.scene.globe;
     if (!globe.translucency) {
       try {
         globe.translucency = new this.Cesium.GlobeTranslucency();
         globe.translucency.enabled = true;
-      } catch (error) {
-        warn('Cesium terrain opacity not supported', error);
+      } catch (e) {
+        warn('Cesium terrain opacity not supported', e);
         return;
       }
     }
@@ -240,7 +270,7 @@ export class CesiumProvider implements MapProvider {
         break;
       }
       case 'wms': {
-        const iLayer = await this.addWMSLayer(layerConfig as any);
+        const iLayer = await this.addWMSLayer(layerConfig as Extract<LayerConfig, { type: 'wms' }>);
         wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
@@ -252,7 +282,7 @@ export class CesiumProvider implements MapProvider {
         break;
       }
       case 'arcgis': {
-        await this.addArcGISLayer(layerConfig as any);
+        await this.addArcGISLayer(layerConfig as Extract<LayerConfig, { type: 'arcgis' }>);
         //todo  wrapper = this.layerManager.addLayer(layerId, iLayer);
         break;
       }
@@ -284,9 +314,10 @@ export class CesiumProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'tile3d' }>,
         );
         wrapper = this.layerManager.addLayer(layerId, tileset);
-        wrapper.setOptions((layerConfig as any).tilesetOptions ?? {});
-        if ((layerConfig as any).cesiumStyle && 'setStyle' in wrapper) {
-          (wrapper as any).setStyle((layerConfig as any).cesiumStyle);
+        const tile3dConfig = layerConfig as Extract<LayerConfig, { type: 'tile3d' }>;
+        wrapper.setOptions(tile3dConfig.tilesetOptions ?? {});
+        if (tile3dConfig.cesiumStyle && 'setStyle' in wrapper) {
+          (wrapper as I3DTilesLayer).setStyle(tile3dConfig.cesiumStyle);
         }
         break;
       }
@@ -298,18 +329,19 @@ export class CesiumProvider implements MapProvider {
         break;
       }
       default:
-        throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
+        throw new Error(`Unsupported layer type: ${(layerConfig as LayerConfig).type}`);
     }
 
     if (!wrapper) return null;
 
     // zIndex/Opacity/Visible zuerst auf dem Layer anwenden (bleiben „Originalzustand“ der Gruppe)
-    if ((layerConfig as any).zIndex !== undefined)
-      await wrapper.setZIndex((layerConfig as any).zIndex);
-    if ((layerConfig as any).opacity !== undefined)
-      wrapper.setOpacity((layerConfig as any).opacity);
-    if ((layerConfig as any).visible !== undefined)
-      wrapper.setVisible((layerConfig as any).visible);
+    const commonProps = layerConfig as { zIndex?: number; opacity?: number; visible?: boolean };
+    if (commonProps.zIndex !== undefined)
+      await wrapper.setZIndex(commonProps.zIndex);
+    if (commonProps.opacity !== undefined)
+      wrapper.setOpacity(commonProps.opacity);
+    if (commonProps.visible !== undefined)
+      wrapper.setVisible(commonProps.visible);
 
     return wrapper;
   }
@@ -318,12 +350,12 @@ export class CesiumProvider implements MapProvider {
   async addLayerToGroup(layerConfig: LayerConfig): Promise<string> {
     return await this.layerManagerMutex.runExclusive(async () => {
       const layerId = crypto.randomUUID();
-      let wrapper = await this.createLayer(layerConfig, layerId);
+      const wrapper = await this.createLayer(layerConfig, layerId);
 
       // >>> In Gruppenverwaltung registrieren (inkl. Basemap-Key)
       const elementId: string | null =
-        (layerConfig as any).layerElementId ??
-        (layerConfig as any).elementId ??
+        (layerConfig as unknown as { layerElementId?: string; elementId?: string }).layerElementId ??
+        (layerConfig as unknown as { elementId?: string }).elementId ??
         null;
 
       this.layerGroups.addLayerToGroup(
@@ -361,7 +393,7 @@ export class CesiumProvider implements MapProvider {
     if (!layerElementId || !basemapid) return null;
     return await this.layerManagerMutex.runExclusive(async () => {
       const layerId = crypto.randomUUID();
-      let wrapper = await this.createLayer(layerConfig, layerId);
+      const wrapper = await this.createLayer(layerConfig, layerId);
 
       this.layerGroups.addLayerToGroup(
         layerConfig.groupId,
@@ -435,16 +467,16 @@ export class CesiumProvider implements MapProvider {
     dataSource: GeoJsonDataSource,
     geostylerStyle: Style,
   ) {
-    (dataSource as any).__vmapLockOpacity = true;
+    (dataSource as unknown as { __vmapLockOpacity: boolean }).__vmapLockOpacity = true;
     // Helper to extract static value from GeoStyler property
-    const getValue = (prop: any, defaultValue: any = undefined) => {
+    const getValue = (prop: unknown, defaultValue?: unknown): unknown => {
       if (prop === undefined || prop === null) return defaultValue;
       // If it's a GeoStyler function object, we can't evaluate it here - return default
-      if (typeof prop === 'object' && prop.name) return defaultValue;
+      if (typeof prop === 'object' && prop !== null && 'name' in prop) return defaultValue;
       return prop;
     };
 
-    const toNumber = (value: any, fallback?: number) => {
+    const toNumber = (value: unknown, fallback?: number): number | undefined => {
       if (value == null) return fallback;
       if (typeof value === 'number') return value;
       const n = Number(value);
@@ -676,7 +708,8 @@ export class CesiumProvider implements MapProvider {
                   break;
 
                 case 'Text':
-                  const labelProp = (symbolizer as any).label;
+                  const labelExpr = (symbolizer as TextSymbolizer).label;
+                  const labelProp = typeof labelExpr === 'string' ? labelExpr : undefined;
                   if (
                     labelProp &&
                     entity.properties &&
@@ -747,7 +780,7 @@ export class CesiumProvider implements MapProvider {
   /**
    * Convert CSS color to Cesium Color
    */
-  private parseCesiumColor(color: string | undefined, defaultColor: any): any {
+  private parseCesiumColor(color: string | undefined, defaultColor: CesiumColor): CesiumColor {
     if (!color) return defaultColor;
 
     // Handle hex colors
@@ -771,7 +804,7 @@ export class CesiumProvider implements MapProvider {
   /**
    * Apply opacity to Cesium color
    */
-  private applyCesiumOpacity(color: any, opacity: number): any {
+  private applyCesiumOpacity(color: CesiumColor, opacity: number): CesiumColor {
     if (!color) return color;
     return color.withAlpha(opacity);
   }
@@ -873,7 +906,7 @@ export class CesiumProvider implements MapProvider {
       if (style.styleFunction && entity.properties) {
         const feature = {
           properties: entity.properties._propertyNames.reduce(
-            (props: any, name: string) => {
+            (props: Record<string, unknown>, name: string) => {
               props[name] = entity.properties[name]?._value;
               return props;
             },
@@ -997,7 +1030,7 @@ export class CesiumProvider implements MapProvider {
 
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
-    options: any,
+    options: GeoJsonDataSource.LoadOptions,
   ): Promise<GeoJsonDataSource> {
     const geoJsonData = await this.wktToGeoJSON(config);
 
@@ -1016,14 +1049,15 @@ export class CesiumProvider implements MapProvider {
 
   private async wktToGeoJSON(
     config: Extract<LayerConfig, { type: 'wkt' }>,
-  ): Promise<any> {
+  ): Promise<GeoJSONFeatureCollection> {
     const wktText = await this.resolveWktText(config);
 
     const wellknownModule = await import('wellknown');
     const parseFn =
       typeof wellknownModule.default === 'function'
         ? wellknownModule.default
-        : (wellknownModule as any).parse;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- wellknown has inconsistent module exports across bundlers
+        : (wellknownModule as Record<string, any>).parse;
 
     if (typeof parseFn !== 'function') {
       throw new Error('wellknown parser not available');
@@ -1062,7 +1096,7 @@ export class CesiumProvider implements MapProvider {
 
   private async createGeoJSONLayer(
     config: Extract<LayerConfig, { type: 'geojson' }>,
-    options: any,
+    options: GeoJsonDataSource.LoadOptions,
   ): Promise<GeoJsonDataSource> {
     let geojson_or_url = null;
     if (config.geojson) {
@@ -1087,7 +1121,7 @@ export class CesiumProvider implements MapProvider {
 
   private async createWFSLayer(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-    options: any,
+    options: GeoJsonDataSource.LoadOptions,
   ): Promise<GeoJsonDataSource> {
     // Fetch GeoJSON from WFS server
     const geojson = await this.fetchWFSFromUrl(config);
@@ -1156,7 +1190,8 @@ export class CesiumProvider implements MapProvider {
     });
 
     // Override the buildImageResource method to use Google Static Maps API
-    (googleImageryProvider as any).buildImageResource = function (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- monkey-patching internal Cesium method not exposed in typings
+    (googleImageryProvider as Record<string, any>).buildImageResource = function (
       x: number,
       y: number,
       level: number,
@@ -1227,17 +1262,18 @@ export class CesiumProvider implements MapProvider {
     apiKey: string,
     opts?: { language?: string; region?: string; libraries?: string[] },
   ): Promise<void> {
-    const mockLoader = (window as any).__mockGoogleMapsApi;
+    const w = window as unknown as WindowWithGoogleMaps;
+    const mockLoader = w.__mockGoogleMapsApi;
     if (typeof mockLoader === 'function') {
       await mockLoader(apiKey, opts);
       return;
     }
-    if ((window as any).google?.maps) return;
+    if (w.google?.maps) return;
 
     await new Promise<void>((resolve, reject) => {
       const cbName =
         '___cesiumGoogleInit___' + Math.random().toString(36).slice(2);
-      (window as any)[cbName] = () => resolve();
+      w[cbName] = () => resolve();
 
       const script = document.createElement('script');
       const params = new URLSearchParams({
@@ -1264,7 +1300,7 @@ export class CesiumProvider implements MapProvider {
   private ensureGoogleLogo(): void {
     if (
       !this.viewer?.container ||
-      (this.viewer.container as any)._googleLogoAdded
+      (this.viewer.container as unknown as ContainerWithGoogleLogo)._googleLogoAdded
     )
       return;
 
@@ -1280,7 +1316,7 @@ export class CesiumProvider implements MapProvider {
     logo.style.zIndex = '1000';
 
     this.viewer.container.appendChild(logo);
-    (this.viewer.container as any)._googleLogoAdded = true;
+    (this.viewer.container as unknown as ContainerWithGoogleLogo)._googleLogoAdded = true;
   }
 
   private async createXYZLayer(
@@ -1316,7 +1352,7 @@ export class CesiumProvider implements MapProvider {
   private async createTerrainLayer(
     config: Extract<LayerConfig, { type: 'terrain' }>,
   ): Promise<CesiumTerrainLayer> {
-    let provider: any;
+    let provider: TerrainProvider;
     if (config.elevationData) {
       provider = await this.Cesium.CesiumTerrainProvider.fromUrl(
         config.elevationData,
@@ -1359,7 +1395,7 @@ export class CesiumProvider implements MapProvider {
         this.Cesium,
         this.viewer,
         fallbackProvider,
-        config as any,
+        config,
       );
       // Set to invisible since there's no terrain data
       layer.setVisible(false);
@@ -1384,7 +1420,7 @@ export class CesiumProvider implements MapProvider {
         this.Cesium,
         this.viewer,
         provider,
-        config as any,
+        config,
       );
 
       if (config.visible !== undefined) {
@@ -1404,7 +1440,7 @@ export class CesiumProvider implements MapProvider {
         this.Cesium,
         this.viewer,
         fallbackProvider,
-        config as any,
+        config,
       );
     }
   }
@@ -1453,7 +1489,8 @@ export class CesiumProvider implements MapProvider {
     });
 
     // Override the buildImageResource method to generate WCS GetCoverage URLs
-    (wcsImageryProvider as any).buildImageResource = function (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- monkey-patching internal Cesium method not exposed in typings
+    (wcsImageryProvider as Record<string, any>).buildImageResource = function (
       x: number,
       y: number,
       level: number,
@@ -1562,10 +1599,14 @@ export class CesiumProvider implements MapProvider {
     }
 
     try {
+      const geotiffExtra = config as Extract<LayerConfig, { type: 'geotiff' }> & {
+        projection?: string;
+        forceProjection?: boolean;
+      };
       const source: GeoTIFFSource = await getGeoTIFFSource(
         config.url,
-        (config as any).projection,
-        (config as any).forceProjection,
+        geotiffExtra.projection,
+        geotiffExtra.forceProjection,
         config.nodata,
       );
       const tileProcessorConfig: GeoTIFFTileProcessorConfig =
@@ -1583,12 +1624,14 @@ export class CesiumProvider implements MapProvider {
         colorStops = stops;
       }
 
-      const tileSize = ((config as any).tileSize as number | undefined) ?? 256;
-      const resolution =
-        ((config as any).resolution as number | undefined) ?? 1.0;
-      const resampleMethod =
-        ((config as any).resampleMethod as 'near' | 'bilinear' | undefined) ??
-        'bilinear';
+      const geotiffRenderExtra = config as Extract<LayerConfig, { type: 'geotiff' }> & {
+        tileSize?: number;
+        resolution?: number;
+        resampleMethod?: 'near' | 'bilinear';
+      };
+      const tileSize = geotiffRenderExtra.tileSize ?? 256;
+      const resolution = geotiffRenderExtra.resolution ?? 1.0;
+      const resampleMethod = geotiffRenderExtra.resampleMethod ?? 'bilinear';
 
       const imageryProvider = new GeoTIFFImageryProvider({
         Cesium: this.Cesium,
@@ -1605,7 +1648,7 @@ export class CesiumProvider implements MapProvider {
         show: config.visible ?? true,
       });
 
-      (layer as any).__vmapGeoTIFFMeta = {
+      (layer as unknown as { __vmapGeoTIFFMeta: Record<string, unknown> }).__vmapGeoTIFFMeta = {
         url: config.url,
         width: source.width,
         height: source.height,
@@ -1789,7 +1832,7 @@ export class CesiumProvider implements MapProvider {
               type: 'tile3d',
               url: data.url,
               tilesetOptions: data.tilesetOptions,
-              cesiumStyle: data.style,
+              cesiumStyle: data.cesiumStyle,
             } as Extract<LayerConfig, { type: 'tile3d' }>);
 
             const updatedLayer = this.layerManager.replaceLayer(
@@ -1798,8 +1841,8 @@ export class CesiumProvider implements MapProvider {
               layer,
             );
             updatedLayer.setOptions(data.tilesetOptions ?? {});
-            if (data.style && 'setStyle' in updatedLayer) {
-              (updatedLayer as any).setStyle(data.style);
+            if (data.cesiumStyle && 'setStyle' in updatedLayer) {
+              (updatedLayer as I3DTilesLayer).setStyle(data.cesiumStyle);
             }
           }
           break;
@@ -1808,7 +1851,7 @@ export class CesiumProvider implements MapProvider {
             const data = update.data ?? {};
             if ('setStyle' in oldLayer) {
               const stylePayload = data.style ?? {};
-              (oldLayer as any).setStyle(stylePayload);
+              (oldLayer as I3DTilesLayer).setStyle(stylePayload);
             }
           }
           break;
@@ -1873,7 +1916,7 @@ export class CesiumProvider implements MapProvider {
 
   private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const baseParams = {
       service: 'WFS',
       request: 'GetFeature',

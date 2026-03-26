@@ -21,7 +21,7 @@ Google Maps Basemap Layer
 | `opacity`   | `opacity`   | Opazität des Layers (0–1).                                                                               | `number`                                                | `1.0`       |
 | `region`    | `region`    | Region-Bias (ccTLD/Region-Code, z. B. "DE", "US"). Beeinflusst Labels/Suchergebnisse.                    | `string`                                                | `undefined` |
 | `scale`     | `scale`     | Scale factor for tile display.                                                                           | `"scaleFactor1x" \| "scaleFactor2x" \| "scaleFactor4x"` | `undefined` |
-| `styles`    | `styles`    | Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array. | `any[] \| string`                                       | `undefined` |
+| `styles`    | `styles`    | Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array. | `Record<string, unknown>[] \| string`                   | `undefined` |
 | `visible`   | `visible`   | Sichtbarkeit des Layers.                                                                                 | `boolean`                                               | `true`      |
 
 

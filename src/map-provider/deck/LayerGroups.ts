@@ -4,7 +4,19 @@ import type { RenderableGroup } from './RenderableGroup';
 
 /** Kompatibel zu deck.gl Deck.setProps */
 export interface DeckLike {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl DeckProps uses generic ViewsT with no suitable narrow type
   setProps(props: Partial<DeckProps<any>>): void;
+}
+
+/** Duck-typing for groups that support the classic layer API */
+interface ClassicLayerGroup {
+  hasLayer(id: string): boolean;
+  removeLayer(id: string): void;
+}
+
+/** Duck-typing for groups that support model-based enabled toggle */
+interface ModelBasedGroup {
+  setModelEnabled(modelId: string, enabled: boolean): void;
 }
 
 /* ============================================================================
@@ -73,12 +85,12 @@ export class LayerGroups<
 
     // --- Sortierung nach zIndex ---
     const sorted = [...updated].sort((a, b) => {
-      const aZ = (a.props as any).zIndex ?? 0;
-      const bZ = (b.props as any).zIndex ?? 0;
+      const aZ = ((a.props as unknown as Record<string, unknown>).zIndex as number) ?? 0;
+      const bZ = ((b.props as unknown as Record<string, unknown>).zIndex as number) ?? 0;
       return aZ - bZ;
     });
 
-    this._deck.setProps({ layers: sorted as any });
+    this._deck.setProps({ layers: sorted });
   }
 
   /* ------------------------------ Mutationen ------------------------------ */
@@ -161,12 +173,11 @@ export class LayerGroups<
 
     for (const g of this._groups) {
       // nur wenn Gruppe die klassische Layer-API hat
-      const hasLayer = (g as any).hasLayer?.bind(g);
-      const removeLayer = (g as any).removeLayer?.bind(g);
+      const candidate = g as unknown as Partial<ClassicLayerGroup>;
 
-      if (typeof hasLayer === 'function' && typeof removeLayer === 'function') {
-        if (hasLayer(layerId)) {
-          removeLayer(layerId);
+      if (typeof candidate.hasLayer === 'function' && typeof candidate.removeLayer === 'function') {
+        if (candidate.hasLayer(layerId)) {
+          candidate.removeLayer(layerId);
           removed = true;
           if (!opts.removeFromAll) break;
         }
@@ -194,9 +205,9 @@ export class LayerGroups<
     if (!g) throw new Error(`Gruppe "${groupId}" nicht gefunden`);
 
     // Prüfen, ob g modellbasiert ist (has setModelEnabled)
-    const setModelEnabled = (g as any).setModelEnabled?.bind(g);
-    if (typeof setModelEnabled === 'function') {
-      setModelEnabled(modelId, enabled);
+    const candidate = g as unknown as Partial<ModelBasedGroup>;
+    if (typeof candidate.setModelEnabled === 'function') {
+      candidate.setModelEnabled(modelId, enabled);
       this._dirty = true;
       if (opts.apply) this.applyToDeck();
     }

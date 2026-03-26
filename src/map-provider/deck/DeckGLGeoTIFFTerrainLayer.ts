@@ -134,7 +134,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     import('geotiff'),
     import('geotiff-geokeys-to-proj4'),
   ]);
-  const Martini = (MartiniModule as any).default ?? MartiniModule;
+  const Martini = (MartiniModule as unknown as { default?: typeof MartiniModule }).default ?? MartiniModule;
 
   class DeckGLGeoTIFFTerrainLayer extends CompositeLayer<DeckGLGeoTIFFTerrainLayerProps> {
     static layerName = 'DeckGLGeoTIFFTerrainLayer';
@@ -173,12 +173,12 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     // LIFECYCLE METHODS
     // ============================================================================
 
-    async initializeState(_context?: any): Promise<void> {
+    async initializeState(_context?: unknown): Promise<void> {
       this.setState({ init: false });
       this._loadAsync();
     }
 
-    shouldUpdateState({ changeFlags }: UpdateParameters<any>): boolean {
+    shouldUpdateState({ changeFlags }: UpdateParameters<Layer<DeckGLGeoTIFFTerrainLayerProps>>): boolean {
       return Boolean(
         changeFlags.propsOrDataChanged || changeFlags.updateTriggersChanged,
       );
@@ -188,7 +188,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
       props: newProps,
       oldProps,
       changeFlags,
-    }: UpdateParameters<any>): void {
+    }: UpdateParameters<Layer<DeckGLGeoTIFFTerrainLayerProps>>): void {
       const reloadPropsChanged =
         newProps.url !== oldProps.url ||
         newProps.projection !== oldProps.projection ||
@@ -223,7 +223,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
       }
     }
 
-    finalizeState(_context?: any): void {
+    finalizeState(_context?: unknown): void {
       if (this.tiff) {
         this.tiff = null;
       }
@@ -337,7 +337,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     // TILE DATA GENERATION
     // ============================================================================
 
-    async getTileData(tile: TileLoadProps): Promise<any> {
+    async getTileData(tile: TileLoadProps): Promise<TextureSource | { elevationData: Float32Array; gridSize: number } | null> {
       if (!this.image || !this.tileProcessor) return null;
 
       const { x, y, z } = tile.index;
@@ -426,9 +426,11 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         layerConfig.extent = extent;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TileLayer constructor expects TileLayerProps which conflicts with dynamic config assembly
       return new TileLayer(layerConfig as any);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl renderSubLayers pass-through pattern requires any for prop spreading
     private _renderColormapSubLayer(subProps: any) {
       const { tile } = subProps;
 
@@ -438,7 +440,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
       const { west, south, east, north } = subProps.tile.bbox;
       const bounds: BitmapBoundingBox = [west, south, east, north];
       const { opacity, visible } = this.props;
-      const webgl = (globalThis as any).WebGLRenderingContext;
+      const webgl = (globalThis as unknown as Record<string, unknown>).WebGLRenderingContext as Record<string, number> | undefined;
       const textureMinFilter = webgl?.TEXTURE_MIN_FILTER ?? 10241;
       const textureMagFilter = webgl?.TEXTURE_MAG_FILTER ?? 10240;
       const linear = webgl?.LINEAR ?? 9729;
@@ -457,6 +459,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
       });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl renderSubLayers pass-through pattern requires any for prop spreading
     private _renderTerrainSubLayer(subProps: any) {
       const { tile } = subProps;
 
@@ -522,7 +525,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         visible,
         mesh,
         data: [[0, 0, 0]],
-        getPosition: (d: any) => d,
+        getPosition: (d: number[]) => d,
         getColor: tileTexture ? [255, 255, 255] : (color ?? [200, 200, 200]),
         texture: tileTexture,
         wireframe: wireframe ?? false,

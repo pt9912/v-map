@@ -5,7 +5,7 @@ import { ILayer } from './i-layer';
 
 export interface I3DTilesLayer extends ILayer {
   setColor(color: string | Color, opacity?: number): void;
-  setStyle(style: any): void;
+  setStyle(style: Record<string, unknown>): void;
 }
 
 export type AnyLayer = ILayer | I3DTilesLayer;

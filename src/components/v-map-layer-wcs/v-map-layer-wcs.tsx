@@ -106,7 +106,7 @@ export class VMapLayerWcs {
     if (!this.didLoad) return;
     await this.helper?.updateLayer({
       type: 'wcs',
-      data: this.createLayerConfig(),
+      data: this.createLayerConfig() as Extract<LayerConfig, { type: 'wcs' }>,
     });
   }
 

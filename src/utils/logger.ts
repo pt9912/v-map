@@ -107,23 +107,19 @@ class ConsoleTransport implements LogTransport {
       }
     }
 
-    // eslint-disable-next-line no-console
     switch (level) {
       case 'debug':
       case 'info':
-        prefix
-          ? console.log(prefix, ...enhancedArgs)
-          : console.log(...enhancedArgs);
+        if (prefix) console.log(prefix, ...enhancedArgs);
+        else console.log(...enhancedArgs);
         break;
       case 'warn':
-        prefix
-          ? console.warn(prefix, ...enhancedArgs)
-          : console.warn(...enhancedArgs);
+        if (prefix) console.warn(prefix, ...enhancedArgs);
+        else console.warn(...enhancedArgs);
         break;
       case 'error':
-        prefix
-          ? console.error(prefix, ...enhancedArgs)
-          : console.error(...enhancedArgs);
+        if (prefix) console.error(prefix, ...enhancedArgs);
+        else console.error(...enhancedArgs);
         break;
       // 'none' wird nicht geroutet
     }
@@ -213,12 +209,13 @@ declare global {
 }
 
 if (exposureEnabled && typeof globalThis !== 'undefined') {
-  (globalThis as any).setLogLevel = setLogLevel;
-  (globalThis as any).getLogLevel = getLogLevel;
-  (globalThis as any).log = (...args: unknown[]) => log(...args);
-  (globalThis as any).info = (...args: unknown[]) => info(...args);
-  (globalThis as any).warn = (...args: unknown[]) => warn(...args);
-  (globalThis as any).error = (...args: unknown[]) => error(...args);
+  const g = globalThis as unknown as Window;
+  g.setLogLevel = setLogLevel;
+  g.getLogLevel = getLogLevel;
+  g.log = (...args: unknown[]) => log(...args);
+  g.info = (...args: unknown[]) => info(...args);
+  g.warn = (...args: unknown[]) => warn(...args);
+  g.error = (...args: unknown[]) => error(...args);
 }
 
 //devtools

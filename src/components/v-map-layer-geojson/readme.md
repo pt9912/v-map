@@ -11,7 +11,7 @@
 | --------------- | ---------------- | ---------------------------------------------------------------------------- | --------- | ----------- |
 | `fillColor`     | `fill-color`     | Fill color for polygon geometries (CSS color value)                          | `string`  | `undefined` |
 | `fillOpacity`   | `fill-opacity`   | Fill opacity for polygon geometries (0-1)                                    | `number`  | `undefined` |
-| `geojson`       | --               | Prop, die du intern nutzt/weiterverarbeitest                                 | `unknown` | `undefined` |
+| `geojson`       | `geojson`        | Prop, die du intern nutzt/weiterverarbeitest                                 | `string`  | `undefined` |
 | `iconSize`      | `icon-size`      | Icon size as [width, height] in pixels (comma-separated string like "32,32") | `string`  | `undefined` |
 | `iconUrl`       | `icon-url`       | Icon URL for point features (alternative to pointColor/pointRadius)          | `string`  | `undefined` |
 | `opacity`       | `opacity`        | Opazität der geojson-Kacheln (0–1).                                          | `number`  | `1.0`       |

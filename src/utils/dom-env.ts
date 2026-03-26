@@ -3,8 +3,8 @@ export const isBrowser = (): boolean =>
 
 export const supportsAdoptedStyleSheets = (): boolean =>
   isBrowser() &&
-  'adoptedStyleSheets' in (document as any) &&
-  typeof (CSSStyleSheet as any)?.prototype?.replaceSync === 'function';
+  'adoptedStyleSheets' in document &&
+  typeof CSSStyleSheet.prototype.replaceSync === 'function';
 
 function onNextTick(fn: () => void) {
   if (typeof requestAnimationFrame !== 'undefined') requestAnimationFrame(fn);
@@ -20,8 +20,8 @@ export function watchElementResize(
   mutationObserverInit?: MutationObserverInit,
 ): Unsubscribe {
   // Native ResizeObserver vorhanden?
-  if (typeof (globalThis as any).ResizeObserver !== 'undefined') {
-    const ro = new (globalThis as any).ResizeObserver(() => cb());
+  if (typeof globalThis.ResizeObserver !== 'undefined') {
+    const ro = new globalThis.ResizeObserver(() => cb());
     ro.observe(target);
     return () => ro.disconnect();
   }
@@ -50,6 +50,6 @@ export function watchElementResize(
     if (typeof window !== 'undefined')
       window.removeEventListener('resize', onWinResize);
     mo?.disconnect();
-    if (pollId) clearInterval(pollId as any);
+    if (pollId) clearInterval(pollId);
   };
 }

@@ -73,7 +73,7 @@ export class VMapLayerGoogle {
    * Custom styles for the Google Map (JSON array of styling objects).
    * Can be passed as JSON string or array.
    */
-  @Prop({ mutable: true }) styles?: any[] | string;
+  @Prop({ mutable: true }) styles?: Record<string, unknown>[] | string;
 
   /**
    * Google Maps libraries to load (comma-separated string).
@@ -89,7 +89,7 @@ export class VMapLayerGoogle {
   //private mapProvider?: MapProvider;
 
   @Watch('styles')
-  parseStyles(newValue: any[] | string) {
+  parseStyles(newValue: Record<string, unknown>[] | string) {
     if (typeof newValue === 'string') {
       try {
         const parsed = JSON.parse(newValue);

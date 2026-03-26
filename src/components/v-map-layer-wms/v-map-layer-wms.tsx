@@ -135,12 +135,9 @@ export class VMapLayerWms {
       data: {
         url: this.url,
         layers: this.layers,
-        params: {
-          styles: this.styles,
-          format: this.format,
-          transparent: this.transparent,
-          tiled: this.tiled,
-        },
+        styles: this.styles,
+        format: this.format,
+        transparent: String(this.transparent),
       },
     });
   }

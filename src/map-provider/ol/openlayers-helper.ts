@@ -13,7 +13,6 @@ export async function injectOlCss(shadowRoot?: ShadowRoot) {
   if ('adoptedStyleSheets' in Document.prototype) {
     const sheet = new CSSStyleSheet();
     await sheet.replace(css);
-    // @ts-ignore
     shadowRoot.adoptedStyleSheets = [
       ...(shadowRoot.adoptedStyleSheets ?? []),
       sheet,

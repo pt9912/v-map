@@ -45,7 +45,7 @@ export async function loadCesium(version = CESIUM_VERSION): Promise<CesiumNS> {
     `Cesium-Version abweichend: erwartet ~${version}, geladen ${actual}`,
   );
 
-  (globalThis as any).CESIUM_BASE_URL = base;
+  (globalThis as Record<string, unknown>).CESIUM_BASE_URL = base;
   return Cesium;
 }
 
@@ -62,7 +62,6 @@ export async function injectWidgetsCss(shadowRoot?: ShadowRoot) {
   if ('adoptedStyleSheets' in Document.prototype) {
     const sheet = new CSSStyleSheet();
     await sheet.replace(absolutized);
-    // @ts-ignore
     shadowRoot.adoptedStyleSheets = [
       ...(shadowRoot.adoptedStyleSheets ?? []),
       sheet,

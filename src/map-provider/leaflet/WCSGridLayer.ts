@@ -39,7 +39,8 @@ export class WCSGridLayer extends L.GridLayer {
     const { url, coverageName, version, format, projection, params } = this.wcsOptions;
 
     // Calculate tile bounds in lat/lng
-    const tileBounds = (this as any)._tileCoordsToBounds(coords);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Leaflet private method not exposed in type definitions
+    const tileBounds = (this as any)._tileCoordsToBounds(coords) as L.LatLngBounds;
     const southwest = tileBounds.getSouthWest();
     const northeast = tileBounds.getNorthEast();
 
@@ -91,7 +92,7 @@ export class WCSGridLayer extends L.GridLayer {
       baseParams.CRS = projection;
 
       // Calculate width and height for the tile
-      const tileSize = (this as any).getTileSize();
+      const tileSize = this.getTileSize();
       baseParams.WIDTH = typeof tileSize === 'number' ? tileSize : tileSize.x;
       baseParams.HEIGHT = typeof tileSize === 'number' ? tileSize : tileSize.y;
 
@@ -125,7 +126,7 @@ export class WCSGridLayer extends L.GridLayer {
 
     tile.onerror = (err) => {
       error('[WCS Tile] Failed to load tile:', err);
-      done(err as any, tile);
+      done(err instanceof Error ? err : new Error(String(err)), tile);
     };
 
     // Set crossOrigin for CORS support
@@ -143,7 +144,7 @@ export class WCSGridLayer extends L.GridLayer {
       ...this.wcsOptions,
       ...newOptions,
     };
-    (this as any).redraw();
+    this.redraw();
   }
 }
 

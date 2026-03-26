@@ -1,5 +1,14 @@
 import { ITriangle } from './Triangle';
 
+export type AffineTransform = {
+  a: number;
+  b: number;
+  c: number;
+  d: number;
+  e: number;
+  f: number;
+};
+
 export type Point2D = { x: number; y: number };
 
 export type Triangle2D = {
@@ -7,7 +16,7 @@ export type Triangle2D = {
   b: Point2D;
   c: Point2D;
   triangle: ITriangle;
-  transform: any;
+  transform: AffineTransform | null;
 };
 
 export class AABB2D {

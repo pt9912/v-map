@@ -140,7 +140,7 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
     log(MSG_COMPONENT + 'onUrlChanged');
     await this.helper?.updateLayer({
       type: 'terrain-geotiff',
-      data: this.createLayerConfig(),
+      data: this.createLayerConfig() as Extract<LayerConfig, { type: 'terrain-geotiff' }>,
     });
   }
 
@@ -180,7 +180,7 @@ export class VMapLayerTerrainGeotiff implements VMapLayer {
     log(MSG_COMPONENT + 'onPropertyChanged');
     await this.helper?.updateLayer({
       type: 'terrain-geotiff',
-      data: this.createLayerConfig(),
+      data: this.createLayerConfig() as Extract<LayerConfig, { type: 'terrain-geotiff' }>,
     });
   }
 

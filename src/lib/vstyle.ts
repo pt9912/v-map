@@ -1,6 +1,6 @@
 // src/lib/vstyle.ts
 export type Color = string | [number, number, number, number?];
-export type Expr<T=any> = T | any[];
+export type Expr<T = unknown> = T | unknown[];
 
 export type VStyleRule = {
   when?: Expr<boolean>;

@@ -72,9 +72,8 @@ export async function createCustomGeoTiff(
 
       await this.getView();
 
-      // @ts-ignore: Zugriff auf private Eigenschaft `sources_`
       //const sources = this.sources_;
-      // @ts-ignore: Zugriff auf private Eigenschaft `sourceImagery_`
+      // @ts-expect-error Zugriff auf private Eigenschaft `sourceImagery_`
       const sources = this.sourceImagery_;
       if (sources && sources.length > 0) {
         this.determineGeoKeys(sources);

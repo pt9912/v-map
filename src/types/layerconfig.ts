@@ -77,7 +77,7 @@ export type LayerConfig =
       groupVisible?: boolean;
       zIndex?: number;
       maxZoom?: number;
-      styles?: any[] | string;
+      styles?: Record<string, unknown>[] | string;
       language?: string;
       libraries?: string[];
       region?: string; // nur wenn deine OL-Version das typisiert
@@ -109,15 +109,15 @@ export type LayerConfig =
   | {
       type: 'scatterplot';
 
-      data?: any; //dataSource,
+      data?: unknown; //dataSource,
       getFillColor?: Color;
       getRadius?: number;
       opacity?: number;
       visible?: boolean;
 
-      getTooltip?: (info: any) => any;
-      onClick?: (info: any) => void;
-      onHover?: (info: any) => void;
+      getTooltip?: (info: Record<string, unknown>) => unknown;
+      onClick?: (info: Record<string, unknown>) => void;
+      onHover?: (info: Record<string, unknown>) => void;
       groupId?: string;
       groupVisible?: boolean;
       zIndex?: number;

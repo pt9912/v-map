@@ -14,6 +14,7 @@ import type {
   BuilderConfig,
   NormalizedStyle,
   LayerType,
+  LayerPatch,
 } from '../../utils/diff';
 import { diffLayers } from '../../utils/diff';
 import { log } from '../../utils/logger';
@@ -85,15 +86,16 @@ export class VMapBuilder {
       this.current = cfg;
       log(MSG_COMPONENT + 'emit configReady');
       this.configReady.emit(cfg);
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const err = e as { message?: string; errors?: string[] } | undefined;
       this.configError.emit({
-        message: e?.message || 'Unknown error',
-        errors: e?.errors,
+        message: err?.message || 'Unknown error',
+        errors: err?.errors,
       });
     }
   }
 
-  private normalizeLayerType(rawType: any): LayerType {
+  private normalizeLayerType(rawType: unknown): LayerType {
     const type = String(rawType ?? '').toLowerCase();
     switch (type) {
       case 'osm':
@@ -115,18 +117,18 @@ export class VMapBuilder {
     }
   }
 
-  private toOptionalString(value: any): string | undefined {
+  private toOptionalString(value: unknown): string | undefined {
     if (value === undefined || value === null) return undefined;
     return typeof value === 'string' ? value : String(value);
   }
 
-  private toOptionalNumber(value: any): number | undefined {
+  private toOptionalNumber(value: unknown): number | undefined {
     if (value === undefined || value === null || value === '') return undefined;
     const num = typeof value === 'number' ? value : Number(value);
     return Number.isFinite(num) ? num : undefined;
   }
 
-  private toOptionalBoolean(value: any): boolean | undefined {
+  private toOptionalBoolean(value: unknown): boolean | undefined {
     if (value === undefined || value === null || value === '') return undefined;
     if (typeof value === 'boolean') return value;
     const normalized = String(value).trim().toLowerCase();
@@ -135,7 +137,7 @@ export class VMapBuilder {
     return undefined;
   }
 
-  private toCsv(value: any): string | undefined {
+  private toCsv(value: unknown): string | undefined {
     if (value === undefined || value === null) return undefined;
     if (Array.isArray(value)) {
       return value
@@ -147,10 +149,10 @@ export class VMapBuilder {
   }
 
   private cleanRecord(
-    record?: Record<string, any>,
-  ): Record<string, any> | undefined {
+    record?: Record<string, unknown>,
+  ): Record<string, unknown> | undefined {
     if (!record) return undefined;
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(record)) {
       if (value !== undefined && value !== null) {
         result[key] = value;
@@ -160,7 +162,7 @@ export class VMapBuilder {
   }
 
   private normalizeLayer(
-    rawLayer: any,
+    rawLayer: Record<string, unknown>,
     groupIndex: number,
     layerIndex: number,
   ): NormalizedLayer {
@@ -171,18 +173,19 @@ export class VMapBuilder {
     const base: NormalizedLayer = {
       id: layerId,
       type,
-      visible: rawLayer?.visible,
-      opacity: rawLayer?.opacity,
-      zIndex: rawLayer?.zIndex,
+      visible: rawLayer?.visible as boolean | string | undefined,
+      opacity: rawLayer?.opacity as number | string | undefined,
+      zIndex: rawLayer?.zIndex as number | string | undefined,
     };
     if (rawLayer?.style != null) {
-      base.style = rawLayer.style;
+      base.style = rawLayer.style as Record<string, unknown>;
     }
 
-    const data: Record<string, any> = {};
-    const setBase = (key: string, value: any) => {
+    const data: Record<string, unknown> = {};
+    const setBase = (key: string, value: unknown) => {
       if (value !== undefined && value !== null) {
-        (base as any)[key] = value;
+        // NormalizedLayer has [key: string]: unknown index signature
+        base[key] = value;
       }
     };
 
@@ -253,28 +256,31 @@ export class VMapBuilder {
         break;
       }
       case 'terrain': {
+        const nested = (rawLayer?.data != null && typeof rawLayer.data === 'object'
+          ? rawLayer.data
+          : {}) as Record<string, unknown>;
         Object.assign(
           data,
           this.cleanRecord({
             elevationData:
               rawLayer?.elevationData ??
               rawLayer?.url ??
-              rawLayer?.data?.elevationData,
-            texture: rawLayer?.texture ?? rawLayer?.data?.texture,
+              nested.elevationData,
+            texture: rawLayer?.texture ?? nested.texture,
             elevationDecoder:
-              rawLayer?.elevationDecoder ?? rawLayer?.data?.elevationDecoder,
+              rawLayer?.elevationDecoder ?? nested.elevationDecoder,
             wireframe: this.toOptionalBoolean(
-              rawLayer?.wireframe ?? rawLayer?.data?.wireframe,
+              rawLayer?.wireframe ?? nested.wireframe,
             ),
-            color: rawLayer?.color ?? rawLayer?.data?.color,
+            color: rawLayer?.color ?? nested.color,
             minZoom: this.toOptionalNumber(
-              rawLayer?.minZoom ?? rawLayer?.data?.minZoom,
+              rawLayer?.minZoom ?? nested.minZoom,
             ),
             maxZoom: this.toOptionalNumber(
-              rawLayer?.maxZoom ?? rawLayer?.data?.maxZoom,
+              rawLayer?.maxZoom ?? nested.maxZoom,
             ),
             meshMaxError: this.toOptionalNumber(
-              rawLayer?.meshMaxError ?? rawLayer?.data?.meshMaxError,
+              rawLayer?.meshMaxError ?? nested.meshMaxError,
             ),
           }) ?? {},
         );
@@ -388,7 +394,10 @@ export class VMapBuilder {
             ? rawLayer.data
             : rawLayer;
         if (payload && typeof payload === 'object') {
-          Object.assign(data, this.cleanRecord(payload) ?? {});
+          Object.assign(
+            data,
+            this.cleanRecord(payload as Record<string, unknown>) ?? {},
+          );
         }
       }
     }
@@ -397,8 +406,9 @@ export class VMapBuilder {
     return base;
   }
 
-  private normalize(raw: any): BuilderConfig {
-    const map = raw?.map ?? raw ?? {};
+  private normalize(raw: unknown): BuilderConfig {
+    const rawObj = (raw != null && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+    const map = (rawObj.map != null && typeof rawObj.map === 'object' ? rawObj.map : rawObj) as Record<string, unknown>;
     const norm: BuilderConfig = {
       map: {
         flavour: String(map.flavour ?? 'ol'),
@@ -406,19 +416,22 @@ export class VMapBuilder {
         center: String(map.center ?? '0,0'),
         style: String(map.style ?? ''),
         styles: this.normalizeStyles(map.styles),
-        layerGroups: (map.layerGroups ?? []).map((g: any, gi: number) => ({
-          groupTitle: g.groupTitle ?? g.group ?? g.title ?? `Group ${gi + 1}`,
-          visible: g.visible,
-          layers: (g.layers ?? []).map((l: any, li: number) =>
-            this.normalizeLayer(l, gi, li),
-          ),
-        })),
+        layerGroups: (Array.isArray(map.layerGroups) ? map.layerGroups : []).map(
+          (g: Record<string, unknown>, gi: number) => ({
+            groupTitle: String(g.groupTitle ?? g.group ?? g.title ?? `Group ${gi + 1}`),
+            visible: g.visible as boolean | string | undefined,
+            layers: (Array.isArray(g.layers) ? g.layers : []).map(
+              (l: Record<string, unknown>, li: number) =>
+                this.normalizeLayer(l, gi, li),
+            ),
+          }),
+        ),
       },
     };
     return norm;
   }
 
-  private normalizeStyles(input: any): NormalizedStyle[] {
+  private normalizeStyles(input: unknown): NormalizedStyle[] {
     const list = Array.isArray(input) ? input : input ? [input] : [];
     return list
       .map((entry, index) => this.normalizeStyle(entry, index))
@@ -426,12 +439,15 @@ export class VMapBuilder {
   }
 
   private normalizeStyle(
-    entry: any,
+    entry: unknown,
     index: number,
   ): NormalizedStyle | undefined {
     if (entry == null) return undefined;
 
-    const raw = typeof entry === 'object' ? entry : { content: entry };
+    const raw: Record<string, unknown> =
+      typeof entry === 'object' && entry !== null
+        ? (entry as Record<string, unknown>)
+        : { content: entry };
     const keySource = raw.key ?? raw.id ?? raw.name;
     const key = String(keySource != null ? keySource : `style-${index + 1}`);
 
@@ -439,8 +455,8 @@ export class VMapBuilder {
 
     let layerTargets: string | undefined;
     if (Array.isArray(raw.layerTargets)) {
-      const targets = raw.layerTargets
-        .map((target: any) => String(target).trim())
+      const targets = (raw.layerTargets as unknown[])
+        .map((target: unknown) => String(target).trim())
         .filter(Boolean);
       layerTargets = targets.length ? targets.join(',') : undefined;
     } else if (typeof raw.layerTargets === 'string') {
@@ -539,8 +555,10 @@ export class VMapBuilder {
       this.ensureAttr(el, 'format', style.format);
       this.ensureAttr(el, 'layer-targets', style.layerTargets);
       if (style.autoApply !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- setting Stencil web component property
         (el as any).autoApply = style.autoApply;
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- setting Stencil web component property
         (el as any).autoApply = true;
       }
       const autoApplyAttr = style.autoApply === true ? '' : undefined;
@@ -566,7 +584,7 @@ export class VMapBuilder {
     }
   }
 
-  private ensureAttr(el: Element, name: string, value?: any) {
+  private ensureAttr(el: Element, name: string, value?: unknown) {
     const v = value == null ? undefined : String(value);
     const cur = el.getAttribute(name);
     if (v == null) {
@@ -579,7 +597,7 @@ export class VMapBuilder {
   private ensureGroup(
     mapEl: Element,
     title: string,
-    visible?: any,
+    visible?: boolean | string,
     index?: number,
   ): HTMLElement {
     let el = Array.from(mapEl.children).find(
@@ -607,8 +625,8 @@ export class VMapBuilder {
   }
 
   private createLayerEl(layer: NormalizedLayer): HTMLElement {
-    const data = (layer.data || {}) as Record<string, any>;
-    const common: Record<string, any> = {
+    const data = (layer.data || {}) as Record<string, unknown>;
+    const common: Record<string, unknown> = {
       id: layer.id,
       visible: layer.visible,
       opacity: layer.opacity,
@@ -616,7 +634,7 @@ export class VMapBuilder {
       ...(layer.style ? { style: JSON.stringify(layer.style) } : {}),
     };
 
-    const add = (attribute: string, value: any, opts?: { json?: boolean }) => {
+    const add = (attribute: string, value: unknown, opts?: { json?: boolean }) => {
       if (value === undefined || value === null) return;
       if (opts?.json && typeof value !== 'string') {
         try {
@@ -849,11 +867,11 @@ export class VMapBuilder {
 
   private patchLayer(
     el: Element,
-    patch: Record<string, { old: any; new: any }>,
+    patch: LayerPatch['changes'],
     next: NormalizedLayer,
   ) {
     for (const [field, change] of Object.entries(patch)) {
-      const nv = (change as any).new;
+      const nv = change.new;
       switch (field) {
         case 'visible':
           this.ensureAttr(el, 'visible', nv);
@@ -897,7 +915,9 @@ export class VMapBuilder {
             parent.replaceChild(newEl, el);
             return;
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- custom web component method not in DOM typings
           (el as any).setData?.(nv);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- custom web component method not in DOM typings
           if (!(el as any).setData) {
             const s = typeof nv === 'object' ? JSON.stringify(nv) : nv;
             this.ensureAttr(el, 'data', s);
@@ -974,7 +994,7 @@ export class VMapBuilder {
         );
         if (!el) continue;
         const nextLayer = group.layers.find(l => l.id === u.id)!;
-        this.patchLayer(el as Element, u.changes as any, nextLayer);
+        this.patchLayer(el as Element, u.changes, nextLayer);
       }
 
       group.layers.forEach((l, idx) => {

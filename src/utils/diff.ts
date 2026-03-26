@@ -65,7 +65,7 @@ export interface NormalizedLayer {
   tiled?: string;
   data?: unknown;
   style?: Record<string, unknown>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type LayerPatch = {
@@ -81,7 +81,7 @@ export type LayerPatch = {
       | 'tiled'
       | 'style'
       | 'data',
-      { old: any; new: any }
+      { old: unknown; new: unknown }
     >
   >;
 };
@@ -96,7 +96,7 @@ export type LayersDiff = {
 
 const EPS = 1e-9;
 
-function toBoolString(v: any): string | undefined {
+function toBoolString(v: unknown): string | undefined {
   if (v == null) return undefined;
   if (typeof v === 'boolean') return v ? 'true' : 'false';
   const s = String(v).toLowerCase();
@@ -105,19 +105,19 @@ function toBoolString(v: any): string | undefined {
   return s;
 }
 
-function toNumOrUndef(v: any): number | undefined {
+function toNumOrUndef(v: unknown): number | undefined {
   if (v == null) return undefined;
   const n = typeof v === 'number' ? v : Number(v);
   return Number.isFinite(n) ? n : undefined;
 }
 
 /** stable JSON for objects (key-sorted) */
-function stableStringify(obj: any): string | undefined {
+function stableStringify(obj: unknown): string | undefined {
   if (obj == null) return undefined;
   if (typeof obj !== 'object') return JSON.stringify(obj);
   const keys = Object.keys(obj).sort();
-  const acc: Record<string, any> = {};
-  for (const k of keys) acc[k] = (obj as any)[k];
+  const acc: Record<string, unknown> = {};
+  for (const k of keys) acc[k] = (obj as Record<string, unknown>)[k];
   return JSON.stringify(acc);
 }
 

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-25T12:31:26",
+  "timestamp": "2026-03-26T13:18:48",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -538,19 +538,20 @@
         },
         {
           "name": "geojson",
-          "type": "unknown",
+          "type": "string",
           "complexType": {
-            "original": "unknown",
-            "resolved": "unknown",
+            "original": "string",
+            "resolved": "string",
             "references": {}
           },
           "mutable": true,
+          "attr": "geojson",
           "reflectToAttr": false,
           "docs": "Prop, die du intern nutzt/weiterverarbeitest",
           "docsTags": [],
           "values": [
             {
-              "type": "unknown"
+              "type": "string"
             }
           ],
           "optional": true,
@@ -1523,11 +1524,16 @@
         },
         {
           "name": "styles",
-          "type": "any[] | string",
+          "type": "Record<string, unknown>[] | string",
           "complexType": {
-            "original": "any[] | string",
-            "resolved": "any[] | string",
-            "references": {}
+            "original": "Record<string, unknown>[] | string",
+            "resolved": "Record<string, unknown>[] | string",
+            "references": {
+              "Record": {
+                "location": "global",
+                "id": "global::Record"
+              }
+            }
           },
           "mutable": true,
           "attr": "styles",
@@ -1536,7 +1542,7 @@
           "docsTags": [],
           "values": [
             {
-              "type": "any[]"
+              "type": "Record<string, unknown>[]"
             },
             {
               "type": "string"

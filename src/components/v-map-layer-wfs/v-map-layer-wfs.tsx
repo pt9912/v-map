@@ -107,7 +107,7 @@ export class VMapLayerWfs {
     if (!this.didLoad) return;
     await this.helper?.updateLayer({
       type: 'wfs',
-      data: this.createLayerConfig(),
+      data: this.createLayerConfig() as Extract<LayerConfig, { type: 'wfs' }>,
     });
   }
 

@@ -101,7 +101,7 @@ export class VMapLayerTile3d {
       data: {
         url: newValue,
         tilesetOptions: this.parseTilesetOptions(),
-        style: this.appliedCesiumStyle,
+        cesiumStyle: this.appliedCesiumStyle,
       },
     });
   }
@@ -114,7 +114,7 @@ export class VMapLayerTile3d {
       data: {
         url: this.url,
         tilesetOptions: this.parseTilesetOptions(),
-        style: this.appliedCesiumStyle,
+        cesiumStyle: this.appliedCesiumStyle,
       },
     });
   }
@@ -229,11 +229,8 @@ export class VMapLayerTile3d {
       opacity: this.opacity,
       zIndex: this.zIndex,
       tilesetOptions: this.parseTilesetOptions(),
-    } as any;
-
-    if (this.appliedCesiumStyle) {
-      (config as any).cesiumStyle = this.appliedCesiumStyle;
-    }
+      cesiumStyle: this.appliedCesiumStyle,
+    };
 
     return config;
   }

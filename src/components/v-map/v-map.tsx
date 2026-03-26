@@ -150,7 +150,7 @@ export class VMap {
     }
     this.mapState = 'creating';
     this.mapProvider = await createProvider(this.flavour);
-    let mapInitOpts: MapInitOptions = { zoom: this.zoom };
+    const mapInitOpts: MapInitOptions = { zoom: this.zoom };
     if (this.center) {
       const centerLL: LonLat = this.center.split(',').map(parseFloat) as [
         number,

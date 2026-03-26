@@ -82,8 +82,8 @@ export class VMapLayerControl {
   // ---- Layer-Extraktion ----------------------------------------------------
 
   private readBool(el: HTMLElement, prop: string, ...attrs: string[]) {
-    const anyEl = el as any;
-    if (typeof anyEl[prop] === 'boolean') return !!anyEl[prop];
+    const elRecord = el as unknown as Record<string, unknown>;
+    if (typeof elRecord[prop] === 'boolean') return !!elRecord[prop];
     for (const a of attrs) if (el.hasAttribute(a)) return true;
     return false;
   }
@@ -94,8 +94,8 @@ export class VMapLayerControl {
     def: number,
     ...attrs: string[]
   ) {
-    const anyEl = el as any;
-    const v = anyEl[prop];
+    const elRecord = el as unknown as Record<string, unknown>;
+    const v = elRecord[prop];
     if (typeof v === 'number' && Number.isFinite(v)) return v;
     for (const a of attrs) {
       const s = el.getAttribute(a);
@@ -113,8 +113,8 @@ export class VMapLayerControl {
     def: string,
     ...attrs: string[]
   ) {
-    const anyEl = el as any;
-    const v = anyEl[prop];
+    const elRecord = el as unknown as Record<string, unknown>;
+    const v = elRecord[prop];
     if (typeof v === 'string' && v.length) return v;
     for (const a of attrs) {
       const s = el.getAttribute(a);
@@ -239,7 +239,7 @@ export class VMapLayerControl {
     val: boolean,
     ...attrs: string[]
   ) {
-    (el as any)[prop] = val;
+    (el as unknown as Record<string, unknown>)[prop] = val;
     for (const a of attrs) {
       if (val) el.setAttribute(a, '');
       else el.removeAttribute(a);
@@ -252,7 +252,7 @@ export class VMapLayerControl {
     val: number,
     ...attrs: string[]
   ) {
-    (el as any)[prop] = val;
+    (el as unknown as Record<string, unknown>)[prop] = val;
     for (const a of attrs) el.setAttribute(a, String(val));
   }
 
@@ -281,7 +281,7 @@ export class VMapLayerControl {
     this.layerGroups = [...this.layerGroups];
   }
 
-  private handleBaseLayerChange(group: any, newBaseLayerId: string) {
+  private handleBaseLayerChange(group: typeof this.layerGroups[number], newBaseLayerId: string) {
     // basemapid aktualisieren
     group.basemapid = newBaseLayerId;
     group.info.element.setAttribute('basemapid', newBaseLayerId);

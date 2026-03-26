@@ -4,6 +4,8 @@ import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
 import { DEFAULT_STYLE } from '../../types/styleconfig';
+import type { StyleConfig } from '../../types/styleconfig';
+import type { Style as GeoStylerStyle } from 'geostyler-style';
 
 import { GmlParser } from '@npm9912/s-gml';
 import { wellknownModule } from 'wellknown';
@@ -22,7 +24,56 @@ import { log, warn } from '../../utils/logger';
 
 import { formatBbox, buildQuery } from '../../utils/spatial-utils';
 
+import type { ColorMapName } from '../geotiff/utils/colormap-utils';
+
 import type { RenderableGroup } from './RenderableGroup';
+
+/**
+ * Internal interface for XYZ-style tile layer configuration.
+ * Used by buildXyzTileLayer which is shared across xyz/osm/arcgis layers.
+ */
+interface XyzTileConfig {
+  url: string;
+  tileSize?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  opacity?: number;
+  subdomains?: string | string[];
+}
+
+/**
+ * Deck.gl style configuration produced by createDeckGLStyle / createGeostylerDeckGLStyle.
+ */
+interface DeckGLStyleConfig {
+  getFillColor: (feature?: GeoJSON.Feature) => [number, number, number, number];
+  getLineColor: (feature?: GeoJSON.Feature) => [number, number, number, number];
+  getPointRadius: (feature?: GeoJSON.Feature) => number;
+  getPointFillColor: (feature?: GeoJSON.Feature) => [number, number, number, number];
+  lineWidthMinPixels: number;
+  pointRadiusMinPixels: number;
+  pointRadiusMaxPixels: number;
+}
+
+/** Re-export GeoJSON FeatureCollection for WKT/WFS return types */
+type GeoJSONFeatureCollection = GeoJSON.FeatureCollection;
+
+/** Data point interface for ScatterplotLayer */
+interface ScatterplotDataPoint {
+  position: [number, number] | [number, number, number];
+  radius: number;
+  color: [number, number, number] | [number, number, number, number];
+  [key: string]: unknown;
+}
+
+/** Layer override properties used in updateLayer / addLayerToGroup / addBaseLayer */
+interface LayerOverrideProps {
+  opacity?: number;
+  zIndex?: number;
+  visible?: boolean;
+  data?: unknown;
+  url?: string;
+  [key: string]: unknown;
+}
 import { LayerGroups } from './LayerGroups';
 import { LayerGroupWithModel } from './LayerGroupWithModel';
 import { type LayerModel } from './LayerModel';
@@ -119,7 +170,7 @@ export class DeckProvider implements MapProvider {
   // ---------- Layer-Factories (unverändert, geben Deck-Layer zurück) ----------
 
   private async buildXyzTileLayer(
-    cfg: any,
+    cfg: XyzTileConfig,
     layerId: string,
   ): Promise<TileLayer> {
     const tileSize = cfg.tileSize ?? 256;
@@ -212,7 +263,7 @@ export class DeckProvider implements MapProvider {
       updateTriggers: {
         renderSubLayers: ['sl.props.opacity'],
       },
-    } as any);
+    } as Record<string, unknown>);
   }
 
   private buildArcgisUrl(
@@ -284,8 +335,11 @@ export class DeckProvider implements MapProvider {
   ): string | undefined {
     if (!model || typeof model.make !== 'function') return undefined;
     try {
-      const layerInstance: any = model.make();
-      return layerInstance?.props?.data?.[0] ?? layerInstance?.props?.url;
+      const layerInstance = model.make();
+      const props = layerInstance?.props as Record<string, unknown> | undefined;
+      const data = props?.data;
+      const firstDataEntry = Array.isArray(data) ? (data[0] as string | undefined) : undefined;
+      return firstDataEntry ?? (props?.url as string | undefined);
     } catch (error) {
       warn('Failed to resolve model URL', error);
       return undefined;
@@ -306,13 +360,15 @@ export class DeckProvider implements MapProvider {
       return defaults;
     }
 
+    // Decoder may come from user config with rScaler/gScaler/bScaler or r/g/b keys
+    const d = decoder as Record<string, number | undefined>;
     return {
       rScaler:
-        (decoder as any).rScaler ?? (decoder as any).r ?? defaults.rScaler,
+        d.rScaler ?? d.r ?? defaults.rScaler,
       gScaler:
-        (decoder as any).gScaler ?? (decoder as any).g ?? defaults.gScaler,
+        d.gScaler ?? d.g ?? defaults.gScaler,
       bScaler:
-        (decoder as any).bScaler ?? (decoder as any).b ?? defaults.bScaler,
+        d.bScaler ?? d.b ?? defaults.bScaler,
       offset: decoder.offset ?? defaults.offset,
     };
   }
@@ -322,13 +378,13 @@ export class DeckProvider implements MapProvider {
   /**
    * Convert a Geostyler style to Deck.gl style configuration
    */
-  private createGeostylerDeckGLStyle(geostylerStyle: any) {
+  private createGeostylerDeckGLStyle(geostylerStyle: GeoStylerStyle): DeckGLStyleConfig {
     // Helper to extract static value from GeoStyler property
-    const getValue = (prop: any, defaultValue: any = undefined) => {
+    const getValue = <T>(prop: unknown, defaultValue: T = undefined as T): T => {
       if (prop === undefined || prop === null) return defaultValue;
       // If it's a GeoStyler function object, we can't evaluate it here - return default
-      if (typeof prop === 'object' && prop.name) return defaultValue;
-      return prop;
+      if (typeof prop === 'object' && (prop as Record<string, unknown>).name) return defaultValue;
+      return prop as T;
     };
 
     const defaultFillColor: [number, number, number, number] = [
@@ -483,7 +539,7 @@ export class DeckProvider implements MapProvider {
   /**
    * Create Deck.gl style configuration from StyleConfig
    */
-  private createDeckGLStyle(style: any = {}) {
+  private createDeckGLStyle(style: StyleConfig = {}): DeckGLStyleConfig {
     // Default colors
     const defaultFillColor: [number, number, number, number] = [
       0, 100, 255, 76,
@@ -517,7 +573,7 @@ export class DeckProvider implements MapProvider {
         : pointColor;
 
     return {
-      getFillColor: (feature: any) => {
+      getFillColor: (feature?: GeoJSON.Feature) => {
         // Apply conditional styling if styleFunction exists
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
@@ -537,7 +593,7 @@ export class DeckProvider implements MapProvider {
         return finalFillColor;
       },
 
-      getLineColor: (feature: any) => {
+      getLineColor: (feature?: GeoJSON.Feature) => {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.strokeColor) {
@@ -556,7 +612,7 @@ export class DeckProvider implements MapProvider {
         return finalStrokeColor;
       },
 
-      getPointRadius: (feature: any) => {
+      getPointRadius: (feature?: GeoJSON.Feature) => {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.pointRadius !== undefined) {
@@ -566,7 +622,7 @@ export class DeckProvider implements MapProvider {
         return style.pointRadius ?? 8;
       },
 
-      getPointFillColor: (feature: any) => {
+      getPointFillColor: (feature?: GeoJSON.Feature) => {
         if (style.styleFunction) {
           const conditionalStyle = style.styleFunction(feature);
           if (conditionalStyle.pointColor) {
@@ -639,7 +695,7 @@ export class DeckProvider implements MapProvider {
       maxZoom: cfg.maxZoom ?? 19,
       tileSize: 256,
 
-      getTileData: async ({ index }: any) => {
+      getTileData: async ({ index }: _TileLoadProps) => {
         const { x, y, z } = index;
 
         // Build Google Static Maps API URL for this tile
@@ -692,16 +748,17 @@ export class DeckProvider implements MapProvider {
         }
       },
 
-      renderSubLayers: (sl: any) => {
-        const { data, tile } = sl;
+      renderSubLayers: (sl: Record<string, unknown>) => {
+        const data = sl.data;
+        const tile = sl.tile as { bbox: GeoBoundingBox; index: { x: number; y: number; z: number } };
         if (!data) return null;
 
         const { west, south, east, north } = tile.bbox;
         return new BitmapLayer({
           id: `${layerId}-bitmap-${tile.index.x}-${tile.index.y}-${tile.index.z}`,
-          image: data,
+          image: data as string,
           bounds: [west, south, east, north],
-          opacity: sl.opacity ?? 1,
+          opacity: (sl.opacity as number) ?? 1,
         });
       },
 
@@ -734,17 +791,18 @@ export class DeckProvider implements MapProvider {
     apiKey: string,
     opts?: { language?: string; region?: string; libraries?: string[] },
   ): Promise<void> {
-    const mockLoader = (window as any).__mockGoogleMapsApi;
+    const win = window as unknown as Record<string, unknown>;
+    const mockLoader = win.__mockGoogleMapsApi;
     if (typeof mockLoader === 'function') {
-      await mockLoader(apiKey, opts);
+      await (mockLoader as (key: string, opts?: Record<string, unknown>) => Promise<void>)(apiKey, opts);
       return;
     }
-    if ((window as any).google?.maps) return;
+    if ((win.google as Record<string, unknown> | undefined)?.maps) return;
 
     await new Promise<void>((resolve, reject) => {
       const cbName =
         '___deckGoogleInit___' + Math.random().toString(36).slice(2);
-      (window as any)[cbName] = () => resolve();
+      win[cbName] = () => resolve();
 
       const script = document.createElement('script');
       const params = new URLSearchParams({
@@ -769,7 +827,8 @@ export class DeckProvider implements MapProvider {
    * Add Google logo for compliance
    */
   private ensureGoogleLogo(container: HTMLElement): void {
-    if ((container as any)._googleLogoAdded) return;
+    const el = container as HTMLElement & { _googleLogoAdded?: boolean };
+    if (el._googleLogoAdded) return;
 
     const logo = document.createElement('img');
     logo.src =
@@ -783,15 +842,15 @@ export class DeckProvider implements MapProvider {
     logo.style.zIndex = '1000';
 
     container.appendChild(logo);
-    (container as any)._googleLogoAdded = true;
+    el._googleLogoAdded = true;
   }
 
   async buildScatterPlot(
     layerConfig: Extract<LayerConfig, { type: 'scatterplot' }>,
     layerId: string,
   ): Promise<Layer> {
-    const data = layerConfig.data;
-    const scatterLayer: Layer = new ScatterplotLayer<any>({
+    const data = layerConfig.data as ScatterplotDataPoint[];
+    const scatterLayer: Layer = new ScatterplotLayer<ScatterplotDataPoint>({
       id: layerId,
       data, // <- dein Array von Punkten (any[] oder ein konkretes Interface)
       getPosition: d => d.position,
@@ -832,7 +891,7 @@ export class DeckProvider implements MapProvider {
     }
     if (geojson_or_url) {
       // Use geostyler style if available, otherwise use default style
-      let deckStyle: any;
+      let deckStyle: DeckGLStyleConfig;
 
       if (config.geostylerStyle) {
         deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
@@ -955,7 +1014,7 @@ export type TileLoadProps = {
           const blob = await res.blob();
           // Bei Image/* → ImageBitmap. Bei Fehlern transparente Kachel zurückgeben.
           return await createImageBitmap(blob);
-        } catch (e) {
+        } catch {
           // Transparente Fallback-Kachel, damit Deck sauber weiterzeichnet
           const canvas = document.createElement('canvas');
           canvas.width = tileSize; //tile.width;
@@ -1003,7 +1062,7 @@ export type TileLoadProps = {
         ],
         renderSubLayers: ['sl.props.opacity'],
       },
-    } as any);
+    } as Record<string, unknown>);
   }
 
   /**
@@ -1065,7 +1124,7 @@ export type TileLoadProps = {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const blob = await res.blob();
             return await createImageBitmap(blob);
-          } catch (e) {
+          } catch {
             // Return transparent fallback tile
             const canvas = document.createElement('canvas');
             canvas.width = tileSize;
@@ -1094,7 +1153,7 @@ export type TileLoadProps = {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const blob = await res.blob();
             return await createImageBitmap(blob);
-          } catch (e) {
+          } catch {
             // Return transparent fallback tile
             const canvas = document.createElement('canvas');
             canvas.width = tileSize;
@@ -1139,7 +1198,7 @@ export type TileLoadProps = {
         ],
         renderSubLayers: ['sl.props.opacity'],
       },
-    } as any);
+    } as Record<string, unknown>);
   }
 
   private async createLayer(
@@ -1148,59 +1207,38 @@ export type TileLoadProps = {
   ): Promise<Layer> {
     switch (layerConfig.type) {
       case 'geojson':
-        return this.createGeoJSONLayer(layerConfig as any, layerId);
+        return this.createGeoJSONLayer(layerConfig, layerId);
       case 'osm':
-        return this.buildOsmLayer(layerConfig as any, layerId);
+        return this.buildOsmLayer(layerConfig, layerId);
       case 'google':
-        return this.buildGoogleTileLayer(
-          layerConfig as Extract<LayerConfig, { type: 'google' }>,
-          layerId,
-        );
+        return this.buildGoogleTileLayer(layerConfig, layerId);
       case 'wms':
-        return this.buildWmsTileLayer(
-          layerConfig as Extract<LayerConfig, { type: 'wms' }>,
-          layerId,
-        );
+        return this.buildWmsTileLayer(layerConfig, layerId);
       case 'wcs':
-        return this.buildWcsTileLayer(
-          layerConfig as Extract<LayerConfig, { type: 'wcs' }>,
-          layerId,
-        );
+        return this.buildWcsTileLayer(layerConfig, layerId);
       case 'wfs':
-        return this.createWFSLayer(
-          layerConfig as Extract<LayerConfig, { type: 'wfs' }>,
-          layerId,
-        );
+        return this.createWFSLayer(layerConfig, layerId);
       case 'arcgis':
-        return this.buildArcgisTileLayer(
-          layerConfig as Extract<LayerConfig, { type: 'arcgis' }>,
-          layerId,
-        );
+        return this.buildArcgisTileLayer(layerConfig, layerId);
       case 'terrain':
-        return this.buildTerrainLayer(
-          layerConfig as Extract<LayerConfig, { type: 'terrain' }>,
-          layerId,
-        );
+        return this.buildTerrainLayer(layerConfig, layerId);
       case 'terrain-geotiff':
-        return this.createGeoTIFFTerrainLayer(
-          layerConfig as Extract<LayerConfig, { type: 'terrain-geotiff' }>,
-          layerId,
-        );
+        return this.createGeoTIFFTerrainLayer(layerConfig, layerId);
       case 'xyz':
-        return this.buildXyzTileLayer(layerConfig as any, layerId);
+        return this.buildXyzTileLayer(layerConfig, layerId);
       case 'scatterplot':
-        return this.buildScatterPlot(layerConfig as any, layerId);
+        return this.buildScatterPlot(layerConfig, layerId);
       case 'wkt':
-        return this.createWKTLayer(layerConfig as any, layerId);
+        return this.createWKTLayer(layerConfig, layerId);
       case 'geotiff':
-        return this.createGeoTIFFLayer(layerConfig as any, layerId);
+        return this.createGeoTIFFLayer(layerConfig, layerId);
       default:
         log(
           `v-map - provider - deck - Unsupported layer type: ${
-            (layerConfig as any).type
+            (layerConfig as Record<string, unknown>).type
           }`,
         );
-        return null as any;
+        return null as unknown as Layer;
     }
   }
 
@@ -1250,20 +1288,20 @@ export type TileLoadProps = {
     const model = this.createLayerModel(
       layerId,
       () => template.clone({}),
-      (layerConfig as any).visible ?? true, // Model-Visibility (enabled)
+      layerConfig.visible ?? true, // Model-Visibility (enabled)
     );
     if (typeof layerConfig.groupVisible !== undefined) {
       group.visible = layerConfig.groupVisible;
     }
     group.addModel(model);
 
-    const ov: any = {};
-    if ((layerConfig as any).opacity !== undefined)
-      ov.opacity = (layerConfig as any).opacity;
-    if ((layerConfig as any).zIndex !== undefined)
-      ov.zIndex = (layerConfig as any).zIndex;
-    if ((layerConfig as any).visible === true) ov.visible = true;
-    if ((layerConfig as any).visible === false) ov.visible = false;
+    const ov: LayerOverrideProps = {};
+    if (layerConfig.opacity !== undefined)
+      ov.opacity = layerConfig.opacity;
+    if (layerConfig.zIndex !== undefined)
+      ov.zIndex = layerConfig.zIndex;
+    if (layerConfig.visible === true) ov.visible = true;
+    if (layerConfig.visible === false) ov.visible = false;
     if (Object.keys(ov).length) group.setModelOverrides(layerId, ov);
 
     this.layerGroups.applyToDeck();
@@ -1296,13 +1334,13 @@ export type TileLoadProps = {
     group.addModel(model);
 
     // Overrides aus config
-    const ov: any = {};
-    if ((layerConfig as any).opacity !== undefined)
-      ov.opacity = (layerConfig as any).opacity;
-    if ((layerConfig as any).zIndex !== undefined)
-      ov.zIndex = (layerConfig as any).zIndex;
-    if ((layerConfig as any).visible === true) ov.visible = true;
-    if ((layerConfig as any).visible === false) ov.visible = false;
+    const ov: LayerOverrideProps = {};
+    if (layerConfig.opacity !== undefined)
+      ov.opacity = layerConfig.opacity;
+    if (layerConfig.zIndex !== undefined)
+      ov.zIndex = layerConfig.zIndex;
+    if (layerConfig.visible === true) ov.visible = true;
+    if (layerConfig.visible === false) ov.visible = false;
     if (Object.keys(ov).length)
       (group as LayerGroupWithModel<Layer>).setModelOverrides(layerId, ov);
 
@@ -1356,7 +1394,7 @@ export type TileLoadProps = {
   async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
     // Finde die Gruppe, die das Model hat
     const group = this.layerGroups.groups.find(g =>
-      (g as any).getModel?.(layerId),
+      (g as LayerGroupWithModel<Layer>).getModel?.(layerId),
     ) as LayerGroupWithModel<Layer> | undefined;
     if (!group) return;
 
@@ -1385,7 +1423,7 @@ export type TileLoadProps = {
         break;
       }
       case 'wms': {
-        const ov: any = {};
+        const ov: LayerOverrideProps = {};
         if (update.data?.url) ov.url = update.data.url; // Basis-URL
         if (update.data?.layers) ov.layers = update.data.layers;
         if (update.data?.styles !== undefined) ov.styles = update.data.styles;
@@ -1400,7 +1438,7 @@ export type TileLoadProps = {
         break;
       }
       case 'wcs': {
-        const ov: any = {};
+        const ov: LayerOverrideProps = {};
         if (update.data?.url) ov.url = update.data.url;
         if (update.data?.coverageName)
           ov.coverageName = update.data.coverageName;
@@ -1418,8 +1456,8 @@ export type TileLoadProps = {
         break;
       }
       case 'arcgis': {
-        const ov: any = {};
-        const currentModel = (group as any).getModel?.(layerId);
+        const ov: LayerOverrideProps = {};
+        const currentModel = (group as LayerGroupWithModel<Layer>).getModel?.(layerId);
         const currentUrl = this.getModelUrl(currentModel);
         const baseUrl = update.data?.url ?? currentUrl ?? null;
         if (baseUrl) {
@@ -1439,7 +1477,7 @@ export type TileLoadProps = {
         break;
       }
       case 'terrain': {
-        const ov: any = {};
+        const ov: LayerOverrideProps = {};
         if (update.data?.elevationData)
           ov.elevationData = update.data.elevationData;
         if (update.data?.texture !== undefined)
@@ -1464,9 +1502,9 @@ export type TileLoadProps = {
         break;
       }
       case 'geotiff': {
-        const data = update.data ?? {};
-        const ov: any = {};
-        if ('url' in data) ov.url = data.url;
+        const data = (update.data ?? {}) as Record<string, unknown>;
+        const ov: LayerOverrideProps = {};
+        if ('url' in data) ov.url = data.url as string;
         if ('nodata' in data) ov.noDataValue = data.nodata;
         if ('colorMap' in data) ov.colorMap = data.colorMap;
         if ('valueRange' in data) ov.valueRange = data.valueRange;
@@ -1476,9 +1514,9 @@ export type TileLoadProps = {
         break;
       }
       case 'terrain-geotiff': {
-        const data = update.data ?? {};
-        const ov: any = {};
-        if ('url' in data) ov.url = data.url;
+        const data = (update.data ?? {}) as Record<string, unknown>;
+        const ov: LayerOverrideProps = {};
+        if ('url' in data) ov.url = data.url as string;
         if ('projection' in data) ov.projection = data.projection;
         if ('forceProjection' in data)
           ov.forceProjection = data.forceProjection;
@@ -1495,7 +1533,7 @@ export type TileLoadProps = {
         break;
       }
       case 'wfs': {
-        const geojson = await this.fetchWFSFromUrl(update.data);
+        const geojson = await this.fetchWFSFromUrl(update.data as Extract<LayerConfig, { type: 'wfs' }>);
         group.setModelOverrides(layerId, { data: geojson });
         break;
       }
@@ -1506,8 +1544,9 @@ export type TileLoadProps = {
   async removeLayer(layerId: string): Promise<void> {
     // Modellbasiert: Model entfernen → apply
     for (const g of this.layerGroups.groups) {
-      const removeModel = (g as any).removeModel?.bind(g);
-      const getModel = (g as any).getModel?.bind(g);
+      const modelGroup = g as LayerGroupWithModel<Layer>;
+      const removeModel = modelGroup.removeModel?.bind(modelGroup);
+      const getModel = modelGroup.getModel?.bind(modelGroup);
       if (typeof getModel === 'function' && getModel(layerId)) {
         removeModel(layerId);
         this.layerGroups.applyToDeck();
@@ -1520,7 +1559,7 @@ export type TileLoadProps = {
 
   async setOpacity(layerId: string, opacity: number): Promise<void> {
     const g = this.layerGroups.groups.find(grp =>
-      (grp as any).getModel?.(layerId),
+      (grp as LayerGroupWithModel<Layer>).getModel?.(layerId),
     ) as LayerGroupWithModel<Layer> | undefined;
     if (!g) return;
     g.setModelOverrides(layerId, { opacity });
@@ -1529,7 +1568,7 @@ export type TileLoadProps = {
 
   async setZIndex(layerId: string, zIndex: number): Promise<void> {
     const g = this.layerGroups.groups.find(grp =>
-      (grp as any).getModel?.(layerId),
+      (grp as LayerGroupWithModel<Layer>).getModel?.(layerId),
     ) as LayerGroupWithModel<Layer> | undefined;
     if (!g) return;
     g.setModelOverrides(layerId, { zIndex });
@@ -1538,7 +1577,7 @@ export type TileLoadProps = {
 
   async setVisible(layerId: string, visible: boolean): Promise<void> {
     const g = this.layerGroups.groups.find(grp =>
-      (grp as any).getModel?.(layerId),
+      (grp as LayerGroupWithModel<Layer>).getModel?.(layerId),
     ) as LayerGroupWithModel<Layer> | undefined;
     if (!g) return;
     // zwei Ebenen: Model.enabled (dein "Layer visible") und Deck-Visible
@@ -1564,7 +1603,7 @@ export type TileLoadProps = {
     const geoJsonData = await this.resolveWktToGeoJSON(config);
 
     // Use geostyler style if available, otherwise use default style
-    let deckStyle: any;
+    let deckStyle: DeckGLStyleConfig;
 
     if (config.geostylerStyle) {
       deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
@@ -1601,7 +1640,7 @@ export type TileLoadProps = {
 
   private async resolveWktToGeoJSON(
     config: Extract<LayerConfig, { type: 'wkt' }>,
-  ): Promise<any> {
+  ): Promise<GeoJSONFeatureCollection> {
     try {
       const wktText = await this.resolveWktText(config);
       return await this.wktToGeoJSON(wktText);
@@ -1624,26 +1663,26 @@ export type TileLoadProps = {
     throw new Error('Either wkt or url must be provided');
   }
 
-  private async wktToGeoJSON(wkt: string): Promise<any> {
+  private async wktToGeoJSON(wkt: string): Promise<GeoJSONFeatureCollection> {
     const parseFn =
       typeof wellknownModule.default === 'function'
         ? wellknownModule.default
-        : (wellknownModule as any).parse;
+        : (wellknownModule as unknown as { parse?: (wkt: string) => Record<string, unknown> }).parse;
 
     if (typeof parseFn !== 'function') {
       throw new Error('wellknown parser not available');
     }
 
-    const geometry = parseFn(wkt);
+    const geometry = parseFn(wkt) as GeoJSON.Geometry | null;
     if (!geometry) {
       throw new Error('Failed to parse WKT');
     }
 
     return {
-      type: 'FeatureCollection',
+      type: 'FeatureCollection' as const,
       features: [
         {
-          type: 'Feature',
+          type: 'Feature' as const,
           geometry,
           properties: {},
         },
@@ -1699,7 +1738,7 @@ export type TileLoadProps = {
         wireframe: config.wireframe,
         texture: config.texture,
         color: config.color,
-        colorMap: config.colorMap as any, // Type cast for colorMap - handled internally
+        colorMap: config.colorMap as ColorMapName,
         valueRange: config.valueRange,
         elevationScale: config.elevationScale,
         renderMode: config.renderMode,
@@ -1720,7 +1759,7 @@ export type TileLoadProps = {
   async destroy() {
     try {
       this.layerGroups.clear({ destroy: true });
-      this.shadowRoot && this.injectedStyle?.remove();
+      if (this.shadowRoot) this.injectedStyle?.remove();
       this.deck?.finalize();
     } catch {}
   }
@@ -1732,7 +1771,7 @@ export type TileLoadProps = {
     const geojson = await this.fetchWFSFromUrl(config);
 
     // Use geostyler style if available, otherwise use default style
-    let deckStyle: any;
+    let deckStyle: DeckGLStyleConfig;
 
     if (config.geostylerStyle) {
       deckStyle = this.createGeostylerDeckGLStyle(config.geostylerStyle);
@@ -1759,7 +1798,7 @@ export type TileLoadProps = {
 
   private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): Promise<any> {
+  ): Promise<GeoJSON.FeatureCollection> {
     const baseParams = {
       service: 'WFS',
       request: 'GetFeature',
@@ -1797,7 +1836,7 @@ export type TileLoadProps = {
       const xml = await response.text();
 
       const parser = new GmlParser();
-      return await parser.parse(xml);
+      return await parser.parse(xml) as GeoJSON.FeatureCollection;
     }
 
     // Default: try to parse as JSON

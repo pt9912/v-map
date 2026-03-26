@@ -87,7 +87,7 @@ export namespace Components {
         /**
           * Prop, die du intern nutzt/weiterverarbeitest
          */
-        "geojson"?: unknown;
+        "geojson"?: string;
         /**
           * Returns the internal layer ID used by the map provider.
          */
@@ -250,7 +250,7 @@ export namespace Components {
         /**
           * Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array.
          */
-        "styles"?: any[] | string;
+        "styles"?: Record<string, unknown>[] | string;
         /**
           * Sichtbarkeit des Layers.
           * @default true
@@ -1220,7 +1220,7 @@ declare namespace LocalJSX {
         /**
           * Prop, die du intern nutzt/weiterverarbeitest
          */
-        "geojson"?: unknown;
+        "geojson"?: string;
         /**
           * Icon size as [width, height] in pixels (comma-separated string like "32,32")
           * @default "32,32"
@@ -1385,7 +1385,7 @@ declare namespace LocalJSX {
         /**
           * Custom styles for the Google Map (JSON array of styling objects). Can be passed as JSON string or array.
          */
-        "styles"?: any[] | string;
+        "styles"?: Record<string, unknown>[] | string;
         /**
           * Sichtbarkeit des Layers.
           * @default true
@@ -1967,6 +1967,7 @@ declare namespace LocalJSX {
         "cssMode": CssMode;
     }
     interface VMapLayerGeojsonAttributes {
+        "geojson": string;
         "url": string;
         "visible": boolean;
         "zIndex": number;
@@ -2004,7 +2005,7 @@ declare namespace LocalJSX {
         "opacity": number;
         "scale": 'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x';
         "maxZoom": number;
-        "styles": any[] | string;
+        "styles": Record<string, unknown>[] | string;
         "libraries": string;
     }
     interface VMapLayerOsmAttributes {

@@ -24,9 +24,13 @@ interface CesiumCollection<T> {
   readonly length: number;
 }
 
+interface ZIndexable {
+  zIndex?: number;
+}
+
 interface I3DTilesLayer extends ILayer {
   setColor(color: string | Color, opacity?: number): void;
-  setStyle(style: Cesium3DTileStyle | { [key: string]: any }): void;
+  setStyle(style: Cesium3DTileStyle | Record<string, unknown>): void;
 }
 
 type CesiumModule = typeof import('cesium');
@@ -87,7 +91,7 @@ export class LayerManager {
       this.viewer.imageryLayers.add(layer);
     }
 
-    (layer as any).id = id;
+    (layer as ZIndexable & { id?: string }).id = id;
     const wrapped = this.wrapLayer(layer);
     this.layers.set(id, wrapped);
     return wrapped;
@@ -129,7 +133,7 @@ export class LayerManager {
     await layer.setZIndex(zindex);
   }
 
-  private wrapLayer(layer: any): ILayer | I3DTilesLayer {
+  private wrapLayer(layer: GeoJsonDataSource | DataSource | Cesium3DTileset | ImageryLayer): ILayer | I3DTilesLayer {
     if (layer instanceof this.Cesium.ImageryLayer) {
       return this.wrapImageryLayer(layer);
     } else if (layer instanceof this.Cesium.Cesium3DTileset) {
@@ -207,19 +211,19 @@ export class LayerManager {
 
     // Sortieren nach zIndex (falls vorhanden) oder Reihenfolge
     tempDataSources.sort((a, b) => {
-      const aZIndex = (a as any).zIndex || 0;
-      const bZIndex = (b as any).zIndex || 0;
+      const aZIndex = (a as unknown as ZIndexable).zIndex || 0;
+      const bZIndex = (b as unknown as ZIndexable).zIndex || 0;
       return aZIndex - bZIndex;
     });
 
     // Den Layer mit dem neuen zIndex einfügen
-    (dataSource as any).zIndex = zIndex;
+    (dataSource as unknown as ZIndexable).zIndex = zIndex;
     tempDataSources.push(dataSource);
 
     // Neu sortieren
     tempDataSources.sort((a, b) => {
-      const aZIndex = (a as any).zIndex || 0;
-      const bZIndex = (b as any).zIndex || 0;
+      const aZIndex = (a as unknown as ZIndexable).zIndex || 0;
+      const bZIndex = (b as unknown as ZIndexable).zIndex || 0;
       return aZIndex - bZIndex;
     });
 
@@ -352,11 +356,13 @@ export class LayerManager {
 
   private wrapImageryLayer(layer: ImageryLayer): ILayer {
     const collection = this.viewer.imageryLayers;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
     let iLOptions: any = {};
     return {
       getOptions: () => {
         return iLOptions;
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
       setOptions(options: any): void {
         iLOptions = options;
       },
@@ -387,11 +393,13 @@ export class LayerManager {
 
   private wrapTilesetLayer(layer: Cesium3DTileset): I3DTilesLayer {
     const collection = this.viewer.scene.primitives;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
     let c3dTSOptions: any = {};
     return {
       getOptions: () => {
         return c3dTSOptions;
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
       setOptions(options: any): void {
         c3dTSOptions = options;
       },
@@ -455,7 +463,7 @@ export class LayerManager {
           colorBlendMode: this.Cesium.ColorBlendMode.MIX,
         });
       },
-      setStyle: (style: Cesium3DTileStyle | { [key: string]: any }) => {
+      setStyle: (style: Cesium3DTileStyle | Record<string, unknown>) => {
         layer.style =
           style instanceof this.Cesium.Cesium3DTileStyle
             ? style
@@ -467,11 +475,13 @@ export class LayerManager {
 
   private wrapDataSourceLayer(layer: DataSource): ILayer {
     const collection = this.viewer.dataSources;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
     let dsOptions: any = {};
     return {
       getOptions: () => {
         return dsOptions;
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- matches ILayer interface contract
       setOptions(options: any): void {
         dsOptions = options;
       },
@@ -483,7 +493,7 @@ export class LayerManager {
       },
       getOpacity: () => 1.0, //todo
       setOpacity: (value: number) => {
-        if ((layer as any).__vmapLockOpacity) return;
+        if ((layer as unknown as { __vmapLockOpacity?: boolean }).__vmapLockOpacity) return;
         layer.entities.values.forEach((entity: Entity) => {
           // Helper-Funktion zum Setzen der Opacity
           const setColorOpacity = (
@@ -502,16 +512,16 @@ export class LayerManager {
               return new this.Cesium.ConstantProperty(applyAlpha(defaultColor));
             }
 
-            const maybeProperty = colorProperty as any;
-            if (maybeProperty && typeof maybeProperty.getValue === 'function') {
-              const currentColor = maybeProperty.getValue(
+            const maybeProperty = colorProperty as Property | Color;
+            if (maybeProperty && typeof (maybeProperty as Property).getValue === 'function') {
+              const currentColor = (maybeProperty as Property).getValue(
                 this.viewer?.clock?.currentTime ?? new JulianDate(),
                 new CesiumColor(),
               );
               const nextColor = applyAlpha(currentColor);
-              if (typeof maybeProperty.setValue === 'function') {
-                maybeProperty.setValue(nextColor);
-                return maybeProperty;
+              if (typeof (maybeProperty as Property & { setValue?: (v: Color) => void }).setValue === 'function') {
+                (maybeProperty as Property & { setValue: (v: Color) => void }).setValue(nextColor);
+                return maybeProperty as Property;
               }
               return new this.Cesium.ConstantProperty(nextColor);
             }

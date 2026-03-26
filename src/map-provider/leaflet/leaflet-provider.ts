@@ -19,10 +19,17 @@ import {
 } from './leaflet-helpers';
 import { GoogleMapTilesLayer } from './google-map-tiles-layer';
 import { GeoTIFFGridLayer } from './GeoTIFFGridLayer';
+import type { GeoTIFFGridLayerOptions } from './GeoTIFFGridLayer';
 import { WCSGridLayer } from './WCSGridLayer';
+import type { WCSGridLayerOptions } from './WCSGridLayer';
 import { getColorStops } from '../geotiff/utils/colormap-utils';
 import { wellknown } from 'wellknown';
 import { GmlParser } from '@npm9912/s-gml';
+import type { Style, TextSymbolizer } from 'geostyler-style';
+import type * as GeoJSON from 'geojson';
+
+/** GeoJSON Feature type used for Leaflet style/pointToLayer/onEachFeature callbacks */
+type GeoJSONFeature = GeoJSON.Feature<GeoJSON.GeometryObject, GeoJSON.GeoJsonProperties>;
 
 type ManagedLeafletLayer = L.Layer & {
   setZIndex?: (zIndex: number) => unknown;
@@ -126,15 +133,15 @@ export class LeafletProvider implements MapProvider {
     layer.vmapVisible = true;
     layer.vmapOpacity = 1.0;
 
-    if ((layerConfig as any).opacity !== undefined) {
-      this.setOpacityByLayer(layer, (layerConfig as any).opacity);
+    if (layerConfig.opacity !== undefined) {
+      this.setOpacityByLayer(layer, layerConfig.opacity);
     }
-    if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex?.((layerConfig as any).zIndex);
+    if (layerConfig.zIndex !== undefined) {
+      layer.setZIndex?.(layerConfig.zIndex);
     }
-    if ((layerConfig as any).visible) {
+    if (layerConfig.visible) {
       this.setVisibleByLayer(layer, true);
-    } else if ((layerConfig as any).visible === false) {
+    } else if (layerConfig.visible === false) {
       this.setVisibleByLayer(layer, false);
     }
 
@@ -168,15 +175,15 @@ export class LeafletProvider implements MapProvider {
   //   layer.vmapVisible = true;
   //   layer.vmapOpacity = 1.0;
 
-  //   if ((config as any).opacity !== undefined) {
-  //     this.setOpacityByLayer(layer, (config as any).opacity);
+  //   if (config.opacity !== undefined) {
+  //     this.setOpacityByLayer(layer, config.opacity);
   //   }
-  //   if ((config as any).zIndex !== undefined) {
-  //     layer.setZIndex((config as any).zIndex);
+  //   if (config.zIndex !== undefined) {
+  //     layer.setZIndex(config.zIndex);
   //   }
-  //   if ((config as any).visible) {
+  //   if (config.visible) {
   //     this.setVisibleByLayer(layer, true);
-  //   } else if ((config as any).visible === false) {
+  //   } else if (config.visible === false) {
   //     this.setVisibleByLayer(layer, false);
   //   }
 
@@ -215,15 +222,15 @@ export class LeafletProvider implements MapProvider {
     layer.vmapVisible = true;
     layer.vmapOpacity = 1.0;
 
-    if ((layerConfig as any).opacity !== undefined) {
-      this.setOpacityByLayer(layer, (layerConfig as any).opacity);
+    if (layerConfig.opacity !== undefined) {
+      this.setOpacityByLayer(layer, layerConfig.opacity);
     }
-    if ((layerConfig as any).zIndex !== undefined) {
-      layer.setZIndex?.((layerConfig as any).zIndex);
+    if (layerConfig.zIndex !== undefined) {
+      layer.setZIndex?.(layerConfig.zIndex);
     }
-    if ((layerConfig as any).visible) {
+    if (layerConfig.visible) {
       this.setVisibleByLayer(layer, true);
-    } else if ((layerConfig as any).visible === false) {
+    } else if (layerConfig.visible === false) {
       this.setVisibleByLayer(layer, false);
     }
     if (basemapid === layerElementId) {
@@ -246,7 +253,7 @@ export class LeafletProvider implements MapProvider {
       log('leaflet - setBaseLayer - layerElementId is null.');
       return;
     }
-    let group = this.layers.find(
+    const group = this.layers.find(
       l => (l as ManagedLayerGroup)._groupId === groupId,
     ) as ManagedLayerGroup | undefined;
 
@@ -351,11 +358,11 @@ export class LeafletProvider implements MapProvider {
           layerConfig as Extract<LayerConfig, { type: 'geotiff' }>,
         );
       default:
-        throw new Error(`Unsupported layer type: ${(layerConfig as any).type}`);
+        throw new Error(`Unsupported layer type: ${(layerConfig as LayerConfig).type}`);
     }
   }
 
-  private async updateGeoJSONLayer(layer: L.Layer, data: any) {
+  private async updateGeoJSONLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'geojson' }>>) {
     if (!(layer instanceof L.GeoJSON)) return;
 
     let geoJsonData = null;
@@ -419,13 +426,13 @@ export class LeafletProvider implements MapProvider {
   ): Promise<L.TileLayer> {
     const layer = L.tileLayer(config.url, {
       attribution: this.normalizeAttribution(config.attributions),
-      maxZoom: (config as any).maxZoom ?? 19,
+      maxZoom: config.maxZoom ?? 19,
       ...(config.options ?? {}),
     } as L.TileLayerOptions);
     return layer;
   }
 
-  private async updateOSMLayer(layer: L.Layer, data: any) {
+  private async updateOSMLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'osm' }>>) {
     if (!('setUrl' in layer) || typeof layer.setUrl !== 'function') return;
 
     let url = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -497,7 +504,7 @@ export class LeafletProvider implements MapProvider {
     return L.tileLayer(arcgisUrl, options);
   }
 
-  private async updateArcGISLayer(layer: L.Layer, data: any) {
+  private async updateArcGISLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'arcgis' }>>) {
     const params = {
       ...(data?.params ?? {}),
     } as Record<string, string | number | boolean>;
@@ -506,11 +513,12 @@ export class LeafletProvider implements MapProvider {
       params.token = data.token;
     }
 
-    const targetUrl = data?.url ?? (layer as any).options?.url ?? '';
+    const tileLayer = layer as L.TileLayer;
+    const targetUrl = data?.url ?? (tileLayer.options as Record<string, unknown>)?.url as string ?? '';
     const nextUrl = this.buildArcGISUrl(targetUrl, params);
 
-    if ((layer as any).setUrl) {
-      (layer as any).setUrl(nextUrl);
+    if ('setUrl' in tileLayer && typeof tileLayer.setUrl === 'function') {
+      tileLayer.setUrl(nextUrl);
     }
   }
 
@@ -529,15 +537,15 @@ export class LeafletProvider implements MapProvider {
     const googleLayer = new GoogleMapTilesLayer({
       apiKey: config.apiKey,
       mapType: config.mapType ?? 'roadmap',
-      language: (config as any).language,
-      region: (config as any).region,
-      scale: config.scale as any,
+      language: config.language,
+      region: config.region,
+      scale: config.scale,
       highDpi: config.highDpi,
-      layerTypes: (config as any).layerTypes,
-      overlay: (config as any).overlay,
+      layerTypes: config.layerTypes,
+      overlay: config.overlay,
       styles: Array.isArray(parsedStyles) ? parsedStyles : undefined,
-      imageFormat: (config as any).imageFormat,
-      apiOptions: (config as any).apiOptions,
+      imageFormat: config.imageFormat,
+      apiOptions: config.apiOptions,
       maxZoom: config.maxZoom ?? 22,
     });
 
@@ -551,7 +559,7 @@ export class LeafletProvider implements MapProvider {
     return googleLayer;
   }
 
-  private tryParseStyles(value: string): any[] | undefined {
+  private tryParseStyles(value: string): Record<string, unknown>[] | undefined {
     try {
       const parsed = JSON.parse(value);
       return Array.isArray(parsed) ? parsed : undefined;
@@ -733,10 +741,10 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  private async updateWKTLayer(layer: L.Layer, data: any): Promise<void> {
+  private async updateWKTLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'wkt' }>>): Promise<void> {
     if (!(layer instanceof L.GeoJSON)) return;
 
-    let geoJsonData = null;
+    let geoJsonData: GeoJSON.FeatureCollection | null = null;
     if (data.wkt) {
       geoJsonData = await this.wktToGeoJSON(data.wkt);
     } else if (data.url) {
@@ -770,7 +778,8 @@ export class LeafletProvider implements MapProvider {
   private async createWKTLayer(
     config: Extract<LayerConfig, { type: 'wkt' }>,
   ): Promise<ManagedLeafletLayer | null> {
-    let geoJsonData = null;
+    let geoJsonData: GeoJSON.FeatureCollection | null = null;
+    const emptyCollection: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
 
     if (config.wkt) {
       geoJsonData = await this.wktToGeoJSON(config.wkt);
@@ -783,10 +792,10 @@ export class LeafletProvider implements MapProvider {
         geoJsonData = await this.wktToGeoJSON(wktText);
       } catch (e) {
         error('Failed to load WKT from URL:', e);
-        geoJsonData = { type: 'FeatureCollection', features: [] };
+        geoJsonData = emptyCollection;
       }
     } else {
-      geoJsonData = { type: 'FeatureCollection', features: [] };
+      geoJsonData = emptyCollection;
     }
 
     log('[Leaflet WKT] Creating layer with GeoJSON data:', geoJsonData);
@@ -817,14 +826,14 @@ export class LeafletProvider implements MapProvider {
     const layer = L.geoJSON(geoJsonData, layerOptions);
 
     log('[Leaflet WKT] Created layer:', layer);
-    if (typeof (layer as any).getBounds === 'function') {
-      log('[Leaflet WKT] Layer bounds:', (layer as any).getBounds());
+    if (typeof layer.getBounds === 'function') {
+      log('[Leaflet WKT] Layer bounds:', layer.getBounds());
     }
 
     return layer;
   }
 
-  private async wktToGeoJSON(wkt: string): Promise<any> {
+  private async wktToGeoJSON(wkt: string): Promise<GeoJSON.FeatureCollection> {
     try {
       // Use wellknown library to parse WKT into GeoJSON (browser-compatible)
       const geoJSON = wellknown.parse(wkt);
@@ -834,9 +843,9 @@ export class LeafletProvider implements MapProvider {
       }
 
       // Return as a Feature
-      const feature = {
+      const feature: GeoJSON.Feature = {
         type: 'Feature',
-        geometry: geoJSON,
+        geometry: geoJSON as GeoJSON.Geometry,
         properties: {},
       };
 
@@ -844,14 +853,16 @@ export class LeafletProvider implements MapProvider {
       log('[Leaflet WKT] Input WKT:', wkt);
       log('[Leaflet WKT] Generated GeoJSON:', JSON.stringify(feature, null, 2));
 
-      return {
+      const fc: GeoJSON.FeatureCollection = {
         type: 'FeatureCollection',
         features: [feature],
       };
+      return fc;
     } catch (e) {
       error('[Leaflet WKT] Failed to parse WKT:', wkt, e);
       // If parsing fails, return empty FeatureCollection
-      return { type: 'FeatureCollection', features: [] };
+      const empty: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+      return empty;
     }
   }
 
@@ -869,15 +880,15 @@ export class LeafletProvider implements MapProvider {
         colorMap: config.colorMap as Parameters<typeof getColorStops>[0],
         valueRange: config.valueRange,
         nodata: config.nodata,
-        resolution: (config as any).resolution,
-        resampleMethod: (config as any).resampleMethod,
+        resolution: (config as Record<string, unknown>).resolution as GeoTIFFGridLayerOptions['resolution'],
+        resampleMethod: (config as Record<string, unknown>).resampleMethod as GeoTIFFGridLayerOptions['resampleMethod'],
         viewProjection: this.map.options.crs.code,
       });
       if (config.opacity !== undefined) {
-        (layer as any).setOpacity(config.opacity);
+        (layer as ManagedLeafletLayer).setOpacity?.(config.opacity);
       }
       if (config.zIndex !== undefined) {
-        (layer as any).setZIndex(config.zIndex);
+        (layer as ManagedLeafletLayer).setZIndex?.(config.zIndex);
       }
       return layer;
     } catch (err) {
@@ -887,20 +898,21 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  private async updateGeoTIFFLayer(layer: L.Layer, data: any): Promise<void> {
+  private async updateGeoTIFFLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'geotiff' }>>): Promise<void> {
     if (!data.url) {
       throw new Error('GeoTIFF update requires a URL');
     }
 
     if (!layer) return;
-    if (!('updateSource' in (layer as any))) return;
-    await (layer as any).updateSource({
+    if (!(layer instanceof GeoTIFFGridLayer)) return;
+    const extData = data as Record<string, unknown>;
+    await layer.updateSource({
       url: data.url,
       colorMap: data.colorMap as Parameters<typeof getColorStops>[0],
       valueRange: data.valueRange,
       nodata: data.nodata,
-      resolution: data.resolution,
-      resampleMethod: data.resampleMethod,
+      resolution: extData.resolution as GeoTIFFGridLayerOptions['resolution'],
+      resampleMethod: extData.resampleMethod as GeoTIFFGridLayerOptions['resampleMethod'],
     });
   }
 
@@ -916,7 +928,7 @@ export class LeafletProvider implements MapProvider {
     }
 
     try {
-      const wcsOptions: any = {
+      const wcsOptions: WCSGridLayerOptions = {
         url: config.url,
         coverageName: config.coverageName,
         version: config.version ?? '2.0.1',
@@ -933,11 +945,11 @@ export class LeafletProvider implements MapProvider {
       const layer = new WCSGridLayer(wcsOptions);
 
       if (config.opacity !== undefined) {
-        (layer as any).setOpacity(config.opacity);
+        (layer as ManagedLeafletLayer).setOpacity?.(config.opacity);
       }
 
       if (config.zIndex !== undefined) {
-        (layer as any).setZIndex(config.zIndex);
+        (layer as ManagedLeafletLayer).setZIndex?.(config.zIndex);
       }
 
       return layer;
@@ -948,11 +960,11 @@ export class LeafletProvider implements MapProvider {
     }
   }
 
-  private async updateWCSLayer(layer: L.Layer, data: any): Promise<void> {
+  private async updateWCSLayer(layer: L.Layer, data: Partial<Extract<LayerConfig, { type: 'wcs' }>>): Promise<void> {
     if (!layer) return;
 
     if (layer instanceof WCSGridLayer) {
-      const updateOptions: Partial<any> = {};
+      const updateOptions: Partial<WCSGridLayerOptions> = {};
 
       if (data.url) updateOptions.url = data.url;
       if (data.coverageName) updateOptions.coverageName = data.coverageName;
@@ -971,18 +983,18 @@ export class LeafletProvider implements MapProvider {
    * Convert a Geostyler style to Leaflet GeoJSON options
    */
   private async createGeostylerLeafletOptions(
-    geostylerStyle: any,
+    geostylerStyle: Style,
   ): Promise<L.GeoJSONOptions> {
     // Helper to extract static value from GeoStyler property
-    const getValue = (prop: any, defaultValue: any = undefined) => {
+    const getValue = (prop: unknown, defaultValue: unknown = undefined): unknown => {
       if (prop === undefined || prop === null) return defaultValue;
       // If it's a GeoStyler function object, we can't evaluate it here - return default
-      if (typeof prop === 'object' && prop.name) return defaultValue;
+      if (typeof prop === 'object' && (prop as Record<string, unknown>).name) return defaultValue;
       return prop;
     };
 
     const options: L.GeoJSONOptions = {
-      style: (feature: any) => {
+      style: (feature?: GeoJSONFeature) => {
         const geometryType = feature?.geometry?.type;
         let leafletStyle: L.PathOptions = {};
 
@@ -1032,7 +1044,7 @@ export class LeafletProvider implements MapProvider {
                     const dashArray = symbolizer.dasharray
                       ? Array.isArray(symbolizer.dasharray)
                         ? symbolizer.dasharray
-                            .map((v: any) => getValue(v, 0) as number)
+                            .map((v: unknown) => getValue(v, 0) as number)
                             .join(',')
                         : undefined
                       : undefined;
@@ -1053,7 +1065,7 @@ export class LeafletProvider implements MapProvider {
         return leafletStyle;
       },
 
-      pointToLayer: (_feature: any, latlng: L.LatLng) => {
+      pointToLayer: (_feature: GeoJSONFeature, latlng: L.LatLng) => {
         if (geostylerStyle.rules) {
           for (const rule of geostylerStyle.rules) {
             if (rule.symbolizers) {
@@ -1113,15 +1125,16 @@ export class LeafletProvider implements MapProvider {
         });
       },
 
-      onEachFeature: (feature: any, layer: L.Layer) => {
+      onEachFeature: (feature: GeoJSONFeature, layer: L.Layer) => {
         if (geostylerStyle.rules) {
           for (const rule of geostylerStyle.rules) {
             if (rule.symbolizers) {
               for (const symbolizer of rule.symbolizers) {
                 if (symbolizer.kind === 'Text') {
-                  const labelProp = (symbolizer as any).label;
+                  const labelProp = (symbolizer as TextSymbolizer).label;
                   if (
                     labelProp &&
+                    typeof labelProp === 'string' &&
                     feature.properties &&
                     feature.properties[labelProp]
                   ) {
@@ -1152,8 +1165,8 @@ export class LeafletProvider implements MapProvider {
   }
 
   private createLeafletStyle(style?: StyleConfig) {
-    return (feature: any): L.PathOptions => {
-      const geometryType = feature.geometry?.type;
+    return (feature?: GeoJSONFeature): L.PathOptions => {
+      const geometryType = feature?.geometry?.type;
 
       const fillColor = style?.fillColor ?? 'rgba(0,100,255,0.3)';
       const fillOpacity = style?.fillOpacity ?? 0.3;
@@ -1190,7 +1203,7 @@ export class LeafletProvider implements MapProvider {
   }
 
   private createLeafletPoint(
-    feature: any,
+    feature: GeoJSONFeature,
     latlng: L.LatLng,
     style?: StyleConfig,
   ): L.Layer {
@@ -1243,7 +1256,7 @@ export class LeafletProvider implements MapProvider {
   }
 
   private bindLeafletPopup(
-    feature: any,
+    feature: GeoJSONFeature,
     layer: L.Layer,
     style?: StyleConfig,
   ): void {
@@ -1298,15 +1311,15 @@ export class LeafletProvider implements MapProvider {
     return layer;
   }
 
-  private async updateWFSLayer(layer: L.GeoJSON, data: any): Promise<void> {
-    const geojson = await this.fetchWFSFromUrl(data);
+  private async updateWFSLayer(layer: L.GeoJSON, data: Partial<Extract<LayerConfig, { type: 'wfs' }>>): Promise<void> {
+    const geojson = await this.fetchWFSFromUrl(data as Extract<LayerConfig, { type: 'wfs' }>);
     layer.clearLayers();
     layer.addData(geojson);
   }
 
   private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
-  ): Promise<any> {
+  ): Promise<GeoJSON.GeoJsonObject> {
     const baseParams = {
       service: 'WFS',
       request: 'GetFeature',
@@ -1336,18 +1349,18 @@ export class LeafletProvider implements MapProvider {
       outputFormat.includes('geojson') ||
       outputFormat === 'application/json'
     ) {
-      return await response.json();
+      return (await response.json()) as GeoJSON.GeoJsonObject;
     }
 
     // Handle GML formats - parse XML to GeoJSON using gml2geojson
     if (outputFormat.includes('gml') || outputFormat.includes('xml')) {
       const xml = await response.text();
       const parser = new GmlParser();
-      return await parser.parse(xml);
+      return (await parser.parse(xml)) as GeoJSON.GeoJsonObject;
     }
 
     // Default: try to parse as JSON
-    return await response.json();
+    return (await response.json()) as GeoJSON.GeoJsonObject;
   }
 
   private appendParams(
