@@ -131,6 +131,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: ^22.13.5
         version: 22.18.1
@@ -2240,6 +2243,9 @@ packages:
 
   '@types/jest@29.5.14':
     resolution: {integrity: sha512-ZN+4sdnLUbo8EVvVc2ao0GFW6oVrQRPn4K2lglySj7APvSrgzxHiNNK99us4WDMi57xxA2yggblIAMNhXOotLQ==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -10276,6 +10282,8 @@ snapshots:
       expect: 29.7.0
       pretty-format: 29.7.0
 
+  '@types/js-yaml@4.0.9': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/leaflet@1.9.21':
@@ -10784,13 +10792,17 @@ snapshots:
       clean-stack: 5.2.0
       indent-string: 5.0.0
 
-  ajv-errors@1.0.1(ajv@6.12.6):
+  ajv-errors@1.0.1(ajv@6.14.0):
     dependencies:
-      ajv: 6.12.6
+      ajv: 6.14.0
 
   ajv-keywords@3.5.2(ajv@6.12.6):
     dependencies:
       ajv: 6.12.6
+
+  ajv-keywords@3.5.2(ajv@6.14.0):
+    dependencies:
+      ajv: 6.14.0
 
   ajv@6.12.6:
     dependencies:
@@ -15355,9 +15367,9 @@ snapshots:
 
   schema-utils@1.0.0:
     dependencies:
-      ajv: 6.12.6
-      ajv-errors: 1.0.1(ajv@6.12.6)
-      ajv-keywords: 3.5.2(ajv@6.12.6)
+      ajv: 6.14.0
+      ajv-errors: 1.0.1(ajv@6.14.0)
+      ajv-keywords: 3.5.2(ajv@6.14.0)
 
   search-insights@2.17.3: {}
 
@@ -15942,7 +15954,7 @@ snapshots:
 
   terser@4.8.1:
     dependencies:
-      acorn: 8.15.0
+      acorn: 8.16.0
       commander: 2.20.3
       source-map: 0.6.1
       source-map-support: 0.5.21
@@ -16594,8 +16606,8 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.9.0
       '@webassemblyjs/wasm-parser': 1.9.0
       acorn: 6.4.2
-      ajv: 6.12.6
-      ajv-keywords: 3.5.2(ajv@6.12.6)
+      ajv: 6.14.0
+      ajv-keywords: 3.5.2(ajv@6.14.0)
       chrome-trace-event: 1.0.4
       enhanced-resolve: 4.5.0
       eslint-scope: 4.0.3

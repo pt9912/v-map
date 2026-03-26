@@ -127,7 +127,7 @@ describe('v-map-layer-geotiff', () => {
 
     await VMapLayerGeoTIFF.prototype['handleStyleReady'].call(component, {
       detail: { style, layerIds: ['dem'] },
-    });
+    } as unknown as CustomEvent);
 
     expect(component.colorMap).toEqual({
       type: 'ramp',
@@ -157,7 +157,7 @@ describe('v-map-layer-geotiff', () => {
         },
         layerIds: ['other-layer'],
       },
-    });
+    } as unknown as CustomEvent);
     await VMapLayerGeoTIFF.prototype['handleStyleReady'].call(component, {
       detail: {
         style: {
@@ -165,7 +165,7 @@ describe('v-map-layer-geotiff', () => {
         },
         layerIds: ['dem'],
       },
-    });
+    } as unknown as CustomEvent);
 
     expect(component.opacity).toBe(1);
     expect(component.extractRasterSymbolizer.call(component, {

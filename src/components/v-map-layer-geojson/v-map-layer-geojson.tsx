@@ -30,7 +30,7 @@ export class VMapLayerGeoJSON {
   /**
    * URL to fetch GeoJSON data from. Alternative to providing data via slot.
    */
-  @Prop({ reflect: true }) url: string = null;
+  @Prop({ reflect: true }) url: string | null = null;
 
   /**
    * Whether the layer is visible on the map.
@@ -123,10 +123,10 @@ export class VMapLayerGeoJSON {
   private geoSlot?: HTMLSlotElement;
   private mo?: MutationObserver;
   private lastString?: string;
-  private layerId: string = null;
+  private layerId: string | null = null;
   private didLoad: boolean = false;
 
-  private helper: VMapLayerHelper;
+  private helper!: VMapLayerHelper;
   private appliedGeostylerStyle?: Style;
 
   /**
@@ -186,7 +186,7 @@ export class VMapLayerGeoJSON {
     log(MSG_COMPONENT + 'onGeoJsonChanged');
     // hier deinen Layer aktualisieren
     if (oldValue !== newValue) {
-      let geojsonString: string = null;
+      let geojsonString: string | null = null;
       if (typeof this.geojson === 'object') {
         geojsonString = JSON.stringify(this.geojson);
       } else if (typeof this.geojson === 'string') {
@@ -397,7 +397,7 @@ export class VMapLayerGeoJSON {
           number,
         ])
       : undefined;
-    let geojsonString: string = null;
+    let geojsonString: string | null = null;
     if (typeof this.geojson === 'object') {
       geojsonString = JSON.stringify(this.geojson);
     } else if (typeof this.geojson === 'string') {
