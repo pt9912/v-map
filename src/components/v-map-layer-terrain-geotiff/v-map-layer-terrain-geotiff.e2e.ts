@@ -1,10 +1,14 @@
 import type { E2EPage } from '../../testing/e2e-testing';
 import { newE2EPage } from '../../testing/e2e-testing';
+import type { GeoTiffTestServer } from '../../testing/geotiff-test-server';
+import { startGeoTiffTestServer } from '../../testing/geotiff-test-server';
 
 jest.setTimeout(20_000);
 
 describe('<v-map-layer-terrain-geotiff> e2e', () => {
   let page: E2EPage;
+  let demServer: GeoTiffTestServer;
+  let localGeoTiffUrl: string;
 
   const render = async (html: string, opts?: { wait?: boolean }) => {
     await page.evaluate(content => {
@@ -18,6 +22,8 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
   };
 
   beforeAll(async () => {
+    demServer = await startGeoTiffTestServer();
+    localGeoTiffUrl = demServer.url;
     page = await newE2EPage();
     await page.setContent('<div id="test-root"></div>');
   });
@@ -28,13 +34,14 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
 
   afterAll(async () => {
     await page.close();
+    await demServer.close();
   });
 
   it('hydrates inside <v-map>', async () => {
     await render(`
       <v-map provider="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-terrain-geotiff url="https://example.com/elevation.tif"></v-map-layer-terrain-geotiff>
+          <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
         </v-map-layergroup>
       </v-map>
     `);
@@ -46,12 +53,12 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
     await render(`
       <v-map provider="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-terrain-geotiff url="https://example.com/terrain.tif"></v-map-layer-terrain-geotiff>
+          <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
         </v-map-layergroup>
       </v-map>
     `);
     const el = await page.find('v-map-layer-terrain-geotiff');
-    expect(el.getAttribute('url')).toBe('https://example.com/terrain.tif');
+    expect(el.getAttribute('url')).toBe(localGeoTiffUrl);
   });
 
   it.skip('accepts optional terrain parameters', async () => {
@@ -60,7 +67,7 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
       <v-map provider="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain-geotiff
-            url="https://example.com/elevation.tif"
+            url="${localGeoTiffUrl}"
             texture="https://example.com/texture.jpg"
             wireframe="true"
             mesh-max-error="2.0"
@@ -82,7 +89,7 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
       <v-map provider="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain-geotiff
-            url="https://example.com/elevation.tif"
+            url="${localGeoTiffUrl}"
             projection="EPSG:32632"
             force-projection="true">
           </v-map-layer-terrain-geotiff>
@@ -99,7 +106,7 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
     await render(`
       <v-map provider="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-terrain-geotiff url="https://example.com/elevation.tif"></v-map-layer-terrain-geotiff>
+          <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
         </v-map-layergroup>
       </v-map>
     `);

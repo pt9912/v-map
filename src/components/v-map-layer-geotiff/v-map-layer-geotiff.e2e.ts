@@ -1,10 +1,14 @@
 import type { E2EPage } from '../../testing/e2e-testing';
 import { newE2EPage } from '../../testing/e2e-testing';
+import type { GeoTiffTestServer } from '../../testing/geotiff-test-server';
+import { startGeoTiffTestServer } from '../../testing/geotiff-test-server';
 
 jest.setTimeout(20_000);
 
 describe('<v-map-layer-geotiff> e2e', () => {
   let page: E2EPage;
+  let demServer: GeoTiffTestServer;
+  let localGeoTiffUrl: string;
 
   const render = async (html: string, opts?: { wait?: boolean }) => {
     await page.evaluate(
@@ -21,23 +25,28 @@ describe('<v-map-layer-geotiff> e2e', () => {
   };
 
   beforeAll(async () => {
+    demServer = await startGeoTiffTestServer();
+    localGeoTiffUrl = demServer.url;
+  });
+
+  beforeEach(async () => {
     page = await newE2EPage();
     await page.setContent('<div id="test-root"></div>');
   });
 
   afterEach(async () => {
-    await render('', { wait: false });
+    await page.close();
   });
 
   afterAll(async () => {
-    await page.close();
+    await demServer.close();
   });
 
   it('hydrates inside <v-map>', async () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-geotiff url="https://example.com/test.tif"></v-map-layer-geotiff>
+          <v-map-layer-geotiff url="${localGeoTiffUrl}"></v-map-layer-geotiff>
         </v-map-layergroup>
       </v-map>
     `);
@@ -49,19 +58,19 @@ describe('<v-map-layer-geotiff> e2e', () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-geotiff url="https://example.com/terrain.tif"></v-map-layer-geotiff>
+          <v-map-layer-geotiff url="${localGeoTiffUrl}"></v-map-layer-geotiff>
         </v-map-layergroup>
       </v-map>
     `);
     const el = await page.find('v-map-layer-geotiff');
-    expect(el.getAttribute('url')).toBe('https://example.com/terrain.tif');
+    expect(el.getAttribute('url')).toBe(localGeoTiffUrl);
   });
 
   it('accepts common props', async () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-geotiff url="https://example.com/test.tif"></v-map-layer-geotiff>
+          <v-map-layer-geotiff url="${localGeoTiffUrl}"></v-map-layer-geotiff>
         </v-map-layergroup>
       </v-map>
     `);
@@ -80,7 +89,10 @@ describe('<v-map-layer-geotiff> e2e', () => {
       await render(`
         <v-map flavour="deck" style="display:block;width:300px;height:200px">
           <v-map-layergroup>
-            <v-map-layer-geotiff url="https://example.com/dem.tif"></v-map-layer-geotiff>
+            <v-map-layer-geotiff
+              url="${localGeoTiffUrl}"
+              visible="false"
+            ></v-map-layer-geotiff>
           </v-map-layergroup>
         </v-map>
       `);
@@ -93,8 +105,9 @@ describe('<v-map-layer-geotiff> e2e', () => {
         <v-map flavour="deck" style="display:block;width:300px;height:200px">
           <v-map-layergroup>
             <v-map-layer-geotiff
-              url="https://example.com/dem.tif"
+              url="${localGeoTiffUrl}"
               color-map="viridis"
+              visible="false"
             ></v-map-layer-geotiff>
           </v-map-layergroup>
         </v-map>
@@ -109,8 +122,9 @@ describe('<v-map-layer-geotiff> e2e', () => {
         <v-map flavour="deck" style="display:block;width:300px;height:200px">
           <v-map-layergroup>
             <v-map-layer-geotiff
-              url="https://example.com/dem.tif"
+              url="${localGeoTiffUrl}"
               nodata="-9999"
+              visible="false"
             ></v-map-layer-geotiff>
           </v-map-layergroup>
         </v-map>
@@ -131,13 +145,17 @@ describe('<v-map-layer-geotiff> e2e', () => {
       await render(`
         <v-map flavour="deck" style="display:block;width:300px;height:200px">
           <v-map-layergroup>
-            <v-map-layer-geotiff url="https://example.com/dem.tif"></v-map-layer-geotiff>
+            <v-map-layer-geotiff
+              url="${localGeoTiffUrl}"
+              visible="false"
+            ></v-map-layer-geotiff>
           </v-map-layergroup>
         </v-map>
       `);
 
       const el = await page.find('v-map-layer-geotiff');
       expect(el).toHaveClass('hydrated');
+      await page.waitForFunction(() => (window as any).__geotiffReady === true);
     });
 
     it('akzeptiert opacity und visible Attribute', async () => {
@@ -145,9 +163,9 @@ describe('<v-map-layer-geotiff> e2e', () => {
         <v-map flavour="deck" style="display:block;width:300px;height:200px">
           <v-map-layergroup>
             <v-map-layer-geotiff
-              url="https://example.com/dem.tif"
+              url="${localGeoTiffUrl}"
               opacity="0.5"
-              visible="true"
+              visible="false"
             ></v-map-layer-geotiff>
           </v-map-layergroup>
         </v-map>
@@ -155,6 +173,7 @@ describe('<v-map-layer-geotiff> e2e', () => {
       const el = await page.find('v-map-layer-geotiff');
       expect(el).toHaveClass('hydrated');
       expect(el.getAttribute('opacity')).toBe('0.5');
+      expect(el.getAttribute('visible')).toBe('false');
     });
   });
 });
