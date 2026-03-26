@@ -1592,11 +1592,10 @@ export class CesiumProvider implements MapProvider {
       throw new Error('GeoTIFF layer requires a URL');
     }
 
-    let viewProjection = 'EPSG:4326';
-    const projection = this.viewer.scene.mapProjection;
-    if (projection instanceof Cesium.WebMercatorProjection) {
-      viewProjection = 'EPSG:3857'; // Web Mercator
-    }
+    // The GeoTIFFImageryProvider always uses WebMercatorTilingScheme,
+    // so the tile processor must reproject into EPSG:3857 to match
+    // the tile coordinate math (x,y,z → bounds).
+    const viewProjection = 'EPSG:3857';
 
     try {
       const geotiffExtra = config as Extract<LayerConfig, { type: 'geotiff' }> & {

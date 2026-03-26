@@ -579,10 +579,14 @@ export class GeoTIFFTileProcessor {
 
     // 1. Calculate View projection bounds for the tile
     const viewBounds = this.getTileBounds(x, y, z);
+    log(
+      `v-map - geotiff - getTileData(${x},${y},${z}): viewBounds=[${viewBounds.map(v => v.toFixed(0)).join(',')}], sourceBounds=[${this.config.sourceBounds.map(v => v.toFixed(0)).join(',')}], toProjection=${this.config.toProjection}`,
+    );
 
     // 2. Early exit: Check if tile intersects with source bounds
     if (!this.tileIntersectsSource(viewBounds)) {
       // Tile is completely outside source bounds - return transparent tile
+      log(`v-map - geotiff - getTileData(${x},${y},${z}): no intersection, returning transparent`);
       const sampleSize = Math.ceil(tileSize * resolution);
       return new Uint8ClampedArray(sampleSize * sampleSize * 4);
     }

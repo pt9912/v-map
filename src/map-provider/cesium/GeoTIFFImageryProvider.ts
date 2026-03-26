@@ -3,7 +3,7 @@ import {
   GeoTIFFTileProcessor,
   type TileDataParams,
 } from '../geotiff/utils/GeoTIFFTileProcessor';
-import { warn } from '../../utils/logger';
+import { log, warn } from '../../utils/logger';
 
 type CesiumModule = typeof import('cesium');
 import type {
@@ -82,6 +82,8 @@ export class GeoTIFFImageryProvider implements ImageryProvider {
       rectangleDegrees[3],
     );
 
+    // Always use WebMercatorTilingScheme because the GeoTIFFTileProcessor
+    // interprets (x,y,z) as Web Mercator tile coordinates.
     this.tilingScheme = new Cesium.WebMercatorTilingScheme();
 
     this.errorEvent = new Cesium.Event();
@@ -256,8 +258,10 @@ export class GeoTIFFImageryProvider implements ImageryProvider {
     try {
       rgbaData = await this.tileProcessor.getTileData(params);
       if (!rgbaData) {
+        log(`v-map - cesium - geotiff - requestImage(${x},${y},${level}): no data returned`);
         return undefined;
       }
+      log(`v-map - cesium - geotiff - requestImage(${x},${y},${level}): rgba ${rgbaData.length} bytes, sampleSize=${Math.ceil(this.tileWidth * this.resolution)}`);
     } catch (err) {
       this.errorEvent.raiseEvent(err);
       warn('v-map - cesium - getTileData - GeoTIFF tile request failed', err);
@@ -265,7 +269,9 @@ export class GeoTIFFImageryProvider implements ImageryProvider {
     }
 
     try {
-      return await this.createFlippedImageFromRGBA(rgbaData);
+      const result = await this.createFlippedImageFromRGBA(rgbaData);
+      log(`v-map - cesium - geotiff - requestImage(${x},${y},${level}): result=${result?.constructor?.name ?? 'undefined'}, size=${result instanceof HTMLCanvasElement ? `${result.width}x${result.height}` : result instanceof ImageBitmap ? `${result.width}x${result.height}` : 'n/a'}`);
+      return result;
     } catch (err) {
       this.errorEvent.raiseEvent(err);
       warn(
