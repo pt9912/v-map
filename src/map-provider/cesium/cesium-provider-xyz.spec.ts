@@ -1,38 +1,49 @@
-import { CesiumProvider } from './cesium-provider';
+import { vi } from 'vitest';
 import type { LayerConfig } from '../../types/layerconfig';
 
-const mockUrlTemplateImageryProvider = jest
-  .fn()
-  .mockImplementation(options => ({ ...options }));
+const { mockUrlTemplateImageryProvider, mockImageryLayer, mockCesium } =
+  vi.hoisted(() => {
+    const hoistedMockUrlTemplateImageryProvider = vi
+      .fn()
+      .mockImplementation(options => ({ ...options }));
 
-const mockImageryLayer = jest.fn().mockImplementation((_provider, options) => ({
-  options,
-  setOptions: jest.fn(),
-  setOpacity: jest.fn(),
-  setVisible: jest.fn(),
-  setZIndex: jest.fn(),
-  getOptions: jest.fn().mockReturnValue(options ?? {}),
-}));
+    const hoistedMockImageryLayer = vi
+      .fn()
+      .mockImplementation((_provider, options) => ({
+        options,
+        setOptions: vi.fn(),
+        setOpacity: vi.fn(),
+        setVisible: vi.fn(),
+        setZIndex: vi.fn(),
+        getOptions: vi.fn().mockReturnValue(options ?? {}),
+      }));
 
-const mockCesium = {
-  Viewer: jest.fn().mockImplementation(() => ({
-    scene: {
-      imageryLayers: {
-        add: jest.fn(),
-        remove: jest.fn(),
+    return {
+      mockUrlTemplateImageryProvider: hoistedMockUrlTemplateImageryProvider,
+      mockImageryLayer: hoistedMockImageryLayer,
+      mockCesium: {
+        Viewer: vi.fn().mockImplementation(() => ({
+          scene: {
+            imageryLayers: {
+              add: vi.fn(),
+              remove: vi.fn(),
+            },
+          },
+          container: document.createElement('div'),
+          destroy: vi.fn(),
+        })),
+        UrlTemplateImageryProvider: hoistedMockUrlTemplateImageryProvider,
+        ImageryLayer: hoistedMockImageryLayer,
       },
-    },
-    container: document.createElement('div'),
-    destroy: jest.fn(),
-  })),
-  UrlTemplateImageryProvider: mockUrlTemplateImageryProvider,
-  ImageryLayer: mockImageryLayer,
-};
+    };
+  });
 
-jest.mock('../../lib/cesium-loader', () => ({
+vi.mock('../../lib/cesium-loader', () => ({
   loadCesium: jest.fn().mockResolvedValue(mockCesium),
   injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
 }));
+
+import { CesiumProvider } from './cesium-provider';
 
 describe('CesiumProvider XYZ layer support', () => {
   let provider: CesiumProvider;
@@ -45,9 +56,9 @@ describe('CesiumProvider XYZ layer support', () => {
   };
 
   beforeAll(() => {
-    (global as any).crypto = {
+    vi.stubGlobal('crypto', {
       randomUUID: jest.fn().mockReturnValue('layer-id'),
-    };
+    });
   });
 
   beforeEach(() => {

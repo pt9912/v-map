@@ -1,55 +1,64 @@
-const mockTerrainLayer = jest.fn().mockImplementation(function(this: any, props: any) {
-  return {
-    id: props.id,
-    props,
-    clone: jest.fn().mockReturnValue({ id: props.id, props }),
-  };
-});
-const mockCreateDeckGLGeoTIFFTerrainLayer = jest.fn().mockResolvedValue({
-  id: 'terrain-geotiff-layer',
-  props: {},
-  clone: jest.fn().mockReturnThis(),
-});
+import { vi } from 'vitest';
 
-jest.mock('@deck.gl/geo-layers', () => ({
+const { mockTerrainLayer, mockCreateDeckGLGeoTIFFTerrainLayer } = vi.hoisted(
+  () => ({
+    mockTerrainLayer: vi.fn().mockImplementation(function (
+      this: any,
+      props: any,
+    ) {
+      return {
+        id: props.id,
+        props,
+        clone: vi.fn().mockReturnValue({ id: props.id, props }),
+      };
+    }),
+    mockCreateDeckGLGeoTIFFTerrainLayer: vi.fn().mockResolvedValue({
+      id: 'terrain-geotiff-layer',
+      props: {},
+      clone: vi.fn().mockReturnThis(),
+    }),
+  }),
+);
+
+vi.mock('@deck.gl/geo-layers', () => ({
   TerrainLayer: mockTerrainLayer,
-  TileLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  TileLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props,
-      clone: jest.fn().mockReturnValue({ id: props.id, props }),
+      clone: vi.fn().mockReturnValue({ id: props.id, props }),
     };
   }),
 }));
 
-jest.mock('@deck.gl/layers', () => ({
-  GeoJsonLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+vi.mock('@deck.gl/layers', () => ({
+  GeoJsonLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
-  BitmapLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  BitmapLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return { id: props.id, props };
   }),
-  ScatterplotLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  ScatterplotLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
 }));
 
-jest.mock('@deck.gl/core', () => ({
-  Deck: jest.fn().mockImplementation(() => ({
-    setProps: jest.fn(),
-    finalize: jest.fn(),
+vi.mock('@deck.gl/core', () => ({
+  Deck: vi.fn().mockImplementation(() => ({
+    setProps: vi.fn(),
+    finalize: vi.fn(),
   })),
 }));
 
-jest.mock('./DeckGLGeoTIFFTerrainLayer', () => ({
+vi.mock('./DeckGLGeoTIFFTerrainLayer', () => ({
   createDeckGLGeoTIFFTerrainLayer: mockCreateDeckGLGeoTIFFTerrainLayer,
 }));
 

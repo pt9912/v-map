@@ -243,24 +243,24 @@ export const config: Config = {
   buildEs5: false, // Deaktiviert ES5-Builds komplett (nur ES2022)
   testing: {
     setupFilesAfterEnv: ['./src/testing/setupTests.jest.ts'],
+    testPathIgnorePatterns: ['\\.spec\\.ts$'],
     collectCoverageFrom: [
-      'src/**/*.{ts,tsx}',
-      '!src/**/*.d.ts',
-      '!src/**/*.spec.ts',
-      '!src/**/*.spec.tsx',
-      '!src/**/*.e2e.ts',
-      '!src/**/*.stories.ts',
-      '!src/**/*.stories.tsx',
-      '!src/testing/**',
+      'src/components/**/*.{ts,tsx}',
+      '!src/components/**/*.d.ts',
+      '!src/components/**/*.spec.ts',
+      '!src/components/**/*.spec.tsx',
+      '!src/components/**/*.e2e.ts',
+      '!src/components/**/*.stories.ts',
+      '!src/components/**/*.stories.tsx',
       '!src/components.d.ts',
     ],
     coverageReporters: ['text', 'lcov', 'html'],
     coverageThreshold: {
       global: {
-        branches: 1,
-        functions: 1,
-        lines: 2,
-        statements: 2,
+        branches: 50,
+        functions: 50,
+        lines: 50,
+        statements: 50,
       },
     },
     // sourceMaps helfen, die TS-Zeilen zu sehen:

@@ -1,85 +1,87 @@
 import type { Style } from 'geostyler-style';
+import { vi } from 'vitest';
 
-// Mock Cesium object
-const mockCesium = {
-  Ion: {
-    defaultAccessToken: null,
-  },
-  Viewer: jest.fn().mockImplementation(() => ({
-    scene: {
-      primitives: {
-        removeAll: jest.fn(),
-        add: jest.fn(),
-      },
-      globe: {
-        baseColor: {},
-      },
-      backgroundColor: {},
+const { mockCesium } = vi.hoisted(() => ({
+  mockCesium: {
+    Ion: {
+      defaultAccessToken: null,
     },
-    dataSources: {
-      add: jest.fn(),
-    },
-    imageryLayers: {
-      add: jest.fn(),
-    },
-    destroy: jest.fn(),
-    container: document.createElement('div'),
-  })),
-  EllipsoidTerrainProvider: jest.fn(),
-  Color: {
-    WHITE: { withAlpha: jest.fn(() => ({})) },
-    BLUE: { withAlpha: jest.fn(() => ({})) },
-    fromCssColorString: jest.fn(() => ({ withAlpha: jest.fn(() => ({})) })),
-  },
-  GeoJsonDataSource: Object.assign(
-    jest.fn().mockImplementation(() => ({
-      entities: {
-        values: [],
+    Viewer: vi.fn().mockImplementation(() => ({
+      scene: {
+        primitives: {
+          removeAll: vi.fn(),
+          add: vi.fn(),
+        },
+        globe: {
+          baseColor: {},
+        },
+        backgroundColor: {},
       },
-      show: true,
+      dataSources: {
+        add: vi.fn(),
+      },
+      imageryLayers: {
+        add: vi.fn(),
+      },
+      destroy: vi.fn(),
+      container: document.createElement('div'),
     })),
-    {
-      load: jest.fn().mockResolvedValue({
+    EllipsoidTerrainProvider: vi.fn(),
+    Color: {
+      WHITE: { withAlpha: vi.fn(() => ({})) },
+      BLUE: { withAlpha: vi.fn(() => ({})) },
+      fromCssColorString: vi.fn(() => ({ withAlpha: vi.fn(() => ({})) })),
+    },
+    GeoJsonDataSource: Object.assign(
+      vi.fn().mockImplementation(() => ({
         entities: {
           values: [],
         },
         show: true,
-      }),
+      })),
+      {
+        load: vi.fn().mockResolvedValue({
+          entities: {
+            values: [],
+          },
+          show: true,
+        }),
+      },
+    ),
+    DataSource: vi.fn().mockImplementation(() => ({
+      show: true,
+    })),
+    Cesium3DTileset: vi.fn().mockImplementation(() => ({
+      show: true,
+      style: null,
+    })),
+    ImageryLayer: vi.fn().mockImplementation(() => ({
+      show: true,
+      alpha: 1,
+    })),
+    Cesium3DTileStyle: vi.fn(),
+    ColorBlendMode: {
+      MIX: 0,
     },
-  ),
-  DataSource: jest.fn().mockImplementation(() => ({
-    show: true,
-  })),
-  Cesium3DTileset: jest.fn().mockImplementation(() => ({
-    show: true,
-    style: null,
-  })),
-  ImageryLayer: jest.fn().mockImplementation(() => ({
-    show: true,
-    alpha: 1,
-  })),
-  Cesium3DTileStyle: jest.fn(),
-  ColorBlendMode: {
-    MIX: 0,
+    Property: class MockProperty {},
+    JulianDate: vi.fn(),
+    ColorMaterialProperty: vi.fn(),
+    ImageMaterialProperty: vi.fn(),
+    PolylineOutlineMaterialProperty: vi.fn(),
+    HeightReference: {
+      CLAMP_TO_GROUND: 0,
+      RELATIVE_TO_GROUND: 1,
+    },
+    VerticalOrigin: {
+      BOTTOM: 0,
+    },
+    BillboardGraphics: vi.fn(),
+    LabelGraphics: vi.fn(),
   },
-  Property: class MockProperty {},
-  JulianDate: jest.fn(),
-  ColorMaterialProperty: jest.fn(),
-  ImageMaterialProperty: jest.fn(),
-  PolylineOutlineMaterialProperty: jest.fn(),
-  HeightReference: {
-    CLAMP_TO_GROUND: 0,
-    RELATIVE_TO_GROUND: 1,
-  },
-  VerticalOrigin: {
-    BOTTOM: 0,
-  },
-  BillboardGraphics: jest.fn(),
-  LabelGraphics: jest.fn(),
-};
+}));
 
 // Mock cesium-loader BEFORE importing the provider
-jest.mock('../../lib/cesium-loader', () => ({
+vi.mock('../../lib/cesium-loader', () => ({
   loadCesium: jest.fn().mockResolvedValue(mockCesium),
   injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
 }));
@@ -92,9 +94,6 @@ import { CesiumProvider } from './cesium-provider';
 
 describe('CesiumProvider GeoStyler Integration', () => {
   let provider: CesiumProvider;
-
-  // Increase timeout for all tests in this suite
-  jest.setTimeout(30000);
 
   beforeEach(() => {
     provider = new CesiumProvider();

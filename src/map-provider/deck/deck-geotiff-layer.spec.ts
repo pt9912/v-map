@@ -1,74 +1,96 @@
-// Mocks müssen vor allen Imports stehen
+import { vi } from 'vitest';
 
-const mockGetTileData = jest
-  .fn()
-  .mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
-const mockCreateGlobalTriangulation = jest.fn();
-const mockGeoTIFFTileProcessor = jest.fn().mockImplementation(() => ({
-  createGlobalTriangulation: mockCreateGlobalTriangulation,
-  getTileData: mockGetTileData,
-}));
-const mockGetTileProcessorConfig = jest.fn().mockResolvedValue({
-  transformViewToSourceMapFn: (c: any) => c,
-  transformSourceMapToViewFn: (c: any) => c,
-  sourceBounds: [0, 0, 100, 100] as [number, number, number, number],
-  sourceRef: [0, 0] as [number, number],
-  resolution: 1.0,
-  imageWidth: 256,
-  imageHeight: 256,
-  fromProjection: 'EPSG:25832',
-  toProjection: 'EPSG:3857',
-  baseImage: {},
-  overviewImages: [],
+// Mocks müssen vor allen Imports stehen
+const {
+  mockGetTileData,
+  mockCreateGlobalTriangulation,
+  mockGeoTIFFTileProcessor,
+  mockGetTileProcessorConfig,
+  mockLoadGeoTIFFSource,
+  mockGetColorStops,
+  mockTileLayer,
+  mockBitmapLayer,
+} = vi.hoisted(() => {
+  const hoistedMockGetTileData = vi
+    .fn()
+    .mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
+  const hoistedMockCreateGlobalTriangulation = vi.fn();
+  const hoistedMockGeoTIFFTileProcessor = vi.fn().mockImplementation(() => ({
+    createGlobalTriangulation: hoistedMockCreateGlobalTriangulation,
+    getTileData: hoistedMockGetTileData,
+  }));
+  const hoistedMockGetTileProcessorConfig = vi.fn().mockResolvedValue({
+    transformViewToSourceMapFn: (c: any) => c,
+    transformSourceMapToViewFn: (c: any) => c,
+    sourceBounds: [0, 0, 100, 100] as [number, number, number, number],
+    sourceRef: [0, 0] as [number, number],
+    resolution: 1.0,
+    imageWidth: 256,
+    imageHeight: 256,
+    fromProjection: 'EPSG:25832',
+    toProjection: 'EPSG:3857',
+    baseImage: {},
+    overviewImages: [],
+  });
+  const hoistedMockLoadGeoTIFFSource = vi.fn().mockResolvedValue({
+    tiff: { close: vi.fn() },
+    baseImage: { getWidth: () => 256, getHeight: () => 256 },
+    fromProjection: 'EPSG:25832',
+    sourceBounds: [300000, 5000000, 400000, 5100000] as [
+      number,
+      number,
+      number,
+      number,
+    ],
+    sourceRef: [350000, 5050000] as [number, number],
+    resolution: 1.0,
+    width: 256,
+    height: 256,
+    overviewImages: [],
+  });
+  const hoistedMockGetColorStops = vi
+    .fn()
+    .mockReturnValue({ stops: [{ value: 0, color: [0, 128, 0] }] });
+  const hoistedMockTileLayer = vi
+    .fn()
+    .mockImplementation(function (this: any, p: any) {
+      return { id: p.id, props: p, layerName: 'TileLayer' };
+    });
+  const hoistedMockBitmapLayer = vi
+    .fn()
+    .mockImplementation(function (this: any, p: any) {
+      return { id: p.id, props: p, layerName: 'BitmapLayer' };
+    });
+
+  return {
+    mockGetTileData: hoistedMockGetTileData,
+    mockCreateGlobalTriangulation: hoistedMockCreateGlobalTriangulation,
+    mockGeoTIFFTileProcessor: hoistedMockGeoTIFFTileProcessor,
+    mockGetTileProcessorConfig: hoistedMockGetTileProcessorConfig,
+    mockLoadGeoTIFFSource: hoistedMockLoadGeoTIFFSource,
+    mockGetColorStops: hoistedMockGetColorStops,
+    mockTileLayer: hoistedMockTileLayer,
+    mockBitmapLayer: hoistedMockBitmapLayer,
+  };
 });
 
-jest.mock('../geotiff/utils/GeoTIFFTileProcessor', () => ({
+vi.mock('../geotiff/utils/GeoTIFFTileProcessor', () => ({
   GeoTIFFTileProcessor: mockGeoTIFFTileProcessor,
   getTileProcessorConfig: mockGetTileProcessorConfig,
 }));
 
-const mockLoadGeoTIFFSource = jest.fn().mockResolvedValue({
-  tiff: { close: jest.fn() },
-  baseImage: { getWidth: () => 256, getHeight: () => 256 },
-  fromProjection: 'EPSG:25832',
-  sourceBounds: [300000, 5000000, 400000, 5100000] as [
-    number,
-    number,
-    number,
-    number,
-  ],
-  sourceRef: [350000, 5050000] as [number, number],
-  resolution: 1.0,
-  width: 256,
-  height: 256,
-  overviewImages: [],
-});
-
-jest.mock('../geotiff/geotiff-source', () => ({
+vi.mock('../geotiff/geotiff-source', () => ({
   loadGeoTIFFSource: mockLoadGeoTIFFSource,
 }));
 
-const mockGetColorStops = jest
-  .fn()
-  .mockReturnValue({ stops: [{ value: 0, color: [0, 128, 0] }] });
-
-jest.mock('../geotiff/utils/colormap-utils', () => ({
+vi.mock('../geotiff/utils/colormap-utils', () => ({
   getColorStops: mockGetColorStops,
 }));
 
-const mockTileLayer = jest.fn().mockImplementation(function (this: any, p: any) {
-  return { id: p.id, props: p, layerName: 'TileLayer' };
-});
-const mockBitmapLayer = jest
-  .fn()
-  .mockImplementation(function (this: any, p: any) {
-    return { id: p.id, props: p, layerName: 'BitmapLayer' };
-  });
+vi.mock('@deck.gl/geo-layers', () => ({ TileLayer: mockTileLayer }));
+vi.mock('@deck.gl/layers', () => ({ BitmapLayer: mockBitmapLayer }));
 
-jest.mock('@deck.gl/geo-layers', () => ({ TileLayer: mockTileLayer }));
-jest.mock('@deck.gl/layers', () => ({ BitmapLayer: mockBitmapLayer }));
-
-jest.mock('@deck.gl/core', () => {
+vi.mock('@deck.gl/core', () => {
   class MockCompositeLayer {
     static layerName = 'MockCompositeLayer';
     static defaultProps = {};
@@ -91,7 +113,7 @@ jest.mock('@deck.gl/core', () => {
 // proj4 gibt [lng, lat] für EPSG:4326-Transformation zurück
 // Quelldaten: sourceBounds [300000, 5000000, 400000, 5100000] in EPSG:25832
 // Für gültige WGS84-Koordinaten transformieren
-jest.mock('proj4', () => ({
+vi.mock('proj4', () => ({
   default: jest.fn((_from: any, _to: any, coord: any) => {
     // Gibt immer ein Array mit gültigen Koordinaten zurück
     if (Array.isArray(coord)) {
@@ -100,8 +122,8 @@ jest.mock('proj4', () => ({
     return coord;
   }),
 }));
-jest.mock('geotiff', () => ({}));
-jest.mock('geotiff-geokeys-to-proj4', () => ({}));
+vi.mock('geotiff', () => ({}));
+vi.mock('geotiff-geokeys-to-proj4', () => ({}));
 
 import { createDeckGLGeoTIFFLayer } from './DeckGLGeoTIFFLayer';
 

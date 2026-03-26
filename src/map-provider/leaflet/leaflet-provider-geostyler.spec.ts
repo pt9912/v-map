@@ -1,46 +1,56 @@
 import type { Style } from 'geostyler-style';
+import { vi } from 'vitest';
 
-// Create mock functions
-const mockMap = jest.fn(() => ({
-  setView: jest.fn().mockReturnThis(),
-  addLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  eachLayer: jest.fn(),
-  invalidateSize: jest.fn(),
-  remove: jest.fn(),
-}));
+const {
+  mockMap,
+  mockGeoJSON,
+  MockLayerGroup,
+  mockLayerGroup,
+  mockTileLayer,
+  mockCircleMarker,
+  mockMarker,
+  mockIcon,
+} = vi.hoisted(() => {
+  class HoistedMockLayerGroup {
+    _groupId?: string;
+    addTo = vi.fn().mockReturnThis();
+    addLayer = vi.fn();
+    clearLayers = vi.fn();
+    getLayers = vi.fn(() => []);
+  }
 
-const mockGeoJSON = jest.fn(() => ({
-  addTo: jest.fn().mockReturnThis(),
-  clearLayers: jest.fn(),
-  addData: jest.fn(),
-  eachLayer: jest.fn(),
-  setStyle: jest.fn(),
-}));
-
-class MockLayerGroup {
-  _groupId?: string;
-  addTo = jest.fn().mockReturnThis();
-  addLayer = jest.fn();
-  clearLayers = jest.fn();
-  getLayers = jest.fn(() => []);
-}
-
-const mockLayerGroup = jest.fn(() => new MockLayerGroup());
-
-const mockTileLayer = jest.fn(() => ({
-  addTo: jest.fn().mockReturnThis(),
-  setUrl: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-}));
-
-const mockCircleMarker = jest.fn(() => ({}));
-const mockMarker = jest.fn(() => ({}));
-const mockIcon = jest.fn(() => ({}));
+  return {
+    mockMap: vi.fn(() => ({
+      setView: vi.fn().mockReturnThis(),
+      addLayer: vi.fn(),
+      removeLayer: vi.fn(),
+      eachLayer: vi.fn(),
+      invalidateSize: vi.fn(),
+      remove: vi.fn(),
+    })),
+    mockGeoJSON: vi.fn(() => ({
+      addTo: vi.fn().mockReturnThis(),
+      clearLayers: vi.fn(),
+      addData: vi.fn(),
+      eachLayer: vi.fn(),
+      setStyle: vi.fn(),
+    })),
+    MockLayerGroup: HoistedMockLayerGroup,
+    mockLayerGroup: vi.fn(() => new HoistedMockLayerGroup()),
+    mockTileLayer: vi.fn(() => ({
+      addTo: vi.fn().mockReturnThis(),
+      setUrl: vi.fn(),
+      setOpacity: vi.fn(),
+      setZIndex: vi.fn(),
+    })),
+    mockCircleMarker: vi.fn(() => ({})),
+    mockMarker: vi.fn(() => ({})),
+    mockIcon: vi.fn(() => ({})),
+  };
+});
 
 // Mock Leaflet module
-jest.mock('leaflet', () => ({
+vi.mock('leaflet', () => ({
   map: mockMap,
   geoJSON: mockGeoJSON,
   layerGroup: mockLayerGroup,
@@ -54,8 +64,8 @@ jest.mock('leaflet', () => ({
     constructor() {}
   },
   Util: {
-    stamp: jest.fn(() => 'layer-id-123'),
-    setOptions: jest.fn((instance: any, opts: any) => {
+    stamp: vi.fn(() => 'layer-id-123'),
+    setOptions: vi.fn((instance: any, opts: any) => {
       instance.options = { ...(instance.options ?? {}), ...opts };
     }),
   },

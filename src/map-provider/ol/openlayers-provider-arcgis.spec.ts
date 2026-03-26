@@ -1,72 +1,74 @@
+import { vi } from 'vitest';
+
+const { mockTileLayer, mockTileArcGISRest } = vi.hoisted(() => ({
+  mockTileLayer: vi.fn().mockImplementation(options => ({
+    ...options,
+    set: vi.fn(),
+    setSource: vi.fn(),
+    getSource: vi.fn(() => options.source),
+    setOpacity: vi.fn(),
+    setVisible: vi.fn(),
+    setZIndex: vi.fn(),
+  })),
+  mockTileArcGISRest: vi.fn().mockImplementation(options => ({
+    ...options,
+    getParams: () => options.params ?? {},
+    getUrls: () => [options.url],
+    getUrl: () => options.url,
+  })),
+}));
+
 // Mock all OpenLayers modules before they are imported
-jest.mock('ol/Map', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/View', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/Layer', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/Base', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/Vector', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/Group', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/Image', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/layer/WebGLTile', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/Vector', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/TileWMS', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/OSM', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/XYZ', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/Google', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/ImageWMS', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/Image', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/source/GeoTIFF', () => ({ __esModule: true, default: jest.fn(), SourceInfo: jest.fn() }));
-jest.mock('ol/Image', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/format/GeoJSON', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/format/GML2', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/format/GML3', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/format/GML32', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/format/WKT', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/control/Control', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Style', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Fill', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Stroke', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Circle', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Icon', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/style/Text', () => ({ __esModule: true, default: jest.fn() }));
-jest.mock('ol/loadingstrategy', () => ({ __esModule: true, bbox: jest.fn() }));
-jest.mock('ol/proj', () => ({ __esModule: true, fromLonLat: jest.fn(), ProjectionLike: jest.fn() }));
+vi.mock('ol/Map', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/View', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/Layer', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/Base', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/Vector', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/Group', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/Image', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/layer/WebGLTile', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/Vector', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/TileWMS', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/OSM', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/XYZ', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/Google', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/ImageWMS', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/Image', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/source/GeoTIFF', () => ({ __esModule: true, default: jest.fn(), SourceInfo: jest.fn() }));
+vi.mock('ol/Image', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/format/GeoJSON', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/format/GML2', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/format/GML3', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/format/GML32', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/format/WKT', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/control/Control', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Style', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Fill', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Stroke', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Circle', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Icon', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/style/Text', () => ({ __esModule: true, default: jest.fn() }));
+vi.mock('ol/loadingstrategy', () => ({ __esModule: true, bbox: jest.fn() }));
+vi.mock('ol/proj', () => ({ __esModule: true, fromLonLat: jest.fn(), ProjectionLike: jest.fn() }));
 
 // Mock local helper modules
-jest.mock('./openlayers-helper', () => ({
+vi.mock('./openlayers-helper', () => ({
   __esModule: true,
   injectOlCss: jest.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('./CustomGeoTiff', () => ({
+vi.mock('./CustomGeoTiff', () => ({
   __esModule: true,
   createCustomGeoTiff: jest.fn().mockResolvedValue(jest.fn()),
 }));
 
-// Create mock functions before jest.mock calls
-const mockTileLayer = jest.fn().mockImplementation(options => ({
-  ...options,
-  set: jest.fn(),
-  setSource: jest.fn(),
-  getSource: jest.fn(() => options.source),
-  setOpacity: jest.fn(),
-  setVisible: jest.fn(),
-  setZIndex: jest.fn(),
-}));
-
-const mockTileArcGISRest = jest.fn().mockImplementation(options => ({
-  ...options,
-  getParams: () => options.params ?? {},
-  getUrls: () => [options.url],
-  getUrl: () => options.url,
-}));
-
 // Override the generic mocks with specific implementations
-jest.mock('ol/layer/Tile', () => ({
+vi.mock('ol/layer/Tile', () => ({
   __esModule: true,
   default: mockTileLayer,
 }));
 
-jest.mock('ol/source/TileArcGISRest', () => ({
+vi.mock('ol/source/TileArcGISRest', () => ({
   __esModule: true,
   default: mockTileArcGISRest,
 }));
