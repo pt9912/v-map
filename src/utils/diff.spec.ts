@@ -9,7 +9,7 @@ describe('diff utilities', () => {
     zIndex: 10,
     url: 'https://example.com/wms',
     layers: 'base',
-    tiled: false,
+    tiled: 'false',
     style: { color: 'red', width: 2 },
     data: { key: 'value' },
     ...overrides,
@@ -28,7 +28,7 @@ describe('diff utilities', () => {
       visible: '1',
       opacity: 1,
       zIndex: 10,
-      tiled: false,
+      tiled: 'false',
       style: { color: 'red', width: 2 },
       data: { key: 'value' },
     });
@@ -45,7 +45,7 @@ describe('diff utilities', () => {
       zIndex: 25,
       url: 'https://example.com/tiles/{z}/{x}/{y}.png',
       layers: 'overlay',
-      tiled: true,
+      tiled: 'true',
       style: { color: 'blue' },
       data: { source: 'remote' },
     });
