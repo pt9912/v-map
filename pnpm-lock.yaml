@@ -87,8 +87,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       '@npm9912/s-gml':
-        specifier: ^1.7.0
-        version: 1.7.0(@types/node@22.18.1)
+        specifier: ^1.7.1
+        version: 1.7.1(@types/node@22.18.1)
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.2.7(typescript@5.9.2))
@@ -1489,8 +1489,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@npm9912/s-gml@1.7.0':
-    resolution: {integrity: sha512-oaBbBlDIUo7qcl+aCgH7tTaFdaz+yQV0mCkkEiFZNWLq/usoP9VIqtMRnPUdSJLjYYV0czCRz9VFJWQkMxaUQw==}
+  '@npm9912/s-gml@1.7.1':
+    resolution: {integrity: sha512-sW5qnCQDor68WspIZVTXcO2O3h/FqGzCyFfYa6nFHJVNLvPv+KGrVUEZRpn7WwzEeTL2AErkscHCo7RyVpj/tA==}
     engines: {node: '>=22.0.0', pnpm: '>=8.0.0'}
     hasBin: true
 
@@ -7322,9 +7322,6 @@ packages:
   wkt-crs@0.2.0:
     resolution: {integrity: sha512-rYheR2V2lyPmTrtxuo9nyFBlTuB4VJ1tlrTpUX88GZleRqLLUazVWihwv7BjGqpmoMd91IaLbG8mURqids9H9w==}
 
-  wkt-parser@1.5.2:
-    resolution: {integrity: sha512-1ZUiV1FTwSiSrgWzV9KXJuOF2BVW91KY/mau04BhnmgOdroRQea7Q0s5TVqwGLm0D2tZwObd/tBYXW49sSxp3Q==}
-
   wkt-parser@1.5.4:
     resolution: {integrity: sha512-heRp3QBynj8SAGepAkE8h2k4KhUGRqzgwlSRgqNhxjmSIeSvE5ZrV8n1uy5jk+iJO2jmfffIwjdAaTirBOOx0A==}
 
@@ -9047,7 +9044,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@npm9912/s-gml@1.7.0(@types/node@22.18.1)':
+  '@npm9912/s-gml@1.7.1(@types/node@22.18.1)':
     dependencies:
       '@mapbox/shp-write': 0.4.3
       '@ngageoint/geopackage': 4.2.6
@@ -11939,7 +11936,7 @@ snapshots:
 
   geojson-rbush@3.2.0:
     dependencies:
-      '@turf/bbox': 6.3.0
+      '@turf/bbox': 6.5.0
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
       '@types/geojson': 7946.0.8
@@ -12167,7 +12164,7 @@ snapshots:
       is-wkt: 0.2.0
       utm-utils: 0.6.1
       wkt-crs: 0.2.0
-      wkt-parser: 1.5.2
+      wkt-parser: 1.5.4
       xml-utils: 1.10.2
 
   get-epsg-code@1.2.0:
@@ -12176,7 +12173,7 @@ snapshots:
       is-wkt: 0.2.0
       utm-utils: 0.6.1
       wkt-crs: 0.2.0
-      wkt-parser: 1.5.2
+      wkt-parser: 1.5.4
       xml-utils: 1.10.2
 
   get-intrinsic@1.3.0:
@@ -14427,7 +14424,7 @@ snapshots:
   readable-stream@3.6.2:
     dependencies:
       inherits: 2.0.4
-      string_decoder: 1.1.1
+      string_decoder: 1.3.0
       util-deprecate: 1.0.2
 
   readable-stream@4.7.0:
@@ -14926,7 +14923,7 @@ snapshots:
       proj-data: 0.0.1
       proj4: 2.20.4
       wkt-crs: 0.2.0
-      wkt-parser: 1.5.2
+      wkt-parser: 1.5.4
 
   spawn-error-forwarder@1.0.0: {}
 
@@ -15934,8 +15931,6 @@ snapshots:
   wkt-crs@0.1.1: {}
 
   wkt-crs@0.2.0: {}
-
-  wkt-parser@1.5.2: {}
 
   wkt-parser@1.5.4: {}
 
