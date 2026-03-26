@@ -243,6 +243,26 @@ export const config: Config = {
   buildEs5: false, // Deaktiviert ES5-Builds komplett (nur ES2022)
   testing: {
     setupFilesAfterEnv: ['./src/testing/setupTests.jest.ts'],
+    collectCoverageFrom: [
+      'src/**/*.{ts,tsx}',
+      '!src/**/*.d.ts',
+      '!src/**/*.spec.ts',
+      '!src/**/*.spec.tsx',
+      '!src/**/*.e2e.ts',
+      '!src/**/*.stories.ts',
+      '!src/**/*.stories.tsx',
+      '!src/testing/**',
+      '!src/components.d.ts',
+    ],
+    coverageReporters: ['text', 'lcov', 'html'],
+    coverageThreshold: {
+      global: {
+        branches: 1,
+        functions: 1,
+        lines: 2,
+        statements: 2,
+      },
+    },
     // sourceMaps helfen, die TS-Zeilen zu sehen:
     // 'ts-jest' o. ä. kümmert sich idR. darum; alternativ:
     // testEnvironmentOptions: { url: 'http://localhost' },
