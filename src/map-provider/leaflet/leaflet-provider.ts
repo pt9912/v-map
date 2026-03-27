@@ -665,19 +665,34 @@ export class LeafletProvider implements MapProvider {
     const fillOpacity =
       typeof options === 'number' ? options : options.fillOpacity ?? opacity;
 
-    const isInstanceOf = (className: 'GeoJSON' | 'LayerGroup' | 'Path' | 'Marker') => {
+    const hasLeafletClass = (
+      candidate: L.Layer,
+      className: 'GeoJSON' | 'LayerGroup' | 'Path' | 'Marker',
+    ): boolean => {
       if (!(className in L)) return false;
       const ctor = (L as unknown as Record<string, unknown>)[className];
-      return typeof ctor === 'function' && layer instanceof (ctor as new (...args: never[]) => object);
+      return (
+        typeof ctor === 'function' &&
+        candidate instanceof (ctor as new (...args: never[]) => object)
+      );
     };
 
-    if (isInstanceOf('GeoJSON') || isInstanceOf('LayerGroup')) {
+    const isLayerCollection = (
+      candidate: L.Layer,
+    ): candidate is L.GeoJSON | L.LayerGroup =>
+      hasLeafletClass(candidate, 'GeoJSON') ||
+      hasLeafletClass(candidate, 'LayerGroup');
+    const isPathLayer = (candidate: L.Layer): candidate is L.Path =>
+      hasLeafletClass(candidate, 'Path');
+    const isMarkerLayer = (candidate: L.Layer): candidate is L.Marker =>
+      hasLeafletClass(candidate, 'Marker');
+
+    if (isLayerCollection(layer)) {
       layer.eachLayer(subLayer => this.setLayerOpacity(subLayer, options));
-    } else if (isInstanceOf('Path')) {
+    } else if (isPathLayer(layer)) {
       layer.setStyle({ opacity, fillOpacity });
-    } else if (isInstanceOf('Marker')) {
-      const marker = layer as L.Marker;
-      marker.setOpacity(opacity);
+    } else if (isMarkerLayer(layer)) {
+      layer.setOpacity(opacity);
     } else if ('setOpacity' in layer) {
       (layer as L.GridLayer).setOpacity(opacity);
     }
