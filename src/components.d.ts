@@ -149,7 +149,7 @@ export namespace Components {
           * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
          */
-        "url": string;
+        "url": string | null;
         /**
           * Whether the layer is visible on the map.
           * @default true
@@ -1278,7 +1278,7 @@ declare namespace LocalJSX {
           * URL to fetch GeoJSON data from. Alternative to providing data via slot.
           * @default null
          */
-        "url"?: string;
+        "url"?: string | null;
         /**
           * Whether the layer is visible on the map.
           * @default true
@@ -1968,7 +1968,7 @@ declare namespace LocalJSX {
     }
     interface VMapLayerGeojsonAttributes {
         "geojson": string;
-        "url": string;
+        "url": string | null;
         "visible": boolean;
         "zIndex": number;
         "opacity": number;

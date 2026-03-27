@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T14:32:50",
+  "timestamp": "2026-03-27T07:58:41",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -862,7 +862,7 @@
           "name": "url",
           "type": "string",
           "complexType": {
-            "original": "string",
+            "original": "string | null",
             "resolved": "string",
             "references": {}
           },
