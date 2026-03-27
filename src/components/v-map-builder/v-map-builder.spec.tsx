@@ -335,8 +335,7 @@ map:
 
     component.applyDiff(undefined, initial);
 
-    const mount = page.root?.shadowRoot?.querySelector('[part="mount"]') as HTMLElement;
-    const mapEl = mount.querySelector('v-map') as HTMLElement;
+    const mapEl = page.root?.querySelector('v-map') as HTMLElement;
 
     expect(mapEl.getAttribute('flavour')).toBe('ol');
     expect(mapEl.querySelectorAll('v-map-style')).toHaveLength(1);
@@ -406,8 +405,7 @@ map:
     component.applyDiff(undefined, previous);
     component.applyDiff(previous, next);
 
-    const mount = page.root?.shadowRoot?.querySelector('[part="mount"]') as HTMLElement;
-    const mapEl = mount.querySelector('v-map') as HTMLElement;
+    const mapEl = page.root?.querySelector('v-map') as HTMLElement;
 
     expect(mapEl.querySelectorAll('v-map-style')).toHaveLength(0);
     expect(mapEl.querySelector('#layer-1')?.tagName.toLowerCase()).toBe(
@@ -1099,8 +1097,7 @@ map:
     });
     component.applyDiff(undefined, initial);
 
-    const mount = page.root?.shadowRoot?.querySelector('[part="mount"]') as HTMLElement;
-    const groupEl = mount.querySelector('v-map-layergroup') as HTMLElement;
+    const groupEl = page.root?.querySelector('v-map-layergroup') as HTMLElement;
     expect(groupEl.children).toHaveLength(3);
     expect(groupEl.children[0].getAttribute('id')).toBe('layer-a');
     expect(groupEl.children[1].getAttribute('id')).toBe('layer-b');

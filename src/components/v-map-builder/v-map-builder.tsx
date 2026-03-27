@@ -937,7 +937,9 @@ export class VMapBuilder {
 
   private applyDiff(_prev: BuilderConfig | undefined, next: BuilderConfig) {
     const container = this.hostEl;
-    let mapEl = container.querySelector(':scope > v-map') as HTMLElement | null;
+    let mapEl = Array.from(container.children).find(
+      ch => ch.tagName.toLowerCase() === 'v-map',
+    ) as HTMLElement | null;
     if (!mapEl) {
       mapEl = document.createElement('v-map');
       container.appendChild(mapEl);
