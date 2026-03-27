@@ -677,6 +677,27 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
       expect(loadSpy).toHaveBeenCalled();
     });
 
+    it('startet den initialen Terrain-GeoTIFF-Load nicht doppelt fuer dieselbe Quelle', async () => {
+      const layer = await createDeckGLGeoTIFFTerrainLayer({
+        id: 'terrain-test',
+        url: 'https://example.com/dem.tif',
+      });
+
+      mockLoadGeoTIFFSource.mockClear();
+
+      await (layer as any).initializeState();
+      (layer as any).updateState({
+        props: { url: 'https://example.com/dem.tif' },
+        oldProps: {},
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(mockLoadGeoTIFFSource).toHaveBeenCalledTimes(1);
+    });
+
     it('ruft setNeedsRedraw auf bei renderMode-Änderung', async () => {
       const layer = await createDeckGLGeoTIFFTerrainLayer({
         id: 'terrain-test',
@@ -720,6 +741,51 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
       });
 
       expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+    });
+
+    it('stellt geladene Laufzeitdaten aus state nach einem Clone-basierten Opacity-Update wieder her', async () => {
+      const originalLayer = await createDeckGLGeoTIFFTerrainLayer({
+        id: 'terrain-test',
+        url: 'https://example.com/dem.tif',
+        renderMode: 'colormap',
+        visible: true,
+        opacity: 1.0,
+      });
+
+      await (originalLayer as any).loadGeoTIFF();
+      const runtime = (originalLayer as any).state.runtime;
+
+      const clonedLayer = await createDeckGLGeoTIFFTerrainLayer({
+        id: 'terrain-test',
+        url: 'https://example.com/dem.tif',
+        renderMode: 'colormap',
+        visible: true,
+        opacity: 0.5,
+      });
+
+      (clonedLayer as any).state = { init: true, runtime };
+      mockTileLayer.mockClear();
+
+      (clonedLayer as any).updateState({
+        props: {
+          url: 'https://example.com/dem.tif',
+          renderMode: 'colormap',
+          visible: true,
+          opacity: 0.5,
+        },
+        oldProps: {
+          url: 'https://example.com/dem.tif',
+          renderMode: 'colormap',
+          visible: true,
+          opacity: 1.0,
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((clonedLayer as any).image).toBe(runtime.image);
+      expect((clonedLayer as any).tileProcessor).toBe(runtime.tileProcessor);
+      expect((clonedLayer as any).renderLayers()).toBeTruthy();
+      expect(mockTileLayer).toHaveBeenCalled();
     });
   });
 

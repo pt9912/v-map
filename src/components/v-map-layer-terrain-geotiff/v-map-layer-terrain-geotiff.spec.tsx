@@ -1,21 +1,31 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerTerrainGeotiff } from './v-map-layer-terrain-geotiff';
 
+const helperMock = {
+  initLayer: jest.fn(),
+  removeLayer: jest.fn(),
+  updateLayer: jest.fn(),
+  setVisible: jest.fn(),
+  setOpacity: jest.fn(),
+  setZIndex: jest.fn(),
+  getLayerId: jest.fn(),
+};
+
 jest.mock('../../layer/v-map-layer-helper', () => {
   return {
-    VMapLayerHelper: jest.fn().mockImplementation(() => ({
-      initLayer: jest.fn(),
-      removeLayer: jest.fn(),
-      updateLayer: jest.fn(),
-      setVisible: jest.fn(),
-      setOpacity: jest.fn(),
-      setZIndex: jest.fn(),
-      getLayerId: jest.fn(),
-    })),
+    VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
   };
 });
 
 describe('v-map-layer-terrain-geotiff', () => {
+  beforeEach(() => {
+    Object.values(helperMock).forEach(value => {
+      if (typeof value === 'function' && 'mockClear' in value) {
+        (value as jest.Mock).mockClear();
+      }
+    });
+  });
+
   it('renders default markup', async () => {
     const page = await newSpecPage({
       components: [VMapLayerTerrainGeotiff],
@@ -69,5 +79,15 @@ describe('v-map-layer-terrain-geotiff', () => {
         renderMode: 'colormap',
       }),
     );
+  });
+
+  it('uses setVisible for visibility changes instead of updateLayer', async () => {
+    await VMapLayerTerrainGeotiff.prototype.onVisibleChanged.call({
+      visible: false,
+      helper: helperMock,
+    });
+
+    expect(helperMock.setVisible).toHaveBeenCalledWith(false);
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
   });
 });

@@ -46,6 +46,8 @@ const {
     resolution: 1.0,
     width: 256,
     height: 256,
+    samplesPerPixel: 4,
+    wgs84Bounds: [8, 50, 9, 51] as [number, number, number, number],
     overviewImages: [],
   });
   const hoistedMockGetColorStops = vi
@@ -129,9 +131,12 @@ import { createDeckGLGeoTIFFLayer } from './DeckGLGeoTIFFLayer';
 
 // ─────────────────────────────────────────────────────────────────────────────
 
+const originalImageData = globalThis.ImageData;
+
 describe('createDeckGLGeoTIFFLayer', () => {
   afterEach(() => {
     jest.clearAllMocks();
+    globalThis.ImageData = originalImageData;
     mockGetTileData.mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
     mockLoadGeoTIFFSource.mockResolvedValue({
       tiff: { close: jest.fn() },
@@ -142,6 +147,8 @@ describe('createDeckGLGeoTIFFLayer', () => {
       resolution: 1.0,
       width: 256,
       height: 256,
+      samplesPerPixel: 4,
+      wgs84Bounds: [8, 50, 9, 51],
       overviewImages: [],
     });
     mockGetTileProcessorConfig.mockResolvedValue({
@@ -333,6 +340,69 @@ describe('createDeckGLGeoTIFFLayer', () => {
       const tileLayerProps = mockTileLayer.mock.calls[0][0];
       expect(tileLayerProps.extent).toEqual([8.0, 50.0, 9.0, 51.0]);
     });
+
+    it('rendert BitmapLayer mit ImageData fuer rohe RGBA-Tiles wenn verfuegbar', async () => {
+      class MockImageData {
+        data: Uint8ClampedArray;
+        width: number;
+        height: number;
+
+        constructor(data: Uint8ClampedArray, width: number, height: number) {
+          this.data = data;
+          this.width = width;
+          this.height = height;
+        }
+      }
+
+      globalThis.ImageData = MockImageData as unknown as typeof ImageData;
+
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+        opacity: 0.4,
+        visible: true,
+      });
+
+      await (layer as any).loadGeoTIFF();
+      (layer as any).renderLayers();
+
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+      tileLayerProps.renderSubLayers({
+        id: 'geotiff-test-tiles-0-0-0',
+        tile: {
+          index: { x: 0, y: 0, z: 0 },
+          bbox: { west: 8, south: 50, east: 9, north: 51 },
+          data: {
+            data: new Uint8ClampedArray(4),
+            width: 1,
+            height: 1,
+          },
+        },
+      });
+
+      expect(mockBitmapLayer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'geotiff-test-tiles-0-0-0-bitmap',
+          opacity: 0.4,
+          visible: true,
+          image: expect.any(MockImageData),
+          bounds: [8, 50, 9, 51],
+        }),
+      );
+    });
+
+    it('rendert nichts wenn der Layer unsichtbar ist', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+        visible: false,
+      });
+
+      await (layer as any).loadGeoTIFF(1);
+
+      expect((layer as any).renderLayers()).toBeNull();
+      expect(mockTileLayer).not.toHaveBeenCalled();
+    });
   });
 
   describe('getTileData', () => {
@@ -480,6 +550,27 @@ describe('createDeckGLGeoTIFFLayer', () => {
       expect(loadSpy).toHaveBeenCalled();
     });
 
+    it('startet den initialen GeoTIFF-Load nicht doppelt fuer dieselbe Quelle', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      mockLoadGeoTIFFSource.mockClear();
+
+      await (layer as any).initializeState();
+      (layer as any).updateState({
+        props: { url: 'https://example.com/data.tif' },
+        oldProps: {},
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(mockLoadGeoTIFFSource).toHaveBeenCalledTimes(1);
+    });
+
     it('ruft setNeedsRedraw auf bei colorMap-Aenderung', async () => {
       const layer = await createDeckGLGeoTIFFLayer({
         id: 'geotiff-test',
@@ -520,6 +611,89 @@ describe('createDeckGLGeoTIFFLayer', () => {
       });
 
       expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+    });
+
+    it('ruft setNeedsRedraw auf bei opacity-Aenderung', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      (layer as any).updateState({
+        props: {
+          url: 'https://example.com/data.tif',
+          opacity: 0.5,
+        },
+        oldProps: {
+          url: 'https://example.com/data.tif',
+          opacity: 1.0,
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+    });
+
+    it('ruft setNeedsRedraw auf bei visible-Aenderung', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      (layer as any).updateState({
+        props: {
+          url: 'https://example.com/data.tif',
+          visible: false,
+        },
+        oldProps: {
+          url: 'https://example.com/data.tif',
+          visible: true,
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+    });
+
+    it('stellt geladene Laufzeitdaten aus state nach einem Clone-basierten Opacity-Update wieder her', async () => {
+      const originalLayer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+        visible: true,
+        opacity: 1.0,
+      });
+
+      await (originalLayer as any).loadGeoTIFF();
+      const runtime = (originalLayer as any).state.runtime;
+
+      const clonedLayer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+        visible: true,
+        opacity: 0.5,
+      });
+
+      (clonedLayer as any).state = { init: true, runtime };
+      mockTileLayer.mockClear();
+
+      (clonedLayer as any).updateState({
+        props: {
+          url: 'https://example.com/data.tif',
+          visible: true,
+          opacity: 0.5,
+        },
+        oldProps: {
+          url: 'https://example.com/data.tif',
+          visible: true,
+          opacity: 1.0,
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((clonedLayer as any).image).toBe(runtime.image);
+      expect((clonedLayer as any).tileProcessor).toBe(runtime.tileProcessor);
+      expect((clonedLayer as any).renderLayers()).toBeTruthy();
+      expect(mockTileLayer).toHaveBeenCalled();
     });
   });
 

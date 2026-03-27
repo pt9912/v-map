@@ -24,6 +24,52 @@ import {
   getColorStops,
 } from '../geotiff/utils/colormap-utils';
 
+const LOG_PREFIX = 'v-map - deck - geotiff - ';
+const TILE_LAYER_LOG_PREFIX = 'v-map - deck - geotiff - tilelayer - ';
+
+type BitmapImageSource = ImageData | {
+  data: Uint8Array | Uint8ClampedArray;
+  width: number;
+  height: number;
+};
+
+function createBitmapImageSource(
+  data: Uint8Array | Uint8ClampedArray,
+  width: number,
+  height: number,
+): {
+  image: BitmapImageSource;
+  kind: 'ImageData' | 'raw';
+} {
+  const ImageDataCtor = (globalThis as typeof globalThis & {
+    ImageData?: new (
+      data: Uint8ClampedArray,
+      width: number,
+      height: number,
+    ) => ImageData;
+  }).ImageData;
+
+  if (!ImageDataCtor) {
+    return {
+      image: { data, width, height },
+      kind: 'raw',
+    };
+  }
+
+  // deck.gl's texture creation path reads dimensions from `image.data.width/height`.
+  // Wrapping raw RGBA tile buffers in ImageData keeps width/height attached and avoids
+  // invalid mipmap creation with typed-array-only sources.
+  const clampedData =
+    data instanceof Uint8ClampedArray
+      ? data
+      : new Uint8ClampedArray(data.buffer, data.byteOffset, data.byteLength);
+
+  return {
+    image: new ImageDataCtor(clampedData, width, height),
+    kind: 'ImageData',
+  };
+}
+
 export interface DeckGLGeoTIFFLayerProps extends LayerProps {
   url: string; // URL des GeoTIFF
 
@@ -162,15 +208,98 @@ export async function createDeckGLGeoTIFFLayer(
 
     // Tile processor with triangulation
     private tileProcessor?: GeoTIFFTileProcessor;
+    private activeLoad?: { signature: string; token: number };
+    private loadedSignature?: string;
+    private loadToken = 0;
+
+    private storeRuntimeState(): void {
+      this.setState({
+        runtime: {
+          tiff: this.tiff,
+          image: this.image,
+          fromProjection: this.fromProjection,
+          sourceBounds: this.sourceBounds,
+          tileProcessor: this.tileProcessor,
+        },
+      });
+    }
+
+    private restoreRuntimeState(): void {
+      const runtime = (
+        this.state as {
+          runtime?: {
+            tiff?: GeoTIFF;
+            image?: GeoTIFFImage;
+            fromProjection?: string;
+            sourceBounds?: [number, number, number, number];
+            tileProcessor?: GeoTIFFTileProcessor;
+          };
+        }
+      ).runtime;
+
+      if (!runtime) return;
+
+      this.tiff ??= runtime.tiff;
+      this.image ??= runtime.image;
+      this.tileProcessor ??= runtime.tileProcessor;
+      this.fromProjection = runtime.fromProjection ?? this.fromProjection;
+      this.sourceBounds = runtime.sourceBounds ?? this.sourceBounds;
+    }
 
     constructor(layerProps: DeckGLGeoTIFFLayerProps) {
       super(layerProps);
     }
 
-    private async _loadAsync() {
-      await this.loadGeoTIFF();
-      this.setState({ init: true });
-      log(this.state);
+    private getLoadSignature(
+      props: DeckGLGeoTIFFLayerProps = this.props,
+    ): string {
+      return JSON.stringify({
+        url: props.url ?? null,
+        projection: props.projection ?? null,
+        forceProjection: props.forceProjection ?? false,
+        noDataValue: props.noDataValue ?? null,
+      });
+    }
+
+    private scheduleLoad(reason: string): void {
+      const signature = this.getLoadSignature();
+
+      if (this.activeLoad?.signature === signature) {
+        log(`${LOG_PREFIX}skip duplicate load: ${reason}`);
+        return;
+      }
+
+      if (this.loadedSignature === signature && this.state.init) {
+        log(`${LOG_PREFIX}skip already-loaded source: ${reason}`);
+        return;
+      }
+
+      const token = ++this.loadToken;
+      this.activeLoad = { signature, token };
+      this.setState({ init: false });
+      void this._loadAsync(token, signature, reason);
+    }
+
+    private async _loadAsync(
+      token: number,
+      signature: string,
+      reason: string,
+    ) {
+      try {
+        const applied = await this.loadGeoTIFF(token);
+        if (!applied || this.activeLoad?.token !== token) {
+          return;
+        }
+
+        this.loadedSignature = signature;
+        this.setState({ init: true });
+        log(`${LOG_PREFIX}load complete: ${reason}`);
+        log(this.state);
+      } finally {
+        if (this.activeLoad?.token === token) {
+          this.activeLoad = undefined;
+        }
+      }
     }
     // ============================================================================
     // LIFECYCLE METHODS
@@ -181,8 +310,7 @@ export async function createDeckGLGeoTIFFLayer(
      */
     async initializeState(_context?: LayerContext): Promise<void> {
       log(this.state);
-      this.setState({ init: false });
-      this._loadAsync();
+      this.scheduleLoad('initializeState');
       log(this.state);
     }
 
@@ -205,6 +333,8 @@ export async function createDeckGLGeoTIFFLayer(
       oldProps,
       changeFlags,
     }: UpdateParameters<Layer<DeckGLGeoTIFFLayerProps>>): void {
+      this.restoreRuntimeState();
+
       const reloadPropsChanged =
         newProps.url !== oldProps.url ||
         newProps.projection !== oldProps.projection ||
@@ -228,6 +358,8 @@ export async function createDeckGLGeoTIFFLayer(
         valueRangeChanged ||
         newProps.resolution !== oldProps.resolution ||
         newProps.resampleMethod !== oldProps.resampleMethod ||
+        newProps.opacity !== oldProps.opacity ||
+        newProps.visible !== oldProps.visible ||
         changeFlags.updateTriggersChanged;
 
       if (
@@ -235,8 +367,7 @@ export async function createDeckGLGeoTIFFLayer(
         newProps.data !== oldProps.data ||
         reloadPropsChanged
       ) {
-        this.setState({ init: false });
-        this._loadAsync();
+        this.scheduleLoad('updateState');
         return;
       }
 
@@ -261,7 +392,7 @@ export async function createDeckGLGeoTIFFLayer(
     // GEOTIFF LOADING
     // ============================================================================
 
-    async loadGeoTIFF() {
+    async loadGeoTIFF(token: number): Promise<boolean> {
       const { url, projection, forceProjection } = this.props;
 
       if (!url) {
@@ -269,12 +400,14 @@ export async function createDeckGLGeoTIFFLayer(
         this.image = undefined;
         this.tileProcessor = undefined;
         this.sourceBounds = [0, 0, 0, 0];
-        log('[deck][geotiff] No URL provided, skipping GeoTIFF loading');
+        this.storeRuntimeState();
+        log(`${LOG_PREFIX}no URL provided, skipping GeoTIFF loading`);
         this.triggerLayerUpdate();
-        return;
+        this.loadedSignature = this.getLoadSignature();
+        return true;
       }
 
-      log(`loadGeoTIFF - init: ${this.state.init}`);
+      log(`${LOG_PREFIX}loadGeoTIFF: init=${this.state.init}, token=${token}`);
       try {
         const source: GeoTIFFSource = await loadGeoTIFFSource(
           url,
@@ -290,6 +423,11 @@ export async function createDeckGLGeoTIFFLayer(
           },
         );
 
+        if (this.activeLoad?.token !== token) {
+          log(`${LOG_PREFIX}ignore stale source load result: token=${token}`);
+          return false;
+        }
+
         this.tiff = source.tiff;
         this.image = source.baseImage;
         this.fromProjection = source.fromProjection;
@@ -297,8 +435,15 @@ export async function createDeckGLGeoTIFFLayer(
 
         // Initialize tile processor using shared utility
         const config = await getTileProcessorConfig(source, this.viewProjection);
+
+        if (this.activeLoad?.token !== token) {
+          log(`${LOG_PREFIX}ignore stale tile processor result: token=${token}`);
+          return false;
+        }
+
         this.tileProcessor = new GeoTIFFTileProcessor(config);
         this.tileProcessor.createGlobalTriangulation();
+        this.storeRuntimeState();
 
         log(
           `v-map - deck - geotiff - loaded: projection=${source.fromProjection}→${this.viewProjection}, bounds=[${source.sourceBounds.map(v => v.toFixed(0)).join(',')}], wgs84=[${source.wgs84Bounds.map(v => v.toFixed(4)).join(',')}], size=${source.width}x${source.height}, bands=${source.samplesPerPixel}`,
@@ -306,9 +451,11 @@ export async function createDeckGLGeoTIFFLayer(
 
         // Invalidate layer um neu zu rendern
         this.triggerLayerUpdate();
+        return true;
       } catch (err) {
-        error('Fehler beim Laden des GeoTIFF:', err);
+        error(`${LOG_PREFIX}failed to load GeoTIFF:`, err);
         this.raiseError(err as Error, 'Failed to load GeoTIFF');
+        return false;
       }
     }
 
@@ -376,7 +523,7 @@ export async function createDeckGLGeoTIFFLayer(
           !isValidCoord(nw) ||
           !isValidCoord(ne)
         ) {
-          warn('[deck][geotiff] Invalid coordinates after transformation:', {
+          warn(`${LOG_PREFIX}invalid coordinates after transformation:`, {
             sw,
             se,
             nw,
@@ -405,7 +552,7 @@ export async function createDeckGLGeoTIFFLayer(
           !Number.isFinite(minLat) ||
           !Number.isFinite(maxLat)
         ) {
-          warn('[deck][geotiff] Invalid extent calculated:', {
+          warn(`${LOG_PREFIX}invalid extent calculated:`, {
             minLng,
             minLat,
             maxLng,
@@ -422,18 +569,13 @@ export async function createDeckGLGeoTIFFLayer(
           maxLat === MAX_LAT;
 
         if (wasClamped) {
-          warn(
-            '[deck][geotiff] GeoTIFF extent exceeds valid bounds - clamped to valid range',
-          );
+          warn(`${LOG_PREFIX}extent exceeds valid bounds, clamped to valid range`);
         }
 
         // Return in deck.gl extent format: [minX, minY, maxX, maxY] = [minLng, minLat, maxLng, maxLat]
         return [minLng, minLat, maxLng, maxLat];
       } catch (err) {
-        warn(
-          '[deck][geotiff] Failed to calculate extent from source bounds:',
-          err,
-        );
+        warn(`${LOG_PREFIX}failed to calculate extent from source bounds:`, err);
         return null;
       }
     }
@@ -443,6 +585,7 @@ export async function createDeckGLGeoTIFFLayer(
     // ============================================================================
 
     async getTileData(tile: TileLoadProps): Promise<TextureSource> {
+      this.restoreRuntimeState();
       log(`v-map - deck - geotiff - getTileData ENTER(${tile.index.x},${tile.index.y},${tile.index.z}): image=${!!this.image}, processor=${!!this.tileProcessor}`);
       if (!this.image || !this.tileProcessor) return null;
 
@@ -493,7 +636,7 @@ export async function createDeckGLGeoTIFFLayer(
           height: tileSize!,
         };
       } catch (error) {
-        warn(`v-map - deck - geotiff - Kachel [${z}/${x}/${y}] Fehler:`, error);
+        warn(`${LOG_PREFIX}tile [${z}/${x}/${y}] failed:`, error);
         return null;
       }
     }
@@ -506,20 +649,23 @@ export async function createDeckGLGeoTIFFLayer(
      * renderLayers is called by CompositeLayer to generate sublayers
      */
     renderLayers() {
-      if (!this.image) return null;
+      this.restoreRuntimeState();
+      if (!this.image || !this.tileProcessor || this.props.visible === false) {
+        return null;
+      }
 
-      const { minZoom, maxZoom, tileSize } = this.props;
+      const { minZoom, maxZoom, tileSize, opacity, visible } = this.props;
       const extent = this.getViewExtent();
 
       // Log extent for debugging
       if (extent) {
         log(
-          `[deck][geotiff] View extent: [${extent
+          `${LOG_PREFIX}view extent: [${extent
             .map(v => v.toFixed(2))
             .join(', ')}]`,
         );
       } else {
-        warn('[deck][geotiff] View extent is null - tiles will load globally');
+        warn(`${LOG_PREFIX}view extent is null, tiles will load globally`);
       }
 
       // Only pass extent if it's valid, otherwise let TileLayer use global extent
@@ -529,9 +675,11 @@ export async function createDeckGLGeoTIFFLayer(
         minZoom,
         maxZoom,
         tileSize,
+        opacity,
+        visible,
         getTileData: this.getTileData.bind(this),
         onTileError: (err: Error) => {
-          warn(`[deck][tilelayer] Error: ${err.message}`);
+          warn(`${TILE_LAYER_LOG_PREFIX}error: ${err.message}`);
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl sub-layer prop forwarding requires any
         renderSubLayers: (subProps: any) => {
@@ -542,27 +690,35 @@ export async function createDeckGLGeoTIFFLayer(
           const { data, width, height } = tile.data;
           const { west, south, east, north } = subProps.tile.bbox;
           const bounds: BitmapBoundingBox = [west, south, east, north];
+          const { opacity, visible } = this.props;
+          const webgl = (globalThis as unknown as Record<string, unknown>).WebGLRenderingContext as Record<string, number> | undefined;
+          const textureMinFilter = webgl?.TEXTURE_MIN_FILTER ?? 10241;
+          const textureMagFilter = webgl?.TEXTURE_MAG_FILTER ?? 10240;
+          const linear = webgl?.LINEAR ?? 9729;
+          const imageSource = createBitmapImageSource(data, width, height);
 
           log(
             `v-map - deck - geotiff - renderSubLayer(${tile.index.x},${tile.index.y},${tile.index.z}): data=${data?.length ?? 'null'}, w=${width}, h=${height}, bounds=[${west?.toFixed(2)},${south?.toFixed(2)},${east?.toFixed(2)},${north?.toFixed(2)}]`,
+          );
+          log(
+            `v-map - deck - geotiff - textureSource(${tile.index.x},${tile.index.y},${tile.index.z}): kind=${imageSource.kind}, ctor=${imageSource.image?.constructor?.name ?? 'unknown'}, w=${width}, h=${height}, bytes=${data?.length ?? 'null'}`,
           );
 
           return new BitmapLayer({
             ...subProps,
             id: `${subProps.id}-bitmap`,
-            image: {
-              data,
-              width,
-              height,
-            },
+            opacity,
+            visible,
+            image: imageSource.image,
             bounds: bounds,
             textureParameters: {
-              [WebGLRenderingContext.TEXTURE_MIN_FILTER]:
-                WebGLRenderingContext.LINEAR,
-              [WebGLRenderingContext.TEXTURE_MAG_FILTER]:
-                WebGLRenderingContext.LINEAR,
+              [textureMinFilter]: linear,
+              [textureMagFilter]: linear,
             },
           });
+        },
+        updateTriggers: {
+          renderSubLayers: [opacity, visible],
         },
       };
 

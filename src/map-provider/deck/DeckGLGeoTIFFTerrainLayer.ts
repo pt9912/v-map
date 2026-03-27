@@ -21,6 +21,9 @@ import {
   getColorStops,
 } from '../geotiff/utils/colormap-utils';
 
+const LOG_PREFIX = 'v-map - deck - terrain-geotiff - ';
+const TILE_LAYER_LOG_PREFIX = 'v-map - deck - terrain-geotiff - tilelayer - ';
+
 export interface DeckGLGeoTIFFTerrainLayerProps extends LayerProps {
   url?: string;
 
@@ -158,15 +161,97 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     private viewProjection: string = 'EPSG:3857';
     private sourceBounds: [number, number, number, number] = [0, 0, 0, 0];
     private tileProcessor?: GeoTIFFTileProcessor;
+    private activeLoad?: { signature: string; token: number };
+    private loadedSignature?: string;
+    private loadToken = 0;
+
+    private storeRuntimeState(): void {
+      this.setState({
+        runtime: {
+          tiff: this.tiff,
+          image: this.image,
+          fromProjection: this.fromProjection,
+          sourceBounds: this.sourceBounds,
+          tileProcessor: this.tileProcessor,
+        },
+      });
+    }
+
+    private restoreRuntimeState(): void {
+      const runtime = (
+        this.state as {
+          runtime?: {
+            tiff?: GeoTIFF;
+            image?: GeoTIFFImage;
+            fromProjection?: string;
+            sourceBounds?: [number, number, number, number];
+            tileProcessor?: GeoTIFFTileProcessor;
+          };
+        }
+      ).runtime;
+
+      if (!runtime) return;
+
+      this.tiff ??= runtime.tiff;
+      this.image ??= runtime.image;
+      this.tileProcessor ??= runtime.tileProcessor;
+      this.fromProjection = runtime.fromProjection ?? this.fromProjection;
+      this.sourceBounds = runtime.sourceBounds ?? this.sourceBounds;
+    }
 
     constructor(layerProps: DeckGLGeoTIFFTerrainLayerProps) {
       super(layerProps);
     }
 
-    private async _loadAsync() {
-      await this.loadGeoTIFF();
-      this.setState({ init: true });
-      log('[terrain-geotiff] Initialization complete');
+    private getLoadSignature(
+      props: DeckGLGeoTIFFTerrainLayerProps = this.props,
+    ): string {
+      return JSON.stringify({
+        url: props.url ?? null,
+        projection: props.projection ?? null,
+        forceProjection: props.forceProjection ?? false,
+        noDataValue: props.noDataValue ?? null,
+      });
+    }
+
+    private scheduleLoad(reason: string): void {
+      const signature = this.getLoadSignature();
+
+      if (this.activeLoad?.signature === signature) {
+        log(`${LOG_PREFIX}skip duplicate load: ${reason}`);
+        return;
+      }
+
+      if (this.loadedSignature === signature && this.state.init) {
+        log(`${LOG_PREFIX}skip already-loaded source: ${reason}`);
+        return;
+      }
+
+      const token = ++this.loadToken;
+      this.activeLoad = { signature, token };
+      this.setState({ init: false });
+      void this._loadAsync(token, signature, reason);
+    }
+
+    private async _loadAsync(
+      token: number,
+      signature: string,
+      reason: string,
+    ) {
+      try {
+        const applied = await this.loadGeoTIFF(token);
+        if (!applied || this.activeLoad?.token !== token) {
+          return;
+        }
+
+        this.loadedSignature = signature;
+        this.setState({ init: true });
+        log(`${LOG_PREFIX}load complete: ${reason}`);
+      } finally {
+        if (this.activeLoad?.token === token) {
+          this.activeLoad = undefined;
+        }
+      }
     }
 
     // ============================================================================
@@ -174,8 +259,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     // ============================================================================
 
     async initializeState(_context?: unknown): Promise<void> {
-      this.setState({ init: false });
-      this._loadAsync();
+      this.scheduleLoad('initializeState');
     }
 
     shouldUpdateState({ changeFlags }: UpdateParameters<Layer<DeckGLGeoTIFFTerrainLayerProps>>): boolean {
@@ -189,6 +273,8 @@ export async function createDeckGLGeoTIFFTerrainLayer(
       oldProps,
       changeFlags,
     }: UpdateParameters<Layer<DeckGLGeoTIFFTerrainLayerProps>>): void {
+      this.restoreRuntimeState();
+
       const reloadPropsChanged =
         newProps.url !== oldProps.url ||
         newProps.projection !== oldProps.projection ||
@@ -213,8 +299,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         newProps.data !== oldProps.data ||
         reloadPropsChanged
       ) {
-        this.setState({ init: false });
-        this._loadAsync();
+        this.scheduleLoad('updateState');
         return;
       }
 
@@ -234,7 +319,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     // GEOTIFF LOADING
     // ============================================================================
 
-    async loadGeoTIFF() {
+    async loadGeoTIFF(token: number): Promise<boolean> {
       const { url, projection, forceProjection } = this.props;
 
       if (!url) {
@@ -242,11 +327,13 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         this.image = undefined;
         this.tileProcessor = undefined;
         this.sourceBounds = [0, 0, 0, 0];
-        log('[terrain-geotiff] No URL provided, skipping GeoTIFF loading');
-        return;
+        this.storeRuntimeState();
+        log(`${LOG_PREFIX}no URL provided, skipping GeoTIFF loading`);
+        this.loadedSignature = this.getLoadSignature();
+        return true;
       }
 
-      log(`[terrain-geotiff] Loading GeoTIFF from ${url}`);
+      log(`${LOG_PREFIX}loadGeoTIFF: url=${url}, token=${token}`);
       try {
         const source: GeoTIFFSource = await loadGeoTIFFSource(
           url,
@@ -262,24 +349,37 @@ export async function createDeckGLGeoTIFFTerrainLayer(
           },
         );
 
+        if (this.activeLoad?.token !== token) {
+          log(`${LOG_PREFIX}ignore stale source load result: token=${token}`);
+          return false;
+        }
+
         this.tiff = source.tiff;
         this.image = source.baseImage;
         this.fromProjection = source.fromProjection;
         this.sourceBounds = source.sourceBounds;
 
         const config = await getTileProcessorConfig(source, this.viewProjection);
+
+        if (this.activeLoad?.token !== token) {
+          log(`${LOG_PREFIX}ignore stale tile processor result: token=${token}`);
+          return false;
+        }
+
         this.tileProcessor = new GeoTIFFTileProcessor(config);
         this.tileProcessor.createGlobalTriangulation();
+        this.storeRuntimeState();
 
         log(
-          `[terrain-geotiff] Projection: ${this.fromProjection} -> ${this.viewProjection}`,
+          `${LOG_PREFIX}loaded: projection=${this.fromProjection}→${this.viewProjection}, bounds=[${this.sourceBounds.map(v => v.toFixed(0)).join(',')}]`,
         );
-        log(`[terrain-geotiff] Bounds: ${this.sourceBounds}`);
 
         this.setNeedsRedraw();
+        return true;
       } catch (err) {
-        error('[terrain-geotiff] Failed to load GeoTIFF:', err);
+        error(`${LOG_PREFIX}failed to load GeoTIFF:`, err);
         this.raiseError(err as Error, 'Failed to load GeoTIFF');
+        return false;
       }
     }
 
@@ -322,13 +422,13 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         const maxLat = clampLat(Math.max(...corners.map(corner => corner[1])));
 
         if (minLng > maxLng || minLat > maxLat) {
-          warn('[terrain-geotiff] Invalid extent calculated from source bounds');
+          warn(`${LOG_PREFIX}invalid extent calculated from source bounds`);
           return null;
         }
 
         return [minLng, minLat, maxLng, maxLat];
       } catch (err) {
-        warn('[terrain-geotiff] Failed to calculate extent from source bounds:', err);
+        warn(`${LOG_PREFIX}failed to calculate extent from source bounds:`, err);
         return null;
       }
     }
@@ -349,7 +449,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         }
         return this._getTileDataTerrain(x, y, z, tileSize!);
       } catch (err) {
-        warn(`[terrain-geotiff] Kachel [${z}/${x}/${y}] konnte nicht geladen werden:`, err);
+        warn(`${LOG_PREFIX}tile [${z}/${x}/${y}] failed:`, err);
         return null;
       }
     }
@@ -398,6 +498,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
     // ============================================================================
 
     renderLayers() {
+      this.restoreRuntimeState();
       if (!this.image || !this.tileProcessor || this.props.visible === false) {
         return null;
       }
@@ -414,7 +515,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         visible: this.props.visible,
         getTileData: this.getTileData.bind(this),
         onTileError: (err: Error) => {
-          warn(`[terrain-geotiff][tilelayer] Error: ${err.message}`);
+          warn(`${TILE_LAYER_LOG_PREFIX}error: ${err.message}`);
         },
         renderSubLayers:
           renderMode === 'colormap'
