@@ -628,7 +628,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         data: [[0, 0, 0]],
         getPosition: (d: number[]) => d,
         getColor: tileTexture ? [255, 255, 255] : (color ?? [200, 200, 200]),
-        texture: tileTexture,
+        texture: tileTexture ?? null,
         wireframe: wireframe ?? false,
       });
     }

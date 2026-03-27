@@ -51,7 +51,9 @@ export async function loadGeoTIFFSource(
     try {
       tiff = await fromUrl(url, {
         allowFullFile: true,
-      });
+        blockSize: 1024 * 1024, // 1MB blocks to reduce HTTP range-request count for non-COG files
+        cacheSize: 100,
+      } as Parameters<typeof fromUrl>[1]);
     } catch (err) {
       lasterr = err;
     }
