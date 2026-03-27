@@ -152,4 +152,100 @@ describe('v-map-layergroup', () => {
     expect(mapProvider.setGroupVisible).toHaveBeenCalledWith('grp-6', false);
     expect(mapProvider.setBaseLayer).toHaveBeenCalledWith('grp-6', null);
   });
+
+  it('connectedCallback registers event listeners on the v-map parent', async () => {
+    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+
+    const mapProvider = { ensureGroup: jest.fn(), setGroupVisible: jest.fn(), setBaseLayer: jest.fn() };
+    const mapEl = document.createElement('v-map');
+    // Mock getMapProvider
+    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(mapProvider);
+    const addEventListenerSpy = jest.spyOn(mapEl, 'addEventListener');
+
+    const groupEl = document.createElement('v-map-layergroup');
+    mapEl.appendChild(groupEl);
+    document.body.appendChild(mapEl);
+
+    const component = {
+      el: groupEl,
+      groupId: 'grp-test',
+      visible: true,
+      basemapid: null,
+      mapProvider: null,
+      init: jest.fn(),
+    } as any;
+
+    await VMapLayerGroup.prototype.connectedCallback.call(component);
+
+    expect(whenDefinedSpy).toHaveBeenCalledWith('v-map');
+    expect((mapEl as any).getMapProvider).toHaveBeenCalled();
+    expect(component.init).toHaveBeenCalledWith(mapProvider);
+    expect(addEventListenerSpy).toHaveBeenCalledWith('map-provider-ready', expect.any(Function));
+    expect(addEventListenerSpy).toHaveBeenCalledWith('map-provider-will-shutdown', expect.any(Function));
+
+    whenDefinedSpy.mockRestore();
+    document.body.innerHTML = '';
+  });
+
+  it('connectedCallback skips init when getMapProvider returns null', async () => {
+    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+
+    const mapEl = document.createElement('v-map');
+    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(null);
+
+    const groupEl = document.createElement('v-map-layergroup');
+    mapEl.appendChild(groupEl);
+    document.body.appendChild(mapEl);
+
+    const component = {
+      el: groupEl,
+      groupId: 'grp-test',
+      visible: true,
+      basemapid: null,
+      mapProvider: null,
+      init: jest.fn(),
+    } as any;
+
+    await VMapLayerGroup.prototype.connectedCallback.call(component);
+
+    expect(component.init).not.toHaveBeenCalled();
+
+    whenDefinedSpy.mockRestore();
+    document.body.innerHTML = '';
+  });
+
+  it('MapProviderWillShutdown sets mapProvider to null', async () => {
+    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+
+    const mapEl = document.createElement('v-map');
+    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(null);
+    const registeredHandlers: Record<string, Function> = {};
+    jest.spyOn(mapEl, 'addEventListener').mockImplementation((event: string, handler: any) => {
+      registeredHandlers[event] = handler;
+    });
+
+    const groupEl = document.createElement('v-map-layergroup');
+    mapEl.appendChild(groupEl);
+    document.body.appendChild(mapEl);
+
+    const component = {
+      el: groupEl,
+      groupId: 'grp-test',
+      visible: true,
+      basemapid: null,
+      mapProvider: { some: 'provider' },
+      init: jest.fn(),
+    } as any;
+
+    await VMapLayerGroup.prototype.connectedCallback.call(component);
+
+    // Invoke the registered shutdown handler directly
+    expect(registeredHandlers['map-provider-will-shutdown']).toBeDefined();
+    await registeredHandlers['map-provider-will-shutdown'](new CustomEvent('map-provider-will-shutdown', { detail: {} }));
+
+    expect(component.mapProvider).toBeNull();
+
+    whenDefinedSpy.mockRestore();
+    document.body.innerHTML = '';
+  });
 });

@@ -173,4 +173,82 @@ describe('v-map-layer-geotiff', () => {
       rules: [{ symbolizers: [{ kind: 'Mark' }] }],
     })).toBeNull();
   });
+
+  it('onUrlChanged triggers updateLayer with current state', async () => {
+    const component = {
+      url: 'https://new.com/dem.tif',
+      nodata: null,
+      colorMap: null,
+      valueRange: null,
+      helper: helperMock,
+    } as any;
+
+    await VMapLayerGeoTIFF.prototype.onUrlChanged.call(component);
+
+    expect(helperMock.updateLayer).toHaveBeenCalledWith({
+      type: 'geotiff',
+      data: {
+        url: 'https://new.com/dem.tif',
+        nodata: null,
+        colorMap: null,
+        valueRange: null,
+      },
+    });
+  });
+
+  it('onUrlChanged does nothing when helper is undefined', async () => {
+    const component = {
+      url: 'https://new.com/dem.tif',
+      helper: undefined,
+    } as any;
+
+    await VMapLayerGeoTIFF.prototype.onUrlChanged.call(component);
+
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('onColorMapChanged triggers updateLayer', async () => {
+    const colorMap = { type: 'ramp', colorMapEntries: [{ color: '#ff0000', quantity: 0 }] };
+    const component = {
+      url: 'https://example.com/dem.tif',
+      nodata: -9999,
+      colorMap,
+      valueRange: [0, 1000],
+      helper: helperMock,
+    } as any;
+
+    await VMapLayerGeoTIFF.prototype.onColorMapChanged.call(component);
+
+    expect(helperMock.updateLayer).toHaveBeenCalledWith({
+      type: 'geotiff',
+      data: {
+        url: 'https://example.com/dem.tif',
+        nodata: -9999,
+        colorMap,
+        valueRange: [0, 1000],
+      },
+    });
+  });
+
+  it('onValueRangeChanged triggers updateLayer', async () => {
+    const component = {
+      url: 'https://example.com/dem.tif',
+      nodata: null,
+      colorMap: null,
+      valueRange: [100, 500],
+      helper: helperMock,
+    } as any;
+
+    await VMapLayerGeoTIFF.prototype.onValueRangeChanged.call(component);
+
+    expect(helperMock.updateLayer).toHaveBeenCalledWith({
+      type: 'geotiff',
+      data: {
+        url: 'https://example.com/dem.tif',
+        nodata: null,
+        colorMap: null,
+        valueRange: [100, 500],
+      },
+    });
+  });
 });

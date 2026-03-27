@@ -149,4 +149,146 @@ describe('v-map-layer-tile3d', () => {
       }),
     );
   });
+
+  it('isReady returns didLoad state', async () => {
+    const component = { didLoad: false } as any;
+    expect(await VMapLayerTile3d.prototype.isReady.call(component)).toBe(false);
+    component.didLoad = true;
+    expect(await VMapLayerTile3d.prototype.isReady.call(component)).toBe(true);
+  });
+
+  it('applyExistingStyles applies cesium styles from v-map-style elements', async () => {
+    const cesiumStyle = { color: 'color("red")' };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['tileset']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-tile3d'),
+      helper: helperMock,
+      appliedCesiumStyle: undefined,
+      isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+      updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+      url: 'https://example.com/tileset.json',
+      parseTilesetOptions: () => undefined,
+    } as any;
+    component.el.id = 'tileset';
+
+    await VMapLayerTile3d.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedCesiumStyle).toEqual(cesiumStyle);
+    expect(helperMock.updateLayer).toHaveBeenCalled();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips styles without getStyle', async () => {
+    const styleEl = document.createElement('v-map-style');
+    // No getStyle method
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-tile3d'),
+      helper: helperMock,
+      appliedCesiumStyle: undefined,
+      isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+      updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+    } as any;
+    component.el.id = 'tileset';
+
+    await VMapLayerTile3d.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedCesiumStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips GeoStyler styles', async () => {
+    const geostylerStyle = { name: 'test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['tileset']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-tile3d'),
+      helper: helperMock,
+      appliedCesiumStyle: undefined,
+      isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+      updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+    } as any;
+    component.el.id = 'tileset';
+
+    await VMapLayerTile3d.prototype['applyExistingStyles'].call(component);
+
+    // GeoStyler styles should be skipped for tile3d
+    expect(component.appliedCesiumStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('onUrlChanged skips update when values are identical', async () => {
+    await VMapLayerTile3d.prototype.onUrlChanged.call(
+      { helper: helperMock } as any,
+      'https://same.com/tileset.json',
+      'https://same.com/tileset.json',
+    );
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('onUrlChanged skips update when helper is undefined', async () => {
+    await VMapLayerTile3d.prototype.onUrlChanged.call(
+      { helper: undefined } as any,
+      'https://old.com/tileset.json',
+      'https://new.com/tileset.json',
+    );
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('onUrlChanged updates layer when url actually changes', async () => {
+    const component = {
+      helper: helperMock,
+      url: 'https://new.com/tileset.json',
+      appliedCesiumStyle: undefined,
+      parseTilesetOptions: () => ({ maxError: 4 }),
+    } as any;
+
+    await VMapLayerTile3d.prototype.onUrlChanged.call(
+      component,
+      'https://old.com/tileset.json',
+      'https://new.com/tileset.json',
+    );
+    expect(helperMock.updateLayer).toHaveBeenCalledWith({
+      type: 'tile3d',
+      data: {
+        url: 'https://new.com/tileset.json',
+        tilesetOptions: { maxError: 4 },
+        cesiumStyle: undefined,
+      },
+    });
+  });
+
+  it('applyExistingStyles skips non-targeted styles', async () => {
+    const cesiumStyle = { color: 'color("red")' };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['other-layer']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-tile3d'),
+      helper: helperMock,
+      appliedCesiumStyle: undefined,
+      isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+      updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+    } as any;
+    component.el.id = 'tileset';
+
+    await VMapLayerTile3d.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedCesiumStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
 });

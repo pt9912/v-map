@@ -322,6 +322,156 @@ describe('v-map-style', () => {
     );
   });
 
+  it('onStyleSourceChanged re-parses when autoApply is true and content changes', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="cesium-3d-tiles" content='{"show":true}' auto-apply></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const spy = jest.spyOn(component, 'loadAndParseStyle');
+    (component as any).content = '{"show":false}';
+    await (component as any).onStyleSourceChanged();
+
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it('onStyleSourceChanged does nothing when autoApply is false', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="sld" content="test" auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const spy = jest.spyOn(component, 'loadAndParseStyle');
+    await (component as any).onStyleSourceChanged();
+
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it('getStyle returns the parsed style', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="cesium-3d-tiles" content='{"show":true}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    await component.loadAndParseStyle();
+    const result = await component.getStyle();
+
+    expect(result).toEqual({ show: true });
+  });
+
+  it('getLayerTargetIds returns parsed targets', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style layer-targets="a,b,c"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const result = await component.getLayerTargetIds();
+
+    expect(result).toEqual(['a', 'b', 'c']);
+  });
+
+  it('successfully parses SLD from content', async () => {
+    const sldContent = '<StyledLayerDescriptor version="1.0.0"></StyledLayerDescriptor>';
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="sld" content='${sldContent}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const result = await component.loadAndParseStyle();
+
+    expect(result).toBeTruthy();
+    expect(result.name).toBe('Mock Style');
+  });
+
+  it('successfully fetches and parses style from src URL', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: jest.fn().mockResolvedValue('<StyledLayerDescriptor />'),
+    });
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="sld" src="https://example.com/style.sld" auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const result = await component.loadAndParseStyle();
+
+    expect(result).toBeTruthy();
+    expect(global.fetch).toHaveBeenCalledWith('https://example.com/style.sld');
+  });
+
+  it('handles Mapbox GL parser returning undefined output', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="mapbox-gl" content='{"version":8}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    component['mapboxParser'] = {
+      readStyle: jest.fn().mockResolvedValue({ output: undefined }),
+    } as any;
+
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeUndefined();
+    expect(component.getError().message).toContain('no style output');
+  });
+
+  it('handles LYRX parser returning undefined output', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="lyrx" content='{"type":"CIMFeatureLayer"}' auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    component['lyrxParser'] = {
+      readStyle: jest.fn().mockResolvedValue({ output: undefined }),
+    } as any;
+
+    const result = await component.loadAndParseStyle();
+    expect(result).toBeUndefined();
+    expect(component.getError().message).toContain('no style output');
+  });
+
+  it('handles Cesium 3D Tiles with non-object JSON value', async () => {
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style format="cesium-3d-tiles" content="42" auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const result = await component.loadAndParseStyle();
+
+    expect(result).toBeUndefined();
+    expect(component.getError().message).toContain('not a valid object');
+  });
+
+  it('loadAndParseStyle handles non-ok fetch response', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      statusText: 'Not Found',
+    });
+
+    const page = await newSpecPage({
+      components: [VMapStyle],
+      html: `<v-map-style src="https://example.com/missing.sld" auto-apply="false"></v-map-style>`,
+    });
+
+    const component = page.rootInstance as VMapStyle;
+    const result = await component.loadAndParseStyle();
+
+    expect(result).toBeUndefined();
+    expect(component.getError()).toBeTruthy();
+    expect(component.getError().message).toContain('Failed to fetch');
+  });
+
   describe('Negative test cases - Parser errors', () => {
     it('should handle invalid JSON for Mapbox GL Style', async () => {
       const page = await newSpecPage({

@@ -265,6 +265,64 @@ describe('<v-map-layer-wfs>', () => {
     expect(VMapLayerWfs.prototype['isTargetedByStyle'].call(component, [])).toBe(true);
   });
 
+  it('applyExistingStyles applies geostyler styles from v-map-style elements', async () => {
+    const geostylerStyle = { name: 'test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wfs1']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wfs'),
+      helper: helperMock,
+      url: 'https://example.com/wfs',
+      typeName: 'ns:layer',
+      version: '1.1.0',
+      outputFormat: 'application/json',
+      srsName: 'EPSG:3857',
+      params: undefined,
+      visible: true,
+      opacity: 1,
+      zIndex: 1000,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWfs.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWfs.prototype['updateLayerWithGeostylerStyle'],
+      createLayerConfig: VMapLayerWfs.prototype['createLayerConfig'],
+      parseParams: VMapLayerWfs.prototype['parseParams'],
+    } as any;
+    component.el.id = 'wfs1';
+
+    await VMapLayerWfs.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toEqual(geostylerStyle);
+    expect(helperMock.updateLayer).toHaveBeenCalled();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips non-targeted and non-geostyler styles', async () => {
+    const cesiumStyle = { color: 'red' };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wfs1']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wfs'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWfs.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWfs.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'wfs1';
+
+    await VMapLayerWfs.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
   it('updateLayerWithGeostylerStyle does nothing without style or helper', async () => {
     await VMapLayerWfs.prototype['updateLayerWithGeostylerStyle'].call({
       appliedGeostylerStyle: undefined,

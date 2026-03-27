@@ -95,4 +95,340 @@ describe('v-map-layercontrol', () => {
 
     expect(timeoutSpy).toHaveBeenCalledWith(expect.any(Function), 100);
   });
+
+  it('readNumber falls back to default when attribute value is NaN', () => {
+    const component = new VMapLayerControl();
+    const el = document.createElement('div');
+    el.setAttribute('opacity', 'not-a-number');
+
+    const result = (component as any).readNumber(el, 'missingProp', 0.5, 'opacity');
+    expect(result).toBe(0.5);
+  });
+
+  it('readNumber returns value from second attribute when first is missing', () => {
+    const component = new VMapLayerControl();
+    const el = document.createElement('div');
+    el.setAttribute('z-index', '7');
+
+    const result = (component as any).readNumber(el, 'missingProp', 0, 'missing-attr', 'z-index');
+    expect(result).toBe(7);
+  });
+
+  it('auto-generates group IDs for groups without an id', () => {
+    document.body.innerHTML = `
+      <v-map id="map-auto">
+        <v-map-layergroup group-title="Auto Group" visible>
+          <v-map-layer-osm label="OSM" visible></v-map-layer-osm>
+        </v-map-layergroup>
+      </v-map>
+    `;
+
+    const component = new VMapLayerControl();
+    component.for = 'map-auto';
+    (component as any).findMapElement();
+
+    expect(component.layerGroups).toHaveLength(1);
+    expect(component.layerGroups[0].info.id).toMatch(/^auto-/);
+
+    document.body.innerHTML = '';
+  });
+
+  it('auto-generates layer IDs for layers without an id', () => {
+    document.body.innerHTML = `
+      <v-map id="map-auto-layers">
+        <v-map-layergroup id="grp-1" group-title="Group" visible>
+          <v-map-layer-wms label="WMS"></v-map-layer-wms>
+        </v-map-layergroup>
+      </v-map>
+    `;
+
+    const component = new VMapLayerControl();
+    component.for = 'map-auto-layers';
+    (component as any).findMapElement();
+
+    expect(component.layerGroups[0].layers[0].info.id).toMatch(/^auto-/);
+
+    document.body.innerHTML = '';
+  });
+
+  it('renders layer groups with checkboxes and controls', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-render"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'osm-1';
+    (layerEl as any).label = 'OSM';
+    (layerEl as any).visible = true;
+    (layerEl as any).opacity = 0.8;
+
+    component.layerGroups = [
+      {
+        info: {
+          element: groupEl,
+          id: 'grp-1',
+          visible: true,
+          opacity: undefined,
+          zIndex: undefined,
+        },
+        label: 'Base',
+        groupTitle: 'Base Maps',
+        basemapid: null,
+        layers: [
+          {
+            info: {
+              element: layerEl,
+              id: 'osm-1',
+              visible: true,
+              opacity: 0.8,
+              zIndex: 0,
+            },
+            label: 'OSM',
+          },
+        ],
+      },
+    ];
+
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    expect(shadow?.querySelector('.layer-control')).not.toBeNull();
+    expect(shadow?.querySelector('.layer-group-title')?.textContent).toBe('Base Maps');
+    expect(shadow?.querySelector('.layer-item-title')?.textContent).toBe('OSM');
+  });
+
+  it('renders basemap selector when basemapid is set', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-basemap"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'osm-1';
+
+    component.layerGroups = [
+      {
+        info: {
+          element: groupEl,
+          id: 'grp-1',
+          visible: true,
+          opacity: undefined,
+          zIndex: undefined,
+        },
+        label: 'Base',
+        groupTitle: 'Base Maps',
+        basemapid: 'osm-1',
+        layers: [
+          {
+            info: {
+              element: layerEl,
+              id: 'osm-1',
+              visible: true,
+              opacity: 1,
+              zIndex: 0,
+            },
+            label: 'OSM',
+          },
+        ],
+      },
+    ];
+
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    expect(shadow?.querySelector('.basemap-selector')).not.toBeNull();
+  });
+
+  it('triggers group visibility change via rendered checkbox', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-events"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'osm-1';
+
+    component.layerGroups = [
+      {
+        info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+        label: 'Base', groupTitle: 'Base Maps', basemapid: null,
+        layers: [
+          { info: { element: layerEl, id: 'osm-1', visible: true, opacity: 1, zIndex: 0 }, label: 'OSM' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    const groupCheckbox = shadow?.querySelector('.layer-group-checkbox') as HTMLInputElement;
+    expect(groupCheckbox).not.toBeNull();
+
+    // Simulate unchecking the group
+    groupCheckbox.checked = false;
+    groupCheckbox.dispatchEvent(new Event('change'));
+
+    expect(component.layerGroups[0].info.visible).toBe(false);
+  });
+
+  it('triggers layer opacity change via rendered slider', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-opacity"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'lyr-1';
+
+    component.layerGroups = [
+      {
+        info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+        label: 'Base', groupTitle: 'Base Maps', basemapid: null,
+        layers: [
+          { info: { element: layerEl, id: 'lyr-1', visible: true, opacity: 1, zIndex: 0 }, label: 'Layer' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    const slider = shadow?.querySelector('.layer-item-opacity') as HTMLInputElement;
+    expect(slider).not.toBeNull();
+
+    slider.value = '0.5';
+    slider.dispatchEvent(new Event('input'));
+
+    expect(layerEl.getAttribute('opacity')).toBe('0.5');
+  });
+
+  it('triggers layer z-index change via rendered number input', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-zindex"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'lyr-z';
+
+    component.layerGroups = [
+      {
+        info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+        label: 'Base', groupTitle: 'Base Maps', basemapid: null,
+        layers: [
+          { info: { element: layerEl, id: 'lyr-z', visible: true, opacity: 1, zIndex: 0 }, label: 'Layer' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    const zInput = shadow?.querySelector('.layer-item-zindex') as HTMLInputElement;
+    expect(zInput).not.toBeNull();
+
+    zInput.value = '5';
+    zInput.dispatchEvent(new Event('change'));
+
+    expect(layerEl.getAttribute('zindex')).toBe('5');
+  });
+
+  it('triggers basemap selector change via rendered select', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-base"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl1 = document.createElement('v-map-layer-osm');
+    layerEl1.id = 'osm-1';
+    const layerEl2 = document.createElement('v-map-layer-wms');
+    layerEl2.id = 'wms-1';
+
+    component.layerGroups = [
+      {
+        info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+        label: 'Base', groupTitle: 'Base Maps', basemapid: 'osm-1',
+        layers: [
+          { info: { element: layerEl1, id: 'osm-1', visible: true, opacity: 1, zIndex: 0 }, label: 'OSM' },
+          { info: { element: layerEl2, id: 'wms-1', visible: true, opacity: 1, zIndex: 0 }, label: 'WMS' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    const select = shadow?.querySelector('.basemap-selector') as HTMLSelectElement;
+    expect(select).not.toBeNull();
+
+    // Simulate selecting the second layer
+    select.value = 'wms-1';
+    select.dispatchEvent(new Event('change'));
+
+    expect(component.layerGroups[0].basemapid).toBe('wms-1');
+    expect(groupEl.getAttribute('basemapid')).toBe('wms-1');
+  });
+
+  it('triggers layer checkbox visibility change via rendered checkbox', async () => {
+    const page = await newSpecPage({
+      components: [VMapLayerControl],
+      html: `<v-map-layercontrol for="map-lyr-vis"></v-map-layercontrol>`,
+    });
+
+    const component = page.rootInstance as any;
+    const groupEl = document.createElement('v-map-layergroup');
+    const layerEl = document.createElement('v-map-layer-osm');
+    layerEl.id = 'lyr-vis';
+
+    component.layerGroups = [
+      {
+        info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+        label: 'Base', groupTitle: 'Base Maps', basemapid: null,
+        layers: [
+          { info: { element: layerEl, id: 'lyr-vis', visible: true, opacity: 1, zIndex: 0 }, label: 'Layer' },
+        ],
+      },
+    ];
+    await page.waitForChanges();
+
+    const shadow = page.root?.shadowRoot;
+    const layerCheckbox = shadow?.querySelector('.layer-item-checkbox') as HTMLInputElement;
+    expect(layerCheckbox).not.toBeNull();
+
+    layerCheckbox.checked = false;
+    layerCheckbox.dispatchEvent(new Event('change'));
+
+    expect(layerEl.hasAttribute('visible')).toBe(false);
+  });
+
+  it('initObserver sets up mutation observer on mapElement', () => {
+    const component = new VMapLayerControl();
+    const mockObserve = jest.fn();
+    const mockDisconnect = jest.fn();
+
+    global.MutationObserver = jest.fn().mockImplementation(() => ({
+      observe: mockObserve,
+      disconnect: mockDisconnect,
+    }));
+
+    const mapEl = document.createElement('v-map');
+    (component as any).mapElement = mapEl;
+
+    (component as any).initObserver();
+
+    expect(mockObserve).toHaveBeenCalledWith(mapEl, expect.objectContaining({
+      childList: true,
+      subtree: true,
+      attributes: true,
+    }));
+  });
 });

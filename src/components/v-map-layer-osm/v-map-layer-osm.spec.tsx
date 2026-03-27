@@ -115,6 +115,19 @@ describe('v-map-layer-osm', () => {
     });
   });
 
+  it('handles watcher calls gracefully when helper is undefined', async () => {
+    const ctx = { helper: undefined, visible: false, opacity: 0.5, zIndex: 5, url: 'https://test.com' } as any;
+    await VMapLayerOSM.prototype.onVisibleChanged.call(ctx);
+    await VMapLayerOSM.prototype.onOpacityChanged.call(ctx);
+    await VMapLayerOSM.prototype.onZIndexChanged.call(ctx);
+    await VMapLayerOSM.prototype.onUrlChanged.call(ctx, 'https://old.com', 'https://test.com');
+
+    expect(helperMock.setVisible).not.toHaveBeenCalled();
+    expect(helperMock.setOpacity).not.toHaveBeenCalled();
+    expect(helperMock.setZIndex).not.toHaveBeenCalled();
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
   it('proxies getLayerId and removes the layer on disconnect', async () => {
     const component = { helper: helperMock } as any;
 

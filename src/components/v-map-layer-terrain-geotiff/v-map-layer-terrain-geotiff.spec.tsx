@@ -90,4 +90,91 @@ describe('v-map-layer-terrain-geotiff', () => {
     expect(helperMock.setVisible).toHaveBeenCalledWith(false);
     expect(helperMock.updateLayer).not.toHaveBeenCalled();
   });
+
+  it('onUrlChanged triggers updateLayer with full config', async () => {
+    const component = {
+      url: 'https://new.com/elevation.tif',
+      helper: helperMock,
+      createLayerConfig: VMapLayerTerrainGeotiff.prototype['createLayerConfig'],
+      projection: undefined,
+      forceProjection: undefined,
+      nodata: undefined,
+      meshMaxError: 4.0,
+      wireframe: false,
+      texture: undefined,
+      color: undefined,
+      colorMap: undefined,
+      valueRange: undefined,
+      elevationScale: 1,
+      renderMode: undefined,
+      minZoom: undefined,
+      maxZoom: undefined,
+      tileSize: undefined,
+      visible: true,
+      opacity: 1,
+      zIndex: 1000,
+    } as any;
+
+    await VMapLayerTerrainGeotiff.prototype.onUrlChanged.call(component);
+    expect(helperMock.updateLayer).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'terrain-geotiff',
+    }));
+  });
+
+  it('onOpacityChanged calls helper.setOpacity', async () => {
+    await VMapLayerTerrainGeotiff.prototype.onOpacityChanged.call({
+      opacity: 0.5,
+      helper: helperMock,
+    });
+    expect(helperMock.setOpacity).toHaveBeenCalledWith(0.5);
+  });
+
+  it('onZIndexChanged calls helper.setZIndex', async () => {
+    await VMapLayerTerrainGeotiff.prototype.onZIndexChanged.call({
+      zIndex: 42,
+      helper: helperMock,
+    });
+    expect(helperMock.setZIndex).toHaveBeenCalledWith(42);
+  });
+
+  it('onPropertyChanged triggers updateLayer for any watched property change', async () => {
+    const component = {
+      url: 'https://example.com/dem.tif',
+      helper: helperMock,
+      createLayerConfig: VMapLayerTerrainGeotiff.prototype['createLayerConfig'],
+      projection: 'EPSG:4326',
+      forceProjection: true,
+      nodata: -9999,
+      meshMaxError: 2.0,
+      wireframe: true,
+      texture: 'https://example.com/texture.png',
+      color: '#ff0000',
+      colorMap: 'viridis',
+      valueRange: '0,100',
+      elevationScale: 2.5,
+      renderMode: 'colormap',
+      minZoom: 1,
+      maxZoom: 18,
+      tileSize: 256,
+      visible: true,
+      opacity: 0.8,
+      zIndex: 500,
+    } as any;
+
+    await VMapLayerTerrainGeotiff.prototype.onPropertyChanged.call(component);
+    expect(helperMock.updateLayer).toHaveBeenCalledWith(expect.objectContaining({
+      type: 'terrain-geotiff',
+    }));
+  });
+
+  it('onPropertyChanged does nothing when helper is undefined', async () => {
+    const component = {
+      helper: undefined,
+      createLayerConfig: VMapLayerTerrainGeotiff.prototype['createLayerConfig'],
+    } as any;
+
+    // Should not throw
+    await VMapLayerTerrainGeotiff.prototype.onPropertyChanged.call(component);
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
 });

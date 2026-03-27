@@ -347,4 +347,166 @@ describe('v-map-layer-geojson', () => {
 
     expect(helperMock.setVisible).not.toHaveBeenCalled();
   });
+
+  it('applyExistingStyles applies geostyler styles from v-map-style elements', async () => {
+    const geostylerStyle = { name: 'test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['geo1']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-geojson'),
+      helper: helperMock,
+      geojson: '{}',
+      url: null,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerGeoJSON.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerGeoJSON.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'geo1';
+
+    await VMapLayerGeoJSON.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toEqual(geostylerStyle);
+    expect(helperMock.updateLayer).toHaveBeenCalled();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips non-geostyler styles', async () => {
+    const cesiumStyle = { color: 'color("red")' };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['geo1']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-geojson'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerGeoJSON.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerGeoJSON.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'geo1';
+
+    await VMapLayerGeoJSON.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips styles without getLayerTargetIds', async () => {
+    const geostylerStyle = { name: 'test', rules: [] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    // no getLayerTargetIds
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-geojson'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerGeoJSON.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerGeoJSON.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'geo1';
+
+    await VMapLayerGeoJSON.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('onSlotChange calls observeAssignedNodes and readGeoJsonFromSlot', () => {
+    const instance = new VMapLayerGeoJSON();
+    (instance as any).observeAssignedNodes = jest.fn();
+    (instance as any).readGeoJsonFromSlot = jest.fn();
+
+    (instance as any).onSlotChange();
+
+    expect((instance as any).observeAssignedNodes).toHaveBeenCalled();
+    expect((instance as any).readGeoJsonFromSlot).toHaveBeenCalled();
+  });
+
+  it('readGeoJsonFromSlot parses valid JSON from slot', () => {
+    const geojson = { type: 'Point', coordinates: [0, 0] };
+    const component = {
+      geoSlot: {
+        assignedNodes: jest.fn().mockReturnValue([
+          { textContent: JSON.stringify(geojson) },
+        ]),
+      },
+      lastString: undefined,
+      geojson: undefined,
+    } as any;
+
+    VMapLayerGeoJSON.prototype['readGeoJsonFromSlot'].call(component);
+
+    expect(component.geojson).toEqual(geojson);
+  });
+
+  it('readGeoJsonFromSlot does nothing when geoSlot is null', () => {
+    const component = {
+      geoSlot: null,
+      geojson: undefined,
+    } as any;
+
+    VMapLayerGeoJSON.prototype['readGeoJsonFromSlot'].call(component);
+
+    expect(component.geojson).toBeUndefined();
+  });
+
+  it('readGeoJsonFromSlot does nothing when slot is empty', () => {
+    const component = {
+      geoSlot: {
+        assignedNodes: jest.fn().mockReturnValue([
+          { textContent: '' },
+        ]),
+      },
+      lastString: undefined,
+      geojson: undefined,
+    } as any;
+
+    VMapLayerGeoJSON.prototype['readGeoJsonFromSlot'].call(component);
+
+    expect(component.geojson).toBeUndefined();
+  });
+
+  it('readGeoJsonFromSlot skips when content unchanged', () => {
+    const raw = '{"type":"Point","coordinates":[0,0]}';
+    const component = {
+      geoSlot: {
+        assignedNodes: jest.fn().mockReturnValue([
+          { textContent: raw },
+        ]),
+      },
+      lastString: raw,
+      geojson: undefined,
+    } as any;
+
+    VMapLayerGeoJSON.prototype['readGeoJsonFromSlot'].call(component);
+
+    expect(component.geojson).toBeUndefined();
+  });
+
+  it('readGeoJsonFromSlot handles invalid JSON gracefully', () => {
+    const component = {
+      geoSlot: {
+        assignedNodes: jest.fn().mockReturnValue([
+          { textContent: '{not valid json}' },
+        ]),
+      },
+      lastString: undefined,
+      geojson: undefined,
+    } as any;
+
+    // Should not throw
+    VMapLayerGeoJSON.prototype['readGeoJsonFromSlot'].call(component);
+
+    expect(component.geojson).toBeUndefined();
+    expect(component.lastString).toBe('{not valid json}');
+  });
 });
