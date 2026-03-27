@@ -314,7 +314,6 @@ export class VMapLayerControl {
                 />
                 <span class="layer-group-title">{group.groupTitle}</span>
                 {group.basemapid !== null ? (
-                  <>
                     <select
                       class="basemap-selector"
                       onChange={e =>
@@ -328,13 +327,12 @@ export class VMapLayerControl {
                         <option
                           key={layer.info.id}
                           value={layer.info.id}
-                          selected={group.basemapid === layer.info.id} // <-- Fix: `selected` statt `value`
+                          selected={group.basemapid === layer.info.id}
                         >
                           {layer.label}
                         </option>
                       ))}
                     </select>
-                  </>
                 ) : (
                   <div></div>
                 )}
