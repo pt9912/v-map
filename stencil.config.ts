@@ -257,10 +257,10 @@ export const config: Config = {
     coverageReporters: ['text', 'lcov', 'html'],
     coverageThreshold: {
       global: {
-        branches: 50,
-        functions: 50,
-        lines: 50,
-        statements: 50,
+        branches: 66,
+        functions: 76,
+        lines: 76,
+        statements: 74,
       },
     },
     // sourceMaps helfen, die TS-Zeilen zu sehen:
