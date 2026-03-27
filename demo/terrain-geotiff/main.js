@@ -16,7 +16,15 @@ function log(scope, msg, tagClass = 'tag-sys') {
   const now = getCurrentTimeInvariant();
   const el = document.createElement('div');
   el.className = 'log-entry';
-  el.innerHTML = `<span class="tag ${tagClass}">${scope}</span><strong>${now}</strong> — ${msg}`;
+
+  const tag = document.createElement('span');
+  tag.className = `tag ${tagClass}`;
+  tag.textContent = scope;
+
+  const time = document.createElement('strong');
+  time.textContent = now;
+
+  el.append(tag, time, ` — ${msg}`);
   logs.appendChild(el);
   logs.scrollTop = logs.scrollHeight;
 }
@@ -27,16 +35,25 @@ async function ensureCustomElementsDefined() {
   const customLoader = url.searchParams.get('loader');
 
   if (customLoader) {
-    const mod = await import(customLoader);
+    const resolved = new URL(customLoader, window.location.href);
+    if (resolved.origin !== window.location.origin) {
+      log('sys', 'Custom loader blocked: nur same-origin URLs erlaubt', 'tag-sys');
+      return;
+    }
+    const mod = await import(resolved.href);
     mod.defineCustomElements?.();
     log('sys', 'defineCustomElements() via loader param', 'tag-sys');
     return;
   }
 
-  let loader;
-  loader = await import('../../loader/index.es2017.js');
-  loader.defineCustomElements?.();
-  log('sys', 'defineCustomElements() aufgerufen', 'tag-sys');
+  try {
+    const loader = await import('../../loader/index.es2017.js');
+    loader.defineCustomElements?.();
+    log('sys', 'defineCustomElements() aufgerufen', 'tag-sys');
+  } catch (e) {
+    log('sys', 'Loader nicht gefunden – bitte zuerst "pnpm build" ausführen', 'tag-sys');
+    throw e;
+  }
 }
 
 async function createMap(provider) {
@@ -149,24 +166,10 @@ async function main() {
   });
 
   // Sample URLs
-  $('#sampleLocal1').addEventListener('click', () => {
-    const url = getSampleUrl('local1');
-    setTerrainUrl(terrainLayer, url);
-  });
-
-  $('#sampleLocal2').addEventListener('click', () => {
-    const url = getSampleUrl('local2');
-    setTerrainUrl(terrainLayer, url);
-  });
-
-  $('#sampleOnline1').addEventListener('click', () => {
-    const url = getSampleUrl('online1');
-    setTerrainUrl(terrainLayer, url);
-  });
-
-  $('#sampleOnline2').addEventListener('click', () => {
-    const url = getSampleUrl('online2');
-    setTerrainUrl(terrainLayer, url);
+  document.querySelectorAll('[data-sample]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTerrainUrl(terrainLayer, getSampleUrl(btn.dataset.sample));
+    });
   });
 
   // Elevation Scale
@@ -233,6 +236,19 @@ async function main() {
     logs.innerHTML = '';
   });
 
+  // Cursor-Koordinaten anzeigen (auf host statt map, überlebt Provider-Wechsel)
+  const coordsEl = $('#coords');
+  host.addEventListener('map-mousemove', e => {
+    const { coordinate } = e.detail;
+    if (coordinate) {
+      const [lng, lat] = coordinate;
+      coordsEl.textContent = `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
+    }
+  });
+  host.addEventListener('pointerleave', () => {
+    coordsEl.textContent = '';
+  });
+
   // Console passthrough für v-map Logs
   const origLog = console.log;
   console.log = (...args) => {
@@ -252,7 +268,8 @@ async function main() {
       } else {
         origLog(...args);
       }
-    } catch {
+    } catch (e) {
+      origLog('log passthrough error:', e);
       origLog(...args);
     }
   };

@@ -32,7 +32,7 @@ Das Script lädt automatisch:
 - `i30dem.tif` (USGS DEM, ~5.3 MB)
 - `m30dem.tif` (USGS DEM, ~5.3 MB)
 
-Die Dateien werden 24 Stunden gecacht.
+Die Dateien werden in `/tmp/v-map-test-dems/` gespeichert und 24 Stunden gecacht (erneuter Aufruf überspringt den Download). Da `/tmp` beim Neustart des Systems geleert werden kann, muss das Script ggf. erneut ausgeführt werden.
 
 **Hinweis**: Ein Symlink von `demo/terrain-geotiff/test-dems` nach `/tmp/v-map-test-dems` ermöglicht den Zugriff über HTTP anstatt `file://` URLs.
 
@@ -54,6 +54,11 @@ Wichtig: In diesem Repo kann `pnpm dlx http-server -p 4174` je nach Umgebung `./
 
 ```
 http://localhost:4174/demo/terrain-geotiff/
+```
+Für Debug-Logs im Browser:
+
+```js
+localStorage.setItem('@pt9912/v-map:logLevel', 'debug');
 ```
 
 ## Features
