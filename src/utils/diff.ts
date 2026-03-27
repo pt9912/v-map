@@ -28,6 +28,7 @@ export type LayerType =
 // }
 export interface LayerGroup {
   groupTitle: string;
+  basemapid: string;
   visible?: boolean | string;
   layers: NormalizedLayer[];
 }
@@ -44,6 +45,7 @@ export interface NormalizedStyle {
 
 export interface MapConfig {
   flavour: string;
+  id: string;
   zoom: number;
   center: string;
   style: string;

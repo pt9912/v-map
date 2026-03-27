@@ -54,10 +54,7 @@ export class VMapBuilder {
     errors?: string[];
   }>;
 
-  private mount?: HTMLElement;
   private current?: BuilderConfig;
-
-  private refMount = (el?: HTMLElement) => (this.mount = el || undefined);
 
   //componentWillLoad() {
   async componentDidLoad() {
@@ -386,7 +383,7 @@ export class VMapBuilder {
         break;
       }
       case 'osm':
-        // already handled by base fields
+        setBase('url', this.toOptionalString(rawLayer?.url));
         break;
       default: {
         const payload =
@@ -412,6 +409,7 @@ export class VMapBuilder {
     const norm: BuilderConfig = {
       map: {
         flavour: String(map.flavour ?? 'ol'),
+        id: String(map.id ?? 'map1'),
         zoom: Number(map.zoom ?? 2),
         center: String(map.center ?? '0,0'),
         style: String(map.style ?? ''),
@@ -419,6 +417,7 @@ export class VMapBuilder {
         layerGroups: (Array.isArray(map.layerGroups) ? map.layerGroups : []).map(
           (g: Record<string, unknown>, gi: number) => ({
             groupTitle: String(g.groupTitle ?? g.group ?? g.title ?? `Group ${gi + 1}`),
+            basemapid: String(g.basemapid ?? ''),
             visible: g.visible as boolean | string | undefined,
             layers: (Array.isArray(g.layers) ? g.layers : []).map(
               (l: Record<string, unknown>, li: number) =>
@@ -471,8 +470,8 @@ export class VMapBuilder {
       raw.autoApply == null
         ? undefined
         : typeof raw.autoApply === 'boolean'
-        ? raw.autoApply
-        : String(raw.autoApply).toLowerCase() !== 'false';
+          ? raw.autoApply
+          : String(raw.autoApply).toLowerCase() !== 'false';
 
     let src: string | undefined =
       raw.src != null ? String(raw.src).trim() : undefined;
@@ -597,6 +596,7 @@ export class VMapBuilder {
   private ensureGroup(
     mapEl: Element,
     title: string,
+    basemapid: string,
     visible?: boolean | string,
     index?: number,
   ): HTMLElement {
@@ -614,6 +614,9 @@ export class VMapBuilder {
       );
     }
     this.ensureAttr(el, 'visible', visible);
+    if (basemapid) {
+      this.ensureAttr(el, 'basemapid', basemapid);
+    }
     return el;
   }
 
@@ -933,13 +936,14 @@ export class VMapBuilder {
   }
 
   private applyDiff(_prev: BuilderConfig | undefined, next: BuilderConfig) {
-    if (!this.mount) return;
-    let mapEl = this.mount.querySelector('v-map') as HTMLElement | null;
+    const container = this.hostEl;
+    let mapEl = container.querySelector(':scope > v-map') as HTMLElement | null;
     if (!mapEl) {
       mapEl = document.createElement('v-map');
-      this.mount.appendChild(mapEl);
+      container.appendChild(mapEl);
     }
     this.ensureAttr(mapEl, 'flavour', next.map.flavour);
+    this.ensureAttr(mapEl, 'id', next.map.id);
     this.ensureAttr(mapEl, 'zoom', String(next.map.zoom));
     this.ensureAttr(mapEl, 'center', next.map.center);
     this.ensureAttr(mapEl, 'style', next.map.style);
@@ -956,6 +960,7 @@ export class VMapBuilder {
       const groupEl = this.ensureGroup(
         mapEl!,
         group.groupTitle,
+        group.basemapid,
         group.visible,
         gi,
       );
@@ -1022,7 +1027,7 @@ export class VMapBuilder {
     return (
       <div class="root">
         <slot name="mapconfig" onSlotchange={this.onSlotChange}></slot>
-        <div part="mount" ref={this.refMount}></div>
+        <slot></slot>
       </div>
     );
   }
