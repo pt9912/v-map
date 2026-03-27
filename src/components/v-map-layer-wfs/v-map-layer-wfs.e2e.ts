@@ -1,10 +1,14 @@
 import type { E2EPage } from '../../testing/e2e-testing';
 import { newE2EPage } from '../../testing/e2e-testing';
+import type { WfsTestServer } from '../../testing/wfs-test-server';
+import { startWfsTestServer } from '../../testing/wfs-test-server';
 
 jest.setTimeout(20_000);
 
 describe('<v-map-layer-wfs> e2e', () => {
   let page: E2EPage;
+  let wfsServer: WfsTestServer;
+  let localWfsUrl: string;
 
   const render = async (html: string, opts?: { wait?: boolean }) => {
     await page.evaluate(
@@ -21,6 +25,8 @@ describe('<v-map-layer-wfs> e2e', () => {
   };
 
   beforeAll(async () => {
+    wfsServer = await startWfsTestServer();
+    localWfsUrl = wfsServer.url;
     page = await newE2EPage();
     await page.setContent('<div id="test-root"></div>');
   });
@@ -31,13 +37,14 @@ describe('<v-map-layer-wfs> e2e', () => {
 
   afterAll(async () => {
     await page.close();
+    await wfsServer.close();
   });
 
   it('hydrates inside <v-map>', async () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-wfs url="https://example.com/wfs" typeName="test:layer"></v-map-layer-wfs>
+          <v-map-layer-wfs url="${localWfsUrl}" typeName="test:layer"></v-map-layer-wfs>
         </v-map-layergroup>
       </v-map>
     `);
@@ -49,12 +56,12 @@ describe('<v-map-layer-wfs> e2e', () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-wfs url="https://example.com/wfs" typeName="test:states"></v-map-layer-wfs>
+          <v-map-layer-wfs url="${localWfsUrl}" typeName="test:states"></v-map-layer-wfs>
         </v-map-layergroup>
       </v-map>
     `);
     const el = await page.find('v-map-layer-wfs');
-    expect(el.getAttribute('url')).toBe('https://example.com/wfs');
+    expect(el.getAttribute('url')).toBe(localWfsUrl);
     expect(el.getAttribute('typeName')).toBe('test:states');
   });
 
@@ -63,7 +70,7 @@ describe('<v-map-layer-wfs> e2e', () => {
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-wfs
-            url="https://example.com/wfs"
+            url="${localWfsUrl}"
             typeName="test:layer"
             version="2.0.0"
             outputFormat="application/json"
@@ -82,7 +89,7 @@ describe('<v-map-layer-wfs> e2e', () => {
     await render(`
       <v-map flavour="ol" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
-          <v-map-layer-wfs url="https://example.com/wfs" typeName="test:layer"></v-map-layer-wfs>
+          <v-map-layer-wfs url="${localWfsUrl}" typeName="test:layer"></v-map-layer-wfs>
         </v-map-layergroup>
       </v-map>
     `);

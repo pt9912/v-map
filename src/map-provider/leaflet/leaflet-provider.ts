@@ -665,11 +665,17 @@ export class LeafletProvider implements MapProvider {
     const fillOpacity =
       typeof options === 'number' ? options : options.fillOpacity ?? opacity;
 
-    if (layer instanceof L.GeoJSON || layer instanceof L.LayerGroup) {
+    const isInstanceOf = (className: 'GeoJSON' | 'LayerGroup' | 'Path' | 'Marker') => {
+      if (!(className in L)) return false;
+      const ctor = (L as unknown as Record<string, unknown>)[className];
+      return typeof ctor === 'function' && layer instanceof (ctor as new (...args: never[]) => object);
+    };
+
+    if (isInstanceOf('GeoJSON') || isInstanceOf('LayerGroup')) {
       layer.eachLayer(subLayer => this.setLayerOpacity(subLayer, options));
-    } else if (layer instanceof L.Path) {
+    } else if (isInstanceOf('Path')) {
       layer.setStyle({ opacity, fillOpacity });
-    } else if (layer instanceof L.Marker) {
+    } else if (isInstanceOf('Marker')) {
       const marker = layer as L.Marker;
       marker.setOpacity(opacity);
     } else if ('setOpacity' in layer) {
