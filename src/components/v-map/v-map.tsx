@@ -22,7 +22,7 @@ import type { MapInitOptions } from '../../types/mapinitoptions';
 
 import { ensureImportMap } from '../../lib/ensure-importmap';
 
-import { VMapEvents, type MapProviderDetail } from '../../utils/events';
+import { VMapEvents, type MapProviderDetail, type MapMouseMoveDetail } from '../../utils/events';
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
@@ -109,6 +109,7 @@ export class VMap {
   private mapState: string = 'unavailable';
   private mapContainer!: HTMLDivElement;
   private unsubscribeResize: Unsubscribe;
+  private unsubscribePointerMove: (() => void) | null = null;
 
   @Watch('flavour')
   async onFlavourChanged(oldValue: string, newValue: string) {
@@ -121,6 +122,8 @@ export class VMap {
 
   private reset() {
     this.unsubscribeResize?.();
+    this.unsubscribePointerMove?.();
+    this.unsubscribePointerMove = null;
 
     const mapProvider = this.mapProvider;
     this.mapProvider = null;
@@ -188,6 +191,19 @@ export class VMap {
         cancelable: true, // Parent kann preventDefault() aufrufen
       }),
     );
+
+    // Mouse-move → Geo-Koordinaten (provider-spezifisch)
+    if (this.mapProvider?.onPointerMove) {
+      this.unsubscribePointerMove = this.mapProvider.onPointerMove((coordinate, pixel) => {
+        this.el.dispatchEvent(
+          new CustomEvent<MapMouseMoveDetail>(VMapEvents.MapMouseMove, {
+            detail: { coordinate, pixel },
+            bubbles: true,
+            composed: true,
+          }),
+        );
+      });
+    }
   }
 
   async componentWillLoad() {

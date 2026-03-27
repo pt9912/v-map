@@ -41,4 +41,7 @@ export interface MapProvider {
   ): Promise<void>;
 
   setGroupVisible?(groupId: string, visible: boolean): Promise<void>;
+
+  /** Register a callback for pointer-move with geo-coordinates. Returns unsubscribe function. */
+  onPointerMove?(callback: (coordinate: [number, number] | null, pixel: [number, number]) => void): () => void;
 }

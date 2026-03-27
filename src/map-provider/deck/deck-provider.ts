@@ -1756,6 +1756,26 @@ export type TileLoadProps = {
     }
   }
 
+  onPointerMove(callback: (coordinate: [number, number] | null, pixel: [number, number]) => void): () => void {
+    const handler = (e: PointerEvent) => {
+      const rect = this.target.getBoundingClientRect();
+      const pixel: [number, number] = [e.clientX - rect.left, e.clientY - rect.top];
+      try {
+        const viewport = this.deck?.getViewports()?.[0];
+        if (viewport) {
+          const [lng, lat] = viewport.unproject(pixel);
+          callback([lng, lat], pixel);
+        } else {
+          callback(null, pixel);
+        }
+      } catch {
+        callback(null, pixel);
+      }
+    };
+    this.target.addEventListener('pointermove', handler);
+    return () => this.target.removeEventListener('pointermove', handler);
+  }
+
   async destroy() {
     try {
       this.layerGroups.clear({ destroy: true });
