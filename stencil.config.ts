@@ -250,6 +250,7 @@ export const config: Config = {
       '!src/components/**/*.spec.ts',
       '!src/components/**/*.spec.tsx',
       '!src/components/**/*.e2e.ts',
+      '!src/components/**/*.e2e-utils.ts',
       '!src/components/**/*.stories.ts',
       '!src/components/**/*.stories.tsx',
       '!src/components.d.ts',
@@ -257,10 +258,10 @@ export const config: Config = {
     coverageReporters: ['text', 'lcov', 'html'],
     coverageThreshold: {
       global: {
-        branches: 66,
-        functions: 76,
-        lines: 76,
-        statements: 74,
+        branches: 80,
+        functions: 94,
+        lines: 98,
+        statements: 95,
       },
     },
     // sourceMaps helfen, die TS-Zeilen zu sehen:
