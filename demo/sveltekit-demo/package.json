@@ -4,12 +4,14 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "rm -rf node_modules/.vite && vite dev",
-		"build": "vite build",
+		"sync:vmap": "node ./scripts/sync-local-vmap.mjs",
+		"dev": "pnpm run sync:vmap && rm -rf node_modules/.vite && vite dev",
+		"build": "pnpm run sync:vmap && vite build",
+		"smoke": "node ./scripts/smoke.mjs",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+		"check": "pnpm run sync:vmap && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "pnpm run sync:vmap && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
 		"@npm9912/v-map": "file:../../"

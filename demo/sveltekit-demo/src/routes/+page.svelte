@@ -9,9 +9,31 @@
 	let logs = $state<string[]>([]);
 
 	const GEOTIFF_SAMPLES = [
-		{ label: 'MiniScale UK', url: 'https://mikenunn.net/data/MiniScale_(std_with_grid)_R23.tif' },
-		{ label: 'OpenLayers Test', url: 'https://openlayers.org/data/raster/no-overviews.tif' },
-		{ label: 'Sentinel-2 RGB', url: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/36/Q/WD/2020/7/S2A_36QWD_20200701_0_L2A/TCI.tif' },
+		{
+			label: 'Local CEA Grayscale',
+			url: '/geotiff/cea.tif',
+			notes: 'small local sample, no external range requests',
+		},
+		{
+			label: 'Local GeoKey Palette',
+			url: '/geotiff/GeogToWGS84GeoKey5.tif',
+			notes: 'small local sample with GeoKeys and palette colors',
+		},
+		{
+			label: 'MiniScale UK',
+			url: 'https://mikenunn.net/data/MiniScale_(std_with_grid)_R23.tif',
+			notes: 'large external RGB sample for deck/geotiff testing',
+		},
+		{
+			label: 'OpenLayers Test',
+			url: 'https://openlayers.org/data/raster/no-overviews.tif',
+			notes: 'external grayscale sample from the OpenLayers test set',
+		},
+		{
+			label: 'Sentinel-2 RGB',
+			url: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/36/Q/WD/2020/7/S2A_36QWD_20200701_0_L2A/TCI.tif',
+			notes: 'large external COG sample with real-world RGB imagery',
+		},
 	];
 
 	const GEOJSON_SAMPLES = {
@@ -78,9 +100,13 @@
 		<div class="row">
 			<strong>GeoTIFF:</strong>
 			{#each GEOTIFF_SAMPLES as sample}
-				<button onclick={() => applyGeoTiff(sample.url)}>{sample.label}</button>
+				<button onclick={() => applyGeoTiff(sample.url)} title={sample.notes}>{sample.label}</button>
 			{/each}
 			<button class="secondary" onclick={() => { geotiffVisible = false; addLog('GeoTIFF hidden'); }}>Hide</button>
+		</div>
+		<div class="row hint">
+			Local demo GeoTIFFs are served from <code>/geotiff/*</code> for reproducible debugging.
+			External samples remain available for larger real-world test cases.
 		</div>
 
 		<div class="row">
@@ -191,6 +217,15 @@
 
 	.row:last-child {
 		margin-bottom: 0;
+	}
+
+	.hint {
+		font-size: 0.8rem;
+		color: #b8c2d9;
+	}
+
+	code {
+		font-family: monospace;
 	}
 
 	.stage {
