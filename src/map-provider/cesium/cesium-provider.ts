@@ -24,6 +24,8 @@ import { getGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 import { GeoTIFFImageryProvider } from './GeoTIFFImageryProvider';
 import { createCesiumGeoTIFFTerrainProvider } from './CesiumGeoTIFFTerrainProvider';
 
+const TERRAIN_GEOTIFF_LOG_PREFIX = 'v-map - cesium - terrain-geotiff - ';
+
 type CesiumModule = typeof import('cesium');
 import type {
   Viewer,
@@ -1388,7 +1390,7 @@ export class CesiumProvider implements MapProvider {
     // If no URL is set, return a fallback layer with EllipsoidTerrainProvider
     if (!config.url) {
       log(
-        '[cesium-terrain-geotiff] GeoTIFF Terrain layer created without URL (will load when URL is set)',
+        `${TERRAIN_GEOTIFF_LOG_PREFIX}layer created without URL, waiting for URL to load`,
       );
       const fallbackProvider = new this.Cesium.EllipsoidTerrainProvider();
       const layer = new CesiumTerrainLayer(
@@ -1403,7 +1405,7 @@ export class CesiumProvider implements MapProvider {
     }
 
     try {
-      log(`[cesium-terrain-geotiff] Creating terrain layer from ${config.url}`);
+      log(`${TERRAIN_GEOTIFF_LOG_PREFIX}create layer: url=${config.url}`);
 
       // Create the custom GeoTIFF terrain provider
       const provider = await createCesiumGeoTIFFTerrainProvider({
@@ -1430,10 +1432,10 @@ export class CesiumProvider implements MapProvider {
         layer.setOpacity(config.opacity);
       }
 
-      log('[cesium-terrain-geotiff] Terrain layer created successfully');
+      log(`${TERRAIN_GEOTIFF_LOG_PREFIX}layer created successfully`);
       return layer;
     } catch (err) {
-      error('[cesium-terrain-geotiff] Failed to create terrain layer:', err);
+      error(`${TERRAIN_GEOTIFF_LOG_PREFIX}failed to create terrain layer:`, err);
       // Return a fallback with EllipsoidTerrainProvider
       const fallbackProvider = new this.Cesium.EllipsoidTerrainProvider();
       return new CesiumTerrainLayer(

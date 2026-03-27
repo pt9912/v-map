@@ -1,6 +1,8 @@
 import * as L from 'leaflet';
 import { log, error } from '../../utils/logger';
 
+const LOG_PREFIX = 'v-map - leaflet - wcs - tile - ';
+
 export interface WCSGridLayerOptions extends L.GridLayerOptions {
   url: string;
   coverageName: string;
@@ -117,15 +119,15 @@ export class WCSGridLayer extends L.GridLayer {
     const tile = document.createElement('img');
     const wcsUrl = this.buildWCSUrl(coords);
 
-    log(`[WCS Tile] Loading tile at coords (${coords.x}, ${coords.y}, ${coords.z})`);
-    log(`[WCS Tile] URL: ${wcsUrl}`);
+    log(`${LOG_PREFIX}load: coords=(${coords.x},${coords.y},${coords.z})`);
+    log(`${LOG_PREFIX}url: ${wcsUrl}`);
 
     tile.onload = () => {
       done(null, tile);
     };
 
     tile.onerror = (err) => {
-      error('[WCS Tile] Failed to load tile:', err);
+      error(`${LOG_PREFIX}failed to load tile:`, err);
       done(err instanceof Error ? err : new Error(String(err)), tile);
     };
 

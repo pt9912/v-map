@@ -3,6 +3,8 @@ import type proj4Type from 'proj4';
 import { log, warn, error } from '../../utils/logger';
 import { loadGeoTIFFSource, GeoTIFFSource } from '../geotiff/geotiff-source';
 
+const LOG_PREFIX = 'v-map - cesium - terrain-geotiff - ';
+
 type CesiumModule = typeof import('cesium');
 import type { TerrainProvider, TilingScheme, TerrainData, Rectangle, Credit, TileAvailability, Event as CesiumEvent } from 'cesium';
 
@@ -51,7 +53,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
     options: CesiumGeoTIFFTerrainProviderOptions,
   ): Promise<boolean> {
     try {
-      log(`[cesium-terrain-geotiff] Loading GeoTIFF from ${options.url}`);
+      log(`${LOG_PREFIX}loadGeoTIFF: url=${options.url}`);
 
       const [geotiffModule, { default: proj4 }, geokeysModule] = await Promise.all([
         import('geotiff'),
@@ -82,18 +84,14 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
       this.noDataValue = source.noDataValue ?? 0;
       this.proj4 = source.proj4; // Store proj4 instance with registered projections
 
-      log('[cesium-terrain-geotiff] GeoTIFF loaded successfully');
       log(
-        `[cesium-terrain-geotiff] Source projection: ${this.fromProjection}`,
+        `${LOG_PREFIX}loaded: projection=${this.fromProjection}, bounds=[${this.sourceBounds.map(v => v.toFixed(0)).join(',')}], wgs84=[${this.wgs84Bounds.map(v => v.toFixed(4)).join(',')}], size=${this.width}x${this.height}`,
       );
-      log(`[cesium-terrain-geotiff] Bounds: ${this.sourceBounds}`);
-      log(`[cesium-terrain-geotiff] WGS84 Bounds: ${this.wgs84Bounds}`);
-      log(`[cesium-terrain-geotiff] Dimensions: ${this.width}x${this.height}`);
 
       this.ready = true;
       return true;
     } catch (err) {
-      error('[cesium-terrain-geotiff] Failed to load GeoTIFF:', err);
+      error(`${LOG_PREFIX}failed to load GeoTIFF:`, err);
       this.ready = false;
       return false;
     }
@@ -162,7 +160,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
             number,
           ];
         } catch (err) {
-          warn('[cesium-terrain-geotiff] Transform failed:', err);
+          warn(`${LOG_PREFIX}transform failed:`, err);
           return coord;
         }
       };
@@ -239,7 +237,7 @@ export class CesiumGeoTIFFTerrainProvider implements TerrainProvider {
         },
       });
     } catch (err) {
-      warn('[cesium-terrain-geotiff] Failed to load tile geometry:', err);
+      warn(`${LOG_PREFIX}failed to load tile geometry:`, err);
       return this.createFlatHeightmap();
     }
   }
