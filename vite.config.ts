@@ -7,6 +7,11 @@ import {
   DECK_VERSION,
 } from './src/lib/versions.gen';
 
+const leafletEsmPath = new URL(
+  './node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.esm.js',
+  import.meta.url,
+).pathname;
+
 console.log('[v-map demo versions]', {
   Cesium: CESIUM_VERSION,
   OL: OL_VERSION,
@@ -105,15 +110,22 @@ export default defineConfig({
     ],
   },
   resolve: {
-    alias: {
-      jszip: new URL(
-        './node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
-        import.meta.url,
-      ).pathname,
-      pako: new URL(
-        './node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
-        import.meta.url,
-      ).pathname,
-    },
+    alias: [
+      { find: /^leaflet$/, replacement: leafletEsmPath },
+      {
+        find: /^jszip$/,
+        replacement: new URL(
+          './node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
+          import.meta.url,
+        ).pathname,
+      },
+      {
+        find: /^pako$/,
+        replacement: new URL(
+          './node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
+          import.meta.url,
+        ).pathname,
+      },
+    ],
   },
 });

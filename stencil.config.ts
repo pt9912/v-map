@@ -267,6 +267,7 @@ export const config: Config = {
     // 'ts-jest' o. ä. kümmert sich idR. darum; alternativ:
     // testEnvironmentOptions: { url: 'http://localhost' },
     moduleNameMapper: {
+      '^leaflet/dist/leaflet-src\\.esm\\.js$': 'leaflet',
       '^geostyler-sld-parser$':
         '<rootDir>/src/testing/mocks/geostyler-sld-parser.ts',
       '^geostyler-mapbox-parser$':

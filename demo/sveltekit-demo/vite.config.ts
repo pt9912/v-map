@@ -2,6 +2,11 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
+const leafletEsmPath = new URL(
+	'../../node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.esm.js',
+	import.meta.url,
+).pathname;
+
 export default defineConfig({
 	plugins: [
 		sveltekit(),
@@ -9,8 +14,8 @@ export default defineConfig({
 			include: ['stream', 'events', 'buffer', 'util', 'string_decoder', 'process'],
 		}),
 	],
-	optimizeDeps: {
-		include: ['@npm9912/v-map/loader'],
+	resolve: {
+		alias: [{ find: /^leaflet$/, replacement: leafletEsmPath }],
 	},
 	server: {
 		// Watch the parent v-map dist directory for changes after `pnpm run build`

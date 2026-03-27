@@ -5,7 +5,6 @@ import type { LonLat } from '../../types/lonlat';
 
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 
-// Leaflet ESM
 import * as L from 'leaflet';
 
 import { isBrowser } from '../../utils/dom-env';

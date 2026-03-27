@@ -1,6 +1,11 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'leaflet/dist/leaflet-src.esm.js': 'leaflet',
+    },
+  },
   test: {
     environment: 'jsdom', // oder 'happy-dom'
     globals: true,

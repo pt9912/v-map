@@ -6,6 +6,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/testing/setupTests.jest.ts'],
   moduleNameMapper: {
+    '^leaflet/dist/leaflet-src\\.esm\\.js$': 'leaflet',
     '^geostyler-sld-parser$':
       '<rootDir>/src/testing/mocks/geostyler-sld-parser.ts',
     '^geostyler-mapbox-parser$':
