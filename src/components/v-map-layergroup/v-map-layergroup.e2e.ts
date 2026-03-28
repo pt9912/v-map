@@ -92,7 +92,7 @@ describe('<v-map-layergroup> e2e', () => {
     expect(childLayer).toBeTruthy();
   });
 
-  it.skip('renders child layers - deck', async () => {
+  it('renders child layers - deck', async () => {
     await render(`
       <v-map flavour="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>

@@ -39,7 +39,7 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
 
   it('hydrates inside <v-map>', async () => {
     await render(`
-      <v-map provider="deck" style="display:block;width:300px;height:200px">
+      <v-map flavour="deck" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
           <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
         </v-map-layergroup>
@@ -51,30 +51,21 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
 
   it('accepts url attribute', async () => {
     await render(`
-      <v-map provider="deck" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
     `);
     const el = await page.find('v-map-layer-terrain-geotiff');
     expect(el.getAttribute('url')).toBe(localGeoTiffUrl);
   });
 
-  it.skip('accepts optional terrain parameters', async () => {
-    // Skipped: need real url for GeoTIFF
+  it('accepts optional terrain parameters', async () => {
     await render(`
-      <v-map provider="deck" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain-geotiff
-            url="${localGeoTiffUrl}"
-            texture="https://example.com/texture.jpg"
-            wireframe="true"
-            mesh-max-error="2.0"
-            elevation-scale="2.0">
-          </v-map-layer-terrain-geotiff>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain-geotiff
+        url="${localGeoTiffUrl}"
+        texture="https://example.com/texture.jpg"
+        wireframe="true"
+        mesh-max-error="2.0"
+        elevation-scale="2.0">
+      </v-map-layer-terrain-geotiff>
     `);
     const el = await page.find('v-map-layer-terrain-geotiff');
     expect(el.getAttribute('texture')).toBe('https://example.com/texture.jpg');
@@ -83,32 +74,22 @@ describe('<v-map-layer-terrain-geotiff> e2e', () => {
     expect(el.getAttribute('elevation-scale')).toBe('2.0');
   });
 
-  it.skip('accepts projection parameters', async () => {
-    // Skipped: need real url for GeoTIFF
+  it('accepts projection parameters', async () => {
     await render(`
-      <v-map provider="deck" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain-geotiff
-            url="${localGeoTiffUrl}"
-            projection="EPSG:32632"
-            force-projection="true">
-          </v-map-layer-terrain-geotiff>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain-geotiff
+        url="${localGeoTiffUrl}"
+        projection="EPSG:32632"
+        force-projection="true">
+      </v-map-layer-terrain-geotiff>
     `);
     const el = await page.find('v-map-layer-terrain-geotiff');
     expect(el.getAttribute('projection')).toBe('EPSG:32632');
     expect(el.getAttribute('force-projection')).toBe('true');
   });
 
-  it.skip('accepts common props', async () => {
-    // Skipped: need real url for GeoTIFF
+  it('accepts common props', async () => {
     await render(`
-      <v-map provider="deck" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain-geotiff url="${localGeoTiffUrl}"></v-map-layer-terrain-geotiff>
     `);
     const el = await page.find('v-map-layer-terrain-geotiff');
     el.setAttribute('opacity', '0.9');

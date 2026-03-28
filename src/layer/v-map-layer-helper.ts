@@ -62,13 +62,17 @@ export class VMapLayerHelper {
       const groupId: string = await layerGroup.getGroupId();
       const groupVisible: boolean = await layerGroup.visible;
       if (this.layerId === null && this.mapProvider) {
-        this.layerId = await this.addLayer(
-          layerGroup.basemapid,
-          groupId,
-          groupVisible,
-          createLayerConfig(),
-          elementId,
-        );
+        try {
+          this.layerId = await this.addLayer(
+            layerGroup.basemapid,
+            groupId,
+            groupVisible,
+            createLayerConfig(),
+            elementId,
+          );
+        } catch (e) {
+          warn(`${this.el.nodeName.toLowerCase()} - failed to add layer: ${(e as Error).message}`);
+        }
       }
     }
     vmap.addEventListener(VMapEvents.MapProviderReady, (async (
@@ -78,15 +82,19 @@ export class VMapLayerHelper {
       const mapEvent = event.detail as MapProviderDetail;
       this.mapProvider = mapEvent.mapProvider;
       if (this.layerId === null && this.mapProvider) {
-        const groupId: string = await layerGroup.getGroupId();
-        const groupVisible: boolean = await layerGroup.visible;
-        this.layerId = await this.addLayer(
-          layerGroup.basemapid,
-          groupId,
-          groupVisible,
-          createLayerConfig(),
-          elementId,
-        );
+        try {
+          const groupId: string = await layerGroup.getGroupId();
+          const groupVisible: boolean = await layerGroup.visible;
+          this.layerId = await this.addLayer(
+            layerGroup.basemapid,
+            groupId,
+            groupVisible,
+            createLayerConfig(),
+            elementId,
+          );
+        } catch (e) {
+          warn(`${this.el.nodeName.toLowerCase()} - failed to add layer: ${(e as Error).message}`);
+        }
       }
     }) as EventListener);
   }

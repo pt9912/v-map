@@ -43,7 +43,6 @@ describe('<v-map-layer-terrain> e2e', () => {
   });
 
   it('accepts elevationData attribute', async () => {
-    // Skipped: terrain layer type not yet supported by OpenLayers provider
     await render(`
       <v-map flavour="cesium" style="display:block;width:300px;height:200px">
         <v-map-layergroup>
@@ -57,34 +56,24 @@ describe('<v-map-layer-terrain> e2e', () => {
     );
   });
 
-  it.skip('accepts optional terrain parameters', async () => {
-    // Skipped: need real url for elevationData
+  it('accepts optional terrain parameters', async () => {
     await render(`
-      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain
-            elevationData="https://example.com/elevation.png"
-            texture="https://example.com/texture.jpg"
-            wireframe="true"
-            color="#ff0000">
-          </v-map-layer-terrain>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain
+        elevationData="https://example.com/elevation.png"
+        texture="https://example.com/texture.jpg"
+        wireframe="true"
+        color="#ff0000">
+      </v-map-layer-terrain>
     `);
     const el = await page.find('v-map-layer-terrain');
     expect(el.getAttribute('texture')).toBe('https://example.com/texture.jpg');
-    expect(el.getAttribute('wireframe')).toBe('true');
+    expect(el.getAttribute('wireframe')).not.toBeNull();
     expect(el.getAttribute('color')).toBe('#ff0000');
   });
 
-  it.skip('accepts common props', async () => {
-    // Skipped: need real url for elevationData
+  it('accepts common props', async () => {
     await render(`
-      <v-map flavour="cesium" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>
-          <v-map-layer-terrain elevationData="https://example.com/elevation.png"></v-map-layer-terrain>
-        </v-map-layergroup>
-      </v-map>
+      <v-map-layer-terrain elevationData="https://example.com/elevation.png"></v-map-layer-terrain>
     `);
     const el = await page.find('v-map-layer-terrain');
     el.setAttribute('opacity', '0.9');

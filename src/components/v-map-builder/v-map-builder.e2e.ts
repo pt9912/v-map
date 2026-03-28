@@ -97,25 +97,21 @@ describe('<v-map-builder> e2e', () => {
     expect(vmap).toBeTruthy();
   });
 
-  it.skip('emits configReady event on successful parse', async () => {
-    // Skipped: Event timing issue with slot content
-    await render(`
-      <v-map-builder>
-        <script type="application/json" slot="mapconfig">
-        {
-          "map": {
-            "flavour": "ol",
-            "zoom": 2,
-            "center": "0,0"
-          }
-        }
-        </script>
-      </v-map-builder>
-    `);
-
+  it('emits configReady event on successful parse', async () => {
+    await render(`<v-map-builder></v-map-builder>`);
     const builder = await page.find('v-map-builder');
     const configReadySpy = await builder.spyOnEvent('configReady');
 
+    await page.evaluate(() => {
+      const el = document.querySelector('v-map-builder');
+      const script = document.createElement('script');
+      script.type = 'application/json';
+      script.slot = 'mapconfig';
+      script.textContent = JSON.stringify({
+        map: { flavour: 'ol', zoom: 2, center: '0,0' },
+      });
+      el!.appendChild(script);
+    });
     await page.waitForChanges();
 
     expect(configReadySpy).toHaveReceivedEvent();
