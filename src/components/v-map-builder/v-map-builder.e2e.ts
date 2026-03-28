@@ -93,7 +93,7 @@ describe('<v-map-builder> e2e', () => {
       </v-map-builder>
     `);
     await page.waitForChanges();
-    const vmap = await page.find('v-map-builder >>> v-map');
+    const vmap = await page.find('v-map-builder > v-map');
     expect(vmap).toBeTruthy();
   });
 
