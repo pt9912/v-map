@@ -269,6 +269,71 @@ describe('v-map-layer-tile3d', () => {
     });
   });
 
+  it('applyExistingStyles skips styles without getLayerTargetIds', async () => {
+    const cesiumStyle = { color: 'color("red")' };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-tile3d'),
+      helper: helperMock,
+      appliedCesiumStyle: undefined,
+      isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+      updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+    } as any;
+    component.el.id = 'tileset';
+
+    await VMapLayerTile3d.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedCesiumStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('watchers handle undefined helper gracefully', async () => {
+    await VMapLayerTile3d.prototype.onVisibleChanged.call({
+      visible: false,
+      helper: undefined,
+    });
+    await VMapLayerTile3d.prototype.onOpacityChanged.call({
+      opacity: 0.5,
+      helper: undefined,
+    });
+    await VMapLayerTile3d.prototype.onZIndexChanged.call({
+      zIndex: 10,
+      helper: undefined,
+    });
+    await VMapLayerTile3d.prototype.onTilesetOptionsChanged.call({
+      helper: undefined,
+    });
+
+    expect(helperMock.setVisible).not.toHaveBeenCalled();
+    expect(helperMock.setOpacity).not.toHaveBeenCalled();
+    expect(helperMock.setZIndex).not.toHaveBeenCalled();
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('updateLayerWithCesiumStyle does nothing without style or helper', async () => {
+    await VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'].call({
+      appliedCesiumStyle: undefined,
+      helper: helperMock,
+    });
+    await VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'].call({
+      appliedCesiumStyle: { color: 'red' },
+      helper: undefined,
+    });
+
+    expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('parseTilesetOptions returns object as-is', () => {
+    const opts = { maxError: 4 };
+    expect(
+      VMapLayerTile3d.prototype['parseTilesetOptions'].call({ tilesetOptions: opts }),
+    ).toBe(opts);
+  });
+
   it('applyExistingStyles skips non-targeted styles', async () => {
     const cesiumStyle = { color: 'color("red")' };
     const styleEl = document.createElement('v-map-style');

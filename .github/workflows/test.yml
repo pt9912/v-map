@@ -105,8 +105,8 @@ jobs:
           echo "Using: ${CANDIDATE}"
 
       # ---------- Tests ----------
-      - name: Run unit/spec tests (Jest/jsdom)
-        run: pnpm run test:spec
+      - name: Run unit/spec + vitest tests with coverage
+        run: pnpm run test:coverage
 
       - name: Run e2e tests (Puppeteer)
         env:

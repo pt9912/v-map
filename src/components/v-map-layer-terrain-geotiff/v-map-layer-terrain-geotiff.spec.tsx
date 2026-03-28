@@ -167,6 +167,23 @@ describe('v-map-layer-terrain-geotiff', () => {
     }));
   });
 
+  it('isReady reflects didLoad state', () => {
+    expect(
+      VMapLayerTerrainGeotiff.prototype.isReady.call({ didLoad: false }),
+    ).toBe(false);
+    expect(
+      VMapLayerTerrainGeotiff.prototype.isReady.call({ didLoad: true }),
+    ).toBe(true);
+  });
+
+  it('getLayerId delegates to helper', async () => {
+    helperMock.getLayerId.mockReturnValue('geotiff-123');
+    const component = { helper: helperMock } as any;
+    expect(
+      await VMapLayerTerrainGeotiff.prototype.getLayerId.call(component),
+    ).toBe('geotiff-123');
+  });
+
   it('onPropertyChanged does nothing when helper is undefined', async () => {
     const component = {
       helper: undefined,

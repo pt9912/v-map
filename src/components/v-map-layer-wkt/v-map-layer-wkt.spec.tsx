@@ -346,6 +346,97 @@ describe('v-map-layer-wkt', () => {
     expect(helperMock.updateLayer).not.toHaveBeenCalled();
   });
 
+  it('applyExistingStyles applies geostyler style from v-map-style elements', async () => {
+    const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wkt1']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wkt'),
+      helper: helperMock,
+      wkt: 'POINT(0 0)',
+      url: undefined,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWkt.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWkt.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'wkt1';
+
+    await VMapLayerWkt.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toEqual(geostylerStyle);
+    expect(helperMock.updateLayer).toHaveBeenCalled();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips styles without getStyle', async () => {
+    const styleEl = document.createElement('v-map-style');
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wkt'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWkt.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWkt.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'wkt1';
+
+    await VMapLayerWkt.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips non-targeted styles', async () => {
+    const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['other-layer']);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wkt'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWkt.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWkt.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'wkt1';
+
+    await VMapLayerWkt.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
+  it('applyExistingStyles skips styles without getLayerTargetIds', async () => {
+    const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
+    const styleEl = document.createElement('v-map-style');
+    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    document.body.appendChild(styleEl);
+
+    const component = {
+      el: document.createElement('v-map-layer-wkt'),
+      helper: helperMock,
+      appliedGeostylerStyle: undefined,
+      isTargetedByStyle: VMapLayerWkt.prototype['isTargetedByStyle'],
+      updateLayerWithGeostylerStyle: VMapLayerWkt.prototype['updateLayerWithGeostylerStyle'],
+    } as any;
+    component.el.id = 'wkt1';
+
+    await VMapLayerWkt.prototype['applyExistingStyles'].call(component);
+
+    expect(component.appliedGeostylerStyle).toBeUndefined();
+
+    document.body.innerHTML = '';
+  });
+
   it('handles watcher calls gracefully when helper is undefined', async () => {
     await VMapLayerWkt.prototype.onVisibleChanged.call({
       visible: false,
