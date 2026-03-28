@@ -33,11 +33,11 @@ describe('<v-map-layer-wcs>', () => {
       h('v-map-layer-wcs', { url: 'https://example.com/wcs', 'coverage-name': 'DEM' }),
     );
 
-    expect(root).toHaveAttribute('coverage-name', 'DEM');
-    expect(root).toHaveAttribute('url', 'https://example.com/wcs');
-    expect(root).toHaveAttribute('format', 'image/tiff');
-    expect(root).toHaveAttribute('version', '1.1.0');
-    expect(root).toHaveAttribute('class', 'hydrated');
+    expect(root?.getAttribute('coverage-name')).toBe('DEM');
+    expect(root?.getAttribute('url')).toBe('https://example.com/wcs');
+    expect(root?.getAttribute('format')).toBe('image/tiff');
+    expect(root?.getAttribute('version')).toBe('1.1.0');
+    expect(root?.classList.contains('hydrated')).toBe(true);
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

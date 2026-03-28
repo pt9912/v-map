@@ -134,7 +134,7 @@ export class VMapLayerOSM implements VMapLayer {
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
-    this.helper.removeLayer();
+    await this.helper?.removeLayer();
   }
 
   render() {

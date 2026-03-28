@@ -91,7 +91,7 @@ export class VMapLayerGroup {
       const mapProvider = await mapElement?.getMapProvider?.();
       await this.init(mapProvider);
     }
-    vmap.addEventListener(VMapEvents.MapProviderReady, (async (
+    vmap?.addEventListener(VMapEvents.MapProviderReady, (async (
       event: CustomEvent,
     ) => {
       log(`${MSG_COMPONENT}map provider ready`);
@@ -99,7 +99,7 @@ export class VMapLayerGroup {
       await this.init(mapEvent.mapProvider);
     }) as EventListener);
 
-    vmap.addEventListener(
+    vmap?.addEventListener(
       VMapEvents.MapProviderWillShutdown,
       async (_event: CustomEvent) => {
         log(`${MSG_COMPONENT}map provider shutting down`);

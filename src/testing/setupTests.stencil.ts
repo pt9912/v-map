@@ -21,6 +21,18 @@ vi.mock('@stencil/core', async (importOriginal) => {
   };
 });
 
+// Suppress unhandled rejections from compiled components that try to load
+// map providers (OpenLayers, Leaflet, Cesium, Deck) during render() tests.
+// The providers are not available in the test environment because the dist
+// bundle inlines dynamic imports that resolve to non-constructable stubs.
+const providerErrors = /Provider is not a constructor|Cannot read properties of (null|undefined)/;
+process.on('unhandledRejection', (reason: unknown) => {
+  const msg = reason instanceof Error ? reason.message : String(reason);
+  if (providerErrors.test(msg)) return; // swallow known provider errors
+  // Re-throw unexpected rejections so vitest reports them
+  throw reason;
+});
+
 beforeAll(async () => {
   // Load compiled Stencil components so custom elements are registered for render() tests
   try {

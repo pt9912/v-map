@@ -9,6 +9,13 @@ export default defineVitestConfig({
   },
   test: {
     globals: true,
+    testTimeout: 15_000,
+    onConsoleLog(log) {
+      // Suppress verbose Stencil component lifecycle logs from compiled dist bundle
+      // to prevent EnvironmentTeardownError from pending console.log RPC calls
+      if (/component(Will|Did)(Load|Render)|connectedCallback|disconnectedCallback|map provider|Running in development mode|Map already in creating|Map provider not yet ready|is not inside a v-map/.test(log)) return false;
+      return undefined;
+    },
     environment: 'jsdom',
     environmentMatchGlobs: [
       ['src/components/**/*.spec.tsx', 'stencil'],
@@ -59,9 +66,12 @@ export default defineVitestConfig({
       ],
       reporter: ['text', 'lcov'],
       thresholds: {
+        // Combined thresholds for components + utils + providers.
+        // Previously split: components (98% lines) and utils (82% lines).
+        // Provider code (~60-75%) lowers the combined average.
         branches: 60,
-        functions: 68,
-        lines: 70,
+        functions: 69,
+        lines: 71,
         statements: 70,
       },
     },

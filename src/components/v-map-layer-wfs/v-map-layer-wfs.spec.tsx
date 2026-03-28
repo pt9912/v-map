@@ -33,12 +33,12 @@ describe('<v-map-layer-wfs>', () => {
       h('v-map-layer-wfs', { url: 'https://example.com/wfs', 'type-name': 'namespace:layer' }),
     );
 
-    expect(root).toHaveAttribute('type-name', 'namespace:layer');
-    expect(root).toHaveAttribute('url', 'https://example.com/wfs');
-    expect(root).toHaveAttribute('version', '1.1.0');
-    expect(root).toHaveAttribute('output-format', 'application/json');
-    expect(root).toHaveAttribute('srs-name', 'EPSG:3857');
-    expect(root).toHaveAttribute('class', 'hydrated');
+    expect(root?.getAttribute('type-name')).toBe('namespace:layer');
+    expect(root?.getAttribute('url')).toBe('https://example.com/wfs');
+    expect(root?.getAttribute('version')).toBe('1.1.0');
+    expect(root?.getAttribute('output-format')).toBe('application/json');
+    expect(root?.getAttribute('srs-name')).toBe('EPSG:3857');
+    expect(root?.classList.contains('hydrated')).toBe(true);
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

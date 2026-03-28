@@ -174,7 +174,7 @@ export class VMapLayerGeoJSON {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
     this.mo?.disconnect();
     this.geoSlot?.removeEventListener('slotchange', this.onSlotChange);
-    this.helper.removeLayer();
+    await this.helper?.removeLayer();
   }
 
   isReady(): boolean {

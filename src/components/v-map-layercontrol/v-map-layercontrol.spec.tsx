@@ -4,13 +4,17 @@ import { forceUpdate } from '@stencil/core';
 import { VMapLayerControl } from './v-map-layercontrol';
 
 describe('v-map-layercontrol', () => {
+  let cleanup: (() => void) | undefined;
+
   afterEach(() => {
+    cleanup?.();
+    cleanup = undefined;
     document.body.innerHTML = '';
     vi.restoreAllMocks();
   });
 
   it('renders an empty state when no layer groups are available', async () => {
-    const { root } = await render(
+    const { root, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-1' }),
     );
 
@@ -154,7 +158,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders layer groups with checkboxes and controls', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-render' }),
     );
 
@@ -203,7 +207,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders basemap selector when basemapid is set', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-basemap' }),
     );
 
@@ -247,7 +251,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers group visibility change via rendered checkbox', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-events' }),
     );
 
@@ -280,7 +284,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer opacity change via rendered slider', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-opacity' }),
     );
 
@@ -312,7 +316,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer z-index change via rendered number input', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-zindex' }),
     );
 
@@ -344,7 +348,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers basemap selector change via rendered select', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-base' }),
     );
 
@@ -381,7 +385,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer checkbox visibility change via rendered checkbox', async () => {
-    const { root, instance, waitForChanges } = await render(
+    const { root, instance, waitForChanges, unmount } = await render(
       h('v-map-layercontrol', { for: 'map-lyr-vis' }),
     );
 
