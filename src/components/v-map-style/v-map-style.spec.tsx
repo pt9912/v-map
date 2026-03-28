@@ -1,5 +1,5 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
+import { h } from '@stencil/vitest';
 
 // Mock all geostyler imports using vi.hoisted + vi.mock
 const { sldMock, mapboxMock, qgisMock, lyrxMock } = vi.hoisted(() => {
@@ -79,19 +79,19 @@ const { sldMock, mapboxMock, qgisMock, lyrxMock } = vi.hoisted(() => {
 });
 
 vi.mock('geostyler-sld-parser', () => {
-  return { default: vi.fn().mockImplementation(() => sldMock) };
+  return { default: vi.fn().mockImplementation(function () { return sldMock; }) };
 });
 
 vi.mock('geostyler-mapbox-parser', () => {
-  return { default: vi.fn().mockImplementation(() => mapboxMock) };
+  return { default: vi.fn().mockImplementation(function () { return mapboxMock; }) };
 });
 
 vi.mock('geostyler-qgis-parser', () => {
-  return { default: vi.fn().mockImplementation(() => qgisMock) };
+  return { default: vi.fn().mockImplementation(function () { return qgisMock; }) };
 });
 
 vi.mock('geostyler-lyrx-parser', () => {
-  return { default: vi.fn().mockImplementation(() => lyrxMock) };
+  return { default: vi.fn().mockImplementation(function () { return lyrxMock; }) };
 });
 
 vi.mock('geostyler-style', () => ({
@@ -101,6 +101,58 @@ vi.mock('geostyler-style', () => ({
 // Import after mocks (ensures mocked modules are used)
 import './v-map-style';
 import { VMapStyle } from './v-map-style';
+
+function toPropName(attr: string): string {
+  return attr.replace(/-([a-z])/g, (_match, char: string) => char.toUpperCase());
+}
+
+function createEmitter(root: HTMLElement, eventName: string) {
+  return {
+    emit: vi.fn((detail?: unknown) => {
+      root.dispatchEvent(
+        new CustomEvent(eventName, {
+          detail,
+          bubbles: false,
+        }),
+      );
+    }),
+  };
+}
+
+async function render(vnode: any) {
+  const root = document.createElement('v-map-style');
+  const instance = new VMapStyle() as any;
+  instance.el = root;
+  instance.styleReady = createEmitter(root, 'styleReady');
+  instance.styleError = createEmitter(root, 'styleError');
+
+  const attrs = vnode?.$attrs$ ?? {};
+  for (const [name, rawValue] of Object.entries(attrs)) {
+    if (typeof rawValue === 'function' || rawValue == null) continue;
+    const value =
+      name === 'auto-apply'
+        ? !(rawValue === false || rawValue === 'false')
+        : rawValue;
+    const propName = toPropName(name);
+    instance[propName] = value;
+    (root as any)[propName] = value;
+    root.setAttribute(name, String(rawValue));
+  }
+
+  (root as any).format = instance.format;
+  (root as any).src = instance.src;
+  (root as any).content = instance.content;
+  (root as any).layerTargets = instance.layerTargets;
+  (root as any).autoApply = instance.autoApply;
+  root.setAttribute('format', instance.format);
+  if (instance.src) root.setAttribute('src', instance.src);
+  if (instance.content) root.setAttribute('content', instance.content);
+  if (instance.layerTargets) {
+    root.setAttribute('layer-targets', instance.layerTargets);
+  }
+
+  return { root, instance };
+}
 
 describe('v-map-style', () => {
   it('renders with default properties', async () => {

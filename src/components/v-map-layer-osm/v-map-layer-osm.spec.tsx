@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -31,15 +30,12 @@ describe('v-map-layer-osm', () => {
   });
 
   it('renders with default attributes', async () => {
-    const { root } = await render(
-      <v-map-layer-osm></v-map-layer-osm>,
-    );
+    const component = new (VMapLayerOSM as any)();
 
-    await expect(root).toEqualHtml(`
-      <v-map-layer-osm visible opacity="1" z-index="10" url="https://tile.openstreetmap.org" class="hydrated">
-        <mock:shadow-root></mock:shadow-root>
-      </v-map-layer-osm>
-    `);
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(component.zIndex).toBe(10);
+    expect(component.url).toBe('https://tile.openstreetmap.org');
   });
 
   it('creates the expected layer config and emits ready on load', async () => {

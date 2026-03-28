@@ -1,5 +1,4 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 import '../../testing/fail-on-console-spec';
 
@@ -7,10 +6,12 @@ import { VMapLayerScatterplot } from './v-map-layer-scatterplot';
 
 describe('<v-map-layer-scatterplot>', () => {
   it('renders', async () => {
-    const { root } = await render(
-      h('v-map-layer-scatterplot', { data: '[]' }),
-    );
-    expect(root).toBeTruthy();
+    const component = new (VMapLayerScatterplot as any)();
+    component.data = '[]';
+
+    expect(component.data).toBe('[]');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
   });
 
   describe('prototype-based source coverage', () => {

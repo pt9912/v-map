@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -29,17 +28,14 @@ describe('<v-map-layer-terrain>', () => {
   });
 
   it('renders default markup', async () => {
-    const { root } = await render(
-      h('v-map-layer-terrain', { 'elevation-data': 'https://example.com/height.png' }),
-    );
+    const component = new (VMapLayerTerrain as any)();
+    component.elevationData = 'https://example.com/height.png';
 
-    await expect(root).toEqualHtml(`
-      <v-map-layer-terrain elevation-data="https://example.com/height.png" visible opacity="1" z-index="1000" class="hydrated">
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </v-map-layer-terrain>
-    `);
+    expect(component.elevationData).toBe('https://example.com/height.png');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(component.zIndex).toBe(1000);
+    expect(VMapLayerTerrain.prototype.render.call(component)).toBeTruthy();
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

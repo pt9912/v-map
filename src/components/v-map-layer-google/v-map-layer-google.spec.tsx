@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 import '../../testing/fail-on-console-spec';
 
@@ -44,158 +43,106 @@ describe('<v-map-layer-google>', () => {
   });
 
   it('renders without props', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', null),
-        ),
-      ),
-    );
-    expect(root).toBeTruthy();
+    const component = new (VMapLayerGoogle as any)();
+
+    expect(component.mapType).toBe('roadmap');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(VMapLayerGoogle.prototype.render.call(component)).toBeUndefined();
   });
 
   it('renders with api-key', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', { 'api-key': mockApiKey }),
-        ),
-      ),
-    );
-    expect(root).toBeTruthy();
-    const googleLayer = root?.querySelector('v-map-layer-google');
-    expect(googleLayer?.getAttribute('api-key')).toBe(mockApiKey);
+    const component = new (VMapLayerGoogle as any)();
+    component.apiKey = mockApiKey;
+
+    expect(component.apiKey).toBe(mockApiKey);
   });
 
   it('renders with all map types', async () => {
     const mapTypes = ['roadmap', 'satellite', 'terrain', 'hybrid'];
 
     for (const mapType of mapTypes) {
-      const { root } = await render(
-        h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-          h('v-map-layergroup', null,
-            h('v-map-layer-google', { 'api-key': mockApiKey, 'map-type': mapType }),
-          ),
-        ),
-      );
-      expect(root).toBeTruthy();
-      const googleLayer = root?.querySelector('v-map-layer-google');
-      expect(googleLayer?.getAttribute('map-type')).toBe(mapType);
+      const component = new (VMapLayerGoogle as any)();
+      component.apiKey = mockApiKey;
+      component.mapType = mapType;
+
+      expect(component.mapType).toBe(mapType);
     }
   });
 
   it('renders with complex attributes', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', {
-            'api-key': mockApiKey,
-            'map-type': 'roadmap',
-            opacity: '0.8',
-            'max-zoom': '18',
-            language: 'de',
-            region: 'DE',
-          }),
-        ),
-      ),
-    );
-    expect(root).toBeTruthy();
-    const googleLayer = root?.querySelector('v-map-layer-google');
-    expect(googleLayer?.getAttribute('api-key')).toBe(mockApiKey);
-    expect(googleLayer?.getAttribute('map-type')).toBe('roadmap');
-    expect(googleLayer?.getAttribute('opacity')).toBe('0.8');
-    expect(googleLayer?.getAttribute('max-zoom')).toBe('18');
-    expect(googleLayer?.getAttribute('language')).toBe('de');
-    expect(googleLayer?.getAttribute('region')).toBe('DE');
+    const component = new (VMapLayerGoogle as any)();
+    component.apiKey = mockApiKey;
+    component.mapType = 'roadmap';
+    component.opacity = 0.8;
+    component.maxZoom = 18;
+    component.language = 'de';
+    component.region = 'DE';
+
+    expect(component.apiKey).toBe(mockApiKey);
+    expect(component.mapType).toBe('roadmap');
+    expect(component.opacity).toBe(0.8);
+    expect(component.maxZoom).toBe(18);
+    expect(component.language).toBe('de');
+    expect(component.region).toBe('DE');
   });
 
   it('handles optional properties', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', {
-            'api-key': mockApiKey,
-            'map-type': 'satellite',
-            'max-zoom': '18',
-            scale: 'scaleFactor2x',
-            language: 'de',
-            region: 'DE',
-            opacity: '0.5',
-            visible: 'false',
-          }),
-        ),
-      ),
-    );
+    const component = new (VMapLayerGoogle as any)();
+    component.apiKey = mockApiKey;
+    component.mapType = 'satellite';
+    component.maxZoom = 18;
+    component.scale = 'scaleFactor2x';
+    component.language = 'de';
+    component.region = 'DE';
+    component.opacity = 0.5;
+    component.visible = false;
 
-    expect(root).toBeTruthy();
-    const googleLayer = root?.querySelector('v-map-layer-google');
-    expect(googleLayer?.getAttribute('max-zoom')).toBe('18');
-    expect(googleLayer?.getAttribute('scale')).toBe('scaleFactor2x');
-    expect(googleLayer?.getAttribute('language')).toBe('de');
-    expect(googleLayer?.getAttribute('region')).toBe('DE');
-    expect(googleLayer?.getAttribute('opacity')).toBe('0.5');
-    // visible="false" may not be reflected as attribute since Stencil treats it as boolean prop
-    expect((googleLayer as any)?.visible).toBe(false);
+    expect(component.maxZoom).toBe(18);
+    expect(component.scale).toBe('scaleFactor2x');
+    expect(component.language).toBe('de');
+    expect(component.region).toBe('DE');
+    expect(component.opacity).toBe(0.5);
+    expect(component.visible).toBe(false);
   });
 
   it('validates required api-key property', async () => {
-    // This test checks that the component handles missing API key gracefully
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', { 'map-type': 'roadmap' }),
-        ),
-      ),
-    );
+    const component = new (VMapLayerGoogle as any)();
+    component.mapType = 'roadmap';
 
-    expect(root).toBeTruthy();
-    const googleLayer = root?.querySelector('v-map-layer-google');
-    // The component should render but may not function without API key
-    expect(googleLayer?.getAttribute('api-key')).toBeNull();
+    expect(component.apiKey).toBeUndefined();
   });
 
   it('supports all Google Maps scale factors', async () => {
     const scaleFactors = ['scaleFactor1x', 'scaleFactor2x', 'scaleFactor4x'];
 
     for (const scale of scaleFactors) {
-      const { root } = await render(
-        h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-          h('v-map-layergroup', null,
-            h('v-map-layer-google', { 'api-key': mockApiKey, scale }),
-          ),
-        ),
-      );
-      const googleLayer = root?.querySelector('v-map-layer-google');
-      expect(googleLayer?.getAttribute('scale')).toBe(scale);
+      const component = new (VMapLayerGoogle as any)();
+      component.apiKey = mockApiKey;
+      component.scale = scale;
+
+      expect(component.scale).toBe(scale);
     }
   });
 
   it('handles styles attribute', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
-        h('v-map-layergroup', null,
-          h('v-map-layer-google', {
-            'api-key': mockApiKey,
-            styles: '[{"featureType":"water","stylers":[{"color":"#blue"}]}]',
-          }),
-        ),
-      ),
-    );
+    const component = new (VMapLayerGoogle as any)();
+    component.apiKey = mockApiKey;
+    component.styles = '[{"featureType":"water","stylers":[{"color":"#blue"}]}]';
 
-    expect(root).toBeTruthy();
-    const googleLayer = root?.querySelector('v-map-layer-google');
-    // styles may be stored as a property rather than reflected as attribute
-    const stylesVal = googleLayer?.getAttribute('styles') ?? JSON.stringify((googleLayer as any)?.styles);
-    expect(stylesVal).toContain('water');
+    await VMapLayerGoogle.prototype.connectedCallback.call(component);
+
+    expect(component.styles).toEqual([
+      { featureType: 'water', stylers: [{ color: '#blue' }] },
+    ]);
   });
 
   it('handles libraries attribute', async () => {
-    const { root } = await render(
-      h('v-map-layer-google', { 'api-key': mockApiKey, libraries: 'geometry,places' }),
-    );
+    const component = new (VMapLayerGoogle as any)();
+    component.apiKey = mockApiKey;
+    component.libraries = 'geometry,places';
 
-    expect(root).toBeTruthy();
-    expect(root?.getAttribute('libraries')).toBe('geometry,places');
+    expect(component.libraries).toBe('geometry,places');
   });
 
   describe('prototype-based source coverage', () => {

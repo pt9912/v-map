@@ -1,6 +1,5 @@
 // src/components/v-map/v-map.spec.tsx
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
 import { VMap } from './v-map';
 import '../../testing/fail-on-console-spec';
 
@@ -45,36 +44,33 @@ vi.mock('../../map-provider/provider-factory', () => ({
   createProvider: mockCreateProvider,
 }));
 
+function createMockEl() {
+  const el = document.createElement('v-map');
+  if (!el.shadowRoot) {
+    el.attachShadow({ mode: 'open' });
+  }
+  return el;
+}
+
 describe('<v-map>', () => {
   it('renders', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none', center: '8.5417,49.0069', zoom: '10' }),
-    );
+    const component = new VMap() as any;
+    component.el = createMockEl();
+    const root = component.el;
+    const map = component.ensureContainer();
 
     expect(root).toBeTruthy();
-
-    const shadow = root!.shadowRoot!;
-    const map = shadow.querySelector('#map') as HTMLElement | null;
-
     expect(map).not.toBeNull();
-
-    // Styles am #map (Target-Div) pruefen
     expect(map!.style.width).toBe('100%');
     expect(map!.style.height).toBe('100%');
-
-    // optional: display block
     expect(map!.style.display).toBe('block');
   });
 
   it('exposes getMapProvider method', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
-    // getMapProvider is a @Method() and should be callable on the element
-    expect(typeof (root as any).getMapProvider).toBe('function');
-    // In test environment the provider may not be constructed, so result can be undefined
-    const result = await (root as any).getMapProvider();
-    // Just verify the method is callable without throwing
+    const component = new VMap();
+
+    expect(typeof component.getMapProvider).toBe('function');
+    const result = await component.getMapProvider();
     expect(result === undefined || result !== null).toBe(true);
   });
 
@@ -85,30 +81,33 @@ describe('<v-map>', () => {
   });
 
   it('onFlavourChanged calls reset when flavour actually changes', async () => {
-    const { instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
-    // Call onFlavourChanged directly with different values
-    await (instance as any).onFlavourChanged('ol', 'leaflet');
-    // Should not throw
+    const component = new VMap() as any;
+    component.reset = vi.fn();
+
+    await component.onFlavourChanged('ol', 'leaflet');
+
+    expect(component.reset).toHaveBeenCalledTimes(1);
   });
 
   it('onFlavourChanged does nothing when values are the same', async () => {
-    const { instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
-    await (instance as any).onFlavourChanged('leaflet', 'leaflet');
-    // Should not throw and should not call reset
+    const component = new VMap() as any;
+    component.reset = vi.fn();
+
+    await component.onFlavourChanged('leaflet', 'leaflet');
+
+    expect(component.reset).not.toHaveBeenCalled();
   });
 
   it('createMap returns early when already creating', async () => {
-    const { instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
-    const inst = instance as any;
-    inst.mapState = 'creating';
-    // calling createMap while already in creating state should not throw
-    await inst.createMap();
+    mockCreateProvider.mockClear();
+    const component = new VMap() as any;
+    component.el = createMockEl();
+    component.ensureContainer = VMap.prototype['ensureContainer'];
+    component.mapState = 'creating';
+
+    await component.createMap();
+
+    expect(mockCreateProvider).not.toHaveBeenCalled();
   });
 
   it('getMapProvider logs when provider is not yet ready', async () => {
@@ -119,39 +118,38 @@ describe('<v-map>', () => {
   });
 
   it('setView works when provider is available', async () => {
-    const { instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none', center: '8.5,49', zoom: '10' }),
-    );
-    const inst = instance as any;
-    // Only test if provider was actually created
-    if (inst.mapProvider && inst.mapState === 'available') {
-      await inst.setView([7, 50], 12);
-    }
+    const setView = vi.fn().mockResolvedValue(undefined);
+    const component = new VMap() as any;
+    component.mapProvider = { setView };
+
+    await component.setView([7, 50], 12);
+
+    expect(setView).toHaveBeenCalledWith([7, 50], 12);
   });
 
   it('disconnectedCallback calls reset', async () => {
-    const { instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
-    const inst = instance as any;
-    // Should not throw
-    inst.disconnectedCallback();
-    expect(inst.mapState).toBe('unavailable');
+    const component = new VMap() as any;
+    component.reset = vi.fn();
+
+    component.disconnectedCallback();
+
+    expect(component.reset).toHaveBeenCalledTimes(1);
   });
 
   it('NOOP_PROVIDER methods are callable stubs', async () => {
-    const { root, instance } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
+    const root = createMockEl();
+    const instance = new VMap() as any;
+    instance.el = root;
+    instance.unsubscribeResize = vi.fn();
+    instance.unsubscribePointerMove = vi.fn();
+    instance.mapProvider = { destroy: vi.fn() };
 
-    // Capture the NOOP_PROVIDER via the MapProviderWillShutdown event
     let noopProvider: any;
-    root!.addEventListener('map-provider-will-shutdown', ((e: CustomEvent) => {
+    root.addEventListener('map-provider-will-shutdown', ((e: CustomEvent) => {
       noopProvider = e.detail.mapProvider;
     }) as EventListener);
 
-    const inst = instance as any;
-    inst.reset();
+    instance.reset();
 
     expect(noopProvider).toBeDefined();
 
@@ -172,34 +170,26 @@ describe('<v-map>', () => {
   });
 
   it('componentDidRender event listener handles MapProviderReady', async () => {
-    const { root } = await render(
-      h('v-map', { flavour: 'leaflet', 'leaflet-css': 'none' }),
-    );
+    const component = new VMap() as any;
+    component.el = createMockEl();
+    component.createMap = vi.fn().mockResolvedValue(undefined);
 
-    // The componentDidRender registers an event listener for MapProviderReady.
-    // Fire it to cover the inline callback.
-    root!.dispatchEvent(
+    await component.componentDidRender();
+
+    component.el.dispatchEvent(
       new CustomEvent('map-provider-ready', {
         detail: { mapProvider: {} },
         bubbles: false,
       }),
     );
+
+    expect(component.createMap).toHaveBeenCalledTimes(1);
   });
 
   /* ------------------------------------------------------------------ */
   /*  Prototype-based unit tests for source coverage                     */
   /* ------------------------------------------------------------------ */
   describe('prototype-based source coverage', () => {
-
-    function createMockEl() {
-      const el = document.createElement('v-map');
-      // The custom element is registered, so it already has a shadowRoot.
-      // If not (e.g. using a generic tag), we attach one.
-      if (!el.shadowRoot) {
-        el.attachShadow({ mode: 'open' });
-      }
-      return el;
-    }
 
     it('ensureContainer creates #map div when missing', () => {
       const el = createMockEl();

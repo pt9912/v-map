@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -31,12 +30,13 @@ describe('v-map-layer-wkt', () => {
   });
 
   it('renders with default attributes', async () => {
-    const { root } = await render(
-      h('v-map-layer-wkt', { wkt: 'POINT(8 49)' }),
-    );
+    const component = new (VMapLayerWkt as any)();
+    component.wkt = 'POINT(8 49)';
 
-    expect(root).toBeTruthy();
-    expect(root?.getAttribute('wkt')).toBe('POINT(8 49)');
+    expect(component.wkt).toBe('POINT(8 49)');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(component.zIndex).toBe(1000);
   });
 
   it('creates the expected layer config and emits ready on load', async () => {

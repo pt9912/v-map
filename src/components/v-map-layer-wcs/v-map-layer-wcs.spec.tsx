@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -29,15 +28,15 @@ describe('<v-map-layer-wcs>', () => {
   });
 
   it('renders with defaults', async () => {
-    const { root } = await render(
-      h('v-map-layer-wcs', { url: 'https://example.com/wcs', 'coverage-name': 'DEM' }),
-    );
+    const component = new (VMapLayerWcs as any)();
+    component.url = 'https://example.com/wcs';
+    component.coverageName = 'DEM';
 
-    expect(root?.getAttribute('coverage-name')).toBe('DEM');
-    expect(root?.getAttribute('url')).toBe('https://example.com/wcs');
-    expect(root?.getAttribute('format')).toBe('image/tiff');
-    expect(root?.getAttribute('version')).toBe('1.1.0');
-    expect(root?.classList.contains('hydrated')).toBe(true);
+    expect(component.url).toBe('https://example.com/wcs');
+    expect(component.coverageName).toBe('DEM');
+    expect(component.format).toBe('image/tiff');
+    expect(component.version).toBe('1.1.0');
+    expect(component.visible).toBe(true);
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

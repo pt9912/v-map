@@ -1,6 +1,68 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
+import { h } from '@stencil/vitest';
 import { VMapBuilder } from './v-map-builder';
+
+function toPropName(attr: string): string {
+  return attr.replace(/-([a-z])/g, (_match, char: string) => char.toUpperCase());
+}
+
+function createEmitter(root: HTMLElement, eventName: string) {
+  return {
+    emit: vi.fn((detail?: unknown) => {
+      root.dispatchEvent(
+        new CustomEvent(eventName, {
+          detail,
+          bubbles: false,
+        }),
+      );
+    }),
+  };
+}
+
+function appendVNode(parent: HTMLElement, node: any): void {
+  if (node == null) return;
+  if (Array.isArray(node)) {
+    node.forEach(child => appendVNode(parent, child));
+    return;
+  }
+  if (typeof node === 'string' || typeof node === 'number') {
+    parent.appendChild(document.createTextNode(String(node)));
+    return;
+  }
+  if (typeof node !== 'object') return;
+  if (node.$text$ != null) {
+    parent.appendChild(document.createTextNode(String(node.$text$)));
+    return;
+  }
+  if (!node.$tag$) return;
+
+  const el = document.createElement(node.$tag$);
+  for (const [name, rawValue] of Object.entries(node.$attrs$ ?? {})) {
+    if (typeof rawValue === 'function' || rawValue == null) continue;
+    el.setAttribute(name, rawValue === true ? '' : String(rawValue));
+  }
+  appendVNode(el, node.$children$ ?? []);
+  parent.appendChild(el);
+}
+
+async function render(vnode: any) {
+  const root = document.createElement('v-map-builder');
+  const instance = new VMapBuilder() as any;
+  instance.hostEl = root;
+  instance.configReady = createEmitter(root, 'configReady');
+  instance.configError = createEmitter(root, 'configError');
+
+  const attrs = vnode?.$attrs$ ?? {};
+  for (const [name, rawValue] of Object.entries(attrs)) {
+    if (typeof rawValue === 'function' || rawValue == null) continue;
+    const propName = toPropName(name);
+    instance[propName] = rawValue;
+    root.setAttribute(name, String(rawValue));
+  }
+
+  appendVNode(root, vnode?.$children$ ?? []);
+  return { root, instance };
+}
 
 describe('v-map-builder', () => {
   it('normalizes layer and style metadata from a config object', async () => {

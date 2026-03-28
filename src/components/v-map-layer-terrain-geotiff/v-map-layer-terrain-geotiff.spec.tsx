@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -30,50 +29,42 @@ describe('v-map-layer-terrain-geotiff', () => {
   });
 
   it('renders default markup', async () => {
-    const { root } = await render(
-      h('v-map-layer-terrain-geotiff', { url: 'https://example.com/elevation.tif' }),
-    );
-    await expect(root).toEqualHtml(`
-      <v-map-layer-terrain-geotiff class="hydrated">
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </v-map-layer-terrain-geotiff>
-    `);
+    const component = new (VMapLayerTerrainGeotiff as any)();
+    component.url = 'https://example.com/elevation.tif';
+
+    expect(component.url).toBe('https://example.com/elevation.tif');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(VMapLayerTerrainGeotiff.prototype.render.call(component)).toBeTruthy();
   });
 
   it('accepts url property', async () => {
-    const { root } = await render(
-      h('v-map-layer-terrain-geotiff', { url: 'https://example.com/test.tif' }),
-    );
-    expect((root as any).url).toBe('https://example.com/test.tif');
+    const component = new (VMapLayerTerrainGeotiff as any)();
+    component.url = 'https://example.com/test.tif';
+
+    expect(component.url).toBe('https://example.com/test.tif');
   });
 
   it('accepts optional terrain properties', async () => {
-    const { root } = await render(
-      h('v-map-layer-terrain-geotiff', {
-        url: 'https://example.com/elevation.tif',
-        'mesh-max-error': '2.0',
-        wireframe: 'true',
-        'elevation-scale': '2.5',
-      }),
-    );
-    expect((root as any).url).toBe('https://example.com/elevation.tif');
-    expect((root as any).meshMaxError).toBe(2.0);
-    expect((root as any).wireframe).toBe(true);
-    expect((root as any).elevationScale).toBe(2.5);
+    const component = new (VMapLayerTerrainGeotiff as any)();
+    component.url = 'https://example.com/elevation.tif';
+    component.meshMaxError = 2.0;
+    component.wireframe = true;
+    component.elevationScale = 2.5;
+
+    expect(component.url).toBe('https://example.com/elevation.tif');
+    expect(component.meshMaxError).toBe(2.0);
+    expect(component.wireframe).toBe(true);
+    expect(component.elevationScale).toBe(2.5);
   });
 
   it('accepts renderMode and includes it in the layer config', async () => {
-    const { root } = await render(
-      h('v-map-layer-terrain-geotiff', {
-        url: 'https://example.com/elevation.tif',
-        'render-mode': 'colormap',
-      }),
-    );
+    const component = new (VMapLayerTerrainGeotiff as any)();
+    component.url = 'https://example.com/elevation.tif';
+    component.renderMode = 'colormap';
 
-    expect((root as any).renderMode).toBe('colormap');
-    expect(VMapLayerTerrainGeotiff.prototype['createLayerConfig'].call(root)).toEqual(
+    expect(component.renderMode).toBe('colormap');
+    expect(VMapLayerTerrainGeotiff.prototype['createLayerConfig'].call(component)).toEqual(
       expect.objectContaining({
         renderMode: 'colormap',
       }),

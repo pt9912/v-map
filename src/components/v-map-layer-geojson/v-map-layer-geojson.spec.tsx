@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -30,12 +29,13 @@ describe('v-map-layer-geojson', () => {
   });
 
   it('renders with url attribute', async () => {
-    const { root } = await render(
-      h('v-map-layer-geojson', { url: 'https://example.com/data.geojson' }),
-    );
+    const component = new (VMapLayerGeoJSON as any)();
+    component.url = 'https://example.com/data.geojson';
 
-    expect(root).toBeTruthy();
-    expect(root?.getAttribute('url')).toBe('https://example.com/data.geojson');
+    expect(component.url).toBe('https://example.com/data.geojson');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(component.zIndex).toBe(1000);
   });
 
   it('returns the layerId', async () => {

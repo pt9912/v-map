@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -29,13 +28,15 @@ describe('<v-map-layer-wms>', () => {
   });
 
   it('renders with required attributes', async () => {
-    const { root } = await render(
-      h('v-map-layer-wms', { url: 'https://example.com/wms', layers: 'topo' }),
-    );
+    const component = new (VMapLayerWms as any)();
+    component.url = 'https://example.com/wms';
+    component.layers = 'topo';
 
-    expect(root).toBeTruthy();
-    expect(root?.getAttribute('url')).toBe('https://example.com/wms');
-    expect(root?.getAttribute('layers')).toBe('topo');
+    expect(component.url).toBe('https://example.com/wms');
+    expect(component.layers).toBe('topo');
+    expect(component.format).toBe('image/png');
+    expect(component.transparent).toBe(true);
+    expect(component.tiled).toBe(true);
   });
 
   it('initializes layer, emits ready, and calls initLayer on componentDidLoad', async () => {

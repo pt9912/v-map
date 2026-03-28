@@ -1,15 +1,14 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
 import { VMapLayerGroup } from './v-map-layergroup';
 
 describe('v-map-layergroup', () => {
   it('renders with default attributes', async () => {
-    const { root } = await render(
-      h('v-map-layergroup', { title: 'Test Group' }),
-    );
-    expect(root).toBeTruthy();
-    expect(root?.getAttribute('title')).toBe('Test Group');
-    expect(root?.getAttribute('opacity')).toBe('1');
+    const component = new (VMapLayerGroup as any)();
+
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
+    expect(component.basemapid).toBeNull();
+    expect(VMapLayerGroup.prototype.render.call(component)).toBeTruthy();
   });
 
   it('returns a group id via getGroupId', async () => {

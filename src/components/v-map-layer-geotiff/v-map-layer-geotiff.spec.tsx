@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -31,17 +30,13 @@ describe('v-map-layer-geotiff', () => {
   });
 
   it('renders and builds a layer config from props', async () => {
-    const { root } = await render(
-      h('v-map-layer-geotiff', {
-        id: 'dem',
-        url: 'https://example.com/dem.tif',
-        opacity: '0.6',
-        'z-index': '5',
-        nodata: '255',
-      }),
-    );
+    const component = new (VMapLayerGeoTIFF as any)();
+    component.url = 'https://example.com/dem.tif';
+    component.opacity = 0.6;
+    component.zIndex = 5;
+    component.nodata = 255;
 
-    expect(VMapLayerGeoTIFF.prototype['createLayerConfig'].call(root)).toEqual({
+    expect(VMapLayerGeoTIFF.prototype['createLayerConfig'].call(component)).toEqual({
       type: 'geotiff',
       visible: true,
       zIndex: 5,

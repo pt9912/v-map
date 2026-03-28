@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -29,18 +28,13 @@ describe('v-map-layer-tile3d', () => {
   });
 
   it('renders a slot and parses valid tileset options', async () => {
-    const { root } = await render(
-      h('v-map-layer-tile3d', {
-        url: 'https://example.com/tileset.json',
-        'tileset-options': '{"maximumScreenSpaceError":8}',
-      }),
-    );
+    const component = new (VMapLayerTile3d as any)();
+    component.url = 'https://example.com/tileset.json';
+    component.tilesetOptions = '{"maximumScreenSpaceError":8}';
 
-    expect(root?.shadowRoot?.querySelector('slot')).not.toBeNull();
-    expect(root?.getAttribute('tileset-options')).toBe(
-      '{"maximumScreenSpaceError":8}',
-    );
-    expect(VMapLayerTile3d.prototype['parseTilesetOptions'].call(root)).toEqual({
+    expect(component.url).toBe('https://example.com/tileset.json');
+    expect(VMapLayerTile3d.prototype.render.call(component)).toBeTruthy();
+    expect(VMapLayerTile3d.prototype['parseTilesetOptions'].call(component)).toEqual({
       maximumScreenSpaceError: 8,
     });
   });

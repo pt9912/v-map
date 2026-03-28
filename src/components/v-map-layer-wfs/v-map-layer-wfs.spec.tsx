@@ -1,5 +1,4 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
@@ -29,16 +28,15 @@ describe('<v-map-layer-wfs>', () => {
   });
 
   it('renders with required attributes', async () => {
-    const { root } = await render(
-      h('v-map-layer-wfs', { url: 'https://example.com/wfs', 'type-name': 'namespace:layer' }),
-    );
+    const component = new (VMapLayerWfs as any)();
+    component.url = 'https://example.com/wfs';
+    component.typeName = 'namespace:layer';
 
-    expect(root?.getAttribute('type-name')).toBe('namespace:layer');
-    expect(root?.getAttribute('url')).toBe('https://example.com/wfs');
-    expect(root?.getAttribute('version')).toBe('1.1.0');
-    expect(root?.getAttribute('output-format')).toBe('application/json');
-    expect(root?.getAttribute('srs-name')).toBe('EPSG:3857');
-    expect(root?.classList.contains('hydrated')).toBe(true);
+    expect(component.typeName).toBe('namespace:layer');
+    expect(component.url).toBe('https://example.com/wfs');
+    expect(component.version).toBe('1.1.0');
+    expect(component.outputFormat).toBe('application/json');
+    expect(component.srsName).toBe('EPSG:3857');
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

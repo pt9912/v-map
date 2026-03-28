@@ -1,4 +1,4 @@
-import { vi, beforeAll } from 'vitest';
+import { vi } from 'vitest';
 
 // Provide stub decorators so Stencil component source files can be imported.
 // The decorators are compile-time constructs; at runtime they are no-ops.
@@ -19,26 +19,4 @@ vi.mock('@stencil/core', async (importOriginal) => {
     Listen: () => noop,
     Build: { isDev: true, isBrowser: false, isTesting: true },
   };
-});
-
-// Suppress unhandled rejections from compiled components that try to load
-// map providers (OpenLayers, Leaflet, Cesium, Deck) during render() tests.
-// The providers are not available in the test environment because the dist
-// bundle inlines dynamic imports that resolve to non-constructable stubs.
-const providerErrors = /Provider is not a constructor|Cannot read properties of (null|undefined)|Google Maps session request failed|getBounds is not a function|document is not defined/;
-for (const event of ['unhandledRejection', 'uncaughtException'] as const) {
-  process.on(event, (reason: unknown) => {
-    const msg = reason instanceof Error ? reason.message : String(reason);
-    if (providerErrors.test(msg)) return;
-    throw reason;
-  });
-}
-
-beforeAll(async () => {
-  // Load compiled Stencil components so custom elements are registered for render() tests
-  try {
-    await import('../../dist/v-map/v-map.esm.js');
-  } catch {
-    // dist may not exist in all CI environments; prototype-only tests still work
-  }
 });

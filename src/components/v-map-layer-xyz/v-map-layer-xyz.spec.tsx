@@ -1,5 +1,4 @@
 import { vi, describe, it, expect } from 'vitest';
-import { render, h } from '@stencil/vitest';
 
 import '../../testing/fail-on-console-spec';
 
@@ -7,10 +6,12 @@ import { VMapLayerXyz } from './v-map-layer-xyz';
 
 describe('<v-map-layer-xyz>', () => {
   it('renders', async () => {
-    const { root } = await render(
-      h('v-map-layer-xyz', { url: 'http://tiles/{z}/{x}/{y}.png' }),
-    );
-    expect(root).toBeTruthy();
+    const component = new (VMapLayerXyz as any)();
+    component.url = 'http://tiles/{z}/{x}/{y}.png';
+
+    expect(component.url).toBe('http://tiles/{z}/{x}/{y}.png');
+    expect(component.visible).toBe(true);
+    expect(component.opacity).toBe(1);
   });
 
   describe('prototype-based source coverage', () => {
