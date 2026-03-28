@@ -47,6 +47,8 @@ docs/site.pdf
 
 .claude/
 test-results/
+.vitest-attachments/
+__screenshots__/
 
 .vite-cache/
 .storybook/.vite-cache/
