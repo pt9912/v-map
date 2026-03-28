@@ -11,6 +11,8 @@ async function waitFor(condition: () => boolean, timeoutMs = 3_000): Promise<voi
 
 describe('v-map-layercontrol browser', () => {
   beforeAll(async () => {
+    // Browser tests intentionally load the built Stencil bundle.
+    // `tsc --noEmit` runs before `dist` exists in CI, so the module is declared via a test-only shim.
     await import('../../../dist/v-map/v-map.esm.js');
     await customElements.whenDefined('v-map-layercontrol');
   });

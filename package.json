@@ -152,6 +152,7 @@
     "@loaders.gl/mvt": "^4.3.4",
     "@loaders.gl/schema": "^4.3.4",
     "@loaders.gl/terrain": "^4.3.4",
+    "@loaders.gl/textures": "4.3.4",
     "@loaders.gl/tiles": "^4.3.4",
     "@loaders.gl/wms": "^4.3.4",
     "@luma.gl/core": "^9.2.6",
