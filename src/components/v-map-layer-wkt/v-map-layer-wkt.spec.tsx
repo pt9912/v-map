@@ -1,38 +1,42 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-  getLayerId: jest.fn().mockReturnValue('wkt-layer-id'),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn().mockReturnValue('wkt-layer-id'),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerWkt } from './v-map-layer-wkt';
 
 describe('v-map-layer-wkt', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
     helperMock.getLayerId.mockReturnValue('wkt-layer-id');
   });
 
   it('renders with default attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerWkt],
-      html: `<v-map-layer-wkt wkt="POINT(8 49)"></v-map-layer-wkt>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-wkt', { wkt: 'POINT(8 49)' }),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('wkt')).toBe('POINT(8 49)');
+    expect(root).toBeTruthy();
+    expect(root?.getAttribute('wkt')).toBe('POINT(8 49)');
   });
 
   it('creates the expected layer config and emits ready on load', async () => {
@@ -46,9 +50,9 @@ describe('v-map-layer-wkt', () => {
       zIndex: 500,
       didLoad: false,
       appliedGeostylerStyle: undefined,
-      ready: { emit: jest.fn() },
+      ready: { emit: vi.fn() },
       createLayerConfig: VMapLayerWkt.prototype['createLayerConfig'],
-      applyExistingStyles: jest.fn(),
+      applyExistingStyles: vi.fn(),
     } as any;
     component.el.id = 'wkt-test';
 
@@ -349,8 +353,8 @@ describe('v-map-layer-wkt', () => {
   it('applyExistingStyles applies geostyler style from v-map-style elements', async () => {
     const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wkt1']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['wkt1']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -395,8 +399,8 @@ describe('v-map-layer-wkt', () => {
   it('applyExistingStyles skips non-targeted styles', async () => {
     const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['other-layer']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['other-layer']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -418,7 +422,9 @@ describe('v-map-layer-wkt', () => {
   it('applyExistingStyles skips styles without getLayerTargetIds', async () => {
     const geostylerStyle = { name: 'Test', rules: [{ name: 'r', symbolizers: [] }] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    // Override getLayerTargetIds to simulate it being absent (returns undefined)
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: undefined, writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {

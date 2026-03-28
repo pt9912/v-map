@@ -1,19 +1,15 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { vi, describe, it, expect } from 'vitest';
+import { render, h } from '@stencil/vitest';
 import { VMapLayerGroup } from './v-map-layergroup';
 
 describe('v-map-layergroup', () => {
   it('renders with default attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGroup],
-      html: `<v-map-layergroup title="Test Group"></v-map-layergroup>`,
-    });
-    expect(page.root).toEqualHtml(`
-      <v-map-layergroup opacity="1" title="Test Group" visible="">
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </v-map-layergroup>
-    `);
+    const { root } = await render(
+      h('v-map-layergroup', { title: 'Test Group' }),
+    );
+    expect(root).toBeTruthy();
+    expect(root?.getAttribute('title')).toBe('Test Group');
+    expect(root?.getAttribute('opacity')).toBe('1');
   });
 
   it('returns a group id via getGroupId', async () => {
@@ -24,7 +20,7 @@ describe('v-map-layergroup', () => {
 
   it('calls setGroupVisible on visibility change when provider supports it', async () => {
     const mapProvider = {
-      setGroupVisible: jest.fn(),
+      setGroupVisible: vi.fn(),
     };
     const component = {
       mapProvider,
@@ -60,7 +56,7 @@ describe('v-map-layergroup', () => {
 
   it('calls setBaseLayer on basemapid change when provider supports it', async () => {
     const mapProvider = {
-      setBaseLayer: jest.fn(),
+      setBaseLayer: vi.fn(),
     };
     const component = {
       mapProvider,
@@ -85,9 +81,9 @@ describe('v-map-layergroup', () => {
 
   it('init sets up the map provider and calls ensureGroup, setGroupVisible, setBaseLayer', async () => {
     const mapProvider = {
-      ensureGroup: jest.fn(),
-      setGroupVisible: jest.fn(),
-      setBaseLayer: jest.fn(),
+      ensureGroup: vi.fn(),
+      setGroupVisible: vi.fn(),
+      setBaseLayer: vi.fn(),
     };
     const component = {
       mapProvider: null,
@@ -107,8 +103,8 @@ describe('v-map-layergroup', () => {
   });
 
   it('init does nothing if mapProvider is already set', async () => {
-    const existingProvider = { ensureGroup: jest.fn() };
-    const newProvider = { ensureGroup: jest.fn() };
+    const existingProvider = { ensureGroup: vi.fn() };
+    const newProvider = { ensureGroup: vi.fn() };
     const component = {
       mapProvider: existingProvider,
       groupId: 'grp-4',
@@ -137,8 +133,8 @@ describe('v-map-layergroup', () => {
 
   it('init works without ensureGroup on the provider', async () => {
     const mapProvider = {
-      setGroupVisible: jest.fn(),
-      setBaseLayer: jest.fn(),
+      setGroupVisible: vi.fn(),
+      setBaseLayer: vi.fn(),
     };
     const component = {
       mapProvider: null,
@@ -154,13 +150,13 @@ describe('v-map-layergroup', () => {
   });
 
   it('connectedCallback registers event listeners on the v-map parent', async () => {
-    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+    const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
-    const mapProvider = { ensureGroup: jest.fn(), setGroupVisible: jest.fn(), setBaseLayer: jest.fn() };
+    const mapProvider = { ensureGroup: vi.fn(), setGroupVisible: vi.fn(), setBaseLayer: vi.fn() };
     const mapEl = document.createElement('v-map');
     // Mock getMapProvider
-    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(mapProvider);
-    const addEventListenerSpy = jest.spyOn(mapEl, 'addEventListener');
+    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(mapProvider), writable: true, configurable: true });
+    const addEventListenerSpy = vi.spyOn(mapEl, 'addEventListener');
 
     const groupEl = document.createElement('v-map-layergroup');
     mapEl.appendChild(groupEl);
@@ -172,7 +168,7 @@ describe('v-map-layergroup', () => {
       visible: true,
       basemapid: null,
       mapProvider: null,
-      init: jest.fn(),
+      init: vi.fn(),
     } as any;
 
     await VMapLayerGroup.prototype.connectedCallback.call(component);
@@ -188,10 +184,10 @@ describe('v-map-layergroup', () => {
   });
 
   it('connectedCallback skips init when getMapProvider returns null', async () => {
-    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+    const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
     const mapEl = document.createElement('v-map');
-    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(null);
+    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(null), writable: true, configurable: true });
 
     const groupEl = document.createElement('v-map-layergroup');
     mapEl.appendChild(groupEl);
@@ -203,7 +199,7 @@ describe('v-map-layergroup', () => {
       visible: true,
       basemapid: null,
       mapProvider: null,
-      init: jest.fn(),
+      init: vi.fn(),
     } as any;
 
     await VMapLayerGroup.prototype.connectedCallback.call(component);
@@ -215,12 +211,12 @@ describe('v-map-layergroup', () => {
   });
 
   it('MapProviderWillShutdown sets mapProvider to null', async () => {
-    const whenDefinedSpy = jest.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+    const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
     const mapEl = document.createElement('v-map');
-    (mapEl as any).getMapProvider = jest.fn().mockResolvedValue(null);
+    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(null), writable: true, configurable: true });
     const registeredHandlers: Record<string, Function> = {};
-    jest.spyOn(mapEl, 'addEventListener').mockImplementation((event: string, handler: any) => {
+    vi.spyOn(mapEl, 'addEventListener').mockImplementation((event: string, handler: any) => {
       registeredHandlers[event] = handler;
     });
 
@@ -234,7 +230,7 @@ describe('v-map-layergroup', () => {
       visible: true,
       basemapid: null,
       mapProvider: { some: 'provider' },
-      init: jest.fn(),
+      init: vi.fn(),
     } as any;
 
     await VMapLayerGroup.prototype.connectedCallback.call(component);

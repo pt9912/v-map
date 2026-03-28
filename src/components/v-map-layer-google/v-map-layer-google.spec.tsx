@@ -1,27 +1,28 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { VMapLayerGoogle } from './v-map-layer-google';
-//import { VMap } from '../v-map/v-map';
-//import { VMapLayergroup } from '../v-map-layergroup/v-map-layergroup';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
 import '../../testing/fail-on-console-spec';
 
 // Mock Google Maps API
-const mockGoogleMapsApi = {
-  google: {
-    maps: {
-      Map: jest.fn(),
-      event: {
-        addListenerOnce: jest.fn(),
+const { mockGoogleMapsApi } = vi.hoisted(() => {
+  const mockGoogleMapsApi = {
+    google: {
+      maps: {
+        Map: vi.fn(),
+        event: {
+          addListenerOnce: vi.fn(),
+        },
       },
     },
-  },
-};
+  };
+  return { mockGoogleMapsApi };
+});
 
 // Mock the loadGoogleMapsApi function
-jest.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
-  loadGoogleMapsApi: jest.fn().mockResolvedValue(undefined),
-  ensureGoogleMutantLoaded: jest.fn().mockResolvedValue(undefined),
-  ensureGoogleLogo: jest.fn(),
+vi.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
+  loadGoogleMapsApi: vi.fn().mockResolvedValue(undefined),
+  ensureGoogleMutantLoaded: vi.fn().mockResolvedValue(undefined),
+  ensureGoogleLogo: vi.fn(),
 }));
 
 describe('<v-map-layer-google>', () => {
@@ -37,157 +38,161 @@ describe('<v-map-layer-google>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders without props', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `<v-map flavour="ol" style="display:block;width:300px;height:200px">
-              <v-map-layergroup>
-                <v-map-layer-google></v-map-layer-google>
-              </v-map-layergroup>
-              </v-map>
-             `,
-    });
-    expect(page.root).toBeTruthy();
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', null),
+        ),
+      ),
+    );
+    expect(root).toBeTruthy();
   });
 
   it('renders with api-key', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `<v-map flavour="ol" style="display:block;width:300px;height:200px">
-              <v-map-layergroup><v-map-layer-google api-key="${mockApiKey}"></v-map-layer-google>
-              </v-map-layergroup>
-      </v-map>`,
-    });
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('api-key')).toBe(mockApiKey);
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', { 'api-key': mockApiKey }),
+        ),
+      ),
+    );
+    expect(root).toBeTruthy();
+    const googleLayer = root?.querySelector('v-map-layer-google');
+    expect(googleLayer?.getAttribute('api-key')).toBe(mockApiKey);
   });
 
   it('renders with all map types', async () => {
     const mapTypes = ['roadmap', 'satellite', 'terrain', 'hybrid'];
 
     for (const mapType of mapTypes) {
-      const page = await newSpecPage({
-        components: [VMapLayerGoogle],
-        html: `<v-map flavour="ol" style="display:block;width:300px;height:200px">
-              <v-map-layergroup><v-map-layer-google api-key="${mockApiKey}" map-type="${mapType}"></v-map-layer-google>
-                </v-map-layergroup>
-      </v-map>`,
-      });
-      expect(page.root).toBeTruthy();
-      expect(page.root?.getAttribute('map-type')).toBe(mapType);
+      const { root } = await render(
+        h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+          h('v-map-layergroup', null,
+            h('v-map-layer-google', { 'api-key': mockApiKey, 'map-type': mapType }),
+          ),
+        ),
+      );
+      expect(root).toBeTruthy();
+      const googleLayer = root?.querySelector('v-map-layer-google');
+      expect(googleLayer?.getAttribute('map-type')).toBe(mapType);
     }
   });
 
   it('renders with complex attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>      
-        <v-map-layer-google
-          api-key="${mockApiKey}"
-          map-type="roadmap"
-          opacity="0.8"
-          max-zoom="18"
-          language="de"
-          region="DE">
-        </v-map-layer-google>
-        </v-map-layergroup>
-      </v-map>        
-      `,
-    });
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('api-key')).toBe(mockApiKey);
-    expect(page.root?.getAttribute('map-type')).toBe('roadmap');
-    expect(page.root?.getAttribute('opacity')).toBe('0.8');
-    expect(page.root?.getAttribute('max-zoom')).toBe('18');
-    expect(page.root?.getAttribute('language')).toBe('de');
-    expect(page.root?.getAttribute('region')).toBe('DE');
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', {
+            'api-key': mockApiKey,
+            'map-type': 'roadmap',
+            opacity: '0.8',
+            'max-zoom': '18',
+            language: 'de',
+            region: 'DE',
+          }),
+        ),
+      ),
+    );
+    expect(root).toBeTruthy();
+    const googleLayer = root?.querySelector('v-map-layer-google');
+    expect(googleLayer?.getAttribute('api-key')).toBe(mockApiKey);
+    expect(googleLayer?.getAttribute('map-type')).toBe('roadmap');
+    expect(googleLayer?.getAttribute('opacity')).toBe('0.8');
+    expect(googleLayer?.getAttribute('max-zoom')).toBe('18');
+    expect(googleLayer?.getAttribute('language')).toBe('de');
+    expect(googleLayer?.getAttribute('region')).toBe('DE');
   });
 
   it('handles optional properties', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `
-      <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layergroup>      
-        <v-map-layer-google
-          api-key="${mockApiKey}"
-          map-type="satellite"
-          max-zoom="18"
-          scale="scaleFactor2x"
-          language="de"
-          region="DE"
-          opacity="0.5"
-          visible="false">
-        </v-map-layer-google>
-        </v-map-layergroup>
-      </v-map>        
-      `,
-    });
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', {
+            'api-key': mockApiKey,
+            'map-type': 'satellite',
+            'max-zoom': '18',
+            scale: 'scaleFactor2x',
+            language: 'de',
+            region: 'DE',
+            opacity: '0.5',
+            visible: 'false',
+          }),
+        ),
+      ),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('max-zoom')).toBe('18');
-    expect(page.root?.getAttribute('scale')).toBe('scaleFactor2x');
-    expect(page.root?.getAttribute('language')).toBe('de');
-    expect(page.root?.getAttribute('region')).toBe('DE');
-    expect(page.root?.getAttribute('opacity')).toBe('0.5');
-    expect(page.root?.getAttribute('visible')).toBe('false');
+    expect(root).toBeTruthy();
+    const googleLayer = root?.querySelector('v-map-layer-google');
+    expect(googleLayer?.getAttribute('max-zoom')).toBe('18');
+    expect(googleLayer?.getAttribute('scale')).toBe('scaleFactor2x');
+    expect(googleLayer?.getAttribute('language')).toBe('de');
+    expect(googleLayer?.getAttribute('region')).toBe('DE');
+    expect(googleLayer?.getAttribute('opacity')).toBe('0.5');
+    // visible="false" may not be reflected as attribute since Stencil treats it as boolean prop
+    expect((googleLayer as any)?.visible).toBe(false);
   });
 
   it('validates required api-key property', async () => {
     // This test checks that the component handles missing API key gracefully
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `      <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layergroup><v-map-layer-google map-type="roadmap"></v-map-layer-google>
-                </v-map-layergroup>
-      </v-map>`,
-    });
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', { 'map-type': 'roadmap' }),
+        ),
+      ),
+    );
 
-    expect(page.root).toBeTruthy();
+    expect(root).toBeTruthy();
+    const googleLayer = root?.querySelector('v-map-layer-google');
     // The component should render but may not function without API key
-    expect(page.root?.getAttribute('api-key')).toBeNull();
+    expect(googleLayer?.getAttribute('api-key')).toBeNull();
   });
 
   it('supports all Google Maps scale factors', async () => {
     const scaleFactors = ['scaleFactor1x', 'scaleFactor2x', 'scaleFactor4x'];
 
     for (const scale of scaleFactors) {
-      const page = await newSpecPage({
-        components: [VMapLayerGoogle],
-        html: `      <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layergroup><v-map-layer-google api-key="${mockApiKey}" scale="${scale}"></v-map-layer-google>
-                </v-map-layergroup>
-      </v-map>`,
-      });
-      expect(page.root?.getAttribute('scale')).toBe(scale);
+      const { root } = await render(
+        h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+          h('v-map-layergroup', null,
+            h('v-map-layer-google', { 'api-key': mockApiKey, scale }),
+          ),
+        ),
+      );
+      const googleLayer = root?.querySelector('v-map-layer-google');
+      expect(googleLayer?.getAttribute('scale')).toBe(scale);
     }
   });
 
   it('handles styles attribute', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `      <v-map flavour="ol" style="display:block;width:300px;height:200px">
-        <v-map-layergroup><v-map-layer-google api-key="${mockApiKey}" styles='[{"featureType":"water","stylers":[{"color":"#blue"}]}]'></v-map-layer-google>
-                </v-map-layergroup>
-      </v-map>`,
-    });
+    const { root } = await render(
+      h('v-map', { flavour: 'ol', style: 'display:block;width:300px;height:200px' },
+        h('v-map-layergroup', null,
+          h('v-map-layer-google', {
+            'api-key': mockApiKey,
+            styles: '[{"featureType":"water","stylers":[{"color":"#blue"}]}]',
+          }),
+        ),
+      ),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('styles')).toContain('water');
+    expect(root).toBeTruthy();
+    const googleLayer = root?.querySelector('v-map-layer-google');
+    // styles may be stored as a property rather than reflected as attribute
+    const stylesVal = googleLayer?.getAttribute('styles') ?? JSON.stringify((googleLayer as any)?.styles);
+    expect(stylesVal).toContain('water');
   });
 
   it('handles libraries attribute', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGoogle],
-      html: `<v-map-layer-google api-key="${mockApiKey}" libraries="geometry,places"></v-map-layer-google>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-google', { 'api-key': mockApiKey, libraries: 'geometry,places' }),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('libraries')).toBe('geometry,places');
+    expect(root).toBeTruthy();
+    expect(root?.getAttribute('libraries')).toBe('geometry,places');
   });
 });

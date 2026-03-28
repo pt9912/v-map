@@ -1,12 +1,13 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { VMapLayerXyz } from './v-map-layer-xyz';
+import { describe, it, expect } from 'vitest';
+import { render, h } from '@stencil/vitest';
+
 import '../../testing/fail-on-console-spec';
+
 describe('<v-map-layer-xyz>', () => {
   it('renders', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerXyz],
-      html: `<v-map-layer-xyz url="http://tiles/{z}/{x}/{y}.png"></v-map-layer-xyz>`,
-    });
-    expect(page.root).toBeTruthy();
+    const { root } = await render(
+      h('v-map-layer-xyz', { url: 'http://tiles/{z}/{x}/{y}.png' }),
+    );
+    expect(root).toBeTruthy();
   });
 });

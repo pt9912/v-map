@@ -1,37 +1,41 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerWms } from './v-map-layer-wms';
 
 describe('<v-map-layer-wms>', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
   });
 
   it('renders with required attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerWms],
-      html: `<v-map-layer-wms url="https://example.com/wms" layers="topo"></v-map-layer-wms>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-wms', { url: 'https://example.com/wms', layers: 'topo' }),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('url')).toBe('https://example.com/wms');
-    expect(page.root?.getAttribute('layers')).toBe('topo');
+    expect(root).toBeTruthy();
+    expect(root?.getAttribute('url')).toBe('https://example.com/wms');
+    expect(root?.getAttribute('layers')).toBe('topo');
   });
 
   it('initializes layer, emits ready, and calls initLayer on componentDidLoad', async () => {
@@ -47,7 +51,7 @@ describe('<v-map-layer-wms>', () => {
       visible: true,
       opacity: 1,
       zIndex: 10,
-      ready: { emit: jest.fn() },
+      ready: { emit: vi.fn() },
       createLayerConfig: VMapLayerWms.prototype['createLayerConfig'],
     } as any;
     component.el.id = 'wms1';

@@ -1,14 +1,13 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { VMapBuilder } from './v-map-builder';
+import { vi, describe, it, expect } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
 describe('v-map-builder', () => {
   it('normalizes layer and style metadata from a config object', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const normalized = component.normalize({
       map: {
         flavour: 'leaflet',
@@ -79,12 +78,11 @@ describe('v-map-builder', () => {
   });
 
   it('normalizes many supported layer types and style source variants', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const normalized = component.normalize({
       map: {
         styles: [
@@ -256,42 +254,41 @@ describe('v-map-builder', () => {
   });
 
   it('parses JSON and YAML scripts and emits config events', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder>
-        <script type="application/json">{"map":{"layerGroups":[]}}</script>
-      </v-map-builder>`,
-    });
+    const { root, instance } = await render(
+      h('v-map-builder', null,
+        h('script', { type: 'application/json' }, '{"map":{"layerGroups":[]}}'),
+      ),
+    );
 
-    const readySpy = jest.fn();
-    const errorSpy = jest.fn();
-    page.root?.addEventListener('configReady', readySpy);
-    page.root?.addEventListener('configError', errorSpy);
+    const readySpy = vi.fn();
+    const errorSpy = vi.fn();
+    root?.addEventListener('configReady', readySpy);
+    root?.addEventListener('configError', errorSpy);
 
-    (page.rootInstance as any).parseFromSlot();
+    const component = (instance ?? root) as any;
+    component.parseFromSlot();
     expect(readySpy).toHaveBeenCalledTimes(1);
 
-    page.root!.innerHTML = `
+    root!.innerHTML = `
       <script type="application/yaml">
 map:
   layerGroups: []
       </script>
     `;
-    (page.rootInstance as any).parseFromSlot();
+    component.parseFromSlot();
     expect(readySpy).toHaveBeenCalledTimes(2);
 
-    page.root!.innerHTML = '';
-    (page.rootInstance as any).parseFromSlot();
+    root!.innerHTML = '';
+    component.parseFromSlot();
     expect(errorSpy).toHaveBeenCalledTimes(1);
   });
 
   it('applies config diffs into mounted map, styles and layers', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const initial = component.normalize({
       map: {
         flavour: 'ol',
@@ -335,7 +332,7 @@ map:
 
     component.applyDiff(undefined, initial);
 
-    const mapEl = page.root?.querySelector('v-map') as HTMLElement;
+    const mapEl = root?.querySelector('v-map') as HTMLElement;
 
     expect(mapEl.getAttribute('flavour')).toBe('ol');
     expect(mapEl.querySelectorAll('v-map-style')).toHaveLength(1);
@@ -366,12 +363,11 @@ map:
   });
 
   it('replaces layers when the type changes and removes obsolete styles', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const previous = component.normalize({
       map: {
         styles: [{ key: 'style-a', content: '<StyledLayerDescriptor />' }],
@@ -405,7 +401,7 @@ map:
     component.applyDiff(undefined, previous);
     component.applyDiff(previous, next);
 
-    const mapEl = page.root?.querySelector('v-map') as HTMLElement;
+    const mapEl = root?.querySelector('v-map') as HTMLElement;
 
     expect(mapEl.querySelectorAll('v-map-style')).toHaveLength(0);
     expect(mapEl.querySelector('#layer-1')?.tagName.toLowerCase()).toBe(
@@ -417,11 +413,10 @@ map:
   });
 
   it('toOptionalBoolean returns false for falsy strings and undefined for unrecognized input', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // false-returning cases
     expect(component.toOptionalBoolean('false')).toBe(false);
@@ -438,11 +433,10 @@ map:
   });
 
   it('toCsv returns the string as-is when value is already a string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     expect(component.toCsv('a,b,c')).toBe('a,b,c');
     expect(component.toCsv('single')).toBe('single');
@@ -450,11 +444,10 @@ map:
   });
 
   it('toKebabCase converts camelCase and snake_case to kebab-case', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     expect(component.toKebabCase('fooBar')).toBe('foo-bar');
     expect(component.toKebabCase('foo_bar')).toBe('foo-bar');
@@ -466,11 +459,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for terrain type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'terrain-1',
@@ -498,11 +490,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for wfs type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'wfs-1',
@@ -528,11 +519,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for wcs type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'wcs-1',
@@ -560,11 +550,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for google type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'google-1',
@@ -593,11 +582,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for geotiff type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'geotiff-1',
@@ -610,11 +598,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for tile3d type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'tile3d-1',
@@ -633,11 +620,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for scatterplot type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'scatter-1',
@@ -658,11 +644,10 @@ map:
   });
 
   it('createLayerEl creates correct elements for wkt type', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'wkt-1',
@@ -698,11 +683,10 @@ map:
   });
 
   it('createLayerEl creates custom element for unknown types', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'custom-1',
@@ -720,11 +704,10 @@ map:
   });
 
   it('createLayerEl handles WMS with params object', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'wms-params',
@@ -757,11 +740,10 @@ map:
   });
 
   it('createLayerEl handles geojson data as object and string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const geojsonObj = { type: 'FeatureCollection', features: [] };
     const layer = {
@@ -805,11 +787,10 @@ map:
   });
 
   it('patchLayer handles visible, opacity, zIndex, layers, and tiled changes', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const el = document.createElement('v-map-layer-wms');
     el.setAttribute('id', 'layer-1');
@@ -842,15 +823,14 @@ map:
   });
 
   it('patchLayer handles style changes via ensureAttr', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // Use a non-HTML element to avoid DOM style attribute interference
     const el = document.createElement('v-map-layer-wms');
-    const ensureAttrSpy = jest.spyOn(component, 'ensureAttr');
+    const ensureAttrSpy = vi.spyOn(component, 'ensureAttr');
 
     const styleObj = { color: 'red' };
     const next = { id: 'layer-1', type: 'wms', style: styleObj } as any;
@@ -871,11 +851,10 @@ map:
   });
 
   it('patchLayer replaces element when type changes', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // Set up a parent container with an existing element
     const parent = document.createElement('div');
@@ -895,11 +874,10 @@ map:
   });
 
   it('patchLayer replaces element when data changes for known types', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // Test data change for terrain - should trigger element replacement
     const parent = document.createElement('div');
@@ -926,11 +904,10 @@ map:
   });
 
   it('patchLayer falls back to setData or attribute for data change on custom types', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // For a custom type, data changes should call setData or set attribute
     const parent = document.createElement('div');
@@ -951,7 +928,7 @@ map:
     expect(el.getAttribute('data')).toBe(JSON.stringify({ key: 'value' }));
 
     // With setData method - should call it
-    const setDataSpy = jest.fn();
+    const setDataSpy = vi.fn();
     el.setData = setDataSpy;
     component.patchLayer(el, {
       data: { old: { key: 'value' }, new: { key: 'newvalue' } },
@@ -961,22 +938,20 @@ map:
   });
 
   it('normalizeStyle returns undefined when entry is an object without src or content', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const result = component.normalizeStyle({ format: 'sld' }, 0);
     expect(result).toBeUndefined();
   });
 
   it('syncStyles updates existing elements and removes obsolete ones', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // Set up a map element with pre-existing builder styles
     const mapEl = document.createElement('v-map');
@@ -1044,14 +1019,13 @@ map:
   });
 
   it('onMapConfigChanged triggers parseFromSlot', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder>
-        <script type="application/json">{"map":{"layerGroups":[]}}</script>
-      </v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
-    const spy = jest.spyOn(component, 'parseFromSlot');
+    const { root, instance } = await render(
+      h('v-map-builder', null,
+        h('script', { type: 'application/json' }, '{"map":{"layerGroups":[]}}'),
+      ),
+    );
+    const component = (instance ?? root) as any;
+    const spy = vi.spyOn(component, 'parseFromSlot');
 
     component.onMapConfigChanged('old', 'new');
 
@@ -1059,14 +1033,13 @@ map:
   });
 
   it('onSlotChange handler triggers parseFromSlot', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder>
-        <script type="application/json">{"map":{"layerGroups":[]}}</script>
-      </v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
-    const spy = jest.spyOn(component, 'parseFromSlot');
+    const { root, instance } = await render(
+      h('v-map-builder', null,
+        h('script', { type: 'application/json' }, '{"map":{"layerGroups":[]}}'),
+      ),
+    );
+    const component = (instance ?? root) as any;
+    const spy = vi.spyOn(component, 'parseFromSlot');
 
     component.onSlotChange();
 
@@ -1074,11 +1047,10 @@ map:
   });
 
   it('applyDiff handles moved layers by reordering them', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // Create initial state with three layers
     const initial = component.normalize({
@@ -1097,7 +1069,7 @@ map:
     });
     component.applyDiff(undefined, initial);
 
-    const groupEl = page.root?.querySelector('v-map-layergroup') as HTMLElement;
+    const groupEl = root?.querySelector('v-map-layergroup') as HTMLElement;
     expect(groupEl.children).toHaveLength(3);
     expect(groupEl.children[0].getAttribute('id')).toBe('layer-a');
     expect(groupEl.children[1].getAttribute('id')).toBe('layer-b');
@@ -1126,11 +1098,10 @@ map:
   });
 
   it('createLayerEl handles terrain with elevationDecoder as object', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const decoder = { rScaler: 6553.6, gScaler: 25.6, bScaler: 0.1, offset: -10000 };
     const layer = {
@@ -1146,11 +1117,10 @@ map:
   });
 
   it('createLayerEl handles terrain color as non-array string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'terrain-color-str',
@@ -1165,11 +1135,10 @@ map:
   });
 
   it('createLayerEl handles wcs and wfs with string params and resolutions', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     // WCS with string resolutions and string params
     const wcsLayer = {
@@ -1201,11 +1170,10 @@ map:
   });
 
   it('createLayerEl handles google styles as string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'google-str',
@@ -1220,11 +1188,10 @@ map:
   });
 
   it('createLayerEl handles tile3d tilesetOptions as string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'tile3d-str',
@@ -1239,11 +1206,10 @@ map:
   });
 
   it('createLayerEl handles scatterplot data as string', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'scatter-str',
@@ -1258,11 +1224,10 @@ map:
   });
 
   it('createLayerEl handles wkt data as object (non-string)', async () => {
-    const page = await newSpecPage({
-      components: [VMapBuilder],
-      html: `<v-map-builder></v-map-builder>`,
-    });
-    const component = page.rootInstance as any;
+    const { root, instance } = await render(
+      h('v-map-builder', null),
+    );
+    const component = (instance ?? root) as any;
 
     const layer = {
       id: 'wkt-obj',

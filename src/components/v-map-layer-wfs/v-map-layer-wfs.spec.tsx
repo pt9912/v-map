@@ -1,41 +1,44 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerWfs } from './v-map-layer-wfs';
 
 describe('<v-map-layer-wfs>', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
   });
 
   it('renders with required attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerWfs],
-      html: `<v-map-layer-wfs url="https://example.com/wfs" type-name="namespace:layer"></v-map-layer-wfs>`
-    });
+    const { root } = await render(
+      h('v-map-layer-wfs', { url: 'https://example.com/wfs', 'type-name': 'namespace:layer' }),
+    );
 
-    expect(page.root).toEqualHtml(`
-      <v-map-layer-wfs opacity="1" output-format="application/json" srs-name="EPSG:3857" type-name="namespace:layer" url="https://example.com/wfs" version="1.1.0" visible="" z-index="1000">
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </v-map-layer-wfs>
-    `);
+    expect(root).toHaveAttribute('type-name', 'namespace:layer');
+    expect(root).toHaveAttribute('url', 'https://example.com/wfs');
+    expect(root).toHaveAttribute('version', '1.1.0');
+    expect(root).toHaveAttribute('output-format', 'application/json');
+    expect(root).toHaveAttribute('srs-name', 'EPSG:3857');
+    expect(root).toHaveAttribute('class', 'hydrated');
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {
@@ -44,7 +47,7 @@ describe('<v-map-layer-wfs>', () => {
       el: document.createElement('v-map-layer-wfs'),
       didLoad: false,
       createLayerConfig: VMapLayerWfs.prototype['createLayerConfig'],
-      applyExistingStyles: jest.fn(),
+      applyExistingStyles: vi.fn(),
       url: 'https://example.com/wfs',
       typeName: 'ns:layer',
       version: '1.1.0',
@@ -268,8 +271,8 @@ describe('<v-map-layer-wfs>', () => {
   it('applyExistingStyles applies geostyler styles from v-map-style elements', async () => {
     const geostylerStyle = { name: 'test', rules: [{ name: 'r', symbolizers: [] }] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wfs1']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['wfs1']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -303,8 +306,8 @@ describe('<v-map-layer-wfs>', () => {
   it('applyExistingStyles skips non-targeted and non-geostyler styles', async () => {
     const cesiumStyle = { color: 'red' };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['wfs1']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(cesiumStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['wfs1']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {

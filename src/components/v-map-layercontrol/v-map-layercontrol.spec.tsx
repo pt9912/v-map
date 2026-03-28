@@ -1,19 +1,20 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { vi, describe, it, expect, afterEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
+import { forceUpdate } from '@stencil/core';
 import { VMapLayerControl } from './v-map-layercontrol';
 
 describe('v-map-layercontrol', () => {
   afterEach(() => {
     document.body.innerHTML = '';
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders an empty state when no layer groups are available', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-1"></v-map-layercontrol>`,
-    });
+    const { root } = await render(
+      h('v-map-layercontrol', { for: 'map-1' }),
+    );
 
-    expect(page.root?.shadowRoot?.textContent).toContain('Keine Layer verfügbar');
+    expect(root?.shadowRoot?.textContent).toContain('Keine Layer verfügbar');
   });
 
   it('reads layer groups and layers from the target map element', async () => {
@@ -89,11 +90,12 @@ describe('v-map-layercontrol', () => {
   it('retries map discovery when the target map is missing', () => {
     const component = new VMapLayerControl();
     component.for = 'missing-map';
-    const timeoutSpy = jest.spyOn(global, 'setTimeout').mockImplementation(() => 1 as any);
+    const timeoutSpy = vi.spyOn(global, 'setTimeout').mockImplementation(() => 1 as any);
 
     (component as any).findMapElement();
 
     expect(timeoutSpy).toHaveBeenCalledWith(expect.any(Function), 100);
+    timeoutSpy.mockRestore();
   });
 
   it('readNumber falls back to default when attribute value is NaN', () => {
@@ -152,18 +154,17 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders layer groups with checkboxes and controls', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-render"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-render' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'osm-1';
-    (layerEl as any).label = 'OSM';
-    (layerEl as any).visible = true;
-    (layerEl as any).opacity = 0.8;
+    Object.defineProperty(layerEl, 'label', { value: 'OSM', writable: true, configurable: true });
+    Object.defineProperty(layerEl, 'visible', { value: true, writable: true, configurable: true });
+    Object.defineProperty(layerEl, 'opacity', { value: 0.8, writable: true, configurable: true });
 
     component.layerGroups = [
       {
@@ -192,21 +193,21 @@ describe('v-map-layercontrol', () => {
       },
     ];
 
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     expect(shadow?.querySelector('.layer-control')).not.toBeNull();
     expect(shadow?.querySelector('.layer-group-title')?.textContent).toBe('Base Maps');
     expect(shadow?.querySelector('.layer-item-title')?.textContent).toBe('OSM');
   });
 
   it('renders basemap selector when basemapid is set', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-basemap"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-basemap' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'osm-1';
@@ -238,19 +239,19 @@ describe('v-map-layercontrol', () => {
       },
     ];
 
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     expect(shadow?.querySelector('.basemap-selector')).not.toBeNull();
   });
 
   it('triggers group visibility change via rendered checkbox', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-events"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-events' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'osm-1';
@@ -264,9 +265,10 @@ describe('v-map-layercontrol', () => {
         ],
       },
     ];
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     const groupCheckbox = shadow?.querySelector('.layer-group-checkbox') as HTMLInputElement;
     expect(groupCheckbox).not.toBeNull();
 
@@ -278,12 +280,11 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer opacity change via rendered slider', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-opacity"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-opacity' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'lyr-1';
@@ -297,9 +298,10 @@ describe('v-map-layercontrol', () => {
         ],
       },
     ];
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     const slider = shadow?.querySelector('.layer-item-opacity') as HTMLInputElement;
     expect(slider).not.toBeNull();
 
@@ -310,12 +312,11 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer z-index change via rendered number input', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-zindex"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-zindex' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'lyr-z';
@@ -329,9 +330,10 @@ describe('v-map-layercontrol', () => {
         ],
       },
     ];
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     const zInput = shadow?.querySelector('.layer-item-zindex') as HTMLInputElement;
     expect(zInput).not.toBeNull();
 
@@ -342,12 +344,11 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers basemap selector change via rendered select', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-base"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-base' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl1 = document.createElement('v-map-layer-osm');
     layerEl1.id = 'osm-1';
@@ -364,9 +365,10 @@ describe('v-map-layercontrol', () => {
         ],
       },
     ];
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     const select = shadow?.querySelector('.basemap-selector') as HTMLSelectElement;
     expect(select).not.toBeNull();
 
@@ -379,12 +381,11 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer checkbox visibility change via rendered checkbox', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerControl],
-      html: `<v-map-layercontrol for="map-lyr-vis"></v-map-layercontrol>`,
-    });
+    const { root, instance, waitForChanges } = await render(
+      h('v-map-layercontrol', { for: 'map-lyr-vis' }),
+    );
 
-    const component = page.rootInstance as any;
+    const component = (instance ?? root) as any;
     const groupEl = document.createElement('v-map-layergroup');
     const layerEl = document.createElement('v-map-layer-osm');
     layerEl.id = 'lyr-vis';
@@ -398,9 +399,10 @@ describe('v-map-layercontrol', () => {
         ],
       },
     ];
-    await page.waitForChanges();
+    forceUpdate(root);
+    await waitForChanges();
 
-    const shadow = page.root?.shadowRoot;
+    const shadow = root?.shadowRoot;
     const layerCheckbox = shadow?.querySelector('.layer-item-checkbox') as HTMLInputElement;
     expect(layerCheckbox).not.toBeNull();
 
@@ -412,13 +414,16 @@ describe('v-map-layercontrol', () => {
 
   it('initObserver sets up mutation observer on mapElement', () => {
     const component = new VMapLayerControl();
-    const mockObserve = jest.fn();
-    const mockDisconnect = jest.fn();
+    const mockObserve = vi.fn();
+    const mockDisconnect = vi.fn();
 
-    global.MutationObserver = jest.fn().mockImplementation(() => ({
-      observe: mockObserve,
-      disconnect: mockDisconnect,
-    }));
+    const OriginalMutationObserver = global.MutationObserver;
+    global.MutationObserver = class {
+      observe = mockObserve;
+      disconnect = mockDisconnect;
+      takeRecords = vi.fn().mockReturnValue([]);
+      constructor(_cb: MutationCallback) {}
+    } as any;
 
     const mapEl = document.createElement('v-map');
     (component as any).mapElement = mapEl;
@@ -430,5 +435,7 @@ describe('v-map-layercontrol', () => {
       subtree: true,
       attributes: true,
     }));
+
+    global.MutationObserver = OriginalMutationObserver;
   });
 });

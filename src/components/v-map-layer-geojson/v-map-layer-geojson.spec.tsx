@@ -1,37 +1,41 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-  getLayerId: jest.fn().mockReturnValue('geojson-layer-id'),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn().mockReturnValue('geojson-layer-id'),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerGeoJSON } from './v-map-layer-geojson';
 
 describe('v-map-layer-geojson', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
   });
 
   it('renders with url attribute', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGeoJSON],
-      html: `<v-map-layer-geojson url="https://example.com/data.geojson"></v-map-layer-geojson>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-geojson', { url: 'https://example.com/data.geojson' }),
+    );
 
-    expect(page.root).toBeTruthy();
-    expect(page.root?.getAttribute('url')).toBe('https://example.com/data.geojson');
+    expect(root).toBeTruthy();
+    expect(root?.getAttribute('url')).toBe('https://example.com/data.geojson');
   });
 
   it('returns the layerId', async () => {
@@ -315,13 +319,13 @@ describe('v-map-layer-geojson', () => {
   });
 
   it('calls removeLayer and cleans up on disconnect', async () => {
-    const mo = { disconnect: jest.fn() };
-    const geoSlot = { removeEventListener: jest.fn() };
+    const mo = { disconnect: vi.fn() };
+    const geoSlot = { removeEventListener: vi.fn() };
     const component = {
       helper: helperMock,
       mo,
       geoSlot,
-      onSlotChange: jest.fn(),
+      onSlotChange: vi.fn(),
     } as any;
 
     await VMapLayerGeoJSON.prototype.disconnectedCallback.call(component);
@@ -351,8 +355,8 @@ describe('v-map-layer-geojson', () => {
   it('applyExistingStyles applies geostyler styles from v-map-style elements', async () => {
     const geostylerStyle = { name: 'test', rules: [{ name: 'r', symbolizers: [] }] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['geo1']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['geo1']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -377,8 +381,8 @@ describe('v-map-layer-geojson', () => {
   it('applyExistingStyles skips non-geostyler styles', async () => {
     const cesiumStyle = { color: 'color("red")' };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(cesiumStyle);
-    (styleEl as any).getLayerTargetIds = jest.fn().mockResolvedValue(['geo1']);
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(cesiumStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: vi.fn().mockResolvedValue(['geo1']), writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -400,8 +404,8 @@ describe('v-map-layer-geojson', () => {
   it('applyExistingStyles skips styles without getLayerTargetIds', async () => {
     const geostylerStyle = { name: 'test', rules: [] };
     const styleEl = document.createElement('v-map-style');
-    (styleEl as any).getStyle = jest.fn().mockResolvedValue(geostylerStyle);
-    // no getLayerTargetIds
+    Object.defineProperty(styleEl, 'getStyle', { value: vi.fn().mockResolvedValue(geostylerStyle), writable: true, configurable: true });
+    Object.defineProperty(styleEl, 'getLayerTargetIds', { value: undefined, writable: true, configurable: true });
     document.body.appendChild(styleEl);
 
     const component = {
@@ -422,8 +426,8 @@ describe('v-map-layer-geojson', () => {
 
   it('onSlotChange calls observeAssignedNodes and readGeoJsonFromSlot', () => {
     const instance = new VMapLayerGeoJSON();
-    (instance as any).observeAssignedNodes = jest.fn();
-    (instance as any).readGeoJsonFromSlot = jest.fn();
+    (instance as any).observeAssignedNodes = vi.fn();
+    (instance as any).readGeoJsonFromSlot = vi.fn();
 
     (instance as any).onSlotChange();
 
@@ -435,7 +439,7 @@ describe('v-map-layer-geojson', () => {
     const geojson = { type: 'Point', coordinates: [0, 0] };
     const component = {
       geoSlot: {
-        assignedNodes: jest.fn().mockReturnValue([
+        assignedNodes: vi.fn().mockReturnValue([
           { textContent: JSON.stringify(geojson) },
         ]),
       },
@@ -462,7 +466,7 @@ describe('v-map-layer-geojson', () => {
   it('readGeoJsonFromSlot does nothing when slot is empty', () => {
     const component = {
       geoSlot: {
-        assignedNodes: jest.fn().mockReturnValue([
+        assignedNodes: vi.fn().mockReturnValue([
           { textContent: '' },
         ]),
       },
@@ -479,7 +483,7 @@ describe('v-map-layer-geojson', () => {
     const raw = '{"type":"Point","coordinates":[0,0]}';
     const component = {
       geoSlot: {
-        assignedNodes: jest.fn().mockReturnValue([
+        assignedNodes: vi.fn().mockReturnValue([
           { textContent: raw },
         ]),
       },
@@ -495,7 +499,7 @@ describe('v-map-layer-geojson', () => {
   it('readGeoJsonFromSlot handles invalid JSON gracefully', () => {
     const component = {
       geoSlot: {
-        assignedNodes: jest.fn().mockReturnValue([
+        assignedNodes: vi.fn().mockReturnValue([
           { textContent: '{not valid json}' },
         ]),
       },

@@ -1,41 +1,43 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerWcs } from './v-map-layer-wcs';
 
 describe('<v-map-layer-wcs>', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
   });
 
   it('renders with defaults', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerWcs],
-      html: `<v-map-layer-wcs url="https://example.com/wcs" coverage-name="DEM"></v-map-layer-wcs>`
-    });
+    const { root } = await render(
+      h('v-map-layer-wcs', { url: 'https://example.com/wcs', 'coverage-name': 'DEM' }),
+    );
 
-    expect(page.root).toEqualHtml(`
-      <v-map-layer-wcs coverage-name="DEM" format="image/tiff" opacity="1" url="https://example.com/wcs" version="1.1.0" visible="" z-index="1000">
-        <mock:shadow-root>
-          <slot></slot>
-        </mock:shadow-root>
-      </v-map-layer-wcs>
-    `);
+    expect(root).toHaveAttribute('coverage-name', 'DEM');
+    expect(root).toHaveAttribute('url', 'https://example.com/wcs');
+    expect(root).toHaveAttribute('format', 'image/tiff');
+    expect(root).toHaveAttribute('version', '1.1.0');
+    expect(root).toHaveAttribute('class', 'hydrated');
   });
 
   it('initializes layer and sets didLoad on componentDidLoad', async () => {

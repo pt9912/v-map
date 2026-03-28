@@ -1,43 +1,47 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-  getLayerId: jest.fn().mockReturnValue('geotiff-layer-id'),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn().mockReturnValue('geotiff-layer-id'),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerGeoTIFF } from './v-map-layer-geotiff';
 
 describe('v-map-layer-geotiff', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
     helperMock.getLayerId.mockReturnValue('geotiff-layer-id');
   });
 
   it('renders and builds a layer config from props', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerGeoTIFF],
-      html: `<v-map-layer-geotiff
-        id="dem"
-        url="https://example.com/dem.tif"
-        opacity="0.6"
-        z-index="5"
-        nodata="255"
-      ></v-map-layer-geotiff>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-geotiff', {
+        id: 'dem',
+        url: 'https://example.com/dem.tif',
+        opacity: '0.6',
+        'z-index': '5',
+        nodata: '255',
+      }),
+    );
 
-    expect((page.rootInstance as any).createLayerConfig()).toEqual({
+    expect(VMapLayerGeoTIFF.prototype['createLayerConfig'].call(root)).toEqual({
       type: 'geotiff',
       visible: true,
       zIndex: 5,

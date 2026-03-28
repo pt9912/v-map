@@ -1,38 +1,40 @@
-import { newSpecPage } from '@stencil/core/testing';
-import { VMapLayerTerrainGeotiff } from './v-map-layer-terrain-geotiff';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-  getLayerId: jest.fn(),
-};
-
-jest.mock('../../layer/v-map-layer-helper', () => {
-  return {
-    VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
   };
+  return { helperMock };
 });
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+}));
+
+import { VMapLayerTerrainGeotiff } from './v-map-layer-terrain-geotiff';
 
 describe('v-map-layer-terrain-geotiff', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
   });
 
   it('renders default markup', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerTerrainGeotiff],
-      html: `<v-map-layer-terrain-geotiff url="https://example.com/elevation.tif"></v-map-layer-terrain-geotiff>`,
-    });
-    expect(page.root).toEqualHtml(`
-      <v-map-layer-terrain-geotiff url="https://example.com/elevation.tif">
+    const { root } = await render(
+      h('v-map-layer-terrain-geotiff', { url: 'https://example.com/elevation.tif' }),
+    );
+    await expect(root).toEqualHtml(`
+      <v-map-layer-terrain-geotiff class="hydrated">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -41,40 +43,37 @@ describe('v-map-layer-terrain-geotiff', () => {
   });
 
   it('accepts url property', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerTerrainGeotiff],
-      html: `<v-map-layer-terrain-geotiff url="https://example.com/test.tif"></v-map-layer-terrain-geotiff>`,
-    });
-    expect(page.rootInstance.url).toBe('https://example.com/test.tif');
+    const { root } = await render(
+      h('v-map-layer-terrain-geotiff', { url: 'https://example.com/test.tif' }),
+    );
+    expect((root as any).url).toBe('https://example.com/test.tif');
   });
 
   it('accepts optional terrain properties', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerTerrainGeotiff],
-      html: `<v-map-layer-terrain-geotiff
-        url="https://example.com/elevation.tif"
-        mesh-max-error="2.0"
-        wireframe="true"
-        elevation-scale="2.5"
-      ></v-map-layer-terrain-geotiff>`,
-    });
-    expect(page.rootInstance.url).toBe('https://example.com/elevation.tif');
-    expect(page.rootInstance.meshMaxError).toBe(2.0);
-    expect(page.rootInstance.wireframe).toBe(true);
-    expect(page.rootInstance.elevationScale).toBe(2.5);
+    const { root } = await render(
+      h('v-map-layer-terrain-geotiff', {
+        url: 'https://example.com/elevation.tif',
+        'mesh-max-error': '2.0',
+        wireframe: 'true',
+        'elevation-scale': '2.5',
+      }),
+    );
+    expect((root as any).url).toBe('https://example.com/elevation.tif');
+    expect((root as any).meshMaxError).toBe(2.0);
+    expect((root as any).wireframe).toBe(true);
+    expect((root as any).elevationScale).toBe(2.5);
   });
 
   it('accepts renderMode and includes it in the layer config', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerTerrainGeotiff],
-      html: `<v-map-layer-terrain-geotiff
-        url="https://example.com/elevation.tif"
-        render-mode="colormap"
-      ></v-map-layer-terrain-geotiff>`,
-    });
+    const { root } = await render(
+      h('v-map-layer-terrain-geotiff', {
+        url: 'https://example.com/elevation.tif',
+        'render-mode': 'colormap',
+      }),
+    );
 
-    expect(page.rootInstance.renderMode).toBe('colormap');
-    expect((page.rootInstance as any).createLayerConfig()).toEqual(
+    expect((root as any).renderMode).toBe('colormap');
+    expect(VMapLayerTerrainGeotiff.prototype['createLayerConfig'].call(root)).toEqual(
       expect.objectContaining({
         renderMode: 'colormap',
       }),

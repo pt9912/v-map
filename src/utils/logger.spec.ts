@@ -17,7 +17,7 @@ describe('logger', () => {
 
   beforeEach(() => {
     transportSpy = vi.fn();
-    transport = { log: transportSpy };
+    transport = { log: transportSpy as any };
     setTransport(transport);
     setLogLevel('debug');
   });

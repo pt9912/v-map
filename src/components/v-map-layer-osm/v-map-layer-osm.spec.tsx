@@ -1,38 +1,42 @@
-const helperMock = {
-  initLayer: jest.fn(),
-  removeLayer: jest.fn(),
-  updateLayer: jest.fn(),
-  setVisible: jest.fn(),
-  setOpacity: jest.fn(),
-  setZIndex: jest.fn(),
-  getLayerId: jest.fn().mockReturnValue('osm-layer-id'),
-};
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, h } from '@stencil/vitest';
 
-jest.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: jest.fn().mockImplementation(() => helperMock),
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn().mockReturnValue('osm-layer-id'),
+  };
+  return { helperMock };
+});
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
 }));
 
-import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerOSM } from './v-map-layer-osm';
 
 describe('v-map-layer-osm', () => {
   beforeEach(() => {
     Object.values(helperMock).forEach(value => {
       if (typeof value === 'function' && 'mockClear' in value) {
-        (value as jest.Mock).mockClear();
+        (value as ReturnType<typeof vi.fn>).mockClear();
       }
     });
     helperMock.getLayerId.mockReturnValue('osm-layer-id');
   });
 
   it('renders with default attributes', async () => {
-    const page = await newSpecPage({
-      components: [VMapLayerOSM],
-      html: `<v-map-layer-osm></v-map-layer-osm>`,
-    });
+    const { root } = await render(
+      <v-map-layer-osm></v-map-layer-osm>,
+    );
 
-    expect(page.root).toEqualHtml(`
-      <v-map-layer-osm opacity="1" url="https://tile.openstreetmap.org" visible="" z-index="10">
+    await expect(root).toEqualHtml(`
+      <v-map-layer-osm visible opacity="1" z-index="10" url="https://tile.openstreetmap.org" class="hydrated">
         <mock:shadow-root></mock:shadow-root>
       </v-map-layer-osm>
     `);
@@ -47,7 +51,7 @@ describe('v-map-layer-osm', () => {
       opacity: 0.7,
       zIndex: 15,
       didLoad: false,
-      ready: { emit: jest.fn() },
+      ready: { emit: vi.fn() },
       createLayerConfig: VMapLayerOSM.prototype['createLayerConfig'],
     } as any;
     component.el.id = 'base';

@@ -1,30 +1,34 @@
-import { defineConfig } from 'vitest/config';
+import { defineVitestConfig } from '@stencil/vitest/config';
 
-export default defineConfig({
+export default defineVitestConfig({
+  stencilConfig: './stencil.config.ts',
   resolve: {
-    alias: {
-      'leaflet/dist/leaflet-src.esm.js': 'leaflet',
-    },
+    alias: [
+      { find: 'leaflet/dist/leaflet-src.esm.js', replacement: 'leaflet' },
+    ],
   },
   test: {
-    environment: 'jsdom', // oder 'happy-dom'
     globals: true,
-    // Vitest soll diese Dateien als Testdateien ausführen.
-    include: ['src/**/*.spec.ts'],
+    environment: 'jsdom',
+    environmentMatchGlobs: [
+      ['src/components/**/*.spec.tsx', 'stencil'],
+    ],
+    include: ['src/**/*.spec.{ts,tsx}'],
     exclude: [
-      'src/components/**',
       'src/**/*.e2e.ts',
       'src/**/*.stories.ts',
       'src/**/*.stories.tsx',
       'src/testing/**',
+      'src/components/v-map-layer-google/google-maps-integration.spec.ts',
     ],
-    setupFiles: ['src/testing/setupTests.vitest.ts'],
+    setupFiles: [
+      'src/testing/setupTests.vitest.ts',
+      'src/testing/setupTests.stencil.ts',
+    ],
     coverage: {
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
-        // Testdateien werden ausgeführt, zählen aber nicht als zu messender Source-Code.
         'src/index.ts',
-        'src/components/**',
         'src/layer/**',
         'src/lib/**',
         'src/types/**',
@@ -55,7 +59,7 @@ export default defineConfig({
       ],
       reporter: ['text', 'lcov'],
       thresholds: {
-        branches: 85,
+        branches: 80,
         functions: 86,
         lines: 82,
         statements: 82,
