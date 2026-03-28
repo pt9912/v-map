@@ -14,7 +14,7 @@ const { helperMock } = vi.hoisted(() => {
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerWms } from './v-map-layer-wms';
@@ -245,5 +245,68 @@ describe('<v-map-layer-wms>', () => {
     });
 
     expect(helperMock.setVisible).not.toHaveBeenCalled();
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns undefined', () => {
+      const result = VMapLayerWms.prototype.render.call({});
+      expect(result).toBeUndefined();
+    });
+
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-wms');
+      const component = { el } as any;
+      await VMapLayerWms.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
+    });
+
+    it('connectedCallback runs without error', async () => {
+      await VMapLayerWms.prototype.connectedCallback.call({});
+    });
+
+    it('disconnectedCallback handles undefined helper', async () => {
+      const component = { helper: undefined } as any;
+      await VMapLayerWms.prototype.disconnectedCallback.call(component);
+      // Should not throw
+    });
+
+    it('updateLayer delegates to helper.updateLayer', async () => {
+      const component = {
+        helper: helperMock,
+        url: 'https://example.com/wms',
+        layers: 'topo',
+        styles: 'default',
+        format: 'image/png',
+        transparent: true,
+      } as any;
+
+      await VMapLayerWms.prototype['updateLayer'].call(component);
+
+      expect(helperMock.updateLayer).toHaveBeenCalledWith({
+        type: 'wms',
+        data: {
+          url: 'https://example.com/wms',
+          layers: 'topo',
+          styles: 'default',
+          format: 'image/png',
+          transparent: 'true',
+        },
+      });
+    });
+
+    it('updateLayer handles undefined helper', async () => {
+      const component = {
+        helper: undefined,
+        url: 'https://example.com/wms',
+        layers: 'topo',
+      } as any;
+
+      await VMapLayerWms.prototype['updateLayer'].call(component);
+      // Should not throw
+    });
   });
 });

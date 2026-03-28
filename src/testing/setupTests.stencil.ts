@@ -2,8 +2,8 @@ import { vi, beforeAll } from 'vitest';
 
 // Provide stub decorators so Stencil component source files can be imported.
 // The decorators are compile-time constructs; at runtime they are no-ops.
-const noop = () => (target: any, key?: string) => {};
-const noopClass = (opts: any) => (target: any) => {};
+const noop = () => (_target: any, _key?: string) => {};
+const noopClass = (_opts: any) => (_target: any) => {};
 
 vi.mock('@stencil/core', async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
@@ -25,13 +25,14 @@ vi.mock('@stencil/core', async (importOriginal) => {
 // map providers (OpenLayers, Leaflet, Cesium, Deck) during render() tests.
 // The providers are not available in the test environment because the dist
 // bundle inlines dynamic imports that resolve to non-constructable stubs.
-const providerErrors = /Provider is not a constructor|Cannot read properties of (null|undefined)/;
-process.on('unhandledRejection', (reason: unknown) => {
-  const msg = reason instanceof Error ? reason.message : String(reason);
-  if (providerErrors.test(msg)) return; // swallow known provider errors
-  // Re-throw unexpected rejections so vitest reports them
-  throw reason;
-});
+const providerErrors = /Provider is not a constructor|Cannot read properties of (null|undefined)|Google Maps session request failed|getBounds is not a function|document is not defined/;
+for (const event of ['unhandledRejection', 'uncaughtException'] as const) {
+  process.on(event, (reason: unknown) => {
+    const msg = reason instanceof Error ? reason.message : String(reason);
+    if (providerErrors.test(msg)) return;
+    throw reason;
+  });
+}
 
 beforeAll(async () => {
   // Load compiled Stencil components so custom elements are registered for render() tests

@@ -240,6 +240,115 @@ describe('WCSGridLayer', () => {
     });
   });
 
+    it('should NOT add geotiff compression for non-tiff format in WCS 2.0.x (lines 72-78)', () => {
+      const options: WCSGridLayerOptions = {
+        url: 'https://example.com/wcs',
+        coverageName: 'test-coverage',
+        version: '2.0.1',
+        format: 'image/png', // Not tiff - should skip compression param
+      };
+
+      const layer = createWCSGridLayer(options);
+
+      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+        getSouthWest: () => ({ lng: 10, lat: 20 }),
+        getNorthEast: () => ({ lng: 30, lat: 40 }),
+      });
+
+      const coords = { x: 1, y: 2, z: 3 } as any;
+      const url = (layer as any).buildWCSUrl(coords);
+
+      expect(url).toContain('SERVICE=WCS');
+      expect(url).toContain('VERSION=2.0.1');
+      expect(url).toContain('FORMAT=image%2Fpng');
+      // Should NOT contain geotiff compression
+      expect(url).not.toContain('geotiff');
+      expect(url).not.toContain('compression');
+    });
+
+    it('should handle WCS 1.x with getTileSize returning an object {x, y} (lines 98-99)', () => {
+      const options: WCSGridLayerOptions = {
+        url: 'https://example.com/wcs',
+        coverageName: 'test-coverage',
+        version: '1.1.1',
+        format: 'image/tiff',
+        projection: 'EPSG:4326',
+      };
+
+      const layer = createWCSGridLayer(options);
+
+      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+        getSouthWest: () => ({ lng: 10, lat: 20 }),
+        getNorthEast: () => ({ lng: 30, lat: 40 }),
+      });
+
+      // Return object instead of number for getTileSize
+      (layer as any).getTileSize = jest.fn().mockReturnValue({ x: 512, y: 512 });
+
+      const coords = { x: 1, y: 2, z: 3 } as any;
+      const url = (layer as any).buildWCSUrl(coords);
+
+      expect(url).toContain('WIDTH=512');
+      expect(url).toContain('HEIGHT=512');
+      expect(url).toContain('COVERAGE=test-coverage');
+      expect(url).toContain('BBOX=10%2C20%2C30%2C40');
+    });
+
+    it('should handle WCS 1.x with extra params (lines 100-102)', () => {
+      const options: WCSGridLayerOptions = {
+        url: 'https://example.com/wcs',
+        coverageName: 'test-coverage',
+        version: '1.0.0',
+        format: 'image/tiff',
+        projection: 'EPSG:4326',
+        params: {
+          customParam: 'value',
+        },
+      };
+
+      const layer = createWCSGridLayer(options);
+
+      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+        getSouthWest: () => ({ lng: 5, lat: 15 }),
+        getNorthEast: () => ({ lng: 25, lat: 35 }),
+      });
+
+      (layer as any).getTileSize = jest.fn().mockReturnValue(256);
+
+      const coords = { x: 0, y: 0, z: 1 } as any;
+      const url = (layer as any).buildWCSUrl(coords);
+
+      expect(url).toContain('customParam=value');
+      expect(url).toContain('WIDTH=256');
+    });
+
+    it('should call done with Error when onerror receives an Error object', () => {
+      const options: WCSGridLayerOptions = {
+        url: 'https://example.com/wcs',
+        coverageName: 'test-coverage',
+      };
+
+      const layer = createWCSGridLayer(options);
+
+      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+        getSouthWest: () => ({ lng: 10, lat: 20 }),
+        getNorthEast: () => ({ lng: 30, lat: 40 }),
+      });
+
+      const coords = { x: 1, y: 2, z: 3 } as any;
+      const done = jest.fn();
+
+      const imgTile = layer.createTile(coords, done) as HTMLImageElement;
+
+      // Trigger onerror with an actual Error object
+      const realError = new Error('Network failure');
+      if (imgTile.onerror) {
+        (imgTile.onerror as any)(realError);
+      }
+
+      expect(done).toHaveBeenCalledWith(realError, imgTile);
+    });
+
   describe('updateOptions', () => {
     it('should update WCS options and trigger redraw', () => {
       const options: WCSGridLayerOptions = {

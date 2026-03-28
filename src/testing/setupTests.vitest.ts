@@ -49,3 +49,11 @@ vi.mock('geostyler-lyrx-parser', () =>
 vi.mock('geostyler-style', () => import('./mocks/geostyler-style'));
 
 globalThis.global = globalThis;
+
+// Catch known async leaks from test constructors that start fetch/timers
+const knownLeaks = /Google Maps session request failed|getBounds is not a function/;
+process.on('unhandledRejection', (reason: unknown) => {
+  const msg = reason instanceof Error ? reason.message : String(reason);
+  if (knownLeaks.test(msg)) return;
+  throw reason;
+});

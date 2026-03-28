@@ -63,6 +63,27 @@ vi.mock('wellknown', () => ({
   },
 }));
 
+vi.mock('@npm9912/s-gml', () => ({
+  GmlParser: vi.fn().mockImplementation(function() {
+    return {
+      parse: vi.fn().mockResolvedValue({ type: 'FeatureCollection', features: [] }),
+    };
+  }),
+}));
+
+vi.mock('./DeckGLGeoTIFFLayer', () => ({
+  createDeckGLGeoTIFFLayer: vi.fn().mockRejectedValue(new Error('GeoTIFF not available')),
+}));
+
+vi.mock('./DeckGLGeoTIFFTerrainLayer', () => ({
+  createDeckGLGeoTIFFTerrainLayer: vi.fn().mockRejectedValue(new Error('Terrain not available')),
+}));
+
+vi.mock('../../utils/logger', () => ({
+  log: vi.fn(),
+  warn: vi.fn(),
+}));
+
 import { DeckProvider } from './deck-provider';
 
 // ---------- helpers ----------
@@ -2138,6 +2159,1065 @@ describe('DeckProvider', () => {
         {},
       );
       expect(result).toBe('https://example.com/wfs');
+    });
+  });
+
+  // ===== 36. addLayerToGroup for WFS type =====
+
+  describe('addLayerToGroup (WFS)', () => {
+    it('creates a WFS layer fetching GeoJSON', async () => {
+      const provider = await initProvider();
+
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: true,
+          json: vi.fn().mockResolvedValue({
+            type: 'FeatureCollection',
+            features: [],
+          }),
+        }),
+      );
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'wfs',
+        url: 'https://example.com/wfs',
+        typeName: 'testLayer',
+        groupId: 'wfs-group',
+      } as any);
+
+      expect(layerId).toBeTruthy();
+    });
+
+    it('throws when WFS fetch fails', async () => {
+      const provider = await initProvider();
+
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: false,
+          status: 500,
+          statusText: 'Internal Server Error',
+        }),
+      );
+
+      await expect(
+        provider.addLayerToGroup({
+          type: 'wfs',
+          url: 'https://example.com/wfs',
+          typeName: 'testLayer',
+          groupId: 'wfs-fail-group',
+        } as any),
+      ).rejects.toThrow('WFS request failed');
+    });
+  });
+
+  // ===== 37. addLayerToGroup for Google type =====
+
+  describe('addLayerToGroup (Google)', () => {
+    it('creates a Google tile layer with apiKey', async () => {
+      const provider = await initProvider();
+      // Mock loadGoogleMapsApi to do nothing
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'google',
+        apiKey: 'test-key',
+        mapType: 'satellite',
+        groupId: 'google-group',
+      } as any);
+
+      expect(layerId).toBeTruthy();
+    });
+
+    it('throws when apiKey is missing for Google layer', async () => {
+      const provider = await initProvider();
+
+      await expect(
+        provider.addLayerToGroup({
+          type: 'google',
+          groupId: 'google-no-key',
+        } as any),
+      ).rejects.toThrow('apiKey');
+    });
+  });
+
+  // ===== 38. buildOsmLayer with custom url =====
+
+  describe('buildOsmLayer (private)', () => {
+    it('builds OSM layer with custom URL', async () => {
+      const provider = await initProvider();
+
+      const layer = await (provider as any).buildOsmLayer(
+        { url: 'https://custom-tiles.example.com', type: 'osm' },
+        'osm-custom-id',
+      );
+
+      expect(layer).toBeDefined();
+      const callArgs = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'osm-custom-id',
+      );
+      expect(callArgs).toBeTruthy();
+    });
+  });
+
+  // ===== 39. fetchWFSFromUrl (private) – branches =====
+
+  describe('fetchWFSFromUrl (private)', () => {
+    let provider: DeckProvider;
+
+    beforeEach(async () => {
+      provider = await initProvider();
+    });
+
+    it('returns JSON for application/json output format', async () => {
+      const data = { type: 'FeatureCollection', features: [] };
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(data),
+      }));
+
+      const result = await (provider as any).fetchWFSFromUrl({
+        url: 'https://wfs.example.com',
+        typeName: 'layer',
+      });
+
+      expect(result).toEqual(data);
+    });
+
+    it('throws when fetch is not ok', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        statusText: 'Forbidden',
+      }));
+
+      await expect(
+        (provider as any).fetchWFSFromUrl({
+          url: 'https://wfs.example.com',
+          typeName: 'layer',
+        }),
+      ).rejects.toThrow('WFS request failed');
+    });
+
+    it('defaults to JSON parse for unknown format', async () => {
+      const data = { type: 'FeatureCollection', features: [] };
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(data),
+      }));
+
+      const result = await (provider as any).fetchWFSFromUrl({
+        url: 'https://wfs.example.com',
+        typeName: 'layer',
+        outputFormat: 'text/csv',
+      });
+
+      expect(result).toEqual(data);
+    });
+
+    it('parses GML when outputFormat includes gml', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        text: vi.fn().mockResolvedValue('<wfs:FeatureCollection/>'),
+      }));
+
+      const result = await (provider as any).fetchWFSFromUrl({
+        url: 'https://wfs.example.com',
+        typeName: 'layer',
+        outputFormat: 'gml3',
+      });
+
+      expect(result).toEqual({ type: 'FeatureCollection', features: [] });
+    });
+
+    it('parses GML when outputFormat includes xml', async () => {
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        text: vi.fn().mockResolvedValue('<xml/>'),
+      }));
+
+      const result = await (provider as any).fetchWFSFromUrl({
+        url: 'https://wfs.example.com',
+        typeName: 'layer',
+        outputFormat: 'application/xml',
+      });
+
+      expect(result).toEqual({ type: 'FeatureCollection', features: [] });
+    });
+  });
+
+  // ===== 40. createWFSLayer with geostylerStyle =====
+
+  describe('addLayerToGroup (WFS with geostylerStyle)', () => {
+    it('creates a WFS layer with geostylerStyle', async () => {
+      const provider = await initProvider();
+
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({
+          type: 'FeatureCollection',
+          features: [],
+        }),
+      }));
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'wfs',
+        url: 'https://example.com/wfs',
+        typeName: 'testLayer',
+        geostylerStyle: {
+          name: 'wfs-style',
+          rules: [
+            { name: 'fill', symbolizers: [{ kind: 'Fill', color: '#FF0000' }] },
+          ],
+        },
+        groupId: 'wfs-geostyler',
+      } as any);
+
+      expect(layerId).toBeTruthy();
+    });
+  });
+
+  // ===== 41. onPointerMove =====
+
+  describe('onPointerMove', () => {
+    it('registers callback and returns unsubscribe function', async () => {
+      const provider = await initProvider();
+      const callback = vi.fn();
+
+      const unsubscribe = provider.onPointerMove(callback);
+      expect(typeof unsubscribe).toBe('function');
+
+      // Call unsubscribe - should not throw
+      unsubscribe();
+    });
+
+    it('invokes callback with coordinates when viewport is available', async () => {
+      const provider = await initProvider();
+      const callback = vi.fn();
+      const target = (provider as any).target as HTMLDivElement;
+
+      (provider as any).deck.getViewports = vi.fn(() => [{
+        unproject: vi.fn(() => [10, 50]),
+      }]);
+
+      // Capture the event listener
+      let capturedHandler: ((e: Event) => void) | undefined;
+      const origAddEvent = target.addEventListener.bind(target);
+      target.addEventListener = vi.fn((type: string, handler: any) => {
+        if (type === 'pointermove') capturedHandler = handler;
+        origAddEvent(type, handler);
+      }) as any;
+
+      provider.onPointerMove(callback);
+
+      // Call the handler directly with a fake PointerEvent-like object
+      if (capturedHandler) {
+        capturedHandler({ clientX: 100, clientY: 200 } as any);
+      }
+
+      expect(callback).toHaveBeenCalledWith(
+        [10, 50],
+        expect.any(Array),
+      );
+    });
+
+    it('invokes callback with null when no viewport', async () => {
+      const provider = await initProvider();
+      const callback = vi.fn();
+      const target = (provider as any).target as HTMLDivElement;
+
+      (provider as any).deck.getViewports = vi.fn(() => []);
+
+      let capturedHandler: ((e: Event) => void) | undefined;
+      const origAddEvent = target.addEventListener.bind(target);
+      target.addEventListener = vi.fn((type: string, handler: any) => {
+        if (type === 'pointermove') capturedHandler = handler;
+        origAddEvent(type, handler);
+      }) as any;
+
+      provider.onPointerMove(callback);
+
+      if (capturedHandler) {
+        capturedHandler({ clientX: 100, clientY: 200 } as any);
+      }
+
+      expect(callback).toHaveBeenCalledWith(null, expect.any(Array));
+    });
+
+    it('invokes callback with null on error', async () => {
+      const provider = await initProvider();
+      const callback = vi.fn();
+      const target = (provider as any).target as HTMLDivElement;
+
+      (provider as any).deck.getViewports = vi.fn(() => {
+        throw new Error('broken');
+      });
+
+      let capturedHandler: ((e: Event) => void) | undefined;
+      const origAddEvent = target.addEventListener.bind(target);
+      target.addEventListener = vi.fn((type: string, handler: any) => {
+        if (type === 'pointermove') capturedHandler = handler;
+        origAddEvent(type, handler);
+      }) as any;
+
+      provider.onPointerMove(callback);
+
+      if (capturedHandler) {
+        capturedHandler({ clientX: 100, clientY: 200 } as any);
+      }
+
+      expect(callback).toHaveBeenCalledWith(null, expect.any(Array));
+    });
+  });
+
+  // ===== 42. geotiff layer error handling =====
+
+  describe('addLayerToGroup (GeoTIFF error handling)', () => {
+    it('returns a fallback GeoJsonLayer when createDeckGLGeoTIFFLayer throws', async () => {
+      const provider = await initProvider();
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'geotiff',
+        url: 'https://example.com/data.tif',
+        groupId: 'geotiff-group',
+      } as any);
+
+      // Should return a fallback layer, not null
+      expect(layerId).toBeTruthy();
+    });
+  });
+
+  describe('addLayerToGroup (terrain-geotiff error handling)', () => {
+    it('returns null when createDeckGLGeoTIFFTerrainLayer throws', async () => {
+      const provider = await initProvider();
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'terrain-geotiff',
+        url: 'https://example.com/terrain.tif',
+        groupId: 'terrain-geotiff-group',
+      } as any);
+
+      // terrain-geotiff returns null on error, which means addLayerToGroup returns null
+      expect(layerId).toBeNull();
+    });
+  });
+
+  // ===== 43. GeoTIFF without URL =====
+
+  describe('addLayerToGroup (GeoTIFF without URL)', () => {
+    it('returns fallback when geotiff URL is missing', async () => {
+      const provider = await initProvider();
+
+      // GeoTIFF without url should throw "GeoTIFF layer requires a URL"
+      // but the error is caught in createGeoTIFFLayer's catch block
+      await expect(
+        provider.addLayerToGroup({
+          type: 'geotiff',
+          groupId: 'geotiff-no-url',
+        } as any),
+      ).rejects.toThrow('GeoTIFF layer requires a URL');
+    });
+  });
+
+  // ===== 44a. onViewStateChange callback (lines 134-135) =====
+
+  describe('init – onViewStateChange callback', () => {
+    it('calls deck.setProps with updated viewState', async () => {
+      const provider = await initProvider();
+      const deck = (provider as any).deck;
+
+      // The Deck constructor was called with onViewStateChange
+      const deckCall = mockDeck.mock.calls[0][0];
+      expect(deckCall.onViewStateChange).toBeDefined();
+
+      // Simulate the callback
+      const newVs = { longitude: 10, latitude: 52, zoom: 8, bearing: 0, pitch: 0 };
+      deckCall.onViewStateChange({ viewState: newVs });
+
+      expect(deck.setProps).toHaveBeenCalledWith({ viewState: newVs });
+    });
+  });
+
+  // ===== 44b. XYZ layer onTileError and renderSubLayers (lines 234-256) =====
+
+  describe('buildXyzTileLayer – callbacks', () => {
+    it('onTileError logs an error without throwing', async () => {
+      const provider = await initProvider();
+      const layer = await (provider as any).buildXyzTileLayer(
+        { url: 'https://tiles.example.com/{z}/{x}/{y}.png', type: 'osm' },
+        'xyz-test-id',
+      );
+      expect(layer).toBeDefined();
+
+      // Extract onTileError from TileLayer constructor call
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'xyz-test-id',
+      );
+      expect(call).toBeTruthy();
+      const { onTileError } = call[0];
+      expect(() => onTileError(new Error('404'))).not.toThrow();
+    });
+
+    it('renderSubLayers returns transparent bitmap when data is null', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildXyzTileLayer(
+        { url: 'https://tiles.example.com/{z}/{x}/{y}.png', type: 'osm' },
+        'xyz-null-data',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'xyz-null-data',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: null,
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, width: 256, height: 256, index: { x: 0, y: 0, z: 0 } },
+      });
+      expect(result).toBeDefined();
+      expect(result.id).toContain('dynamic-transparent-bitmap');
+    });
+
+    it('renderSubLayers returns BitmapLayer when data is present', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildXyzTileLayer(
+        { url: 'https://tiles.example.com/{z}/{x}/{y}.png', type: 'osm' },
+        'xyz-with-data',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'xyz-with-data',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: 'blob:image',
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, index: { x: 0, y: 0, z: 0 } },
+        opacity: 0.8,
+      });
+      expect(result).toBeDefined();
+    });
+  });
+
+  // ===== 44c. Google layer getTileData, renderSubLayers, onTileLoad (lines 699-767) =====
+
+  describe('buildGoogleTileLayer – callbacks', () => {
+    it('getTileData fetches a tile and returns blob', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      const fakeBlob = new Blob(['pixels']);
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(fakeBlob),
+      }));
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'test-key', mapType: 'roadmap', scale: 'scaleFactor2x' },
+        'google-tile-test',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-tile-test',
+      );
+      const { getTileData } = call[0];
+      const blob = await getTileData({ index: { x: 0, y: 0, z: 1 } });
+      expect(blob).toBe(fakeBlob);
+    });
+
+    it('getTileData returns null when fetch fails', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network')));
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'test-key', mapType: 'satellite' },
+        'google-tile-fail',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-tile-fail',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({ index: { x: 0, y: 0, z: 1 } });
+      expect(result).toBeNull();
+    });
+
+    it('getTileData sets language and region when configured', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      const fakeBlob = new Blob(['pixels']);
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(fakeBlob),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'k', mapType: 'roadmap', language: 'de', region: 'DE', scale: 'scaleFactor1x' },
+        'google-lang',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-lang',
+      );
+      const { getTileData } = call[0];
+      await getTileData({ index: { x: 0, y: 0, z: 1 } });
+
+      const url = fetchMock.mock.calls[0][0] as string;
+      expect(url).toContain('language=de');
+      expect(url).toContain('region=DE');
+      expect(url).toContain('scale=1');
+    });
+
+    it('renderSubLayers returns null when data is falsy', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'k', mapType: 'roadmap' },
+        'google-rs-null',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-rs-null',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: null,
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, index: { x: 0, y: 0, z: 0 } },
+      });
+      expect(result).toBeNull();
+    });
+
+    it('renderSubLayers returns BitmapLayer when data is present', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'k', mapType: 'roadmap' },
+        'google-rs-data',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-rs-data',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: 'blob:image',
+        opacity: 0.7,
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, index: { x: 0, y: 0, z: 0 } },
+      });
+      expect(result).toBeDefined();
+    });
+
+    it('onTileLoad calls ensureGoogleLogo', async () => {
+      const provider = await initProvider();
+      (provider as any).loadGoogleMapsApi = vi.fn().mockResolvedValue(undefined);
+      const spy = vi.spyOn(provider as any, 'ensureGoogleLogo');
+
+      await (provider as any).buildGoogleTileLayer(
+        { type: 'google', apiKey: 'k', mapType: 'roadmap' },
+        'google-onload',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'google-onload',
+      );
+      const { onTileLoad } = call[0];
+      onTileLoad();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  // ===== 44d. loadGoogleMapsApi – script loading branch (lines 802-822) =====
+
+  describe('loadGoogleMapsApi – script injection branch', () => {
+    it('injects script element and resolves on callback', async () => {
+      const provider = await initProvider();
+      // Remove mock loader and google.maps so script branch is hit
+      delete (window as any).__mockGoogleMapsApi;
+      delete (window as any).google;
+
+      const origAppend = document.head.appendChild.bind(document.head);
+      document.head.appendChild = vi.fn((el: any) => {
+        // Simulate the Google Maps callback being invoked
+        if (el.tagName === 'SCRIPT' && el.src) {
+          const url = new URL(el.src);
+          const cbName = url.searchParams.get('callback');
+          if (cbName) (window as any)[cbName]();
+        }
+        return origAppend(el);
+      }) as any;
+
+      await expect(
+        (provider as any).loadGoogleMapsApi('test-key', { language: 'de', region: 'DE', libraries: ['places', 'geometry'] }),
+      ).resolves.not.toThrow();
+
+      document.head.appendChild = origAppend;
+    });
+
+    it('rejects when script fails to load', async () => {
+      const provider = await initProvider();
+      delete (window as any).__mockGoogleMapsApi;
+      delete (window as any).google;
+
+      const origAppend = document.head.appendChild.bind(document.head);
+      document.head.appendChild = vi.fn((el: any) => {
+        if (el.tagName === 'SCRIPT') {
+          // Simulate error after a microtask
+          setTimeout(() => el.onerror(), 0);
+        }
+        return origAppend(el);
+      }) as any;
+
+      await expect(
+        (provider as any).loadGoogleMapsApi('bad-key'),
+      ).rejects.toThrow('Google Maps JS API failed to load');
+
+      document.head.appendChild = origAppend;
+    });
+  });
+
+  // ===== 44e. buildScatterPlot – onHover callback (lines 856-867) =====
+
+  describe('buildScatterPlot – onHover', () => {
+    it('executes onHover callback without throwing', async () => {
+      const provider = await initProvider();
+      const { ScatterplotLayer } = await import('@deck.gl/layers');
+
+      const layer = await (provider as any).buildScatterPlot(
+        {
+          type: 'scatterplot',
+          data: [{ position: [10, 50], radius: 5, color: [255, 0, 0, 255] }],
+        },
+        'scatter-hover-test',
+      );
+
+      expect(layer).toBeDefined();
+      // Extract the onHover from the ScatterplotLayer constructor call
+      const scatterCall = (ScatterplotLayer as any).mock.calls.find(
+        (c: any[]) => c[0]?.id === 'scatter-hover-test',
+      );
+      expect(scatterCall).toBeTruthy();
+      const { onHover } = scatterCall[0];
+      expect(() => onHover({ object: { name: 'test' } })).not.toThrow();
+      expect(() => onHover({ object: null })).not.toThrow();
+    });
+  });
+
+  // ===== 44f. WMS getTileData, onTileError, renderSubLayers (lines 994-1042) =====
+
+  describe('buildWmsTileLayer – callbacks', () => {
+    it('getTileData fetches tile and creates ImageBitmap', async () => {
+      const provider = await initProvider();
+      const fakeImageBitmap = { width: 256, height: 256 };
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(new Blob(['pixels'])),
+      }));
+      vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue(fakeImageBitmap));
+
+      await (provider as any).buildWmsTileLayer(
+        { type: 'wms', url: 'https://example.com/wms', layers: 'test', version: '1.3.0' },
+        'wms-td-test',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wms-td-test',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBe(fakeImageBitmap);
+    });
+
+    it('getTileData returns canvas fallback on fetch error', async () => {
+      const provider = await initProvider();
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network')));
+
+      await (provider as any).buildWmsTileLayer(
+        { type: 'wms', url: 'https://example.com/wms', layers: 'test' },
+        'wms-td-fail',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wms-td-fail',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBeInstanceOf(HTMLCanvasElement);
+    });
+
+    it('onTileError logs without throwing', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWmsTileLayer(
+        { type: 'wms', url: 'https://example.com/wms', layers: 'test' },
+        'wms-err',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wms-err',
+      );
+      expect(() => call[0].onTileError(new Error('tile err'))).not.toThrow();
+    });
+
+    it('renderSubLayers returns canvas-based BitmapLayer for HTMLCanvasElement data', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWmsTileLayer(
+        { type: 'wms', url: 'https://example.com/wms', layers: 'test' },
+        'wms-rs-canvas',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wms-rs-canvas',
+      );
+      const { renderSubLayers } = call[0];
+      const canvas = document.createElement('canvas');
+      const result = renderSubLayers({
+        data: canvas,
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, width: 256, height: 256, index: { x: 0, y: 0, z: 0 } },
+      });
+      expect(result).toBeDefined();
+    });
+
+    it('renderSubLayers returns image BitmapLayer for non-canvas data', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWmsTileLayer(
+        { type: 'wms', url: 'https://example.com/wms', layers: 'test' },
+        'wms-rs-img',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wms-rs-img',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: { width: 256, height: 256 },
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, index: { x: 0, y: 0, z: 0 } },
+        opacity: 0.9,
+      });
+      expect(result).toBeDefined();
+    });
+  });
+
+  // ===== 44g. WCS getTileData, renderSubLayers, onTileError (lines 1099-1182) =====
+
+  describe('buildWcsTileLayer – callbacks', () => {
+    it('getTileData (WCS 2.0.x) fetches tile and creates ImageBitmap', async () => {
+      const provider = await initProvider();
+      const fakeImageBitmap = { width: 256, height: 256 };
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(new Blob(['pixels'])),
+      }));
+      vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue(fakeImageBitmap));
+
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem', version: '2.0.1', format: 'image/tiff' },
+        'wcs-20-test',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-20-test',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBe(fakeImageBitmap);
+    });
+
+    it('getTileData (WCS 2.0.x) returns canvas fallback on fetch error', async () => {
+      const provider = await initProvider();
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network')));
+
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem', version: '2.0.1' },
+        'wcs-20-fail',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-20-fail',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBeInstanceOf(HTMLCanvasElement);
+    });
+
+    it('getTileData (WCS 2.0.x) adds geotiff:compression for tiff format', async () => {
+      const provider = await initProvider();
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(new Blob([])),
+      });
+      vi.stubGlobal('fetch', fetchMock);
+      vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue({ width: 256 }));
+
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem', version: '2.0.1', format: 'image/geotiff' },
+        'wcs-20-tiff',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-20-tiff',
+      );
+      const { getTileData } = call[0];
+      await getTileData({ bbox: { west: 8, south: 50, east: 9, north: 51 } });
+      const url = fetchMock.mock.calls[0][0] as string;
+      expect(url).toContain('subset=X');
+      expect(url).toContain('subset=Y');
+    });
+
+    it('getTileData (WCS 1.x.x) fetches tile and creates ImageBitmap', async () => {
+      const provider = await initProvider();
+      const fakeImageBitmap = { width: 256, height: 256 };
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        blob: vi.fn().mockResolvedValue(new Blob(['pixels'])),
+      }));
+      vi.stubGlobal('createImageBitmap', vi.fn().mockResolvedValue(fakeImageBitmap));
+
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem', version: '1.1.1' },
+        'wcs-1x-test',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-1x-test',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBe(fakeImageBitmap);
+    });
+
+    it('getTileData (WCS 1.x.x) returns canvas fallback on fetch error', async () => {
+      const provider = await initProvider();
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('fail')));
+
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem', version: '1.1.1' },
+        'wcs-1x-fail',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-1x-fail',
+      );
+      const { getTileData } = call[0];
+      const result = await getTileData({
+        bbox: { west: 8, south: 50, east: 9, north: 51 },
+      });
+      expect(result).toBeInstanceOf(HTMLCanvasElement);
+    });
+
+    it('onTileError logs without throwing', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem' },
+        'wcs-err',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-err',
+      );
+      expect(() => call[0].onTileError(new Error('wcs tile err'))).not.toThrow();
+    });
+
+    it('renderSubLayers returns canvas-based BitmapLayer for HTMLCanvasElement data', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem' },
+        'wcs-rs-canvas',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-rs-canvas',
+      );
+      const { renderSubLayers } = call[0];
+      const canvas = document.createElement('canvas');
+      const result = renderSubLayers({
+        data: canvas,
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, width: 256, height: 256, index: { x: 0, y: 0, z: 0 } },
+      });
+      expect(result).toBeDefined();
+    });
+
+    it('renderSubLayers returns image BitmapLayer for non-canvas data', async () => {
+      const provider = await initProvider();
+      await (provider as any).buildWcsTileLayer(
+        { type: 'wcs', url: 'https://example.com/wcs', coverageName: 'dem' },
+        'wcs-rs-img',
+      );
+
+      const call = mockTileLayer.mock.calls.find(
+        (c: any[]) => c[0]?.id === 'wcs-rs-img',
+      );
+      const { renderSubLayers } = call[0];
+      const result = renderSubLayers({
+        data: { width: 256, height: 256 },
+        tile: { bbox: { west: 0, south: 0, east: 1, north: 1 }, index: { x: 0, y: 0, z: 0 } },
+        opacity: 0.5,
+      });
+      expect(result).toBeDefined();
+    });
+  });
+
+  // ===== 44h. addLayerToGroup with zIndex (line 1302) =====
+
+  describe('addLayerToGroup – zIndex override', () => {
+    it('applies zIndex override when provided', async () => {
+      const provider = await initProvider();
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'geojson',
+        geojson: JSON.stringify({ type: 'FeatureCollection', features: [] }),
+        groupId: 'zindex-test',
+        zIndex: 42,
+      } as any);
+
+      expect(layerId).toBeTruthy();
+    });
+  });
+
+  // ===== 44i. updateLayer 'wfs' case (lines 1536-1538) =====
+
+  describe('updateLayer (wfs case)', () => {
+    it('updates a WFS layer with new config', async () => {
+      const provider = await initProvider();
+
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({ type: 'FeatureCollection', features: [] }),
+      }));
+
+      const layerId = await provider.addLayerToGroup({
+        type: 'wfs',
+        url: 'https://example.com/wfs',
+        typeName: 'layer1',
+        groupId: 'update-wfs-group',
+      } as any);
+
+      expect(layerId).toBeTruthy();
+
+      await expect(
+        provider.updateLayer(layerId, {
+          type: 'wfs',
+          data: {
+            url: 'https://example.com/wfs2',
+            typeName: 'layer2',
+          } as any,
+        }),
+      ).resolves.not.toThrow();
+    });
+  });
+
+  // ===== 44j. wktToGeoJSON – wellknown parser not available (line 1673) =====
+
+  describe('wktToGeoJSON – parser not available', () => {
+    it('throws when wellknown has no parse function', async () => {
+      const provider = await initProvider();
+      const wk = await import('wellknown');
+
+      // Save original and replace with non-function
+      const origDefault = (wk.wellknownModule as any).default;
+      const origParse = (wk.wellknownModule as any).parse;
+      (wk.wellknownModule as any).default = 'not-a-function';
+      (wk.wellknownModule as any).parse = undefined;
+
+      await expect(
+        (provider as any).wktToGeoJSON('POINT(10 50)'),
+      ).rejects.toThrow('wellknown parser not available');
+
+      // Restore
+      (wk.wellknownModule as any).default = origDefault;
+      if (origParse) (wk.wellknownModule as any).parse = origParse;
+    });
+  });
+
+  // ===== 44k. createGeoTIFFLayer success path (line 1711) =====
+
+  describe('createGeoTIFFLayer – success path', () => {
+    it('returns the layer when createDeckGLGeoTIFFLayer succeeds', async () => {
+      const provider = await initProvider();
+      const { createDeckGLGeoTIFFLayer } = await import('./DeckGLGeoTIFFLayer');
+      const fakeLayer = { id: 'geotiff-success', props: {} };
+      (createDeckGLGeoTIFFLayer as any).mockResolvedValueOnce(fakeLayer);
+
+      const result = await (provider as any).createGeoTIFFLayer(
+        { type: 'geotiff', url: 'https://example.com/data.tif', opacity: 0.8, visible: true },
+        'geotiff-success',
+      );
+
+      expect(result).toBe(fakeLayer);
+    });
+  });
+
+  // ===== 44. WKT layer with null geometry =====
+
+  describe('wktToGeoJSON (null geometry)', () => {
+    it('throws when wellknown returns null', async () => {
+      const provider = await initProvider();
+
+      // Override the wellknown mock to return null
+      const { wellknownModule } = await import('wellknown');
+      const defaultFn = (wellknownModule as any).default;
+      (wellknownModule as any).default = vi.fn().mockReturnValue(null);
+
+      await expect(
+        (provider as any).wktToGeoJSON('INVALID'),
+      ).rejects.toThrow('Failed to parse WKT');
+
+      // Restore
+      (wellknownModule as any).default = defaultFn;
+    });
+  });
+
+  // ===== 45. resolveWktText edge cases =====
+
+  describe('resolveWktText (private)', () => {
+    it('throws when neither wkt nor url provided', async () => {
+      const provider = await initProvider();
+
+      await expect(
+        (provider as any).resolveWktText({}),
+      ).rejects.toThrow('Either wkt or url must be provided');
+    });
+
+    it('returns wkt string directly', async () => {
+      const provider = await initProvider();
+      const result = await (provider as any).resolveWktText({ wkt: 'POINT(10 50)' });
+      expect(result).toBe('POINT(10 50)');
+    });
+
+    it('fetches WKT text from URL', async () => {
+      const provider = await initProvider();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: true,
+        text: vi.fn().mockResolvedValue('POINT(10 50)'),
+      }));
+
+      const result = await (provider as any).resolveWktText({ url: 'https://example.com/data.wkt' });
+      expect(result).toBe('POINT(10 50)');
+    });
+
+    it('throws when WKT fetch fails', async () => {
+      const provider = await initProvider();
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+      }));
+
+      await expect(
+        (provider as any).resolveWktText({ url: 'https://example.com/bad.wkt' }),
+      ).rejects.toThrow('Failed to fetch WKT');
     });
   });
 });

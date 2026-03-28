@@ -100,6 +100,7 @@ vi.mock('geostyler-style', () => ({
 
 // Import after mocks (ensures mocked modules are used)
 import './v-map-style';
+import { VMapStyle } from './v-map-style';
 
 describe('v-map-style', () => {
   it('renders with default properties', async () => {
@@ -606,6 +607,571 @@ describe('v-map-style', () => {
 
       expect(styleErrorSpy).toHaveBeenCalled();
       expect(styleErrorSpy.mock.calls[0][0].detail).toBeInstanceOf(Error);
+    });
+  });
+
+  describe('prototype-based source coverage', () => {
+    function makeComponent(overrides: Record<string, any> = {}) {
+      return {
+        el: document.createElement('v-map-style'),
+        format: 'sld' as any,
+        src: undefined as string | undefined,
+        content: undefined as string | undefined,
+        layerTargets: undefined as string | undefined,
+        autoApply: true,
+        parsedStyle: undefined as any,
+        isLoading: false,
+        error: undefined as Error | undefined,
+        sldParser: sldMock,
+        mapboxParser: mapboxMock,
+        qgisParser: qgisMock,
+        lyrxParser: lyrxMock,
+        styleReady: { emit: vi.fn() },
+        styleError: { emit: vi.fn() },
+        loadAndParseStyle: VMapStyle.prototype.loadAndParseStyle,
+        parseStyle: VMapStyle.prototype['parseStyle'],
+        parseSLD: VMapStyle.prototype['parseSLD'],
+        parseMapboxGL: VMapStyle.prototype['parseMapboxGL'],
+        parseQGIS: VMapStyle.prototype['parseQGIS'],
+        parseLyrx: VMapStyle.prototype['parseLyrx'],
+        parseCesium3DTiles: VMapStyle.prototype['parseCesium3DTiles'],
+        getLayerTargets: VMapStyle.prototype.getLayerTargets,
+        ...overrides,
+      } as any;
+    }
+
+    it('loadAndParseStyle parses SLD from content', async () => {
+      const component = makeComponent({
+        format: 'sld',
+        content: '<StyledLayerDescriptor/>',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeTruthy();
+      expect(result.name).toBe('Mock Style');
+      expect(component.parsedStyle).toEqual(result);
+      expect(component.isLoading).toBe(false);
+      expect(component.styleReady.emit).toHaveBeenCalledWith({
+        style: result,
+        layerIds: [],
+      });
+    });
+
+    it('loadAndParseStyle parses Mapbox GL from content', async () => {
+      const component = makeComponent({
+        format: 'mapbox-gl',
+        content: '{"version":8,"layers":[]}',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeTruthy();
+      expect(result.name).toBe('Mock Mapbox Style');
+      expect(component.styleReady.emit).toHaveBeenCalled();
+    });
+
+    it('loadAndParseStyle parses QGIS from content', async () => {
+      const component = makeComponent({
+        format: 'qgis',
+        content: '<qgis></qgis>',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeTruthy();
+      expect(result.name).toBe('Mock QGIS Style');
+    });
+
+    it('loadAndParseStyle parses LYRX from content', async () => {
+      const component = makeComponent({
+        format: 'lyrx',
+        content: '{"type":"CIMFeatureLayer"}',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeTruthy();
+      expect(result.name).toBe('Mock LYRX Style');
+    });
+
+    it('loadAndParseStyle parses Cesium 3D Tiles from content', async () => {
+      const component = makeComponent({
+        format: 'cesium-3d-tiles',
+        content: '{"color":"red","show":true}',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toEqual({ color: 'red', show: true });
+    });
+
+    it('loadAndParseStyle fetches from src URL', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: vi.fn().mockResolvedValue('<StyledLayerDescriptor/>'),
+      });
+
+      const component = makeComponent({
+        format: 'sld',
+        src: 'https://example.com/style.sld',
+        content: undefined,
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeTruthy();
+      expect(global.fetch).toHaveBeenCalledWith('https://example.com/style.sld');
+    });
+
+    it('loadAndParseStyle sets error when neither src nor content provided', async () => {
+      const component = makeComponent({
+        src: undefined,
+        content: undefined,
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error).toBeTruthy();
+      expect(component.error.message).toContain('Either src or content must be provided');
+      expect(component.styleError.emit).toHaveBeenCalledWith(component.error);
+      expect(component.isLoading).toBe(false);
+    });
+
+    it('loadAndParseStyle sets error on non-ok fetch response', async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        statusText: 'Not Found',
+      });
+
+      const component = makeComponent({
+        src: 'https://example.com/missing.sld',
+        content: undefined,
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error).toBeTruthy();
+      expect(component.error.message).toContain('Failed to fetch');
+    });
+
+    it('loadAndParseStyle sets error on fetch rejection', async () => {
+      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+
+      const component = makeComponent({
+        src: 'https://example.com/fail.sld',
+        content: undefined,
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error).toBeTruthy();
+      expect(component.error.message).toBe('Network error');
+    });
+
+    it('loadAndParseStyle handles unsupported format', async () => {
+      const component = makeComponent({
+        format: 'unsupported-format',
+        content: 'test',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error).toBeTruthy();
+      expect(component.error.message).toContain('Unsupported style format');
+    });
+
+    it('loadAndParseStyle handles SLD parser returning undefined output', async () => {
+      const component = makeComponent({
+        format: 'sld',
+        content: '<broken/>',
+        sldParser: { readStyle: vi.fn().mockResolvedValue({ output: undefined }) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('no style output');
+    });
+
+    it('loadAndParseStyle handles QGIS parser returning undefined output', async () => {
+      const component = makeComponent({
+        format: 'qgis',
+        content: '<broken/>',
+        qgisParser: { readStyle: vi.fn().mockResolvedValue({ output: undefined }) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('no style output');
+    });
+
+    it('loadAndParseStyle handles Mapbox GL parser returning undefined output', async () => {
+      const component = makeComponent({
+        format: 'mapbox-gl',
+        content: '{"version":8}',
+        mapboxParser: { readStyle: vi.fn().mockResolvedValue({ output: undefined }) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('no style output');
+    });
+
+    it('loadAndParseStyle handles LYRX parser returning undefined output', async () => {
+      const component = makeComponent({
+        format: 'lyrx',
+        content: '{"type":"CIM"}',
+        lyrxParser: { readStyle: vi.fn().mockResolvedValue({ output: undefined }) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('no style output');
+    });
+
+    it('loadAndParseStyle handles invalid JSON for Mapbox GL', async () => {
+      const component = makeComponent({
+        format: 'mapbox-gl',
+        content: 'not json',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('Mapbox GL Style parsing failed');
+    });
+
+    it('loadAndParseStyle handles non-object JSON for Mapbox GL', async () => {
+      const component = makeComponent({
+        format: 'mapbox-gl',
+        content: '"just a string"',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('not a valid object');
+    });
+
+    it('loadAndParseStyle handles invalid JSON for LYRX', async () => {
+      const component = makeComponent({
+        format: 'lyrx',
+        content: '{invalid',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('LYRX (ArcGIS Pro) Style parsing failed');
+    });
+
+    it('loadAndParseStyle handles null JSON for LYRX', async () => {
+      const component = makeComponent({
+        format: 'lyrx',
+        content: 'null',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('not a valid object');
+    });
+
+    it('loadAndParseStyle handles invalid JSON for Cesium 3D Tiles', async () => {
+      const component = makeComponent({
+        format: 'cesium-3d-tiles',
+        content: 'not valid json',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('Cesium 3D Tiles style parsing failed');
+    });
+
+    it('loadAndParseStyle handles non-object JSON for Cesium 3D Tiles', async () => {
+      const component = makeComponent({
+        format: 'cesium-3d-tiles',
+        content: '42',
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('not a valid object');
+    });
+
+    it('loadAndParseStyle includes layer targets in styleReady event', async () => {
+      const component = makeComponent({
+        format: 'cesium-3d-tiles',
+        content: '{"show":true}',
+        layerTargets: 'layer1, layer2',
+      });
+
+      await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(component.styleReady.emit).toHaveBeenCalledWith({
+        style: { show: true },
+        layerIds: ['layer1', 'layer2'],
+      });
+    });
+
+    it('getLayerTargets returns empty array when layerTargets is undefined', () => {
+      const component = makeComponent({ layerTargets: undefined });
+      const result = VMapStyle.prototype.getLayerTargets.call(component);
+      expect(result).toEqual([]);
+    });
+
+    it('getLayerTargets splits and trims comma-separated targets', () => {
+      const component = makeComponent({ layerTargets: ' a , b , c ' });
+      const result = VMapStyle.prototype.getLayerTargets.call(component);
+      expect(result).toEqual(['a', 'b', 'c']);
+    });
+
+    it('getLayerTargetIds returns the result of getLayerTargets', async () => {
+      const component = makeComponent({ layerTargets: 'x,y' });
+      const result = await VMapStyle.prototype.getLayerTargetIds.call(component);
+      expect(result).toEqual(['x', 'y']);
+    });
+
+    it('getStyle returns the parsedStyle', async () => {
+      const mockStyle = { name: 'test', rules: [] };
+      const component = makeComponent({ parsedStyle: mockStyle });
+      const result = await VMapStyle.prototype.getStyle.call(component);
+      expect(result).toEqual(mockStyle);
+    });
+
+    it('getStyle returns undefined when no style is parsed', async () => {
+      const component = makeComponent({ parsedStyle: undefined });
+      const result = await VMapStyle.prototype.getStyle.call(component);
+      expect(result).toBeUndefined();
+    });
+
+    it('isStyleLoading returns the isLoading state', () => {
+      const component = makeComponent({ isLoading: false });
+      expect(VMapStyle.prototype.isStyleLoading.call(component)).toBe(false);
+
+      component.isLoading = true;
+      expect(VMapStyle.prototype.isStyleLoading.call(component)).toBe(true);
+    });
+
+    it('getError returns the error state', () => {
+      const component = makeComponent({ error: undefined });
+      expect(VMapStyle.prototype.getError.call(component)).toBeUndefined();
+
+      const err = new Error('test');
+      component.error = err;
+      expect(VMapStyle.prototype.getError.call(component)).toBe(err);
+    });
+
+    it('connectedCallback calls loadAndParseStyle when autoApply and content exist', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: true,
+        content: '<sld/>',
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.connectedCallback.call(component);
+
+      expect(loadSpy).toHaveBeenCalled();
+    });
+
+    it('connectedCallback calls loadAndParseStyle when autoApply and src exist', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: true,
+        src: 'https://example.com/style.sld',
+        content: undefined,
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.connectedCallback.call(component);
+
+      expect(loadSpy).toHaveBeenCalled();
+    });
+
+    it('connectedCallback does not call loadAndParseStyle when autoApply is false', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: false,
+        content: '<sld/>',
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.connectedCallback.call(component);
+
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('connectedCallback does not call loadAndParseStyle when no src or content', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: true,
+        src: undefined,
+        content: undefined,
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.connectedCallback.call(component);
+
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('onStyleSourceChanged calls loadAndParseStyle when autoApply and content exist', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: true,
+        content: '<sld/>',
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.onStyleSourceChanged.call(component);
+
+      expect(loadSpy).toHaveBeenCalled();
+    });
+
+    it('onStyleSourceChanged does not call loadAndParseStyle when autoApply is false', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: false,
+        content: '<sld/>',
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.onStyleSourceChanged.call(component);
+
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('onStyleSourceChanged does not call loadAndParseStyle when no src or content', async () => {
+      const loadSpy = vi.fn();
+      const component = makeComponent({
+        autoApply: true,
+        src: undefined,
+        content: undefined,
+        loadAndParseStyle: loadSpy,
+      });
+
+      await VMapStyle.prototype.onStyleSourceChanged.call(component);
+
+      expect(loadSpy).not.toHaveBeenCalled();
+    });
+
+    it('loadAndParseStyle handles SLD parser throwing an error', async () => {
+      const component = makeComponent({
+        format: 'sld',
+        content: '<broken/>',
+        sldParser: { readStyle: vi.fn().mockRejectedValue(new Error('XML parse error')) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('SLD parsing failed');
+    });
+
+    it('loadAndParseStyle handles QGIS parser throwing an error', async () => {
+      const component = makeComponent({
+        format: 'qgis',
+        content: '<broken/>',
+        qgisParser: { readStyle: vi.fn().mockRejectedValue(new Error('QGIS parse error')) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('QGIS Style parsing failed');
+    });
+
+    it('loadAndParseStyle handles Mapbox GL parser throwing an error', async () => {
+      const component = makeComponent({
+        format: 'mapbox-gl',
+        content: '{"version":8}',
+        mapboxParser: { readStyle: vi.fn().mockRejectedValue(new Error('Mapbox error')) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('Mapbox GL Style parsing failed');
+    });
+
+    it('loadAndParseStyle handles LYRX parser throwing an error', async () => {
+      const component = makeComponent({
+        format: 'lyrx',
+        content: '{"type":"CIM"}',
+        lyrxParser: { readStyle: vi.fn().mockRejectedValue(new Error('LYRX error')) },
+      });
+
+      const result = await VMapStyle.prototype.loadAndParseStyle.call(component);
+
+      expect(result).toBeUndefined();
+      expect(component.error.message).toContain('LYRX (ArcGIS Pro) Style parsing failed');
+    });
+
+    it('default component has expected initial state from makeComponent', () => {
+      const component = makeComponent();
+      expect(component.format).toBe('sld');
+      expect(component.autoApply).toBe(true);
+      expect(component.isLoading).toBe(false);
+      expect(component.parsedStyle).toBeUndefined();
+      expect(component.error).toBeUndefined();
+    });
+
+    it('render returns JSX with all branches (line 301)', () => {
+      // Test render with isLoading=true
+      const loadingComp = makeComponent({ isLoading: true, error: undefined, parsedStyle: undefined });
+      const loadingResult = VMapStyle.prototype.render.call(loadingComp);
+      expect(loadingResult).toBeTruthy();
+
+      // Test render with error set
+      const errorComp = makeComponent({ isLoading: false, error: new Error('test'), parsedStyle: undefined });
+      const errorResult = VMapStyle.prototype.render.call(errorComp);
+      expect(errorResult).toBeTruthy();
+
+      // Test render with parsedStyle set and layer targets
+      const successComp = makeComponent({
+        isLoading: false,
+        error: undefined,
+        parsedStyle: { name: 'test', rules: [] },
+        layerTargets: 'a,b',
+        format: 'sld',
+      });
+      const successResult = VMapStyle.prototype.render.call(successComp);
+      expect(successResult).toBeTruthy();
+
+      // Test render with parsedStyle but no layer targets
+      const noTargetsComp = makeComponent({
+        isLoading: false,
+        error: undefined,
+        parsedStyle: { name: 'test', rules: [] },
+        layerTargets: undefined,
+        format: 'sld',
+      });
+      const noTargetsResult = VMapStyle.prototype.render.call(noTargetsComp);
+      expect(noTargetsResult).toBeTruthy();
+    });
+
+    it('parser fields are assigned on rendered component (lines 77-80)', async () => {
+      // Rendering creates a real component instance which runs field initializers
+      const { root, instance } = await render(
+        h('v-map-style', { format: 'sld', 'auto-apply': 'false' }),
+      );
+      const component = (instance ?? root) as any;
+      // Verify parsers are defined (mocked implementations)
+      expect(component.sldParser).toBeDefined();
+      expect(component.mapboxParser).toBeDefined();
+      expect(component.qgisParser).toBeDefined();
+      expect(component.lyrxParser).toBeDefined();
     });
   });
 });

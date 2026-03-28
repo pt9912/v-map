@@ -198,19 +198,29 @@ describe('GeoTIFFTileProcessor', () => {
     });
 
     it('should use bilinear sampling when specified', async () => {
-      const processor = new GeoTIFFTileProcessor(mockConfig);
+      // Use small worldSize so tile pixels actually map inside source bounds
+      // triggering the bilinear sampling branch
+      const raster = new Uint8Array(10 * 10).fill(128);
+      const bilinearConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        baseImage: createMockImage(10, 10, [1.0, 1.0], raster),
+        worldSize: 200,
+      };
+
+      const processor = new GeoTIFFTileProcessor(bilinearConfig);
       processor.createGlobalTriangulation();
 
       const result = await processor.getTileData({
         x: 0,
         y: 0,
-        z: 1,
-        tileSize: 256,
+        z: 0,
+        tileSize: 8,
         resolution: 1.0,
         resampleMethod: 'bilinear',
       });
 
       expect(result).toBeDefined();
+      expect(result).toBeInstanceOf(Uint8ClampedArray);
     });
 
     it('should apply colorStops when provided', async () => {
@@ -343,9 +353,189 @@ describe('GeoTIFFTileProcessor', () => {
 
       expect(result).toBeDefined();
     });
+
+    it('should break early when ratio <= 1.0 for an overview image', async () => {
+      // ratio = tileResolution / (resolution * 2.0)
+      // tileResolution = (worldSize / 2^z) / tileSize
+      // With worldSize=200, z=0, tileSize=256: tileResolution = 200/256 = 0.78125
+      // baseResolution = 1.0, so ratio = 0.78125 / (1.0 * 2.0) = 0.39 <= 1.0 -> BREAK on base
+      const configWithOverviews = {
+        ...mockConfig,
+        overviewImages: [
+          createMockImage(50, 50, [2.0, 2.0]),
+          createMockImage(25, 25, [4.0, 4.0]),
+        ],
+        worldSize: 200,
+      };
+
+      const processor = new GeoTIFFTileProcessor(configWithOverviews);
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getTileData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 256,
+        resolution: 1.0,
+        resampleMethod: 'near',
+      });
+
+      expect(result).toBeDefined();
+    });
   });
 
   describe('Edge Cases', () => {
+    it('should return transparent tile when calculateReadWindow returns null (getTileData)', async () => {
+      // To trigger calculateReadWindow returning null (lines 336-345, 628):
+      // tileIntersectsSource must return true, but the pixel window must be degenerate.
+      //
+      // We use a resettable counter in the transform. During createGlobalTriangulation
+      // the counter accumulates. We reset before calling getTileData.
+      // During getTileData: first 4 calls are from tileIntersectsSource (returns inside),
+      // subsequent calls from calculateTileSourceBounds return far outside.
+      const counter = { value: 0, active: false };
+      const trickTransform = function (_coord: [number, number]): [number, number] {
+        if (!counter.active) return [1000.5, 1000.5]; // during triangulation setup
+        counter.value++;
+        if (counter.value <= 4) {
+          return [1000.5, 1000.5]; // inside sourceBounds [1000,1000,1001,1001]
+        }
+        return [9999, 9999]; // far outside -> tileSrcWest >> srcEast -> readWidth=0
+      };
+
+      const nullWindowConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        sourceBounds: [1000, 1000, 1001, 1001],
+        baseImage: createMockImage(1, 1),
+        transformViewToSourceMapFn: trickTransform as any,
+        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        worldSize: 200,
+      };
+
+      const processor = new GeoTIFFTileProcessor(nullWindowConfig);
+      processor.createGlobalTriangulation();
+
+      // Activate the counter and reset before getTileData
+      counter.active = true;
+      counter.value = 0;
+
+      const result = await processor.getTileData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 16,
+        resolution: 1.0,
+        resampleMethod: 'near',
+      });
+
+      // Should return a transparent tile when readWindow is null
+      expect(result).toBeInstanceOf(Uint8ClampedArray);
+      expect(result!.length).toBe(16 * 16 * 4);
+    });
+
+    it('should return empty Float32Array when calculateReadWindow returns null (getElevationData)', async () => {
+      const counter = { value: 0, active: false };
+      const trickTransform = function (_coord: [number, number]): [number, number] {
+        if (!counter.active) return [1000.5, 1000.5];
+        counter.value++;
+        if (counter.value <= 4) {
+          return [1000.5, 1000.5];
+        }
+        return [9999, 9999];
+      };
+
+      const nullWindowConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        sourceBounds: [1000, 1000, 1001, 1001],
+        baseImage: createMockImage(1, 1),
+        transformViewToSourceMapFn: trickTransform as any,
+        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        worldSize: 200,
+      };
+
+      const processor = new GeoTIFFTileProcessor(nullWindowConfig);
+      processor.createGlobalTriangulation();
+
+      counter.active = true;
+      counter.value = 0;
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 16,
+      });
+
+      // Should return empty Float32Array when readWindow is null
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.length).toBe(17 * 17);
+      expect(result!.every(v => v === 0)).toBe(true);
+    });
+
+    it('should handle readRasters failure and rethrow after retries', async () => {
+      const failingImage = {
+        getWidth: () => 100,
+        getHeight: () => 100,
+        getResolution: () => [1.0, 1.0],
+        readRasters: jest.fn().mockRejectedValue(new Error('network error')),
+      } as unknown as GeoTIFFImage;
+
+      const failConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        baseImage: failingImage,
+      };
+
+      const processor = new GeoTIFFTileProcessor(failConfig);
+      processor.createGlobalTriangulation();
+
+      await expect(
+        processor.getTileData({
+          x: 0,
+          y: 0,
+          z: 1,
+          tileSize: 16,
+          resolution: 1.0,
+          resampleMethod: 'near',
+        }),
+      ).rejects.toThrow('network error');
+
+      // readRasters should be called 3 times (initial + 2 retries)
+      expect(failingImage.readRasters).toHaveBeenCalledTimes(3);
+    });
+
+    it('should skip number entries in rasters array', async () => {
+      // readRasters returns a mix of TypedArrays and numbers
+      const mixedImage = {
+        getWidth: () => 100,
+        getHeight: () => 100,
+        getResolution: () => [1.0, 1.0],
+        readRasters: jest.fn().mockResolvedValue([
+          42, // unexpected number - should be skipped
+          new Uint8Array(100 * 100),
+        ]),
+      } as unknown as GeoTIFFImage;
+
+      const mixedConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        baseImage: mixedImage,
+      };
+
+      const processor = new GeoTIFFTileProcessor(mixedConfig);
+      processor.createGlobalTriangulation();
+
+      // Should not throw - number entries are skipped
+      const result = await processor.getTileData({
+        x: 0,
+        y: 0,
+        z: 1,
+        tileSize: 16,
+        resolution: 1.0,
+        resampleMethod: 'near',
+      });
+
+      expect(result).toBeInstanceOf(Uint8ClampedArray);
+    });
+
     it('should handle tiles outside source bounds gracefully', async () => {
       const processor = new GeoTIFFTileProcessor(mockConfig);
       processor.createGlobalTriangulation();
@@ -560,6 +750,49 @@ describe('GeoTIFFTileProcessor', () => {
     });
   });
 
+  describe('renderTilePixels rgba branch', () => {
+    it('should write RGBA pixel data when source point maps inside bounds and sampling succeeds', async () => {
+      // Set up a config where the tile fully overlaps the source data
+      // so that renderTilePixels hits the rgba truthy branch (lines 512-515).
+      // Use a small worldSize so tile bounds align with source bounds.
+      const raster = new Uint8Array(10 * 10).fill(128);
+      const smallConfig: GeoTIFFTileProcessorConfig = {
+        transformViewToSourceMapFn: jest.fn((coord: [number, number]) => coord),
+        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        sourceBounds: [0, 0, 100, 100],
+        sourceRef: [0, 0],
+        resolution: 1.0,
+        imageWidth: 10,
+        imageHeight: 10,
+        fromProjection: 'EPSG:4326',
+        toProjection: 'EPSG:3857',
+        baseImage: createMockImage(10, 10, [1.0, 1.0], raster),
+        overviewImages: [],
+        worldSize: 200, // small worldSize so tile covers [-100,-100,100,100]
+      };
+
+      const processor = new GeoTIFFTileProcessor(smallConfig);
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getTileData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 8, // small tile for fast test
+        resolution: 1.0,
+        resampleMethod: 'near',
+      });
+
+      expect(result).toBeInstanceOf(Uint8ClampedArray);
+      expect(result!.length).toBe(8 * 8 * 4);
+      // Some pixels should have non-zero alpha (those that mapped inside source bounds)
+      const hasNonTransparentPixel = Array.from(result!).some(
+        (val, i) => i % 4 === 3 && val > 0,
+      );
+      expect(hasNonTransparentPixel).toBe(true);
+    });
+  });
+
   describe('Data Validation', () => {
     it('should produce RGBA data with correct dimensions', async () => {
       const processor = new GeoTIFFTileProcessor(mockConfig);
@@ -636,18 +869,19 @@ describe('GeoTIFFTileProcessor', () => {
         ...mockConfig,
         noDataValue: -9999,
         baseImage: createMockImage(
-          100,
-          100,
+          10,
+          10,
           [1.0, 1.0],
-          new Float32Array(100 * 100).fill(-9999),
+          new Float32Array(10 * 10).fill(-9999),
         ),
+        worldSize: 200, // small worldSize so tile z=0 covers [-100,-100,100,100]
       });
       processor.createGlobalTriangulation();
 
       const result = await processor.getElevationData({
         x: 0,
         y: 0,
-        z: 1,
+        z: 0,
         tileSize: 16,
       });
 
@@ -694,6 +928,119 @@ describe('GeoTIFFTileProcessor', () => {
 
       expect(result256!.length).toBe(257 * 257);
       expect(result512!.length).toBe(513 * 513);
+    });
+
+    it('sanitizes Infinity elevation values to zero', async () => {
+      const processor = new GeoTIFFTileProcessor({
+        ...mockConfig,
+        baseImage: createMockImage(
+          10,
+          10,
+          [1.0, 1.0],
+          new Float32Array(10 * 10).fill(Infinity),
+        ),
+        worldSize: 200, // small worldSize so tile z=0 covers [-100,-100,100,100]
+      });
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.every(v => v === 0)).toBe(true);
+    });
+
+    it('sanitizes NaN elevation values to zero', async () => {
+      const processor = new GeoTIFFTileProcessor({
+        ...mockConfig,
+        baseImage: createMockImage(
+          10,
+          10,
+          [1.0, 1.0],
+          new Float32Array(10 * 10).fill(NaN),
+        ),
+        worldSize: 200,
+      });
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.every(v => v === 0)).toBe(true);
+    });
+
+    it('preserves valid finite elevation values', async () => {
+      const rasterData = new Float32Array(10 * 10).fill(42.5);
+      const processor = new GeoTIFFTileProcessor({
+        ...mockConfig,
+        baseImage: createMockImage(10, 10, [1.0, 1.0], rasterData),
+        worldSize: 200, // small worldSize so tile [0,0,z=0] covers [-100,-100,100,100]
+      });
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 0,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      // At least some values should be 42.5 (those that fall within source bounds)
+      const nonZeroValues = Array.from(result!).filter(v => v !== 0);
+      expect(nonZeroValues.length).toBeGreaterThan(0);
+      for (const v of nonZeroValues) {
+        expect(v).toBe(42.5);
+      }
+    });
+
+    it('creates fallback triangulation when global is not available', async () => {
+      const processor = new GeoTIFFTileProcessor(mockConfig);
+      // Do NOT create global triangulation
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 1,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.length).toBe(17 * 17);
+    });
+
+    it('returns empty Float32Array when readWindow is null', async () => {
+      // Configure so that calculateReadWindow returns null
+      const farConfig: GeoTIFFTileProcessorConfig = {
+        ...mockConfig,
+        sourceBounds: [0, 0, 1, 1],
+        baseImage: createMockImage(1, 1),
+        transformViewToSourceMapFn: jest.fn(() => [5000, 5000] as [number, number]),
+        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+      };
+
+      const processor = new GeoTIFFTileProcessor(farConfig);
+      processor.createGlobalTriangulation();
+
+      const result = await processor.getElevationData({
+        x: 0,
+        y: 0,
+        z: 1,
+        tileSize: 16,
+      });
+
+      expect(result).toBeInstanceOf(Float32Array);
+      expect(result!.length).toBe(17 * 17);
+      expect(result!.every(v => v === 0)).toBe(true);
     });
   });
 });
@@ -796,5 +1143,35 @@ describe('getTileProcessorConfig', () => {
 
     expect(config4326.toProjection).toBe('EPSG:4326');
     expect(config3857.toProjection).toBe('EPSG:3857');
+  });
+
+  it('transformViewToSourceMapFn calls proj4 and returns numeric coordinates', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    const result = config.transformViewToSourceMapFn([10, 20]);
+
+    expect(result).toEqual([10, 20]); // identity because proj4 is mocked
+    expect(typeof result[0]).toBe('number');
+    expect(typeof result[1]).toBe('number');
+  });
+
+  it('transformSourceMapToViewFn calls proj4 and returns numeric coordinates', async () => {
+    const source = createMockSource();
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    const result = config.transformSourceMapToViewFn([30, 40]);
+
+    expect(result).toEqual([30, 40]); // identity because proj4 is mocked
+    expect(typeof result[0]).toBe('number');
+    expect(typeof result[1]).toBe('number');
+  });
+
+  it('handles undefined overviewImages by defaulting to empty array', async () => {
+    const source = createMockSource();
+    (source as any).overviewImages = undefined;
+    const config = await getTileProcessorConfig(source as any, 'EPSG:3857');
+
+    expect(config.overviewImages).toEqual([]);
   });
 });

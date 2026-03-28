@@ -14,7 +14,7 @@ const { helperMock } = vi.hoisted(() => {
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerTile3d } from './v-map-layer-tile3d';
@@ -367,5 +367,111 @@ describe('v-map-layer-tile3d', () => {
     expect(component.appliedCesiumStyle).toBeUndefined();
 
     document.body.innerHTML = '';
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns a virtual DOM node', () => {
+      const result = VMapLayerTile3d.prototype.render.call({});
+      expect(result).toBeTruthy();
+    });
+
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-tile3d');
+      const component = { el } as any;
+      await VMapLayerTile3d.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
+    });
+
+    it('componentDidLoad initializes layer and emits ready', async () => {
+      const el = document.createElement('v-map-layer-tile3d');
+      el.id = 'tile3d-1';
+      const readyEmit = vi.fn();
+      const component = {
+        el,
+        helper: helperMock,
+        didLoad: false,
+        ready: { emit: readyEmit },
+        url: 'https://example.com/tileset.json',
+        visible: true,
+        opacity: 1,
+        zIndex: 1000,
+        tilesetOptions: undefined,
+        appliedCesiumStyle: undefined,
+        createLayerConfig: VMapLayerTile3d.prototype['createLayerConfig'],
+        applyExistingStyles: vi.fn().mockResolvedValue(undefined),
+        parseTilesetOptions: VMapLayerTile3d.prototype['parseTilesetOptions'],
+      } as any;
+
+      await VMapLayerTile3d.prototype.componentDidLoad.call(component);
+
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'tile3d-1');
+      expect(component.didLoad).toBe(true);
+      expect(readyEmit).toHaveBeenCalledTimes(1);
+    });
+
+    it('disconnectedCallback calls helper.removeLayer', async () => {
+      const component = { helper: helperMock } as any;
+      await VMapLayerTile3d.prototype.disconnectedCallback.call(component);
+      expect(helperMock.removeLayer).toHaveBeenCalled();
+    });
+
+    it('disconnectedCallback handles undefined helper', async () => {
+      const component = { helper: undefined } as any;
+      await VMapLayerTile3d.prototype.disconnectedCallback.call(component);
+      // Should not throw
+    });
+
+    it('parseTilesetOptions returns undefined for falsy input', () => {
+      const result = VMapLayerTile3d.prototype['parseTilesetOptions'].call({ tilesetOptions: undefined });
+      expect(result).toBeUndefined();
+    });
+
+    it('createLayerConfig returns full config', () => {
+      const component = {
+        url: 'https://example.com/tileset.json',
+        visible: true,
+        opacity: 0.8,
+        zIndex: 500,
+        tilesetOptions: undefined,
+        appliedCesiumStyle: { show: true },
+        parseTilesetOptions: VMapLayerTile3d.prototype['parseTilesetOptions'],
+      } as any;
+
+      const config = VMapLayerTile3d.prototype['createLayerConfig'].call(component);
+      expect(config.type).toBe('tile3d');
+      expect(config.cesiumStyle).toEqual({ show: true });
+    });
+
+    it('isTargetedByStyle returns false for undefined layerIds', () => {
+      const component = { el: document.createElement('div') } as any;
+      expect(VMapLayerTile3d.prototype['isTargetedByStyle'].call(component, undefined)).toBe(false);
+    });
+
+    it('isTargetedByStyle returns true for empty layerIds', () => {
+      const component = { el: document.createElement('div') } as any;
+      component.el.id = 'test';
+      expect(VMapLayerTile3d.prototype['isTargetedByStyle'].call(component, [])).toBe(true);
+    });
+
+    it('onStyleReady ignores null style', async () => {
+      const component = {
+        helper: helperMock,
+        el: document.createElement('v-map-layer-tile3d'),
+        appliedCesiumStyle: undefined,
+        isTargetedByStyle: VMapLayerTile3d.prototype['isTargetedByStyle'],
+        updateLayerWithCesiumStyle: VMapLayerTile3d.prototype['updateLayerWithCesiumStyle'],
+      } as any;
+      component.el.id = 'tileset';
+
+      await VMapLayerTile3d.prototype.onStyleReady.call(component, {
+        detail: { style: null, layerIds: ['tileset'] },
+      } as CustomEvent<any>);
+
+      expect(component.appliedCesiumStyle).toBeUndefined();
+    });
   });
 });

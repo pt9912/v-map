@@ -15,7 +15,7 @@ const { helperMock } = vi.hoisted(() => {
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerOSM } from './v-map-layer-osm';
@@ -142,5 +142,66 @@ describe('v-map-layer-osm', () => {
     await VMapLayerOSM.prototype.disconnectedCallback.call(component);
 
     expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns undefined', () => {
+      const result = VMapLayerOSM.prototype.render.call({});
+      expect(result).toBeUndefined();
+    });
+
+    it('componentWillRender runs without error', async () => {
+      await VMapLayerOSM.prototype.componentWillRender.call({});
+    });
+
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-osm');
+      const component = { el } as any;
+      await VMapLayerOSM.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
+    });
+
+    it('connectedCallback runs without error', async () => {
+      await VMapLayerOSM.prototype.connectedCallback.call({});
+    });
+
+    it('isReady reflects didLoad state', () => {
+      expect(VMapLayerOSM.prototype.isReady.call({ didLoad: false })).toBe(false);
+      expect(VMapLayerOSM.prototype.isReady.call({ didLoad: true })).toBe(true);
+    });
+
+    it('createLayerConfig returns expected structure', () => {
+      const component = {
+        url: 'https://tile.openstreetmap.org',
+        visible: true,
+        zIndex: 10,
+        opacity: 0.8,
+      } as any;
+
+      const config = VMapLayerOSM.prototype['createLayerConfig'].call(component);
+      expect(config).toEqual({
+        type: 'osm',
+        url: 'https://tile.openstreetmap.org',
+        visible: true,
+        zIndex: 10,
+        opacity: 0.8,
+      });
+    });
+
+    it('disconnectedCallback handles undefined helper', async () => {
+      const component = { helper: undefined } as any;
+      await VMapLayerOSM.prototype.disconnectedCallback.call(component);
+      // Should not throw
+    });
+
+    it('getLayerId returns undefined when helper is undefined', async () => {
+      const component = { helper: undefined } as any;
+      const result = await VMapLayerOSM.prototype.getLayerId.call(component);
+      expect(result).toBeUndefined();
+    });
   });
 });

@@ -244,4 +244,27 @@ describe('v-map-layergroup', () => {
     whenDefinedSpy.mockRestore();
     document.body.innerHTML = '';
   });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns a virtual DOM node', () => {
+      const result = VMapLayerGroup.prototype.render.call({});
+      expect(result).toBeTruthy();
+    });
+
+    it('componentWillRender runs without error', async () => {
+      await VMapLayerGroup.prototype.componentWillRender.call({});
+    });
+
+    it('componentWillLoad runs without error', async () => {
+      await VMapLayerGroup.prototype.componentWillLoad.call({});
+    });
+
+    it('componentDidLoad runs without error', async () => {
+      await VMapLayerGroup.prototype.componentDidLoad.call({});
+    });
+  });
 });

@@ -15,7 +15,7 @@ const { helperMock } = vi.hoisted(() => {
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerGeoTIFF } from './v-map-layer-geotiff';
@@ -253,6 +253,139 @@ describe('v-map-layer-geotiff', () => {
         colorMap: null,
         valueRange: [100, 500],
       },
+    });
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns undefined', () => {
+      const result = VMapLayerGeoTIFF.prototype.render.call({});
+      expect(result).toBeUndefined();
+    });
+
+    it('componentWillRender runs without error', async () => {
+      await VMapLayerGeoTIFF.prototype.componentWillRender.call({});
+    });
+
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-geotiff');
+      const component = { el } as any;
+      await VMapLayerGeoTIFF.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
+    });
+
+    it('componentDidLoad initializes layer and emits ready', async () => {
+      const el = document.createElement('v-map-layer-geotiff');
+      el.id = 'test-geotiff';
+      const readyEmit = vi.fn();
+      const component = {
+        el,
+        helper: helperMock,
+        didLoad: false,
+        ready: { emit: readyEmit },
+        url: 'https://example.com/dem.tif',
+        visible: true,
+        zIndex: 100,
+        opacity: 1,
+        nodata: null,
+        colorMap: null,
+        valueRange: null,
+        createLayerConfig: VMapLayerGeoTIFF.prototype['createLayerConfig'],
+      } as any;
+
+      await VMapLayerGeoTIFF.prototype.componentDidLoad.call(component);
+
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'test-geotiff');
+      expect(component.didLoad).toBe(true);
+      expect(readyEmit).toHaveBeenCalledTimes(1);
+    });
+
+    it('connectedCallback registers styleReady listener', async () => {
+      const addSpy = vi.spyOn(document, 'addEventListener');
+      const component = { el: document.createElement('v-map-layer-geotiff'), handleStyleReady: vi.fn() } as any;
+
+      await VMapLayerGeoTIFF.prototype.connectedCallback.call(component);
+
+      expect(addSpy).toHaveBeenCalledWith('styleReady', expect.any(Function));
+      addSpy.mockRestore();
+    });
+
+    it('disconnectedCallback removes styleReady listener', () => {
+      const removeSpy = vi.spyOn(document, 'removeEventListener');
+      const component = { handleStyleReady: vi.fn() } as any;
+
+      VMapLayerGeoTIFF.prototype.disconnectedCallback.call(component);
+
+      expect(removeSpy).toHaveBeenCalledWith('styleReady', expect.any(Function));
+      removeSpy.mockRestore();
+    });
+
+    it('isReady reflects didLoad state', () => {
+      expect(VMapLayerGeoTIFF.prototype.isReady.call({ didLoad: false })).toBe(false);
+      expect(VMapLayerGeoTIFF.prototype.isReady.call({ didLoad: true })).toBe(true);
+    });
+
+    it('getLayerId delegates to helper', async () => {
+      helperMock.getLayerId.mockReturnValue('geotiff-abc');
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerGeoTIFF.prototype.getLayerId.call(component);
+      expect(result).toBe('geotiff-abc');
+    });
+
+    it('createLayerConfig returns expected structure', () => {
+      const component = {
+        url: 'https://example.com/test.tif',
+        visible: true,
+        zIndex: 50,
+        opacity: 0.8,
+        nodata: -9999,
+        colorMap: 'viridis',
+        valueRange: [0, 1000],
+      } as any;
+
+      const config = VMapLayerGeoTIFF.prototype['createLayerConfig'].call(component);
+      expect(config).toEqual({
+        type: 'geotiff',
+        visible: true,
+        zIndex: 50,
+        opacity: 0.8,
+        url: 'https://example.com/test.tif',
+        nodata: -9999,
+        colorMap: 'viridis',
+        valueRange: [0, 1000],
+      });
+    });
+
+    it('handleStyleReady with empty layerIds applies style', async () => {
+      const component = {
+        helper: helperMock,
+        el: document.createElement('v-map-layer-geotiff'),
+        url: 'https://example.com/dem.tif',
+        visible: true,
+        opacity: 1,
+        colorMap: null,
+        extractRasterSymbolizer: VMapLayerGeoTIFF.prototype['extractRasterSymbolizer'],
+      } as any;
+      component.el.id = 'dem';
+
+      const style = {
+        name: 'Raster style',
+        rules: [{ name: 'Rule', symbolizers: [{ kind: 'Raster' }] }],
+      };
+
+      await VMapLayerGeoTIFF.prototype['handleStyleReady'].call(component, {
+        detail: { style, layerIds: [] },
+      } as unknown as CustomEvent);
+      // no layerIds filter means it passes through
+    });
+
+    it('extractRasterSymbolizer returns null when no Raster symbolizer', () => {
+      const style = { name: 'test', rules: [{ symbolizers: [{ kind: 'Fill' }] }] };
+      const result = VMapLayerGeoTIFF.prototype['extractRasterSymbolizer'].call({}, style);
+      expect(result).toBeNull();
     });
   });
 });

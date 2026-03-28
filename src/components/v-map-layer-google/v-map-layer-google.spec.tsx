@@ -25,6 +25,8 @@ vi.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
   ensureGoogleLogo: vi.fn(),
 }));
 
+import { VMapLayerGoogle } from './v-map-layer-google';
+
 describe('<v-map-layer-google>', () => {
   const mockApiKey = 'test-mock-api-key-123';
 
@@ -194,5 +196,101 @@ describe('<v-map-layer-google>', () => {
 
     expect(root).toBeTruthy();
     expect(root?.getAttribute('libraries')).toBe('geometry,places');
+  });
+
+  describe('prototype-based source coverage', () => {
+    it('componentDidLoad emits ready event', async () => {
+      const component = {
+        el: document.createElement('v-map-layer-google'),
+        mapType: 'roadmap',
+        visible: true,
+        opacity: 1,
+        ready: { emit: vi.fn() },
+      } as any;
+
+      await VMapLayerGoogle.prototype.componentDidLoad.call(component);
+
+      expect(component.ready.emit).toHaveBeenCalledTimes(1);
+    });
+
+    it('connectedCallback runs without error when styles is undefined', async () => {
+      const component = {
+        el: document.createElement('v-map-layer-google'),
+        styles: undefined,
+        autoApply: true,
+        parseStyles: VMapLayerGoogle.prototype.parseStyles,
+      } as any;
+
+      await expect(
+        VMapLayerGoogle.prototype.connectedCallback.call(component),
+      ).resolves.toBeUndefined();
+    });
+
+    it('connectedCallback parses string styles on initial load', async () => {
+      const stylesJson = '[{"featureType":"water","stylers":[{"color":"#0000ff"}]}]';
+      const component = {
+        el: document.createElement('v-map-layer-google'),
+        styles: stylesJson,
+        parseStyles: VMapLayerGoogle.prototype.parseStyles,
+      } as any;
+
+      await VMapLayerGoogle.prototype.connectedCallback.call(component);
+
+      // After parsing, styles should be the parsed array
+      expect(component.styles).toEqual([{ featureType: 'water', stylers: [{ color: '#0000ff' }] }]);
+    });
+
+    it('parseStyles converts a JSON string to an array', () => {
+      const component = {
+        styles: undefined as any,
+      } as any;
+
+      const stylesJson = '[{"featureType":"road"}]';
+      VMapLayerGoogle.prototype.parseStyles.call(component, stylesJson);
+
+      expect(component.styles).toEqual([{ featureType: 'road' }]);
+    });
+
+    it('parseStyles warns on invalid JSON string', () => {
+      const component = {
+        styles: undefined as any,
+      } as any;
+
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      VMapLayerGoogle.prototype.parseStyles.call(component, 'not valid json');
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Invalid JSON in styles attribute:',
+        expect.any(Error),
+      );
+
+      warnSpy.mockRestore();
+    });
+
+    it('parseStyles does nothing when value is already an array', () => {
+      const component = {
+        styles: undefined as any,
+      } as any;
+
+      const arrayStyles = [{ featureType: 'water' }];
+      VMapLayerGoogle.prototype.parseStyles.call(component, arrayStyles as any);
+
+      // styles should remain undefined since non-string values skip the parsing branch
+      expect(component.styles).toBeUndefined();
+    });
+
+    it('render returns undefined', () => {
+      const component = {} as any;
+      const result = VMapLayerGoogle.prototype.render.call(component);
+      expect(result).toBeUndefined();
+    });
+
+    it('has correct default property values', () => {
+      const component = new (VMapLayerGoogle as any)();
+      expect(component.visible).toBe(true);
+      expect(component.opacity).toBe(1.0);
+      expect(component.mapType).toBe('roadmap');
+    });
   });
 });

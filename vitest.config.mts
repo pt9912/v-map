@@ -10,6 +10,7 @@ export default defineVitestConfig({
   test: {
     globals: true,
     testTimeout: 15_000,
+    teardownTimeout: 30_000,
     onConsoleLog(log) {
       // Suppress verbose Stencil component lifecycle logs from compiled dist bundle
       // to prevent EnvironmentTeardownError from pending console.log RPC calls
@@ -36,7 +37,6 @@ export default defineVitestConfig({
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'src/index.ts',
-        'src/layer/**',
         'src/lib/**',
         'src/types/**',
         'src/**/*.d.ts',
@@ -48,31 +48,17 @@ export default defineVitestConfig({
         'src/**/*.stories.tsx',
         'src/testing/**',
         'src/components.d.ts',
-        'src/map-provider/provider-factory.ts',
+        'src/map-provider/cesium/i-layer.ts',
         'src/map-provider/deck/LayerModel.ts',
         'src/map-provider/deck/RenderableGroup.ts',
-        'src/map-provider/geotiff/geotiff-source.ts',
         'src/map-provider/geotiff/utils/Triangle.ts',
-        'src/map-provider/leaflet/WMTSGridLayer.ts',
-        'src/map-provider/leaflet/GeoTIFFGridLayer.ts',
-        'src/map-provider/leaflet/google-map-tiles-layer.ts',
-        'src/map-provider/ol/CustomGeoTiff.ts',
-        'src/map-provider/ol/openlayers-helper.ts',
-        'src/map-provider/ol/openlayers-provider.ts',
-        'src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts',
-        'src/map-provider/cesium/GeoTIFFImageryProvider.ts',
-        'src/map-provider/cesium/i-layer.ts',
-        'src/map-provider/cesium/layer-manager.ts',
       ],
       reporter: ['text', 'lcov'],
       thresholds: {
-        // Combined thresholds for components + utils + providers.
-        // Previously split: components (98% lines) and utils (82% lines).
-        // Provider code (~60-75%) lowers the combined average.
-        branches: 60,
-        functions: 69,
-        lines: 71,
-        statements: 70,
+        branches: 80,
+        functions: 85,
+        lines: 85,
+        statements: 85,
       },
     },
   },

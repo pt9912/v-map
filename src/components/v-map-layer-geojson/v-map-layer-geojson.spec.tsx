@@ -15,7 +15,7 @@ const { helperMock } = vi.hoisted(() => {
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerGeoJSON } from './v-map-layer-geojson';
@@ -512,5 +512,143 @@ describe('v-map-layer-geojson', () => {
 
     expect(component.geojson).toBeUndefined();
     expect(component.lastString).toBe('{not valid json}');
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns a virtual DOM node', () => {
+      const component = { onSlotChange: vi.fn() } as any;
+      const result = VMapLayerGeoJSON.prototype.render.call(component);
+      expect(result).toBeTruthy();
+    });
+
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-geojson');
+      const component = { el } as any;
+      await VMapLayerGeoJSON.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
+    });
+
+    it('connectedCallback runs without error', async () => {
+      await VMapLayerGeoJSON.prototype.connectedCallback.call({});
+    });
+
+    it('componentDidLoad initializes layer with slot handling', async () => {
+      const el = document.createElement('v-map-layer-geojson');
+      el.id = 'geo-test';
+      if (!el.shadowRoot) {
+        el.attachShadow({ mode: 'open' });
+      }
+      // No slot element in shadowRoot, so geoSlot will be null
+      const component = {
+        el,
+        helper: helperMock,
+        didLoad: false,
+        geoSlot: undefined,
+        url: null,
+        geojson: undefined,
+        visible: true,
+        opacity: 1,
+        zIndex: 1000,
+        iconSize: undefined,
+        appliedGeostylerStyle: undefined,
+        createLayerConfig: VMapLayerGeoJSON.prototype['createLayerConfig'],
+        applyExistingStyles: vi.fn().mockResolvedValue(undefined),
+        observeAssignedNodes: vi.fn(),
+        readGeoJsonFromSlot: vi.fn(),
+        onSlotChange: vi.fn(),
+      } as any;
+
+      await VMapLayerGeoJSON.prototype.componentDidLoad.call(component);
+
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'geo-test');
+      expect(component.didLoad).toBe(true);
+    });
+
+    it('observeAssignedNodes sets up MutationObserver on slot nodes', () => {
+      const mockObserve = vi.fn();
+      const mockDisconnect = vi.fn();
+      const OriginalMutationObserver = global.MutationObserver;
+      global.MutationObserver = class {
+        observe = mockObserve;
+        disconnect = mockDisconnect;
+        takeRecords = vi.fn().mockReturnValue([]);
+        constructor(_cb: MutationCallback) {}
+      } as any;
+
+      const textNode = document.createTextNode('{"type":"Point"}');
+      const component = {
+        geoSlot: {
+          assignedNodes: vi.fn().mockReturnValue([textNode]),
+        },
+        mo: undefined,
+        readGeoJsonFromSlot: vi.fn(),
+      } as any;
+
+      VMapLayerGeoJSON.prototype['observeAssignedNodes'].call(component);
+
+      expect(component.mo).toBeDefined();
+      expect(mockObserve).toHaveBeenCalledWith(textNode, expect.objectContaining({
+        characterData: true,
+        childList: true,
+        subtree: true,
+      }));
+
+      global.MutationObserver = OriginalMutationObserver;
+    });
+
+    it('observeAssignedNodes returns when geoSlot is null', () => {
+      const existingMo = { disconnect: vi.fn() };
+      const component = {
+        geoSlot: null,
+        mo: existingMo,
+      } as any;
+
+      VMapLayerGeoJSON.prototype['observeAssignedNodes'].call(component);
+
+      expect(existingMo.disconnect).toHaveBeenCalled();
+    });
+
+    it('disconnectedCallback handles missing mo and geoSlot', async () => {
+      const component = {
+        helper: helperMock,
+        mo: undefined,
+        geoSlot: undefined,
+        onSlotChange: vi.fn(),
+      } as any;
+
+      await VMapLayerGeoJSON.prototype.disconnectedCallback.call(component);
+      expect(helperMock.removeLayer).toHaveBeenCalled();
+    });
+
+    it('onStyleChanged does nothing when helper is undefined', async () => {
+      await VMapLayerGeoJSON.prototype.onStyleChanged.call({
+        geojson: '{}',
+        url: null,
+        helper: undefined,
+      });
+      expect(helperMock.updateLayer).not.toHaveBeenCalled();
+    });
+
+    it('onGeoJsonChanged handles undefined helper', async () => {
+      await VMapLayerGeoJSON.prototype.onGeoJsonChanged.call(
+        { geojson: '{}', helper: undefined },
+        'old',
+        'new',
+      );
+      expect(helperMock.updateLayer).not.toHaveBeenCalled();
+    });
+
+    it('onUrlChanged handles undefined helper', async () => {
+      await VMapLayerGeoJSON.prototype.onUrlChanged.call(
+        { url: 'https://new.com', helper: undefined },
+        'https://old.com',
+        'https://new.com',
+      );
+      expect(helperMock.updateLayer).not.toHaveBeenCalled();
+    });
   });
 });

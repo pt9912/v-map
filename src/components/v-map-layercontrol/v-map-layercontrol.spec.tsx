@@ -14,7 +14,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders an empty state when no layer groups are available', async () => {
-    const { root, unmount } = await render(
+    const { root } = await render(
       h('v-map-layercontrol', { for: 'map-1' }),
     );
 
@@ -158,7 +158,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders layer groups with checkboxes and controls', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-render' }),
     );
 
@@ -207,7 +207,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('renders basemap selector when basemapid is set', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-basemap' }),
     );
 
@@ -251,7 +251,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers group visibility change via rendered checkbox', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-events' }),
     );
 
@@ -284,7 +284,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer opacity change via rendered slider', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-opacity' }),
     );
 
@@ -316,7 +316,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer z-index change via rendered number input', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-zindex' }),
     );
 
@@ -348,7 +348,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers basemap selector change via rendered select', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-base' }),
     );
 
@@ -385,7 +385,7 @@ describe('v-map-layercontrol', () => {
   });
 
   it('triggers layer checkbox visibility change via rendered checkbox', async () => {
-    const { root, instance, waitForChanges, unmount } = await render(
+    const { root, instance, waitForChanges } = await render(
       h('v-map-layercontrol', { for: 'map-lyr-vis' }),
     );
 
@@ -441,5 +441,220 @@ describe('v-map-layercontrol', () => {
     }));
 
     global.MutationObserver = OriginalMutationObserver;
+  });
+
+  /* ------------------------------------------------------------------ */
+  /*  Prototype-based unit tests for source function coverage            */
+  /* ------------------------------------------------------------------ */
+  describe('prototype-based source coverage', () => {
+
+    it('render returns empty div when no layer groups', () => {
+      const component = { layerGroups: [] } as any;
+      const result = VMapLayerControl.prototype.render.call(component);
+      expect(result).toBeTruthy();
+    });
+
+    it('connectedCallback runs without error', async () => {
+      await VMapLayerControl.prototype.connectedCallback.call({});
+    });
+
+    it('disconnectedCallback disconnects observer', async () => {
+      const disconnectSpy = vi.fn();
+      const component = { observer: { disconnect: disconnectSpy } } as any;
+      await VMapLayerControl.prototype.disconnectedCallback.call(component);
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+
+    it('disconnectedCallback handles missing observer', async () => {
+      const component = { observer: undefined } as any;
+      await VMapLayerControl.prototype.disconnectedCallback.call(component);
+    });
+
+    it('componentWillLoad calls findMapElement', async () => {
+      const timeoutSpy = vi.spyOn(global, 'setTimeout').mockImplementation(() => 1 as any);
+      const component = {
+        for: 'nonexistent-map',
+        mapElement: null,
+        findMapElement: VMapLayerControl.prototype['findMapElement'],
+        initObserver: vi.fn(),
+        updateLayerGroupsFromDom: vi.fn(),
+      } as any;
+
+      await VMapLayerControl.prototype.componentWillLoad.call(component);
+      timeoutSpy.mockRestore();
+    });
+
+    it('readBool returns false when no attribute and prop is missing', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      const result = (component as any).readBool(el, 'missingProp', 'missing-attr');
+      expect(result).toBe(false);
+    });
+
+    it('readBool returns true when attribute is present', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      el.setAttribute('visible', '');
+      const result = (component as any).readBool(el, 'missingProp', 'visible');
+      expect(result).toBe(true);
+    });
+
+    it('readBool returns boolean prop value', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div') as any;
+      el.visible = true;
+      const result = (component as any).readBool(el, 'visible', 'visible');
+      expect(result).toBe(true);
+    });
+
+    it('readString returns default when no prop or attribute', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      const result = (component as any).readString(el, 'missingProp', 'default-val', 'missing-attr');
+      expect(result).toBe('default-val');
+    });
+
+    it('readString returns attribute value', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      el.setAttribute('label', 'My Label');
+      const result = (component as any).readString(el, 'missingProp', 'default', 'label');
+      expect(result).toBe('My Label');
+    });
+
+    it('readString returns prop value when set', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div') as any;
+      el.label = 'PropLabel';
+      const result = (component as any).readString(el, 'label', 'default', 'label');
+      expect(result).toBe('PropLabel');
+    });
+
+    it('readNumber returns default when prop and attribute are missing', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      const result = (component as any).readNumber(el, 'missingProp', 42, 'missing-attr');
+      expect(result).toBe(42);
+    });
+
+    it('readNumber returns numeric prop when set', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div') as any;
+      el.opacity = 0.75;
+      const result = (component as any).readNumber(el, 'opacity', 1, 'opacity');
+      expect(result).toBe(0.75);
+    });
+
+    it('readNumber skips empty attribute strings', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+      el.setAttribute('opacity', '');
+      const result = (component as any).readNumber(el, 'missingProp', 1, 'opacity');
+      expect(result).toBe(1);
+    });
+
+    it('getLayersFromDom returns undefined when groupElement is null', () => {
+      const component = new VMapLayerControl();
+      const result = (component as any).getLayersFromDom(null);
+      expect(result).toBeUndefined();
+    });
+
+    it('getLayersFromDom extracts layers from group element', () => {
+      const component = new VMapLayerControl();
+      const groupEl = document.createElement('v-map-layergroup');
+      const layerEl = document.createElement('v-map-layer-osm');
+      layerEl.id = 'osm-test';
+      layerEl.setAttribute('label', 'OSM');
+      groupEl.appendChild(layerEl);
+
+      const layers = (component as any).getLayersFromDom(groupEl);
+      expect(layers).toHaveLength(1);
+      expect(layers[0].info.id).toBe('osm-test');
+    });
+
+    it('cloneLayerGroups creates deep clones', () => {
+      const component = new VMapLayerControl();
+      const groupEl = document.createElement('v-map-layergroup');
+      const layerEl = document.createElement('v-map-layer-osm');
+      component.layerGroups = [
+        {
+          info: { element: groupEl, id: 'grp', visible: true, opacity: 1, zIndex: 0 },
+          label: 'Group',
+          groupTitle: 'Title',
+          basemapid: null,
+          layers: [
+            { info: { element: layerEl, id: 'lyr', visible: true, opacity: 1, zIndex: 0 }, label: 'Layer' },
+          ],
+        },
+      ];
+
+      const cloned = (component as any).cloneLayerGroups();
+      expect(cloned).toHaveLength(1);
+      expect(cloned[0].info).not.toBe(component.layerGroups[0].info);
+      expect(cloned[0].layers[0].info).not.toBe(component.layerGroups[0].layers[0].info);
+    });
+
+    it('setBool sets property and attribute correctly', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+
+      (component as any).setBool(el, 'visible', true, 'visible');
+      expect((el as any).visible).toBe(true);
+      expect(el.hasAttribute('visible')).toBe(true);
+
+      (component as any).setBool(el, 'visible', false, 'visible');
+      expect((el as any).visible).toBe(false);
+      expect(el.hasAttribute('visible')).toBe(false);
+    });
+
+    it('setNumber sets property and attribute correctly', () => {
+      const component = new VMapLayerControl();
+      const el = document.createElement('div');
+
+      (component as any).setNumber(el, 'opacity', 0.5, 'opacity');
+      expect((el as any).opacity).toBe(0.5);
+      expect(el.getAttribute('opacity')).toBe('0.5');
+    });
+
+    it('handleVisibilityChange does nothing when element is missing', () => {
+      const component = new VMapLayerControl();
+      component.layerGroups = [];
+      const info = { element: null, id: 'x', visible: true, opacity: 1, zIndex: 0 } as any;
+
+      (component as any).handleVisibilityChange(info, false);
+      expect(info.visible).toBe(true); // unchanged
+    });
+
+    it('handleOpacityChange does nothing when element is missing', () => {
+      const component = new VMapLayerControl();
+      component.layerGroups = [];
+      const info = { element: null, id: 'x', visible: true, opacity: 1, zIndex: 0 } as any;
+
+      (component as any).handleOpacityChange(info, 0.5);
+      expect(info.opacity).toBe(1); // unchanged
+    });
+
+    it('handleZIndexChange does nothing when element is missing', () => {
+      const component = new VMapLayerControl();
+      component.layerGroups = [];
+      const info = { element: null, id: 'x', visible: true, opacity: 1, zIndex: 0 } as any;
+
+      (component as any).handleZIndexChange(info, 10);
+      expect(info.zIndex).toBe(0); // unchanged
+    });
+
+    it('initObserver does nothing when mapElement is null', () => {
+      const component = new VMapLayerControl();
+      (component as any).mapElement = null;
+      (component as any).initObserver();
+      expect((component as any).observer).toBeUndefined();
+    });
+
+    it('updateLayerGroupsFromDom does nothing when mapElement is null', () => {
+      const component = new VMapLayerControl();
+      (component as any).mapElement = null;
+      (component as any).updateLayerGroupsFromDom();
+      expect(component.layerGroups).toEqual([]);
+    });
   });
 });

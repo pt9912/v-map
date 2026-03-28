@@ -105,4 +105,102 @@ describe('dom-env', () => {
     expect(disconnect).toHaveBeenCalledTimes(1);
     expect(clearIntervalSpy).toHaveBeenCalled();
   });
+
+  it('uses setTimeout fallback when requestAnimationFrame is unavailable (line 11)', () => {
+    vi.stubGlobal('ResizeObserver', undefined);
+    vi.stubGlobal('requestAnimationFrame', undefined);
+
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+
+    const disconnect = vi.fn();
+    const observe = vi.fn();
+    const mutationCallbacks: Array<() => void> = [];
+    class MockMutationObserver {
+      constructor(cb: () => void) {
+        mutationCallbacks.push(cb);
+      }
+      observe = observe;
+      disconnect = disconnect;
+    }
+    vi.stubGlobal('MutationObserver', MockMutationObserver);
+
+    const element = document.createElement('div');
+    const cb = vi.fn();
+    const unsubscribe = watchElementResize(element, cb);
+
+    // Trigger the mutation callback; since rAF is undefined, it should use setTimeout
+    mutationCallbacks[0]();
+    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 0);
+
+    unsubscribe();
+  });
+
+  it('handles fallback path when window is undefined (lines 31, 47, 50)', () => {
+    vi.stubGlobal('ResizeObserver', undefined);
+    vi.stubGlobal('MutationObserver', undefined);
+    vi.stubGlobal('window', undefined);
+
+    const element = document.createElement('div');
+    const cb = vi.fn();
+
+    // Should not throw even when window is undefined
+    const unsubscribe = watchElementResize(element, cb);
+
+    // unsubscribe should also not throw
+    unsubscribe();
+  });
+
+  it('handles fallback path when MutationObserver is undefined (line 36 false branch)', () => {
+    vi.stubGlobal('ResizeObserver', undefined);
+    vi.stubGlobal('MutationObserver', undefined);
+
+    const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+    const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((fn: FrameRequestCallback) => {
+      fn(0);
+      return 1;
+    });
+
+    const element = document.createElement('div');
+    const cb = vi.fn();
+    const unsubscribe = watchElementResize(element, cb);
+
+    // Should still add resize listener and setInterval
+    expect(addEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+    expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 250);
+
+    unsubscribe();
+  });
+
+  it('calls mo.observe(target) without init when mutationObserverInit is not provided (line 41)', () => {
+    vi.stubGlobal('ResizeObserver', undefined);
+
+    const disconnect = vi.fn();
+    const observe = vi.fn();
+    class MockMutationObserver {
+      constructor(_cb: () => void) {}
+      observe = observe;
+      disconnect = disconnect;
+    }
+    vi.stubGlobal('MutationObserver', MockMutationObserver);
+
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((fn: FrameRequestCallback) => {
+      fn(0);
+      return 1;
+    });
+
+    const element = document.createElement('div');
+    const cb = vi.fn();
+    // Call without mutationObserverInit (no 3rd arg) to hit line 41
+    const unsubscribe = watchElementResize(element, cb);
+
+    // observe should have been called with just the element (no options)
+    expect(observe).toHaveBeenCalledWith(element);
+    expect(observe).toHaveBeenCalledTimes(1);
+    // Verify it was NOT called with a second argument
+    expect(observe.mock.calls[0]).toHaveLength(1);
+
+    unsubscribe();
+  });
 });

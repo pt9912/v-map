@@ -714,4 +714,417 @@ describe('createDeckGLGeoTIFFLayer', () => {
       expect((layer as any).image).toBeNull();
     });
   });
+
+  // =========================================================================
+  // TARGETED BRANCH COVERAGE TESTS
+  // =========================================================================
+
+  describe('createBitmapImageSource – no ImageData global (line 53)', () => {
+    it('returns raw object when ImageData is not available', async () => {
+      // Remove ImageData so the fallback branch is taken
+      delete (globalThis as any).ImageData;
+
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+      (layer as any).renderLayers();
+
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+      const rawData = new Uint8ClampedArray(4);
+      tileLayerProps.renderSubLayers({
+        id: 'geotiff-test-tiles-0-0-0',
+        tile: {
+          index: { x: 0, y: 0, z: 0 },
+          bbox: { west: 8, south: 50, east: 9, north: 51 },
+          data: { data: rawData, width: 1, height: 1 },
+        },
+      });
+
+      // BitmapLayer should receive a raw object (not an ImageData instance)
+      expect(mockBitmapLayer).toHaveBeenCalledWith(
+        expect.objectContaining({
+          image: expect.objectContaining({ data: rawData, width: 1, height: 1 }),
+        }),
+      );
+    });
+  });
+
+  describe('scheduleLoad – skip already-loaded source (lines 273-274)', () => {
+    it('skips load when signature matches loadedSignature and state.init is true', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      // Perform an initial load so loadedSignature is set
+      await (layer as any).loadGeoTIFF(1);
+      (layer as any).loadedSignature = (layer as any).getLoadSignature();
+      (layer as any).state.init = true;
+      (layer as any).activeLoad = undefined;
+
+      mockLoadGeoTIFFSource.mockClear();
+
+      // Call scheduleLoad again – should skip because already loaded
+      (layer as any).scheduleLoad('test-already-loaded');
+
+      // No new load should have started
+      expect(mockLoadGeoTIFFSource).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('_loadAsync – stale token after loadGeoTIFF (line 291)', () => {
+    it('returns early when loadGeoTIFF returns false', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      // Make loadGeoTIFF return false (simulating stale load)
+      jest.spyOn(layer as any, 'loadGeoTIFF').mockResolvedValue(false);
+
+      (layer as any).activeLoad = { signature: 'test', token: 1 };
+      await (layer as any)._loadAsync(1, 'test', 'stale-test');
+
+      // state.init should NOT have been set to true
+      expect((layer as any).state.init).toBeFalsy();
+      // activeLoad should be cleared in finally block
+      expect((layer as any).activeLoad).toBeUndefined();
+    });
+
+    it('returns early when activeLoad.token mismatches after loadGeoTIFF', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      // loadGeoTIFF returns true but we change the token mid-flight
+      jest.spyOn(layer as any, 'loadGeoTIFF').mockImplementation(async () => {
+        // Simulate another scheduleLoad changing the activeLoad token
+        (layer as any).activeLoad = { signature: 'newer', token: 99 };
+        return true;
+      });
+
+      (layer as any).activeLoad = { signature: 'test', token: 1 };
+      await (layer as any)._loadAsync(1, 'test', 'token-mismatch');
+
+      // Should not set init true because token changed
+      expect((layer as any).state.init).toBeFalsy();
+      // activeLoad should NOT be cleared (different token)
+      expect((layer as any).activeLoad).toEqual({ signature: 'newer', token: 99 });
+    });
+  });
+
+  describe('shouldUpdateState (line 323)', () => {
+    it('returns true when updateTriggersChanged is true', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      const result = (layer as any).shouldUpdateState({
+        changeFlags: { propsOrDataChanged: false, updateTriggersChanged: true },
+      });
+      expect(result).toBe(true);
+    });
+
+    it('returns false when neither propsOrDataChanged nor updateTriggersChanged', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      const result = (layer as any).shouldUpdateState({
+        changeFlags: { propsOrDataChanged: false, updateTriggersChanged: false },
+      });
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('updateState – valueRange branch (line 351)', () => {
+    it('detects valueRange change when arrays differ', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      (layer as any).updateState({
+        props: {
+          url: 'https://example.com/data.tif',
+          valueRange: [0, 5000],
+        },
+        oldProps: {
+          url: 'https://example.com/data.tif',
+          valueRange: [0, 3000],
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((layer as any).setNeedsRedraw).toHaveBeenCalled();
+    });
+
+    it('does not trigger update when valueRange is identical', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      // Reset to check no spurious call
+      (layer as any).setNeedsRedraw.mockClear();
+
+      (layer as any).updateState({
+        props: {
+          url: 'https://example.com/data.tif',
+          valueRange: [0, 3000],
+          colorMap: 'grayscale',
+          resolution: 1.0,
+          resampleMethod: 'bilinear',
+          opacity: 1.0,
+          visible: true,
+        },
+        oldProps: {
+          url: 'https://example.com/data.tif',
+          valueRange: [0, 3000],
+          colorMap: 'grayscale',
+          resolution: 1.0,
+          resampleMethod: 'bilinear',
+          opacity: 1.0,
+          visible: true,
+        },
+        changeFlags: { dataChanged: false, updateTriggersChanged: false },
+      });
+
+      expect((layer as any).setNeedsRedraw).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('loadGeoTIFF – stale token after getTileProcessorConfig (lines 440-441)', () => {
+    it('returns false when activeLoad token changes during getTileProcessorConfig', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      const token = 42;
+      // Set activeLoad to match the token so line 426 passes
+      (layer as any).activeLoad = { signature: 'sig', token };
+
+      // During getTileProcessorConfig, change the token to simulate a concurrent load
+      mockGetTileProcessorConfig.mockImplementationOnce(async () => {
+        // Simulate another scheduleLoad changing the activeLoad token
+        (layer as any).activeLoad = { signature: 'newer', token: 999 };
+        return {
+          transformViewToSourceMapFn: (c: any) => c,
+          transformSourceMapToViewFn: (c: any) => c,
+          sourceBounds: [0, 0, 100, 100],
+          sourceRef: [0, 0],
+          resolution: 1.0,
+          imageWidth: 256,
+          imageHeight: 256,
+          fromProjection: 'EPSG:25832',
+          toProjection: 'EPSG:3857',
+          baseImage: {},
+          overviewImages: [],
+        };
+      });
+
+      const result = await (layer as any).loadGeoTIFF(token);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('getViewExtent – invalid coordinates (lines 526-532)', () => {
+    it('returns null when proj4 returns NaN coordinates', async () => {
+      const proj4Mock = (await import('proj4')).default as unknown as ReturnType<typeof vi.fn>;
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      // Make proj4 return NaN for invalid coordinate transformation
+      proj4Mock.mockImplementation(() => [NaN, NaN]);
+
+      const extent = (layer as any).getViewExtent();
+      expect(extent).toBeNull();
+
+      // Restore original proj4 mock behavior
+      proj4Mock.mockImplementation((_from: any, _to: any, coord: any) => {
+        if (Array.isArray(coord)) {
+          return [coord[0] / 10000, coord[1] / 100000];
+        }
+        return coord;
+      });
+    });
+  });
+
+  describe('getViewExtent – extent clamped to bounds (line 572)', () => {
+    it('warns when extent exceeds valid WGS84 bounds and gets clamped', async () => {
+      const proj4Mock = (await import('proj4')).default as unknown as ReturnType<typeof vi.fn>;
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      // Make proj4 return coordinates that exceed WGS84 bounds
+      // MIN_LNG = -180, MAX_LNG = 180, MIN_LAT = -85.05112878, MAX_LAT = 85.05112878
+      proj4Mock.mockImplementation(() => [-200, 90]);
+
+      const extent = (layer as any).getViewExtent();
+      // Should still return an extent (clamped), not null
+      expect(extent).not.toBeNull();
+      // minLng should be clamped to -180
+      expect(extent![0]).toBe(-180);
+      // maxLat should be clamped to 85.05112878
+      expect(extent![3]).toBe(85.05112878);
+
+      // Restore original proj4 mock behavior
+      proj4Mock.mockImplementation((_from: any, _to: any, coord: any) => {
+        if (Array.isArray(coord)) {
+          return [coord[0] / 10000, coord[1] / 100000];
+        }
+        return coord;
+      });
+    });
+  });
+
+  describe('getViewExtent – proj4 throws (lines 578-579)', () => {
+    it('returns null when proj4 throws an error', async () => {
+      const proj4Mock = (await import('proj4')).default as unknown as ReturnType<typeof vi.fn>;
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      // Make proj4 throw
+      proj4Mock.mockImplementation(() => {
+        throw new Error('proj4 transformation failed');
+      });
+
+      const extent = (layer as any).getViewExtent();
+      expect(extent).toBeNull();
+
+      // Restore original proj4 mock behavior
+      proj4Mock.mockImplementation((_from: any, _to: any, coord: any) => {
+        if (Array.isArray(coord)) {
+          return [coord[0] / 10000, coord[1] / 100000];
+        }
+        return coord;
+      });
+    });
+  });
+
+  describe('getTileData – error in tile processing (lines 639-640)', () => {
+    it('returns null when tileProcessor.getTileData throws', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+        tileSize: 256,
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      // Make getTileData throw
+      mockGetTileData.mockRejectedValueOnce(new Error('Tile processing failed'));
+
+      const result = await (layer as any).getTileData({
+        index: { x: 0, y: 0, z: 0 },
+      });
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('renderLayers – null extent warning (line 668)', () => {
+    it('warns and still renders when getViewExtent returns null', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+
+      // Make getViewExtent return null
+      jest.spyOn(layer as any, 'getViewExtent').mockReturnValue(null);
+
+      const result = (layer as any).renderLayers();
+
+      // Should still create a TileLayer, just without extent
+      expect(result).toBeTruthy();
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+      expect(tileLayerProps.extent).toBeUndefined();
+    });
+  });
+
+  describe('renderSubLayers – no tile data (line 682)', () => {
+    it('returns null when tile.data is falsy', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+      (layer as any).renderLayers();
+
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+
+      // Call renderSubLayers with no data
+      const result = tileLayerProps.renderSubLayers({
+        id: 'geotiff-test-tiles-0-0-0',
+        tile: {
+          index: { x: 0, y: 0, z: 0 },
+          bbox: { west: 8, south: 50, east: 9, north: 51 },
+          data: null,
+        },
+      });
+
+      expect(result).toBeNull();
+    });
+
+    it('returns null when tile itself is falsy', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+      (layer as any).renderLayers();
+
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+
+      // Call renderSubLayers with no tile
+      const result = tileLayerProps.renderSubLayers({
+        id: 'geotiff-test-tiles-0-0-0',
+        tile: null,
+      });
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('onTileError callback (line 682)', () => {
+    it('handles tile errors via onTileError callback', async () => {
+      const layer = await createDeckGLGeoTIFFLayer({
+        id: 'geotiff-test',
+        url: 'https://example.com/data.tif',
+      });
+
+      await (layer as any).loadGeoTIFF();
+      (layer as any).renderLayers();
+
+      const tileLayerProps = mockTileLayer.mock.calls[0][0];
+
+      // Should not throw
+      expect(() =>
+        tileLayerProps.onTileError(new Error('tile load failed')),
+      ).not.toThrow();
+    });
+  });
 });
