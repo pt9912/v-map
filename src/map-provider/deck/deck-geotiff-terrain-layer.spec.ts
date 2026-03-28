@@ -23,11 +23,11 @@ const {
   const hoistedMockGetElevationData = vi
     .fn()
     .mockResolvedValue(new Float32Array(257 * 257));
-  const hoistedMockGeoTIFFTileProcessor = vi.fn().mockImplementation(() => ({
+  const hoistedMockGeoTIFFTileProcessor = vi.fn().mockImplementation(function() { return {
     createGlobalTriangulation: hoistedMockCreateGlobalTriangulation,
     getTileData: hoistedMockGetTileData,
     getElevationData: hoistedMockGetElevationData,
-  }));
+  }; });
   const hoistedMockGetTileProcessorConfig = vi.fn().mockResolvedValue({
     transformViewToSourceMapFn: (c: any) => c,
     transformSourceMapToViewFn: (c: any) => c,
@@ -84,7 +84,7 @@ const {
     .mockReturnValue({ getMesh: hoistedMockGetMesh });
   const hoistedMockMartini = vi
     .fn()
-    .mockImplementation(() => ({ createTile: hoistedMockCreateTile }));
+    .mockImplementation(function() { return { createTile: hoistedMockCreateTile }; });
 
   return {
     mockCreateGlobalTriangulation: hoistedMockCreateGlobalTriangulation,
@@ -182,18 +182,18 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
       baseImage: {},
       overviewImages: [],
     });
-    mockGeoTIFFTileProcessor.mockImplementation(() => ({
+    mockGeoTIFFTileProcessor.mockImplementation(function() { return {
       createGlobalTriangulation: mockCreateGlobalTriangulation,
       getTileData: mockGetTileData,
       getElevationData: mockGetElevationData,
-    }));
+    }; });
     mockGetColorStops.mockReturnValue({ stops: [{ value: 0, color: [0, 128, 0] }] });
     mockGetMesh.mockReturnValue({
       vertices: new Uint16Array([0, 0, 256, 0, 0, 256, 256, 256]),
       triangles: new Uint32Array([0, 1, 2, 1, 3, 2]),
     });
     mockCreateTile.mockReturnValue({ getMesh: mockGetMesh });
-    MockMartini.mockImplementation(() => ({ createTile: mockCreateTile }));
+    MockMartini.mockImplementation(function() { return { createTile: mockCreateTile }; });
   });
 
   it('gibt eine Layer-Instanz zurück', async () => {

@@ -5,24 +5,24 @@ const { mockUrlTemplateImageryProvider, mockImageryLayer, mockCesium } =
   vi.hoisted(() => {
     const hoistedMockUrlTemplateImageryProvider = vi
       .fn()
-      .mockImplementation(options => ({ ...options }));
+      .mockImplementation(function(options) { return { ...options }; });
 
     const hoistedMockImageryLayer = vi
       .fn()
-      .mockImplementation((_provider, options) => ({
+      .mockImplementation(function(_provider, options) { return {
         options,
         setOptions: vi.fn(),
         setOpacity: vi.fn(),
         setVisible: vi.fn(),
         setZIndex: vi.fn(),
         getOptions: vi.fn().mockReturnValue(options ?? {}),
-      }));
+      }; });
 
     return {
       mockUrlTemplateImageryProvider: hoistedMockUrlTemplateImageryProvider,
       mockImageryLayer: hoistedMockImageryLayer,
       mockCesium: {
-        Viewer: vi.fn().mockImplementation(() => ({
+        Viewer: vi.fn().mockImplementation(function() { return {
           scene: {
             imageryLayers: {
               add: vi.fn(),
@@ -31,7 +31,7 @@ const { mockUrlTemplateImageryProvider, mockImageryLayer, mockCesium } =
           },
           container: document.createElement('div'),
           destroy: vi.fn(),
-        })),
+        }; }),
         UrlTemplateImageryProvider: hoistedMockUrlTemplateImageryProvider,
         ImageryLayer: hoistedMockImageryLayer,
       },

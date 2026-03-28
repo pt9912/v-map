@@ -92,11 +92,11 @@ describe('OpenLayersProvider WFS/WCS support', () => {
   it('verwendet createWcsSource zum Erstellen eines WCS-Layers', async () => {
     jest.resetModules();
 
-    const mockImageLayer = jest.fn().mockImplementation(() => ({
+    const mockImageLayer = jest.fn().mockImplementation(function() { return {
       set: jest.fn(),
       setOpacity: jest.fn(),
       setVisible: jest.fn(),
-    }));
+    }; });
 
     jest.doMock('ol/layer/Image', () => ({
       __esModule: true,

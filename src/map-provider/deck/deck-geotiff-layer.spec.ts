@@ -15,10 +15,10 @@ const {
     .fn()
     .mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
   const hoistedMockCreateGlobalTriangulation = vi.fn();
-  const hoistedMockGeoTIFFTileProcessor = vi.fn().mockImplementation(() => ({
+  const hoistedMockGeoTIFFTileProcessor = vi.fn().mockImplementation(function() { return {
     createGlobalTriangulation: hoistedMockCreateGlobalTriangulation,
     getTileData: hoistedMockGetTileData,
-  }));
+  }; });
   const hoistedMockGetTileProcessorConfig = vi.fn().mockResolvedValue({
     transformViewToSourceMapFn: (c: any) => c,
     transformSourceMapToViewFn: (c: any) => c,
@@ -164,10 +164,10 @@ describe('createDeckGLGeoTIFFLayer', () => {
       baseImage: {},
       overviewImages: [],
     });
-    mockGeoTIFFTileProcessor.mockImplementation(() => ({
+    mockGeoTIFFTileProcessor.mockImplementation(function() { return {
       createGlobalTriangulation: mockCreateGlobalTriangulation,
       getTileData: mockGetTileData,
-    }));
+    }; });
     mockGetColorStops.mockReturnValue({ stops: [{ value: 0, color: [0, 128, 0] }] });
   });
 

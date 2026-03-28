@@ -13,26 +13,26 @@ const {
 } = vi.hoisted(() => {
   const hoistedMockUrlTemplateImageryProvider = vi
     .fn()
-    .mockImplementation((options) => ({ ...options }));
+    .mockImplementation(function(options) { return { ...options }; });
 
   const hoistedMockOpenStreetMapImageryProvider = vi
     .fn()
-    .mockImplementation((options) => ({ ...options }));
+    .mockImplementation(function(options) { return { ...options }; });
 
   const hoistedMockWebMapServiceImageryProvider = vi
     .fn()
-    .mockImplementation((options) => ({ ...options }));
+    .mockImplementation(function(options) { return { ...options }; });
 
   const hoistedMockImageryLayer = vi
     .fn()
-    .mockImplementation((_provider, options) => ({
+    .mockImplementation(function(_provider, options) { return {
       options,
       setOptions: vi.fn(),
       setOpacity: vi.fn(),
       setVisible: vi.fn(),
       setZIndex: vi.fn(),
       getOptions: vi.fn().mockReturnValue(options ?? {}),
-    }));
+    }; });
 
   const mockFromCssColorString = vi.fn().mockImplementation((css: string) => ({
     _css: css,
@@ -48,10 +48,10 @@ const {
     }),
   };
 
-  const hoistedMockGlobeTranslucency = vi.fn().mockImplementation(() => ({
+  const hoistedMockGlobeTranslucency = vi.fn().mockImplementation(function() { return {
     enabled: false,
     frontFaceAlpha: 1,
-  }));
+  }; });
 
   const hoistedMockCesiumTerrainProviderFromUrl = vi
     .fn()
@@ -63,24 +63,24 @@ const {
 
   const hoistedMockConstantProperty = vi
     .fn()
-    .mockImplementation((v: unknown) => ({ _value: v }));
+    .mockImplementation(function(v: unknown) { return { _value: v }; });
 
   const hoistedMockColorMaterialProperty = vi
     .fn()
-    .mockImplementation((c: unknown) => ({ _color: c }));
+    .mockImplementation(function(c: unknown) { return { _color: c }; });
 
   const hoistedMockNearFarScalar = vi
     .fn()
-    .mockImplementation((a: number, b: number, c: number, d: number) => ({
+    .mockImplementation(function(a: number, b: number, c: number, d: number) { return {
       near: a,
       nearValue: b,
       far: c,
       farValue: d,
-    }));
+    }; });
 
   const hoistedMockCartesian2 = vi
     .fn()
-    .mockImplementation((x: number, y: number) => ({ x, y }));
+    .mockImplementation(function(x: number, y: number) { return { x, y }; });
 
   const hoistedMockCesium3DTileset = {
     fromUrl: vi.fn().mockResolvedValue({
@@ -90,10 +90,10 @@ const {
 
   const hoistedMockCesium3DTileStyle = vi
     .fn()
-    .mockImplementation((s: unknown) => ({ _style: s }));
+    .mockImplementation(function(s: unknown) { return { _style: s }; });
 
   const hoistedMockCesium = {
-    Viewer: vi.fn().mockImplementation(() => ({
+    Viewer: vi.fn().mockImplementation(function() { return {
       scene: {
         imageryLayers: { add: vi.fn(), remove: vi.fn() },
         primitives: { removeAll: vi.fn() },
@@ -109,7 +109,7 @@ const {
       destroy: vi.fn(),
       terrainProvider: {},
       clock: { currentTime: 0 },
-    })),
+    }; }),
     UrlTemplateImageryProvider: hoistedMockUrlTemplateImageryProvider,
     OpenStreetMapImageryProvider: hoistedMockOpenStreetMapImageryProvider,
     WebMapServiceImageryProvider: hoistedMockWebMapServiceImageryProvider,
@@ -150,9 +150,9 @@ const {
       toRadians: vi.fn((deg: number) => deg * (Math.PI / 180)),
     },
     EllipsoidTerrainProvider: vi.fn(),
-    GeographicTilingScheme: vi.fn().mockImplementation(() => ({})),
-    WebMercatorTilingScheme: vi.fn().mockImplementation(() => ({})),
-    Resource: vi.fn().mockImplementation((opts: any) => ({ ...opts })),
+    GeographicTilingScheme: vi.fn().mockImplementation(function() { return {}; }),
+    WebMercatorTilingScheme: vi.fn().mockImplementation(function() { return {}; }),
+    Resource: vi.fn().mockImplementation(function(opts: any) { return { ...opts }; }),
   };
 
   return {
@@ -1400,7 +1400,7 @@ describe('CesiumProvider', () => {
       // Add BillboardGraphics mock
       mockCesium.BillboardGraphics = vi
         .fn()
-        .mockImplementation((opts: any) => ({ ...opts }));
+        .mockImplementation(function(opts: any) { return { ...opts }; });
       mockCesium.VerticalOrigin = { BOTTOM: 0 };
 
       dataSource = {
@@ -1437,7 +1437,7 @@ describe('CesiumProvider', () => {
     it('adds label when textProperty is set and entity has matching property', () => {
       mockCesium.LabelGraphics = vi
         .fn()
-        .mockImplementation((opts: any) => ({ ...opts }));
+        .mockImplementation(function(opts: any) { return { ...opts }; });
       mockCesium.VerticalOrigin = { BOTTOM: 0 };
       (provider as any).viewer.clock = { currentTime: 0 };
 
@@ -1600,10 +1600,10 @@ describe('CesiumProvider', () => {
       }));
       mockCesium.BillboardGraphics = vi
         .fn()
-        .mockImplementation((opts: any) => ({ ...opts }));
+        .mockImplementation(function(opts: any) { return { ...opts }; });
       mockCesium.LabelGraphics = vi
         .fn()
-        .mockImplementation((opts: any) => ({ ...opts }));
+        .mockImplementation(function(opts: any) { return { ...opts }; });
       mockCesium.VerticalOrigin = { BOTTOM: 0 };
       mockCesium.ClassificationType = { BOTH: 0 };
       (provider as any).viewer.clock = { currentTime: 0 };
@@ -2086,7 +2086,7 @@ describe('CesiumProvider', () => {
     });
 
     it('updates a terrain-geotiff layer by removing old and creating new', async () => {
-      mockCesium.EllipsoidTerrainProvider.mockImplementation(() => ({}));
+      mockCesium.EllipsoidTerrainProvider.mockImplementation(function() { return {}; });
       (provider as any).viewer.scene.globe.translucency = null;
 
       await provider.updateLayer('test-layer-id', {
@@ -2308,9 +2308,9 @@ describe('CesiumProvider', () => {
   /* ================================================================ */
   describe('createGeoTIFFTerrainLayer (private)', () => {
     it('returns fallback layer when no url is provided', async () => {
-      mockCesium.EllipsoidTerrainProvider.mockImplementation(() => ({
+      mockCesium.EllipsoidTerrainProvider.mockImplementation(function() { return {
         _type: 'Ellipsoid',
-      }));
+      }; });
       (provider as any).viewer.scene.globe.translucency = null;
 
       const layer = await (provider as any).createGeoTIFFTerrainLayer({

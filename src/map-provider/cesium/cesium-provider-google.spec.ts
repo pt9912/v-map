@@ -3,7 +3,7 @@ import { LayerConfig, googleMapType } from '../../types/layerconfig';
 
 // Mock Cesium imports
 const mockCesium = {
-  Viewer: jest.fn().mockImplementation(() => ({
+  Viewer: jest.fn().mockImplementation(function() { return {
     scene: {
       imageryLayers: {
         add: jest.fn(),
@@ -12,26 +12,26 @@ const mockCesium = {
     },
     container: document.createElement('div'),
     destroy: jest.fn(),
-  })),
-  UrlTemplateImageryProvider: jest.fn().mockImplementation(options => ({
+  }; }),
+  UrlTemplateImageryProvider: jest.fn().mockImplementation(function(options) { return {
     ...options,
     buildImageResource: options.buildImageResource || jest.fn(),
-  })),
-  ImageryLayer: jest.fn().mockImplementation((provider, options) => ({
+  }; }),
+  ImageryLayer: jest.fn().mockImplementation(function(provider, options) { return {
     provider,
     getVisible: jest.fn().mockReturnValue(true),
     setVisible: jest.fn(),
     setOpacity: jest.fn(),
     ...options,
-  })),
-  WebMercatorTilingScheme: jest.fn().mockImplementation(() => ({
+  }; }),
+  WebMercatorTilingScheme: jest.fn().mockImplementation(function() { return {
     tileXYToRectangle: jest.fn().mockReturnValue({
       west: -Math.PI,
       south: -Math.PI / 2,
       east: Math.PI,
       north: Math.PI / 2,
     }),
-  })),
+  }; }),
   Rectangle: {
     MAX_VALUE: {
       west: -Math.PI,
@@ -43,7 +43,7 @@ const mockCesium = {
   Math: {
     toDegrees: jest.fn(radians => radians * (180 / Math.PI)),
   },
-  Resource: jest.fn().mockImplementation(options => options),
+  Resource: jest.fn().mockImplementation(function(options) { return options; }),
 };
 
 jest.mock('../../lib/cesium-loader', () => ({

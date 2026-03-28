@@ -1731,10 +1731,10 @@ describe('LeafletProvider', () => {
       (provider as any).map.options = { crs: { code: 'EPSG:4326' } };
 
       const { GeoTIFFGridLayer: MockGeoTIFF } = await import('./GeoTIFFGridLayer');
-      (MockGeoTIFF as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => ({
+      (MockGeoTIFF as unknown as ReturnType<typeof vi.fn>).mockImplementation(function() { return {
         setOpacity: vi.fn(),
         setZIndex: vi.fn(),
-      }));
+      }; });
 
       const layerId = await provider.addLayerToGroup({
         type: 'geotiff',
@@ -1761,7 +1761,7 @@ describe('LeafletProvider', () => {
       (provider as any).map.options = { crs: { code: 'EPSG:4326' } };
 
       const { GeoTIFFGridLayer: MockGeoTIFF } = await import('./GeoTIFFGridLayer');
-      (MockGeoTIFF as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => {
+      (MockGeoTIFF as unknown as ReturnType<typeof vi.fn>).mockImplementation(function() {
         throw new Error('GeoTIFF creation failed');
       });
 

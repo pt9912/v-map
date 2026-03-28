@@ -32,7 +32,7 @@ describe('dom-env', () => {
     const observe = vi.fn();
     const disconnect = vi.fn();
     const callbackHolder: Array<() => void> = [];
-    const resizeObserver = vi.fn().mockImplementation((cb: () => void) => {
+    const resizeObserver = vi.fn().mockImplementation(function(cb: () => void) {
       callbackHolder.push(cb);
       return { observe, disconnect };
     });

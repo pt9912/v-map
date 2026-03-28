@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 
 const { mockTileLayer, mockTileArcGISRest } = vi.hoisted(() => ({
-  mockTileLayer: vi.fn().mockImplementation(options => ({
+  mockTileLayer: vi.fn().mockImplementation(function(options) { return {
     ...options,
     set: vi.fn(),
     setSource: vi.fn(),
@@ -9,13 +9,13 @@ const { mockTileLayer, mockTileArcGISRest } = vi.hoisted(() => ({
     setOpacity: vi.fn(),
     setVisible: vi.fn(),
     setZIndex: vi.fn(),
-  })),
-  mockTileArcGISRest: vi.fn().mockImplementation(options => ({
+  }; }),
+  mockTileArcGISRest: vi.fn().mockImplementation(function(options) { return {
     ...options,
     getParams: () => options.params ?? {},
     getUrls: () => [options.url],
     getUrl: () => options.url,
-  })),
+  }; }),
 }));
 
 // Mock all OpenLayers modules before they are imported

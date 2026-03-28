@@ -6,7 +6,7 @@ const { mockCesium } = vi.hoisted(() => ({
     Ion: {
       defaultAccessToken: null,
     },
-    Viewer: vi.fn().mockImplementation(() => ({
+    Viewer: vi.fn().mockImplementation(function() { return {
       scene: {
         primitives: {
           removeAll: vi.fn(),
@@ -25,7 +25,7 @@ const { mockCesium } = vi.hoisted(() => ({
       },
       destroy: vi.fn(),
       container: document.createElement('div'),
-    })),
+    }; }),
     EllipsoidTerrainProvider: vi.fn(),
     Color: {
       WHITE: { withAlpha: vi.fn(() => ({})) },
@@ -33,12 +33,12 @@ const { mockCesium } = vi.hoisted(() => ({
       fromCssColorString: vi.fn(() => ({ withAlpha: vi.fn(() => ({})) })),
     },
     GeoJsonDataSource: Object.assign(
-      vi.fn().mockImplementation(() => ({
+      vi.fn().mockImplementation(function() { return {
         entities: {
           values: [],
         },
         show: true,
-      })),
+      }; }),
       {
         load: vi.fn().mockResolvedValue({
           entities: {
@@ -48,17 +48,17 @@ const { mockCesium } = vi.hoisted(() => ({
         }),
       },
     ),
-    DataSource: vi.fn().mockImplementation(() => ({
+    DataSource: vi.fn().mockImplementation(function() { return {
       show: true,
-    })),
-    Cesium3DTileset: vi.fn().mockImplementation(() => ({
+    }; }),
+    Cesium3DTileset: vi.fn().mockImplementation(function() { return {
       show: true,
       style: null,
-    })),
-    ImageryLayer: vi.fn().mockImplementation(() => ({
+    }; }),
+    ImageryLayer: vi.fn().mockImplementation(function() { return {
       show: true,
       alpha: 1,
-    })),
+    }; }),
     Cesium3DTileStyle: vi.fn(),
     ColorBlendMode: {
       MIX: 0,

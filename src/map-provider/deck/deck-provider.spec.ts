@@ -10,10 +10,10 @@ const { mockTileLayer, mockDeck } = vi.hoisted(() => ({
       clone: vi.fn().mockReturnValue({ id: props.id, props }),
     };
   }),
-  mockDeck: vi.fn().mockImplementation(() => ({
+  mockDeck: vi.fn().mockImplementation(function() { return {
     setProps: vi.fn(),
     finalize: vi.fn(),
-  })),
+  }; }),
 }));
 
 vi.mock('@deck.gl/core', () => ({
@@ -22,28 +22,28 @@ vi.mock('@deck.gl/core', () => ({
 
 vi.mock('@deck.gl/geo-layers', () => ({
   TileLayer: mockTileLayer,
-  TerrainLayer: vi.fn().mockImplementation((props: any) => ({
+  TerrainLayer: vi.fn().mockImplementation(function(props: any) { return {
     id: props.id,
     props,
     clone: vi.fn().mockReturnValue({ id: props.id, props }),
-  })),
+  }; }),
 }));
 
 vi.mock('@deck.gl/layers', () => ({
-  BitmapLayer: vi.fn().mockImplementation((props: any) => ({
+  BitmapLayer: vi.fn().mockImplementation(function(props: any) { return {
     id: props?.id,
     props,
-  })),
-  GeoJsonLayer: vi.fn().mockImplementation((props: any) => ({
+  }; }),
+  GeoJsonLayer: vi.fn().mockImplementation(function(props: any) { return {
     id: props.id,
     props,
     clone: vi.fn().mockReturnValue({ id: props.id, props }),
-  })),
-  ScatterplotLayer: vi.fn().mockImplementation((props: any) => ({
+  }; }),
+  ScatterplotLayer: vi.fn().mockImplementation(function(props: any) { return {
     id: props.id,
     props,
     clone: vi.fn().mockReturnValue({ id: props.id, props }),
-  })),
+  }; }),
 }));
 
 vi.mock('wellknown', () => ({

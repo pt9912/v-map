@@ -3,8 +3,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 const { mockIsBrowser, mockSupportsAdoptedStyleSheets, mockControlExtend, mockDomUtilCreate, mockIconDefault } =
   vi.hoisted(() => {
     const mockAddTo = vi.fn().mockReturnThis();
-    const mockControlExtend = vi.fn().mockImplementation(() => {
-      return vi.fn().mockImplementation(() => ({ addTo: mockAddTo }));
+    const mockControlExtend = vi.fn().mockImplementation(function() {
+      return vi.fn().mockImplementation(function() { return { addTo: mockAddTo }; });
     });
     return {
       mockIsBrowser: vi.fn(() => true),
@@ -101,7 +101,7 @@ describe('leaflet-helpers', () => {
       mockSupportsAdoptedStyleSheets.mockReturnValue(true);
       const mockSheet = { replaceSync: vi.fn() };
       const origCSSStyleSheet = (globalThis as any).CSSStyleSheet;
-      (globalThis as any).CSSStyleSheet = vi.fn(() => mockSheet);
+      (globalThis as any).CSSStyleSheet = vi.fn(function() { return mockSheet; });
       const origAdopted = (document as any).adoptedStyleSheets;
       (document as any).adoptedStyleSheets = [];
 
@@ -141,7 +141,7 @@ describe('leaflet-helpers', () => {
   describe('ensureGoogleLogo', () => {
     it('fügt das Google-Logo zur Karte hinzu', () => {
       const mockAddTo = vi.fn().mockReturnThis();
-      const MockControl = vi.fn().mockImplementation(() => ({ addTo: mockAddTo }));
+      const MockControl = vi.fn().mockImplementation(function() { return { addTo: mockAddTo }; });
       mockControlExtend.mockReturnValueOnce(MockControl);
 
       const mockMap = { _googleLogoAdded: false } as any;
@@ -169,7 +169,7 @@ describe('leaflet-helpers', () => {
       const capturedOnAdd = { fn: null as any };
       mockControlExtend.mockImplementationOnce((def: any) => {
         capturedOnAdd.fn = def.onAdd;
-        return vi.fn().mockImplementation(() => ({ addTo: vi.fn() }));
+        return vi.fn().mockImplementation(function() { return { addTo: vi.fn() }; });
       });
 
       const mockMap = {} as any;
