@@ -43,72 +43,9 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
-      # ---------- System-Libs für Chrome/Chromium (Ubuntu 24.04) ----------
-      - name: Install Chrome runtime dependencies
-        run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-            libnss3 libnspr4 \
-            libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 \
-            libcups2 libdrm2 libgbm1 \
-            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
-            libx11-6 libx11-xcb1 libxcb1 libxext6 libxrandr2 libxrender1 libxshmfence1 \
-            libglib2.0-0 \
-            libcairo2 libpango-1.0-0 libpangocairo-1.0-0 \
-            libasound2t64 \
-            fonts-liberation \
-            ca-certificates
-          sudo rm -rf /var/lib/apt/lists/*
-
-      # ---------- PUPPETEER_CACHE_DIR absolut setzen & cachen ----------
-      - name: Set PUPPETEER_CACHE_DIR
-        run: |
-          echo "PUPPETEER_CACHE_DIR=$HOME/.cache/puppeteer" >> "$GITHUB_ENV"
-          mkdir -p "$HOME/.cache/puppeteer"
-
-      - name: Restore Puppeteer browser cache
-        uses: actions/cache@v4
-        with:
-          # Der Actions-Cache akzeptiert "~", aber wir bleiben explizit:
-          path: ~/.cache/puppeteer
-          key: puppeteer-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            puppeteer-${{ runner.os }}-
-
-      - name: Install chrome-headless-shell
-        run: pnpm dlx @puppeteer/browsers install chrome-headless-shell@stable -P "$PUPPETEER_CACHE_DIR"
-
-      - name: Resolve chrome-headless-shell path (cache + repo, mit Fallback)
-        id: phs
-        shell: bash
-        run: |
-          set -euo pipefail
-          # 1) Suche im Cache
-          CANDIDATE="$(find "$PUPPETEER_CACHE_DIR" -type f -name 'chrome-headless-shell' -print -quit 2>/dev/null || true)"
-          # 2) Falls Puppeteer doch ins Repo schrieb (kommt vor):
-          if [[ -z "${CANDIDATE}" ]]; then
-            CANDIDATE="$(find "$GITHUB_WORKSPACE" -type f -path '*/chrome-headless-shell/*/chrome-headless-shell' -print -quit 2>/dev/null || true)"
-          fi
-          # 3) Letzter Fallback: Puppeteer (voll) liefern lassen
-          if [[ -z "${CANDIDATE}" ]]; then
-            echo "(warn) chrome-headless-shell not found in cache/workspace; trying puppeteer fallback"
-            CANDIDATE="$(node -e "try{console.log(require('puppeteer').executablePath())}catch(e){process.exit(1)}" || true)"
-          fi
-
-          if [[ -z "${CANDIDATE}" || ! -e "${CANDIDATE}" ]]; then
-            echo "No chrome-headless-shell found!" >&2
-            exit 1
-          fi
-
-          echo "path=${CANDIDATE}" >> "$GITHUB_OUTPUT"
-          echo "PUPPETEER_EXECUTABLE_PATH=${CANDIDATE}" >> "$GITHUB_ENV"
-          echo "Using: ${CANDIDATE}"
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
 
       # ---------- Tests ----------
-      - name: Run unit/spec + vitest tests with coverage
+      - name: Run vitest tests with coverage
         run: pnpm run test:coverage
-
-      - name: Run e2e tests (Puppeteer)
-        env:
-          PUPPETEER_EXECUTABLE_PATH: ${{ steps.phs.outputs.path }}
-        run: pnpm run test:e2e

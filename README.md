@@ -18,7 +18,7 @@ Gebaut mit [Stencil.js](https://stenciljs.com/), [OpenLayers](https://openlayers
 - **Touch-Optimiert**: Funktioniert auf Desktop und mobilen Geräten
 - **TypeScript-Unterstützung**: Vollständige Typdefinitionen
 - **Storybook-Dokumentation**: Interaktive Beispiele und API-Docs
-- **Testing**: Jest/Vitest für Unit- und Komponententests
+- **Testing**: Vitest für Spec-, Unit- und Browser-Tests
 - **CI/CD**: Automatisiertes Testing und Releases via GitHub Actions
 - **Devcontainer-Support**: Voll ausgestattete Entwicklungsumgebung mit Docker
 
@@ -80,12 +80,13 @@ Läuft standardmäßig auf: [http://localhost:3333](http://localhost:3333)
 
 ## 🧪 Tests
 
-Dieses Projekt nutzt **Jest** (Stencil integriert) und **Vitest** (für Utility-Funktionen).
+Dieses Projekt nutzt **Vitest** für `spec`-, `unit`- und Browser-Tests.
 
 ```bash
-pnpm test       # Unit- und Komponententests
-pnpm test:spec  # Spezifikationstests
-pnpm test:e2e   # E2E tests
+pnpm test                       # spec + browser
+pnpm test:coverage             # alle Vitest-Projekte mit Coverage
+pnpm test:vitest:browser       # Browser-/Runtime-Tests
+pnpm test:vitest:browser:watch # Browser-Tests im Watch-Modus
 ```
 
 ---
@@ -107,7 +108,7 @@ Erreichbar unter: [http://localhost:6006](http://localhost:6006)
 Das Projekt enthält eine vorkonfigurierte **Devcontainer-Umgebung**:
 
 - Basierend auf `node:22`
-- Enthält pnpm, GitHub CLI, Linting/Prettier, Jest/Vitest
+- Enthält pnpm, GitHub CLI, Linting/Prettier und Vitest
 - Automatisches Setup via `post-create.sh`
 
 Öffne das Repo in [VS Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) oder [GitHub Codespaces].
@@ -147,12 +148,14 @@ v-map/
 │   │   ├── v-map-layer-osm/     # OSM-Basemap
 │   │   ├── v-map-layer-geojson/ # GeoJSON-Daten
 │   │   └── v-map-layergroup/    # Layer-Gruppierung
+│   ├── map-provider/            # Provider-Implementierungen
+│   ├── testing/                 # Test-Setups und Mocks
 │   └── index.ts                 # Entry Point
+├── docs/dev/                    # Interne Entwicklerdoku
 ├── .devcontainer/               # VS Code/Codespaces Setup
 ├── .github/workflows/           # CI/CD Pipelines
-├── jest.config.ts               # Jest-Konfiguration
-├── vite.config.ts               # Vite-Build
-├── vitest.config.ts             # Vitest-Tests
+├── vite.config.ts               # Vite-Konfiguration
+├── vitest.config.mts            # Vitest-Projekte
 └── stencil.config.ts            # Stencil-Konfiguration
 ```
 
