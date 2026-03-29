@@ -6,6 +6,11 @@ const vitestArgs = process.argv.slice(2);
 const vitestViteCacheDir =
   process.env.VITE_CACHE_DIR ||
   resolve(process.cwd(), 'node_modules/.vitest-cache', 'vite');
+const vitestInactivityTimeoutMs = Number.parseInt(
+  process.env.VITEST_BROWSER_INACTIVITY_TIMEOUT_MS ?? '180000',
+  10,
+);
+const vitestKillGraceMs = 5_000;
 
 function sleep(ms) {
   return new Promise(resolveSleep => setTimeout(resolveSleep, ms));
@@ -29,6 +34,8 @@ function runVitest({ attempt, streamOutput }) {
     let stdout = '';
     let stderr = '';
     let lastActivityAt = Date.now();
+    let inactivityTimedOut = false;
+    let killTimer;
 
     const heartbeat = setInterval(() => {
       if (Date.now() - lastActivityAt < 30_000) return;
@@ -37,6 +44,25 @@ function runVitest({ attempt, streamOutput }) {
       );
       lastActivityAt = Date.now();
     }, 30_000);
+
+    const inactivityWatchdog = setInterval(() => {
+      if (!Number.isFinite(vitestInactivityTimeoutMs)) return;
+      if (vitestInactivityTimeoutMs <= 0) return;
+      if (Date.now() - lastActivityAt < vitestInactivityTimeoutMs) return;
+
+      inactivityTimedOut = true;
+      process.stderr.write(
+        `\n[vitest-browser-retry] attempt ${attempt} exceeded ${vitestInactivityTimeoutMs}ms without output; terminating and retrying.\n`,
+      );
+
+      clearInterval(inactivityWatchdog);
+      child.kill('SIGTERM');
+      killTimer = setTimeout(() => {
+        if (child.exitCode === null && child.signalCode === null) {
+          child.kill('SIGKILL');
+        }
+      }, vitestKillGraceMs);
+    }, 1_000);
 
     child.stdout.on('data', chunk => {
       const text = String(chunk);
@@ -54,20 +80,32 @@ function runVitest({ attempt, streamOutput }) {
 
     child.on('error', error => {
       clearInterval(heartbeat);
+      clearInterval(inactivityWatchdog);
+      clearTimeout(killTimer);
       rejectRun(error);
     });
 
-    child.on('close', status => {
+    child.on('close', (status, signal) => {
       clearInterval(heartbeat);
-      resolveRun({ status, stdout, stderr });
+      clearInterval(inactivityWatchdog);
+      clearTimeout(killTimer);
+      resolveRun({
+        status,
+        signal,
+        stdout,
+        stderr,
+        inactivityTimedOut,
+      });
     });
   });
 }
 
-function isColdBrowserCacheFailure(result) {
-  if (result.status === 0) return false;
+function isRetryableFailure(result) {
+  if (result.status === 0 && !result.inactivityTimedOut) return false;
 
   const output = `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
+
+  if (result.inactivityTimedOut) return true;
 
   return [
     'Vite unexpectedly reloaded a test',
@@ -80,14 +118,21 @@ function isColdBrowserCacheFailure(result) {
 async function main() {
   const firstResult = await runVitest({ attempt: 1, streamOutput: false });
 
-  if (!isColdBrowserCacheFailure(firstResult)) {
+  if (!isRetryableFailure(firstResult)) {
     replayOutput(firstResult);
     process.exit(firstResult.status ?? 1);
   }
 
-  process.stderr.write(
-    '\n[vitest-browser-retry] retrying once after cold browser dep optimization.\n',
-  );
+  process.stderr.write(firstResult.stderr ?? '');
+  if (firstResult.inactivityTimedOut) {
+    process.stderr.write(
+      '\n[vitest-browser-retry] retrying once after an inactivity timeout during browser test startup.\n',
+    );
+  } else {
+    process.stderr.write(
+      '\n[vitest-browser-retry] retrying once after cold browser dep optimization.\n',
+    );
+  }
   await sleep(750);
 
   const secondResult = await runVitest({ attempt: 2, streamOutput: true });
