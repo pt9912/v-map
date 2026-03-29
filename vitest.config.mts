@@ -2,6 +2,8 @@ import { defineVitestConfig } from '@stencil/vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { optimizeDepsExclude, optimizeDepsInclude } from './config/optimize-deps';
 
+const vitestCacheRoot = 'node_modules/.vitest-cache';
+
 const sharedCoverage = {
   include: ['src/**/*.{ts,tsx}'],
   exclude: [
@@ -37,7 +39,7 @@ const sharedCoverage = {
 
 export default defineVitestConfig({
   stencilConfig: './stencil.config.ts',
-  cacheDir: 'node_modules/.vitest-cache',
+  cacheDir: vitestCacheRoot,
   resolve: {
     alias: [
       { find: 'leaflet/dist/leaflet-src.esm.js', replacement: 'leaflet' },
@@ -50,6 +52,11 @@ export default defineVitestConfig({
     deps: {
       optimizer: {
         client: {
+          enabled: true,
+          exclude: [...optimizeDepsExclude],
+          include: [...optimizeDepsInclude],
+        },
+        ssr: {
           enabled: true,
           exclude: [...optimizeDepsExclude],
           include: [...optimizeDepsInclude],
@@ -103,13 +110,16 @@ export default defineVitestConfig({
         test: {
           name: 'browser',
           include: ['src/**/*.test.{ts,tsx}'],
-          globalSetup: ['scripts/prewarm-vitest-browser-cache.mjs'],
           setupFiles: ['src/testing/setupTests.browser.ts'],
           globals: true,
           testTimeout: 15_000,
           passWithNoTests: true,
           browser: {
             enabled: true,
+            api: {
+              port: 42153,
+              strictPort: true,
+            },
             provider: playwright(),
             headless: true,
             instances: [{ browser: 'chromium' }],

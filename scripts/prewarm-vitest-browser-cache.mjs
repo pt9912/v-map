@@ -3,16 +3,14 @@ import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-export function prewarmVitestBrowserCache() {
-  const projectName = 'browser';
-  const projectHash = createHash('sha1').update(projectName).digest('hex');
-  const cacheDir = resolve(
-    process.cwd(),
-    'node_modules/.vitest-cache',
-    'vitest',
-    projectHash,
-  );
+const vitestCacheRoot = resolve(process.cwd(), 'node_modules/.vitest-cache', 'vitest');
 
+function getProjectCacheDir(projectName) {
+  const projectHash = createHash('sha1').update(projectName).digest('hex');
+  return resolve(vitestCacheRoot, projectHash);
+}
+
+function optimizeCacheDir(cacheDir) {
   const viteBin = resolve(process.cwd(), 'node_modules/.bin/vite');
   const result = spawnSync(viteBin, ['optimize', '--force'], {
     env: {
@@ -24,6 +22,15 @@ export function prewarmVitestBrowserCache() {
 
   if (result.status !== 0) {
     throw new Error(`vite optimize failed with exit code ${result.status ?? 1}`);
+  }
+}
+
+export function prewarmVitestBrowserCache() {
+  // Vitest's browser runner can address two cache namespaces depending on how
+  // the browser project is resolved internally. Warm both to avoid late
+  // dependency re-optimization during the actual test run.
+  for (const projectName of ['', 'browser']) {
+    optimizeCacheDir(getProjectCacheDir(projectName));
   }
 }
 
