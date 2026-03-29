@@ -9,7 +9,9 @@ import {
 } from '@stencil/core';
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
+import type { VMapErrorDetail } from '../../utils/events';
 
 const MSG_COMPONENT = 'v-map-layer-wcs - ';
 
@@ -18,8 +20,11 @@ const MSG_COMPONENT = 'v-map-layer-wcs - ';
   styleUrl: 'v-map-layer-wcs.css',
   shadow: true,
 })
-export class VMapLayerWcs {
+export class VMapLayerWcs implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /** Basis-URL des WCS-Dienstes. */
   @Prop({ reflect: true }) url!: string;
@@ -52,23 +57,41 @@ export class VMapLayerWcs {
   @Prop({ reflect: true }) zIndex: number = 1000;
 
   @State() private didLoad = false;
+  private hasLoadedOnce = false;
 
   private helper: VMapLayerHelper;
 
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
+
   componentWillLoad() {
     log(MSG_COMPONENT + 'componentWillLoad');
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + 'componentDidLoad');
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
     this.didLoad = true;
+    this.hasLoadedOnce = true;
+  }
+
+  async connectedCallback() {
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
   }
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + 'disconnectedCallback');
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   /** Gibt `true` zurück, sobald der Layer initialisiert wurde. */
@@ -118,7 +141,7 @@ export class VMapLayerWcs {
         return parsed as Record<string, string | number | boolean>;
       }
     } catch (error) {
-      log(MSG_COMPONENT + 'Invalid params JSON, ignoring', error);
+      this.helper?.setError({ type: 'parse', message: 'Invalid params JSON', attribute: 'params', cause: error });
     }
     return undefined;
   }
@@ -134,7 +157,7 @@ export class VMapLayerWcs {
         return parsed as number[];
       }
     } catch (error) {
-      log(MSG_COMPONENT + 'Invalid resolutions JSON, ignoring', error);
+      this.helper?.setError({ type: 'parse', message: 'Invalid resolutions JSON', attribute: 'resolutions', cause: error });
     }
     return undefined;
   }

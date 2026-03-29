@@ -9,7 +9,9 @@ import {
 } from '@stencil/core';
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
-import { log, warn } from '../../utils/logger';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
+import { log } from '../../utils/logger';
+import type { VMapErrorDetail } from '../../utils/events';
 
 const MSG_COMPONENT = 'v-map-layer-terrain - ';
 
@@ -27,8 +29,11 @@ type ColorTuple = [number, number, number];
   styleUrl: 'v-map-layer-terrain.css',
   shadow: true,
 })
-export class VMapLayerTerrain {
+export class VMapLayerTerrain implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).
@@ -86,25 +91,41 @@ export class VMapLayerTerrain {
   @Prop({ reflect: true }) zIndex: number = 1000;
 
   @State() private didLoad = false;
+  private hasLoadedOnce = false;
 
   private helper: VMapLayerHelper;
 
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
+
   componentWillLoad() {
     log(MSG_COMPONENT + 'componentWillLoad');
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + 'componentDidLoad');
-
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
-
     this.didLoad = true;
+    this.hasLoadedOnce = true;
+  }
+
+  async connectedCallback() {
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
   }
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + 'disconnectedCallback');
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   /**
@@ -177,12 +198,9 @@ export class VMapLayerTerrain {
       ) {
         return parsed as ElevationDecoder;
       }
-      warn(
-        MSG_COMPONENT +
-          'Invalid elevationDecoder, expected JSON object with r/g/b/offset',
-      );
+      this.helper?.setError({ type: 'parse', message: 'Invalid elevationDecoder JSON', attribute: 'elevationDecoder', cause: undefined });
     } catch (error) {
-      warn(MSG_COMPONENT + 'Failed to parse elevationDecoder JSON', error);
+      this.helper?.setError({ type: 'parse', message: 'Invalid elevationDecoder JSON', attribute: 'elevationDecoder', cause: error });
     }
     return undefined;
   }
@@ -205,7 +223,7 @@ export class VMapLayerTerrain {
           return parsed as ColorTuple;
         }
       } catch (error) {
-        warn(MSG_COMPONENT + 'Failed to parse color JSON array', error);
+        this.helper?.setError({ type: 'parse', message: 'Failed to parse color JSON array', attribute: 'color', cause: error });
       }
     }
 
@@ -237,7 +255,7 @@ export class VMapLayerTerrain {
       }
     }
 
-    warn(MSG_COMPONENT + `Unsupported color format: ${value}`);
+    this.helper?.setError({ type: 'parse', message: `Unsupported color format: ${value}`, attribute: 'color' });
     return undefined;
   }
 

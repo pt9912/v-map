@@ -10,9 +10,9 @@ import {
 } from '@stencil/core';
 
 import type { VMapLayer } from '../../types/vmaplayer';
-import { VMapEvents } from '../../utils/events';
+import { VMapEvents, type VMapErrorDetail } from '../../utils/events';
 import type { LayerConfig } from '../../types/layerconfig';
-import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import { VMapLayerHelper, type VMapErrorHost } from '../../layer/v-map-layer-helper';
 import MSG from '../../utils/messages';
 import { log } from '../../utils/logger';
 
@@ -23,8 +23,11 @@ const MSG_COMPONENT: string = 'v-map-layer-osm - ';
   styleUrl: 'v-map-layer-osm.css',
   shadow: true,
 })
-export class VMapLayerOSM implements VMapLayer {
+export class VMapLayerOSM implements VMapLayer, VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   @Prop({ reflect: true }) visible: boolean = true;
 
@@ -51,8 +54,18 @@ export class VMapLayerOSM implements VMapLayer {
   @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
 
   private didLoad: boolean = false;
+  private hasLoadedOnce: boolean = false;
 
   private helper: VMapLayerHelper;
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
 
   @Watch('visible')
   async onVisibleChanged() {
@@ -112,18 +125,23 @@ export class VMapLayerOSM implements VMapLayer {
 
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
   }
 
   async componentWillLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
+    this.hasLoadedOnce = true;
     this.didLoad = true;
     this.ready.emit();
   }
@@ -134,7 +152,7 @@ export class VMapLayerOSM implements VMapLayer {
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   render() {

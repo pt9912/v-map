@@ -11,8 +11,10 @@ import {
 
 import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
+import type { VMapErrorDetail } from '../../utils/events';
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import type { StyleEvent } from '../../types/styling';
@@ -26,8 +28,11 @@ const MSG_COMPONENT: string = 'v-map-layer-geotiff - ';
   styleUrl: 'v-map-layer-geotiff.css',
   shadow: true,
 })
-export class VMapLayerGeoTIFF implements VMapLayer {
+export class VMapLayerGeoTIFF implements VMapLayer, VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * URL to the GeoTIFF file to be displayed on the map.
@@ -69,8 +74,18 @@ export class VMapLayerGeoTIFF implements VMapLayer {
   @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
 
   private didLoad: boolean = false;
+  private hasLoadedOnce: boolean = false;
 
   private helper: VMapLayerHelper;
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
 
   @Watch('url')
   async onUrlChanged() {
@@ -184,13 +199,18 @@ export class VMapLayerGeoTIFF implements VMapLayer {
 
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    if (this.hasLoadedOnce) {
+      this.helper.startLoading();
+      await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+    }
 
     // Listen for styleReady events from v-map-style component
     document.addEventListener('styleReady', this.handleStyleReady.bind(this) as EventListener);
   }
 
-  disconnectedCallback() {
+  async disconnectedCallback() {
     document.removeEventListener('styleReady', this.handleStyleReady.bind(this) as EventListener);
+    await this.helper?.dispose();
   }
 
   /**
@@ -260,14 +280,16 @@ export class VMapLayerGeoTIFF implements VMapLayer {
 
   async componentWillLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
+    this.hasLoadedOnce = true;
     this.didLoad = true;
     this.ready.emit();
   }

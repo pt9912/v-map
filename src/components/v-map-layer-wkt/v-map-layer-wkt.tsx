@@ -12,8 +12,10 @@ import {
 
 import type { VMapLayer } from '../../types/vmaplayer';
 import { VMapEvents } from '../../utils/events';
+import type { VMapErrorDetail } from '../../utils/events';
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { Style } from 'geostyler-style';
@@ -27,8 +29,11 @@ const MSG_COMPONENT: string = 'v-map-layer-wkt - ';
   styleUrl: 'v-map-layer-wkt.css',
   shadow: true,
 })
-export class VMapLayerWkt implements VMapLayer {
+export class VMapLayerWkt implements VMapLayer, VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * WKT-Geometrie (z. B. "POINT(11.57 48.14)" oder "POLYGON((...))").
@@ -136,7 +141,17 @@ export class VMapLayerWkt implements VMapLayer {
   @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
 
   private didLoad: boolean = false;
+  private hasLoadedOnce: boolean = false;
   private helper: VMapLayerHelper;
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
   private appliedGeostylerStyle?: Style;
 
   @Watch('wkt')
@@ -289,6 +304,9 @@ export class VMapLayerWkt implements VMapLayer {
 
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
   }
 
   private createLayerConfig(): LayerConfig {
@@ -334,23 +352,25 @@ export class VMapLayerWkt implements VMapLayer {
 
   async componentWillLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
     await this.applyExistingStyles();
 
+    this.hasLoadedOnce = true;
     this.didLoad = true;
     this.ready.emit();
   }
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   render() {

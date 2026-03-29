@@ -13,7 +13,9 @@ import {
 
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
-import { log, warn } from '../../utils/logger';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
+import type { VMapErrorDetail } from '../../utils/events';
+import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { VMapEvents } from '../../utils/events';
 import { type Cesium3DTileStyle } from '../../types/styling';
@@ -26,8 +28,11 @@ const MSG_COMPONENT = 'v-map-layer-tile3d - ';
   styleUrl: 'v-map-layer-tile3d.css',
   shadow: true,
 })
-export class VMapLayerTile3d {
+export class VMapLayerTile3d implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * URL pointing to the Cesium 3D Tileset.
@@ -63,26 +68,35 @@ export class VMapLayerTile3d {
   @Event({ eventName: VMapEvents.Ready }) ready!: EventEmitter<void>;
 
   @State() private didLoad = false;
+  private hasLoadedOnce = false;
 
   private helper: VMapLayerHelper;
   private appliedCesiumStyle?: Cesium3DTileStyle;
 
+  async connectedCallback() {
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+  }
+
   async componentWillLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
     await this.applyExistingStyles();
     this.didLoad = true;
+    this.hasLoadedOnce = true;
     this.ready.emit();
   }
 
   async disconnectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   /**
@@ -91,6 +105,15 @@ export class VMapLayerTile3d {
   @Method()
   async isReady(): Promise<boolean> {
     return this.didLoad;
+  }
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
   }
 
   @Watch('url')
@@ -216,7 +239,7 @@ export class VMapLayerTile3d {
     try {
       return JSON.parse(this.tilesetOptions);
     } catch (error) {
-      warn(MSG_COMPONENT + 'Invalid tilesetOptions JSON provided', error);
+      this.helper?.setError({ type: 'parse', message: 'Invalid tilesetOptions JSON', attribute: 'tilesetOptions', cause: error });
       return undefined;
     }
   }

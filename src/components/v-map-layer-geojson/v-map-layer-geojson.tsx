@@ -9,7 +9,9 @@ import {
 } from '@stencil/core';
 import type { LayerConfig } from '../../types/layerconfig';
 import { VMapLayerHelper } from '../../layer/v-map-layer-helper';
-import { log, warn } from '../../utils/logger';
+import type { VMapErrorHost } from '../../layer/v-map-layer-helper';
+import type { VMapErrorDetail } from '../../utils/events';
+import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 import { Style } from 'geostyler-style';
 import { isGeoStylerStyle, StyleEvent } from '../../types/styling';
@@ -21,8 +23,11 @@ const MSG_COMPONENT: string = 'v-map-layer-geojson - ';
   tag: 'v-map-layer-geojson',
   shadow: true,
 })
-export class VMapLayerGeoJSON {
+export class VMapLayerGeoJSON implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /** Prop, die du intern nutzt/weiterverarbeitest */
   @Prop({ mutable: true }) geojson?: string;
@@ -125,6 +130,7 @@ export class VMapLayerGeoJSON {
   private lastString?: string;
   private layerId: string | null = null;
   private didLoad: boolean = false;
+  private hasLoadedOnce = false;
 
   private helper!: VMapLayerHelper;
   private appliedGeostylerStyle?: Style;
@@ -137,13 +143,25 @@ export class VMapLayerGeoJSON {
     return this.layerId;
   }
 
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
+
   async connectedCallback() {
     log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
   }
 
   async componentWillLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
-    this.helper = new VMapLayerHelper(this.el);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
@@ -162,11 +180,13 @@ export class VMapLayerGeoJSON {
       this.readGeoJsonFromSlot();
     }
 
+    this.helper.startLoading();
     await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
 
     await this.applyExistingStyles();
 
     this.didLoad = true;
+    this.hasLoadedOnce = true;
     //todo    this.ready.emit();
   }
 
@@ -174,7 +194,7 @@ export class VMapLayerGeoJSON {
     log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
     this.mo?.disconnect();
     this.geoSlot?.removeEventListener('slotchange', this.onSlotChange);
-    await this.helper?.removeLayer();
+    await this.helper?.dispose();
   }
 
   isReady(): boolean {
@@ -385,7 +405,7 @@ export class VMapLayerGeoJSON {
       // optional: eigenes Event „data-updated“ feuern
       // this.host.dispatchEvent(new CustomEvent('data-updated', { detail: this.geojson }));
     } catch (e) {
-      warn(MSG_COMPONENT + 'Ungültiges JSON im Slot:', e);
+      this.helper?.setError({ type: 'parse', message: 'Ungültiges JSON im Slot', attribute: 'geojson', cause: e });
     }
   }
 
