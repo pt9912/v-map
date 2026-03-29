@@ -19,6 +19,7 @@ import type {
 import { diffLayers } from '../../utils/diff';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
+import { VMapEvents, type VMapErrorDetail } from '../../utils/events';
 
 const MSG_COMPONENT: string = 'v-map-builder - ';
 
@@ -85,10 +86,20 @@ export class VMapBuilder {
       this.configReady.emit(cfg);
     } catch (e: unknown) {
       const err = e as { message?: string; errors?: string[] } | undefined;
+      const message = err?.message || 'Unknown error';
       this.configError.emit({
-        message: err?.message || 'Unknown error',
+        message,
         errors: err?.errors,
       });
+      this.hostEl.dispatchEvent(new CustomEvent(VMapEvents.Error, {
+        detail: {
+          type: 'validation',
+          message,
+          cause: e,
+        } satisfies VMapErrorDetail,
+        bubbles: true,
+        composed: true,
+      }));
     }
   }
 

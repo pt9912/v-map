@@ -23,6 +23,7 @@ import {
   type ResolvedStyle,
   StyleEvent,
 } from '../../types/styling';
+import { VMapEvents, type VMapErrorDetail } from '../../utils/events';
 
 const MSG_COMPONENT = 'v-map-style';
 
@@ -137,6 +138,19 @@ export class VMapStyle {
     } catch (error) {
       this.error = error as Error;
       this.styleError.emit(this.error);
+
+      const errorType: VMapErrorDetail['type'] =
+        isRemoteFetchFailure(this.error) ? 'network' : 'parse';
+      this.el.dispatchEvent(new CustomEvent(VMapEvents.Error, {
+        detail: {
+          type: errorType,
+          message: this.error.message,
+          cause: this.error,
+        } satisfies VMapErrorDetail,
+        bubbles: true,
+        composed: true,
+      }));
+
       console.error(MSG_COMPONENT + ' - Style parsing failed:', error);
       return undefined;
     } finally {
@@ -318,4 +332,12 @@ export class VMapStyle {
       </div>
     );
   }
+}
+
+/**
+ * Checks whether the error originated from a failed fetch() call
+ * (e.g. "Failed to fetch style from ...") vs. a parse error.
+ */
+function isRemoteFetchFailure(error: Error): boolean {
+  return error.message.startsWith('Failed to fetch style from');
 }

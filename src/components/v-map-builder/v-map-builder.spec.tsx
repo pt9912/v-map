@@ -1810,6 +1810,56 @@ map:
       expect(emittedError[0].message).toContain('No configuration <script> found');
     });
 
+    it('parseFromSlot dispatches unified vmap-error event with type validation', () => {
+      const hostEl = createMockHost();
+      const vmapErrors: CustomEvent[] = [];
+      hostEl.addEventListener('vmap-error', ((e: CustomEvent) => {
+        vmapErrors.push(e);
+      }) as EventListener);
+
+      const component = {
+        hostEl,
+        current: undefined,
+        configReady: { emit: vi.fn() },
+        configError: { emit: vi.fn() },
+      } as any;
+
+      VMapBuilder.prototype['parseFromSlot'].call(component);
+
+      expect(vmapErrors).toHaveLength(1);
+      expect(vmapErrors[0].detail.type).toBe('validation');
+      expect(vmapErrors[0].detail.message).toContain('No configuration <script> found');
+      expect(vmapErrors[0].detail.cause).toBeInstanceOf(Error);
+      expect(vmapErrors[0].bubbles).toBe(true);
+      expect(vmapErrors[0].composed).toBe(true);
+    });
+
+    it('parseFromSlot dispatches vmap-error on invalid JSON', () => {
+      const hostEl = createMockHost();
+      const script = document.createElement('script');
+      script.type = 'application/json';
+      script.textContent = '{invalid json}';
+      hostEl.appendChild(script);
+
+      const vmapErrors: CustomEvent[] = [];
+      hostEl.addEventListener('vmap-error', ((e: CustomEvent) => {
+        vmapErrors.push(e);
+      }) as EventListener);
+
+      const component = {
+        hostEl,
+        current: undefined,
+        configReady: { emit: vi.fn() },
+        configError: { emit: vi.fn() },
+      } as any;
+
+      VMapBuilder.prototype['parseFromSlot'].call(component);
+
+      expect(vmapErrors).toHaveLength(1);
+      expect(vmapErrors[0].detail.type).toBe('validation');
+      expect(vmapErrors[0].detail.cause).toBeDefined();
+    });
+
     it('parseFromSlot parses YAML script', () => {
       const hostEl = createMockHost();
       const script = document.createElement('script');

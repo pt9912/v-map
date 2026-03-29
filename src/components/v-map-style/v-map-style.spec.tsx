@@ -660,6 +660,48 @@ describe('v-map-style', () => {
       expect(styleErrorSpy).toHaveBeenCalled();
       expect(styleErrorSpy.mock.calls[0][0].detail).toBeInstanceOf(Error);
     });
+
+    it('should dispatch unified vmap-error event with type parse on parsing failure', async () => {
+      const { root, instance } = await render(
+        h('v-map-style', { format: 'mapbox-gl', content: 'invalid', 'auto-apply': 'false' }),
+      );
+
+      const component = (instance ?? root) as any;
+      const vmapErrorSpy = vi.fn();
+      root!.addEventListener('vmap-error', vmapErrorSpy);
+
+      await component.loadAndParseStyle();
+
+      expect(vmapErrorSpy).toHaveBeenCalled();
+      const detail = vmapErrorSpy.mock.calls[0][0].detail;
+      expect(detail.type).toBe('parse');
+      expect(detail.message).toBeTruthy();
+      expect(detail.cause).toBeInstanceOf(Error);
+    });
+
+    it('should dispatch unified vmap-error event with type network on fetch failure', async () => {
+      const { root, instance } = await render(
+        h('v-map-style', { format: 'sld', src: 'https://nonexistent.example.com/style.sld', 'auto-apply': 'false' }),
+      );
+
+      const component = (instance ?? root) as any;
+      const vmapErrorSpy = vi.fn();
+      root!.addEventListener('vmap-error', vmapErrorSpy);
+
+      // Override fetch to simulate network failure with the expected message pattern
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = vi.fn().mockRejectedValue(new Error('Failed to fetch style from https://nonexistent.example.com/style.sld'));
+      try {
+        await component.loadAndParseStyle();
+      } finally {
+        globalThis.fetch = originalFetch;
+      }
+
+      expect(vmapErrorSpy).toHaveBeenCalled();
+      const detail = vmapErrorSpy.mock.calls[0][0].detail;
+      expect(detail.type).toBe('network');
+      expect(detail.cause).toBeInstanceOf(Error);
+    });
   });
 
   describe('prototype-based source coverage', () => {
