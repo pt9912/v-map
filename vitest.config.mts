@@ -27,10 +27,10 @@ const sharedCoverage = {
   ],
   reporter: ['text', 'lcov'],
   thresholds: {
-    branches: 80,
-    functions: 85,
-    lines: 85,
-    statements: 85,
+    branches: 89,
+    functions: 95,
+    lines: 98,
+    statements: 97,
   },
 } as const;
 

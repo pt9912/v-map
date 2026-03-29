@@ -6,7 +6,11 @@ vi.mock('../../utils/logger', () => ({
   error: vi.fn(),
 }));
 
-import { GeoTIFFImageryProvider } from './GeoTIFFImageryProvider';
+import {
+  GeoTIFFImageryProvider,
+  type CesiumGeoTIFFImageryOptions,
+} from './GeoTIFFImageryProvider';
+import type { GeoTIFFTileProcessor } from '../geotiff/utils/GeoTIFFTileProcessor';
 
 const mockTileProcessor = {
   getTileData: vi.fn().mockResolvedValue(new Uint8ClampedArray(16 * 16 * 4)),
@@ -30,14 +34,14 @@ const mockCesium = {
   Event: vi.fn().mockImplementation(function () {
     return { raiseEvent: vi.fn() };
   }),
-} as any;
+} as unknown as CesiumGeoTIFFImageryOptions['Cesium'];
 
 describe('GeoTIFFImageryProvider browser example', () => {
   it('renders tile data through real browser canvas APIs', async () => {
     const provider = new GeoTIFFImageryProvider({
       Cesium: mockCesium,
       rectangleDegrees: [8, 50, 9, 51],
-      tileProcessor: mockTileProcessor as any,
+      tileProcessor: mockTileProcessor as unknown as GeoTIFFTileProcessor,
       tileSize: 16,
       resolution: 1,
       resampleMethod: 'bilinear',

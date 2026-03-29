@@ -1,21 +1,13 @@
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-
-async function waitFor(condition: () => boolean, timeoutMs = 3_000): Promise<void> {
-  const deadline = performance.now() + timeoutMs;
-  while (performance.now() < deadline) {
-    if (condition()) return;
-    await new Promise(resolve => requestAnimationFrame(() => resolve(undefined)));
-  }
-  throw new Error('Timed out while waiting for browser test condition');
-}
+import {
+  loadVMapBundle,
+  waitFor,
+  waitForHydration,
+} from '../../testing/browser-test-utils';
 
 describe('v-map-layercontrol browser', () => {
   beforeAll(async () => {
-    // Browser tests intentionally load the built Stencil bundle.
-    // `tsc --noEmit` runs before `dist` exists in CI, so this stays a runtime-only import.
-    await Function(
-      'return import("../../../dist/v-map/v-map.esm.js")',
-    )();
+    await loadVMapBundle();
     await customElements.whenDefined('v-map-layercontrol');
   });
 
@@ -180,3 +172,20 @@ describe('v-map-layercontrol browser', () => {
     expect(sourceGroup.getAttribute('basemapid')).toBe('wms-1');
   });
 });
+  it('hydrates and keeps the target map reference via the for attribute', async () => {
+    document.body.innerHTML = `
+      <v-map id="my-map" flavour="ol" style="display:block;width:300px;height:200px">
+        <v-map-layergroup>
+          <v-map-layer-osm></v-map-layer-osm>
+        </v-map-layergroup>
+      </v-map>
+    `;
+
+    const control = document.createElement('v-map-layercontrol');
+    control.setAttribute('for', 'my-map');
+    document.body.appendChild(control);
+
+    await waitForHydration(control);
+
+    expect(control.getAttribute('for')).toBe('my-map');
+  });
