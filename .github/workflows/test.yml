@@ -47,5 +47,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       # ---------- Tests ----------
+      - name: Run vitest browser tests
+        run: pnpm run test:vitest:browser
+
       - name: Run vitest tests with coverage
         run: pnpm run test:coverage
