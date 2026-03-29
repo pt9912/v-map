@@ -5,6 +5,7 @@ Willkommen bei der offiziellen Dokumentation von **V-Map**.
 ## Inhalte
 
 - [Getting Started](./getting-started.md)
+- [Guides](./guides/error-handling.md)
 - [Komponenten API](./api/components/README.md)
 - [TypeScript API](./api/ts/README.md)
 
