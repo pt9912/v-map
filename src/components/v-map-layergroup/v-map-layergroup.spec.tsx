@@ -152,9 +152,9 @@ describe('v-map-layergroup', () => {
     const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
     const mapProvider = { ensureGroup: vi.fn(), setGroupVisible: vi.fn(), setBaseLayer: vi.fn() };
-    const mapEl = document.createElement('v-map');
-    // Mock getMapProvider
-    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(mapProvider), writable: true, configurable: true });
+    const mapEl = document.createElement('v-map') as HTMLVMapElement & { __vMapProvider?: unknown };
+    mapEl.__vMapProvider = mapProvider;
+    Object.defineProperty(mapEl, 'isMapProviderReady', { value: vi.fn().mockResolvedValue(true), writable: true, configurable: true });
     const addEventListenerSpy = vi.spyOn(mapEl, 'addEventListener');
 
     const groupEl = document.createElement('v-map-layergroup');
@@ -173,7 +173,7 @@ describe('v-map-layergroup', () => {
     await VMapLayerGroup.prototype.connectedCallback.call(component);
 
     expect(whenDefinedSpy).toHaveBeenCalledWith('v-map');
-    expect((mapEl as any).getMapProvider).toHaveBeenCalled();
+    expect((mapEl as any).isMapProviderReady).toHaveBeenCalled();
     expect(component.init).toHaveBeenCalledWith(mapProvider);
     expect(addEventListenerSpy).toHaveBeenCalledWith('map-provider-ready', expect.any(Function));
     expect(addEventListenerSpy).toHaveBeenCalledWith('map-provider-will-shutdown', expect.any(Function));
@@ -182,11 +182,11 @@ describe('v-map-layergroup', () => {
     document.body.innerHTML = '';
   });
 
-  it('connectedCallback skips init when getMapProvider returns null', async () => {
+  it('connectedCallback skips init when map provider is not ready', async () => {
     const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
     const mapEl = document.createElement('v-map');
-    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(null), writable: true, configurable: true });
+    Object.defineProperty(mapEl, 'isMapProviderReady', { value: vi.fn().mockResolvedValue(false), writable: true, configurable: true });
 
     const groupEl = document.createElement('v-map-layergroup');
     mapEl.appendChild(groupEl);
@@ -213,7 +213,7 @@ describe('v-map-layergroup', () => {
     const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
 
     const mapEl = document.createElement('v-map');
-    Object.defineProperty(mapEl, 'getMapProvider', { value: vi.fn().mockResolvedValue(null), writable: true, configurable: true });
+    Object.defineProperty(mapEl, 'isMapProviderReady', { value: vi.fn().mockResolvedValue(false), writable: true, configurable: true });
     const registeredHandlers: Record<string, Function> = {};
     vi.spyOn(mapEl, 'addEventListener').mockImplementation((event: string, handler: any) => {
       registeredHandlers[event] = handler;

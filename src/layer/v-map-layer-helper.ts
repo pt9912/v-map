@@ -4,6 +4,8 @@ import { VMapEvents, type MapProviderDetail } from '../utils/events';
 import type { MapProvider, LayerUpdate } from '../types/mapprovider';
 import { log, warn } from '../utils/logger';
 
+type VMapHostElement = HTMLVMapElement & { __vMapProvider?: MapProvider | null };
+
 export class VMapLayerHelper {
   private layerId: string | null = null;
   private mapProvider: MapProvider = null;
@@ -54,11 +56,11 @@ export class VMapLayerHelper {
     const layerGroup: HTMLVMapLayergroupElement =
       group as HTMLVMapLayergroupElement;
 
-    const isMapProviderAvailable = (await vmap.getMapProvider()) ? true : false;
+    const isMapProviderAvailable = (await vmap.isMapProviderReady?.()) === true;
 
     if (isMapProviderAvailable) {
       log(`${this.el.nodeName.toLowerCase()} - layer is being added`);
-      this.mapProvider = await vmap.getMapProvider();
+      this.mapProvider = (vmap as VMapHostElement).__vMapProvider ?? null;
       const groupId: string = await layerGroup.getGroupId();
       const groupVisible: boolean = await layerGroup.visible;
       if (this.layerId === null && this.mapProvider) {

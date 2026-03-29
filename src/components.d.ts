@@ -8,7 +8,6 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Flavour } from "./types/flavour";
 import { CssMode } from "./types/cssmode";
 import { MapProviderDetail } from "./utils/events";
-import { MapProvider } from "./types/mapprovider";
 import { BuilderConfig } from "./utils/diff";
 import { ColorMap as GeoStylerColorMap } from "geostyler-style";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
@@ -16,7 +15,6 @@ import { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
 export { MapProviderDetail } from "./utils/events";
-export { MapProvider } from "./types/mapprovider";
 export { BuilderConfig } from "./utils/diff";
 export { ColorMap as GeoStylerColorMap } from "geostyler-style";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
@@ -41,10 +39,10 @@ export namespace Components {
          */
         "flavour": Flavour;
         /**
-          * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper). Nützlich für fortgeschrittene Integrationen.
-          * @returns Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
+          * Gibt zurück, ob der Karten-Provider initialisiert wurde und verwendet werden kann.
+          * @returns Promise mit `true`, sobald der Provider bereit ist, sonst `false`.
          */
-        "getMapProvider": () => Promise<MapProvider>;
+        "isMapProviderReady": () => Promise<boolean>;
         /**
           * Setzt Kartenzentrum und Zoom (optional animiert).
           * @param center [lon, lat] in WGS84

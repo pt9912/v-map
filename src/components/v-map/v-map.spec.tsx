@@ -66,12 +66,12 @@ describe('<v-map>', () => {
     expect(map!.style.display).toBe('block');
   });
 
-  it('exposes getMapProvider method', async () => {
+  it('exposes isMapProviderReady method', async () => {
     const component = new VMap();
 
-    expect(typeof component.getMapProvider).toBe('function');
-    const result = await component.getMapProvider();
-    expect(result === undefined || result !== null).toBe(true);
+    expect(typeof component.isMapProviderReady).toBe('function');
+    const result = await component.isMapProviderReady();
+    expect(result).toBe(false);
   });
 
   it('setView throws when provider is not ready', async () => {
@@ -110,11 +110,10 @@ describe('<v-map>', () => {
     expect(mockCreateProvider).not.toHaveBeenCalled();
   });
 
-  it('getMapProvider logs when provider is not yet ready', async () => {
+  it('isMapProviderReady logs when provider is not yet ready', async () => {
     const vmap = new VMap();
-    // mapProvider is undefined initially, so the log branch should trigger
-    const result = await vmap.getMapProvider();
-    expect(result).toBeUndefined();
+    const result = await vmap.isMapProviderReady();
+    expect(result).toBe(false);
   });
 
   it('setView works when provider is available', async () => {
@@ -421,19 +420,19 @@ describe('<v-map>', () => {
       ).rejects.toThrow();
     });
 
-    it('getMapProvider returns the provider when available', async () => {
+    it('isMapProviderReady returns true when provider is available', async () => {
       const mockProvider = { init: vi.fn() };
       const component = { mapProvider: mockProvider } as any;
 
-      const result = await VMap.prototype.getMapProvider.call(component);
-      expect(result).toBe(mockProvider);
+      const result = await VMap.prototype.isMapProviderReady.call(component);
+      expect(result).toBe(true);
     });
 
-    it('getMapProvider returns undefined when provider is not set', async () => {
+    it('isMapProviderReady returns false when provider is not set', async () => {
       const component = { mapProvider: undefined } as any;
 
-      const result = await VMap.prototype.getMapProvider.call(component);
-      expect(result).toBeUndefined();
+      const result = await VMap.prototype.isMapProviderReady.call(component);
+      expect(result).toBe(false);
     });
 
     it('onFlavourChanged calls reset when old !== new', async () => {

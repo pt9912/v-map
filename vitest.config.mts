@@ -1,5 +1,6 @@
 import { defineVitestConfig } from '@stencil/vitest/config';
 import { playwright } from '@vitest/browser-playwright';
+import { optimizeDepsExclude, optimizeDepsInclude } from './config/optimize-deps';
 
 const sharedCoverage = {
   include: ['src/**/*.{ts,tsx}'],
@@ -36,6 +37,7 @@ const sharedCoverage = {
 
 export default defineVitestConfig({
   stencilConfig: './stencil.config.ts',
+  cacheDir: 'node_modules/.vitest-cache',
   resolve: {
     alias: [
       { find: 'leaflet/dist/leaflet-src.esm.js', replacement: 'leaflet' },
@@ -45,6 +47,15 @@ export default defineVitestConfig({
     globals: true,
     testTimeout: 15_000,
     teardownTimeout: 30_000,
+    deps: {
+      optimizer: {
+        client: {
+          enabled: true,
+          exclude: [...optimizeDepsExclude],
+          include: [...optimizeDepsInclude],
+        },
+      },
+    },
     onConsoleLog(log) {
       // Suppress verbose Stencil component lifecycle logs from compiled dist bundle
       // to prevent EnvironmentTeardownError from pending console.log RPC calls
@@ -92,6 +103,7 @@ export default defineVitestConfig({
         test: {
           name: 'browser',
           include: ['src/**/*.test.{ts,tsx}'],
+          globalSetup: ['scripts/prewarm-vitest-browser-cache.mjs'],
           setupFiles: ['src/testing/setupTests.browser.ts'],
           globals: true,
           testTimeout: 15_000,

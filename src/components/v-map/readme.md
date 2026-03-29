@@ -25,16 +25,15 @@
 
 ## Methods
 
-### `getMapProvider() => Promise<MapProvider>`
+### `isMapProviderReady() => Promise<boolean>`
 
-Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
-Nützlich für fortgeschrittene Integrationen.
+Gibt zurück, ob der Karten-Provider initialisiert wurde und verwendet werden kann.
 
 #### Returns
 
-Type: `Promise<MapProvider>`
+Type: `Promise<boolean>`
 
-Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
+Promise mit `true`, sobald der Provider bereit ist, sonst `false`.
 
 ### `setView(coordinates: [number, number], zoom: number) => Promise<void>`
 

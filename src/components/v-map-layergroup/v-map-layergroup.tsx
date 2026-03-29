@@ -5,6 +5,7 @@ import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 
 const MSG_COMPONENT: string = 'v-map-layergroup - ';
+type VMapHostElement = HTMLVMapElement & { __vMapProvider?: MapProvider | null };
 
 @Component({
   tag: 'v-map-layergroup',
@@ -84,11 +85,9 @@ export class VMapLayerGroup {
     await customElements.whenDefined('v-map');
     const vmap = mapElement as HTMLVMapElement;
 
-    const mapProviderAvailable: boolean = (await mapElement?.getMapProvider?.())
-      ? true
-      : false;
+    const mapProviderAvailable = (await mapElement?.isMapProviderReady?.()) === true;
     if (mapProviderAvailable) {
-      const mapProvider = await mapElement?.getMapProvider?.();
+      const mapProvider = (mapElement as VMapHostElement | null)?.__vMapProvider ?? null;
       await this.init(mapProvider);
     }
     vmap?.addEventListener(VMapEvents.MapProviderReady, (async (

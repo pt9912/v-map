@@ -6,6 +6,7 @@ import {
   LEAFLET_VERSION,
   DECK_VERSION,
 } from './src/lib/versions.gen';
+import { optimizeDepsExclude, optimizeDepsInclude } from './config/optimize-deps';
 
 const leafletEsmPath = new URL(
   './node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.esm.js',
@@ -20,6 +21,7 @@ console.log('[v-map demo versions]', {
 });
 
 export default defineConfig({
+  cacheDir: process.env.VITE_CACHE_DIR || undefined,
   plugins: [
     {
       name: 'node-polyfills',
@@ -70,51 +72,8 @@ export default defineConfig({
     global: 'window', // Polyfill global for browser
   },
   optimizeDeps: {
-    exclude: [
-      'cesium',
-      '@loaders.gl/wms',
-      '@loaders.gl/tiles',
-      '@loaders.gl/gltf',
-      '@loaders.gl/schema',
-      '@loaders.gl/terrain',
-      '@loaders.gl/images',
-      '@loaders.gl/geojson',
-      '@deck.gl/core',
-      '@deck.gl/layers',
-      '@deck.gl/geo-layers',
-    ],
-    include: [
-      'geostyler-sld-parser > memfs', // Force bundle memfs
-      'ol', // Pre-bundle the entire OpenLayers package
-      '@stencil/core',
-      '@stencil/core/internal/client',
-      'leaflet',
-      'ol',
-      'geotiff',
-      'proj4',
-      'geotiff-geokeys-to-proj4',
-      'jszip',
-      'pako',
-      'snappyjs',
-      'pbf',
-      'lie',
-      'setimmediate',
-      'readable-stream',
-      '@loaders.gl/core',
-      '@loaders.gl/images',
-      '@loaders.gl/wms',
-      '@loaders.gl/loader-utils',
-      '@loaders.gl/schema',
-      '@loaders.gl/textures',
-      '@loaders.gl/gltf',
-      '@loaders.gl/tiles',
-      '@loaders.gl/compression',
-      '@loaders.gl/zip',
-      '@loaders.gl/3d-tiles',
-      '@loaders.gl/terrain',
-      '@loaders.gl/mvt',
-      '@loaders.gl/gis',
-    ],
+    exclude: [...optimizeDepsExclude],
+    include: [...optimizeDepsInclude],
   },
   resolve: {
     alias: [

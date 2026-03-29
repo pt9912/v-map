@@ -28,26 +28,27 @@ import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
 
 const NOOP_PROVIDER: MapProvider = {
-  async init() {},
-  async destroy() {},
-  async setOpacity() {},
-  async setVisible() {},
-  async setZIndex() {},
+  async init() { },
+  async destroy() { },
+  async setOpacity() { },
+  async setVisible() { },
+  async setZIndex() { },
   async addLayerToGroup() {
     return null;
   },
-  async updateLayer() {},
-  async removeLayer() {},
-  async setView() {},
+  async updateLayer() { },
+  async removeLayer() { },
+  async setView() { },
   async addBaseLayer() {
     return null;
   },
-  async setBaseLayer() {},
-  async ensureGroup() {},
-  async setGroupVisible() {},
+  async setBaseLayer() { },
+  async ensureGroup() { },
+  async setGroupVisible() { },
 };
 
 const MSG_COMPONENT: string = 'v-map - ';
+type VMapHostElement = HTMLElement & { __vMapProvider?: MapProvider | null };
 
 @Component({
   tag: 'v-map',
@@ -127,6 +128,7 @@ export class VMap {
 
     const mapProvider = this.mapProvider;
     this.mapProvider = null;
+    (this.el as VMapHostElement).__vMapProvider = null;
 
     const payLoad: MapProviderDetail = {
       mapProvider: NOOP_PROVIDER,
@@ -175,6 +177,7 @@ export class VMap {
     };
     await this.mapProvider.init(opts);
     this.mapState = 'available';
+    (this.el as VMapHostElement).__vMapProvider = this.mapProvider;
     this.unsubscribeResize = watchElementResize(this.el, async () => {
       await this.mapProvider?.setView(mapInitOpts.center, mapInitOpts.zoom);
     });
@@ -242,17 +245,21 @@ export class VMap {
   }
 
   /**
-   * Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).
-   * Nützlich für fortgeschrittene Integrationen.
-   * @returns Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit.
+   * Gibt zurück, ob der Karten-Provider initialisiert wurde und verwendet werden kann.
+   * @returns Promise mit `true`, sobald der Provider bereit ist, sonst `false`.
    */
   @Method()
-  async getMapProvider(): Promise<MapProvider> {
-    if (!this.mapProvider || this.mapProvider == NOOP_PROVIDER) {
-      //throw new Error('Map-Provider noch nicht initialisiert.');
+  async isMapProviderReady(): Promise<boolean> {
+    const isReady =
+      this.mapProvider !== null &&
+      this.mapProvider !== undefined &&
+      this.mapProvider !== NOOP_PROVIDER;
+
+    if (!isReady) {
       log(MSG_COMPONENT + 'Map provider not yet ready.');
     }
-    return this.mapProvider;
+
+    return isReady;
   }
 
   /**

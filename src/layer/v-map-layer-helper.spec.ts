@@ -39,7 +39,8 @@ function createMockMapProvider(overrides: Record<string, unknown> = {}) {
 function createMockVMap(mapProvider: unknown) {
   const listeners: Record<string, EventListener[]> = {};
   return {
-    getMapProvider: vi.fn().mockResolvedValue(mapProvider),
+    __vMapProvider: mapProvider,
+    isMapProviderReady: vi.fn().mockResolvedValue(mapProvider !== null && mapProvider !== undefined),
     addEventListener: vi.fn((event: string, handler: EventListener) => {
       if (!listeners[event]) listeners[event] = [];
       listeners[event].push(handler);

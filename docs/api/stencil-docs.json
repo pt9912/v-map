@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-28T14:48:25",
+  "timestamp": "2026-03-29T07:44:57",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -211,35 +211,29 @@
       ],
       "methods": [
         {
-          "name": "getMapProvider",
+          "name": "isMapProviderReady",
           "returns": {
-            "type": "Promise<MapProvider>",
-            "docs": "Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit."
+            "type": "Promise<boolean>",
+            "docs": "Promise mit `true`, sobald der Provider bereit ist, sonst `false`."
           },
           "complexType": {
-            "signature": "() => Promise<MapProvider>",
+            "signature": "() => Promise<boolean>",
             "parameters": [],
             "references": {
               "Promise": {
                 "location": "global",
                 "id": "global::Promise"
-              },
-              "MapProvider": {
-                "location": "import",
-                "path": "../../types/mapprovider",
-                "id": "src/types/mapprovider.ts::MapProvider",
-                "referenceLocation": "MapProvider"
               }
             },
-            "return": "Promise<MapProvider>"
+            "return": "Promise<boolean>"
           },
-          "signature": "getMapProvider() => Promise<MapProvider>",
+          "signature": "isMapProviderReady() => Promise<boolean>",
           "parameters": [],
-          "docs": "Liefert die aktive Provider-Instanz (z. B. OL-, Leaflet- oder Deck-Wrapper).\nNützlich für fortgeschrittene Integrationen.",
+          "docs": "Gibt zurück, ob der Karten-Provider initialisiert wurde und verwendet werden kann.",
           "docsTags": [
             {
               "name": "returns",
-              "text": "Promise mit der Provider-Instanz oder `undefined`, falls noch nicht bereit."
+              "text": "Promise mit `true`, sobald der Provider bereit ist, sonst `false`."
             }
           ]
         },
@@ -5300,11 +5294,6 @@
       "declaration": "export interface MapProviderDetail {\n  mapProvider: MapProvider;\n}",
       "docstring": "",
       "path": "src/utils/events.ts"
-    },
-    "src/types/mapprovider.ts::MapProvider": {
-      "declaration": "export interface MapProvider {\n  init(options: ProviderOptions): Promise<void>;\n  destroy(): Promise<void>;\n\n  setOpacity(layerId: string, opacity: number): Promise<void>;\n  setVisible(layerId: string, visible: boolean): Promise<void>;\n  setZIndex(layerId: string, zIndex: number): Promise<void>;\n\n  /** Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind */\n  addLayerToGroup(layer: LayerConfig): Promise<string>;\n  updateLayer(layerId: string, update: LayerUpdate): Promise<void>;\n  removeLayer(layerId: string): Promise<void>;\n\n  addBaseLayer?(\n    layerConfig: LayerConfig,\n    basemapid: string,\n    layerElementId: string,\n  ): Promise<string>;\n  setBaseLayer?(groupId: string, layerElementId: string): Promise<void>;\n\n  /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */\n  setView(center: LonLat, zoom: number): Promise<void>;\n\n  ensureGroup(\n    groupId: string,\n    visible: boolean,\n    opts?: { basemapid?: string },\n  ): Promise<void>;\n\n  setGroupVisible?(groupId: string, visible: boolean): Promise<void>;\n\n  /** Register a callback for pointer-move with geo-coordinates. Returns unsubscribe function. */\n  onPointerMove?(callback: (coordinate: [number, number] | null, pixel: [number, number]) => void): () => void;\n}",
-      "docstring": "",
-      "path": "src/types/mapprovider.ts"
     },
     "src/utils/diff.ts::BuilderConfig": {
       "declaration": "export interface BuilderConfig {\n  map: MapConfig;\n}",

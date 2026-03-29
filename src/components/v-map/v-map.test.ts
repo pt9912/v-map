@@ -17,7 +17,7 @@ describe('v-map browser', () => {
     document.body.innerHTML = '';
   });
 
-  it('hydrates and exposes a live map provider', async () => {
+  it('hydrates and reports a ready live map provider', async () => {
     const map = createLiveMap();
     const readyEvent = onceEvent<CustomEvent>(map, 'map-provider-ready');
 
@@ -29,7 +29,7 @@ describe('v-map browser', () => {
 
     expect(map.getAttribute('center')).toBe('11.5761,48.1371');
     expect(map.getAttribute('zoom')).toBe('12');
-    expect(await map.getMapProvider()).toBeTruthy();
+    expect(await map.isMapProviderReady()).toBe(true);
   });
 
   it('emits shutdown when the live map is removed from the DOM', async () => {
