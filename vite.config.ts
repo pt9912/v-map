@@ -74,6 +74,7 @@ export default defineConfig({
   optimizeDeps: {
     exclude: [...optimizeDepsExclude],
     include: [...optimizeDepsInclude],
+    noDiscovery: true,
   },
   resolve: {
     alias: [

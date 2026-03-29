@@ -2,6 +2,7 @@ export const optimizeDepsInclude = [
   '@stencil/core',
   '@stencil/core/internal/client',
   'leaflet',
+  'leaflet/dist/leaflet-src.esm.js',
   'ol',
   'ol/Map',
   'ol/View',

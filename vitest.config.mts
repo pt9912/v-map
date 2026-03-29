@@ -45,6 +45,11 @@ export default defineVitestConfig({
       { find: 'leaflet/dist/leaflet-src.esm.js', replacement: 'leaflet' },
     ],
   },
+  optimizeDeps: {
+    exclude: [...optimizeDepsExclude],
+    include: [...optimizeDepsInclude],
+    noDiscovery: true,
+  },
   test: {
     globals: true,
     testTimeout: 15_000,
@@ -55,11 +60,13 @@ export default defineVitestConfig({
           enabled: true,
           exclude: [...optimizeDepsExclude],
           include: [...optimizeDepsInclude],
+          noDiscovery: true,
         },
         ssr: {
           enabled: true,
           exclude: [...optimizeDepsExclude],
           include: [...optimizeDepsInclude],
+          noDiscovery: true,
         },
       },
     },
