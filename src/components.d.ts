@@ -7,14 +7,14 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Flavour } from "./types/flavour";
 import { CssMode } from "./types/cssmode";
-import { MapProviderDetail } from "./utils/events";
+import { MapProviderDetail, VMapErrorDetail } from "./utils/events";
 import { BuilderConfig } from "./utils/diff";
 import { ColorMap as GeoStylerColorMap } from "geostyler-style";
 import { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
 import { ResolvedStyle, StyleEvent, StyleFormat } from "./types/styling";
 export { Flavour } from "./types/flavour";
 export { CssMode } from "./types/cssmode";
-export { MapProviderDetail } from "./utils/events";
+export { MapProviderDetail, VMapErrorDetail } from "./utils/events";
 export { BuilderConfig } from "./utils/diff";
 export { ColorMap as GeoStylerColorMap } from "geostyler-style";
 export { Color } from "./components/v-map-layer-scatterplot/v-map-layer-scatterplot";
@@ -86,6 +86,7 @@ export namespace Components {
           * Prop, die du intern nutzt/weiterverarbeitest
          */
         "geojson"?: string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
@@ -99,6 +100,10 @@ export namespace Components {
           * Icon URL for point features (alternative to pointColor/pointRadius)
          */
         "iconUrl"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Opazität der geojson-Kacheln (0–1).
           * @default 1
@@ -165,10 +170,15 @@ export namespace Components {
           * @default null
          */
         "colorMap"?: string | GeoStylerColorMap;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * NoData Values to discard (overriding any nodata values in the metadata).
           * @default null
@@ -209,6 +219,7 @@ export namespace Components {
           * @example <v-map-layer-google api-key="YOUR_KEY"></v-map-layer-google>
          */
         "apiKey"?: string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
           * @default "en"
@@ -219,6 +230,10 @@ export namespace Components {
           * @example "geometry,places,drawing"
          */
         "libraries"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
           * @default "roadmap"
@@ -256,10 +271,15 @@ export namespace Components {
         "visible": boolean;
     }
     interface VMapLayerOsm {
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Opazität der OSM-Kacheln (0–1).
           * @default 1
@@ -286,6 +306,7 @@ export namespace Components {
           * Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
          */
         "data"?: string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
           * @default '#3388ff'
@@ -296,6 +317,10 @@ export namespace Components {
           * @default 4
          */
         "getRadius": number;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Globale Opazität (0–1).
           * @default 1
@@ -324,10 +349,15 @@ export namespace Components {
           * JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
          */
         "elevationDecoder"?: string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Liefert `true`, sobald das Terrain-Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximale Zoomstufe für das Terrain.
          */
@@ -385,10 +415,15 @@ export namespace Components {
           * @default false
          */
         "forceProjection"?: boolean;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximum zoom level.
           * @default 24
@@ -461,10 +496,15 @@ export namespace Components {
         "zIndex": number;
     }
     interface VMapLayerTile3d {
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Indicates whether the tileset has been initialised and added to the map.
          */
         "isReady": () => Promise<boolean>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Global opacity factor (0-1).
           * @default 1
@@ -499,10 +539,15 @@ export namespace Components {
           * @default 'image/tiff'
          */
         "format": string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Gibt `true` zurück, sobald der Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Opazität (0–1).
           * @default 1
@@ -541,10 +586,15 @@ export namespace Components {
         "zIndex": number;
     }
     interface VMapLayerWfs {
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Gibt `true` zurück, sobald der Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Opazität (0–1).
           * @default 1
@@ -599,6 +649,7 @@ export namespace Components {
           * @default 0.3
          */
         "fillOpacity"?: number;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
@@ -612,6 +663,10 @@ export namespace Components {
           * Icon URL for point features (alternative to pointColor/pointRadius)
          */
         "iconUrl"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Globale Opazität (0–1).
           * @default 1
@@ -684,10 +739,15 @@ export namespace Components {
           * @default "image/png"
          */
         "format": string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Kommagetrennte Layer-Namen (z. B. "topp:states").
          */
         "layers": string;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Globale Opazität des WMS-Layers (0–1).
           * @default 1
@@ -731,6 +791,11 @@ export namespace Components {
           * Attributions-/Copyright-Text (HTML erlaubt).
          */
         "attributions"?: string;
+        "getError": () => Promise<VMapErrorDetail | undefined>;
+        /**
+          * @default 'idle'
+         */
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximaler Zoomlevel, den der Tile-Server liefert.
           * @default 19
@@ -1229,6 +1294,10 @@ declare namespace LocalJSX {
          */
         "iconUrl"?: string;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Opazität der geojson-Kacheln (0–1).
           * @default 1
          */
@@ -1295,6 +1364,10 @@ declare namespace LocalJSX {
          */
         "colorMap"?: string | GeoStylerColorMap;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * NoData Values to discard (overriding any nodata values in the metadata).
           * @default null
          */
@@ -1350,6 +1423,10 @@ declare namespace LocalJSX {
          */
         "libraries"?: string;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
           * @default "roadmap"
          */
@@ -1392,6 +1469,10 @@ declare namespace LocalJSX {
     }
     interface VMapLayerOsm {
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Wird ausgelöst, wenn der OSM-Layer bereit ist.
           * @event ready
          */
@@ -1433,6 +1514,10 @@ declare namespace LocalJSX {
          */
         "getRadius"?: number;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Wird ausgelöst, sobald der Scatterplot registriert wurde.
           * @event ready
          */
@@ -1465,6 +1550,10 @@ declare namespace LocalJSX {
           * JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
          */
         "elevationDecoder"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximale Zoomstufe für das Terrain.
          */
@@ -1522,6 +1611,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "forceProjection"?: boolean;
+        /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximum zoom level.
           * @default 24
@@ -1600,6 +1693,10 @@ declare namespace LocalJSX {
     }
     interface VMapLayerTile3d {
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Fired once the tileset layer is initialised.
          */
         "onReady"?: (event: VMapLayerTile3dCustomEvent<void>) => void;
@@ -1638,6 +1735,10 @@ declare namespace LocalJSX {
          */
         "format"?: string;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Opazität (0–1).
           * @default 1
          */
@@ -1675,6 +1776,10 @@ declare namespace LocalJSX {
         "zIndex"?: number;
     }
     interface VMapLayerWfs {
+        /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Opazität (0–1).
           * @default 1
@@ -1738,6 +1843,10 @@ declare namespace LocalJSX {
           * Icon URL for point features (alternative to pointColor/pointRadius)
          */
         "iconUrl"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Signalisiert, dass das WKT-Layer initialisiert ist.
           * @event ready
@@ -1820,6 +1929,10 @@ declare namespace LocalJSX {
          */
         "layers": string;
         /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
+        /**
           * Signalisiert, dass der WMS-Layer bereit ist.
           * @event ready
          */
@@ -1867,6 +1980,10 @@ declare namespace LocalJSX {
           * Attributions-/Copyright-Text (HTML erlaubt).
          */
         "attributions"?: string;
+        /**
+          * @default 'idle'
+         */
+        "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
         /**
           * Maximaler Zoomlevel, den der Tile-Server liefert.
           * @default 19
@@ -1965,6 +2082,7 @@ declare namespace LocalJSX {
         "cssMode": CssMode;
     }
     interface VMapLayerGeojsonAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "geojson": string;
         "url": string | null;
         "visible": boolean;
@@ -1984,6 +2102,7 @@ declare namespace LocalJSX {
         "textSize": number;
     }
     interface VMapLayerGeotiffAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "visible": boolean;
         "opacity": number;
@@ -1992,6 +2111,7 @@ declare namespace LocalJSX {
         "colorMap": string | GeoStylerColorMap;
     }
     interface VMapLayerGoogleAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "mapType": | 'roadmap'
     | 'satellite'
     | 'terrain'
@@ -2007,12 +2127,14 @@ declare namespace LocalJSX {
         "libraries": string;
     }
     interface VMapLayerOsmAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "visible": boolean;
         "opacity": number;
         "zIndex": number;
         "url": string;
     }
     interface VMapLayerScatterplotAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "data": string;
         "url": string;
         "getFillColor": Color;
@@ -2021,6 +2143,7 @@ declare namespace LocalJSX {
         "visible": boolean;
     }
     interface VMapLayerTerrainAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "elevationData": string;
         "texture": string;
         "elevationDecoder": string;
@@ -2034,6 +2157,7 @@ declare namespace LocalJSX {
         "zIndex": number;
     }
     interface VMapLayerTerrainGeotiffAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "projection": string;
         "forceProjection": boolean;
@@ -2052,6 +2176,7 @@ declare namespace LocalJSX {
         "tileSize": number;
     }
     interface VMapLayerTile3dAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "tilesetOptions": string | Record<string, unknown>;
         "visible": boolean;
@@ -2059,6 +2184,7 @@ declare namespace LocalJSX {
         "zIndex": number;
     }
     interface VMapLayerWcsAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "coverageName": string;
         "format": string;
@@ -2071,6 +2197,7 @@ declare namespace LocalJSX {
         "zIndex": number;
     }
     interface VMapLayerWfsAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "typeName": string;
         "version": string;
@@ -2082,6 +2209,7 @@ declare namespace LocalJSX {
         "zIndex": number;
     }
     interface VMapLayerWktAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "wkt": string;
         "url": string;
         "visible": boolean;
@@ -2101,6 +2229,7 @@ declare namespace LocalJSX {
         "textSize": number;
     }
     interface VMapLayerWmsAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "layers": string;
         "styles": string;
@@ -2112,6 +2241,7 @@ declare namespace LocalJSX {
         "zIndex": number;
     }
     interface VMapLayerXyzAttributes {
+        "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "url": string;
         "attributions": string;
         "maxZoom": number;

@@ -7,15 +7,16 @@
 
 ## Properties
 
-| Property     | Attribute   | Description                                                                                                | Type                 | Default |
-| ------------ | ----------- | ---------------------------------------------------------------------------------------------------------- | -------------------- | ------- |
-| `colorMap`   | `color-map` | ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein). | `ColorMap \| string` | `null`  |
-| `nodata`     | `nodata`    | NoData Values to discard (overriding any nodata values in the metadata).                                   | `number`             | `null`  |
-| `opacity`    | `opacity`   | Opazität der GeoTIFF-Kacheln (0–1).                                                                        | `number`             | `1.0`   |
-| `url`        | `url`       | URL to the GeoTIFF file to be displayed on the map.                                                        | `string`             | `null`  |
-| `valueRange` | --          | Value range for colormap normalization [min, max].                                                         | `[number, number]`   | `null`  |
-| `visible`    | `visible`   | Sichtbarkeit des Layers                                                                                    | `boolean`            | `true`  |
-| `zIndex`     | `z-index`   | Z-index for layer stacking order. Higher values render on top.                                             | `number`             | `100`   |
+| Property     | Attribute    | Description                                                                                                | Type                                        | Default  |
+| ------------ | ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------- | -------- |
+| `colorMap`   | `color-map`  | ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein). | `ColorMap \| string`                        | `null`   |
+| `loadState`  | `load-state` |                                                                                                            | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'` |
+| `nodata`     | `nodata`     | NoData Values to discard (overriding any nodata values in the metadata).                                   | `number`                                    | `null`   |
+| `opacity`    | `opacity`    | Opazität der GeoTIFF-Kacheln (0–1).                                                                        | `number`                                    | `1.0`    |
+| `url`        | `url`        | URL to the GeoTIFF file to be displayed on the map.                                                        | `string`                                    | `null`   |
+| `valueRange` | --           | Value range for colormap normalization [min, max].                                                         | `[number, number]`                          | `null`   |
+| `visible`    | `visible`    | Sichtbarkeit des Layers                                                                                    | `boolean`                                   | `true`   |
+| `zIndex`     | `z-index`    | Z-index for layer stacking order. Higher values render on top.                                             | `number`                                    | `100`    |
 
 
 ## Events
@@ -26,6 +27,16 @@
 
 
 ## Methods
+
+### `getError() => Promise<VMapErrorDetail | undefined>`
+
+
+
+#### Returns
+
+Type: `Promise<VMapErrorDetail>`
+
+
 
 ### `getLayerId() => Promise<string>`
 

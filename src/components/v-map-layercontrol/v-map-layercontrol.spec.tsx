@@ -494,4 +494,89 @@ describe('v-map-layercontrol', () => {
       expect(component.layerGroups).toEqual([]);
     });
   });
+
+  describe('render inline event handlers', () => {
+    function findCallbacks(node: any, eventName: string, results: any[] = []): any[] {
+      if (!node || typeof node !== 'object') return results;
+      if (node.$attrs$ && typeof node.$attrs$[eventName] === 'function') {
+        results.push(node.$attrs$[eventName]);
+      }
+      if (Array.isArray(node.$children$)) {
+        for (const child of node.$children$) findCallbacks(child, eventName, results);
+      }
+      return results;
+    }
+
+    function createLayerControlWithGroup() {
+      const component = new VMapLayerControl() as any;
+      const groupEl = document.createElement('v-map-layergroup');
+      const layerEl = document.createElement('v-map-layer-osm');
+      layerEl.id = 'osm-1';
+      component.layerGroups = [
+        {
+          info: { element: groupEl, id: 'grp-1', visible: true, opacity: undefined, zIndex: undefined },
+          label: 'Base',
+          groupTitle: 'Base Maps',
+          basemapid: 'osm-1',
+          layers: [
+            { info: { element: layerEl, id: 'osm-1', visible: true, opacity: 0.8, zIndex: 5 }, label: 'OSM' },
+          ],
+        },
+      ];
+      return component;
+    }
+
+    it('group visibility checkbox onChange handler updates visibility', () => {
+      const component = createLayerControlWithGroup();
+      const vnode = component.render();
+      const onChanges = findCallbacks(vnode, 'onChange');
+      // First onChange should be the group visibility checkbox
+      expect(onChanges.length).toBeGreaterThanOrEqual(1);
+      const groupCheckboxHandler = onChanges[0];
+      groupCheckboxHandler({ target: { checked: false } });
+      expect(component.layerGroups[0].info.visible).toBe(false);
+    });
+
+    it('basemap selector onChange handler updates basemapid', () => {
+      const component = createLayerControlWithGroup();
+      const vnode = component.render();
+      const onChanges = findCallbacks(vnode, 'onChange');
+      // The second onChange in a group with basemapid should be the select
+      expect(onChanges.length).toBeGreaterThanOrEqual(2);
+      const selectHandler = onChanges[1];
+      selectHandler({ target: { value: 'dem-1' } });
+      expect(component.layerGroups[0].basemapid).toBe('dem-1');
+    });
+
+    it('layer visibility checkbox onChange handler updates layer visibility', () => {
+      const component = createLayerControlWithGroup();
+      const vnode = component.render();
+      const onChanges = findCallbacks(vnode, 'onChange');
+      // Third onChange should be the layer checkbox
+      expect(onChanges.length).toBeGreaterThanOrEqual(3);
+      const layerCheckboxHandler = onChanges[2];
+      layerCheckboxHandler({ target: { checked: false } });
+      expect(component.layerGroups[0].layers[0].info.visible).toBe(false);
+    });
+
+    it('layer opacity onInput handler updates layer opacity', () => {
+      const component = createLayerControlWithGroup();
+      const vnode = component.render();
+      const onInputs = findCallbacks(vnode, 'onInput');
+      expect(onInputs.length).toBeGreaterThanOrEqual(1);
+      const opacityHandler = onInputs[0];
+      opacityHandler({ target: { value: '0.3' } });
+      expect(component.layerGroups[0].layers[0].info.opacity).toBe(0.3);
+    });
+
+    it('layer zIndex onChange handler updates layer zIndex', () => {
+      const component = createLayerControlWithGroup();
+      const vnode = component.render();
+      const onChanges = findCallbacks(vnode, 'onChange');
+      // The last onChange should be the zIndex input
+      const zIndexHandler = onChanges[onChanges.length - 1];
+      zIndexHandler({ target: { value: '99' } });
+      expect(component.layerGroups[0].layers[0].info.zIndex).toBe(99);
+    });
+  });
 });

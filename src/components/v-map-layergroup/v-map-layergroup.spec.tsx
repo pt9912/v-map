@@ -244,6 +244,44 @@ describe('v-map-layergroup', () => {
     document.body.innerHTML = '';
   });
 
+  it('MapProviderReady event handler calls init with the map provider', async () => {
+    const whenDefinedSpy = vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+
+    const mapEl = document.createElement('v-map');
+    Object.defineProperty(mapEl, 'isMapProviderReady', { value: vi.fn().mockResolvedValue(false), writable: true, configurable: true });
+    const registeredHandlers: Record<string, Function> = {};
+    vi.spyOn(mapEl, 'addEventListener').mockImplementation((event: string, handler: any) => {
+      registeredHandlers[event] = handler;
+    });
+
+    const groupEl = document.createElement('v-map-layergroup');
+    mapEl.appendChild(groupEl);
+    document.body.appendChild(mapEl);
+
+    const component = {
+      el: groupEl,
+      groupId: 'grp-ready',
+      visible: true,
+      basemapid: null,
+      mapProvider: null,
+      init: vi.fn(),
+    } as any;
+
+    await VMapLayerGroup.prototype.connectedCallback.call(component);
+
+    // Invoke the registered MapProviderReady handler
+    expect(registeredHandlers['map-provider-ready']).toBeDefined();
+    const newProvider = { ensureGroup: vi.fn(), setGroupVisible: vi.fn(), setBaseLayer: vi.fn() };
+    await registeredHandlers['map-provider-ready'](new CustomEvent('map-provider-ready', {
+      detail: { mapProvider: newProvider },
+    }));
+
+    expect(component.init).toHaveBeenCalledWith(newProvider);
+
+    whenDefinedSpy.mockRestore();
+    document.body.innerHTML = '';
+  });
+
   /* ------------------------------------------------------------------ */
   /*  Prototype-based unit tests for source function coverage            */
   /* ------------------------------------------------------------------ */

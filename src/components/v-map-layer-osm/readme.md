@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property  | Attribute | Description                                                                       | Type      | Default                            |
-| --------- | --------- | --------------------------------------------------------------------------------- | --------- | ---------------------------------- |
-| `opacity` | `opacity` | Opazität der OSM-Kacheln (0–1).                                                   | `number`  | `1.0`                              |
-| `url`     | `url`     | Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server. | `string`  | `'https://tile.openstreetmap.org'` |
-| `visible` | `visible` | Sichtbarkeit des Layers                                                           | `boolean` | `true`                             |
-| `zIndex`  | `z-index` | Z-index for layer stacking order. Higher values render on top.                    | `number`  | `10`                               |
+| Property    | Attribute    | Description                                                                       | Type                                        | Default                            |
+| ----------- | ------------ | --------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| `loadState` | `load-state` |                                                                                   | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`                           |
+| `opacity`   | `opacity`    | Opazität der OSM-Kacheln (0–1).                                                   | `number`                                    | `1.0`                              |
+| `url`       | `url`        | Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server. | `string`                                    | `'https://tile.openstreetmap.org'` |
+| `visible`   | `visible`    | Sichtbarkeit des Layers                                                           | `boolean`                                   | `true`                             |
+| `zIndex`    | `z-index`    | Z-index for layer stacking order. Higher values render on top.                    | `number`                                    | `10`                               |
 
 
 ## Events
@@ -23,6 +24,16 @@
 
 
 ## Methods
+
+### `getError() => Promise<VMapErrorDetail | undefined>`
+
+
+
+#### Returns
+
+Type: `Promise<VMapErrorDetail>`
+
+
 
 ### `getLayerId() => Promise<string>`
 
