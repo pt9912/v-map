@@ -10,13 +10,14 @@ vi.mock('../utils/logger', () => ({
 vi.mock('../utils/events', () => ({
   VMapEvents: {
     Ready: 'ready',
+    Error: 'vmap-error',
     MapProviderReady: 'map-provider-ready',
     MapProviderWillShutdown: 'map-provider-will-shutdown',
     MapMouseMove: 'map-mousemove',
   },
 }));
 
-import { VMapLayerHelper } from './v-map-layer-helper';
+import { VMapLayerHelper, type VMapErrorHost } from './v-map-layer-helper';
 import { warn } from '../utils/logger';
 
 /* ------------------------------------------------------------------ */
@@ -45,6 +46,11 @@ function createMockVMap(mapProvider: unknown) {
       if (!listeners[event]) listeners[event] = [];
       listeners[event].push(handler);
     }),
+    removeEventListener: vi.fn((event: string, handler: EventListener) => {
+      if (listeners[event]) {
+        listeners[event] = listeners[event].filter(h => h !== handler);
+      }
+    }),
     _fireEvent(eventName: string, detail: unknown) {
       const handlers = listeners[eventName] || [];
       for (const h of handlers) {
@@ -64,12 +70,23 @@ function createMockLayerGroup(overrides: Record<string, unknown> = {}) {
 }
 
 function createMockElement(closest: Record<string, unknown> = {}) {
-  return {
+  const el = {
     nodeName: 'V-MAP-LAYER-XYZ',
     closest: vi.fn((selector: string) => {
       return closest[selector] ?? null;
     }),
+    dispatchEvent: vi.fn(),
   } as unknown as HTMLElement;
+  return el;
+}
+
+function createMockHost(): VMapErrorHost & { states: string[] } {
+  return {
+    states: [] as string[],
+    setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+      this.states.push(state);
+    },
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -79,12 +96,14 @@ describe('VMapLayerHelper', () => {
   let helper: VMapLayerHelper;
   let mockEl: HTMLElement;
   let mockProvider: ReturnType<typeof createMockMapProvider>;
+  let mockHost: ReturnType<typeof createMockHost>;
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockProvider = createMockMapProvider();
     mockEl = createMockElement();
-    helper = new VMapLayerHelper(mockEl);
+    mockHost = createMockHost();
+    helper = new VMapLayerHelper(mockEl, mockHost);
   });
 
   /* ================================================================ */
@@ -103,12 +122,82 @@ describe('VMapLayerHelper', () => {
   });
 
   /* ================================================================ */
-  /*  setVisible / setOpacity / setZIndex when no provider            */
+  /*  Error / State management                                         */
+  /* ================================================================ */
+  describe('error management', () => {
+    it('setError stores error, sets state, dispatches event and warns', () => {
+      const detail = { type: 'provider' as const, message: 'test error' };
+
+      helper.setError(detail);
+
+      expect(helper.getError()).toEqual(detail);
+      expect(mockHost.states).toContain('error');
+      expect(mockEl.dispatchEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'vmap-error',
+          detail,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining('test error'),
+      );
+    });
+
+    it('clearError removes stored error', () => {
+      helper.setError({ type: 'provider', message: 'err' });
+      helper.clearError();
+      expect(helper.getError()).toBeUndefined();
+    });
+
+    it('getError returns undefined when no error', () => {
+      expect(helper.getError()).toBeUndefined();
+    });
+
+    it('startLoading sets loading state but keeps last error', () => {
+      helper.setError({ type: 'provider', message: 'old error' });
+      mockHost.states = [];
+
+      helper.startLoading();
+
+      expect(mockHost.states).toEqual(['loading']);
+      expect(helper.getError()).toBeDefined();
+    });
+
+    it('markReady clears error and sets ready state', () => {
+      helper.setError({ type: 'provider', message: 'err' });
+      mockHost.states = [];
+
+      helper.markReady();
+
+      expect(helper.getError()).toBeUndefined();
+      expect(mockHost.states).toEqual(['ready']);
+    });
+
+    it('markUpdated delegates to markReady', () => {
+      helper.setError({ type: 'provider', message: 'err' });
+      mockHost.states = [];
+
+      helper.markUpdated();
+
+      expect(helper.getError()).toBeUndefined();
+      expect(mockHost.states).toEqual(['ready']);
+    });
+  });
+
+  /* ================================================================ */
+  /*  setVisible / setOpacity / setZIndex                              */
   /* ================================================================ */
   describe('setVisible', () => {
     it('does nothing when mapProvider is null', async () => {
-      // Should not throw
       await helper.setVisible(true);
+    });
+
+    it('does nothing when layerId is null', async () => {
+      (helper as any).mapProvider = mockProvider;
+      await helper.setVisible(true);
+      expect(mockProvider.setVisible).not.toHaveBeenCalled();
     });
 
     it('delegates to mapProvider.setVisible', async () => {
@@ -118,6 +207,28 @@ describe('VMapLayerHelper', () => {
       await helper.setVisible(false);
 
       expect(mockProvider.setVisible).toHaveBeenCalledWith('layer-1', false);
+    });
+
+    it('sets error on provider failure', async () => {
+      (helper as any).mapProvider = createMockMapProvider({
+        setVisible: vi.fn().mockRejectedValue(new Error('vis fail')),
+      });
+      (helper as any).layerId = 'layer-1';
+
+      await helper.setVisible(true);
+
+      expect(helper.getError()?.type).toBe('provider');
+      expect(helper.getError()?.message).toContain('setVisible failed');
+    });
+
+    it('does NOT set ready state on success', async () => {
+      (helper as any).mapProvider = mockProvider;
+      (helper as any).layerId = 'layer-1';
+      mockHost.states = [];
+
+      await helper.setVisible(true);
+
+      expect(mockHost.states).not.toContain('ready');
     });
   });
 
@@ -134,6 +245,17 @@ describe('VMapLayerHelper', () => {
 
       expect(mockProvider.setOpacity).toHaveBeenCalledWith('layer-1', 0.75);
     });
+
+    it('sets error on provider failure', async () => {
+      (helper as any).mapProvider = createMockMapProvider({
+        setOpacity: vi.fn().mockRejectedValue(new Error('opacity fail')),
+      });
+      (helper as any).layerId = 'layer-1';
+
+      await helper.setOpacity(0.5);
+
+      expect(helper.getError()?.message).toContain('setOpacity failed');
+    });
   });
 
   describe('setZIndex', () => {
@@ -148,6 +270,17 @@ describe('VMapLayerHelper', () => {
       await helper.setZIndex(10);
 
       expect(mockProvider.setZIndex).toHaveBeenCalledWith('layer-1', 10);
+    });
+
+    it('sets error on provider failure', async () => {
+      (helper as any).mapProvider = createMockMapProvider({
+        setZIndex: vi.fn().mockRejectedValue(new Error('z fail')),
+      });
+      (helper as any).layerId = 'layer-1';
+
+      await helper.setZIndex(5);
+
+      expect(helper.getError()?.message).toContain('setZIndex failed');
     });
   });
 
@@ -178,19 +311,40 @@ describe('VMapLayerHelper', () => {
   /*  updateLayer                                                      */
   /* ================================================================ */
   describe('updateLayer', () => {
-    it('delegates to mapProvider.updateLayer', async () => {
+    it('delegates to mapProvider.updateLayer and marks updated', async () => {
       (helper as any).mapProvider = mockProvider;
       (helper as any).layerId = 'layer-1';
+      mockHost.states = [];
 
       const update = { type: 'geojson', data: { url: 'new.json' } } as any;
       await helper.updateLayer(update);
 
       expect(mockProvider.updateLayer).toHaveBeenCalledWith('layer-1', update);
+      expect(mockHost.states).toContain('ready');
     });
 
-    it('does nothing when mapProvider is null', async () => {
+    it('triggers recreateLayer when layerId is missing', async () => {
+      // Set up initContext so recreateLayer can work
+      const mockVMap = createMockVMap(mockProvider);
+      const mockGroup = createMockLayerGroup();
+      (helper as any).initContext = { group: mockGroup, vmap: mockVMap, createLayerConfig: () => ({ type: 'osm' }), elementId: 'el' };
+      (helper as any).mapProvider = null;
+
       await helper.updateLayer({ type: 'geojson', data: {} } as any);
-      // no throw
+
+      // recreateLayer should have been called, which calls addToMapInternal
+      expect(mockHost.states).toContain('loading');
+    });
+
+    it('sets error on provider failure', async () => {
+      (helper as any).mapProvider = createMockMapProvider({
+        updateLayer: vi.fn().mockRejectedValue(new Error('update fail')),
+      });
+      (helper as any).layerId = 'layer-1';
+
+      await helper.updateLayer({ type: 'geojson', data: {} } as any);
+
+      expect(helper.getError()?.message).toContain('updateLayer failed');
     });
   });
 
@@ -260,6 +414,7 @@ describe('VMapLayerHelper', () => {
 
       expect(mockProvider.addLayerToGroup).toHaveBeenCalled();
       expect(helper.getLayerId()).toBe('group-layer-id');
+      expect(mockHost.states).toContain('ready');
     });
 
     it('adds layer with basemapid when available', async () => {
@@ -296,53 +451,7 @@ describe('VMapLayerHelper', () => {
       expect(mockProvider.removeLayer).toHaveBeenCalledWith('old-layer');
     });
 
-    it('defers layer add via MapProviderReady event', async () => {
-      // Map provider NOT available initially
-      const mockVMap = createMockVMap(null);
-      const mockGroup = createMockLayerGroup();
-      const createLayerConfig = vi.fn().mockReturnValue({ type: 'osm' });
-
-      await (helper as any).addToMapInternal(
-        mockGroup,
-        mockVMap,
-        createLayerConfig,
-      );
-
-      // Layer should not be added yet
-      expect(helper.getLayerId()).toBeNull();
-
-      // Fire the MapProviderReady event
-      mockVMap._fireEvent('map-provider-ready', { mapProvider: mockProvider });
-
-      // Wait for async handler
-      await vi.waitFor(() => {
-        expect(helper.getLayerId()).toBe('group-layer-id');
-      });
-    });
-
-    it('does not add layer twice on deferred event if already added', async () => {
-      const mockVMap = createMockVMap(mockProvider);
-      const mockGroup = createMockLayerGroup();
-      const createLayerConfig = vi.fn().mockReturnValue({ type: 'osm' });
-
-      await (helper as any).addToMapInternal(
-        mockGroup,
-        mockVMap,
-        createLayerConfig,
-      );
-
-      // layerId is already set from initial add
-      expect(helper.getLayerId()).toBe('group-layer-id');
-
-      // Fire MapProviderReady event - should not add again
-      mockProvider.addLayerToGroup.mockClear();
-      mockVMap._fireEvent('map-provider-ready', { mapProvider: mockProvider });
-
-      await new Promise(r => setTimeout(r, 10));
-      expect(mockProvider.addLayerToGroup).not.toHaveBeenCalled();
-    });
-
-    it('catches and warns on addLayer failure during immediate add', async () => {
+    it('sets error on addLayer failure', async () => {
       const failProvider = createMockMapProvider({
         addLayerToGroup: vi.fn().mockRejectedValue(new Error('add failed')),
       });
@@ -356,17 +465,17 @@ describe('VMapLayerHelper', () => {
         createLayerConfig,
       );
 
-      expect(warn).toHaveBeenCalledWith(
-        expect.stringContaining('failed to add layer: add failed'),
-      );
-      expect(helper.getLayerId()).toBeNull();
+      expect(helper.getError()?.type).toBe('provider');
+      expect(helper.getError()?.message).toContain('Layer could not be added');
+      expect(helper.getError()?.message).toContain('add failed');
+      expect(mockHost.states).toContain('error');
     });
 
-    it('catches and warns on addLayer failure during deferred add', async () => {
-      const failProvider = createMockMapProvider({
-        addLayerToGroup: vi.fn().mockRejectedValue(new Error('deferred fail')),
+    it('sets error when addLayer returns falsy layerId', async () => {
+      const nullProvider = createMockMapProvider({
+        addLayerToGroup: vi.fn().mockResolvedValue(null),
       });
-      const mockVMap = createMockVMap(null);
+      const mockVMap = createMockVMap(nullProvider);
       const mockGroup = createMockLayerGroup();
       const createLayerConfig = vi.fn().mockReturnValue({ type: 'osm' });
 
@@ -376,14 +485,8 @@ describe('VMapLayerHelper', () => {
         createLayerConfig,
       );
 
-      // Fire deferred event
-      mockVMap._fireEvent('map-provider-ready', { mapProvider: failProvider });
-
-      await vi.waitFor(() => {
-        expect(warn).toHaveBeenCalledWith(
-          expect.stringContaining('failed to add layer: deferred fail'),
-        );
-      });
+      expect(helper.getError()?.message).toContain('provider returned no layer ID');
+      expect(mockHost.states).toContain('error');
     });
   });
 
@@ -393,7 +496,7 @@ describe('VMapLayerHelper', () => {
   describe('initLayer', () => {
     it('warns when element is not inside a v-map-layergroup', async () => {
       const el = createMockElement({});
-      const h = new VMapLayerHelper(el);
+      const h = new VMapLayerHelper(el, mockHost);
 
       await h.initLayer(() => ({ type: 'osm' }) as any);
 
@@ -408,9 +511,8 @@ describe('VMapLayerHelper', () => {
         'v-map-layergroup': mockGroup,
         // no v-map
       });
-      const h = new VMapLayerHelper(el);
+      const h = new VMapLayerHelper(el, mockHost);
 
-      // We need customElements.whenDefined to be a mock
       if (!globalThis.customElements) {
         (globalThis as any).customElements = {
           whenDefined: vi.fn().mockResolvedValue(undefined),
@@ -424,7 +526,7 @@ describe('VMapLayerHelper', () => {
       );
     });
 
-    it('adds MapProviderWillShutdown listener and calls addToMapInternal', async () => {
+    it('binds map events and calls addToMapInternal', async () => {
       const mockGroup = createMockLayerGroup();
       const mockVMap = createMockVMap(mockProvider);
       const el = createMockElement({
@@ -432,7 +534,6 @@ describe('VMapLayerHelper', () => {
         'v-map': mockVMap,
       });
 
-      // Ensure customElements.whenDefined is available
       if (!globalThis.customElements) {
         (globalThis as any).customElements = {
           whenDefined: vi.fn().mockResolvedValue(undefined),
@@ -441,12 +542,16 @@ describe('VMapLayerHelper', () => {
         vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
       }
 
-      const h = new VMapLayerHelper(el);
+      const h = new VMapLayerHelper(el, mockHost);
       const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
 
       await h.initLayer(createConfig, 'el-id');
 
-      // Should have registered MapProviderWillShutdown listener
+      // Should have registered both event listeners
+      expect(mockVMap.addEventListener).toHaveBeenCalledWith(
+        'map-provider-ready',
+        expect.any(Function),
+      );
       expect(mockVMap.addEventListener).toHaveBeenCalledWith(
         'map-provider-will-shutdown',
         expect.any(Function),
@@ -456,7 +561,79 @@ describe('VMapLayerHelper', () => {
       expect(h.getLayerId()).toBe('group-layer-id');
     });
 
-    it('MapProviderWillShutdown clears mapProvider and layerId', async () => {
+    it('defers layer add via MapProviderReady event', async () => {
+      const mockGroup = createMockLayerGroup();
+      const mockVMap = createMockVMap(null);
+      const el = createMockElement({
+        'v-map-layergroup': mockGroup,
+        'v-map': mockVMap,
+      });
+
+      if (!globalThis.customElements) {
+        (globalThis as any).customElements = {
+          whenDefined: vi.fn().mockResolvedValue(undefined),
+        };
+      } else {
+        vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+      }
+
+      const h = new VMapLayerHelper(el, mockHost);
+      const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
+
+      await h.initLayer(createConfig);
+
+      // Layer should not be added yet
+      expect(h.getLayerId()).toBeNull();
+
+      // Fire the MapProviderReady event
+      mockVMap.__vMapProvider = mockProvider;
+      mockVMap.isMapProviderReady.mockResolvedValue(true);
+      mockVMap._fireEvent('map-provider-ready', { mapProvider: mockProvider });
+
+      await vi.waitFor(() => {
+        expect(h.getLayerId()).toBe('group-layer-id');
+      });
+
+      // Should have set loading before adding
+      expect(mockHost.states).toContain('loading');
+    });
+
+    it('sets error on addLayer failure during deferred add', async () => {
+      const failProvider = createMockMapProvider({
+        addLayerToGroup: vi.fn().mockRejectedValue(new Error('deferred fail')),
+      });
+      const mockGroup = createMockLayerGroup();
+      const mockVMap = createMockVMap(null);
+      const el = createMockElement({
+        'v-map-layergroup': mockGroup,
+        'v-map': mockVMap,
+      });
+
+      if (!globalThis.customElements) {
+        (globalThis as any).customElements = {
+          whenDefined: vi.fn().mockResolvedValue(undefined),
+        };
+      } else {
+        vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+      }
+
+      const h = new VMapLayerHelper(el, mockHost);
+      const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
+
+      await h.initLayer(createConfig);
+
+      // Fire deferred event — update mock so addToMapInternal sees the provider
+      mockVMap.__vMapProvider = failProvider;
+      mockVMap.isMapProviderReady.mockResolvedValue(true);
+      mockVMap._fireEvent('map-provider-ready', { mapProvider: failProvider });
+
+      await vi.waitFor(() => {
+        expect(h.getError()?.message).toContain('Layer could not be added');
+        expect(h.getError()?.message).toContain('deferred fail');
+      });
+    });
+
+    it('MapProviderWillShutdown clears state to idle', async () => {
       const mockGroup = createMockLayerGroup();
       const mockVMap = createMockVMap(mockProvider);
       const el = createMockElement({
@@ -472,7 +649,7 @@ describe('VMapLayerHelper', () => {
         vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
       }
 
-      const h = new VMapLayerHelper(el);
+      const h = new VMapLayerHelper(el, mockHost);
       const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
 
       await h.initLayer(createConfig);
@@ -480,13 +657,160 @@ describe('VMapLayerHelper', () => {
       expect(h.getMapProvider()).not.toBeNull();
       expect(h.getLayerId()).not.toBeNull();
 
-      // Fire the shutdown event
+      mockHost.states = [];
       mockVMap._fireEvent('map-provider-will-shutdown', {});
 
       await new Promise(r => setTimeout(r, 10));
 
       expect(h.getMapProvider()).toBeNull();
       expect(h.getLayerId()).toBeNull();
+      expect(h.getError()).toBeUndefined();
+      expect(mockHost.states).toContain('idle');
+    });
+  });
+
+  /* ================================================================ */
+  /*  recreateLayer                                                    */
+  /* ================================================================ */
+  describe('recreateLayer', () => {
+    it('does nothing without initContext', async () => {
+      mockHost.states = [];
+      await helper.recreateLayer();
+      expect(mockHost.states).toEqual([]);
+    });
+
+    it('calls addToMapInternal with stored context', async () => {
+      const mockVMap = createMockVMap(mockProvider);
+      const mockGroup = createMockLayerGroup();
+      const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
+      (helper as any).initContext = { group: mockGroup, vmap: mockVMap, createLayerConfig: createConfig, elementId: 'el' };
+
+      mockHost.states = [];
+      await helper.recreateLayer();
+
+      expect(mockHost.states).toContain('loading');
+      expect(helper.getLayerId()).toBe('group-layer-id');
+    });
+
+    it('guards against parallel calls via recreateInFlight', async () => {
+      const mockVMap = createMockVMap(mockProvider);
+      const mockGroup = createMockLayerGroup();
+      const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
+      (helper as any).initContext = { group: mockGroup, vmap: mockVMap, createLayerConfig: createConfig, elementId: 'el' };
+
+      // Call twice in parallel
+      const p1 = helper.recreateLayer();
+      const p2 = helper.recreateLayer();
+      await Promise.all([p1, p2]);
+
+      // addLayerToGroup should only be called once
+      expect(mockProvider.addLayerToGroup).toHaveBeenCalledTimes(1);
+    });
+
+    it('resets recreateInFlight even on error', async () => {
+      const failProvider = createMockMapProvider({
+        addLayerToGroup: vi.fn().mockRejectedValue(new Error('fail')),
+      });
+      const mockVMap = createMockVMap(failProvider);
+      const mockGroup = createMockLayerGroup();
+      const createConfig = vi.fn().mockReturnValue({ type: 'osm' });
+      (helper as any).initContext = { group: mockGroup, vmap: mockVMap, createLayerConfig: createConfig };
+
+      await helper.recreateLayer();
+
+      // Should be able to call again (recreateInFlight was reset)
+      expect((helper as any).recreateInFlight).toBe(false);
+    });
+  });
+
+  /* ================================================================ */
+  /*  dispose                                                          */
+  /* ================================================================ */
+  describe('dispose', () => {
+    it('removes event listeners, layer, error, and sets idle', async () => {
+      const mockGroup = createMockLayerGroup();
+      const mockVMap = createMockVMap(mockProvider);
+      const el = createMockElement({
+        'v-map-layergroup': mockGroup,
+        'v-map': mockVMap,
+      });
+
+      if (!globalThis.customElements) {
+        (globalThis as any).customElements = {
+          whenDefined: vi.fn().mockResolvedValue(undefined),
+        };
+      } else {
+        vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+      }
+
+      const h = new VMapLayerHelper(el, mockHost);
+      await h.initLayer(() => ({ type: 'osm' }) as any);
+
+      expect(h.getLayerId()).toBe('group-layer-id');
+
+      // Set an error to verify it gets cleared
+      h.setError({ type: 'provider', message: 'some error' });
+      mockHost.states = [];
+
+      await h.dispose();
+
+      expect(mockVMap.removeEventListener).toHaveBeenCalledWith(
+        'map-provider-ready',
+        expect.any(Function),
+      );
+      expect(mockVMap.removeEventListener).toHaveBeenCalledWith(
+        'map-provider-will-shutdown',
+        expect.any(Function),
+      );
+      expect(h.getLayerId()).toBeNull();
+      expect(h.getError()).toBeUndefined();
+      expect(mockHost.states).toContain('idle');
+    });
+
+    it('allows re-binding after dispose via initLayer', async () => {
+      const mockGroup = createMockLayerGroup();
+      const mockVMap = createMockVMap(mockProvider);
+      const el = createMockElement({
+        'v-map-layergroup': mockGroup,
+        'v-map': mockVMap,
+      });
+
+      if (!globalThis.customElements) {
+        (globalThis as any).customElements = {
+          whenDefined: vi.fn().mockResolvedValue(undefined),
+        };
+      } else {
+        vi.spyOn(customElements, 'whenDefined').mockResolvedValue(undefined as any);
+      }
+
+      const h = new VMapLayerHelper(el, mockHost);
+      await h.initLayer(() => ({ type: 'osm' }) as any);
+      await h.dispose();
+
+      // Re-init should work (listenersBound was reset)
+      mockProvider.addLayerToGroup.mockClear();
+      await h.initLayer(() => ({ type: 'osm' }) as any);
+
+      expect(h.getLayerId()).toBe('group-layer-id');
+      expect(mockVMap.addEventListener).toHaveBeenCalledWith(
+        'map-provider-ready',
+        expect.any(Function),
+      );
+    });
+  });
+
+  /* ================================================================ */
+  /*  host-less usage (backward compatibility)                         */
+  /* ================================================================ */
+  describe('without host', () => {
+    it('works without host parameter', async () => {
+      const hostlessHelper = new VMapLayerHelper(mockEl);
+
+      // Should not throw
+      hostlessHelper.startLoading();
+      hostlessHelper.markReady();
+      hostlessHelper.setError({ type: 'provider', message: 'test' });
+      expect(hostlessHelper.getError()?.message).toBe('test');
     });
   });
 });
