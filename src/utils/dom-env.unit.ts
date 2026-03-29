@@ -59,4 +59,57 @@ describe('dom-env unit', () => {
 
     expect(disconnect).toHaveBeenCalledTimes(1);
   });
+
+  it('falls back to window resize, MutationObserver and polling when ResizeObserver is unavailable', () => {
+    const addEventListener = vi.fn();
+    const removeEventListener = vi.fn();
+    let resizeHandler: (() => void) | undefined;
+    addEventListener.mockImplementation((type: string, handler: () => void) => {
+      if (type === 'resize') resizeHandler = handler;
+    });
+
+    const rafCallbacks: Array<() => void> = [];
+    const requestAnimationFrame = vi.fn((cb: () => void) => {
+      rafCallbacks.push(cb);
+      return 1;
+    });
+    const setIntervalSpy = vi.fn(() => 123 as unknown as ReturnType<typeof setInterval>);
+    const clearIntervalSpy = vi.fn();
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+    const mutationCallbacks: Array<() => void> = [];
+    class MockMutationObserver {
+      constructor(cb: () => void) {
+        mutationCallbacks.push(cb);
+      }
+      observe = observe;
+      disconnect = disconnect;
+    }
+
+    vi.stubGlobal('ResizeObserver', undefined);
+    vi.stubGlobal('window', { addEventListener, removeEventListener });
+    vi.stubGlobal('requestAnimationFrame', requestAnimationFrame);
+    vi.stubGlobal('setInterval', setIntervalSpy);
+    vi.stubGlobal('clearInterval', clearIntervalSpy);
+    vi.stubGlobal('MutationObserver', MockMutationObserver);
+
+    const cb = vi.fn();
+    const target = {} as HTMLElement;
+    const mutationObserverInit = { attributes: true };
+    const unsubscribe = watchElementResize(target, cb, mutationObserverInit);
+
+    resizeHandler?.();
+    mutationCallbacks[0]();
+    rafCallbacks.forEach((fn) => fn());
+
+    expect(observe).toHaveBeenCalledWith(target, mutationObserverInit);
+    expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 250);
+    expect(cb).toHaveBeenCalledTimes(2);
+
+    unsubscribe();
+
+    expect(removeEventListener).toHaveBeenCalledWith('resize', resizeHandler);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(clearIntervalSpy).toHaveBeenCalledWith(123);
+  });
 });
