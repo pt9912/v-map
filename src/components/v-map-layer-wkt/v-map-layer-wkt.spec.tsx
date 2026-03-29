@@ -9,12 +9,20 @@ const { helperMock } = vi.hoisted(() => {
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
     getLayerId: vi.fn().mockReturnValue('wkt-layer-id'),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerWkt } from './v-map-layer-wkt';
@@ -230,7 +238,7 @@ describe('v-map-layer-wkt', () => {
     );
 
     await VMapLayerWkt.prototype.disconnectedCallback.call(component);
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
   });
 
   it('isReady reflects didLoad state', () => {
@@ -469,5 +477,67 @@ describe('v-map-layer-wkt', () => {
 
     // No errors thrown, nothing called on helperMock
     expect(helperMock.setVisible).not.toHaveBeenCalled();
+  });
+
+  it('componentWillLoad creates a VMapLayerHelper', async () => {
+    const el = document.createElement('v-map-layer-wkt');
+    const component = { el } as any;
+    await VMapLayerWkt.prototype.componentWillLoad.call(component);
+    expect(component.helper).toBeDefined();
+  });
+
+  it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+    const component = {
+      hasLoadedOnce: true,
+      helper: helperMock,
+      el: document.createElement('v-map-layer-wkt'),
+      wkt: 'POINT(11 48)',
+      url: undefined,
+      visible: true,
+      opacity: 1,
+      zIndex: 1000,
+      appliedGeostylerStyle: undefined,
+      createLayerConfig: VMapLayerWkt.prototype['createLayerConfig'],
+    } as any;
+    component.el.id = 'wkt-reconnect';
+    await VMapLayerWkt.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).toHaveBeenCalled();
+    expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'wkt-reconnect');
+  });
+
+  it('connectedCallback skips when hasLoadedOnce is false', async () => {
+    const component = { hasLoadedOnce: false } as any;
+    await VMapLayerWkt.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).not.toHaveBeenCalled();
+  });
+
+  it('render returns undefined', () => {
+    const result = VMapLayerWkt.prototype.render.call({});
+    expect(result).toBeUndefined();
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerWkt as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerWkt as any)();
+      VMapLayerWkt.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerWkt.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerWkt.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerWkt.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
   });
 });

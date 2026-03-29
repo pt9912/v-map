@@ -8,12 +8,21 @@ const { helperMock } = vi.hoisted(() => {
     setVisible: vi.fn(),
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerWfs } from './v-map-layer-wfs';
@@ -205,9 +214,9 @@ describe('<v-map-layer-wfs>', () => {
     expect(config.geostylerStyle).toEqual(geostylerStyle);
   });
 
-  it('removes layer on disconnect', async () => {
+  it('disposes layer on disconnect', async () => {
     await VMapLayerWfs.prototype.disconnectedCallback.call({ helper: helperMock });
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
   });
 
   it('applies geostyler style from styleReady event when targeted', async () => {
@@ -335,5 +344,80 @@ describe('<v-map-layer-wfs>', () => {
     });
 
     expect(helperMock.updateLayer).not.toHaveBeenCalled();
+  });
+
+  it('componentWillLoad creates a VMapLayerHelper', () => {
+    const el = document.createElement('v-map-layer-wfs');
+    const component = { el } as any;
+    VMapLayerWfs.prototype.componentWillLoad.call(component);
+    expect(component.helper).toBeDefined();
+  });
+
+  it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+    const component = {
+      hasLoadedOnce: true,
+      helper: helperMock,
+      el: document.createElement('v-map-layer-wfs'),
+      url: 'https://example.com/wfs',
+      typeName: 'ns:layer',
+      version: '1.1.0',
+      outputFormat: 'application/json',
+      srsName: 'EPSG:3857',
+      params: undefined,
+      visible: true,
+      opacity: 1,
+      zIndex: 1000,
+      appliedGeostylerStyle: undefined,
+      createLayerConfig: VMapLayerWfs.prototype['createLayerConfig'],
+      parseParams: VMapLayerWfs.prototype['parseParams'],
+    } as any;
+    component.el.id = 'wfs-reconnect';
+    await VMapLayerWfs.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).toHaveBeenCalled();
+    expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'wfs-reconnect');
+  });
+
+  it('connectedCallback skips when hasLoadedOnce is false', async () => {
+    const component = { hasLoadedOnce: false } as any;
+    await VMapLayerWfs.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).not.toHaveBeenCalled();
+  });
+
+  it('render returns a slot element', () => {
+    const result = VMapLayerWfs.prototype.render.call({});
+    expect(result).toBeTruthy();
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerWfs as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerWfs as any)();
+      VMapLayerWfs.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerWfs.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerWfs.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerWfs.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
+
+    it('parseParams calls helper.setError on invalid JSON', () => {
+      const component = { params: '{invalid', helper: helperMock } as any;
+      VMapLayerWfs.prototype['parseParams'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'params' }),
+      );
+    });
   });
 });

@@ -8,6 +8,15 @@ const { helperMock } = vi.hoisted(() => {
     setVisible: vi.fn(),
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
@@ -407,10 +416,36 @@ describe('v-map-layer-tile3d', () => {
       expect(readyEmit).toHaveBeenCalledTimes(1);
     });
 
-    it('disconnectedCallback calls helper.removeLayer', async () => {
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+      const component = {
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-tile3d'),
+        url: 'https://example.com/tileset.json',
+        visible: true,
+        opacity: 1,
+        zIndex: 1000,
+        tilesetOptions: undefined,
+        appliedCesiumStyle: undefined,
+        createLayerConfig: VMapLayerTile3d.prototype['createLayerConfig'],
+        parseTilesetOptions: VMapLayerTile3d.prototype['parseTilesetOptions'],
+      } as any;
+      component.el.id = 'tile3d-reconnect';
+      await VMapLayerTile3d.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'tile3d-reconnect');
+    });
+
+    it('connectedCallback skips when hasLoadedOnce is false', async () => {
+      const component = { hasLoadedOnce: false } as any;
+      await VMapLayerTile3d.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).not.toHaveBeenCalled();
+    });
+
+    it('disconnectedCallback calls helper.dispose', async () => {
       const component = { helper: helperMock } as any;
       await VMapLayerTile3d.prototype.disconnectedCallback.call(component);
-      expect(helperMock.removeLayer).toHaveBeenCalled();
+      expect(helperMock.dispose).toHaveBeenCalled();
     });
 
     it('disconnectedCallback handles undefined helper', async () => {
@@ -466,6 +501,39 @@ describe('v-map-layer-tile3d', () => {
       } as CustomEvent<any>);
 
       expect(component.appliedCesiumStyle).toBeUndefined();
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerTile3d as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerTile3d as any)();
+      VMapLayerTile3d.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerTile3d.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerTile3d.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerTile3d.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
+
+    it('parseTilesetOptions calls helper.setError on invalid JSON', () => {
+      const component = { tilesetOptions: '{invalid', helper: helperMock } as any;
+      VMapLayerTile3d.prototype['parseTilesetOptions'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'tilesetOptions' }),
+      );
     });
   });
 });

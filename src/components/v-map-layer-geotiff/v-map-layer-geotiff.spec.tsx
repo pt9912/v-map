@@ -9,6 +9,14 @@ const { helperMock } = vi.hoisted(() => {
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
     getLayerId: vi.fn().mockReturnValue('geotiff-layer-id'),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
@@ -298,6 +306,29 @@ describe('v-map-layer-geotiff', () => {
       expect(readyEmit).toHaveBeenCalledTimes(1);
     });
 
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+      const addSpy = vi.spyOn(document, 'addEventListener');
+      const component = {
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-geotiff'),
+        url: 'https://example.com/dem.tif',
+        visible: true,
+        opacity: 1,
+        zIndex: 100,
+        nodata: null,
+        colorMap: null,
+        valueRange: null,
+        createLayerConfig: VMapLayerGeoTIFF.prototype['createLayerConfig'],
+        handleStyleReady: vi.fn(),
+      } as any;
+      component.el.id = 'geotiff-reconnect';
+      await VMapLayerGeoTIFF.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'geotiff-reconnect');
+      addSpy.mockRestore();
+    });
+
     it('connectedCallback registers styleReady listener', async () => {
       const addSpy = vi.spyOn(document, 'addEventListener');
       const component = { el: document.createElement('v-map-layer-geotiff'), handleStyleReady: vi.fn() } as any;
@@ -381,6 +412,31 @@ describe('v-map-layer-geotiff', () => {
       const style = { name: 'test', rules: [{ symbolizers: [{ kind: 'Fill' }] }] };
       const result = VMapLayerGeoTIFF.prototype['extractRasterSymbolizer'].call({}, style);
       expect(result).toBeNull();
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerGeoTIFF as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerGeoTIFF as any)();
+      VMapLayerGeoTIFF.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerGeoTIFF.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerGeoTIFF.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerGeoTIFF.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
     });
   });
 });

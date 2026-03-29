@@ -8,6 +8,15 @@ const { helperMock } = vi.hoisted(() => {
     setVisible: vi.fn(),
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
@@ -229,9 +238,9 @@ describe('<v-map-layer-wms>', () => {
     });
   });
 
-  it('removes layer on disconnect', async () => {
+  it('disposes layer on disconnect', async () => {
     await VMapLayerWms.prototype.disconnectedCallback.call({ helper: helperMock });
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
   });
 
   it('handles watcher calls gracefully when helper is undefined', async () => {
@@ -265,8 +274,30 @@ describe('<v-map-layer-wms>', () => {
       expect(component.helper).toBeDefined();
     });
 
-    it('connectedCallback runs without error', async () => {
+    it('connectedCallback runs without error when hasLoadedOnce is false', async () => {
       await VMapLayerWms.prototype.connectedCallback.call({});
+    });
+
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+      const component = {
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-wms'),
+        url: 'https://example.com/wms',
+        layers: 'topo',
+        styles: undefined,
+        format: 'image/png',
+        transparent: true,
+        tiled: true,
+        visible: true,
+        opacity: 1,
+        zIndex: 10,
+        createLayerConfig: VMapLayerWms.prototype['createLayerConfig'],
+      } as any;
+      component.el.id = 'wms-reconnect';
+      await VMapLayerWms.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'wms-reconnect');
     });
 
     it('disconnectedCallback handles undefined helper', async () => {
@@ -308,6 +339,31 @@ describe('<v-map-layer-wms>', () => {
 
       await VMapLayerWms.prototype['updateLayer'].call(component);
       // Should not throw
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerWms as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerWms as any)();
+      VMapLayerWms.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerWms.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerWms.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerWms.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
     });
   });
 });

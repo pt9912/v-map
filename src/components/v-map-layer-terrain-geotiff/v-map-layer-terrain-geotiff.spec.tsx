@@ -9,6 +9,14 @@ const { helperMock } = vi.hoisted(() => {
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
     getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
@@ -243,8 +251,39 @@ describe('v-map-layer-terrain-geotiff', () => {
       expect(readyEmit).toHaveBeenCalledTimes(1);
     });
 
-    it('connectedCallback runs without error', async () => {
+    it('connectedCallback runs without error when hasLoadedOnce is false', async () => {
       await VMapLayerTerrainGeotiff.prototype.connectedCallback.call({});
+    });
+
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+      const component = {
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-terrain-geotiff'),
+        url: 'https://example.com/elevation.tif',
+        visible: true,
+        opacity: 1,
+        zIndex: 100,
+        projection: null,
+        forceProjection: false,
+        nodata: null,
+        meshMaxError: 4.0,
+        wireframe: false,
+        texture: null,
+        color: null,
+        colorMap: null,
+        valueRange: null,
+        elevationScale: 1.0,
+        renderMode: 'terrain',
+        minZoom: 0,
+        maxZoom: 24,
+        tileSize: 256,
+        createLayerConfig: VMapLayerTerrainGeotiff.prototype['createLayerConfig'],
+      } as any;
+      component.el.id = 'terrain-geotiff-reconnect';
+      await VMapLayerTerrainGeotiff.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'terrain-geotiff-reconnect');
     });
 
     it('disconnectedCallback runs without error', () => {
@@ -303,6 +342,31 @@ describe('v-map-layer-terrain-geotiff', () => {
     it('onZIndexChanged does nothing when helper is undefined', async () => {
       await VMapLayerTerrainGeotiff.prototype.onZIndexChanged.call({ zIndex: 10, helper: undefined });
       expect(helperMock.setZIndex).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerTerrainGeotiff as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerTerrainGeotiff as any)();
+      VMapLayerTerrainGeotiff.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerTerrainGeotiff.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerTerrainGeotiff.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerTerrainGeotiff.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
     });
   });
 });

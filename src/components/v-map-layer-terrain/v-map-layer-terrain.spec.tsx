@@ -8,12 +8,21 @@ const { helperMock } = vi.hoisted(() => {
     setVisible: vi.fn(),
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerTerrain } from './v-map-layer-terrain';
@@ -251,8 +260,88 @@ describe('<v-map-layer-terrain>', () => {
     });
   });
 
-  it('removes layer on disconnect', async () => {
+  it('disposes layer on disconnect', async () => {
     await VMapLayerTerrain.prototype.disconnectedCallback.call({ helper: helperMock });
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
+  });
+
+  it('componentWillLoad creates a VMapLayerHelper', () => {
+    const el = document.createElement('v-map-layer-terrain');
+    const component = { el } as any;
+    VMapLayerTerrain.prototype.componentWillLoad.call(component);
+    expect(component.helper).toBeDefined();
+  });
+
+  it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+    const component = {
+      hasLoadedOnce: true,
+      helper: helperMock,
+      el: document.createElement('v-map-layer-terrain'),
+      elevationData: 'https://example.com/height.png',
+      texture: undefined,
+      elevationDecoder: undefined,
+      wireframe: undefined,
+      color: undefined,
+      minZoom: undefined,
+      maxZoom: undefined,
+      meshMaxError: undefined,
+      opacity: 1,
+      visible: true,
+      zIndex: 1000,
+      createLayerConfig: VMapLayerTerrain.prototype['createLayerConfig'],
+      getElevationDecoder: VMapLayerTerrain.prototype['getElevationDecoder'],
+      getColorArray: VMapLayerTerrain.prototype['getColorArray'],
+    } as any;
+    component.el.id = 'terrain-reconnect';
+    await VMapLayerTerrain.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).toHaveBeenCalled();
+    expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'terrain-reconnect');
+  });
+
+  it('connectedCallback skips when hasLoadedOnce is false', async () => {
+    const component = { hasLoadedOnce: false } as any;
+    await VMapLayerTerrain.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).not.toHaveBeenCalled();
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerTerrain as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerTerrain as any)();
+      VMapLayerTerrain.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerTerrain.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerTerrain.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerTerrain.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
+
+    it('getElevationDecoder calls helper.setError on invalid JSON', () => {
+      const component = { elevationDecoder: '{invalid', helper: helperMock } as any;
+      VMapLayerTerrain.prototype['getElevationDecoder'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'elevationDecoder' }),
+      );
+    });
+
+    it('getColorArray calls helper.setError on invalid JSON array', () => {
+      const component = { color: '[invalid', helper: helperMock } as any;
+      VMapLayerTerrain.prototype['getColorArray'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'color' }),
+      );
+    });
   });
 });

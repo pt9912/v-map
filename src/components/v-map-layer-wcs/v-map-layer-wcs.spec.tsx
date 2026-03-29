@@ -8,12 +8,21 @@ const { helperMock } = vi.hoisted(() => {
     setVisible: vi.fn(),
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
+    getLayerId: vi.fn(),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
 
 vi.mock('../../layer/v-map-layer-helper', () => ({
-  VMapLayerHelper: vi.fn().mockImplementation(() => helperMock),
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
 }));
 
 import { VMapLayerWcs } from './v-map-layer-wcs';
@@ -209,8 +218,92 @@ describe('<v-map-layer-wcs>', () => {
     });
   });
 
-  it('removes layer on disconnect', async () => {
+  it('disposes layer on disconnect', async () => {
     await VMapLayerWcs.prototype.disconnectedCallback.call({ helper: helperMock });
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
+  });
+
+  it('componentWillLoad creates a VMapLayerHelper', () => {
+    const el = document.createElement('v-map-layer-wcs');
+    const component = { el } as any;
+    VMapLayerWcs.prototype.componentWillLoad.call(component);
+    expect(component.helper).toBeDefined();
+  });
+
+  it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+    const component = {
+      hasLoadedOnce: true,
+      helper: helperMock,
+      el: document.createElement('v-map-layer-wcs'),
+      url: 'https://example.com/wcs',
+      coverageName: 'DEM',
+      format: 'image/tiff',
+      version: '1.1.0',
+      projection: undefined,
+      resolutions: undefined,
+      params: undefined,
+      visible: true,
+      opacity: 1,
+      zIndex: 1000,
+      createLayerConfig: VMapLayerWcs.prototype['createLayerConfig'],
+      parseParams: VMapLayerWcs.prototype['parseParams'],
+      parseResolutions: VMapLayerWcs.prototype['parseResolutions'],
+    } as any;
+    component.el.id = 'wcs-reconnect';
+    await VMapLayerWcs.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).toHaveBeenCalled();
+    expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'wcs-reconnect');
+  });
+
+  it('connectedCallback skips when hasLoadedOnce is false', async () => {
+    const component = { hasLoadedOnce: false } as any;
+    await VMapLayerWcs.prototype.connectedCallback.call(component);
+    expect(helperMock.startLoading).not.toHaveBeenCalled();
+  });
+
+  it('render returns a slot element', () => {
+    const result = VMapLayerWcs.prototype.render.call({});
+    expect(result).toBeTruthy();
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerWcs as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerWcs as any)();
+      VMapLayerWcs.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerWcs.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerWcs.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerWcs.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
+
+    it('parseParams calls helper.setError on invalid JSON', () => {
+      const component = { params: '{invalid', helper: helperMock } as any;
+      VMapLayerWcs.prototype['parseParams'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'params' }),
+      );
+    });
+
+    it('parseResolutions calls helper.setError on invalid JSON', () => {
+      const component = { resolutions: '{invalid', helper: helperMock } as any;
+      VMapLayerWcs.prototype['parseResolutions'].call(component);
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'resolutions' }),
+      );
+    });
   });
 });

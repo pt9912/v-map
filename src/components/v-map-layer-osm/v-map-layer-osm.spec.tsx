@@ -9,6 +9,14 @@ const { helperMock } = vi.hoisted(() => {
     setOpacity: vi.fn(),
     setZIndex: vi.fn(),
     getLayerId: vi.fn().mockReturnValue('osm-layer-id'),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
   return { helperMock };
 });
@@ -128,7 +136,7 @@ describe('v-map-layer-osm', () => {
     expect(helperMock.updateLayer).not.toHaveBeenCalled();
   });
 
-  it('proxies getLayerId and removes the layer on disconnect', async () => {
+  it('proxies getLayerId and disposes the layer on disconnect', async () => {
     const component = { helper: helperMock } as any;
 
     expect(await VMapLayerOSM.prototype.getLayerId.call(component)).toBe(
@@ -137,7 +145,7 @@ describe('v-map-layer-osm', () => {
 
     await VMapLayerOSM.prototype.disconnectedCallback.call(component);
 
-    expect(helperMock.removeLayer).toHaveBeenCalledTimes(1);
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
   });
 
   /* ------------------------------------------------------------------ */
@@ -161,8 +169,25 @@ describe('v-map-layer-osm', () => {
       expect(component.helper).toBeDefined();
     });
 
-    it('connectedCallback runs without error', async () => {
+    it('connectedCallback runs without error when hasLoadedOnce is false', async () => {
       await VMapLayerOSM.prototype.connectedCallback.call({});
+    });
+
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
+      const component = {
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-osm'),
+        url: 'https://tile.openstreetmap.org',
+        visible: true,
+        opacity: 1,
+        zIndex: 10,
+        createLayerConfig: VMapLayerOSM.prototype['createLayerConfig'],
+      } as any;
+      component.el.id = 'osm-reconnect';
+      await VMapLayerOSM.prototype.connectedCallback.call(component);
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'osm-reconnect');
     });
 
     it('isReady reflects didLoad state', () => {
@@ -198,6 +223,31 @@ describe('v-map-layer-osm', () => {
       const component = { helper: undefined } as any;
       const result = await VMapLayerOSM.prototype.getLayerId.call(component);
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
+      const component = new (VMapLayerOSM as any)();
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerOSM as any)();
+      VMapLayerOSM.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerOSM.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerOSM.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerOSM.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
     });
   });
 });
