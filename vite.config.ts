@@ -12,6 +12,9 @@ const leafletEsmPath = new URL(
   './node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.esm.js',
   import.meta.url,
 ).pathname;
+const vitestViteCacheDir =
+  process.env.VITE_CACHE_DIR ||
+  (process.env.VITEST ? 'node_modules/.vitest-cache/vite' : undefined);
 
 console.log('[v-map demo versions]', {
   Cesium: CESIUM_VERSION,
@@ -21,7 +24,7 @@ console.log('[v-map demo versions]', {
 });
 
 export default defineConfig({
-  cacheDir: process.env.VITE_CACHE_DIR || undefined,
+  cacheDir: vitestViteCacheDir,
   plugins: [
     {
       name: 'node-polyfills',

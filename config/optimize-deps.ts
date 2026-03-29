@@ -1,6 +1,8 @@
 export const optimizeDepsInclude = [
   '@stencil/core',
   '@stencil/core/internal/client',
+  '@npm9912/s-gml',
+  'js-yaml',
   'leaflet',
   'leaflet/dist/leaflet-src.esm.js',
   'ol',
@@ -39,6 +41,7 @@ export const optimizeDepsInclude = [
   'geotiff',
   'proj4',
   'geotiff-geokeys-to-proj4',
+  'wellknown',
   '@deck.gl/core',
   '@deck.gl/layers',
   '@deck.gl/geo-layers',

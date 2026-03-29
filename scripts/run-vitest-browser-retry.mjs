@@ -3,10 +3,22 @@ import { resolve } from 'node:path';
 
 const vitestBin = resolve(process.cwd(), 'node_modules/.bin/vitest');
 const vitestArgs = process.argv.slice(2);
+const vitestViteCacheDir =
+  process.env.VITE_CACHE_DIR ||
+  resolve(process.cwd(), 'node_modules/.vitest-cache', 'vite');
+
+function sleep(ms) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+}
 
 function runVitest() {
   return spawnSync(vitestBin, vitestArgs, {
     encoding: 'utf8',
+    env: {
+      ...process.env,
+      VITE_CACHE_DIR: vitestViteCacheDir,
+    },
+    maxBuffer: 10 * 1024 * 1024,
     stdio: 'pipe',
   });
 }
@@ -29,15 +41,28 @@ function isColdBrowserCacheFailure(result) {
   ].some(marker => output.includes(marker));
 }
 
-let result = runVitest();
-replayOutput(result);
+const firstResult = runVitest();
 
-if (isColdBrowserCacheFailure(result)) {
-  process.stderr.write(
-    '\n[vitest-browser-retry] retrying once after cold browser dep optimization.\n',
-  );
-  result = runVitest();
-  replayOutput(result);
+if (!isColdBrowserCacheFailure(firstResult)) {
+  replayOutput(firstResult);
+  process.exit(firstResult.status ?? 1);
 }
 
-process.exit(result.status ?? 1);
+process.stderr.write(
+  '\n[vitest-browser-retry] retrying once after cold browser dep optimization.\n',
+);
+sleep(750);
+
+const secondResult = runVitest();
+
+if (secondResult.status === 0) {
+  replayOutput(secondResult);
+  process.exit(0);
+}
+
+replayOutput(firstResult);
+process.stderr.write(
+  '\n[vitest-browser-retry] retry did not recover the browser cache cold-start failure.\n',
+);
+replayOutput(secondResult);
+process.exit(secondResult.status ?? 1);
