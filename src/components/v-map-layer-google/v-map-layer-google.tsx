@@ -1,8 +1,11 @@
 // src/components/v-map-layer-google/v-map-layer-google.tsx
-import { Component, Prop, Element, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Watch, Method } from '@stencil/core';
 
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
+import type { VMapErrorDetail } from '../../utils/events';
+import type { LayerConfig } from '../../types/layerconfig';
+import { VMapLayerHelper, type VMapErrorHost } from '../../layer/v-map-layer-helper';
 
 const MSG_COMPONENT: string = 'v-map-layer-google - ';
 
@@ -14,8 +17,11 @@ const MSG_COMPONENT: string = 'v-map-layer-google - ';
   styleUrl: 'v-map-layer-google.css',
   shadow: true,
 })
-export class VMapLayerGoogle {
+export class VMapLayerGoogle implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * Karten-Typ: "roadmap" | "satellite" | "hybrid" | "terrain".
@@ -86,7 +92,18 @@ export class VMapLayerGoogle {
    * @event ready
    */
   @Event() ready!: EventEmitter<void>;
-  //private mapProvider?: MapProvider;
+
+  private hasLoadedOnce: boolean = false;
+  private helper: VMapLayerHelper;
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
+  }
+
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
 
   @Watch('styles')
   parseStyles(newValue: Record<string, unknown>[] | string) {
@@ -96,9 +113,25 @@ export class VMapLayerGoogle {
         // Update the prop with the parsed array
         this.styles = parsed;
       } catch (e) {
-        console.warn('Invalid JSON in styles attribute:', e);
+        this.helper?.setError({ type: 'parse', message: 'Invalid JSON in styles attribute', attribute: 'styles', cause: e });
       }
     }
+  }
+
+  private createLayerConfig(): LayerConfig {
+    return {
+      type: 'google',
+      apiKey: this.apiKey ?? '',
+      mapType: this.mapType,
+      language: this.language,
+      region: this.region,
+      visible: this.visible,
+      opacity: this.opacity,
+      scale: this.scale,
+      maxZoom: this.maxZoom,
+      styles: this.styles,
+      libraries: this.libraries ? this.libraries.split(',').map(s => s.trim()) : undefined,
+    };
   }
 
   async connectedCallback() {
@@ -107,13 +140,31 @@ export class VMapLayerGoogle {
     if (typeof this.styles === 'string') {
       this.parseStyles(this.styles);
     }
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+  }
+
+  async componentWillLoad() {
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
+    this.helper = new VMapLayerHelper(this.el, this);
   }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+
+    this.hasLoadedOnce = true;
     this.ready.emit();
   }
+
+  async disconnectedCallback() {
+    log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
+    await this.helper?.dispose();
+  }
+
   render() {
     return;
   }

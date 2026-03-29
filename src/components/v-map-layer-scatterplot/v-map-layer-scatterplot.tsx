@@ -1,8 +1,11 @@
 // src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx
-import { Component, Prop, Element, Event, EventEmitter } from '@stencil/core';
+import { Component, Prop, Element, Event, EventEmitter, Method } from '@stencil/core';
 
 import MSG from '../../utils/messages';
 import { log } from '../../utils/logger';
+import type { VMapErrorDetail } from '../../utils/events';
+import type { LayerConfig } from '../../types/layerconfig';
+import { VMapLayerHelper, type VMapErrorHost } from '../../layer/v-map-layer-helper';
 
 const MSG_COMPONENT: string = 'v-map-layer-scatterplot - ';
 
@@ -13,8 +16,11 @@ export type Color = string | [number, number, number, number?];
   styleUrl: 'v-map-layer-scatterplot.css',
   shadow: true,
 })
-export class VMapLayerScatterplot {
+export class VMapLayerScatterplot implements VMapErrorHost {
   @Element() el!: HTMLElement;
+
+  @Prop({ attribute: 'load-state', reflect: true, mutable: true })
+  loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
   /**
    * Datenquelle für Punkte. Erwartet Objekte mit mindestens
@@ -57,26 +63,56 @@ export class VMapLayerScatterplot {
    */
   @Event() ready!: EventEmitter<void>;
 
-  async connectedCallback() {
-    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+  private hasLoadedOnce: boolean = false;
+  private helper: VMapLayerHelper;
+
+  setLoadState(state: 'idle' | 'loading' | 'ready' | 'error') {
+    this.loadState = state;
   }
 
-  // private parseInline(): any[] {
-  //   if (!this.data) return [];
-  //   try {
-  //     const parsed = JSON.parse(this.data);
-  //     return Array.isArray(parsed) ? parsed : [parsed];
-  //   } catch (e) {
-  //     error('<v-map-layer-scatterplot> invalid JSON in "data"', e);
-  //     return [];
-  //   }
-  // }
+  @Method()
+  async getError(): Promise<VMapErrorDetail | undefined> {
+    return this.helper?.getError();
+  }
+
+  private createLayerConfig(): LayerConfig {
+    return {
+      type: 'scatterplot',
+      data: this.data,
+      getFillColor: this.getFillColor,
+      getRadius: this.getRadius,
+      opacity: this.opacity,
+      visible: this.visible,
+    };
+  }
+
+  async connectedCallback() {
+    log(MSG_COMPONENT + MSG.COMPONENT_CONNECTED_CALLBACK);
+    if (!this.hasLoadedOnce) return;
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+  }
+
+  async componentWillLoad() {
+    log(MSG_COMPONENT + MSG.COMPONENT_WILL_LOAD);
+    this.helper = new VMapLayerHelper(this.el, this);
+  }
 
   async componentDidLoad() {
     log(MSG_COMPONENT + MSG.COMPONENT_DID_LOAD);
 
+    this.helper.startLoading();
+    await this.helper.initLayer(() => this.createLayerConfig(), this.el.id);
+
+    this.hasLoadedOnce = true;
     this.ready.emit();
   }
+
+  async disconnectedCallback() {
+    log(MSG_COMPONENT + MSG.COMPONENT_DISCONNECTED_CALLBACK);
+    await this.helper?.dispose();
+  }
+
   render() {
     return;
   }

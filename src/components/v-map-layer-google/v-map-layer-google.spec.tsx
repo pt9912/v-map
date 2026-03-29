@@ -1,21 +1,29 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-import '../../testing/fail-on-console-spec';
-
-// Mock Google Maps API
-const { mockGoogleMapsApi } = vi.hoisted(() => {
-  const mockGoogleMapsApi = {
-    google: {
-      maps: {
-        Map: vi.fn(),
-        event: {
-          addListenerOnce: vi.fn(),
-        },
-      },
-    },
+const { helperMock } = vi.hoisted(() => {
+  const helperMock = {
+    initLayer: vi.fn(),
+    removeLayer: vi.fn(),
+    updateLayer: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getLayerId: vi.fn().mockReturnValue('google-layer-id'),
+    startLoading: vi.fn(),
+    dispose: vi.fn(),
+    setError: vi.fn(),
+    clearError: vi.fn(),
+    getError: vi.fn().mockReturnValue(undefined),
+    markReady: vi.fn(),
+    markUpdated: vi.fn(),
+    recreateLayer: vi.fn(),
   };
-  return { mockGoogleMapsApi };
+  return { helperMock };
 });
+
+vi.mock('../../layer/v-map-layer-helper', () => ({
+  VMapLayerHelper: vi.fn().mockImplementation(function () { return helperMock; }),
+}));
 
 // Mock the loadGoogleMapsApi function
 vi.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
@@ -30,11 +38,10 @@ describe('<v-map-layer-google>', () => {
   const mockApiKey = 'test-mock-api-key-123';
 
   beforeEach(() => {
-    // Setup window.google mock
-    (global as any).window = Object.create(window);
-    Object.defineProperty(window, 'google', {
-      value: mockGoogleMapsApi.google,
-      writable: true,
+    Object.values(helperMock).forEach(value => {
+      if (typeof value === 'function' && 'mockClear' in value) {
+        (value as ReturnType<typeof vi.fn>).mockClear();
+      }
     });
   });
 
@@ -42,35 +49,31 @@ describe('<v-map-layer-google>', () => {
     vi.clearAllMocks();
   });
 
-  it('renders without props', async () => {
+  it('renders without props', () => {
     const component = new (VMapLayerGoogle as any)();
-
     expect(component.mapType).toBe('roadmap');
     expect(component.visible).toBe(true);
     expect(component.opacity).toBe(1);
     expect(VMapLayerGoogle.prototype.render.call(component)).toBeUndefined();
   });
 
-  it('renders with api-key', async () => {
+  it('renders with api-key', () => {
     const component = new (VMapLayerGoogle as any)();
     component.apiKey = mockApiKey;
-
     expect(component.apiKey).toBe(mockApiKey);
   });
 
-  it('renders with all map types', async () => {
+  it('renders with all map types', () => {
     const mapTypes = ['roadmap', 'satellite', 'terrain', 'hybrid'];
-
     for (const mapType of mapTypes) {
       const component = new (VMapLayerGoogle as any)();
       component.apiKey = mockApiKey;
       component.mapType = mapType;
-
       expect(component.mapType).toBe(mapType);
     }
   });
 
-  it('renders with complex attributes', async () => {
+  it('renders with complex attributes', () => {
     const component = new (VMapLayerGoogle as any)();
     component.apiKey = mockApiKey;
     component.mapType = 'roadmap';
@@ -87,7 +90,7 @@ describe('<v-map-layer-google>', () => {
     expect(component.region).toBe('DE');
   });
 
-  it('handles optional properties', async () => {
+  it('handles optional properties', () => {
     const component = new (VMapLayerGoogle as any)();
     component.apiKey = mockApiKey;
     component.mapType = 'satellite';
@@ -106,29 +109,29 @@ describe('<v-map-layer-google>', () => {
     expect(component.visible).toBe(false);
   });
 
-  it('validates required api-key property', async () => {
+  it('validates required api-key property', () => {
     const component = new (VMapLayerGoogle as any)();
     component.mapType = 'roadmap';
-
     expect(component.apiKey).toBeUndefined();
   });
 
-  it('supports all Google Maps scale factors', async () => {
+  it('supports all Google Maps scale factors', () => {
     const scaleFactors = ['scaleFactor1x', 'scaleFactor2x', 'scaleFactor4x'];
-
     for (const scale of scaleFactors) {
       const component = new (VMapLayerGoogle as any)();
       component.apiKey = mockApiKey;
       component.scale = scale;
-
       expect(component.scale).toBe(scale);
     }
   });
 
   it('handles styles attribute', async () => {
-    const component = new (VMapLayerGoogle as any)();
-    component.apiKey = mockApiKey;
-    component.styles = '[{"featureType":"water","stylers":[{"color":"#blue"}]}]';
+    const component = {
+      helper: helperMock,
+      styles: '[{"featureType":"water","stylers":[{"color":"#blue"}]}]',
+      hasLoadedOnce: false,
+      parseStyles: VMapLayerGoogle.prototype.parseStyles,
+    } as any;
 
     await VMapLayerGoogle.prototype.connectedCallback.call(component);
 
@@ -137,34 +140,72 @@ describe('<v-map-layer-google>', () => {
     ]);
   });
 
-  it('handles libraries attribute', async () => {
+  it('handles libraries attribute', () => {
     const component = new (VMapLayerGoogle as any)();
     component.apiKey = mockApiKey;
     component.libraries = 'geometry,places';
-
     expect(component.libraries).toBe('geometry,places');
   });
 
+  it('creates the expected layer config and emits ready on load', async () => {
+    const component = {
+      helper: helperMock,
+      el: document.createElement('v-map-layer-google'),
+      mapType: 'roadmap',
+      apiKey: mockApiKey,
+      language: 'de',
+      region: 'DE',
+      visible: true,
+      opacity: 0.8,
+      scale: 'scaleFactor2x',
+      maxZoom: 18,
+      styles: undefined,
+      libraries: 'geometry',
+      hasLoadedOnce: false,
+      ready: { emit: vi.fn() },
+      createLayerConfig: VMapLayerGoogle.prototype['createLayerConfig'],
+    } as any;
+    component.el.id = 'google1';
+
+    await VMapLayerGoogle.prototype.componentDidLoad.call(component);
+
+    expect(helperMock.startLoading).toHaveBeenCalled();
+    expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'google1');
+    expect(component.createLayerConfig.call(component)).toEqual({
+      type: 'google',
+      apiKey: mockApiKey,
+      mapType: 'roadmap',
+      language: 'de',
+      region: 'DE',
+      visible: true,
+      opacity: 0.8,
+      scale: 'scaleFactor2x',
+      maxZoom: 18,
+      styles: undefined,
+      libraries: ['geometry'],
+    });
+    expect(component.hasLoadedOnce).toBe(true);
+    expect(component.ready.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('disposes layer on disconnect', async () => {
+    await VMapLayerGoogle.prototype.disconnectedCallback.call({ helper: helperMock });
+    expect(helperMock.dispose).toHaveBeenCalledTimes(1);
+  });
+
   describe('prototype-based source coverage', () => {
-    it('componentDidLoad emits ready event', async () => {
-      const component = {
-        el: document.createElement('v-map-layer-google'),
-        mapType: 'roadmap',
-        visible: true,
-        opacity: 1,
-        ready: { emit: vi.fn() },
-      } as any;
-
-      await VMapLayerGoogle.prototype.componentDidLoad.call(component);
-
-      expect(component.ready.emit).toHaveBeenCalledTimes(1);
+    it('componentWillLoad creates a VMapLayerHelper', async () => {
+      const el = document.createElement('v-map-layer-google');
+      const component = { el } as any;
+      await VMapLayerGoogle.prototype.componentWillLoad.call(component);
+      expect(component.helper).toBeDefined();
     });
 
     it('connectedCallback runs without error when styles is undefined', async () => {
       const component = {
-        el: document.createElement('v-map-layer-google'),
+        helper: helperMock,
         styles: undefined,
-        autoApply: true,
+        hasLoadedOnce: false,
         parseStyles: VMapLayerGoogle.prototype.parseStyles,
       } as any;
 
@@ -176,68 +217,125 @@ describe('<v-map-layer-google>', () => {
     it('connectedCallback parses string styles on initial load', async () => {
       const stylesJson = '[{"featureType":"water","stylers":[{"color":"#0000ff"}]}]';
       const component = {
-        el: document.createElement('v-map-layer-google'),
+        helper: helperMock,
         styles: stylesJson,
+        hasLoadedOnce: false,
         parseStyles: VMapLayerGoogle.prototype.parseStyles,
       } as any;
 
       await VMapLayerGoogle.prototype.connectedCallback.call(component);
 
-      // After parsing, styles should be the parsed array
       expect(component.styles).toEqual([{ featureType: 'water', stylers: [{ color: '#0000ff' }] }]);
     });
 
-    it('parseStyles converts a JSON string to an array', () => {
+    it('connectedCallback re-initializes when hasLoadedOnce is true', async () => {
       const component = {
-        styles: undefined as any,
+        hasLoadedOnce: true,
+        helper: helperMock,
+        el: document.createElement('v-map-layer-google'),
+        styles: undefined,
+        mapType: 'roadmap',
+        visible: true,
+        opacity: 1,
+        parseStyles: VMapLayerGoogle.prototype.parseStyles,
+        createLayerConfig: VMapLayerGoogle.prototype['createLayerConfig'],
       } as any;
+      component.el.id = 'google2';
 
-      const stylesJson = '[{"featureType":"road"}]';
-      VMapLayerGoogle.prototype.parseStyles.call(component, stylesJson);
+      await VMapLayerGoogle.prototype.connectedCallback.call(component);
 
+      expect(helperMock.startLoading).toHaveBeenCalled();
+      expect(helperMock.initLayer).toHaveBeenCalledWith(expect.any(Function), 'google2');
+    });
+
+    it('parseStyles converts a JSON string to an array', () => {
+      const component = { helper: helperMock, styles: undefined as any } as any;
+      VMapLayerGoogle.prototype.parseStyles.call(component, '[{"featureType":"road"}]');
       expect(component.styles).toEqual([{ featureType: 'road' }]);
     });
 
-    it('parseStyles warns on invalid JSON string', () => {
-      const component = {
-        styles: undefined as any,
-      } as any;
-
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
+    it('parseStyles calls helper.setError on invalid JSON string', () => {
+      const component = { helper: helperMock, styles: undefined as any } as any;
       VMapLayerGoogle.prototype.parseStyles.call(component, 'not valid json');
-
-      expect(warnSpy).toHaveBeenCalledWith(
-        'Invalid JSON in styles attribute:',
-        expect.any(Error),
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'parse', attribute: 'styles' }),
       );
-
-      warnSpy.mockRestore();
     });
 
     it('parseStyles does nothing when value is already an array', () => {
-      const component = {
-        styles: undefined as any,
-      } as any;
-
-      const arrayStyles = [{ featureType: 'water' }];
-      VMapLayerGoogle.prototype.parseStyles.call(component, arrayStyles as any);
-
-      // styles should remain undefined since non-string values skip the parsing branch
+      const component = { helper: helperMock, styles: undefined as any } as any;
+      VMapLayerGoogle.prototype.parseStyles.call(component, [{ featureType: 'water' }] as any);
       expect(component.styles).toBeUndefined();
     });
 
     it('render returns undefined', () => {
-      const component = {} as any;
-      const result = VMapLayerGoogle.prototype.render.call(component);
+      const result = VMapLayerGoogle.prototype.render.call({});
       expect(result).toBeUndefined();
     });
 
-    it('has correct default property values', () => {
+    it('disconnectedCallback handles undefined helper', async () => {
+      const component = { helper: undefined } as any;
+      await VMapLayerGoogle.prototype.disconnectedCallback.call(component);
+    });
+  });
+
+  describe('Error-API', () => {
+    it('initializes loadState as idle', () => {
       const component = new (VMapLayerGoogle as any)();
-      expect(component.visible).toBe(true);
-      expect(component.opacity).toBe(1.0);
-      expect(component.mapType).toBe('roadmap');
+      expect(component.loadState).toBe('idle');
+    });
+
+    it('setLoadState updates loadState', () => {
+      const component = new (VMapLayerGoogle as any)();
+      VMapLayerGoogle.prototype.setLoadState.call(component, 'loading');
+      expect(component.loadState).toBe('loading');
+      VMapLayerGoogle.prototype.setLoadState.call(component, 'error');
+      expect(component.loadState).toBe('error');
+      VMapLayerGoogle.prototype.setLoadState.call(component, 'ready');
+      expect(component.loadState).toBe('ready');
+    });
+
+    it('getError delegates to helper.getError', async () => {
+      const errorDetail = { type: 'provider' as const, message: 'test error' };
+      helperMock.getError.mockReturnValue(errorDetail);
+      const component = { helper: helperMock } as any;
+      const result = await VMapLayerGoogle.prototype.getError.call(component);
+      expect(result).toEqual(errorDetail);
+    });
+
+    it('componentDidLoad calls startLoading before initLayer', async () => {
+      const callOrder: string[] = [];
+      helperMock.startLoading.mockImplementation(() => { callOrder.push('startLoading'); });
+      helperMock.initLayer.mockImplementation(() => { callOrder.push('initLayer'); });
+
+      const component = {
+        helper: helperMock,
+        el: document.createElement('v-map-layer-google'),
+        mapType: 'roadmap',
+        visible: true,
+        opacity: 1,
+        didLoad: false,
+        hasLoadedOnce: false,
+        ready: { emit: vi.fn() },
+        createLayerConfig: VMapLayerGoogle.prototype['createLayerConfig'],
+      } as any;
+
+      await VMapLayerGoogle.prototype.componentDidLoad.call(component);
+
+      expect(callOrder[0]).toBe('startLoading');
+      expect(callOrder[1]).toBe('initLayer');
+    });
+
+    it('parseStyles sets parse error on invalid JSON via helper', () => {
+      const component = { helper: helperMock, styles: undefined as any } as any;
+      VMapLayerGoogle.prototype.parseStyles.call(component, '{invalid json}');
+      expect(helperMock.setError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'parse',
+          message: 'Invalid JSON in styles attribute',
+          attribute: 'styles',
+        }),
+      );
     });
   });
 });
