@@ -11,7 +11,7 @@
 | --------------------------- | --------------- | --------------------------------------------- | ------------------------------------------- | -------------- |
 | `coverageName` _(required)_ | `coverage-name` | Coverage-Name/ID.                             | `string`                                    | `undefined`    |
 | `format`                    | `format`        | Ausgabeformat, z. B. image/tiff.              | `string`                                    | `'image/tiff'` |
-| `loadState`                 | `load-state`    |                                               | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`       |
+| `loadState`                 | `load-state`    | Current load state of the layer.              | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`       |
 | `opacity`                   | `opacity`       | Opazität (0–1).                               | `number`                                    | `1`            |
 | `params`                    | `params`        | Zusätzliche Parameter als JSON-String.        | `string`                                    | `undefined`    |
 | `projection`                | `projection`    | Projektion (Projection) für die Quelle.       | `string`                                    | `undefined`    |
@@ -26,7 +26,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

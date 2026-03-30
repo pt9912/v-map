@@ -144,7 +144,7 @@ Same as deck.gl requirements:
 | `colorMap`        | `color-map`        | ColorMap for elevation data visualization. Only relevant when no texture is set.           | `ColorMap \| string`                        | `null`      |
 | `elevationScale`  | `elevation-scale`  | Elevation exaggeration factor.                                                             | `number`                                    | `1.0`       |
 | `forceProjection` | `force-projection` | Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys                             | `boolean`                                   | `false`     |
-| `loadState`       | `load-state`       |                                                                                            | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
+| `loadState`       | `load-state`       | Current load state of the layer.                                                           | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
 | `maxZoom`         | `max-zoom`         | Maximum zoom level.                                                                        | `number`                                    | `24`        |
 | `meshMaxError`    | `mesh-max-error`   | Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, but slower. | `number`                                    | `4.0`       |
 | `minZoom`         | `min-zoom`         | Minimum zoom level.                                                                        | `number`                                    | `0`         |
@@ -172,7 +172,7 @@ Same as deck.gl requirements:
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

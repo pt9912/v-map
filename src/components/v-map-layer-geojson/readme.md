@@ -14,7 +14,7 @@
 | `geojson`       | `geojson`        | Prop, die du intern nutzt/weiterverarbeitest                                 | `string`                                    | `undefined` |
 | `iconSize`      | `icon-size`      | Icon size as [width, height] in pixels (comma-separated string like "32,32") | `string`                                    | `undefined` |
 | `iconUrl`       | `icon-url`       | Icon URL for point features (alternative to pointColor/pointRadius)          | `string`                                    | `undefined` |
-| `loadState`     | `load-state`     |                                                                              | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
+| `loadState`     | `load-state`     | Current load state of the layer.                                             | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
 | `opacity`       | `opacity`        | Opazität der geojson-Kacheln (0–1).                                          | `number`                                    | `1.0`       |
 | `pointColor`    | `point-color`    | Point color for point geometries (CSS color value)                           | `string`                                    | `undefined` |
 | `pointRadius`   | `point-radius`   | Point radius for point geometries in pixels                                  | `number`                                    | `undefined` |
@@ -33,7 +33,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

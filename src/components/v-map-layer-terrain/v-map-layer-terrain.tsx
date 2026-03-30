@@ -32,6 +32,7 @@ type ColorTuple = [number, number, number];
 export class VMapLayerTerrain implements VMapErrorHost {
   @Element() el!: HTMLElement;
 
+  /** Current load state of the layer. */
   @Prop({ attribute: 'load-state', reflect: true, mutable: true })
   loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -99,6 +100,7 @@ export class VMapLayerTerrain implements VMapErrorHost {
     this.loadState = state;
   }
 
+  /** Returns the last error detail, if any. */
   @Method()
   async getError(): Promise<VMapErrorDetail | undefined> {
     return this.helper?.getError();

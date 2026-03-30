@@ -26,6 +26,7 @@ const MSG_COMPONENT = 'v-map-layer-wfs - ';
 export class VMapLayerWfs implements VMapErrorHost {
   @Element() el!: HTMLElement;
 
+  /** Current load state of the layer. */
   @Prop({ attribute: 'load-state', reflect: true, mutable: true })
   loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -66,6 +67,7 @@ export class VMapLayerWfs implements VMapErrorHost {
     this.loadState = state;
   }
 
+  /** Returns the last error detail, if any. */
   @Method()
   async getError(): Promise<VMapErrorDetail | undefined> {
     return this.helper?.getError();

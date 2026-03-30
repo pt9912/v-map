@@ -23,6 +23,7 @@ const MSG_COMPONENT = 'v-map-layer-wcs - ';
 export class VMapLayerWcs implements VMapErrorHost {
   @Element() el!: HTMLElement;
 
+  /** Current load state of the layer. */
   @Prop({ attribute: 'load-state', reflect: true, mutable: true })
   loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -65,6 +66,7 @@ export class VMapLayerWcs implements VMapErrorHost {
     this.loadState = state;
   }
 
+  /** Returns the last error detail, if any. */
   @Method()
   async getError(): Promise<VMapErrorDetail | undefined> {
     return this.helper?.getError();

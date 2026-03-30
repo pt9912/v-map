@@ -32,6 +32,7 @@ const MSG_COMPONENT: string = 'v-map-layer-wkt - ';
 export class VMapLayerWkt implements VMapLayer, VMapErrorHost {
   @Element() el!: HTMLElement;
 
+  /** Current load state of the layer. */
   @Prop({ attribute: 'load-state', reflect: true, mutable: true })
   loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -148,6 +149,7 @@ export class VMapLayerWkt implements VMapLayer, VMapErrorHost {
     this.loadState = state;
   }
 
+  /** Returns the last error detail, if any. */
   @Method()
   async getError(): Promise<VMapErrorDetail | undefined> {
     return this.helper?.getError();

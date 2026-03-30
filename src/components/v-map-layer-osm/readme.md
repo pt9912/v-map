@@ -9,7 +9,7 @@
 
 | Property    | Attribute    | Description                                                                       | Type                                        | Default                            |
 | ----------- | ------------ | --------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------------------- |
-| `loadState` | `load-state` |                                                                                   | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`                           |
+| `loadState` | `load-state` | Current load state of the layer.                                                  | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`                           |
 | `opacity`   | `opacity`    | Opazität der OSM-Kacheln (0–1).                                                   | `number`                                    | `1.0`                              |
 | `url`       | `url`        | Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server. | `string`                                    | `'https://tile.openstreetmap.org'` |
 | `visible`   | `visible`    | Sichtbarkeit des Layers                                                           | `boolean`                                   | `true`                             |
@@ -27,7 +27,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

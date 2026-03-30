@@ -86,6 +86,9 @@ export namespace Components {
           * Prop, die du intern nutzt/weiterverarbeitest
          */
         "geojson"?: string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
@@ -101,6 +104,7 @@ export namespace Components {
          */
         "iconUrl"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -170,12 +174,16 @@ export namespace Components {
           * @default null
          */
         "colorMap"?: string | GeoStylerColorMap;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -219,6 +227,9 @@ export namespace Components {
           * @example <v-map-layer-google api-key="YOUR_KEY"></v-map-layer-google>
          */
         "apiKey"?: string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Sprach-Lokalisierung (BCP-47, z. B. "de", "en-US").
@@ -231,6 +242,7 @@ export namespace Components {
          */
         "libraries"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -271,12 +283,16 @@ export namespace Components {
         "visible": boolean;
     }
     interface VMapLayerOsm {
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -306,6 +322,9 @@ export namespace Components {
           * Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
          */
         "data"?: string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
@@ -318,6 +337,7 @@ export namespace Components {
          */
         "getRadius": number;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -349,12 +369,16 @@ export namespace Components {
           * JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
          */
         "elevationDecoder"?: string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Liefert `true`, sobald das Terrain-Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -415,12 +439,16 @@ export namespace Components {
           * @default false
          */
         "forceProjection"?: boolean;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
          */
         "getLayerId": () => Promise<string>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -496,12 +524,16 @@ export namespace Components {
         "zIndex": number;
     }
     interface VMapLayerTile3d {
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Indicates whether the tileset has been initialised and added to the map.
          */
         "isReady": () => Promise<boolean>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -539,12 +571,16 @@ export namespace Components {
           * @default 'image/tiff'
          */
         "format": string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Gibt `true` zurück, sobald der Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -586,12 +622,16 @@ export namespace Components {
         "zIndex": number;
     }
     interface VMapLayerWfs {
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Gibt `true` zurück, sobald der Layer initialisiert wurde.
          */
         "isReady": () => Promise<boolean>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -649,6 +689,9 @@ export namespace Components {
           * @default 0.3
          */
         "fillOpacity"?: number;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Returns the internal layer ID used by the map provider.
@@ -664,6 +707,7 @@ export namespace Components {
          */
         "iconUrl"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -739,12 +783,16 @@ export namespace Components {
           * @default "image/png"
          */
         "format": string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
           * Kommagetrennte Layer-Namen (z. B. "topp:states").
          */
         "layers": string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -791,8 +839,12 @@ export namespace Components {
           * Attributions-/Copyright-Text (HTML erlaubt).
          */
         "attributions"?: string;
+        /**
+          * Returns the last error detail, if any.
+         */
         "getError": () => Promise<VMapErrorDetail | undefined>;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
@@ -1294,6 +1346,7 @@ declare namespace LocalJSX {
          */
         "iconUrl"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1364,6 +1417,7 @@ declare namespace LocalJSX {
          */
         "colorMap"?: string | GeoStylerColorMap;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1423,6 +1477,7 @@ declare namespace LocalJSX {
          */
         "libraries"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1469,6 +1524,7 @@ declare namespace LocalJSX {
     }
     interface VMapLayerOsm {
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1514,6 +1570,7 @@ declare namespace LocalJSX {
          */
         "getRadius"?: number;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1551,6 +1608,7 @@ declare namespace LocalJSX {
          */
         "elevationDecoder"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1612,6 +1670,7 @@ declare namespace LocalJSX {
          */
         "forceProjection"?: boolean;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1693,6 +1752,7 @@ declare namespace LocalJSX {
     }
     interface VMapLayerTile3d {
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1735,6 +1795,7 @@ declare namespace LocalJSX {
          */
         "format"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1777,6 +1838,7 @@ declare namespace LocalJSX {
     }
     interface VMapLayerWfs {
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1844,6 +1906,7 @@ declare namespace LocalJSX {
          */
         "iconUrl"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1929,6 +1992,7 @@ declare namespace LocalJSX {
          */
         "layers": string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';
@@ -1981,6 +2045,7 @@ declare namespace LocalJSX {
          */
         "attributions"?: string;
         /**
+          * Current load state of the layer.
           * @default 'idle'
          */
         "loadState"?: 'idle' | 'loading' | 'ready' | 'error';

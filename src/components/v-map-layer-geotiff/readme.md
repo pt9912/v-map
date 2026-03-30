@@ -10,7 +10,7 @@
 | Property     | Attribute    | Description                                                                                                | Type                                        | Default  |
 | ------------ | ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------- | -------- |
 | `colorMap`   | `color-map`  | ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein). | `ColorMap \| string`                        | `null`   |
-| `loadState`  | `load-state` |                                                                                                            | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'` |
+| `loadState`  | `load-state` | Current load state of the layer.                                                                           | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'` |
 | `nodata`     | `nodata`     | NoData Values to discard (overriding any nodata values in the metadata).                                   | `number`                                    | `null`   |
 | `opacity`    | `opacity`    | Opazität der GeoTIFF-Kacheln (0–1).                                                                        | `number`                                    | `1.0`    |
 | `url`        | `url`        | URL to the GeoTIFF file to be displayed on the map.                                                        | `string`                                    | `null`   |
@@ -30,7 +30,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

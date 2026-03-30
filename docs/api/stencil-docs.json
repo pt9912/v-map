@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-29T07:44:57",
+  "timestamp": "2026-03-30T05:36:51",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -605,6 +605,48 @@
           "setter": false
         },
         {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "opacity",
           "type": "number",
           "complexType": {
@@ -942,6 +984,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "getLayerId",
           "returns": {
             "type": "Promise<string>",
@@ -1031,6 +1101,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -1211,6 +1323,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "getLayerId",
           "returns": {
             "type": "Promise<string>",
@@ -1358,6 +1498,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -1577,7 +1759,36 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
       "events": [
         {
           "event": "ready",
@@ -1623,6 +1834,48 @@
       "docsTags": [],
       "usage": {},
       "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "opacity",
           "type": "number",
@@ -1741,6 +1994,34 @@
         }
       ],
       "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
         {
           "name": "getLayerId",
           "returns": {
@@ -1900,6 +2181,48 @@
           "setter": false
         },
         {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "opacity",
           "type": "number",
           "complexType": {
@@ -1981,7 +2304,36 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
       "events": [
         {
           "event": "ready",
@@ -2092,6 +2444,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -2301,6 +2695,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "isReady",
           "returns": {
             "type": "Promise<boolean>",
@@ -2469,6 +2891,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -2886,6 +3350,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "getLayerId",
           "returns": {
             "type": "Promise<string>",
@@ -2947,6 +3439,48 @@
       "docsTags": [],
       "usage": {},
       "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "opacity",
           "type": "number",
@@ -3091,6 +3625,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "isReady",
           "returns": {
             "type": "Promise<boolean>",
@@ -3204,6 +3766,48 @@
           "default": "'image/tiff'",
           "values": [
             {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
               "type": "string"
             }
           ],
@@ -3423,6 +4027,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "isReady",
           "returns": {
             "type": "Promise<boolean>",
@@ -3470,6 +4102,48 @@
       "docsTags": [],
       "usage": {},
       "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "opacity",
           "type": "number",
@@ -3716,6 +4390,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "isReady",
           "returns": {
             "type": "Promise<boolean>",
@@ -3873,6 +4575,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -4232,6 +4976,34 @@
       ],
       "methods": [
         {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
           "name": "getLayerId",
           "returns": {
             "type": "Promise<string>",
@@ -4355,6 +5127,48 @@
           ],
           "optional": false,
           "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
           "getter": false,
           "setter": false
         },
@@ -4555,7 +5369,36 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
       "events": [
         {
           "event": "ready",
@@ -4620,6 +5463,48 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -4785,7 +5670,36 @@
           "setter": false
         }
       ],
-      "methods": [],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
       "events": [
         {
           "event": "ready",
@@ -5279,6 +6193,11 @@
       "declaration": "export type Color = string | [number, number, number, number?];",
       "docstring": "",
       "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
+    },
+    "src/utils/events.ts::VMapErrorDetail": {
+      "declaration": "export interface VMapErrorDetail {\n  /** Error category */\n  type: 'network' | 'validation' | 'parse' | 'provider';\n  /** Human-readable error message */\n  message: string;\n  /** Affected prop/attribute (if applicable) */\n  attribute?: string;\n  /** Original thrown value (if available) */\n  cause?: unknown;\n}",
+      "docstring": "",
+      "path": "src/utils/events.ts"
     },
     "src/types/flavour.ts::Flavour": {
       "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",

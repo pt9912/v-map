@@ -9,7 +9,7 @@
 
 | Property           | Attribute         | Description                                                  | Type                                        | Default     |
 | ------------------ | ----------------- | ------------------------------------------------------------ | ------------------------------------------- | ----------- |
-| `loadState`        | `load-state`      |                                                              | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
+| `loadState`        | `load-state`      | Current load state of the layer.                             | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
 | `opacity`          | `opacity`         | Global opacity factor (0-1).                                 | `number`                                    | `1`         |
 | `tilesetOptions`   | `tileset-options` | Optional JSON string or object with Cesium3DTileset options. | `string \| unknown`                         | `undefined` |
 | `url` _(required)_ | `url`             | URL pointing to the Cesium 3D Tileset.                       | `string`                                    | `undefined` |
@@ -28,7 +28,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

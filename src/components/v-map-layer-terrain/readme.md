@@ -12,7 +12,7 @@
 | `color`                      | `color`             | Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').    | `string`                                    | `undefined` |
 | `elevationData` _(required)_ | `elevation-data`    | URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).             | `string`                                    | `undefined` |
 | `elevationDecoder`           | `elevation-decoder` | JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}'). | `string`                                    | `undefined` |
-| `loadState`                  | `load-state`        |                                                                                        | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
+| `loadState`                  | `load-state`        | Current load state of the layer.                                                       | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`    |
 | `maxZoom`                    | `max-zoom`          | Maximale Zoomstufe für das Terrain.                                                    | `number`                                    | `undefined` |
 | `meshMaxError`               | `mesh-max-error`    | Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).                  | `number`                                    | `undefined` |
 | `minZoom`                    | `min-zoom`          | Minimale Zoomstufe für das Terrain.                                                    | `number`                                    | `undefined` |
@@ -27,7 +27,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 

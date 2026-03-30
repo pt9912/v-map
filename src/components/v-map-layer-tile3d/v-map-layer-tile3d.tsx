@@ -31,6 +31,7 @@ const MSG_COMPONENT = 'v-map-layer-tile3d - ';
 export class VMapLayerTile3d implements VMapErrorHost {
   @Element() el!: HTMLElement;
 
+  /** Current load state of the layer. */
   @Prop({ attribute: 'load-state', reflect: true, mutable: true })
   loadState: 'idle' | 'loading' | 'ready' | 'error' = 'idle';
 
@@ -111,6 +112,7 @@ export class VMapLayerTile3d implements VMapErrorHost {
     this.loadState = state;
   }
 
+  /** Returns the last error detail, if any. */
   @Method()
   async getError(): Promise<VMapErrorDetail | undefined> {
     return this.helper?.getError();

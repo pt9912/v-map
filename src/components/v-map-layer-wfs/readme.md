@@ -9,7 +9,7 @@
 
 | Property                | Attribute       | Description                              | Type                                        | Default              |
 | ----------------------- | --------------- | ---------------------------------------- | ------------------------------------------- | -------------------- |
-| `loadState`             | `load-state`    |                                          | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`             |
+| `loadState`             | `load-state`    | Current load state of the layer.         | `"error" \| "idle" \| "loading" \| "ready"` | `'idle'`             |
 | `opacity`               | `opacity`       | Opazität (0–1).                          | `number`                                    | `1`                  |
 | `outputFormat`          | `output-format` | Ausgabeformat, z. B. application/json.   | `string`                                    | `'application/json'` |
 | `params`                | `params`        | Zusätzliche Parameter als JSON-String.   | `string`                                    | `undefined`          |
@@ -25,7 +25,7 @@
 
 ### `getError() => Promise<VMapErrorDetail | undefined>`
 
-
+Returns the last error detail, if any.
 
 #### Returns
 
