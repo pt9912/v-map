@@ -242,7 +242,6 @@ export const config: Config = {
   ],
   buildEs5: false, // Deaktiviert ES5-Builds komplett (nur ES2022)
   testing: {
-    setupFilesAfterEnv: ['./src/testing/setupTests.jest.ts'],
     testPathIgnorePatterns: ['\\.spec\\.ts$'],
     collectCoverageFrom: [
       'src/components/**/*.{ts,tsx}',
@@ -263,23 +262,6 @@ export const config: Config = {
         lines: 98,
         statements: 95,
       },
-    },
-    // sourceMaps helfen, die TS-Zeilen zu sehen:
-    // 'ts-jest' o. ä. kümmert sich idR. darum; alternativ:
-    // testEnvironmentOptions: { url: 'http://localhost' },
-    moduleNameMapper: {
-      '^leaflet/dist/leaflet-src\\.esm\\.js$': 'leaflet',
-      '^geostyler-sld-parser$':
-        '<rootDir>/src/testing/mocks/geostyler-sld-parser.ts',
-      '^geostyler-mapbox-parser$':
-        '<rootDir>/src/testing/mocks/geostyler-mapbox-parser.ts',
-      '^geostyler-qgis-parser$':
-        '<rootDir>/src/testing/mocks/geostyler-qgis-parser.ts',
-      '^geostyler-lyrx-parser$':
-        '<rootDir>/src/testing/mocks/geostyler-lyrx-parser.ts',
-      '^geostyler-style$': '<rootDir>/src/testing/mocks/geostyler-style.ts',
-      '^@mapbox/tiny-sdf$': '<rootDir>/src/testing/mocks/mapbox-tiny-sdf.ts',
-      '^@npm9912/s-gml$': '<rootDir>/src/testing/mocks/s-gml.ts',
     },
     transformIgnorePatterns: ['node_modules/(?!(.pnpm|ol|leaflet|@loaders\\.gl|@mapbox|@deck\\.gl|geostyler-style|geostyler-sld-parser))'],
     browserHeadless: 'shell',

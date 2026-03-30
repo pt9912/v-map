@@ -1,11 +1,9 @@
 /**
  * OpenLayersProvider GeoStyler Integration Tests
  *
- * Note: These tests are skipped due to Jest limitations with mocking dynamic ES module imports.
- * OpenLayers uses await import() for lazy loading, which Jest cannot properly mock.
- * The GeoStyler implementation in OpenLayersProvider works correctly in runtime.
- *
- * Related Jest issue: https://github.com/jestjs/jest/issues/10025
+ * Note: This remains a placeholder spec.
+ * The GeoStyler path relies on runtime-loaded modules and is covered in browser/E2E scenarios
+ * rather than a dedicated unit-level mock setup here.
  *
  * The implementation supports:
  * - Fill symbolizer (polygons with outline)
