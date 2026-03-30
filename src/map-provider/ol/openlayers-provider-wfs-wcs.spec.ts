@@ -9,7 +9,7 @@ vi.mock('ol/layer/Base', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Vector', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Group', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Tile', () => ({ __esModule: true, default: vi.fn() }));
-vi.mock('ol/layer/Image', () => ({ __esModule: true, default: vi.fn() }));
+vi.mock('ol/layer/Image', () => ({ __esModule: true, default: vi.fn().mockImplementation(function(this: any, opts: any) { Object.assign(this, opts); this.set = vi.fn(); }) }));
 vi.mock('ol/layer/WebGLTile', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/source/Vector', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/source/TileWMS', () => ({ __esModule: true, default: vi.fn() }));
