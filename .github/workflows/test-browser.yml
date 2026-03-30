@@ -12,6 +12,7 @@ jobs:
     env:
       CI: true
       NODE_OPTIONS: --experimental-vm-modules
+      VITEST_BROWSER_INACTIVITY_TIMEOUT_MS: 120000
 
     steps:
       - name: Checkout
@@ -39,6 +40,14 @@ jobs:
           key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-store-${{ runner.os }}-
+
+      - name: Restore Vitest cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.vitest-cache
+          key: vitest-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            vitest-cache-${{ runner.os }}-
 
       - name: Install deps
         run: pnpm install --frozen-lockfile

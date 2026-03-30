@@ -37,12 +37,14 @@ function runVitest({ attempt, streamOutput }) {
     let inactivityTimedOut = false;
     let killTimer;
 
+    let lastHeartbeatAt = 0;
     const heartbeat = setInterval(() => {
-      if (Date.now() - lastActivityAt < 30_000) return;
+      const now = Date.now();
+      if (now - lastHeartbeatAt < 30_000) return;
+      lastHeartbeatAt = now;
       process.stderr.write(
-        `\n[vitest-browser-retry] attempt ${attempt} still running...\n`,
+        `\n[vitest-browser-retry] attempt ${attempt} still running (no output for ${Math.round((now - lastActivityAt) / 1000)}s)...\n`,
       );
-      lastActivityAt = Date.now();
     }, 30_000);
 
     const inactivityWatchdog = setInterval(() => {
