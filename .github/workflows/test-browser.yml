@@ -41,10 +41,12 @@ jobs:
           restore-keys: |
             pnpm-store-${{ runner.os }}-
 
-      - name: Restore Vitest cache
+      - name: Restore Vitest/Vite cache
         uses: actions/cache@v4
         with:
-          path: node_modules/.vitest-cache
+          path: |
+            node_modules/.vitest-cache
+            node_modules/.vite/vitest
           key: vitest-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             vitest-cache-${{ runner.os }}-

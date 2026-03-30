@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 const vitestBin = resolve(process.cwd(), 'node_modules/.bin/vitest');
@@ -14,6 +15,29 @@ const vitestKillGraceMs = 5_000;
 
 function sleep(ms) {
   return new Promise(resolveSleep => setTimeout(resolveSleep, ms));
+}
+
+async function countFilesRecursive(dir) {
+  let entries;
+  try {
+    entries = await readdir(dir, { withFileTypes: true });
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      return 0;
+    }
+    throw error;
+  }
+
+  let count = 0;
+  for (const entry of entries) {
+    const entryPath = resolve(dir, entry.name);
+    if (entry.isDirectory()) {
+      count += await countFilesRecursive(entryPath);
+    } else {
+      count += 1;
+    }
+  }
+  return count;
 }
 
 function replayOutput(result) {
@@ -36,15 +60,29 @@ function runVitest({ attempt, streamOutput }) {
     let lastActivityAt = Date.now();
     let inactivityTimedOut = false;
     let killTimer;
+    let heartbeatInFlight = false;
 
     let lastHeartbeatAt = 0;
-    const heartbeat = setInterval(() => {
+    const heartbeat = setInterval(async () => {
       const now = Date.now();
       if (now - lastHeartbeatAt < 30_000) return;
+      if (heartbeatInFlight) return;
       lastHeartbeatAt = now;
-      process.stderr.write(
-        `\n[vitest-browser-retry] attempt ${attempt} still running (no output for ${Math.round((now - lastActivityAt) / 1000)}s)...\n`,
-      );
+      heartbeatInFlight = true;
+      try {
+        const cacheFileCount = await countFilesRecursive(vitestViteCacheDir);
+        process.stderr.write(
+          `\n[vitest-browser-retry] attempt ${attempt} still running (no output for ${Math.round((now - lastActivityAt) / 1000)}s, cache files: ${cacheFileCount})...\n`,
+        );
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : String(error);
+        process.stderr.write(
+          `\n[vitest-browser-retry] attempt ${attempt} still running (no output for ${Math.round((now - lastActivityAt) / 1000)}s, cache files: unavailable: ${message})...\n`,
+        );
+      } finally {
+        heartbeatInFlight = false;
+      }
     }, 30_000);
 
     const inactivityWatchdog = setInterval(() => {
