@@ -10,6 +10,7 @@ OGC WMS Layer
 | --- | --- | --- | --- | --- |
 | `format` | `string` | `format` | `'image/png'` | Bildformat des GetMap-Requests. |
 | `layers` | `string` | `layers` |  | Kommagetrennte Layer-Namen (z. B. "topp:states"). |
+| `loadState` | `error \| idle \| loading \| ready` | `load-state` | `'idle'` | Current load state of the layer. |
 | `opacity` | `number` | `opacity` | `1.0` | Globale Opazität des WMS-Layers (0–1). |
 | `styles` | `string` | `styles` |  | WMS-`STYLES` Parameter (kommagetrennt). |
 | `tiled` | `boolean` | `tiled` | `true` | Tiled/geslicete Requests verwenden (falls Server unterstützt). |
@@ -23,4 +24,8 @@ OGC WMS Layer
 | Event | Detail-Type | Beschreibung |
 | --- | --- | --- |
 | `ready` | `void` | Signalisiert, dass der WMS-Layer bereit ist. |
+
+### Methods
+
+- `getError() => Promise<VMapErrorDetail>` — Returns the last error detail, if any.
 

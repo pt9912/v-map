@@ -6,15 +6,23 @@
 
 # Interface: VMapLayerOsmAttributes
 
-Defined in: [src/components.d.ts:1997](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1997)
+Defined in: [src/components.d.ts:2194](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2194)
 
 ## Properties
+
+### loadState
+
+> **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:2195](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2195)
+
+***
 
 ### opacity
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:1999](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1999)
+Defined in: [src/components.d.ts:2197](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2197)
 
 ***
 
@@ -22,7 +30,7 @@ Defined in: [src/components.d.ts:1999](https://github.com/pt9912/v-map/blob/e2b8
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:2001](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2001)
+Defined in: [src/components.d.ts:2199](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2199)
 
 ***
 
@@ -30,7 +38,7 @@ Defined in: [src/components.d.ts:2001](https://github.com/pt9912/v-map/blob/e2b8
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1998](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1998)
+Defined in: [src/components.d.ts:2196](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2196)
 
 ***
 
@@ -38,4 +46,4 @@ Defined in: [src/components.d.ts:1998](https://github.com/pt9912/v-map/blob/e2b8
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:2000](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2000)
+Defined in: [src/components.d.ts:2198](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2198)

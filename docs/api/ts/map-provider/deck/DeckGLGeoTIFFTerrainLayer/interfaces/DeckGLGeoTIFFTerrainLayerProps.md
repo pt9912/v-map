@@ -6,7 +6,7 @@
 
 # Interface: DeckGLGeoTIFFTerrainLayerProps
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:13](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L13)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:27](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L27)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:13](https://gith
 
 > `optional` **\_dataDiff**: \<`LayerDataT`\>(`newData`, `oldData?`) => `object`[]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:83
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:83
 
 Callback to determine the difference between two data values, in order to perform a partial update.
 
@@ -52,7 +52,7 @@ Callback to determine the difference between two data values, in order to perfor
 
 > `optional` **autoHighlight**: `boolean`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:174
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:175
 
 Enable GPU-based object highlighting. Default false.
 
@@ -66,9 +66,9 @@ Enable GPU-based object highlighting. Default false.
 
 > `optional` **color**: \[`number`, `number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:68](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L68)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:82](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L82)
 
-Farbe für das Terrain (wenn keine Textur vorhanden)
+Farbe für das Terrain-Mesh (terrain-Modus, wenn keine Textur)
 [r, g, b] mit Werten 0-255
 
 ***
@@ -77,7 +77,7 @@ Farbe für das Terrain (wenn keine Textur vorhanden)
 
 > `optional` **colorFormat**: `"RGBA"` \| `"RGB"`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:144
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:145
 
 The format of colors, default 'RGBA'.
 
@@ -91,10 +91,9 @@ The format of colors, default 'RGBA'.
 
 > `optional` **colorMap**: [`GeoStylerColorMap`](../../../../index/interfaces/GeoStylerColorMap.md) \| [`ColorMapName`](../../../geotiff/utils/colormap-utils/type-aliases/ColorMapName.md)
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:74](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L74)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:87](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L87)
 
-ColorMap für Höhendaten-Visualisierung
-Nur relevant wenn keine texture gesetzt ist
+ColorMap für Höhendaten-Visualisierung (colormap-Modus)
 
 ***
 
@@ -102,7 +101,7 @@ Nur relevant wenn keine texture gesetzt ist
 
 > `optional` **coordinateOrigin**: \[`number`, `number`, `number`\]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:128
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:129
 
 The coordinate origin of the data.
 
@@ -116,7 +115,7 @@ The coordinate origin of the data.
 
 > `optional` **coordinateSystem**: `CoordinateSystem`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:124
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:125
 
 The coordinate system of the data. Default to COORDINATE_SYSTEM.LNGLAT in a geospatial view or COORDINATE_SYSTEM.CARTESIAN in a non-geospatial view.
 
@@ -130,7 +129,7 @@ The coordinate system of the data. Default to COORDINATE_SYSTEM.LNGLAT in a geos
 
 > `optional` **data**: `unknown`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:75
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:75
 
 The data to visualize.
 
@@ -144,7 +143,7 @@ The data to visualize.
 
 > `optional` **dataComparator**: \<`LayerDataT`\>(`newData`, `oldData?`) => `boolean`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:79
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:79
 
 Callback to determine if two data values are equal.
 
@@ -178,7 +177,7 @@ Callback to determine if two data values are equal.
 
 > `optional` **dataTransform**: \<`LayerDataT`\>(`data`, `previousData?`) => `LayerDataT`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:90
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:90
 
 Callback to manipulate remote data when it's fetched and parsed.
 
@@ -212,9 +211,9 @@ Callback to manipulate remote data when it's fetched and parsed.
 
 > `optional` **elevationScale**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:86](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L86)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:98](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L98)
 
-Höhen-Überhöhung (Exaggeration Factor)
+Höhen-Überhöhung (terrain-Modus)
 Default: 1.0
 
 ***
@@ -223,7 +222,7 @@ Default: 1.0
 
 > `optional` **extensions**: `LayerExtension`\<`unknown`\>[]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:156
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:157
 
 Add additional functionalities to this layer.
 
@@ -237,7 +236,7 @@ Add additional functionalities to this layer.
 
 > `optional` **fetch**: (`url`, `context`) => `any`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:94
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:94
 
 Custom implementation to fetch and parse content from URLs.
 
@@ -283,7 +282,7 @@ Custom implementation to fetch and parse content from URLs.
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:24](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L24)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:38](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L38)
 
 Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
 
@@ -293,7 +292,7 @@ Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
 
 > `optional` **getPolygonOffset**: (`params`) => \[`number`, `number`\]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:168
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:169
 
 Callback to calculate the polygonOffset WebGL parameter.
 
@@ -319,7 +318,7 @@ Callback to calculate the polygonOffset WebGL parameter.
 
 > `optional` **highlightColor**: `number`[] \| (`pickingInfo`) => `number`[]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:182
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:183
 
 The color of the highlight.
 
@@ -333,7 +332,7 @@ The color of the highlight.
 
 > `optional` **highlightedObjectIndex**: `number`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:178
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:179
 
 The index of the data object to highlight. If unspecified, the currently hoverred object is highlighted.
 
@@ -347,7 +346,7 @@ The index of the data object to highlight. If unspecified, the currently hoverre
 
 > **id**: `string`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:71
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:71
 
 Unique identifier of the layer.
 
@@ -361,7 +360,7 @@ Unique identifier of the layer.
 
 > `optional` **loaders**: `Loader`[]
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:160
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:161
 
 Add support for additional data formats.
 
@@ -375,7 +374,7 @@ Add support for additional data formats.
 
 > `optional` **loadOptions**: `any`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:164
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:165
 
 Options to customize the behavior of loaders
 
@@ -389,7 +388,7 @@ Options to customize the behavior of loaders
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:39](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L39)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:53](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L53)
 
 Maximale Zoom-Stufe
 
@@ -399,10 +398,10 @@ Maximale Zoom-Stufe
 
 > `optional` **meshMaxError**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:51](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L51)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:65](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L65)
 
-Mesh-Fehlertoleranz in Metern (Martini)
-Kleinere Werte = detaillierteres Mesh, aber langsamer
+Mesh-Fehlertoleranz in Metern für Martini-Triangulierung.
+Kleinere Werte = detaillierteres Mesh, aber höhere GPU-Last.
 Default: 4.0
 
 ***
@@ -411,7 +410,7 @@ Default: 4.0
 
 > `optional` **minZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:34](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L34)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:48](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L48)
 
 Minimale Zoom-Stufe
 
@@ -421,7 +420,7 @@ Minimale Zoom-Stufe
 
 > `optional` **modelMatrix**: `Matrix4Like`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:132
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:133
 
 A 4x4 matrix to transform local coordianates to the world space.
 
@@ -435,7 +434,7 @@ A 4x4 matrix to transform local coordianates to the world space.
 
 > `optional` **noDataValue**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:29](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L29)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:43](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L43)
 
 NoData-Wert für ungültige Höhendaten
 
@@ -445,7 +444,7 @@ NoData-Wert für ungültige Höhendaten
 
 > `optional` **numInstances**: `number`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:215
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:216
 
 (Advanced) supply attribute size externally
 
@@ -459,7 +458,7 @@ Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core
 
 > `optional` **onClick**: (`pickingInfo`, `event`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:201
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:202
 
 Called when the mouse clicks over an object of this layer.
 
@@ -537,7 +536,7 @@ Called when the mouse clicks over an object of this layer.
 
 > `optional` **onDataLoad**: \<`LayerDataT`\>(`data`, `context`) => `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:186
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:187
 
 Called when remote data is fetched and parsed.
 
@@ -577,7 +576,7 @@ Called when remote data is fetched and parsed.
 
 > `optional` **onDrag**: (`pickingInfo`, `event`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:209
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:210
 
 Called when the mouse drags an object of this layer.
 
@@ -655,7 +654,7 @@ Called when the mouse drags an object of this layer.
 
 > `optional` **onDragEnd**: (`pickingInfo`, `event`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:213
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:214
 
 Called when the mouse releases an object of this layer.
 
@@ -733,7 +732,7 @@ Called when the mouse releases an object of this layer.
 
 > `optional` **onDragStart**: (`pickingInfo`, `event`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:205
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:206
 
 Called when the mouse starts dragging an object of this layer.
 
@@ -811,7 +810,7 @@ Called when the mouse starts dragging an object of this layer.
 
 > `optional` **onError**: (`error`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:193
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:194
 
 Called when the layer encounters an error.
 
@@ -835,7 +834,7 @@ Called when the layer encounters an error.
 
 > `optional` **onHover**: (`pickingInfo`, `event`) => `boolean` \| `void`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:197
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:198
 
 Called when the mouse enters/leaves an object of this layer.
 
@@ -913,7 +912,7 @@ Called when the mouse enters/leaves an object of this layer.
 
 > `optional` **opacity**: `number`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:120
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:121
 
 Opacity of the layer, between 0 and 1. Default 1.
 
@@ -927,7 +926,7 @@ Opacity of the layer, between 0 and 1. Default 1.
 
 > `optional` **operation**: `Operation` \| `"terrain+terrain"` \| `"terrain+mask"` \| `"terrain+draw"` \| `"mask+terrain"` \| `"mask+mask"` \| `"mask+draw"` \| `"draw+terrain"` \| `"draw+mask"` \| `"draw+draw"`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:108
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:108
 
 Rendering operation of the layer. `+` separated list of names.
 
@@ -941,7 +940,7 @@ Rendering operation of the layer. `+` separated list of names.
 
 > `optional` **parameters**: `Parameters`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:148
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:149
 
 Override the WebGL parameters used to draw this layer. See https://luma.gl/modules/gltools/docs/api-reference/parameter-setting#parameters
 
@@ -953,11 +952,12 @@ Override the WebGL parameters used to draw this layer. See https://luma.gl/modul
 
 ### pickable?
 
-> `optional` **pickable**: `boolean`
+> `optional` **pickable**: `boolean` \| `"3d"`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:116
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:117
 
 If the layer can be picked on pointer events. Default false.
+Set to '3d' to enable depth picking for 3D coordinates.
 
 #### Inherited from
 
@@ -969,7 +969,7 @@ If the layer can be picked on pointer events. Default false.
 
 > `optional` **positionFormat**: `"XYZ"` \| `"XY"`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:140
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:141
 
 The format of positions, default 'XYZ'.
 
@@ -983,9 +983,21 @@ The format of positions, default 'XYZ'.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:19](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L19)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:33](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L33)
 
-Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
+Quell-Projektion des GeoTIFF (z. B. \"EPSG:32632\" oder proj4-String)
+
+***
+
+### renderMode?
+
+> `optional` **renderMode**: `"terrain"` \| `"colormap"`
+
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:105](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L105)
+
+Rendering-Modus:
+- 'terrain': 3D-Mesh via Martini-Algorithmus (Standard)
+- 'colormap': 2D-Kacheln mit Farbkarte (TileLayer + BitmapLayer)
 
 ***
 
@@ -993,7 +1005,7 @@ Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
 
 > `optional` **startIndices**: `NumericArray`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:217
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:218
 
 (Advanced) supply variable-width attribute size externally
 
@@ -1007,9 +1019,9 @@ Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core
 
 > `optional` **texture**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:62](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L62)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:76](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L76)
 
-Textur-URL (optional) - kann ein Bild oder tile-URL sein
+Textur-URL (optional)
 
 ***
 
@@ -1017,9 +1029,9 @@ Textur-URL (optional) - kann ein Bild oder tile-URL sein
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:44](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L44)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:58](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L58)
 
-Tile-Größe in Pixeln
+Tile-Größe in Pixeln (muss 2^n sein, z. B. 256 oder 512)
 
 ***
 
@@ -1027,7 +1039,7 @@ Tile-Größe in Pixeln
 
 > `optional` **transitions**: `Record`\<`string`, `any`\>
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:152
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:153
 
 Create smooth transitions when prop values update.
 
@@ -1041,7 +1053,7 @@ Create smooth transitions when prop values update.
 
 > `optional` **updateTriggers**: `Record`\<`string`, `any`\>
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:104
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:104
 
 The dependencies used to trigger re-evaluation of functional accessors (get*).
 
@@ -1055,7 +1067,7 @@ The dependencies used to trigger re-evaluation of functional accessors (get*).
 
 > `optional` **url**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:14](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L14)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:28](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L28)
 
 ***
 
@@ -1063,10 +1075,9 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:14](https://gith
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:80](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L80)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:92](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L92)
 
-Wertebereich für Normalisierung [min, max]
-Wird für ColorMap-Mapping verwendet
+Wertebereich für ColorMap-Normalisierung [min, max]
 
 ***
 
@@ -1074,7 +1085,7 @@ Wird für ColorMap-Mapping verwendet
 
 > `optional` **visible**: `boolean`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:112
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:112
 
 If the layer should be rendered. Default true.
 
@@ -1088,9 +1099,9 @@ If the layer should be rendered. Default true.
 
 > `optional` **wireframe**: `boolean`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:57](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L57)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:71](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L71)
 
-Wireframe-Modus (nur Mesh-Linien anzeigen)
+Wireframe-Modus: zeigt nur Mesh-Linien (terrain-Modus)
 Default: false
 
 ***
@@ -1099,7 +1110,7 @@ Default: false
 
 > `optional` **wrapLongitude**: `boolean`
 
-Defined in: node\_modules/.pnpm/@deck.gl+core@9.1.15/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:136
+Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core/dist/types/layer-props.d.ts:137
 
 (Geospatial only) normalize geometries that cross the 180th meridian. Default false.
 

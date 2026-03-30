@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:1285](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1285)
+Defined in: [src/components.d.ts:1413](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1413)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1285](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
 
-Defined in: [src/components.d.ts:1290](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1290)
+Defined in: [src/components.d.ts:1418](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1418)
 
 ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
 
@@ -26,11 +26,27 @@ null
 
 ***
 
+### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:1423](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1423)
+
+Current load state of the layer.
+
+#### Default
+
+```ts
+'idle'
+```
+
+***
+
 ### nodata?
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/components.d.ts:1295](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1295)
+Defined in: [src/components.d.ts:1428](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1428)
 
 NoData Values to discard (overriding any nodata values in the metadata).
 
@@ -46,7 +62,7 @@ null
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1305](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1305)
+Defined in: [src/components.d.ts:1438](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1438)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -62,7 +78,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:1310](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1310)
+Defined in: [src/components.d.ts:1443](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1443)
 
 URL to the GeoTIFF file to be displayed on the map.
 
@@ -78,7 +94,7 @@ null
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/components.d.ts:1315](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1315)
+Defined in: [src/components.d.ts:1448](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1448)
 
 Value range for colormap normalization [min, max].
 
@@ -94,7 +110,7 @@ null
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1320](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1320)
+Defined in: [src/components.d.ts:1453](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1453)
 
 Sichtbarkeit des Layers
 
@@ -110,7 +126,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1325](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1325)
+Defined in: [src/components.d.ts:1458](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1458)
 
 Z-index for layer stacking order. Higher values render on top.
 
@@ -126,7 +142,7 @@ Z-index for layer stacking order. Higher values render on top.
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1300](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1300)
+Defined in: [src/components.d.ts:1433](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L1433)
 
 Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.
  ready

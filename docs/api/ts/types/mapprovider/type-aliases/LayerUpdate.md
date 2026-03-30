@@ -6,22 +6,6 @@
 
 # Type Alias: LayerUpdate
 
-> **LayerUpdate** = `object`
+> **LayerUpdate** = `{ [K in LayerConfig["type"]]: { data: Partial<Extract<LayerConfig, { type: K }>>; type: K } }`\[[`LayerConfig`](../../layerconfig/type-aliases/LayerConfig.md)\[`"type"`\]\] \| \{ `data`: \{ `style?`: `Record`\<`string`, `unknown`\>; \}; `type`: `"tile3d-style"`; \}
 
-Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/mapprovider.ts#L5)
-
-## Properties
-
-### data
-
-> **data**: `any`
-
-Defined in: [src/types/mapprovider.ts:7](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/mapprovider.ts#L7)
-
-***
-
-### type
-
-> **type**: `string`
-
-Defined in: [src/types/mapprovider.ts:6](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/types/mapprovider.ts#L6)
+Defined in: [src/types/mapprovider.ts:5](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/types/mapprovider.ts#L5)

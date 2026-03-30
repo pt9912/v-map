@@ -6,12 +6,12 @@
 
 # Type Alias: Expr\<T\>
 
-> **Expr**\<`T`\> = `T` \| `any`[]
+> **Expr**\<`T`\> = `T` \| `unknown`[]
 
-Defined in: [src/lib/vstyle.ts:3](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/lib/vstyle.ts#L3)
+Defined in: [src/lib/vstyle.ts:3](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/lib/vstyle.ts#L3)
 
 ## Type Parameters
 
 ### T
 
-`T` = `any`
+`T` = `unknown`

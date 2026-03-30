@@ -6,7 +6,7 @@
 
 # Interface: IntrinsicElements
 
-Defined in: [src/components.d.ts:2126](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2126)
+Defined in: [src/components.d.ts:2334](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2334)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2126](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map**: `Omit`\<[`VMap`](VMap.md), keyof [`VMapAttributes`](VMapAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2127](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2127)
+Defined in: [src/components.d.ts:2335](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2335)
 
 #### Type Declaration
 
@@ -88,7 +88,7 @@ Defined in: [src/components.d.ts:2127](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-builder**: [`VMapBuilder`](VMapBuilder.md)
 
-Defined in: [src/components.d.ts:2128](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2128)
+Defined in: [src/components.d.ts:2336](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2336)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [src/components.d.ts:2128](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-geojson**: `Omit`\<[`VMapLayerGeojson`](VMapLayerGeojson.md), keyof [`VMapLayerGeojsonAttributes`](VMapLayerGeojsonAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2129)
+Defined in: [src/components.d.ts:2337](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2337)
 
 #### Type Declaration
 
@@ -108,6 +108,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **fillOpacity**: `number`
 
+##### geojson?
+
+> `optional` **geojson**: `string`
+
 ##### iconSize?
 
 > `optional` **iconSize**: `string`
@@ -115,6 +119,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 ##### iconUrl?
 
 > `optional` **iconUrl**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -174,6 +182,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:fillOpacity**: `number`
 
+##### attr:geojson?
+
+> `optional` **attr:geojson**: `string`
+
 ##### attr:iconSize?
 
 > `optional` **attr:iconSize**: `string`
@@ -181,6 +193,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 ##### attr:iconUrl?
 
 > `optional` **attr:iconUrl**: `string`
+
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### attr:opacity?
 
@@ -240,6 +256,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **prop:fillOpacity**: `number`
 
+##### prop:geojson?
+
+> `optional` **prop:geojson**: `string`
+
 ##### prop:iconSize?
 
 > `optional` **prop:iconSize**: `string`
@@ -247,6 +267,10 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 ##### prop:iconUrl?
 
 > `optional` **prop:iconUrl**: `string`
+
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### prop:opacity?
 
@@ -302,13 +326,17 @@ Defined in: [src/components.d.ts:2129](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-geotiff**: `Omit`\<[`VMapLayerGeotiff`](VMapLayerGeotiff.md), keyof [`VMapLayerGeotiffAttributes`](VMapLayerGeotiffAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2130](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2130)
+Defined in: [src/components.d.ts:2338](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2338)
 
 #### Type Declaration
 
 ##### colorMap?
 
 > `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### nodata?
 
@@ -336,6 +364,10 @@ Defined in: [src/components.d.ts:2130](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:nodata?
 
 > `optional` **attr:nodata**: `number`
@@ -361,6 +393,10 @@ Defined in: [src/components.d.ts:2130](https://github.com/pt9912/v-map/blob/e2b8
 ##### prop:colorMap?
 
 > `optional` **prop:colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
+
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### prop:nodata?
 
@@ -388,7 +424,7 @@ Defined in: [src/components.d.ts:2130](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-google**: `Omit`\<[`VMapLayerGoogle`](VMapLayerGoogle.md), keyof [`VMapLayerGoogleAttributes`](VMapLayerGoogleAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2131)
+Defined in: [src/components.d.ts:2339](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2339)
 
 #### Type Declaration
 
@@ -403,6 +439,10 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 ##### libraries?
 
 > `optional` **libraries**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### mapType?
 
@@ -426,7 +466,7 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 
 ##### styles?
 
-> `optional` **styles**: `string` \| `any`[]
+> `optional` **styles**: `string` \| `Record`\<`string`, `unknown`\>[]
 
 ##### visible?
 
@@ -445,6 +485,10 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 ##### attr:libraries?
 
 > `optional` **attr:libraries**: `string`
+
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### attr:mapType?
 
@@ -468,7 +512,7 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 
 ##### attr:styles?
 
-> `optional` **attr:styles**: `string` \| `any`[]
+> `optional` **attr:styles**: `string` \| `Record`\<`string`, `unknown`\>[]
 
 ##### attr:visible?
 
@@ -487,6 +531,10 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 ##### prop:libraries?
 
 > `optional` **prop:libraries**: `string`
+
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### prop:mapType?
 
@@ -510,7 +558,7 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 
 ##### prop:styles?
 
-> `optional` **prop:styles**: `string` \| `any`[]
+> `optional` **prop:styles**: `string` \| `Record`\<`string`, `unknown`\>[]
 
 ##### prop:visible?
 
@@ -522,9 +570,13 @@ Defined in: [src/components.d.ts:2131](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-osm**: `Omit`\<[`VMapLayerOsm`](VMapLayerOsm.md), keyof [`VMapLayerOsmAttributes`](VMapLayerOsmAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2132](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2132)
+Defined in: [src/components.d.ts:2340](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2340)
 
 #### Type Declaration
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -544,6 +596,10 @@ Defined in: [src/components.d.ts:2132](https://github.com/pt9912/v-map/blob/e2b8
 
 #### Type Declaration
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:opacity?
 
 > `optional` **attr:opacity**: `number`
@@ -561,6 +617,10 @@ Defined in: [src/components.d.ts:2132](https://github.com/pt9912/v-map/blob/e2b8
 > `optional` **attr:zIndex**: `number`
 
 #### Type Declaration
+
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### prop:opacity?
 
@@ -584,7 +644,7 @@ Defined in: [src/components.d.ts:2132](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-scatterplot**: `Omit`\<[`VMapLayerScatterplot`](VMapLayerScatterplot.md), keyof [`VMapLayerScatterplotAttributes`](VMapLayerScatterplotAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2133)
+Defined in: [src/components.d.ts:2341](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2341)
 
 #### Type Declaration
 
@@ -599,6 +659,10 @@ Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b8
 ##### getRadius?
 
 > `optional` **getRadius**: `number`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -626,6 +690,10 @@ Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:getRadius**: `number`
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:opacity?
 
 > `optional` **attr:opacity**: `number`
@@ -652,6 +720,10 @@ Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **prop:getRadius**: `number`
 
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### prop:opacity?
 
 > `optional` **prop:opacity**: `number`
@@ -668,9 +740,9 @@ Defined in: [src/components.d.ts:2133](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-terrain
 
-> **v-map-layer-terrain**: `Omit`\<[`VMapLayerTerrain`](VMapLayerTerrain.md), keyof VMapLayerTerrainAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:color"?: string; "attr:maxZoom"?: number; "attr:minZoom"?: number; "attr:meshMaxError"?: number; "attr:wireframe"?: boolean; "attr:texture"?: string; "attr:elevationDecoder"?: string; "attr:elevationData"?: string; \} & (\{ ...; \} & One...
+> **v-map-layer-terrain**: `Omit`\<[`VMapLayerTerrain`](VMapLayerTerrain.md), keyof VMapLayerTerrainAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "attr:minZoom"?: number; "attr:maxZoom"?: number; "attr:color"?: string; ... 4 more ...; "attr:meshMaxError"?: number; \} & (\{ ...; \} & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:2134](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2134)
+Defined in: [src/components.d.ts:2342](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2342)
 
 #### Type Declaration
 
@@ -685,6 +757,10 @@ Defined in: [src/components.d.ts:2134](https://github.com/pt9912/v-map/blob/e2b8
 ##### elevationDecoder?
 
 > `optional` **elevationDecoder**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### maxZoom?
 
@@ -724,7 +800,7 @@ Defined in: [src/components.d.ts:2134](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-terrain-geotiff**: `Omit`\<[`VMapLayerTerrainGeotiff`](VMapLayerTerrainGeotiff.md), keyof [`VMapLayerTerrainGeotiffAttributes`](VMapLayerTerrainGeotiffAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2135)
+Defined in: [src/components.d.ts:2343](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2343)
 
 #### Type Declaration
 
@@ -739,6 +815,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 ##### forceProjection?
 
 > `optional` **forceProjection**: `boolean`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### maxZoom?
 
@@ -763,6 +843,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 ##### projection?
 
 > `optional` **projection**: `string`
+
+##### renderMode?
+
+> `optional` **renderMode**: `"terrain"` \| `"colormap"`
 
 ##### texture?
 
@@ -802,6 +886,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:forceProjection**: `boolean`
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:maxZoom?
 
 > `optional` **attr:maxZoom**: `number`
@@ -825,6 +913,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 ##### attr:projection?
 
 > `optional` **attr:projection**: `string`
+
+##### attr:renderMode?
+
+> `optional` **attr:renderMode**: `"terrain"` \| `"colormap"`
 
 ##### attr:texture?
 
@@ -864,6 +956,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **prop:forceProjection**: `boolean`
 
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### prop:maxZoom?
 
 > `optional` **prop:maxZoom**: `number`
@@ -887,6 +983,10 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 ##### prop:projection?
 
 > `optional` **prop:projection**: `string`
+
+##### prop:renderMode?
+
+> `optional` **prop:renderMode**: `"terrain"` \| `"colormap"`
 
 ##### prop:texture?
 
@@ -916,11 +1016,15 @@ Defined in: [src/components.d.ts:2135](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-tile3d
 
-> **v-map-layer-tile3d**: `Omit`\<[`VMapLayerTile3d`](VMapLayerTile3d.md), keyof VMapLayerTile3dAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:url"?: string; "attr:tilesetOptions"?: string \| Record\<string, unknown\>; \} & (\{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:tilesetOptions"?: string \| Record\<...\>; \} & OneOf\<.....
+> **v-map-layer-tile3d**: `Omit`\<[`VMapLayerTile3d`](VMapLayerTile3d.md), keyof VMapLayerTile3dAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:zIndex"?: number; "attr:url"?: string; "attr:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "attr:tilesetOptions"?: string \| Record\<string, unknown\>; \} & (\{ ...; \} & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:2136](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2136)
+Defined in: [src/components.d.ts:2344](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2344)
 
 #### Type Declaration
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -946,9 +1050,9 @@ Defined in: [src/components.d.ts:2136](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-wcs
 
-> **v-map-layer-wcs**: `Omit`\<[`VMapLayerWcs`](VMapLayerWcs.md), keyof VMapLayerWcsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:params"?: string; "prop:version"?: string; "prop:format"?: string; "prop:projection"?: string; "prop:coverageName"?: string; "prop:resolutions"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
+> **v-map-layer-wcs**: `Omit`\<[`VMapLayerWcs`](VMapLayerWcs.md), keyof VMapLayerWcsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "prop:version"?: string; "prop:format"?: string; "prop:params"?: string; "prop:coverageName"?: string; "prop:projection"?: string; "prop:resolutions"?: string; ...
 
-Defined in: [src/components.d.ts:2137](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2137)
+Defined in: [src/components.d.ts:2345](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2345)
 
 #### Type Declaration
 
@@ -959,6 +1063,10 @@ Defined in: [src/components.d.ts:2137](https://github.com/pt9912/v-map/blob/e2b8
 ##### format?
 
 > `optional` **format**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -1002,6 +1110,10 @@ Defined in: [src/components.d.ts:2137](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:format**: `string`
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:opacity?
 
 > `optional` **attr:opacity**: `number`
@@ -1038,11 +1150,15 @@ Defined in: [src/components.d.ts:2137](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-wfs
 
-> **v-map-layer-wfs**: `Omit`\<[`VMapLayerWfs`](VMapLayerWfs.md), keyof VMapLayerWfsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:params"?: string; "prop:version"?: string; "prop:typeName"?: string; "prop:outputFormat"?: string; "prop:srsName"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
+> **v-map-layer-wfs**: `Omit`\<[`VMapLayerWfs`](VMapLayerWfs.md), keyof VMapLayerWfsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "prop:version"?: string; "prop:typeName"?: string; "prop:outputFormat"?: string; "prop:srsName"?: string; "prop:params"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:2138](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2138)
+Defined in: [src/components.d.ts:2346](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2346)
 
 #### Type Declaration
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -1081,6 +1197,10 @@ Defined in: [src/components.d.ts:2138](https://github.com/pt9912/v-map/blob/e2b8
 > `optional` **zIndex**: `number`
 
 #### Type Declaration
+
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### attr:opacity?
 
@@ -1124,7 +1244,7 @@ Defined in: [src/components.d.ts:2138](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layer-wkt**: `Omit`\<[`VMapLayerWkt`](VMapLayerWkt.md), keyof [`VMapLayerWktAttributes`](VMapLayerWktAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2139)
+Defined in: [src/components.d.ts:2347](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2347)
 
 #### Type Declaration
 
@@ -1143,6 +1263,10 @@ Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b8
 ##### iconUrl?
 
 > `optional` **iconUrl**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -1214,6 +1338,10 @@ Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:iconUrl**: `string`
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:opacity?
 
 > `optional` **attr:opacity**: `number`
@@ -1284,6 +1412,10 @@ Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **prop:iconUrl**: `string`
 
+##### prop:loadState?
+
+> `optional` **prop:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### prop:opacity?
 
 > `optional` **prop:opacity**: `number`
@@ -1340,9 +1472,9 @@ Defined in: [src/components.d.ts:2139](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-wms
 
-> **v-map-layer-wms**: `Omit`\<[`VMapLayerWms`](VMapLayerWms.md), keyof VMapLayerWmsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:layers"?: string; "prop:tiled"?: boolean; "prop:format"?: string; "prop:styles"?: string; "prop:transparent"?: boolean; \} & (OneOf\<...\> & OneOf\<...\>)
+> **v-map-layer-wms**: `Omit`\<[`VMapLayerWms`](VMapLayerWms.md), keyof VMapLayerWmsAttributes\> & `object` & `object` & \{ "prop:visible"?: boolean; "prop:opacity"?: number; "prop:zIndex"?: number; "prop:url"?: string; "prop:layers"?: string; "prop:tiled"?: boolean; "prop:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "prop:format"?: string; "prop:transparent"?: boolean; "prop:styles"?: string; \} & (OneOf\<...\> & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:2140](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2140)
+Defined in: [src/components.d.ts:2348](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2348)
 
 #### Type Declaration
 
@@ -1353,6 +1485,10 @@ Defined in: [src/components.d.ts:2140](https://github.com/pt9912/v-map/blob/e2b8
 ##### layers?
 
 > `optional` **layers**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### opacity?
 
@@ -1392,6 +1528,10 @@ Defined in: [src/components.d.ts:2140](https://github.com/pt9912/v-map/blob/e2b8
 
 > `optional` **attr:layers**: `string`
 
+##### attr:loadState?
+
+> `optional` **attr:loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
 ##### attr:opacity?
 
 > `optional` **attr:opacity**: `number`
@@ -1424,15 +1564,19 @@ Defined in: [src/components.d.ts:2140](https://github.com/pt9912/v-map/blob/e2b8
 
 ### v-map-layer-xyz
 
-> **v-map-layer-xyz**: `Omit`\<[`VMapLayerXyz`](VMapLayerXyz.md), keyof VMapLayerXyzAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:url"?: string; "attr:tileSize"?: number; "attr:maxZoom"?: number; "attr:subdomains"?: string; "attr:attributions"?: string; \} & (\{ "prop:visible"?: boolean; ... 5 more ...; "prop:attributions"?: string; \} & OneOf\<...\>)
+> **v-map-layer-xyz**: `Omit`\<[`VMapLayerXyz`](VMapLayerXyz.md), keyof VMapLayerXyzAttributes\> & `object` & \{ "attr:visible"?: boolean; "attr:opacity"?: number; "attr:url"?: string; "attr:loadState"?: "ready" \| "error" \| "idle" \| "loading"; "attr:tileSize"?: number; "attr:maxZoom"?: number; "attr:attributions"?: string; "attr:subdomains"?: string; \} & (\{ ...; \} & OneOf\<...\>)
 
-Defined in: [src/components.d.ts:2141](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2141)
+Defined in: [src/components.d.ts:2349](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2349)
 
 #### Type Declaration
 
 ##### attributions?
 
 > `optional` **attributions**: `string`
+
+##### loadState?
+
+> `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
 ##### maxZoom?
 
@@ -1464,7 +1608,7 @@ Defined in: [src/components.d.ts:2141](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layercontrol**: `Omit`\<[`VMapLayercontrol`](VMapLayercontrol.md), `"for"`\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2142](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2142)
+Defined in: [src/components.d.ts:2350](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2350)
 
 #### Type Declaration
 
@@ -1490,7 +1634,7 @@ Defined in: [src/components.d.ts:2142](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-layergroup**: `Omit`\<[`VMapLayergroup`](VMapLayergroup.md), keyof [`VMapLayergroupAttributes`](VMapLayergroupAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2143](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2143)
+Defined in: [src/components.d.ts:2351](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2351)
 
 #### Type Declaration
 
@@ -1540,7 +1684,7 @@ Defined in: [src/components.d.ts:2143](https://github.com/pt9912/v-map/blob/e2b8
 
 > **v-map-style**: `Omit`\<[`VMapStyle`](VMapStyle.md), keyof [`VMapStyleAttributes`](VMapStyleAttributes.md)\> & `object` & `object` & `object`
 
-Defined in: [src/components.d.ts:2144](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2144)
+Defined in: [src/components.d.ts:2352](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2352)
 
 #### Type Declaration
 

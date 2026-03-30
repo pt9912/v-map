@@ -10,9 +10,10 @@
 | --- | --- | --- | --- | --- |
 | `fillColor` | `string` | `fill-color` |  | Fill color for polygon geometries (CSS color value) |
 | `fillOpacity` | `number` | `fill-opacity` |  | Fill opacity for polygon geometries (0-1) |
-| `geojson` | `unknown` |  |  | Prop, die du intern nutzt/weiterverarbeitest |
+| `geojson` | `string` | `geojson` |  | Prop, die du intern nutzt/weiterverarbeitest |
 | `iconSize` | `string` | `icon-size` |  | Icon size as [width, height] in pixels (comma-separated string like "32,32") |
 | `iconUrl` | `string` | `icon-url` |  | Icon URL for point features (alternative to pointColor/pointRadius) |
+| `loadState` | `error \| idle \| loading \| ready` | `load-state` | `'idle'` | Current load state of the layer. |
 | `opacity` | `number` | `opacity` | `1.0` | Opazität der geojson-Kacheln (0–1). |
 | `pointColor` | `string` | `point-color` |  | Point color for point geometries (CSS color value) |
 | `pointRadius` | `number` | `point-radius` |  | Point radius for point geometries in pixels |
@@ -28,5 +29,6 @@
 
 ### Methods
 
+- `getError() => Promise<VMapErrorDetail>` — Returns the last error detail, if any.
 - `getLayerId() => Promise<string>` — Returns the internal layer ID used by the map provider.
 

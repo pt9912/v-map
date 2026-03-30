@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWms
 
-Defined in: [src/components.d.ts:678](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L678)
+Defined in: [src/components.d.ts:780](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L780)
 
 OGC WMS Layer
 
@@ -16,7 +16,7 @@ OGC WMS Layer
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:683](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L683)
+Defined in: [src/components.d.ts:785](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L785)
 
 Bildformat des GetMap-Requests.
 
@@ -28,13 +28,43 @@ Bildformat des GetMap-Requests.
 
 ***
 
+### getError()
+
+> **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
+
+Defined in: [src/components.d.ts:789](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L789)
+
+Returns the last error detail, if any.
+
+#### Returns
+
+`Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
+
+***
+
 ### layers
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:687](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L687)
+Defined in: [src/components.d.ts:793](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L793)
 
 Kommagetrennte Layer-Namen (z. B. "topp:states").
+
+***
+
+### loadState
+
+> **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:798](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L798)
+
+Current load state of the layer.
+
+#### Default
+
+```ts
+'idle'
+```
 
 ***
 
@@ -42,7 +72,7 @@ Kommagetrennte Layer-Namen (z. B. "topp:states").
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:692](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L692)
+Defined in: [src/components.d.ts:803](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L803)
 
 Globale Opazität des WMS-Layers (0–1).
 
@@ -58,7 +88,7 @@ Globale Opazität des WMS-Layers (0–1).
 
 > `optional` **styles**: `string`
 
-Defined in: [src/components.d.ts:697](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L697)
+Defined in: [src/components.d.ts:808](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L808)
 
 WMS-`STYLES` Parameter (kommagetrennt).
 
@@ -74,7 +104,7 @@ WMS-`STYLES` Parameter (kommagetrennt).
 
 > **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:702](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L702)
+Defined in: [src/components.d.ts:813](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L813)
 
 Tiled/geslicete Requests verwenden (falls Server unterstützt).
 
@@ -90,7 +120,7 @@ true
 
 > **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:707](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L707)
+Defined in: [src/components.d.ts:818](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L818)
 
 Transparente Kacheln anfordern.
 
@@ -106,7 +136,7 @@ true
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:711](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L711)
+Defined in: [src/components.d.ts:822](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L822)
 
 Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
@@ -116,7 +146,7 @@ Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:716](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L716)
+Defined in: [src/components.d.ts:827](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L827)
 
 Sichtbarkeit des WMS-Layers.
 
@@ -132,7 +162,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:721](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L721)
+Defined in: [src/components.d.ts:832](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L832)
 
 Z-index for layer stacking order. Higher values render on top.
 

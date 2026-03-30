@@ -8,7 +8,7 @@
 
 > **Bounds** = `object`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:23](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/geotiff/utils/Triangulation.ts#L23)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:23](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/Triangulation.ts#L23)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:23](https://github.
 
 > **maxX**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:26](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/geotiff/utils/Triangulation.ts#L26)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:26](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/Triangulation.ts#L26)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:26](https://github.
 
 > **maxY**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:27](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/geotiff/utils/Triangulation.ts#L27)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:27](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/Triangulation.ts#L27)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:27](https://github.
 
 > **minX**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:24](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/geotiff/utils/Triangulation.ts#L24)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:24](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/Triangulation.ts#L24)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:24](https://github.
 
 > **minY**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:25](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/geotiff/utils/Triangulation.ts#L25)
+Defined in: [src/map-provider/geotiff/utils/Triangulation.ts:25](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/Triangulation.ts#L25)

@@ -6,7 +6,7 @@
 
 # Interface: GeoStylerColorMap
 
-Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-style/dist/src/style.d.ts:651
+Defined in: node\_modules/.pnpm/geostyler-style@11.0.2/node\_modules/geostyler-style/dist/style.d.ts:715
 
 A ColorMap defines the color values for the pixels of a raster image.
 
@@ -16,7 +16,7 @@ A ColorMap defines the color values for the pixels of a raster image.
 
 > `optional` **colorMapEntries**: `ColorMapEntry`[]
 
-Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-style/dist/src/style.d.ts:653
+Defined in: node\_modules/.pnpm/geostyler-style@11.0.2/node\_modules/geostyler-style/dist/style.d.ts:717
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-s
 
 > `optional` **extended**: `boolean` \| `GeoStylerBooleanFunction`
 
-Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-style/dist/src/style.d.ts:654
+Defined in: node\_modules/.pnpm/geostyler-style@11.0.2/node\_modules/geostyler-style/dist/style.d.ts:718
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-s
 
 > **type**: `"values"` \| `GeoStylerStringFunction` \| `"ramp"` \| `"intervals"`
 
-Defined in: node\_modules/.pnpm/geostyler-style@10.5.0/node\_modules/geostyler-style/dist/src/style.d.ts:652
+Defined in: node\_modules/.pnpm/geostyler-style@11.0.2/node\_modules/geostyler-style/dist/style.d.ts:716

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiff
 
-Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L164)
+Defined in: [src/components.d.ts:171](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L171)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:164](https://github.com/pt9912/v-map/blob/e2b85
 
 > `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
 
-Defined in: [src/components.d.ts:169](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L169)
+Defined in: [src/components.d.ts:176](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L176)
 
 ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).
 
@@ -26,11 +26,25 @@ null
 
 ***
 
+### getError()
+
+> **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
+
+Defined in: [src/components.d.ts:180](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L180)
+
+Returns the last error detail, if any.
+
+#### Returns
+
+`Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
+
+***
+
 ### getLayerId()
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:173](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L173)
+Defined in: [src/components.d.ts:184](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L184)
 
 Returns the internal layer ID used by the map provider.
 
@@ -40,11 +54,27 @@ Returns the internal layer ID used by the map provider.
 
 ***
 
+### loadState
+
+> **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:189](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L189)
+
+Current load state of the layer.
+
+#### Default
+
+```ts
+'idle'
+```
+
+***
+
 ### nodata?
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/components.d.ts:178](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L178)
+Defined in: [src/components.d.ts:194](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L194)
 
 NoData Values to discard (overriding any nodata values in the metadata).
 
@@ -60,7 +90,7 @@ null
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:183](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L183)
+Defined in: [src/components.d.ts:199](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L199)
 
 Opazität der GeoTIFF-Kacheln (0–1).
 
@@ -76,7 +106,7 @@ Opazität der GeoTIFF-Kacheln (0–1).
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:188](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L188)
+Defined in: [src/components.d.ts:204](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L204)
 
 URL to the GeoTIFF file to be displayed on the map.
 
@@ -92,7 +122,7 @@ null
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/components.d.ts:193](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L193)
+Defined in: [src/components.d.ts:209](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L209)
 
 Value range for colormap normalization [min, max].
 
@@ -108,7 +138,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:198](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L198)
+Defined in: [src/components.d.ts:214](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L214)
 
 Sichtbarkeit des Layers
 
@@ -124,7 +154,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:203](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L203)
+Defined in: [src/components.d.ts:219](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L219)
 
 Z-index for layer stacking order. Higher values render on top.
 

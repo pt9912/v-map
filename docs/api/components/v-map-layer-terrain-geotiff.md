@@ -12,12 +12,14 @@ The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF ele
 | `colorMap` | `ColorMap \| string` | `color-map` | `null` | ColorMap for elevation data visualization. Only relevant when no texture is set. |
 | `elevationScale` | `number` | `elevation-scale` | `1.0` | Elevation exaggeration factor. |
 | `forceProjection` | `boolean` | `force-projection` | `false` | Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys |
+| `loadState` | `error \| idle \| loading \| ready` | `load-state` | `'idle'` | Current load state of the layer. |
 | `maxZoom` | `number` | `max-zoom` | `24` | Maximum zoom level. |
 | `meshMaxError` | `number` | `mesh-max-error` | `4.0` | Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, but slower. |
 | `minZoom` | `number` | `min-zoom` | `0` | Minimum zoom level. |
 | `nodata` | `number` | `nodata` | `null` | NoData value to discard (overriding any nodata values in the metadata). |
 | `opacity` | `number` | `opacity` | `1.0` | Opacity of the terrain layer (0–1). |
 | `projection` | `string` | `projection` | `null` | Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String) |
+| `renderMode` | `colormap \| terrain` | `render-mode` | `'terrain'` | Rendering mode for GeoTIFF terrain. |
 | `texture` | `string` | `texture` | `null` | Optional texture URL (can be an image or tile URL). |
 | `tileSize` | `number` | `tile-size` | `256` | Tile size in pixels. |
 | `url` | `string` | `url` | `null` | URL to the GeoTIFF file containing elevation data. |
@@ -34,5 +36,6 @@ The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF ele
 
 ### Methods
 
+- `getError() => Promise<VMapErrorDetail>` — Returns the last error detail, if any.
 - `getLayerId() => Promise<string>` — Returns the internal layer ID used by the map provider.
 

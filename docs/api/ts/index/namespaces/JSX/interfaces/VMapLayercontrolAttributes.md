@@ -6,7 +6,7 @@
 
 # Interface: VMapLayercontrolAttributes
 
-Defined in: [src/components.d.ts:2110](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2110)
+Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2318)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/components.d.ts:2110](https://github.com/pt9912/v-map/blob/e2b8
 
 > **for**: `string`
 
-Defined in: [src/components.d.ts:2111](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2111)
+Defined in: [src/components.d.ts:2319](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2319)

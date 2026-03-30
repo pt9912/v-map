@@ -8,7 +8,7 @@
 
 > **createCesiumGeoTIFFTerrainProvider**(`options`): `Promise`\<`TerrainProvider`\>
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:375](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L375)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:372](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L372)
 
 Factory function to create a CesiumGeoTIFFTerrainProvider
 

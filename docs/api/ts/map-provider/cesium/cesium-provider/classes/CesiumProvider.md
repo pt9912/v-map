@@ -6,7 +6,7 @@
 
 # Class: CesiumProvider
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:134](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L134)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:166](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L166)
 
 ## Implements
 
@@ -28,7 +28,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:134](https://github.com/
 
 > **addBaseLayer**(`layerConfig`, `basemapid`, `layerElementId`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:356](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L356)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:390](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L390)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:356](https://github.com/
 
 > **addLayerToGroup**(`layerConfig`): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:318](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L318)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:352](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L352)
 
 Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sind
 
@@ -82,7 +82,7 @@ Layer hinzufügen; Rückgabe bewusst async, weil Erzeugung/Importe asynchron sin
 
 > **destroy**(): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:187](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L187)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:219](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L219)
 
 #### Returns
 
@@ -98,7 +98,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:187](https://github.com/
 
 > **ensureGroup**(`groupId`, `visible`, `_opts?`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:384](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L384)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:418](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L418)
 
 #### Parameters
 
@@ -130,7 +130,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:384](https://github.com/
 
 > **init**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:143](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L143)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:175](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L175)
 
 #### Parameters
 
@@ -152,7 +152,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:143](https://github.com/
 
 > **removeLayer**(`layerId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:398](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L398)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:432](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L432)
 
 #### Parameters
 
@@ -174,7 +174,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:398](https://github.com/
 
 > **setBaseLayer**(`groupId`, `layerElementId`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:348](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L348)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:382](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L382)
 
 #### Parameters
 
@@ -200,7 +200,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:348](https://github.com/
 
 > **setGroupVisible**(`groupId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:393](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L393)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:427](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L427)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:393](https://github.com/
 
 > **setOpacity**(`layerId`, `opacity`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:412](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L412)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:446](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L446)
 
 #### Parameters
 
@@ -252,7 +252,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:412](https://github.com/
 
 > **setView**(`center`, `zoom`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:1857](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L1857)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:1901](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L1901)
 
 View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void>
 
@@ -280,7 +280,7 @@ View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promis
 
 > **setVisible**(`layerId`, `visible`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:416](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L416)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:450](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L450)
 
 #### Parameters
 
@@ -306,7 +306,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:416](https://github.com/
 
 > **setZIndex**(`layerId`, `zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:420](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L420)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:454](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L454)
 
 #### Parameters
 
@@ -332,7 +332,7 @@ Defined in: [src/map-provider/cesium/cesium-provider.ts:420](https://github.com/
 
 > **updateLayer**(`layerId`, `update`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/cesium-provider.ts:1652](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/map-provider/cesium/cesium-provider.ts#L1652)
+Defined in: [src/map-provider/cesium/cesium-provider.ts:1696](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/cesium/cesium-provider.ts#L1696)
 
 #### Parameters
 

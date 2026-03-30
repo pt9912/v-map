@@ -8,7 +8,7 @@
 
 > **warn**(...`args`): `void`
 
-Defined in: [src/utils/logger.ts:199](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/utils/logger.ts#L199)
+Defined in: [src/utils/logger.ts:195](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/logger.ts#L195)
 
 ## Parameters
 

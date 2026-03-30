@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWmsAttributes
 
-Defined in: [src/components.d.ts:2090](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2090)
+Defined in: [src/components.d.ts:2296](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2296)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2090](https://github.com/pt9912/v-map/blob/e2b8
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:2094](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2094)
+Defined in: [src/components.d.ts:2301](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2301)
 
 ***
 
@@ -22,7 +22,15 @@ Defined in: [src/components.d.ts:2094](https://github.com/pt9912/v-map/blob/e2b8
 
 > **layers**: `string`
 
-Defined in: [src/components.d.ts:2092](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2092)
+Defined in: [src/components.d.ts:2299](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2299)
+
+***
+
+### loadState
+
+> **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:2297](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2297)
 
 ***
 
@@ -30,7 +38,7 @@ Defined in: [src/components.d.ts:2092](https://github.com/pt9912/v-map/blob/e2b8
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:2098](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2098)
+Defined in: [src/components.d.ts:2305](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2305)
 
 ***
 
@@ -38,7 +46,7 @@ Defined in: [src/components.d.ts:2098](https://github.com/pt9912/v-map/blob/e2b8
 
 > **styles**: `string`
 
-Defined in: [src/components.d.ts:2093](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2093)
+Defined in: [src/components.d.ts:2300](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2300)
 
 ***
 
@@ -46,7 +54,7 @@ Defined in: [src/components.d.ts:2093](https://github.com/pt9912/v-map/blob/e2b8
 
 > **tiled**: `boolean`
 
-Defined in: [src/components.d.ts:2096](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2096)
+Defined in: [src/components.d.ts:2303](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2303)
 
 ***
 
@@ -54,7 +62,7 @@ Defined in: [src/components.d.ts:2096](https://github.com/pt9912/v-map/blob/e2b8
 
 > **transparent**: `boolean`
 
-Defined in: [src/components.d.ts:2095](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2095)
+Defined in: [src/components.d.ts:2302](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2302)
 
 ***
 
@@ -62,7 +70,7 @@ Defined in: [src/components.d.ts:2095](https://github.com/pt9912/v-map/blob/e2b8
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:2091](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2091)
+Defined in: [src/components.d.ts:2298](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2298)
 
 ***
 
@@ -70,7 +78,7 @@ Defined in: [src/components.d.ts:2091](https://github.com/pt9912/v-map/blob/e2b8
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:2097](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2097)
+Defined in: [src/components.d.ts:2304](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2304)
 
 ***
 
@@ -78,4 +86,4 @@ Defined in: [src/components.d.ts:2097](https://github.com/pt9912/v-map/blob/e2b8
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:2099](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L2099)
+Defined in: [src/components.d.ts:2306](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2306)

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogleAttributes
 
-Defined in: [src/components.d.ts:1982](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1982)
+Defined in: [src/components.d.ts:2178](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2178)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1982](https://github.com/pt9912/v-map/blob/e2b8
 
 > **apiKey**: `string`
 
-Defined in: [src/components.d.ts:1987](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1987)
+Defined in: [src/components.d.ts:2184](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2184)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:1987](https://github.com/pt9912/v-map/blob/e2b8
 
 > **language**: `string`
 
-Defined in: [src/components.d.ts:1988](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1988)
+Defined in: [src/components.d.ts:2185](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2185)
 
 ***
 
@@ -30,7 +30,15 @@ Defined in: [src/components.d.ts:1988](https://github.com/pt9912/v-map/blob/e2b8
 
 > **libraries**: `string`
 
-Defined in: [src/components.d.ts:1995](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1995)
+Defined in: [src/components.d.ts:2192](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2192)
+
+***
+
+### loadState
+
+> **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
+
+Defined in: [src/components.d.ts:2179](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2179)
 
 ***
 
@@ -38,7 +46,7 @@ Defined in: [src/components.d.ts:1995](https://github.com/pt9912/v-map/blob/e2b8
 
 > **mapType**: `"roadmap"` \| `"satellite"` \| `"terrain"` \| `"hybrid"`
 
-Defined in: [src/components.d.ts:1983](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1983)
+Defined in: [src/components.d.ts:2180](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2180)
 
 ***
 
@@ -46,7 +54,7 @@ Defined in: [src/components.d.ts:1983](https://github.com/pt9912/v-map/blob/e2b8
 
 > **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:1993](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1993)
+Defined in: [src/components.d.ts:2190](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2190)
 
 ***
 
@@ -54,7 +62,7 @@ Defined in: [src/components.d.ts:1993](https://github.com/pt9912/v-map/blob/e2b8
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:1991](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1991)
+Defined in: [src/components.d.ts:2188](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2188)
 
 ***
 
@@ -62,7 +70,7 @@ Defined in: [src/components.d.ts:1991](https://github.com/pt9912/v-map/blob/e2b8
 
 > **region**: `string`
 
-Defined in: [src/components.d.ts:1989](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1989)
+Defined in: [src/components.d.ts:2186](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2186)
 
 ***
 
@@ -70,15 +78,15 @@ Defined in: [src/components.d.ts:1989](https://github.com/pt9912/v-map/blob/e2b8
 
 > **scale**: `"scaleFactor1x"` \| `"scaleFactor2x"` \| `"scaleFactor4x"`
 
-Defined in: [src/components.d.ts:1992](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1992)
+Defined in: [src/components.d.ts:2189](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2189)
 
 ***
 
 ### styles
 
-> **styles**: `string` \| `any`[]
+> **styles**: `string` \| `Record`\<`string`, `unknown`\>[]
 
-Defined in: [src/components.d.ts:1994](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1994)
+Defined in: [src/components.d.ts:2191](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2191)
 
 ***
 
@@ -86,4 +94,4 @@ Defined in: [src/components.d.ts:1994](https://github.com/pt9912/v-map/blob/e2b8
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1990](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L1990)
+Defined in: [src/components.d.ts:2187](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2187)

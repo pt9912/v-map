@@ -12,5 +12,6 @@
 
 ## Type Aliases
 
+- [AffineTransform](type-aliases/AffineTransform.md)
 - [Point2D](type-aliases/Point2D.md)
 - [Triangle2D](type-aliases/Triangle2D.md)

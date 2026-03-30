@@ -8,7 +8,9 @@
 
 ## Interfaces
 
+- [MapMouseMoveDetail](interfaces/MapMouseMoveDetail.md)
 - [MapProviderDetail](interfaces/MapProviderDetail.md)
+- [VMapErrorDetail](interfaces/VMapErrorDetail.md)
 
 ## Type Aliases
 

@@ -51,12 +51,6 @@ Re-exports [Flavour](../types/flavour/type-aliases/Flavour.md)
 
 ***
 
-### MapProvider
-
-Re-exports [MapProvider](../types/mapprovider/interfaces/MapProvider.md)
-
-***
-
 ### MapProviderDetail
 
 Re-exports [MapProviderDetail](../utils/events/interfaces/MapProviderDetail.md)
@@ -78,3 +72,9 @@ Re-exports [StyleEvent](../types/styling/type-aliases/StyleEvent.md)
 ### StyleFormat
 
 Re-exports [StyleFormat](../types/styling/type-aliases/StyleFormat.md)
+
+***
+
+### VMapErrorDetail
+
+Re-exports [VMapErrorDetail](../utils/events/interfaces/VMapErrorDetail.md)

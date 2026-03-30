@@ -14,5 +14,5 @@
 
 ### Methods
 
-- `getGroupId() => Promise<string>`
+- `getGroupId() => Promise<string>` — Returns the internal group identifier used by the map provider.
 

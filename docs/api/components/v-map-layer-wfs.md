@@ -8,6 +8,7 @@
 
 | Name | Type | Attr | Default | Beschreibung |
 | --- | --- | --- | --- | --- |
+| `loadState` | `error \| idle \| loading \| ready` | `load-state` | `'idle'` | Current load state of the layer. |
 | `opacity` | `number` | `opacity` | `1` | Opazität (0–1). |
 | `outputFormat` | `string` | `output-format` | `'application/json'` | Ausgabeformat, z. B. application/json. |
 | `params` | `string` | `params` |  | Zusätzliche Parameter als JSON-String. |
@@ -20,5 +21,6 @@
 
 ### Methods
 
+- `getError() => Promise<VMapErrorDetail>` — Returns the last error detail, if any.
 - `isReady() => Promise<boolean>` — Gibt `true` zurück, sobald der Layer initialisiert wurde.
 

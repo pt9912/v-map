@@ -6,7 +6,7 @@
 
 # Interface: VMapLayergroup
 
-Defined in: [src/components.d.ts:766](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L766)
+Defined in: [src/components.d.ts:886](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L886)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:766](https://github.com/pt9912/v-map/blob/e2b85
 
 > **basemapid**: `string`
 
-Defined in: [src/components.d.ts:771](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L771)
+Defined in: [src/components.d.ts:891](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L891)
 
 Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
 
@@ -30,7 +30,9 @@ null
 
 > **getGroupId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:772](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L772)
+Defined in: [src/components.d.ts:895](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L895)
+
+Returns the internal group identifier used by the map provider.
 
 #### Returns
 
@@ -42,7 +44,7 @@ Defined in: [src/components.d.ts:772](https://github.com/pt9912/v-map/blob/e2b85
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:777](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L777)
+Defined in: [src/components.d.ts:900](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L900)
 
 Globale Opazität (0–1) für alle Kinder.
 
@@ -58,7 +60,7 @@ Globale Opazität (0–1) für alle Kinder.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:782](https://github.com/pt9912/v-map/blob/e2b853347ead69afd667cd745419d9a650534b71/src/components.d.ts#L782)
+Defined in: [src/components.d.ts:905](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L905)
 
 Sichtbarkeit der gesamten Gruppe.
 

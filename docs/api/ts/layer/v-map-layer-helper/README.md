@@ -9,3 +9,7 @@
 ## Classes
 
 - [VMapLayerHelper](classes/VMapLayerHelper.md)
+
+## Interfaces
+
+- [VMapErrorHost](interfaces/VMapErrorHost.md)

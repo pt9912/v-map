@@ -10,6 +10,7 @@
 | --- | --- | --- | --- | --- |
 | `coverageName` | `string` | `coverage-name` |  | Coverage-Name/ID. |
 | `format` | `string` | `format` | `'image/tiff'` | Ausgabeformat, z. B. image/tiff. |
+| `loadState` | `error \| idle \| loading \| ready` | `load-state` | `'idle'` | Current load state of the layer. |
 | `opacity` | `number` | `opacity` | `1` | Opazität (0–1). |
 | `params` | `string` | `params` |  | Zusätzliche Parameter als JSON-String. |
 | `projection` | `string` | `projection` |  | Projektion (Projection) für die Quelle. |
@@ -21,5 +22,6 @@
 
 ### Methods
 
+- `getError() => Promise<VMapErrorDetail>` — Returns the last error detail, if any.
 - `isReady() => Promise<boolean>` — Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
