@@ -96,6 +96,24 @@ Nur diese vier Kategorien sollen fuer die einheitliche Error-API verwendet werde
 | `parse` | Eingabe formal nicht parsebar | invalides JSON, defekte GeoJSON-/WKT-/Style-Eingaben |
 | `provider` | Provider- oder Layer-Lifecycle-Fehler | `addLayer()` fehlgeschlagen, Provider nicht verfuegbar |
 
+### Laufzeitfehler von Layern
+
+Laufzeit-Layer-Fehler verwenden ebenfalls `type: 'network'`.
+
+Das betrifft insbesondere:
+
+- Tile-Ladefehler
+- Feature-Fetch-Fehler
+- Image-Ladefehler
+- DNS-, HTTP- oder CORS-Fehler waehrend bereits laufender Layer
+
+Es wird kein zusaetzlicher Error-Typ wie `runtime` eingefuehrt. Der Ursprung wird ueber das `message`-Feld differenziert, zum Beispiel:
+
+- `Tile load error`
+- `WMS tile fetch error`
+- `Feature load error`
+- `Image load error`
+
 ## Bevorzugtes Implementierungsmuster
 
 Neue Layer sollen standardmaessig `VMapLayerHelper` per Komposition nutzen.
@@ -111,9 +129,55 @@ Kanonische Stellen:
 - einheitliches Error-Detail-Format
 - einheitliche Recovery bei `updateLayer()`
 - korrekter Reset bei Provider-Shutdown und `disconnectedCallback()`
+- einheitliche Runtime-Fehlerpropagation aus den Providern
 - weniger divergierende Lifecycle-Logik in einzelnen Layern
 
 Ein neuer Layer ohne `VMapLayerHelper` ist nur in begruendeten Ausnahmefaellen zulaessig. Die Abweichung muss im PR explizit begruendet werden.
+
+### Runtime-Fehlerkanal zwischen Helper und Providern
+
+Layer-Provider koennen zusaetzlich zur Initialisierungslogik Laufzeitfehler an `VMapLayerHelper` melden.
+
+Kanonische Schnittstelle:
+
+- `src/types/mapprovider.ts`
+
+```ts
+type LayerErrorCallback = (error: {
+  type: 'network';
+  message: string;
+  cause?: unknown;
+}) => void;
+
+interface MapProvider {
+  onLayerError?(layerId: string, callback: LayerErrorCallback): void;
+  offLayerError?(layerId: string): void;
+}
+```
+
+Regeln:
+
+- `onLayerError(...)` registriert pro `layerId` genau einen Runtime-Fehlerkanal.
+- `offLayerError(...)` entfernt den Callback und haengt native Listener wieder ab.
+- Das Error-Objekt enthaelt kein `layerId`; die Zuordnung erfolgt ueber die Registrierung.
+
+### Debounce fuer Runtime-Fehler
+
+`VMapLayerHelper` behandelt Runtime-Fehler nicht mit `setError(...)` direkt, sondern ueber einen gedrosselten Pfad:
+
+- erster Laufzeitfehler feuert sofort
+- nachfolgende Fehler desselben Layers werden fuer 5 Sekunden unterdrueckt
+- `clearError()` und `markReady()` setzen das Zeitfenster zurueck
+
+Ziel:
+
+- keine Event-Flut bei kaputten Tile- oder WMS-URLs
+- weiterhin sichtbarer Fehlerzustand ueber `vmap-error`, `load-state="error"` und `getError()`
+
+Wichtig:
+
+- das Debounce lebt im Helper, nicht in den Providern
+- Provider melden jeden nativen Fehler an den Callback; der Helper entscheidet, ob daraus ein API-Fehler wird
 
 ### Minimales Skelett fuer neue Layer
 
@@ -160,6 +224,54 @@ export class VMapLayerFoo implements VMapErrorHost {
   }
 }
 ```
+
+## Runtime-Fehlerpropagation aus Providern
+
+Die Error-API endet nicht bei `addLayer()`-Fehlern. Provider muessen auch Fehler propagieren, die erst nach erfolgreicher Initialisierung auftreten.
+
+### Verbindliche Regeln
+
+- Provider verwalten pro Layer einen Callback-Speicher und Cleanup-Speicher.
+- Runtime-Fehler muessen als `network`-Fehler an den registrierten Callback gemeldet werden.
+- Cleanup muss in allen Entfernungs- und Recreate-Pfaden erfolgen.
+- Rebind muss beruecksichtigt werden, wenn der Provider intern Source- oder Layer-Objekte ersetzt.
+
+Empfohlenes internes Muster:
+
+```ts
+private layerErrorCallbacks = new Map<string, LayerErrorCallback>();
+private layerErrorCleanups = new Map<string, () => void>();
+```
+
+### Provider-spezifische Erwartung
+
+| Provider | Native Fehlerquelle | Erwartetes Verhalten |
+| --- | --- | --- |
+| OpenLayers | `tileloaderror`, `featuresloaderror`, `imageloaderror` | Listener an Source haengen, bei `change:source` neu verdrahten |
+| Leaflet | `tileerror` | Listener einmalig am bestehenden Layer registrieren |
+| Cesium | `ImageryProvider.errorEvent`, `Cesium3DTileset.tileFailed` | Listener registrieren und nach Layer-Ersetzung wieder an neue native Objekte binden |
+| Deck.gl | `onTileError` und Catch-Bloecke in `getTileData()` | Callback-Lookup ueber `layerId`; verschluckte Fetch-Fehler vor Fallback-Kachel explizit melden |
+
+### Source- und Layer-Ersetzung
+
+Nicht alle Provider behalten bei `updateLayer()` dasselbe native Objekt.
+
+Deshalb gilt:
+
+- OpenLayers: bei `layer.setSource(new ...)` muessen Source-Listener neu angehaengt werden
+- Leaflet: in-place-Updates wie `setUrl()` oder `clearLayers()` benoetigen keinen Rebind, solange das Layer-Objekt gleich bleibt
+- Cesium: `replaceLayer()` sowie `remove()` plus `addCustomLayer()` erfordern ein erneutes Anhaengen der Runtime-Listener
+- Deck.gl: modellbasierte Rebuilds duerfen den Fehlerkanal nicht verlieren; Callback-Lookups muessen spaet aufgeloest werden
+
+### Cleanup im Helper
+
+`VMapLayerHelper` muss `offLayerError(...)` in allen Pfaden aufrufen, die einen Layer entfernen oder ersetzen:
+
+- `removeLayer()`
+- `dispose()`
+- Recreate in `addToMapInternal()` vor dem Entfernen des alten Layers
+
+Ohne diesen Cleanup entstehen verwaiste Listener oder doppelte Runtime-Fehlermeldungen.
 
 ## Regeln fuer Watcher und Fehlerpfade
 
@@ -245,6 +357,15 @@ Mindestens erforderlich:
 - Spec-Test fuer Parse-/Validierungsfehler mit korrektem `VMapErrorDetail`
 - Test fuer unveraenderte `ready`-Semantik
 - Test fuer Bubbling von `vmap-error`
+
+Fuer Layer mit Runtime-Fehlerpfaden zusaetzlich erforderlich:
+
+- Test fuer Runtime-Fehlerpropagation ueber `onLayerError(...)`
+- Test fuer das 5s-Debounce im `VMapLayerHelper`
+- Test fuer Reset des Debounce nach `clearError()` oder erfolgreicher Recovery
+- Test fuer Cleanup bei `removeLayer()`, `dispose()` und Recreate
+- Test fuer Rebind nach Source- oder Layer-Ersetzung, falls der Provider native Objekte austauscht
+- Test fuer Deck.gl-WMS/WCS-Fetch-Fehler, die vor Rueckgabe einer Fallback-Kachel an die Error-API gemeldet werden
 
 Wenn die Komponente echte Hydration, Provider-Lifecycle oder DOM-Reflexion relevant nutzt, sind zusaetzlich Browser- oder Integrations-Tests sinnvoll.
 
