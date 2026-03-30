@@ -1,4 +1,4 @@
-import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate, LayerErrorCallback } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
@@ -54,6 +54,8 @@ export class LeafletProvider implements MapProvider {
   private unsubscribeResize: Unsubscribe;
   private shadowRoot: ShadowRoot;
   private injectedStyle: HTMLStyleElement;
+  private layerErrorCallbacks = new Map<string, LayerErrorCallback>();
+  private layerErrorCleanups = new Map<string, () => void>();
 
   async init(options: ProviderOptions) {
     if (!isBrowser()) return;
@@ -583,10 +585,27 @@ export class LeafletProvider implements MapProvider {
     this.map?.setView([lat, lon], zoom, { animate: false });
   }
 
+  onLayerError(layerId: string, callback: LayerErrorCallback): void {
+    this.layerErrorCallbacks.set(layerId, callback);
+    this._getLayerById(layerId).then(layer => {
+      if (!layer) return;
+      const handler = () => { callback({ type: 'network', message: 'Tile load error' }); };
+      layer.on('tileerror', handler);
+      this.layerErrorCleanups.set(layerId, () => layer.off('tileerror', handler));
+    });
+  }
+
+  offLayerError(layerId: string): void {
+    this.layerErrorCleanups.get(layerId)?.();
+    this.layerErrorCleanups.delete(layerId);
+    this.layerErrorCallbacks.delete(layerId);
+  }
+
   async removeLayer(layerId: string): Promise<void> {
     if (!layerId) {
       return;
     }
+    this.offLayerError(layerId);
     const layer = await this._getLayerById(layerId);
     if (layer) {
       this.map.removeLayer(layer);

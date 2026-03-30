@@ -6,7 +6,7 @@ import { LayerManager } from './layer-manager';
 import { log, warn, error } from '../../utils/logger';
 import { loadCesium, injectWidgetsCss } from '../../lib/cesium-loader';
 
-import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate, LayerErrorCallback } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
@@ -171,6 +171,8 @@ export class CesiumProvider implements MapProvider {
 
   private layerGroups = new CesiumLayerGroups();
   private layerManagerMutex = new AsyncMutex();
+  private layerErrorCallbacks = new Map<string, LayerErrorCallback>();
+  private layerErrorCleanups = new Map<string, () => void>();
 
   async init(options: ProviderOptions) {
     this.shadowRoot = options.shadowRoot;
@@ -429,12 +431,54 @@ export class CesiumProvider implements MapProvider {
     this.layerGroups.apply();
   }
 
+  // ── Runtime error listeners ──────────────────────────────────────
+
+  onLayerError(layerId: string, callback: LayerErrorCallback): void {
+    this.layerErrorCallbacks.set(layerId, callback);
+    this.attachCesiumErrorListeners(layerId);
+  }
+
+  offLayerError(layerId: string): void {
+    this.layerErrorCleanups.get(layerId)?.();
+    this.layerErrorCleanups.delete(layerId);
+    this.layerErrorCallbacks.delete(layerId);
+  }
+
+  private attachCesiumErrorListeners(layerId: string): void {
+    this.layerErrorCleanups.get(layerId)?.();
+    const cb = this.layerErrorCallbacks.get(layerId);
+    if (!cb) return;
+
+    const iLayer = this.layerManager.getLayer(layerId);
+    if (!iLayer) return;
+
+    const cleanups: Array<() => void> = [];
+    const handler = () => { cb({ type: 'network', message: 'Tile load error' }); };
+
+    // ImageryLayer: access provider.errorEvent
+    const nativeLayer = (iLayer as unknown as { _imageryLayer?: { imageryProvider?: { errorEvent?: { addEventListener: (fn: () => void) => () => void } } } })._imageryLayer;
+    if (nativeLayer?.imageryProvider?.errorEvent) {
+      const unsub = nativeLayer.imageryProvider.errorEvent.addEventListener(handler);
+      cleanups.push(unsub);
+    }
+
+    // Cesium3DTileset: tileFailed event
+    const tileset = (iLayer as unknown as { _tileset?: { tileFailed?: { addEventListener: (fn: () => void) => () => void } } })._tileset;
+    if (tileset?.tileFailed) {
+      const unsub = tileset.tileFailed.addEventListener(handler);
+      cleanups.push(unsub);
+    }
+
+    if (cleanups.length > 0) {
+      this.layerErrorCleanups.set(layerId, () => cleanups.forEach(fn => fn()));
+    }
+  }
+
   async removeLayer(layerId: string): Promise<void> {
     if (!layerId) return;
+    this.offLayerError(layerId);
     await this.layerManagerMutex.runExclusive(async () => {
-      // erst aus Viewer entfernen (bestehende Logik)
       this.layerManager.removeLayer(layerId);
-      // dann aus Gruppen
       this.layerGroups.removeLayer(layerId, true);
       this.layerGroups.apply();
     });
@@ -1695,6 +1739,9 @@ export class CesiumProvider implements MapProvider {
 
   async updateLayer(layerId: string, update: LayerUpdate): Promise<void> {
     return await this.layerManagerMutex.runExclusive(async () => {
+      const hadErrorListener = this.layerErrorCallbacks.has(layerId);
+      if (hadErrorListener) this.offLayerError(layerId);
+
       const oldLayer = this.layerManager.getLayer(layerId);
       switch (update.type) {
         case 'geojson':
@@ -1895,6 +1942,9 @@ export class CesiumProvider implements MapProvider {
           }
           break;
       }
+
+      // Re-attach error listeners after layer replacement
+      if (hadErrorListener) this.attachCesiumErrorListeners(layerId);
     });
   }
 

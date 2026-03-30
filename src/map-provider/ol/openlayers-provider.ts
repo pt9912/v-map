@@ -33,7 +33,8 @@ import type { FeatureLike } from 'ol/Feature';
 import type FeatureFormat from 'ol/format/Feature';
 import type { Extent } from 'ol/extent';
 
-import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate, LayerErrorCallback } from '../../types/mapprovider';
+import type TileSource from 'ol/source/Tile';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
@@ -66,6 +67,8 @@ export class OpenLayersProvider implements MapProvider {
   private baseLayers: Layer[] = [];
   private googleLogoAdded = false;
   private projection: ProjectionLike = 'EPSG:3857';
+  private layerErrorCallbacks: globalThis.Map<string, LayerErrorCallback> = new globalThis.Map();
+  private layerErrorCleanups: globalThis.Map<string, () => void> = new globalThis.Map();
 
   async init(options: ProviderOptions) {
     await injectOlCss(options.shadowRoot);
@@ -1078,6 +1081,65 @@ export class OpenLayersProvider implements MapProvider {
     });
   }
 
+  // ── Runtime error listeners ──────────────────────────────────────
+
+  onLayerError(layerId: string, callback: LayerErrorCallback): void {
+    this.layerErrorCallbacks.set(layerId, callback);
+    this._getLayerById(layerId).then(layer => {
+      if (!layer) return;
+      this.attachSourceErrorListeners(layerId, layer);
+    });
+  }
+
+  offLayerError(layerId: string): void {
+    this.layerErrorCleanups.get(layerId)?.();
+    this.layerErrorCleanups.delete(layerId);
+    this.layerErrorCallbacks.delete(layerId);
+  }
+
+  private attachSourceErrorListeners(layerId: string, layer: Layer | BaseLayer): void {
+    // Clean up previous listeners for this layer (e.g. after source replacement)
+    this.layerErrorCleanups.get(layerId)?.();
+
+    const cb = this.layerErrorCallbacks.get(layerId);
+    if (!cb) return;
+
+    const source = (layer as Layer).getSource?.();
+    if (!source) return;
+
+    const cleanups: Array<() => void> = [];
+
+    // Tile sources (OSM, XYZ, WMS, ArcGIS, Google)
+    if ('getTile' in source || source instanceof TileWMS || source instanceof OSM || source instanceof XYZ || source instanceof Google || source instanceof TileArcGISRest) {
+      const handler = () => { cb({ type: 'network', message: 'Tile load error' }); };
+      (source as TileSource).on('tileloaderror', handler);
+      cleanups.push(() => (source as TileSource).un('tileloaderror', handler));
+    }
+
+    // Vector sources (GeoJSON URL, WFS)
+    if (source instanceof VectorSource) {
+      const handler = () => { cb({ type: 'network', message: 'Feature load error' }); };
+      source.on('featuresloaderror', handler);
+      cleanups.push(() => source.un('featuresloaderror', handler));
+    }
+
+    // Image sources (WCS)
+    if (source instanceof ImageSource) {
+      const handler = () => { cb({ type: 'network', message: 'Image load error' }); };
+      source.on('imageloaderror', handler);
+      cleanups.push(() => source.un('imageloaderror', handler));
+    }
+
+    // Re-attach on source replacement (e.g. updateWMSLayer)
+    const sourceChangeHandler = () => {
+      this.attachSourceErrorListeners(layerId, layer);
+    };
+    layer.on('change:source' as never, sourceChangeHandler);
+    cleanups.push(() => layer.un('change:source' as never, sourceChangeHandler));
+
+    this.layerErrorCleanups.set(layerId, () => cleanups.forEach(fn => fn()));
+  }
+
   async setView(center: LonLat, zoom: number) {
     if (!this.map) return;
     this.map
@@ -1136,11 +1198,11 @@ export class OpenLayersProvider implements MapProvider {
     if (!layerId) {
       return;
     }
+    this.offLayerError(layerId);
     const layer = await this._getLayerById(layerId);
     if (layer) {
       const group = layer.get('group');
       if (group) group.getLayers().remove(layer);
-      //this.map.removeLayer(layer);
     }
   }
 

@@ -1,5 +1,5 @@
 // DeckProvider.ts (relevante Änderungen)
-import type { MapProvider, LayerUpdate } from '../../types/mapprovider';
+import type { MapProvider, LayerUpdate, LayerErrorCallback } from '../../types/mapprovider';
 import type { ProviderOptions } from '../../types/provideroptions';
 import type { LayerConfig } from '../../types/layerconfig';
 import type { LonLat } from '../../types/lonlat';
@@ -87,6 +87,7 @@ export class DeckProvider implements MapProvider {
   // Store arbeitet mit RenderableGroup — wir nutzen hier die modellbasierte Gruppe
   private layerGroups: LayerGroups<Layer, RenderableGroup<Layer>> =
     new LayerGroups({});
+  private layerErrorCallbacks = new Map<string, LayerErrorCallback>();
 
   async init(opts: ProviderOptions) {
     this.target = opts.target;
@@ -231,8 +232,9 @@ export class DeckProvider implements MapProvider {
         return null;        
       },
       */
-      onTileError: err => {
+      onTileError: (err: unknown) => {
         log(`v-map - provider - deck - Tile Error: ${err}`);
+        this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `Tile load error: ${err}`, cause: err });
       },
 
       renderSubLayers: sl => {
@@ -1014,19 +1016,21 @@ export type TileLoadProps = {
           const blob = await res.blob();
           // Bei Image/* → ImageBitmap. Bei Fehlern transparente Kachel zurückgeben.
           return await createImageBitmap(blob);
-        } catch {
+        } catch (err) {
+          this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `WMS tile fetch error: ${err}`, cause: err });
           // Transparente Fallback-Kachel, damit Deck sauber weiterzeichnet
           const canvas = document.createElement('canvas');
-          canvas.width = tileSize; //tile.width;
-          canvas.height = tileSize; //tile.height;
+          canvas.width = tileSize;
+          canvas.height = tileSize;
           const ctx = canvas.getContext('2d');
           ctx?.clearRect(0, 0, canvas.width, canvas.height);
           return canvas;
         }
       },
 
-      onTileError: err => {
+      onTileError: (err: unknown) => {
         log(`v-map - provider - deck - WMS Tile Error: ${err}`);
+        this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `WMS tile error: ${err}`, cause: err });
       },
 
       renderSubLayers: sl => {
@@ -1124,7 +1128,8 @@ export type TileLoadProps = {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const blob = await res.blob();
             return await createImageBitmap(blob);
-          } catch {
+          } catch (err) {
+            this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `WCS tile fetch error: ${err}`, cause: err });
             // Return transparent fallback tile
             const canvas = document.createElement('canvas');
             canvas.width = tileSize;
@@ -1153,7 +1158,8 @@ export type TileLoadProps = {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const blob = await res.blob();
             return await createImageBitmap(blob);
-          } catch {
+          } catch (err) {
+            this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `WCS tile fetch error: ${err}`, cause: err });
             // Return transparent fallback tile
             const canvas = document.createElement('canvas');
             canvas.width = tileSize;
@@ -1165,8 +1171,9 @@ export type TileLoadProps = {
         }
       },
 
-      onTileError: err => {
+      onTileError: (err: unknown) => {
         log(`v-map - provider - deck - WCS Tile Error: ${err}`);
+        this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `WCS tile error: ${err}`, cause: err });
       },
 
       renderSubLayers: sl => {
@@ -1541,7 +1548,16 @@ export type TileLoadProps = {
     this.layerGroups.applyToDeck();
   }
 
+  onLayerError(layerId: string, callback: LayerErrorCallback): void {
+    this.layerErrorCallbacks.set(layerId, callback);
+  }
+
+  offLayerError(layerId: string): void {
+    this.layerErrorCallbacks.delete(layerId);
+  }
+
   async removeLayer(layerId: string): Promise<void> {
+    this.offLayerError(layerId);
     // Modellbasiert: Model entfernen → apply
     for (const g of this.layerGroups.groups) {
       const modelGroup = g as LayerGroupWithModel<Layer>;
@@ -1706,6 +1722,9 @@ export type TileLoadProps = {
         visible: config.visible ?? true,
         noDataValue: config.nodata,
         nullColor: [0, 0, 0, 0],
+        onTileLoadError: (err) => {
+          this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `GeoTIFF tile error: ${err.message}`, cause: err });
+        },
       });
 
       return layer;
@@ -1744,6 +1763,9 @@ export type TileLoadProps = {
         renderMode: config.renderMode,
         opacity: config.opacity ?? 1.0,
         visible: config.visible ?? true,
+        onTileLoadError: (err) => {
+          this.layerErrorCallbacks.get(layerId)?.({ type: 'network', message: `GeoTIFF terrain tile error: ${err.message}`, cause: err });
+        },
       });
 
       return layer;

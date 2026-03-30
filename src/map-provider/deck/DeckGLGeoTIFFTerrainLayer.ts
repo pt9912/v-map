@@ -103,6 +103,8 @@ export interface DeckGLGeoTIFFTerrainLayerProps extends LayerProps {
    * - 'colormap': 2D-Kacheln mit Farbkarte (TileLayer + BitmapLayer)
    */
   renderMode?: 'terrain' | 'colormap';
+  /** Optional callback for tile load errors, wired by provider. */
+  onTileLoadError?: (err: Error) => void;
 }
 
 /**
@@ -516,6 +518,7 @@ export async function createDeckGLGeoTIFFTerrainLayer(
         getTileData: this.getTileData.bind(this),
         onTileError: (err: Error) => {
           warn(`${TILE_LAYER_LOG_PREFIX}error: ${err.message}`);
+          this.props.onTileLoadError?.(err);
         },
         renderSubLayers:
           renderMode === 'colormap'

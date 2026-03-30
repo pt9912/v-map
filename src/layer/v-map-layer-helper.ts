@@ -12,6 +12,8 @@ export interface VMapErrorHost {
 }
 
 export class VMapLayerHelper {
+  private static readonly RUNTIME_ERROR_DEBOUNCE_MS = 5000;
+
   private layerId: string | null = null;
   private mapProvider: MapProvider = null;
   private _error?: VMapErrorDetail;
@@ -24,6 +26,7 @@ export class VMapLayerHelper {
   };
   private listenersBound = false;
   private recreateInFlight = false;
+  private lastRuntimeErrorTime = 0;
 
   constructor(private el: HTMLElement, host?: VMapErrorHost) {
     this.host = host;
@@ -57,8 +60,18 @@ export class VMapLayerHelper {
     warn(`${this.el.nodeName.toLowerCase()} - ${detail.message}`);
   }
 
+  public setRuntimeError(detail: VMapErrorDetail): void {
+    const now = Date.now();
+    if (now - this.lastRuntimeErrorTime < VMapLayerHelper.RUNTIME_ERROR_DEBOUNCE_MS) {
+      return;
+    }
+    this.lastRuntimeErrorTime = now;
+    this.setError(detail);
+  }
+
   public clearError(): void {
     this._error = undefined;
+    this.lastRuntimeErrorTime = 0;
   }
 
   public getError(): VMapErrorDetail | undefined {
@@ -103,6 +116,7 @@ export class VMapLayerHelper {
     elementId?: string,
   ) {
     if (this.layerId) {
+      this.unregisterLayerError();
       await this.mapProvider?.removeLayer(this.layerId);
       this.layerId = null;
     }
@@ -124,6 +138,7 @@ export class VMapLayerHelper {
             elementId,
           );
           if (this.layerId) {
+            this.registerLayerError();
             this.markReady();
           } else {
             this.setError({
@@ -300,8 +315,27 @@ export class VMapLayerHelper {
   }
 
   public async removeLayer() {
+    this.unregisterLayerError();
     await this.mapProvider?.removeLayer(this.layerId);
     this.layerId = null;
+  }
+
+  private registerLayerError(): void {
+    if (this.layerId && this.mapProvider?.onLayerError) {
+      this.mapProvider.onLayerError(this.layerId, (err) => {
+        this.setRuntimeError({
+          type: err.type,
+          message: err.message,
+          cause: err.cause,
+        });
+      });
+    }
+  }
+
+  private unregisterLayerError(): void {
+    if (this.layerId && this.mapProvider?.offLayerError) {
+      this.mapProvider.offLayerError(this.layerId);
+    }
   }
 
   private async getVMap(): Promise<HTMLVMapElement> {

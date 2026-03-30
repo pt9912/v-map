@@ -11,6 +11,8 @@ export type LayerUpdate =
     }[LayerConfig['type']]
   | { type: 'tile3d-style'; data: { style?: Record<string, unknown> } };
 
+export type LayerErrorCallback = (error: { type: 'network'; message: string; cause?: unknown }) => void;
+
 export interface MapProvider {
   init(options: ProviderOptions): Promise<void>;
   destroy(): Promise<void>;
@@ -41,6 +43,11 @@ export interface MapProvider {
   ): Promise<void>;
 
   setGroupVisible?(groupId: string, visible: boolean): Promise<void>;
+
+  /** Register a callback for runtime layer errors (tile load, feature fetch, etc.). */
+  onLayerError?(layerId: string, callback: LayerErrorCallback): void;
+  /** Unregister the runtime error callback and detach native listeners for a layer. */
+  offLayerError?(layerId: string): void;
 
   /** Register a callback for pointer-move with geo-coordinates. Returns unsubscribe function. */
   onPointerMove?(callback: (coordinate: [number, number] | null, pixel: [number, number]) => void): () => void;

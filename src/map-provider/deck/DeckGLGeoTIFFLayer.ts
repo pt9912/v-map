@@ -158,6 +158,8 @@ export interface DeckGLGeoTIFFLayerProps extends LayerProps {
    * Beispiel: [0, 3000] für Höhendaten 0-3000m
    */
   valueRange?: [number, number];
+  /** Optional callback for tile load errors, wired by provider. */
+  onTileLoadError?: (err: Error) => void;
 }
 
 /**
@@ -680,6 +682,7 @@ export async function createDeckGLGeoTIFFLayer(
         getTileData: this.getTileData.bind(this),
         onTileError: (err: Error) => {
           warn(`${TILE_LAYER_LOG_PREFIX}error: ${err.message}`);
+          this.props.onTileLoadError?.(err);
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deck.gl sub-layer prop forwarding requires any
         renderSubLayers: (subProps: any) => {
