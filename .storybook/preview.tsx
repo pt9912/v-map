@@ -5,7 +5,6 @@ import { defineCustomElements } from '../loader/index.js';
 defineCustomElements();
 
 export const parameters: Preview['parameters'] = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
   docs: {
     inlineStories: true,
     source: {
