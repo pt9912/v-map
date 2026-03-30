@@ -133,7 +133,7 @@ vi.mock('@deck.gl/core', () => {
     setState(s: any) {
       this.state = { ...this.state, ...s };
     }
-    setNeedsRedraw = jest.fn();
+    setNeedsRedraw = vi.fn();
     raiseError(err: Error) {
       throw err;
     }
@@ -142,7 +142,7 @@ vi.mock('@deck.gl/core', () => {
 });
 
 vi.mock('proj4', () => ({
-  default: jest.fn((_from: any, _to: any, c: any) => c),
+  default: vi.fn((_from: any, _to: any, c: any) => c),
 }));
 vi.mock('geotiff', () => ({}));
 vi.mock('geotiff-geokeys-to-proj4', () => ({}));
@@ -155,11 +155,11 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
   const defaultElevationData = new Float32Array(257 * 257);
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockGetTileData.mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
     mockGetElevationData.mockResolvedValue(defaultElevationData);
     mockLoadGeoTIFFSource.mockResolvedValue({
-      tiff: { close: jest.fn() },
+      tiff: { close: vi.fn() },
       baseImage: { getWidth: () => 256, getHeight: () => 256 },
       fromProjection: 'EPSG:25832',
       sourceBounds: [300000, 5000000, 400000, 5100000],
@@ -335,7 +335,7 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
 
       await (layer as any).loadGeoTIFF();
 
-      jest.spyOn(layer as any, 'getViewExtent').mockReturnValue([8.0, 50.0, 9.0, 51.0]);
+      vi.spyOn(layer as any, 'getViewExtent').mockReturnValue([8.0, 50.0, 9.0, 51.0]);
 
       (layer as any).renderLayers();
 
@@ -664,7 +664,7 @@ describe('createDeckGLGeoTIFFTerrainLayer', () => {
         url: 'https://example.com/dem.tif',
       });
 
-      const loadSpy = jest
+      const loadSpy = vi
         .spyOn(layer as any, '_loadAsync')
         .mockResolvedValue(undefined);
 

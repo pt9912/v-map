@@ -1,46 +1,48 @@
-const setUrlMock = jest.fn();
+import { vi } from 'vitest';
+
+const setUrlMock = vi.fn();
 
 let LeafletProvider: any;
-let mockTileLayer: jest.Mock;
+let mockTileLayer: ReturnType<typeof vi.fn>;
 
 class MockLayerGroup {
   _groupId?: string;
-  addLayer = jest.fn();
-  clearLayers = jest.fn();
-  addTo = jest.fn().mockReturnThis();
+  addLayer = vi.fn();
+  clearLayers = vi.fn();
+  addTo = vi.fn().mockReturnThis();
   basemap = false;
-  getLayers = jest.fn(() => []);
+  getLayers = vi.fn(() => []);
 }
 
 const setupModule = async () => {
-  jest.resetModules();
+  vi.resetModules();
   setUrlMock.mockClear();
 
-  mockTileLayer = jest.fn().mockImplementation((url: string) => ({
+  mockTileLayer = vi.fn().mockImplementation((url: string) => ({
     url,
     setUrl: setUrlMock,
-    setZIndex: jest.fn(),
+    setZIndex: vi.fn(),
   }));
 
-  jest.doMock('leaflet', () => ({
+  vi.doMock('leaflet', () => ({
     tileLayer: mockTileLayer,
-    map: jest.fn(() => ({
-      setView: jest.fn().mockReturnThis(),
-      addLayer: jest.fn(),
-      removeLayer: jest.fn(),
-      remove: jest.fn(),
-      eachLayer: jest.fn(),
-      invalidateSize: jest.fn(),
+    map: vi.fn(() => ({
+      setView: vi.fn().mockReturnThis(),
+      addLayer: vi.fn(),
+      removeLayer: vi.fn(),
+      remove: vi.fn(),
+      eachLayer: vi.fn(),
+      invalidateSize: vi.fn(),
     })),
-    layerGroup: jest.fn(() => new MockLayerGroup()),
+    layerGroup: vi.fn(() => new MockLayerGroup()),
     LayerGroup: MockLayerGroup,
     GridLayer: class {
       options: any = {};
       constructor() {}
     },
     Util: {
-      stamp: jest.fn(() => 'leaflet-layer-id'),
-      setOptions: jest.fn((instance, opts) => {
+      stamp: vi.fn(() => 'leaflet-layer-id'),
+      setOptions: vi.fn((instance: any, opts: any) => {
         instance.options = { ...(instance.options ?? {}), ...opts };
       }),
     },
@@ -51,7 +53,7 @@ const setupModule = async () => {
 
 describe('LeafletProvider ArcGIS support', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('erstellt einen ArcGIS Tile-Layer mit Parametern', async () => {

@@ -1,8 +1,5 @@
 import { vi } from 'vitest';
 
-// Alias jest → vi so existing jest.fn()/jest.spyOn() calls work under Vitest
-(globalThis as any).jest = vi;
-
 Object.defineProperty(document, 'createRange', {
   value: () => ({
     setStart: () => {},

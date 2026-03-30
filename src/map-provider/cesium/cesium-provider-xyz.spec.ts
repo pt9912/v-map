@@ -39,8 +39,8 @@ const { mockUrlTemplateImageryProvider, mockImageryLayer, mockCesium } =
   });
 
 vi.mock('../../lib/cesium-loader', () => ({
-  loadCesium: jest.fn().mockResolvedValue(mockCesium),
-  injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
+  loadCesium: vi.fn().mockResolvedValue(mockCesium),
+  injectWidgetsCss: vi.fn().mockResolvedValue(undefined),
 }));
 
 import { CesiumProvider } from './cesium-provider';
@@ -48,39 +48,39 @@ import { CesiumProvider } from './cesium-provider';
 describe('CesiumProvider XYZ layer support', () => {
   let provider: CesiumProvider;
   const mockWrapper = {
-    setOptions: jest.fn(),
-    setVisible: jest.fn(),
-    setOpacity: jest.fn(),
-    setZIndex: jest.fn(),
-    getOptions: jest.fn().mockReturnValue({}),
+    setOptions: vi.fn(),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
+    setZIndex: vi.fn(),
+    getOptions: vi.fn().mockReturnValue({}),
   };
 
   beforeAll(() => {
     vi.stubGlobal('crypto', {
-      randomUUID: jest.fn().mockReturnValue('layer-id'),
+      randomUUID: vi.fn().mockReturnValue('layer-id'),
     });
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     provider = new CesiumProvider();
     (provider as any).Cesium = mockCesium;
     (global as any).Cesium = mockCesium;
     (provider as any).viewer = mockCesium.Viewer();
     (provider as any).layerManager = {
-      addLayer: jest.fn().mockReturnValue(mockWrapper),
-      replaceLayer: jest.fn().mockReturnValue(mockWrapper),
-      getLayer: jest.fn().mockReturnValue({
-        getOptions: jest.fn().mockReturnValue({}),
+      addLayer: vi.fn().mockReturnValue(mockWrapper),
+      replaceLayer: vi.fn().mockReturnValue(mockWrapper),
+      getLayer: vi.fn().mockReturnValue({
+        getOptions: vi.fn().mockReturnValue({}),
       }),
     };
     (provider as any).layerGroups = {
-      addLayerToGroup: jest.fn().mockReturnValue('layer-id'),
-      removeLayer: jest.fn(),
-      setBasemap: jest.fn(),
-      setVisible: jest.fn(),
-      setOpacity: jest.fn(),
-      apply: jest.fn(),
+      addLayerToGroup: vi.fn().mockReturnValue('layer-id'),
+      removeLayer: vi.fn(),
+      setBasemap: vi.fn(),
+      setVisible: vi.fn(),
+      setOpacity: vi.fn(),
+      apply: vi.fn(),
     };
   });
 

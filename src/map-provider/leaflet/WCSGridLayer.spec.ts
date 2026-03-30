@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { WCSGridLayer, createWCSGridLayer } from './WCSGridLayer';
 import type { WCSGridLayerOptions } from './WCSGridLayer';
 
@@ -58,7 +59,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
@@ -88,13 +89,13 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       // Mock getTileSize
-      (layer as any).getTileSize = jest.fn().mockReturnValue(256);
+      (layer as any).getTileSize = vi.fn().mockReturnValue(256);
 
       const coords = { x: 1, y: 2, z: 3 } as any;
       const url = (layer as any).buildWCSUrl(coords);
@@ -124,7 +125,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
@@ -145,7 +146,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
@@ -168,13 +169,13 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       const coords = { x: 1, y: 2, z: 3 } as any;
-      const done = jest.fn();
+      const done = vi.fn();
 
       const tile = layer.createTile(coords, done) as HTMLImageElement;
 
@@ -193,13 +194,13 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       const coords = { x: 1, y: 2, z: 3 } as any;
-      const done = jest.fn();
+      const done = vi.fn();
 
       const imgTile = layer.createTile(coords, done) as HTMLImageElement;
 
@@ -220,13 +221,13 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock _tileCoordsToBounds
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       const coords = { x: 1, y: 2, z: 3 } as any;
-      const done = jest.fn();
+      const done = vi.fn();
 
       const imgTile = layer.createTile(coords, done) as HTMLImageElement;
 
@@ -250,7 +251,7 @@ describe('WCSGridLayer', () => {
 
       const layer = createWCSGridLayer(options);
 
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
@@ -277,13 +278,13 @@ describe('WCSGridLayer', () => {
 
       const layer = createWCSGridLayer(options);
 
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       // Return object instead of number for getTileSize
-      (layer as any).getTileSize = jest.fn().mockReturnValue({ x: 512, y: 512 });
+      (layer as any).getTileSize = vi.fn().mockReturnValue({ x: 512, y: 512 });
 
       const coords = { x: 1, y: 2, z: 3 } as any;
       const url = (layer as any).buildWCSUrl(coords);
@@ -308,12 +309,12 @@ describe('WCSGridLayer', () => {
 
       const layer = createWCSGridLayer(options);
 
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 5, lat: 15 }),
         getNorthEast: () => ({ lng: 25, lat: 35 }),
       });
 
-      (layer as any).getTileSize = jest.fn().mockReturnValue(256);
+      (layer as any).getTileSize = vi.fn().mockReturnValue(256);
 
       const coords = { x: 0, y: 0, z: 1 } as any;
       const url = (layer as any).buildWCSUrl(coords);
@@ -330,13 +331,13 @@ describe('WCSGridLayer', () => {
 
       const layer = createWCSGridLayer(options);
 
-      (layer as any)._tileCoordsToBounds = jest.fn().mockReturnValue({
+      (layer as any)._tileCoordsToBounds = vi.fn().mockReturnValue({
         getSouthWest: () => ({ lng: 10, lat: 20 }),
         getNorthEast: () => ({ lng: 30, lat: 40 }),
       });
 
       const coords = { x: 1, y: 2, z: 3 } as any;
-      const done = jest.fn();
+      const done = vi.fn();
 
       const imgTile = layer.createTile(coords, done) as HTMLImageElement;
 
@@ -360,7 +361,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock redraw method
-      (layer as any).redraw = jest.fn();
+      (layer as any).redraw = vi.fn();
 
       layer.updateOptions({
         version: '1.1.1',
@@ -382,7 +383,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock redraw method
-      (layer as any).redraw = jest.fn();
+      (layer as any).redraw = vi.fn();
 
       layer.updateOptions({
         url: 'https://newserver.com/wcs',
@@ -404,7 +405,7 @@ describe('WCSGridLayer', () => {
       const layer = createWCSGridLayer(options);
 
       // Mock redraw method
-      (layer as any).redraw = jest.fn();
+      (layer as any).redraw = vi.fn();
 
       layer.updateOptions({
         params: {

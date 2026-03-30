@@ -1,3 +1,4 @@
+import { vi, type Mock } from 'vitest';
 import {
   GeoTIFFTileProcessor,
   getTileProcessorConfig,
@@ -16,21 +17,21 @@ const createMockImage = (
     getWidth: () => width,
     getHeight: () => height,
     getResolution: () => resolution,
-    readRasters: jest.fn().mockResolvedValue([rasterData]),
+    readRasters: vi.fn().mockResolvedValue([rasterData]),
   } as unknown as GeoTIFFImage;
 };
 
 describe('GeoTIFFTileProcessor', () => {
   let mockConfig: GeoTIFFTileProcessorConfig;
-  let mockTransformViewToSourceMapFn: jest.Mock;
-  let mockTransformSourceMapToViewFn: jest.Mock;
+  let mockTransformViewToSourceMapFn: Mock<(coord: [number, number]) => [number, number]>;
+  let mockTransformSourceMapToViewFn: Mock<(coord: [number, number]) => [number, number]>;
 
   beforeEach(() => {
     // Mock transformation function (identity transform for testing)
-    mockTransformViewToSourceMapFn = jest.fn(
+    mockTransformViewToSourceMapFn = vi.fn(
       (coord: [number, number]) => coord,
     );
-    mockTransformSourceMapToViewFn = jest.fn(
+    mockTransformSourceMapToViewFn = vi.fn(
       (coord: [number, number]) => coord,
     );
 
@@ -408,7 +409,7 @@ describe('GeoTIFFTileProcessor', () => {
         sourceBounds: [1000, 1000, 1001, 1001],
         baseImage: createMockImage(1, 1),
         transformViewToSourceMapFn: trickTransform as any,
-        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        transformSourceMapToViewFn: vi.fn((coord: [number, number]) => coord),
         worldSize: 200,
       };
 
@@ -449,7 +450,7 @@ describe('GeoTIFFTileProcessor', () => {
         sourceBounds: [1000, 1000, 1001, 1001],
         baseImage: createMockImage(1, 1),
         transformViewToSourceMapFn: trickTransform as any,
-        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        transformSourceMapToViewFn: vi.fn((coord: [number, number]) => coord),
         worldSize: 200,
       };
 
@@ -477,7 +478,7 @@ describe('GeoTIFFTileProcessor', () => {
         getWidth: () => 100,
         getHeight: () => 100,
         getResolution: () => [1.0, 1.0],
-        readRasters: jest.fn().mockRejectedValue(new Error('network error')),
+        readRasters: vi.fn().mockRejectedValue(new Error('network error')),
       } as unknown as GeoTIFFImage;
 
       const failConfig: GeoTIFFTileProcessorConfig = {
@@ -509,7 +510,7 @@ describe('GeoTIFFTileProcessor', () => {
         getWidth: () => 100,
         getHeight: () => 100,
         getResolution: () => [1.0, 1.0],
-        readRasters: jest.fn().mockResolvedValue([
+        readRasters: vi.fn().mockResolvedValue([
           42, // unexpected number - should be skipped
           new Uint8Array(100 * 100),
         ]),
@@ -657,12 +658,12 @@ describe('GeoTIFFTileProcessor', () => {
 
     it('should handle transform function that returns different coordinates', async () => {
       // Create a transform function that actually transforms
-      const transformFn = jest.fn(
+      const transformFn = vi.fn(
         (coord: [number, number]): [number, number] => {
           return [coord[0] * 2, coord[1] * 2]; // Scale by 2
         },
       );
-      const transformInversFn = jest.fn(
+      const transformInversFn = vi.fn(
         (coord: [number, number]): [number, number] => {
           return [coord[0] / 2, coord[1] / 2]; // Scale by 0.5 (inverse)
         },
@@ -757,8 +758,8 @@ describe('GeoTIFFTileProcessor', () => {
       // Use a small worldSize so tile bounds align with source bounds.
       const raster = new Uint8Array(10 * 10).fill(128);
       const smallConfig: GeoTIFFTileProcessorConfig = {
-        transformViewToSourceMapFn: jest.fn((coord: [number, number]) => coord),
-        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        transformViewToSourceMapFn: vi.fn((coord: [number, number]) => coord),
+        transformSourceMapToViewFn: vi.fn((coord: [number, number]) => coord),
         sourceBounds: [0, 0, 100, 100],
         sourceRef: [0, 0],
         resolution: 1.0,
@@ -1024,8 +1025,8 @@ describe('GeoTIFFTileProcessor', () => {
         ...mockConfig,
         sourceBounds: [0, 0, 1, 1],
         baseImage: createMockImage(1, 1),
-        transformViewToSourceMapFn: jest.fn(() => [5000, 5000] as [number, number]),
-        transformSourceMapToViewFn: jest.fn((coord: [number, number]) => coord),
+        transformViewToSourceMapFn: vi.fn(() => [5000, 5000] as [number, number]),
+        transformSourceMapToViewFn: vi.fn((coord: [number, number]) => coord),
       };
 
       const processor = new GeoTIFFTileProcessor(farConfig);
@@ -1047,8 +1048,8 @@ describe('GeoTIFFTileProcessor', () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-jest.mock('proj4', () => ({
-  default: jest.fn((_fromProj: string, _toProj: string, coord: [number, number]) => coord),
+vi.mock('proj4', () => ({
+  default: vi.fn((_fromProj: string, _toProj: string, coord: [number, number]) => coord),
 }));
 
 describe('getTileProcessorConfig', () => {
@@ -1058,7 +1059,7 @@ describe('getTileProcessorConfig', () => {
       getWidth: () => 256,
       getHeight: () => 256,
       getResolution: () => [1.0, 1.0],
-      readRasters: jest.fn().mockResolvedValue([new Uint8Array(256 * 256)]),
+      readRasters: vi.fn().mockResolvedValue([new Uint8Array(256 * 256)]),
     } as any,
     fromProjection: 'EPSG:25832',
     sourceBounds: [300000, 5000000, 400000, 5100000] as [number, number, number, number],

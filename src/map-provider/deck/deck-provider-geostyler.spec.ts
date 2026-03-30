@@ -1,43 +1,45 @@
+import { vi } from 'vitest';
 import { DeckProvider } from './deck-provider';
 import type { Style } from 'geostyler-style';
 
 // Mock @deck.gl imports
-jest.mock('@deck.gl/core', () => ({
-  Deck: jest.fn().mockImplementation(() => ({
-    setProps: jest.fn(),
-    finalize: jest.fn(),
-  })),
+vi.mock('@deck.gl/core', () => {
+  const Deck = vi.fn(function (this: any) {
+    this.setProps = vi.fn();
+    this.finalize = vi.fn();
+  });
+  return { Deck };
+});
+
+vi.mock('@deck.gl/geo-layers', () => ({
+  TileLayer: vi.fn().mockImplementation(function(this: any, props: any) {
+    return {
+      id: props.id,
+      props: props,
+      clone: vi.fn().mockReturnThis(),
+    };
+  }),
 }));
 
-jest.mock('@deck.gl/geo-layers', () => ({
-  TileLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+vi.mock('@deck.gl/layers', () => ({
+  GeoJsonLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
-}));
-
-jest.mock('@deck.gl/layers', () => ({
-  GeoJsonLayer: jest.fn().mockImplementation(function(this: any, props: any) {
-    return {
-      id: props.id,
-      props: props,
-      clone: jest.fn().mockReturnThis(),
-    };
-  }),
-  BitmapLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  BitmapLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
     };
   }),
-  ScatterplotLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  ScatterplotLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
 }));
@@ -50,7 +52,7 @@ describe('DeckProvider GeoStyler Integration', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('GeoStyler Style Support', () => {

@@ -194,14 +194,14 @@ describe('Triangulation and BVHNode2D', () => {
 
         // Prüfe x-Koordinate
         if (x < west || x > east) {
-          fail(
+          expect.fail(
             `Dreieck ${i}, Ecke ${j}: x=${x} liegt außerhalb von [${west}, ${east}]`,
           );
         }
 
         // Prüfe y-Koordinate
         if (y < south || y > north) {
-          fail(
+          expect.fail(
             `Dreieck ${i}, Ecke ${j}: y=${y} liegt außerhalb von [${south}, ${north}]`,
           );
         }

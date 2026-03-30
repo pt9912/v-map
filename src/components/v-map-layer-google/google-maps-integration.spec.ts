@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { newSpecPage } from '@stencil/core/testing';
 import { VMapLayerGoogle } from './v-map-layer-google';
 
@@ -5,13 +6,13 @@ import { VMapLayerGoogle } from './v-map-layer-google';
 const mockGoogleMapsApi = {
   google: {
     maps: {
-      Map: jest.fn().mockImplementation(() => ({
-        setCenter: jest.fn(),
-        setZoom: jest.fn(),
-        setMapTypeId: jest.fn(),
+      Map: vi.fn().mockImplementation(() => ({
+        setCenter: vi.fn(),
+        setZoom: vi.fn(),
+        setMapTypeId: vi.fn(),
       })),
       event: {
-        addListenerOnce: jest.fn((_map, _event, callback) => {
+        addListenerOnce: vi.fn((_map, _event, callback) => {
           setTimeout(callback, 100);
         }),
       },
@@ -26,12 +27,12 @@ const mockGoogleMapsApi = {
 };
 
 // Mock provider-specific Google Maps helpers
-jest.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
-  loadGoogleMapsApi: jest.fn().mockResolvedValue(undefined),
-  ensureGoogleMutantLoaded: jest.fn().mockResolvedValue(undefined),
-  ensureGoogleLogo: jest.fn(),
-  ensureLeafletCss: jest.fn().mockReturnValue(document.createElement('style')),
-  removeInjectedCss: jest.fn(),
+vi.mock('../../map-provider/leaflet/leaflet-helpers', () => ({
+  loadGoogleMapsApi: vi.fn().mockResolvedValue(undefined),
+  ensureGoogleMutantLoaded: vi.fn().mockResolvedValue(undefined),
+  ensureGoogleLogo: vi.fn(),
+  ensureLeafletCss: vi.fn().mockReturnValue(document.createElement('style')),
+  removeInjectedCss: vi.fn(),
 }));
 
 describe('Google Maps Integration Tests', () => {
@@ -46,7 +47,7 @@ describe('Google Maps Integration Tests', () => {
     });
 
     // Mock fetch for Static Maps API calls
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       blob: () =>
         Promise.resolve(new Blob(['mock-image'], { type: 'image/png' })),
@@ -54,7 +55,7 @@ describe('Google Maps Integration Tests', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Google Maps Layer Component', () => {
@@ -230,7 +231,7 @@ describe('Google Maps Integration Tests', () => {
 
     it('should handle network errors gracefully', async () => {
       // Mock network failure for Static Maps API
-      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
 
       const page = await newSpecPage({
         components: [VMapLayerGoogle],

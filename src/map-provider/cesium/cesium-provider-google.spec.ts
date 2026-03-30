@@ -1,31 +1,32 @@
+import { vi } from 'vitest';
 import { CesiumProvider } from './cesium-provider';
 import { LayerConfig, googleMapType } from '../../types/layerconfig';
 
-// Mock Cesium imports
-const mockCesium = {
-  Viewer: jest.fn().mockImplementation(function() { return {
+// Mock Cesium imports — use vi.hoisted() so the variable is available when vi.mock() is hoisted
+const mockCesium = vi.hoisted(() => ({
+  Viewer: vi.fn().mockImplementation(function() { return {
     scene: {
       imageryLayers: {
-        add: jest.fn(),
-        remove: jest.fn(),
+        add: vi.fn(),
+        remove: vi.fn(),
       },
     },
     container: document.createElement('div'),
-    destroy: jest.fn(),
+    destroy: vi.fn(),
   }; }),
-  UrlTemplateImageryProvider: jest.fn().mockImplementation(function(options) { return {
+  UrlTemplateImageryProvider: vi.fn().mockImplementation(function(options) { return {
     ...options,
-    buildImageResource: options.buildImageResource || jest.fn(),
+    buildImageResource: options.buildImageResource || vi.fn(),
   }; }),
-  ImageryLayer: jest.fn().mockImplementation(function(provider, options) { return {
+  ImageryLayer: vi.fn().mockImplementation(function(provider, options) { return {
     provider,
-    getVisible: jest.fn().mockReturnValue(true),
-    setVisible: jest.fn(),
-    setOpacity: jest.fn(),
+    getVisible: vi.fn().mockReturnValue(true),
+    setVisible: vi.fn(),
+    setOpacity: vi.fn(),
     ...options,
   }; }),
-  WebMercatorTilingScheme: jest.fn().mockImplementation(function() { return {
-    tileXYToRectangle: jest.fn().mockReturnValue({
+  WebMercatorTilingScheme: vi.fn().mockImplementation(function() { return {
+    tileXYToRectangle: vi.fn().mockReturnValue({
       west: -Math.PI,
       south: -Math.PI / 2,
       east: Math.PI,
@@ -41,14 +42,14 @@ const mockCesium = {
     },
   },
   Math: {
-    toDegrees: jest.fn(radians => radians * (180 / Math.PI)),
+    toDegrees: vi.fn(radians => radians * (180 / Math.PI)),
   },
-  Resource: jest.fn().mockImplementation(function(options) { return options; }),
-};
+  Resource: vi.fn().mockImplementation(function(options) { return options; }),
+}));
 
-jest.mock('../../lib/cesium-loader', () => ({
-  loadCesium: jest.fn().mockResolvedValue(mockCesium),
-  injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
+vi.mock('../../lib/cesium-loader', () => ({
+  loadCesium: vi.fn().mockResolvedValue(mockCesium),
+  injectWidgetsCss: vi.fn().mockResolvedValue(undefined),
 }));
 
 // Create global Cesium mock that will be available to the real CesiumProvider
@@ -58,9 +59,9 @@ jest.mock('../../lib/cesium-loader', () => ({
 const mockGoogleMapsApi = {
   google: {
     maps: {
-      Map: jest.fn(),
+      Map: vi.fn(),
       event: {
-        addListenerOnce: jest.fn(),
+        addListenerOnce: vi.fn(),
       },
     },
   },
@@ -86,31 +87,31 @@ describe('CesiumProvider Google Maps Integration', () => {
     (provider as any).viewer = {
       scene: {
         imageryLayers: {
-          add: jest.fn(),
-          remove: jest.fn(),
+          add: vi.fn(),
+          remove: vi.fn(),
         },
       },
     };
     (provider as any).layerManager = {
-      addLayer: jest.fn().mockReturnValue({
+      addLayer: vi.fn().mockReturnValue({
         layerId: 'mock-layer-wrapper',
-        setOpacity: jest.fn(),
-        setVisible: jest.fn(),
-        setZIndex: jest.fn(),
+        setOpacity: vi.fn(),
+        setVisible: vi.fn(),
+        setZIndex: vi.fn(),
       }),
-      removeLayer: jest.fn(),
-      setOpacity: jest.fn(),
-      setVisible: jest.fn(),
+      removeLayer: vi.fn(),
+      setOpacity: vi.fn(),
+      setVisible: vi.fn(),
     };
     (provider as any).layerGroups = {
-      addLayerToGroup: jest.fn().mockReturnValue('mock-layer-id'),
-      removeLayer: jest.fn(),
-      setOpacity: jest.fn(),
-      setVisible: jest.fn(),
-      apply: jest.fn(),
+      addLayerToGroup: vi.fn().mockReturnValue('mock-layer-id'),
+      removeLayer: vi.fn(),
+      setOpacity: vi.fn(),
+      setVisible: vi.fn(),
+      apply: vi.fn(),
     };
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Google Maps Static API Integration', () => {

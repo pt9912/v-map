@@ -20,7 +20,7 @@
       "ol/webgl/PaletteTexture": ["./types/ol-override.d.ts"]
     },
     // WICHTIG: KEIN "typeRoots" auf cesium/Source setzen
-    "types": ["@stencil/core", "jest", "node", "cesium", "ol", "geojson"] // <- keine 'Assets'/'Widgets' etc.
+    "types": ["@stencil/core", "vitest/globals", "node", "cesium", "ol", "geojson"] // <- keine 'Assets'/'Widgets' etc.
   },
   "include": ["src", "types", "node_modules/cesium/Source/Cesium.d.ts"],
   "exclude": [

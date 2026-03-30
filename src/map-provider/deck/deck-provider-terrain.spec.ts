@@ -66,7 +66,7 @@ import { DeckProvider } from './deck-provider';
 
 describe('DeckProvider terrain support', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('erstellt einen TerrainLayer mit den übergebenen Parametern', async () => {
@@ -134,13 +134,13 @@ describe('DeckProvider terrain support', () => {
 
   it('leitet renderMode auch bei terrain-geotiff Updates an die Model-Overrides weiter', async () => {
     const provider = new DeckProvider();
-    const setModelOverrides = jest.fn();
-    const applyToDeck = jest.fn();
+    const setModelOverrides = vi.fn();
+    const applyToDeck = vi.fn();
 
     (provider as any).layerGroups = {
       groups: [
         {
-          getModel: jest.fn().mockImplementation((layerId: string) =>
+          getModel: vi.fn().mockImplementation((layerId: string) =>
             layerId === 'terrain-geotiff-layer' ? { id: layerId } : undefined,
           ),
           setModelOverrides,

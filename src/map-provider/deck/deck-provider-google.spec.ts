@@ -1,16 +1,18 @@
+import { vi } from 'vitest';
 import { DeckProvider } from './deck-provider';
 import { LayerConfig, googleMapType } from '../../types/layerconfig';
 
 // Mock @deck.gl imports
-jest.mock('@deck.gl/core', () => ({
-  Deck: jest.fn().mockImplementation(() => ({
-    setProps: jest.fn(),
-    finalize: jest.fn(),
-  })),
-}));
+vi.mock('@deck.gl/core', () => {
+  const Deck = vi.fn(function (this: any) {
+    this.setProps = vi.fn();
+    this.finalize = vi.fn();
+  });
+  return { Deck };
+});
 
-jest.mock('@deck.gl/geo-layers', () => ({
-  TileLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+vi.mock('@deck.gl/geo-layers', () => ({
+  TileLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: {
@@ -18,7 +20,7 @@ jest.mock('@deck.gl/geo-layers', () => ({
         opacity: props.opacity ?? 1,
         ...props,
       },
-      clone: jest.fn().mockImplementation((overrides: any) => ({
+      clone: vi.fn().mockImplementation((overrides: any) => ({
         id: props.id,
         props: {
           visible: overrides?.visible ?? props.visible ?? true,
@@ -26,32 +28,32 @@ jest.mock('@deck.gl/geo-layers', () => ({
           ...props,
           ...overrides,
         },
-        clone: jest.fn().mockReturnThis(),
+        clone: vi.fn().mockReturnThis(),
       })),
       ...props,
     };
   }),
 }));
 
-jest.mock('@deck.gl/layers', () => ({
-  BitmapLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+vi.mock('@deck.gl/layers', () => ({
+  BitmapLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       ...props,
     };
   }),
-  GeoJsonLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  GeoJsonLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
-  ScatterplotLayer: jest.fn().mockImplementation(function(this: any, props: any) {
+  ScatterplotLayer: vi.fn().mockImplementation(function(this: any, props: any) {
     return {
       id: props.id,
       props: props,
-      clone: jest.fn().mockReturnThis(),
+      clone: vi.fn().mockReturnThis(),
     };
   }),
 }));
@@ -60,9 +62,9 @@ jest.mock('@deck.gl/layers', () => ({
 const mockGoogleMapsApi = {
   google: {
     maps: {
-      Map: jest.fn(),
+      Map: vi.fn(),
       event: {
-        addListenerOnce: jest.fn(),
+        addListenerOnce: vi.fn(),
       },
     },
   },
@@ -81,13 +83,13 @@ describe('DeckProvider Google Maps Integration', () => {
     });
 
     // Mock fetch for Static Maps API
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
 
     provider = new DeckProvider();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Google Maps Static API Integration', () => {
@@ -177,7 +179,7 @@ describe('DeckProvider Google Maps Integration', () => {
 
       // Mock successful fetch response
       const mockBlob = new Blob(['mock-image-data'], { type: 'image/png' });
-      (global.fetch as jest.Mock).mockResolvedValue({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
         ok: true,
         blob: () => Promise.resolve(mockBlob),
       });
@@ -205,7 +207,7 @@ describe('DeckProvider Google Maps Integration', () => {
       });
 
       // Mock failed fetch response
-      (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+      (global.fetch as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Network error'));
 
       const config: LayerConfig = {
         type: 'google' as const,
@@ -229,7 +231,7 @@ describe('DeckProvider Google Maps Integration', () => {
 
       // Mock successful fetch response and capture the URL
       const mockBlob = new Blob(['mock-image-data'], { type: 'image/png' });
-      (global.fetch as jest.Mock).mockResolvedValue({
+      (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
         ok: true,
         blob: () => Promise.resolve(mockBlob),
       });

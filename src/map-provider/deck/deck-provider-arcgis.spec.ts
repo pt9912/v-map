@@ -39,7 +39,7 @@ import { DeckProvider } from './deck-provider';
 
 describe('DeckProvider ArcGIS support', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('erstellt ein ArcGIS TileLayer über buildArcgisTileLayer', async () => {

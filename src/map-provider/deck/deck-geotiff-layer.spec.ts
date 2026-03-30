@@ -104,7 +104,7 @@ vi.mock('@deck.gl/core', () => {
     setState(s: any) {
       this.state = { ...this.state, ...s };
     }
-    setNeedsRedraw = jest.fn();
+    setNeedsRedraw = vi.fn();
     raiseError(err: Error) {
       throw err;
     }
@@ -116,7 +116,7 @@ vi.mock('@deck.gl/core', () => {
 // Quelldaten: sourceBounds [300000, 5000000, 400000, 5100000] in EPSG:25832
 // Für gültige WGS84-Koordinaten transformieren
 vi.mock('proj4', () => ({
-  default: jest.fn((_from: any, _to: any, coord: any) => {
+  default: vi.fn((_from: any, _to: any, coord: any) => {
     // Gibt immer ein Array mit gültigen Koordinaten zurück
     if (Array.isArray(coord)) {
       return [coord[0] / 10000, coord[1] / 100000];
@@ -135,11 +135,11 @@ const originalImageData = globalThis.ImageData;
 
 describe('createDeckGLGeoTIFFLayer', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     globalThis.ImageData = originalImageData;
     mockGetTileData.mockResolvedValue(new Uint8ClampedArray(256 * 256 * 4));
     mockLoadGeoTIFFSource.mockResolvedValue({
-      tiff: { close: jest.fn() },
+      tiff: { close: vi.fn() },
       baseImage: { getWidth: () => 256, getHeight: () => 256 },
       fromProjection: 'EPSG:25832',
       sourceBounds: [300000, 5000000, 400000, 5100000],
@@ -333,7 +333,7 @@ describe('createDeckGLGeoTIFFLayer', () => {
       await (layer as any).loadGeoTIFF();
 
       // Extent-Berechnung via proj4 wird gemockt
-      jest.spyOn(layer as any, 'getViewExtent').mockReturnValue([8.0, 50.0, 9.0, 51.0]);
+      vi.spyOn(layer as any, 'getViewExtent').mockReturnValue([8.0, 50.0, 9.0, 51.0]);
 
       (layer as any).renderLayers();
 
@@ -537,7 +537,7 @@ describe('createDeckGLGeoTIFFLayer', () => {
         url: 'https://example.com/data.tif',
       });
 
-      const loadSpy = jest
+      const loadSpy = vi
         .spyOn(layer as any, '_loadAsync')
         .mockResolvedValue(undefined);
 
@@ -783,7 +783,7 @@ describe('createDeckGLGeoTIFFLayer', () => {
       });
 
       // Make loadGeoTIFF return false (simulating stale load)
-      jest.spyOn(layer as any, 'loadGeoTIFF').mockResolvedValue(false);
+      vi.spyOn(layer as any, 'loadGeoTIFF').mockResolvedValue(false);
 
       (layer as any).activeLoad = { signature: 'test', token: 1 };
       await (layer as any)._loadAsync(1, 'test', 'stale-test');
@@ -801,7 +801,7 @@ describe('createDeckGLGeoTIFFLayer', () => {
       });
 
       // loadGeoTIFF returns true but we change the token mid-flight
-      jest.spyOn(layer as any, 'loadGeoTIFF').mockImplementation(async () => {
+      vi.spyOn(layer as any, 'loadGeoTIFF').mockImplementation(async () => {
         // Simulate another scheduleLoad changing the activeLoad token
         (layer as any).activeLoad = { signature: 'newer', token: 99 };
         return true;
@@ -1052,7 +1052,7 @@ describe('createDeckGLGeoTIFFLayer', () => {
       await (layer as any).loadGeoTIFF();
 
       // Make getViewExtent return null
-      jest.spyOn(layer as any, 'getViewExtent').mockReturnValue(null);
+      vi.spyOn(layer as any, 'getViewExtent').mockReturnValue(null);
 
       const result = (layer as any).renderLayers();
 

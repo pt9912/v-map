@@ -82,8 +82,8 @@ const { mockCesium } = vi.hoisted(() => ({
 
 // Mock cesium-loader BEFORE importing the provider
 vi.mock('../../lib/cesium-loader', () => ({
-  loadCesium: jest.fn().mockResolvedValue(mockCesium),
-  injectWidgetsCss: jest.fn().mockResolvedValue(undefined),
+  loadCesium: vi.fn().mockResolvedValue(mockCesium),
+  injectWidgetsCss: vi.fn().mockResolvedValue(undefined),
 }));
 
 // Import provider AFTER mocks are defined
@@ -100,7 +100,7 @@ describe('CesiumProvider GeoStyler Integration', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('GeoStyler Style Support', () => {

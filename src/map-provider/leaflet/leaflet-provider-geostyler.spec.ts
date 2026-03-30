@@ -90,7 +90,7 @@ describe('LeafletProvider GeoStyler Integration', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('GeoStyler Style Support', () => {
