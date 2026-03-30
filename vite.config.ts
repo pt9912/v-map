@@ -51,24 +51,12 @@ export default defineConfig({
     },
   ],
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          'chunk-ol': [
-            // 'ol',
-            // 'ol/Map',
-            // 'ol/View',
-            // 'ol/proj',
-            // 'ol/layer/Tile',
-            // 'ol/source/OSM',
-          ],
-          'chunk-leaflet': ['leaflet'],
+        manualChunks(id) {
+          if (id.includes('leaflet')) return 'chunk-leaflet';
         },
       },
-    },
-    commonjsOptions: {
-      ignore: ['path'],
-      transformMixedEsModules: true, // Handle ESM/CJS interop
     },
   },
   define: {
@@ -80,22 +68,16 @@ export default defineConfig({
     noDiscovery: true,
   },
   resolve: {
-    alias: [
-      { find: /^leaflet$/, replacement: leafletEsmPath },
-      {
-        find: /^jszip$/,
-        replacement: new URL(
-          './node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
-          import.meta.url,
-        ).pathname,
-      },
-      {
-        find: /^pako$/,
-        replacement: new URL(
-          './node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
-          import.meta.url,
-        ).pathname,
-      },
-    ],
+    alias: {
+      leaflet: leafletEsmPath,
+      jszip: new URL(
+        './node_modules/.pnpm/jszip@3.10.1/node_modules/jszip/dist/jszip.js',
+        import.meta.url,
+      ).pathname,
+      pako: new URL(
+        './node_modules/.pnpm/pako@1.0.11/node_modules/pako/dist/pako.js',
+        import.meta.url,
+      ).pathname,
+    },
   },
 });

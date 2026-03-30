@@ -49,7 +49,7 @@ const config = {
       'fast-xml-parser': fastXmlParserEsm,
       'geotiff': path.resolve(
         process.cwd(),
-        'node_modules/.pnpm/geotiff@2.1.4-beta.0/node_modules/geotiff/dist-browser/geotiff.js',
+        'node_modules/.pnpm/geotiff@3.0.5/node_modules/geotiff/dist-browser/geotiff.js',
       ),
       'jszip': path.resolve(
         process.cwd(),
@@ -147,19 +147,16 @@ const config = {
       '@deck.gl/geo-layers',
     ];
 
-    // Unterdrücke Node.js-Modul-Warnungen für externalisierte Module
+    // Rolldown (Vite 8) treats MISSING_EXPORT as error by default.
+    // Shim missing exports for Stencil class re-exports and OL internals.
     config.build = config.build ?? {};
-    config.build.rollupOptions = config.build.rollupOptions ?? {};
-    config.build.rollupOptions.onwarn = (warning, warn) => {
-      // Ignoriere Warnungen über externalisierte Node.js-Module
-      if (
-        warning.code === 'UNRESOLVED_IMPORT' &&
-        ['http', 'https', 'url', 'fs', 'path'].includes(warning.source)
-      ) {
-        return;
-      }
-      warn(warning);
+    config.build.chunkSizeWarningLimit = 1600;
+    config.build.rolldownOptions = config.build.rolldownOptions ?? {};
+    config.build.rolldownOptions.moduleTypes = {
+      '.tsx': 'tsx',
+      '.ts': 'ts',
     };
+    config.build.rolldownOptions.shimMissingExports = true;
 
     return config;
   },
