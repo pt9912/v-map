@@ -775,7 +775,13 @@ export class OpenLayersProvider implements MapProvider {
   // }
 
   /**
-   * Convert a Geostyler style to OpenLayers style function
+   * Convert a GeoStyler style to an OpenLayers style function.
+   *
+   * TODO: Replace this hand-rolled conversion (~200 lines) with
+   * geostyler-openlayers-parser's writeStyle(). The official parser
+   * covers more symbolizer types, handles filters, and stays in sync
+   * with the GeoStyler spec. See:
+   * https://github.com/geostyler/geostyler-openlayers-parser
    */
   private async createGeostylerStyleFunction(geostylerStyle: GeoStylerStyle) {
     // Helper to extract static value from GeoStyler property (could be function or value)
