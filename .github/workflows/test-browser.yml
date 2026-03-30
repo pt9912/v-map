@@ -1,4 +1,4 @@
-name: Test
+name: Test (Browser)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  coverage:
+  browser:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -43,5 +43,8 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
-      - name: Run vitest tests with coverage
-        run: pnpm run test:coverage
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run vitest browser tests
+        run: pnpm run test:vitest:browser
