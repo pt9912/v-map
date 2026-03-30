@@ -7,7 +7,8 @@ export type StyleFormat =
   | 'mapbox-gl'
   | 'qgis'
   | 'lyrx'
-  | 'cesium-3d-tiles';
+  | 'cesium-3d-tiles'
+  | 'geostyler';
 
 export type ResolvedStyle = Style | Cesium3DTileStyle;
 

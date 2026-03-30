@@ -170,6 +170,8 @@ export class VMapStyle {
         return this.parseLyrx(styleContent);
       case 'cesium-3d-tiles':
         return this.parseCesium3DTiles(styleContent);
+      case 'geostyler':
+        return this.parseGeoStyler(styleContent);
       default:
         throw new Error(`Unsupported style format: ${this.format}`);
     }
@@ -277,6 +279,25 @@ export class VMapStyle {
     } catch (error) {
       throw new Error(
         `Cesium 3D Tiles style parsing failed: ${error?.message || error}`,
+      );
+    }
+  }
+
+  private async parseGeoStyler(jsonContent: string): Promise<Style> {
+    try {
+      const style = JSON.parse(jsonContent);
+
+      if (typeof style !== 'object' || style === null) {
+        throw new Error('Parsed GeoStyler style is not a valid object');
+      }
+      if (typeof style.name !== 'string' || !Array.isArray(style.rules)) {
+        throw new Error('GeoStyler style must have "name" (string) and "rules" (array)');
+      }
+
+      return style as Style;
+    } catch (error) {
+      throw new Error(
+        `GeoStyler style parsing failed: ${error?.message || error}`,
       );
     }
   }
