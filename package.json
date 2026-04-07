@@ -50,9 +50,6 @@
       "require": "./loader/index.cjs"
     }
   },
-  "branches": [
-    "main"
-  ],
   "publishConfig": {
     "access": "public"
   },
