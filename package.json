@@ -1,6 +1,6 @@
 {
   "name": "@npm9912/v-map",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "VMap Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
