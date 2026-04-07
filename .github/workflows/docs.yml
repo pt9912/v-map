@@ -5,6 +5,9 @@ on:
     paths: [ 'src/**', 'docs/**', 'stencil.config.ts', 'typedoc.json', 'package.json' ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-docs:
     runs-on: ubuntu-latest

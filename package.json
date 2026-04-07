@@ -1,7 +1,34 @@
 {
   "name": "@npm9912/v-map",
   "version": "0.1.0",
-  "description": "VMap Components",
+  "description": "Provider-agnostische Web-Mapping-Komponentenbibliothek auf Basis von Stencil.js — unterstützt OpenLayers, Cesium, Leaflet und Deck.gl über ein einheitliches deklaratives Web-Component-API.",
+  "keywords": [
+    "map",
+    "mapping",
+    "web-map",
+    "web-mapping",
+    "gis",
+    "geospatial",
+    "cartography",
+    "openlayers",
+    "leaflet",
+    "cesium",
+    "deck.gl",
+    "deckgl",
+    "web-components",
+    "custom-elements",
+    "stencil",
+    "stenciljs",
+    "typescript",
+    "geojson",
+    "wms",
+    "wfs",
+    "wcs",
+    "geotiff",
+    "3d-map",
+    "terrain",
+    "provider-agnostic"
+  ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -23,9 +50,6 @@
       "require": "./loader/index.cjs"
     }
   },
-  "branches": [
-    "main"
-  ],
   "publishConfig": {
     "access": "public"
   },
