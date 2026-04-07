@@ -1,0 +1,6238 @@
+{
+  "timestamp": "2026-03-30T07:13:21",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "4.43.3",
+    "typescriptVersion": "5.8.3"
+  },
+  "components": [
+    {
+      "filePath": "src/components/v-map/v-map.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map",
+      "readme": "# v-map\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "center",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "center",
+          "reflectToAttr": false,
+          "docs": "Mittelpunkt der Karte im **WGS84**-Koordinatensystem.\nErwartet [lon, lat] (Längengrad, Breitengrad).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "[0, 0]"
+            },
+            {
+              "name": "example",
+              "text": "<v-map center=\"[11.5761, 48.1371]\" zoom=\"12\"></v-map>"
+            }
+          ],
+          "default": "'0,0'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "cssMode",
+          "type": "\"bundle\" | \"cdn\" | \"inline-min\" | \"none\"",
+          "complexType": {
+            "original": "CssMode",
+            "resolved": "\"bundle\" | \"cdn\" | \"inline-min\" | \"none\"",
+            "references": {
+              "CssMode": {
+                "location": "import",
+                "path": "../../types/cssmode",
+                "id": "src/types/cssmode.ts::CssMode",
+                "referenceLocation": "CssMode"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "css-mode",
+          "reflectToAttr": false,
+          "docs": "Aktiviert ein „CSS-Only“-Rendering (z. B. für einfache Tests/Layouts).\nBei `true` werden keine Provider initialisiert.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "'cdn'",
+          "values": [
+            {
+              "value": "bundle",
+              "type": "string"
+            },
+            {
+              "value": "cdn",
+              "type": "string"
+            },
+            {
+              "value": "inline-min",
+              "type": "string"
+            },
+            {
+              "value": "none",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "flavour",
+          "type": "\"cesium\" | \"deck\" | \"leaflet\" | \"ol\"",
+          "complexType": {
+            "original": "Flavour",
+            "resolved": "\"cesium\" | \"deck\" | \"leaflet\" | \"ol\"",
+            "references": {
+              "Flavour": {
+                "location": "import",
+                "path": "../../types/flavour",
+                "id": "src/types/flavour.ts::Flavour",
+                "referenceLocation": "Flavour"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "flavour",
+          "reflectToAttr": true,
+          "docs": "Zu verwendender Karten-Provider.\nUnterstützte Werte: \"ol\" | \"leaflet\" | \"cesium\" | \"deck\".",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"ol\""
+            },
+            {
+              "name": "example",
+              "text": "<v-map flavour=\"leaflet\"></v-map>"
+            }
+          ],
+          "default": "'ol'",
+          "values": [
+            {
+              "value": "cesium",
+              "type": "string"
+            },
+            {
+              "value": "deck",
+              "type": "string"
+            },
+            {
+              "value": "leaflet",
+              "type": "string"
+            },
+            {
+              "value": "ol",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "useDefaultImportMap",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "use-default-import-map",
+          "reflectToAttr": false,
+          "docs": "Falls true, injiziert v-map automatisch die Import-Map.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "zoom",
+          "reflectToAttr": false,
+          "docs": "Anfangs-Zoomstufe. Skala abhängig vom Provider (typisch 0–20).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "3"
+            }
+          ],
+          "default": "2",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "isMapProviderReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": "Promise mit `true`, sobald der Provider bereit ist, sonst `false`."
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isMapProviderReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Gibt zurück, ob der Karten-Provider initialisiert wurde und verwendet werden kann.",
+          "docsTags": [
+            {
+              "name": "returns",
+              "text": "Promise mit `true`, sobald der Provider bereit ist, sonst `false`."
+            }
+          ]
+        },
+        {
+          "name": "setView",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(coordinates: [number, number], zoom: number) => Promise<void>",
+            "parameters": [
+              {
+                "name": "coordinates",
+                "type": "[number, number]",
+                "docs": ""
+              },
+              {
+                "name": "zoom",
+                "type": "number",
+                "docs": "Zoomstufe"
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "setView(coordinates: [number, number], zoom: number) => Promise<void>",
+          "parameters": [
+            {
+              "name": "coordinates",
+              "type": "[number, number]",
+              "docs": ""
+            },
+            {
+              "name": "zoom",
+              "type": "number",
+              "docs": "Zoomstufe"
+            }
+          ],
+          "docs": "Setzt Kartenzentrum und Zoom (optional animiert).",
+          "docsTags": [
+            {
+              "name": "param",
+              "text": "center [lon, lat] in WGS84"
+            },
+            {
+              "name": "param",
+              "text": "zoom Zoomstufe"
+            },
+            {
+              "name": "param",
+              "text": "options Zusätzliche Optionen (z. B. { animate: true, duration: 300 })"
+            },
+            {
+              "name": "example",
+              "text": "await mapEl.setView([7.1, 50.7], 10, { animate: true, duration: 400 });"
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": "mapProviderReady",
+          "detail": "MapProviderDetail",
+          "bubbles": true,
+          "complexType": {
+            "original": "MapProviderDetail",
+            "resolved": "MapProviderDetail",
+            "references": {
+              "MapProviderDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::MapProviderDetail",
+                "referenceLocation": "MapProviderDetail"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": false,
+          "docs": "Wird ausgelöst, sobald der Karten-Provider initialisiert wurde und Layers entgegennimmt.\n`detail` enthält `{ provider, flavour }`.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "mapProviderReady"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-builder/v-map-builder.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-builder",
+      "readme": "# v-map-builder\n\n\n",
+      "docs": "A component that builds map configurations dynamically from JSON/YAML configuration scripts.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "mount - The container element where the generated map and layers are mounted."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "mapconfig",
+          "type": "unknown",
+          "complexType": {
+            "original": "unknown",
+            "resolved": "unknown",
+            "references": {}
+          },
+          "mutable": true,
+          "reflectToAttr": false,
+          "docs": "Configuration object for the map builder. Can be any structure that will be normalized to BuilderConfig.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "unknown"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "configError",
+          "detail": "{ message: string; errors?: string[]; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{\n    message: string;\n    errors?: string[];\n  }",
+            "resolved": "{ message: string; errors?: string[]; }",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Event emitted when there is an error parsing the map configuration.",
+          "docsTags": []
+        },
+        {
+          "event": "configReady",
+          "detail": "BuilderConfig",
+          "bubbles": true,
+          "complexType": {
+            "original": "BuilderConfig",
+            "resolved": "BuilderConfig",
+            "references": {
+              "BuilderConfig": {
+                "location": "import",
+                "path": "../../utils/diff",
+                "id": "src/utils/diff.ts::BuilderConfig",
+                "referenceLocation": "BuilderConfig"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Event emitted when the map configuration has been successfully parsed and is ready to use.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "mount",
+          "docs": "The container element where the generated map and layers are mounted."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [
+        "v-map-style",
+        "v-map-layergroup",
+        "v-map-layer-osm",
+        "v-map-layer-wms",
+        "v-map-layer-geojson",
+        "v-map-layer-xyz",
+        "v-map-layer-terrain",
+        "v-map-layer-wfs",
+        "v-map-layer-wcs",
+        "v-map-layer-google",
+        "v-map-layer-geotiff",
+        "v-map-layer-tile3d",
+        "v-map-layer-scatterplot",
+        "v-map-layer-wkt",
+        "v-map"
+      ],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-style",
+          "v-map-layergroup",
+          "v-map-layer-osm",
+          "v-map-layer-wms",
+          "v-map-layer-geojson",
+          "v-map-layer-xyz",
+          "v-map-layer-terrain",
+          "v-map-layer-wfs",
+          "v-map-layer-wcs",
+          "v-map-layer-google",
+          "v-map-layer-geotiff",
+          "v-map-layer-tile3d",
+          "v-map-layer-scatterplot",
+          "v-map-layer-wkt",
+          "v-map"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-geojson/v-map-layer-geojson.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-geojson",
+      "readme": "# v-map-layer-geojson\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "fillColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "fill-color",
+          "reflectToAttr": true,
+          "docs": "Fill color for polygon geometries (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,0.3)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "fillOpacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "fill-opacity",
+          "reflectToAttr": true,
+          "docs": "Fill opacity for polygon geometries (0-1)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "0.3"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "geojson",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "geojson",
+          "reflectToAttr": false,
+          "docs": "Prop, die du intern nutzt/weiterverarbeitest",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconSize",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-size",
+          "reflectToAttr": true,
+          "docs": "Icon size as [width, height] in pixels (comma-separated string like \"32,32\")",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"32,32\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconUrl",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-url",
+          "reflectToAttr": true,
+          "docs": "Icon URL for point features (alternative to pointColor/pointRadius)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität der geojson-Kacheln (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "pointColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "point-color",
+          "reflectToAttr": true,
+          "docs": "Point color for point geometries (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,1)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "pointRadius",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "point-radius",
+          "reflectToAttr": true,
+          "docs": "Point radius for point geometries in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "6"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-color",
+          "reflectToAttr": true,
+          "docs": "Stroke color for lines and polygon outlines (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,1)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeOpacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-opacity",
+          "reflectToAttr": true,
+          "docs": "Stroke opacity (0-1)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-width",
+          "reflectToAttr": true,
+          "docs": "Stroke width in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "2"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-color",
+          "reflectToAttr": true,
+          "docs": "Text color for labels (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'#000000'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textProperty",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-property",
+          "reflectToAttr": true,
+          "docs": "Text property name from feature properties to display as label",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-size",
+          "reflectToAttr": true,
+          "docs": "Text size for labels in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "12"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string | null",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "URL to fetch GeoJSON data from. Alternative to providing data via slot.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Whether the layer is visible on the map.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-geojson"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-geotiff/v-map-layer-geotiff.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-geotiff",
+      "readme": "# v-map-layer-geotiff\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "colorMap",
+          "type": "ColorMap | string",
+          "complexType": {
+            "original": "string | GeoStylerColorMap",
+            "resolved": "ColorMap | string",
+            "references": {
+              "GeoStylerColorMap": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::ColorMap",
+                "referenceLocation": "ColorMap"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "color-map",
+          "reflectToAttr": false,
+          "docs": "ColorMap für die Visualisierung (kann entweder ein vordefinierter Name oder eine GeoStyler ColorMap sein).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "ColorMap"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "nodata",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "nodata",
+          "reflectToAttr": false,
+          "docs": "NoData Values to discard (overriding any nodata values in the metadata).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "Opazität der GeoTIFF-Kacheln (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "URL to the GeoTIFF file to be displayed on the map.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "valueRange",
+          "type": "[number, number]",
+          "complexType": {
+            "original": "[number, number]",
+            "resolved": "[number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Value range for colormap normalization [min, max].",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "100"
+            }
+          ],
+          "default": "100",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Wird ausgelöst, wenn der GeoTIFF-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-geotiff"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-google/v-map-layer-google.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-google",
+      "readme": "# v-map-layer-google\n\n\n",
+      "docs": "Google Maps Basemap Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "apiKey",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "api-key",
+          "reflectToAttr": true,
+          "docs": "Google Maps API-Schlüssel.",
+          "docsTags": [
+            {
+              "name": "example",
+              "text": "<v-map-layer-google api-key=\"YOUR_KEY\"></v-map-layer-google>"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "language",
+          "reflectToAttr": true,
+          "docs": "Sprach-Lokalisierung (BCP-47, z. B. \"de\", \"en-US\").",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"en\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "libraries",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "libraries",
+          "reflectToAttr": true,
+          "docs": "Google Maps libraries to load (comma-separated string).",
+          "docsTags": [
+            {
+              "name": "example",
+              "text": "\"geometry,places,drawing\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "mapType",
+          "type": "\"hybrid\" | \"roadmap\" | \"satellite\" | \"terrain\"",
+          "complexType": {
+            "original": "| 'roadmap'\n    | 'satellite'\n    | 'terrain'\n    | 'hybrid'",
+            "resolved": "\"hybrid\" | \"roadmap\" | \"satellite\" | \"terrain\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "map-type",
+          "reflectToAttr": true,
+          "docs": "Karten-Typ: \"roadmap\" | \"satellite\" | \"hybrid\" | \"terrain\".",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"roadmap\""
+            }
+          ],
+          "default": "'roadmap'",
+          "values": [
+            {
+              "value": "hybrid",
+              "type": "string"
+            },
+            {
+              "value": "roadmap",
+              "type": "string"
+            },
+            {
+              "value": "satellite",
+              "type": "string"
+            },
+            {
+              "value": "terrain",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "Maximum zoom level for the layer.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität des Layers (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "region",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "region",
+          "reflectToAttr": true,
+          "docs": "Region-Bias (ccTLD/Region-Code, z. B. \"DE\", \"US\").\nBeeinflusst Labels/Suchergebnisse.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "scale",
+          "type": "\"scaleFactor1x\" | \"scaleFactor2x\" | \"scaleFactor4x\"",
+          "complexType": {
+            "original": "'scaleFactor1x' | 'scaleFactor2x' | 'scaleFactor4x'",
+            "resolved": "\"scaleFactor1x\" | \"scaleFactor2x\" | \"scaleFactor4x\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "scale",
+          "reflectToAttr": true,
+          "docs": "Scale factor for tile display.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"scaleFactor1x\""
+            }
+          ],
+          "values": [
+            {
+              "value": "scaleFactor1x",
+              "type": "string"
+            },
+            {
+              "value": "scaleFactor2x",
+              "type": "string"
+            },
+            {
+              "value": "scaleFactor4x",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "styles",
+          "type": "Record<string, unknown>[] | string",
+          "complexType": {
+            "original": "Record<string, unknown>[] | string",
+            "resolved": "Record<string, unknown>[] | string",
+            "references": {
+              "Record": {
+                "location": "global",
+                "id": "global::Record"
+              }
+            }
+          },
+          "mutable": true,
+          "attr": "styles",
+          "reflectToAttr": false,
+          "docs": "Custom styles for the Google Map (JSON array of styling objects).\nCan be passed as JSON string or array.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "Record<string, unknown>[]"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Signalisiert, dass der Google-Layer bereit ist. `detail` enthält Metadaten.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-google"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-osm/v-map-layer-osm.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-osm",
+      "readme": "# v-map-layer-osm\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität der OSM-Kacheln (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "Base URL for OpenStreetMap tile server. Defaults to the standard OSM tile server.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'https://tile.openstreetmap.org'"
+            }
+          ],
+          "default": "'https://tile.openstreetmap.org'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "10"
+            }
+          ],
+          "default": "10",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Wird ausgelöst, wenn der OSM-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-osm"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-scatterplot",
+      "readme": "# v-map-layer-scatterplot\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "data",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "data",
+          "reflectToAttr": true,
+          "docs": "Datenquelle für Punkte. Erwartet Objekte mit mindestens\neiner Position in [lon, lat]. Zusätzliche Felder sind erlaubt.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "getFillColor",
+          "type": "[number, number, number, number?] | string",
+          "complexType": {
+            "original": "Color",
+            "resolved": "[number, number, number, number?] | string",
+            "references": {
+              "Color": {
+                "location": "local",
+                "path": "/Development/v-map/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx",
+                "id": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx::Color"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "get-fill-color",
+          "reflectToAttr": true,
+          "docs": "Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe\nz. B. [r,g,b] oder CSS-Farbe (providerabhängig).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'#3388ff'"
+            }
+          ],
+          "default": "'#3388ff'",
+          "values": [
+            {
+              "type": "[number, number, number, number?]"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "getRadius",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "get-radius",
+          "reflectToAttr": true,
+          "docs": "Funktion/konstanter Wert für den Punkt-Radius.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "4"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Globale Opazität (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Wird ausgelöst, sobald der Scatterplot registriert wurde.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-scatterplot"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-terrain/v-map-layer-terrain.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-terrain",
+      "readme": "# v-map-layer-terrain\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "color",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "color",
+          "reflectToAttr": true,
+          "docs": "Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationData",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-data",
+          "reflectToAttr": true,
+          "docs": "URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationDecoder",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-decoder",
+          "reflectToAttr": true,
+          "docs": "JSON-Repräsentation eines Elevation-Decoders (z. B. '{\"r\":1,\"g\":1,\"b\":1,\"offset\":0}').",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "Maximale Zoomstufe für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "meshMaxError",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "mesh-max-error",
+          "reflectToAttr": true,
+          "docs": "Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "minZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min-zoom",
+          "reflectToAttr": true,
+          "docs": "Minimale Zoomstufe für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "texture",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "texture",
+          "reflectToAttr": true,
+          "docs": "Optionale Textur (RGB) für das Terrain.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wireframe",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wireframe",
+          "reflectToAttr": true,
+          "docs": "Darstellung des Mesh als Drahtgitter.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-Index für die Darstellung.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "isReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Liefert `true`, sobald das Terrain-Layer initialisiert wurde.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-terrain"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-terrain-geotiff/v-map-layer-terrain-geotiff.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-terrain-geotiff",
+      "readme": "# v-map-layer-terrain-geotiff\n\nThe `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.\n\n## Features\n\n- ✅ Load elevation data from GeoTIFF files\n- ✅ Support for different projections via proj4\n- ✅ 3D mesh generation with Martini (configurable detail level)\n- ✅ Optional texture overlay\n- ✅ Wireframe mode\n- ✅ Elevation exaggeration\n- ✅ Reactive property updates\n\n## Usage\n\n### Basic Example\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### With Texture Overlay\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    texture=\"https://tile.openstreetmap.org/{z}/{x}/{y}.png\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### Wireframe Mode\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"10\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    wireframe=\"true\"\n    elevation-scale=\"3.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n### High Detail Terrain\n\n```html\n<v-map provider=\"deck\" center=\"[11.5, 48.1]\" zoom=\"12\">\n  <v-map-layer-terrain-geotiff\n    url=\"https://example.com/elevation.tif\"\n    mesh-max-error=\"1.0\"\n    elevation-scale=\"2.0\"\n  >\n  </v-map-layer-terrain-geotiff>\n</v-map>\n```\n\n## Properties\n\n| Property           | Type                                  | Default     | Description                                                    |\n| ------------------ | ------------------------------------- | ----------- | -------------------------------------------------------------- |\n| `url`              | `string`                              | `null`      | URL to the GeoTIFF file containing elevation data (required)   |\n| `projection`       | `string`                              | `null`      | Source projection (e.g., \"EPSG:32632\"), auto-detected if null |\n| `forceProjection`  | `boolean`                             | `false`     | Force projection prop, ignore GeoKeys                          |\n| `visible`          | `boolean`                             | `true`      | Layer visibility                                               |\n| `opacity`          | `number`                              | `1.0`       | Layer opacity (0-1)                                            |\n| `zIndex`           | `number`                              | `100`       | Z-index for layer stacking                                     |\n| `nodata`           | `number`                              | `null`      | NoData value to discard from elevation                         |\n| `meshMaxError`     | `number`                              | `4.0`       | Mesh error tolerance in meters (smaller = more detailed)       |\n| `wireframe`        | `boolean`                             | `false`     | Enable wireframe mode                                          |\n| `texture`          | `string`                              | `null`      | Optional texture URL (image or tile URL)                       |\n| `color`            | `[number, number, number]`            | `null`      | Terrain color [r, g, b] when no texture                        |\n| `colorMap`         | `string \\| GeoStylerColorMap`         | `null`      | ColorMap for elevation visualization                           |\n| `valueRange`       | `[number, number]`                    | `null`      | Value range for colormap normalization [min, max]              |\n| `elevationScale`   | `number`                              | `1.0`       | Elevation exaggeration factor                                  |\n| `minZoom`          | `number`                              | `0`         | Minimum zoom level                                             |\n| `maxZoom`          | `number`                              | `24`        | Maximum zoom level                                             |\n| `tileSize`         | `number`                              | `256`       | Tile size in pixels                                            |\n\n## Events\n\n| Event   | Description                          |\n| ------- | ------------------------------------ |\n| `ready` | Fired when the layer is initialized  |\n\n## Methods\n\n| Method        | Returns  | Description                                    |\n| ------------- | -------- | ---------------------------------------------- |\n| `getLayerId`  | `string` | Returns the internal layer ID                  |\n| `isReady`     | `boolean`| Returns true if the layer is ready             |\n\n## Performance Tips\n\n1. **meshMaxError**: Use larger values (4-10) for better performance, smaller values (0.5-2) for more detail\n2. **elevationScale**: Adjust to exaggerate or flatten terrain features\n3. **tileSize**: Smaller tiles load faster but increase requests\n4. **Projection**: Auto-detection works for most GeoTIFFs, but manual projection can be faster\n\n## GeoTIFF Requirements\n\n- **Elevation data**: Single-band GeoTIFF with elevation values in meters\n- **Coordinate system**: Should have proper GeoKeys or use `projection` prop\n- **Cloud-Optimized**: COG format recommended for better performance\n\n## Examples of Compatible GeoTIFF Sources\n\n- Sentinel-2 DEM tiles (Copernicus)\n- SRTM elevation data\n- Custom DEM files with proper georeferencing\n\n## Browser Support\n\nSame as deck.gl requirements:\n- Chrome/Edge 79+\n- Firefox 78+\n- Safari 14+\n\n## Dependencies\n\n- deck.gl (@deck.gl/core, @deck.gl/geo-layers)\n- geotiff\n- proj4\n- geotiff-geokeys-to-proj4\n",
+      "docs": "The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "color",
+          "type": "[number, number, number]",
+          "complexType": {
+            "original": "[number, number, number]",
+            "resolved": "[number, number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Color for the terrain (if no texture is provided).\n[r, g, b] with values 0-255.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "[255, 255, 255]"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number, number]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "colorMap",
+          "type": "ColorMap | string",
+          "complexType": {
+            "original": "string | GeoStylerColorMap",
+            "resolved": "ColorMap | string",
+            "references": {
+              "GeoStylerColorMap": {
+                "location": "import",
+                "path": "geostyler-style",
+                "id": "node_modules::ColorMap",
+                "referenceLocation": "ColorMap"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "color-map",
+          "reflectToAttr": false,
+          "docs": "ColorMap for elevation data visualization.\nOnly relevant when no texture is set.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "ColorMap"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "elevationScale",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "elevation-scale",
+          "reflectToAttr": false,
+          "docs": "Elevation exaggeration factor.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1.0"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "forceProjection",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "force-projection",
+          "reflectToAttr": false,
+          "docs": "Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": false,
+          "docs": "Maximum zoom level.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "24"
+            }
+          ],
+          "default": "24",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "meshMaxError",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "mesh-max-error",
+          "reflectToAttr": false,
+          "docs": "Mesh error tolerance in meters (Martini).\nSmaller values = more detailed mesh, but slower.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "4.0"
+            }
+          ],
+          "default": "4.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "minZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min-zoom",
+          "reflectToAttr": false,
+          "docs": "Minimum zoom level.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "0"
+            }
+          ],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "nodata",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "nodata",
+          "reflectToAttr": false,
+          "docs": "NoData value to discard (overriding any nodata values in the metadata).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": false,
+          "docs": "Opacity of the terrain layer (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "projection",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "projection",
+          "reflectToAttr": false,
+          "docs": "Quell-Projektion des GeoTIFF (z. B. \"EPSG:32632\" oder proj4-String)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "renderMode",
+          "type": "\"colormap\" | \"terrain\"",
+          "complexType": {
+            "original": "'terrain' | 'colormap'",
+            "resolved": "\"colormap\" | \"terrain\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "render-mode",
+          "reflectToAttr": false,
+          "docs": "Rendering mode for GeoTIFF terrain.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "terrain"
+            }
+          ],
+          "default": "'terrain'",
+          "values": [
+            {
+              "value": "colormap",
+              "type": "string"
+            },
+            {
+              "value": "terrain",
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "texture",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "texture",
+          "reflectToAttr": false,
+          "docs": "Optional texture URL (can be an image or tile URL).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tileSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tile-size",
+          "reflectToAttr": false,
+          "docs": "Tile size in pixels.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "256"
+            }
+          ],
+          "default": "256",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": false,
+          "docs": "URL to the GeoTIFF file containing elevation data.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "valueRange",
+          "type": "[number, number]",
+          "complexType": {
+            "original": "[number, number]",
+            "resolved": "[number, number]",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "Value range for colormap normalization [min, max].",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "[number, number]"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": false,
+          "docs": "Sichtbarkeit des Layers",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wireframe",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wireframe",
+          "reflectToAttr": false,
+          "docs": "Enable wireframe mode (show only mesh lines).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": false,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "100"
+            }
+          ],
+          "default": "100",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when the terrain layer is ready.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layer-tile3d/v-map-layer-tile3d.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-tile3d",
+      "readme": "# v-map-layer-tile3d\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Global opacity factor (0-1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tilesetOptions",
+          "type": "string | unknown",
+          "complexType": {
+            "original": "string | Record<string, unknown>",
+            "resolved": "string | unknown",
+            "references": {
+              "Record": {
+                "location": "global",
+                "id": "global::Record"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tileset-options",
+          "reflectToAttr": false,
+          "docs": "Optional JSON string or object with Cesium3DTileset options.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "unknown"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "URL pointing to the Cesium 3D Tileset.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Whether the tileset should be visible.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-index used for ordering tilesets.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "isReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Indicates whether the tileset has been initialised and added to the map.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired once the tileset layer is initialised.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-tile3d"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-wcs/v-map-layer-wcs.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wcs",
+      "readme": "# v-map-layer-wcs\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "coverageName",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "coverage-name",
+          "reflectToAttr": true,
+          "docs": "Coverage-Name/ID.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "format",
+          "reflectToAttr": true,
+          "docs": "Ausgabeformat, z. B. image/tiff.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'image/tiff'"
+            }
+          ],
+          "default": "'image/tiff'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "params",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "params",
+          "reflectToAttr": true,
+          "docs": "Zusätzliche Parameter als JSON-String.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "projection",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "projection",
+          "reflectToAttr": true,
+          "docs": "Projektion (Projection) für die Quelle.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "resolutions",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "resolutions",
+          "reflectToAttr": true,
+          "docs": "Auflösungen als JSON-Array, z. B. [1000,500].",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "Basis-URL des WCS-Dienstes.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "version",
+          "reflectToAttr": true,
+          "docs": "WCS-Version.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'1.1.0'"
+            }
+          ],
+          "default": "'1.1.0'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-Index für die Darstellung.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "isReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Gibt `true` zurück, sobald der Layer initialisiert wurde.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wcs"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-wfs/v-map-layer-wfs.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wfs",
+      "readme": "# v-map-layer-wfs\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "outputFormat",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "output-format",
+          "reflectToAttr": true,
+          "docs": "Ausgabeformat, z. B. application/json.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'application/json'"
+            }
+          ],
+          "default": "'application/json'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "params",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "params",
+          "reflectToAttr": true,
+          "docs": "Zusätzliche Parameter als JSON-String.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "srsName",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "srs-name",
+          "reflectToAttr": true,
+          "docs": "Ziel-Referenzsystem, Standard EPSG:3857.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'EPSG:3857'"
+            }
+          ],
+          "default": "'EPSG:3857'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "typeName",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "type-name",
+          "reflectToAttr": true,
+          "docs": "Feature-Typ (typeName) des WFS.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "WFS Endpunkt (z. B. https://server/wfs).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "version",
+          "reflectToAttr": true,
+          "docs": "WFS Version, Standard 1.1.0.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'1.1.0'"
+            }
+          ],
+          "default": "'1.1.0'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-Index für Rendering.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "isReady",
+          "returns": {
+            "type": "Promise<boolean>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<boolean>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<boolean>"
+          },
+          "signature": "isReady() => Promise<boolean>",
+          "parameters": [],
+          "docs": "Gibt `true` zurück, sobald der Layer initialisiert wurde.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wfs"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-wkt/v-map-layer-wkt.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wkt",
+      "readme": "# v-map-layer-wkt\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "fillColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "fill-color",
+          "reflectToAttr": true,
+          "docs": "Fill color for polygon geometries (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,0.3)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "fillOpacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "fill-opacity",
+          "reflectToAttr": true,
+          "docs": "Fill opacity for polygon geometries (0-1)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "0.3"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconSize",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-size",
+          "reflectToAttr": true,
+          "docs": "Icon size as [width, height] in pixels (comma-separated string like \"32,32\")",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"32,32\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "iconUrl",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "icon-url",
+          "reflectToAttr": true,
+          "docs": "Icon URL for point features (alternative to pointColor/pointRadius)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Globale Opazität (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "pointColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "point-color",
+          "reflectToAttr": true,
+          "docs": "Point color for point geometries (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,1)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "pointRadius",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "point-radius",
+          "reflectToAttr": true,
+          "docs": "Point radius for point geometries in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "6"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-color",
+          "reflectToAttr": true,
+          "docs": "Stroke color for lines and polygon outlines (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'rgba(0,100,255,1)'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeOpacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-opacity",
+          "reflectToAttr": true,
+          "docs": "Stroke opacity (0-1)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "stroke-width",
+          "reflectToAttr": true,
+          "docs": "Stroke width in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "2"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textColor",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-color",
+          "reflectToAttr": true,
+          "docs": "Text color for labels (CSS color value)",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'#000000'"
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textProperty",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-property",
+          "reflectToAttr": true,
+          "docs": "Text property name from feature properties to display as label",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "textSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "text-size",
+          "reflectToAttr": true,
+          "docs": "Text size for labels in pixels",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "12"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "URL, von der eine WKT-Geometrie geladen wird (alternativ zu `wkt`).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "wkt",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "wkt",
+          "reflectToAttr": true,
+          "docs": "WKT-Geometrie (z. B. \"POINT(11.57 48.14)\" oder \"POLYGON((...))\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1000"
+            }
+          ],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        },
+        {
+          "name": "getLayerId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getLayerId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal layer ID used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Signalisiert, dass das WKT-Layer initialisiert ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [
+        {
+          "event": "styleReady",
+          "target": "document",
+          "capture": false,
+          "passive": false
+        }
+      ],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wkt"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-wms/v-map-layer-wms.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-wms",
+      "readme": "# v-map-layer-wms\n\n\n",
+      "docs": "OGC WMS Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "format",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "format",
+          "reflectToAttr": true,
+          "docs": "Bildformat des GetMap-Requests.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"image/png\""
+            }
+          ],
+          "default": "'image/png'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "layers",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "layers",
+          "reflectToAttr": true,
+          "docs": "Kommagetrennte Layer-Namen (z. B. \"topp:states\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Globale Opazität des WMS-Layers (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "styles",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "styles",
+          "reflectToAttr": true,
+          "docs": "WMS-`STYLES` Parameter (kommagetrennt).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "\"\""
+            }
+          ],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tiled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tiled",
+          "reflectToAttr": true,
+          "docs": "Tiled/geslicete Requests verwenden (falls Server unterstützt).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "transparent",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "transparent",
+          "reflectToAttr": true,
+          "docs": "Transparente Kacheln anfordern.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "Basis-URL des WMS-Dienstes (GetMap-Endpunkt ohne Query-Parameter).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des WMS-Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "zIndex",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "z-index",
+          "reflectToAttr": true,
+          "docs": "Z-index for layer stacking order. Higher values render on top.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "10"
+            }
+          ],
+          "default": "10",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Signalisiert, dass der WMS-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-wms"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layer-xyz/v-map-layer-xyz.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layer-xyz",
+      "readme": "# v-map-layer-xyz\n\n\n",
+      "docs": "XYZ Tile Layer",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "attributions",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "attributions",
+          "reflectToAttr": true,
+          "docs": "Attributions-/Copyright-Text (HTML erlaubt).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loadState",
+          "type": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+          "complexType": {
+            "original": "'idle' | 'loading' | 'ready' | 'error'",
+            "resolved": "\"error\" | \"idle\" | \"loading\" | \"ready\"",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "load-state",
+          "reflectToAttr": true,
+          "docs": "Current load state of the layer.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'idle'"
+            }
+          ],
+          "default": "'idle'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "idle",
+              "type": "string"
+            },
+            {
+              "value": "loading",
+              "type": "string"
+            },
+            {
+              "value": "ready",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxZoom",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-zoom",
+          "reflectToAttr": true,
+          "docs": "Maximaler Zoomlevel, den der Tile-Server liefert.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "19"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Opazität (0–1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "subdomains",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "subdomains",
+          "reflectToAttr": true,
+          "docs": "Subdomains für parallele Tile-Anfragen (z. B. \"a,b,c\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tileSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "tile-size",
+          "reflectToAttr": true,
+          "docs": "Größe einer Kachel in Pixeln.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "256"
+            }
+          ],
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "url",
+          "reflectToAttr": true,
+          "docs": "URL-Template für Kacheln, z. B. \"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\".",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit des XYZ-Layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getError",
+          "returns": {
+            "type": "Promise<VMapErrorDetail>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<VMapErrorDetail | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "VMapErrorDetail": {
+                "location": "import",
+                "path": "../../utils/events",
+                "id": "src/utils/events.ts::VMapErrorDetail",
+                "referenceLocation": "VMapErrorDetail"
+              }
+            },
+            "return": "Promise<VMapErrorDetail>"
+          },
+          "signature": "getError() => Promise<VMapErrorDetail | undefined>",
+          "parameters": [],
+          "docs": "Returns the last error detail, if any.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "ready",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Wird ausgelöst, wenn der XYZ-Layer bereit ist.",
+          "docsTags": [
+            {
+              "name": "event",
+              "text": "ready"
+            }
+          ]
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layer-xyz"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-layercontrol/v-map-layercontrol.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layercontrol",
+      "readme": "# v-map-layercontrol\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "for",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "for",
+          "reflectToAttr": false,
+          "docs": "ID der zu steuernden Karte (DOM-Element mit dieser id)",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/v-map-layergroup/v-map-layergroup.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-layergroup",
+      "readme": "# v-map-layergroup\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "basemapid",
+          "type": "string",
+          "complexType": {
+            "original": "string | null",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "basemapid",
+          "reflectToAttr": true,
+          "docs": "Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "null"
+            }
+          ],
+          "default": "null",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "opacity",
+          "reflectToAttr": true,
+          "docs": "Globale Opazität (0–1) für alle Kinder.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1.0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "visible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "visible",
+          "reflectToAttr": true,
+          "docs": "Sichtbarkeit der gesamten Gruppe.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getGroupId",
+          "returns": {
+            "type": "Promise<string>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string>"
+          },
+          "signature": "getGroupId() => Promise<string>",
+          "parameters": [],
+          "docs": "Returns the internal group identifier used by the map provider.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-layergroup"
+        ]
+      }
+    },
+    {
+      "filePath": "src/components/v-map-style/v-map-style.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-style",
+      "readme": "# v-map-style\n\n\n",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "autoApply",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "auto-apply",
+          "reflectToAttr": true,
+          "docs": "Whether to automatically apply the style when loaded.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "true"
+            }
+          ],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "content",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "content",
+          "reflectToAttr": true,
+          "docs": "Inline style content as string (alternative to src).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "format",
+          "type": "\"cesium-3d-tiles\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
+          "complexType": {
+            "original": "StyleFormat",
+            "resolved": "\"cesium-3d-tiles\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
+            "references": {
+              "StyleFormat": {
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::StyleFormat",
+                "referenceLocation": "StyleFormat"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "format",
+          "reflectToAttr": true,
+          "docs": "The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles').",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'sld'"
+            }
+          ],
+          "default": "'sld'",
+          "values": [
+            {
+              "value": "cesium-3d-tiles",
+              "type": "string"
+            },
+            {
+              "value": "lyrx",
+              "type": "string"
+            },
+            {
+              "value": "mapbox-gl",
+              "type": "string"
+            },
+            {
+              "value": "qgis",
+              "type": "string"
+            },
+            {
+              "value": "sld",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "layerTargets",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "layer-targets",
+          "reflectToAttr": true,
+          "docs": "Target layer IDs to apply this style to. If not specified, applies to all compatible layers.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "src",
+          "reflectToAttr": true,
+          "docs": "The style source - can be a URL to fetch from or inline SLD/style content.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "getLayerTargetIds",
+          "returns": {
+            "type": "Promise<string[]>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<string[]>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<string[]>"
+          },
+          "signature": "getLayerTargetIds() => Promise<string[]>",
+          "parameters": [],
+          "docs": "Get the target layer IDs as array. async",
+          "docsTags": []
+        },
+        {
+          "name": "getStyle",
+          "returns": {
+            "type": "Promise<ResolvedStyle>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<ResolvedStyle | undefined>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              },
+              "ResolvedStyle": {
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::ResolvedStyle",
+                "referenceLocation": "ResolvedStyle"
+              }
+            },
+            "return": "Promise<ResolvedStyle>"
+          },
+          "signature": "getStyle() => Promise<ResolvedStyle | undefined>",
+          "parameters": [],
+          "docs": "Get the currently parsed style.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "styleError",
+          "detail": "Error",
+          "bubbles": true,
+          "complexType": {
+            "original": "Error",
+            "resolved": "Error",
+            "references": {
+              "Error": {
+                "location": "global",
+                "id": "global::Error"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when style parsing fails.",
+          "docsTags": []
+        },
+        {
+          "event": "styleReady",
+          "detail": "{ style?: ResolvedStyle; layerIds?: string[]; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "StyleEvent",
+            "resolved": "{ style?: ResolvedStyle; layerIds?: string[]; }",
+            "references": {
+              "StyleEvent": {
+                "location": "import",
+                "path": "../../types/styling",
+                "id": "src/types/styling.ts::StyleEvent",
+                "referenceLocation": "StyleEvent"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when style is successfully parsed and ready to apply.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [
+        "v-map-builder"
+      ],
+      "dependencies": [],
+      "dependencyGraph": {
+        "v-map-builder": [
+          "v-map-style"
+        ]
+      }
+    }
+  ],
+  "typeLibrary": {
+    "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx::Color": {
+      "declaration": "export type Color = string | [number, number, number, number?];",
+      "docstring": "",
+      "path": "src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx"
+    },
+    "src/utils/events.ts::VMapErrorDetail": {
+      "declaration": "export interface VMapErrorDetail {\n  /** Error category */\n  type: 'network' | 'validation' | 'parse' | 'provider';\n  /** Human-readable error message */\n  message: string;\n  /** Affected prop/attribute (if applicable) */\n  attribute?: string;\n  /** Original thrown value (if available) */\n  cause?: unknown;\n}",
+      "docstring": "",
+      "path": "src/utils/events.ts"
+    },
+    "src/types/flavour.ts::Flavour": {
+      "declaration": "export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';",
+      "docstring": "",
+      "path": "src/types/flavour.ts"
+    },
+    "src/types/cssmode.ts::CssMode": {
+      "declaration": "export type CssMode = 'inline-min' | 'cdn' | 'none' | 'bundle';",
+      "docstring": "",
+      "path": "src/types/cssmode.ts"
+    },
+    "src/utils/events.ts::MapProviderDetail": {
+      "declaration": "export interface MapProviderDetail {\n  mapProvider: MapProvider;\n}",
+      "docstring": "",
+      "path": "src/utils/events.ts"
+    },
+    "src/utils/diff.ts::BuilderConfig": {
+      "declaration": "export interface BuilderConfig {\n  map: MapConfig;\n}",
+      "docstring": "",
+      "path": "src/utils/diff.ts"
+    },
+    "src/types/styling.ts::StyleFormat": {
+      "declaration": "export type StyleFormat =\n  | 'sld'\n  | 'mapbox-gl'\n  | 'qgis'\n  | 'lyrx'\n  | 'cesium-3d-tiles';",
+      "docstring": "",
+      "path": "src/types/styling.ts"
+    },
+    "src/types/styling.ts::StyleEvent": {
+      "declaration": "{\n  style?: ResolvedStyle;\n  layerIds?: string[];\n}",
+      "docstring": "",
+      "path": "src/types/styling.ts"
+    },
+    "src/types/styling.ts::ResolvedStyle": {
+      "declaration": "export type ResolvedStyle = Style | Cesium3DTileStyle;",
+      "docstring": "",
+      "path": "src/types/styling.ts"
+    }
+  }
+}

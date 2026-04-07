@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>V-Map – HTML Demo - ES2017</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+    }
+
+    #map-host {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    #map-host v-map {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    #map-host v-map-layercontrol {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+
+    #map-host2 v-map-layercontrol {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+    }
+
+    /* Error-API: load-state styling */
+    [load-state="loading"] {
+      opacity: 0.5;
+    }
+
+    [load-state="error"] {
+      outline: 2px dashed red;
+    }
+
+    #error-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px 16px;
+      background: #d32f2f;
+      color: #fff;
+      font: 14px/1.4 system-ui, sans-serif;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #error-banner[hidden] {
+      display: none !important;
+    }
+
+    #error-banner button {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: #fff;
+      padding: 2px 8px;
+      cursor: pointer;
+      border-radius: 3px;
+      margin-left: 16px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="error-banner" hidden>
+    <span id="error-text"></span>
+    <button id="error-close">&times;</button>
+  </div>
+
+  <div id="map-host">
+    <v-map id="map1" flavour="ol" center="11.5,48.1" zoom="6" style="display:block;width:100%;height:100%;">
+      <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+        <v-map-layer-osm id="OSM-BASE" label="OpenStreetMap" z-index="0" opacity="1.0"></v-map-layer-osm>
+        <v-map-layer-osm id="OSM-BASE-DE" label="OpenStreetMap DE" z-index="0" opacity="1.0"
+          url="https://tile.openstreetmap.de/"></v-map-layer-osm>
+      </v-map-layergroup>
+      <v-map-layergroup group-title="Error-API Demo">
+        <!-- Broken WMS triggers runtime tileloaderror → vmap-error -->
+        <v-map-layer-wms id="broken-wms" label="Broken WMS (Demo)" url="https://invalid.example.com/wms"
+          layers="does-not-exist" z-index="5">
+        </v-map-layer-wms>
+      </v-map-layergroup>
+    </v-map>
+    <v-map-layercontrol for="map1"></v-map-layercontrol>
+  </div>
+
+  <script type="module">
+    console.log('loading...');
+    const loader = await import('../../loader/index.es2017.js');
+    loader.defineCustomElements();
+
+    // --- Error-API Demo ---
+
+    const map = document.getElementById('map1');
+    const banner = document.getElementById('error-banner');
+    const errorText = document.getElementById('error-text');
+    const errorClose = document.getElementById('error-close');
+    let hideTimer;
+
+    function hideBanner() {
+      banner.hidden = true;
+      clearTimeout(hideTimer);
+    }
+
+    errorClose.addEventListener('click', hideBanner);
+
+    // Central error listener on <v-map> (bubbles + composed)
+    map.addEventListener('vmap-error', async (event) => {
+      const source = event.target;
+      const error = event.detail;
+
+      console.error(
+        '[vmap-error]',
+        source.tagName,
+        `(${error.type}):`,
+        error.message,
+      );
+
+      // Show error banner with auto-hide after 8s
+      banner.hidden = false;
+      errorText.textContent =
+        `${source.tagName}#${source.id}: ${error.type} – ${error.message}`;
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hideBanner, 8000);
+
+      // Also demonstrate getError()
+      if (typeof source.getError === 'function') {
+        const detail = await source.getError();
+        if (detail) {
+          console.log('[getError()]', detail);
+        }
+      }
+    });
+
+    // Log load-state changes
+    const layers = map.querySelectorAll('[load-state]');
+    for (const layer of layers) {
+      new MutationObserver(() => {
+        console.log(
+          `[load-state] ${layer.tagName}#${layer.id}: ${layer.getAttribute('load-state')}`,
+        );
+      }).observe(layer, { attributes: true, attributeFilter: ['load-state'] });
+    }
+
+    // Query faulty layers after 5s
+    setTimeout(() => {
+      const faulty = document.querySelectorAll('[load-state="error"]');
+      if (faulty.length) {
+        console.log('[load-state] Faulty layers:', faulty.length);
+      }
+    }, 5000);
+  </script>
+</body>
+
+</html>

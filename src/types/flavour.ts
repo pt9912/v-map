@@ -1,0 +1,1 @@
+export type Flavour = 'ol' | 'cesium' | 'leaflet' | 'deck';

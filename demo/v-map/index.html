@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>V-Map Test-Harness – Properties & Slot-Änderungen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>V-Map Test-Harness</h1>
+      <p>
+        Teste Property/Slot-Änderungen
+        (<code>@Listen</code>/<code>@Watch</code>) ohne Storybook-Remount.
+      </p>
+    </header>
+
+    <section class="controls">
+      <div class="row">
+        <label>Map-Provider:</label>
+        <select id="flavour">
+          <option value="ol" selected>OpenLayers (ol)</option>
+          <option value="leaflet">Leaflet</option>
+          <option value="deck">Deck.gl</option>
+          <option value="cesium">Cesium</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Update-Modus:</label>
+        <label
+          ><input type="radio" name="mode" value="slot" checked /> Slot</label
+        >
+        <label><input type="radio" name="mode" value="prop" /> Property</label>
+
+        <button id="resetBtn" class="secondary">Reset Map</button>
+      </div>
+
+      <div class="row">
+        <label>GeoTIFF URL:</label>
+        <input
+          type="text"
+          id="geotiffUrl"
+          style="flex: 1; min-width: 300px;"
+          placeholder="Enter GeoTIFF URL..."
+        />
+        <button id="applyGeoTiffBtn">Apply GeoTIFF</button>
+        <button id="clearGeoTiffBtn" class="secondary">Clear GeoTIFF</button>
+      </div>
+
+      <div class="row">
+        <button id="sampleGeoTiffBtn1" data-sample="geotiff1">
+          Beispiel: Sentinel-2 RGB
+        </button>
+        <button id="sampleGeoTiffBtn2" data-sample="geotiff2">
+          Beispiel: OpenLayers Test
+        </button>
+        <button id="sampleGeoTiffBtn3" data-sample="geotiff3">
+          Beispiel: MiniScale UK
+        </button>
+      </div>
+
+      <div class="row">
+        <button id="samplePointBtn" data-sample="point">
+          Beispiel: Point (München)
+        </button>
+        <button id="sampleLineBtn" data-sample="line">
+          Beispiel: LineString
+        </button>
+        <button id="samplePolygonBtn" data-sample="polygon">
+          Beispiel: Polygon
+        </button>
+        <button id="sampleClusterBtn" data-sample="cluster">
+          Beispiel: Random Cluster
+        </button>
+      </div>
+
+      <div class="row">
+        <textarea id="geojsonInput" rows="12" spellcheck="false"></textarea>
+      </div>
+
+      <div class="row">
+        <button id="applyBtn">Apply GeoJSON</button>
+        <button id="validateBtn" class="secondary">Validate JSON</button>
+        <button id="slotPingBtn" class="secondary">
+          Ping Slot (dispatch slotchange)
+        </button>
+        <span id="status"></span>
+      </div>
+    </section>
+
+    <section class="stage">
+      <!-- Map Stage -->
+      <div id="map-host">
+        <!-- v-map + children werden dynamisch via JS angelegt -->
+        <v-map-layercontrol for="map1"></v-map-layercontrol>
+      </div>
+      <div
+        id="resizer"
+        class="resizer"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize logs"
+      ></div>
+      <aside class="log">
+        <div class="log-head">
+          <h2>Events & Logs</h2>
+          <button id="clearLogsBtn" class="secondary small" title="Logs leeren">
+            Logs löschen
+          </button>
+        </div>
+        <div id="logs"></div>
+        <div class="legend">
+          <span class="tag tag-map">map</span>
+          <span class="tag tag-map-provider">map provider</span>
+          <span class="tag tag-group">group</span>
+          <span class="tag tag-layer">layer</span>
+          <span class="tag tag-slot">slot</span>
+          <span class="tag tag-sys">sys</span>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <p>
+        <strong>Hinweis:</strong> Stelle sicher, dass du vor dem Öffnen dieser
+        Seite <code>pnpm build</code> im V-Map-Projekt ausgeführt hast, sodass
+        <code>../../loader</code> existiert. Alternativ kannst du den
+        Loader-Pfad via Query-Param setzen, z. B.
+        <code>?loader=../../loader/index.es2017.js</code>. Starte den Server im
+        Projekt-Root mit <code>pnpm dlx http-server . -p 4174</code>.
+      </p>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

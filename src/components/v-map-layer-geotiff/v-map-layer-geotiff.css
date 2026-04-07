@@ -1,0 +1,4 @@
+/* src/components/v-map-layer-geojson/v-map-layer-geojson.css */
+:host {
+  display: none; /* Komponente selbst nicht sichtbar (nur Logik) */
+}

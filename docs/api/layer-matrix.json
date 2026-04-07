@@ -1,0 +1,110 @@
+{
+  "types": [
+    "arcgis",
+    "geojson",
+    "geotiff",
+    "google",
+    "osm",
+    "scatterplot",
+    "terrain",
+    "terrain-geotiff",
+    "tile3d",
+    "wcs",
+    "wfs",
+    "wkt",
+    "wms",
+    "xyz"
+  ],
+  "providers": [
+    "cesium",
+    "deck",
+    "leaflet",
+    "ol"
+  ],
+  "support": {
+    "arcgis": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "geojson": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "geotiff": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "google": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "osm": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "scatterplot": {
+      "cesium": false,
+      "deck": true,
+      "leaflet": false,
+      "ol": false
+    },
+    "terrain": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": false,
+      "ol": false
+    },
+    "terrain-geotiff": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": false,
+      "ol": false
+    },
+    "tile3d": {
+      "cesium": true,
+      "deck": false,
+      "leaflet": false,
+      "ol": false
+    },
+    "wcs": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "wfs": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "wkt": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "wms": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    },
+    "xyz": {
+      "cesium": true,
+      "deck": true,
+      "leaflet": true,
+      "ol": true
+    }
+  }
+}

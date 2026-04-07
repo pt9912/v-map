@@ -1,0 +1,9 @@
+{
+  "*.{ts,tsx}": [
+    "npm run lint",
+    "npm test -- --findRelatedTests"
+  ],
+  "*.{css,scss}": [
+    "stylelint"
+  ]
+}

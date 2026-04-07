@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Munich"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.5761, 48.1371]
+      }
+    }
+  ]
+}

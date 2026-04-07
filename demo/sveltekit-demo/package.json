@@ -1,0 +1,29 @@
+{
+	"name": "sveltekit-demo",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"sync:vmap": "node ./scripts/sync-local-vmap.mjs",
+		"dev": "pnpm run sync:vmap && rm -rf node_modules/.vite && vite dev",
+		"build": "pnpm run sync:vmap && vite build",
+		"smoke": "node ./scripts/smoke.mjs",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "pnpm run sync:vmap && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "pnpm run sync:vmap && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"dependencies": {
+		"@npm9912/v-map": "file:../../"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/kit": "^2.50.2",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"svelte": "^5.54.0",
+		"svelte-check": "^4.4.2",
+		"typescript": "^5.9.3",
+		"vite": "^7.3.1",
+		"vite-plugin-node-polyfills": "^0.25.0"
+	}
+}

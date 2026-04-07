@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  app:
+    build: .devcontainer
+    volumes:
+      - .:/workspaces/v-map
+    ports:
+      - '3333:3333' # Stencil
+      - '6006:6006' # Storybook
+    environment:
+      - NODE_ENV=development

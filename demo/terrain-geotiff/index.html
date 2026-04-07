@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Terrain GeoTIFF Test – V-Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../v-map/styles.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Terrain GeoTIFF Test</h1>
+      <p>
+        Teste <code>v-map-layer-terrain-geotiff</code> mit deck.gl und Cesium.
+      </p>
+    </header>
+
+    <section class="controls">
+      <div class="row">
+        <label>Map-Provider:</label>
+        <select id="provider">
+          <option value="deck" selected>Deck.gl</option>
+          <option value="cesium">Cesium</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label>DEM URL:</label>
+        <input
+          type="text"
+          id="demUrl"
+          style="flex: 1; min-width: 300px;"
+          placeholder="GeoTIFF URL eingeben..."
+        />
+        <button id="applyUrlBtn">URL anwenden</button>
+      </div>
+
+      <div class="row">
+        <button id="sampleLocal1" data-sample="local1">
+          Lokal: i30dem.tif
+        </button>
+        <button id="sampleLocal2" data-sample="local2">
+          Lokal: m30dem.tif
+        </button>
+        <button id="sampleOnline1" data-sample="online1">
+          Online: AWS Terrain Tile A (138 KB)
+        </button>
+        <button id="sampleOnline2" data-sample="online2">
+          Online: AWS Terrain Tile B (138 KB)
+        </button>
+      </div>
+
+      <div class="row">
+        <label>Höhenüberhöhung:</label>
+        <input
+          type="range"
+          id="elevationScale"
+          min="0.1"
+          max="5"
+          step="0.1"
+          value="1.0"
+        />
+        <span id="elevationValue">1.0</span>
+      </div>
+
+      <div class="row">
+        <label>Mesh-Fehlertoleranz:</label>
+        <input
+          type="range"
+          id="meshMaxError"
+          min="0.5"
+          max="10"
+          step="0.5"
+          value="4.0"
+        />
+        <span id="meshMaxErrorValue">4.0</span>
+      </div>
+
+      <div class="row">
+        <label>Wireframe:</label>
+        <input type="checkbox" id="wireframe" />
+
+        <label style="margin-left: 2rem;">Opacity:</label>
+        <input
+          type="range"
+          id="opacity"
+          min="0"
+          max="1"
+          step="0.1"
+          value="1.0"
+        />
+        <span id="opacityValue">1.0</span>
+      </div>
+
+      <div class="row">
+        <button id="downloadDems" class="secondary">
+          Download-Befehl kopieren
+        </button>
+        <button id="resetMap" class="secondary">Karte zurücksetzen</button>
+        <span id="status"></span>
+        <span id="coords" style="margin-left: auto; font-family: ui-monospace, monospace; color: var(--muted); font-size: 12px;"></span>
+      </div>
+    </section>
+
+    <section class="stage">
+      <!-- Map Stage -->
+      <div id="map-host">
+        <!-- v-map wird dynamisch via JS angelegt -->
+      </div>
+
+      <div class="resizer"></div>
+
+      <aside class="log">
+        <div class="log-head">
+          <h2>Events & Logs</h2>
+          <button id="clearLogsBtn" class="secondary small" title="Logs leeren">
+            Logs löschen
+          </button>
+        </div>
+        <div id="logs"></div>
+        <div class="legend">
+          <span class="tag tag-map">map</span>
+          <span class="tag tag-layer">terrain</span>
+          <span class="tag tag-sys">sys</span>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <p>
+        <strong>Vorbereitung:</strong>
+      </p>
+      <ol>
+        <li>
+          Führe im Projekt-Root <code>pnpm build</code> aus, damit
+          <code>../../loader</code> existiert.
+        </li>
+        <li>
+          Führe <code>bash ../../scripts/download-test-dems.sh</code> aus, um
+          Test-DEMs nach <code>/tmp/v-map-test-dems/</code> zu laden.
+        </li>
+        <li>
+          Starte einen lokalen Server, z. B.
+          <code>pnpm dlx http-server . -p 4174</code> im Projekt-Root.
+        </li>
+        <li>Öffne <code>http://localhost:4174/demo/terrain-geotiff/</code></li>
+      </ol>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
