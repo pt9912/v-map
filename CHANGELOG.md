@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/pt9912/v-map/compare/v0.1.0...v0.1.1) (2026-04-07)
+
+
+### Bug Fixes
+
+* **npm:** remove invalid top-level "branches" field from package.json ([1dd3689](https://github.com/pt9912/v-map/commit/1dd3689d57b4c4a1337b94327fbd8948b9e6e741))
+
 # [0.1.0](https://github.com/pt9912/v-map/compare/v0.0.0...v0.1.0) (2026-04-07)
 
 

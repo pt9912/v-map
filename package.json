@@ -1,6 +1,6 @@
 {
   "name": "@npm9912/v-map",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Provider-agnostische Web-Mapping-Komponentenbibliothek auf Basis von Stencil.js — unterstützt OpenLayers, Cesium, Leaflet und Deck.gl über ein einheitliches deklaratives Web-Component-API.",
   "keywords": [
     "map",
