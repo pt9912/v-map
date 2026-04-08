@@ -8,7 +8,7 @@
 
 > **AffineTransform** = `object`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:3](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L3)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:3](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L3)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:3](https://github.com/pt99
 
 > **a**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:4](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L4)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:4](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L4)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:4](https://github.com/pt99
 
 > **b**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L5)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L5)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:5](https://github.com/pt99
 
 > **c**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L6)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L6)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:6](https://github.com/pt99
 
 > **d**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L7)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L7)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:7](https://github.com/pt99
 
 > **e**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L8)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L8)
 
 ***
 
@@ -56,4 +56,4 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:8](https://github.com/pt99
 
 > **f**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:9](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L9)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:9](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L9)

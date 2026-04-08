@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerOsmAttributes
 
-Defined in: [src/components.d.ts:2305](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2305)
+Defined in: [src/components.d.ts:2305](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2305)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2305](https://github.com/pt9912/v-map/blob/9b0d
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:2306](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2306)
+Defined in: [src/components.d.ts:2306](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2306)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2306](https://github.com/pt9912/v-map/blob/9b0d
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2308)
+Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2308)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/9b0d
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2310)
+Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2310)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/9b0d
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:2307](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2307)
+Defined in: [src/components.d.ts:2307](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2307)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/components.d.ts:2307](https://github.com/pt9912/v-map/blob/9b0d
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:2309](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L2309)
+Defined in: [src/components.d.ts:2309](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L2309)
