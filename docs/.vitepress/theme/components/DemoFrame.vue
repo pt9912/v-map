@@ -1,31 +1,45 @@
 <script setup lang="ts">
-// Generic iframe wrapper that loads a standalone HTML demo from
-// docs/public/demos/<name>.html (which gets copied to /demos/<name>.html
-// in the deployed site).
+// Generic iframe wrapper for two kinds of embedded demos:
 //
-// Used from markdown via the inline shortcut `@[demo:cdn-osm-geojson]`
-// (see the markdown plugin in .vitepress/config.ts), which expands to
-// `<DemoFrame name="cdn-osm-geojson" />`.
+// kind="html" (default) — single static HTML file under
+//   docs/public/demos/<name>.html, copied to /demos/<name>.html in the
+//   deployed site. Used by the @[demo:cdn-osm-geojson] markdown shortcut.
 //
-// withBase() makes sure the URL respects VitePress's base path (`/v-map/`),
-// so the iframe still loads correctly when the docs are served under a
-// non-root prefix on GitHub Pages.
+// kind="example" — full SPA built from a workspace under examples/<name>/
+//   by scripts/build-examples.mjs, copied to /demos/<name>/index.html.
+//   Used by the @[example:sveltekit] markdown shortcut.
+//
+// withBase() makes sure both URL forms respect VitePress's base path
+// (`/v-map/`), so the iframe still loads correctly when the docs are
+// served under a non-root prefix on GitHub Pages.
 import { computed } from 'vue';
 import { withBase } from 'vitepress';
 
 const props = withDefaults(
   defineProps<{
     name: string;
+    kind?: 'html' | 'example';
     height?: string;
     title?: string;
   }>(),
   {
-    height: '500px',
+    kind: 'html',
+    height: '600px',
     title: 'Live demo',
   },
 );
 
-const src = computed(() => withBase(`/demos/${props.name}.html`));
+const src = computed(() =>
+  withBase(
+    props.kind === 'example'
+      ? `/demos/${props.name}/`
+      : `/demos/${props.name}.html`,
+  ),
+);
+
+const labelHtml = computed(() =>
+  props.kind === 'example' ? `${props.name}/` : `${props.name}.html`,
+);
 </script>
 
 <template>
@@ -41,7 +55,7 @@ const src = computed(() => withBase(`/demos/${props.name}.html`));
     </ClientOnly>
     <p class="demo-frame__caption">
       Live demo (sandboxed Iframe):
-      <a :href="src" target="_blank" rel="noreferrer">{{ name }}.html</a>
+      <a :href="src" target="_blank" rel="noreferrer">{{ labelHtml }}</a>
       &middot; <a :href="src" target="_blank" rel="noreferrer">in neuem Tab öffnen</a>
     </p>
   </div>

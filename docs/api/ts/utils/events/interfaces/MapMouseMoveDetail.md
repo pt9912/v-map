@@ -6,7 +6,7 @@
 
 # Interface: MapMouseMoveDetail
 
-Defined in: [src/utils/events.ts:32](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/utils/events.ts#L32)
+Defined in: [src/utils/events.ts:32](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/utils/events.ts#L32)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/events.ts:32](https://github.com/pt9912/v-map/blob/f91c4c
 
 > **coordinate**: \[`number`, `number`\]
 
-Defined in: [src/utils/events.ts:33](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/utils/events.ts#L33)
+Defined in: [src/utils/events.ts:33](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/utils/events.ts#L33)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/events.ts:33](https://github.com/pt9912/v-map/blob/f91c4c
 
 > **pixel**: \[`number`, `number`\]
 
-Defined in: [src/utils/events.ts:34](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/utils/events.ts#L34)
+Defined in: [src/utils/events.ts:34](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/utils/events.ts#L34)

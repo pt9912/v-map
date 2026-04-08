@@ -50,8 +50,11 @@ export default {
             line,
           );
           const demoMatch = /^@\[demo:([a-z0-9][a-z0-9-]*)\]$/.exec(line);
+          const exampleMatch = /^@\[example:([a-z0-9][a-z0-9-]*)\]$/.exec(
+            line,
+          );
 
-          if (!componentMatch && !demoMatch) return false;
+          if (!componentMatch && !demoMatch && !exampleMatch) return false;
           if (silent) return true;
 
           const token = state.push('html_block', '', 0);
@@ -60,6 +63,10 @@ export default {
             token.content = `<${componentMatch[1]} />\n`;
           } else if (demoMatch) {
             token.content = `<DemoFrame name="${demoMatch[1]}" />\n`;
+          } else if (exampleMatch) {
+            // Examples live as full SPAs under /demos/<name>/ (note the
+            // trailing slash). DemoFrame strips/normalises that internally.
+            token.content = `<DemoFrame name="${exampleMatch[1]}" kind="example" />\n`;
           }
 
           state.line = startLine + 1;
@@ -83,6 +90,10 @@ export default {
         ],
       },
       {
+        text: 'Frameworks',
+        items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
+      },
+      {
         text: 'API',
         items: [
           { text: 'Komponenten', link: '/api/components/' },
@@ -93,6 +104,22 @@ export default {
     ],
 
     sidebar: {
+      '/guides/frameworks/': [
+        {
+          text: 'Frameworks',
+          items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
+        },
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting Started', link: '/getting-started' },
+            { text: 'Übersicht', link: '/guides/' },
+            { text: 'CDN ohne Bundler', link: '/guides/cdn-esm' },
+            { text: 'Error Handling', link: '/guides/error-handling' },
+            { text: 'Styling', link: '/guides/styling' },
+          ],
+        },
+      ],
       '/guides/': [
         {
           text: 'Guide',
@@ -103,6 +130,10 @@ export default {
             { text: 'Error Handling', link: '/guides/error-handling' },
             { text: 'Styling', link: '/guides/styling' },
           ],
+        },
+        {
+          text: 'Frameworks',
+          items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
         },
       ],
       '/getting-started': [

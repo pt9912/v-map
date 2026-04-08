@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWfs
 
-Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L665)
+Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L665)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:665](https://github.com/pt9912/v-map/blob/f91c4
 
 > **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
 
-Defined in: [src/components.d.ts:669](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L669)
+Defined in: [src/components.d.ts:669](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L669)
 
 Returns the last error detail, if any.
 
@@ -28,7 +28,7 @@ Returns the last error detail, if any.
 
 > **isReady**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:673](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L673)
+Defined in: [src/components.d.ts:673](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L673)
 
 Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
@@ -42,7 +42,7 @@ Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:678](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L678)
+Defined in: [src/components.d.ts:678](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L678)
 
 Current load state of the layer.
 
@@ -58,7 +58,7 @@ Current load state of the layer.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:683](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L683)
+Defined in: [src/components.d.ts:683](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L683)
 
 Opazität (0–1).
 
@@ -74,7 +74,7 @@ Opazität (0–1).
 
 > **outputFormat**: `string`
 
-Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L688)
+Defined in: [src/components.d.ts:688](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L688)
 
 Ausgabeformat, z. B. application/json.
 
@@ -90,7 +90,7 @@ Ausgabeformat, z. B. application/json.
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:692](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L692)
+Defined in: [src/components.d.ts:692](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L692)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -100,7 +100,7 @@ Zusätzliche Parameter als JSON-String.
 
 > **srsName**: `string`
 
-Defined in: [src/components.d.ts:697](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L697)
+Defined in: [src/components.d.ts:697](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L697)
 
 Ziel-Referenzsystem, Standard EPSG:3857.
 
@@ -116,7 +116,7 @@ Ziel-Referenzsystem, Standard EPSG:3857.
 
 > **typeName**: `string`
 
-Defined in: [src/components.d.ts:701](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L701)
+Defined in: [src/components.d.ts:701](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L701)
 
 Feature-Typ (typeName) des WFS.
 
@@ -126,7 +126,7 @@ Feature-Typ (typeName) des WFS.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:705](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L705)
+Defined in: [src/components.d.ts:705](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L705)
 
 WFS Endpunkt (z. B. https://server/wfs).
 
@@ -136,7 +136,7 @@ WFS Endpunkt (z. B. https://server/wfs).
 
 > **version**: `string`
 
-Defined in: [src/components.d.ts:710](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L710)
+Defined in: [src/components.d.ts:710](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L710)
 
 WFS Version, Standard 1.1.0.
 
@@ -152,7 +152,7 @@ WFS Version, Standard 1.1.0.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:715](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L715)
+Defined in: [src/components.d.ts:715](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L715)
 
 Sichtbarkeit des Layers.
 
@@ -168,7 +168,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:720](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L720)
+Defined in: [src/components.d.ts:720](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L720)
 
 Z-Index für Rendering.
 

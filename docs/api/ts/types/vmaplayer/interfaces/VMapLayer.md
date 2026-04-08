@@ -6,7 +6,7 @@
 
 # Interface: VMapLayer
 
-Defined in: [src/types/vmaplayer.ts:4](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/vmaplayer.ts#L4)
+Defined in: [src/types/vmaplayer.ts:4](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/types/vmaplayer.ts#L4)
 
 Gemeinsame API für alle Map‑Layer‑Components.
 
@@ -16,7 +16,7 @@ Gemeinsame API für alle Map‑Layer‑Components.
 
 > **opacity**: `number`
 
-Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/vmaplayer.ts#L7)
+Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/types/vmaplayer.ts#L7)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/vmaplayer.ts:7](https://github.com/pt9912/v-map/blob/f91c
 
 > **visible**: `boolean`
 
-Defined in: [src/types/vmaplayer.ts:6](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/vmaplayer.ts#L6)
+Defined in: [src/types/vmaplayer.ts:6](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/types/vmaplayer.ts#L6)
 
 Sichtbarkeit des Layers
 
@@ -34,7 +34,7 @@ Sichtbarkeit des Layers
 
 > **zIndex**: `number`
 
-Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/vmaplayer.ts#L8)
+Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/types/vmaplayer.ts#L8)
 
 ## Methods
 
@@ -42,7 +42,7 @@ Defined in: [src/types/vmaplayer.ts:8](https://github.com/pt9912/v-map/blob/f91c
 
 > `optional` **isReady**(): `boolean`
 
-Defined in: [src/types/vmaplayer.ts:10](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/vmaplayer.ts#L10)
+Defined in: [src/types/vmaplayer.ts:10](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/types/vmaplayer.ts#L10)
 
 #### Returns
 
