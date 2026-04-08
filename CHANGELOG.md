@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/pt9912/v-map/compare/v0.2.4...v0.3.0) (2026-04-08)
+
+
+### Features
+
+* **docs:** embed sveltekit example as live iframe via @[example:name] ([d966057](https://github.com/pt9912/v-map/commit/d9660577924d837f865260b61db0c75926d460ab))
+
 ## [0.2.4](https://github.com/pt9912/v-map/compare/v0.2.3...v0.2.4) (2026-04-08)
 
 
