@@ -8,7 +8,7 @@
 
 > **getTypeRange**(`arrayType`): \[`number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:140](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/normalization-utils.ts#L140)
+Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:140](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/utils/normalization-utils.ts#L140)
 
 Get the typical value range for a TypedArray type
 

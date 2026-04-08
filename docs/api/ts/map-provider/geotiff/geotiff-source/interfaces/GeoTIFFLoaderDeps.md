@@ -6,7 +6,7 @@
 
 # Interface: GeoTIFFLoaderDeps
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/geotiff-source.ts#L13)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L13)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/p
 
 > **geokeysToProj4**: `__module`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/geotiff-source.ts#L16)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L16)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/p
 
 > **geotiff**: `__module`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/geotiff-source.ts#L14)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/p
 
 > **proj4**: \{(`toProj`): `Converter`; (`fromProj`, `toProj`): `Converter`; \<`T`\>(`toProj`, `coord`): `T`; \<`T`\>(`fromProj`, `toProj`, `coord`): `T`; \} & `object`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:15](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/geotiff-source.ts#L15)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:15](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L15)
 
 #### Type Declaration
 

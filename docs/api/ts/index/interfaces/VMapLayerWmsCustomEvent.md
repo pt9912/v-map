@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerWmsCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:1017](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1017)
+Defined in: [src/components.d.ts:1017](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/components.d.ts#L1017)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:1018](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1018)
+Defined in: [src/components.d.ts:1018](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/components.d.ts#L1018)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerWmsElement`
 
-Defined in: [src/components.d.ts:1019](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1019)
+Defined in: [src/components.d.ts:1019](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/components.d.ts#L1019)
 
 The read-only **`target`** property of the dispatched.
 

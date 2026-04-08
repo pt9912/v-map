@@ -8,7 +8,7 @@
 
 > **loadCesium**(`version`): `Promise`\<`__module`\>
 
-Defined in: [src/lib/cesium-loader.ts:14](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/lib/cesium-loader.ts#L14)
+Defined in: [src/lib/cesium-loader.ts:14](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/lib/cesium-loader.ts#L14)
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: NormalizedStyle
 
-Defined in: [src/utils/diff.ts:35](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L35)
+Defined in: [src/utils/diff.ts:35](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L35)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/diff.ts:35](https://github.com/pt9912/v-map/blob/108573a3
 
 > `optional` **autoApply**: `boolean`
 
-Defined in: [src/utils/diff.ts:42](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L42)
+Defined in: [src/utils/diff.ts:42](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L42)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/diff.ts:42](https://github.com/pt9912/v-map/blob/108573a3
 
 > `optional` **content**: `string`
 
-Defined in: [src/utils/diff.ts:40](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L40)
+Defined in: [src/utils/diff.ts:40](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L40)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/diff.ts:40](https://github.com/pt9912/v-map/blob/108573a3
 
 > **format**: `string`
 
-Defined in: [src/utils/diff.ts:38](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L38)
+Defined in: [src/utils/diff.ts:38](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L38)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/diff.ts:38](https://github.com/pt9912/v-map/blob/108573a3
 
 > `optional` **id**: `string`
 
-Defined in: [src/utils/diff.ts:43](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L43)
+Defined in: [src/utils/diff.ts:43](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L43)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/diff.ts:43](https://github.com/pt9912/v-map/blob/108573a3
 
 > **key**: `string`
 
-Defined in: [src/utils/diff.ts:37](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L37)
+Defined in: [src/utils/diff.ts:37](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L37)
 
 internal identifier to keep track between updates
 
@@ -56,7 +56,7 @@ internal identifier to keep track between updates
 
 > `optional` **layerTargets**: `string`
 
-Defined in: [src/utils/diff.ts:41](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L41)
+Defined in: [src/utils/diff.ts:41](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L41)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [src/utils/diff.ts:41](https://github.com/pt9912/v-map/blob/108573a3
 
 > `optional` **src**: `string`
 
-Defined in: [src/utils/diff.ts:39](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/diff.ts#L39)
+Defined in: [src/utils/diff.ts:39](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/diff.ts#L39)

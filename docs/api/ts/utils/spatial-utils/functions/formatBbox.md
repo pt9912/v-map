@@ -8,7 +8,7 @@
 
 > **formatBbox**(`west`, `south`, `east`, `north`, `version`, `crs`): `string`
 
-Defined in: [src/utils/spatial-utils.ts:11](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/spatial-utils.ts#L11)
+Defined in: [src/utils/spatial-utils.ts:11](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/spatial-utils.ts#L11)
 
 ## Parameters
 

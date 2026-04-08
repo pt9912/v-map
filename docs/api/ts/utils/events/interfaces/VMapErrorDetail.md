@@ -6,7 +6,7 @@
 
 # Interface: VMapErrorDetail
 
-Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/events.ts#L12)
+Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/events.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/108573
 
 > `optional` **attribute**: `string`
 
-Defined in: [src/utils/events.ts:18](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/events.ts#L18)
+Defined in: [src/utils/events.ts:18](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/events.ts#L18)
 
 Affected prop/attribute (if applicable)
 
@@ -24,7 +24,7 @@ Affected prop/attribute (if applicable)
 
 > `optional` **cause**: `unknown`
 
-Defined in: [src/utils/events.ts:20](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/events.ts#L20)
+Defined in: [src/utils/events.ts:20](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/events.ts#L20)
 
 Original thrown value (if available)
 
@@ -34,7 +34,7 @@ Original thrown value (if available)
 
 > **message**: `string`
 
-Defined in: [src/utils/events.ts:16](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/events.ts#L16)
+Defined in: [src/utils/events.ts:16](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/events.ts#L16)
 
 Human-readable error message
 
@@ -44,6 +44,6 @@ Human-readable error message
 
 > **type**: `"network"` \| `"validation"` \| `"parse"` \| `"provider"`
 
-Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/events.ts#L14)
+Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/utils/events.ts#L14)
 
 Error category
