@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/pt9912/v-map/compare/v0.2.0...v0.2.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* **docs:** live home demo via Vue SFC + tiny markdown shortcut ([108573a](https://github.com/pt9912/v-map/commit/108573a318331113571d4e8a895cc80082774fc3))
+
 # [0.2.0](https://github.com/pt9912/v-map/compare/v0.1.1...v0.2.0) (2026-04-08)
 
 
