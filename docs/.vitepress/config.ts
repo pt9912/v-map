@@ -12,55 +12,60 @@ export default {
     // would otherwise try to parse as HTML and choke on.
     html: false,
 
-    // Tiny inline plugin: turn `@[component:Name]` markers in markdown into
-    // raw `<Name />` HTML by emitting an `html_inline` token directly.
+    // Tiny block-level plugin: turn `@[component:Name]` and `@[demo:name]`
+    // markers (each on their own line) in markdown into raw `<Name />` /
+    // `<DemoFrame name="name" />` HTML, emitted as `html_block` tokens.
+    //
+    // We deliberately use the BLOCK ruler instead of the INLINE ruler.
+    // markdown-it wraps every inline token in a `<p>` paragraph, so an
+    // inline rule that emits `<DemoFrame />` would produce `<p><DemoFrame
+    // /></p>`. Vue then expands DemoFrame into a `<div>...<p
+    // class="demo-frame__caption">...</p></div>`, which gives the browser
+    // a forbidden nested `<p>` and triggers auto-correction + Vue
+    // hydration mismatches that visibly duplicate parts of the rendered
+    // tree (the caption was showing twice).
+    //
+    // A block-level rule emits a self-standing `html_block` token that
+    // sits between paragraphs without any wrapping `<p>`, which is what
+    // we actually want for component embeds.
+    //
     // markdown-it's `html: false` option only disables the *parsing* of
-    // raw HTML from input, but `html_inline` tokens emitted by plugins are
-    // still rendered as-is. This lets us reference globally registered Vue
-    // SFCs (like <LiveMap />) from inside any .md file without enabling
-    // raw HTML across the board. The token name is restricted to PascalCase
-    // identifiers so the syntax can't accidentally collide with prose.
+    // raw HTML from input, but `html_block` tokens emitted by plugins are
+    // still rendered as-is, so we can keep the typedoc generic-type
+    // signatures (`<T>` etc.) safely escaped while letting our explicit
+    // markers through.
+    //
+    // Component names are PascalCase, demo names are kebab-case, and the
+    // marker must be the only content on its line.
     config: md => {
-      // @[component:Name] → <Name />
-      md.inline.ruler.before('emphasis', 'vue_component', (state, silent) => {
-        const start = state.pos;
-        const marker = '@[component:';
-        if (state.src.slice(start, start + marker.length) !== marker) {
-          return false;
-        }
-        const end = state.src.indexOf(']', start + marker.length);
-        if (end === -1) return false;
-        const name = state.src.slice(start + marker.length, end).trim();
-        if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) return false;
-        if (!silent) {
-          const token = state.push('html_inline', '', 0);
-          token.content = `<${name} />`;
-        }
-        state.pos = end + 1;
-        return true;
-      });
+      md.block.ruler.before(
+        'paragraph',
+        'vue_component_block',
+        (state, startLine, _endLine, silent) => {
+          const start = state.bMarks[startLine] + state.tShift[startLine];
+          const max = state.eMarks[startLine];
+          const line = state.src.slice(start, max).trim();
 
-      // @[demo:filename] → <DemoFrame name="filename" />
-      // Filename refers to docs/public/demos/<filename>.html, which is
-      // copied to /demos/<filename>.html in the deployed site. The
-      // DemoFrame Vue SFC handles the iframe + caption + sandbox.
-      md.inline.ruler.before('emphasis', 'demo_frame', (state, silent) => {
-        const start = state.pos;
-        const marker = '@[demo:';
-        if (state.src.slice(start, start + marker.length) !== marker) {
-          return false;
-        }
-        const end = state.src.indexOf(']', start + marker.length);
-        if (end === -1) return false;
-        const name = state.src.slice(start + marker.length, end).trim();
-        if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) return false;
-        if (!silent) {
-          const token = state.push('html_inline', '', 0);
-          token.content = `<DemoFrame name="${name}" />`;
-        }
-        state.pos = end + 1;
-        return true;
-      });
+          const componentMatch = /^@\[component:([A-Z][A-Za-z0-9]*)\]$/.exec(
+            line,
+          );
+          const demoMatch = /^@\[demo:([a-z0-9][a-z0-9-]*)\]$/.exec(line);
+
+          if (!componentMatch && !demoMatch) return false;
+          if (silent) return true;
+
+          const token = state.push('html_block', '', 0);
+          token.map = [startLine, startLine + 1];
+          if (componentMatch) {
+            token.content = `<${componentMatch[1]} />\n`;
+          } else if (demoMatch) {
+            token.content = `<DemoFrame name="${demoMatch[1]}" />\n`;
+          }
+
+          state.line = startLine + 1;
+          return true;
+        },
+      );
     },
   },
 
