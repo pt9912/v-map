@@ -6,7 +6,7 @@
 
 # Interface: NormalizedLayer
 
-Defined in: [src/utils/diff.ts:59](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L59)
+Defined in: [src/utils/diff.ts:59](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L59)
 
 ## Indexable
 
@@ -18,7 +18,7 @@ Defined in: [src/utils/diff.ts:59](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **data**: `unknown`
 
-Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L68)
+Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L68)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/diff.ts:68](https://github.com/pt9912/v-map/blob/3e820faf
 
 > **id**: `string`
 
-Defined in: [src/utils/diff.ts:60](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L60)
+Defined in: [src/utils/diff.ts:60](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L60)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/diff.ts:60](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **layers**: `string`
 
-Defined in: [src/utils/diff.ts:66](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L66)
+Defined in: [src/utils/diff.ts:66](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L66)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/diff.ts:66](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **opacity**: `string` \| `number`
 
-Defined in: [src/utils/diff.ts:63](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L63)
+Defined in: [src/utils/diff.ts:63](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L63)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/diff.ts:63](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **style**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L69)
+Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L69)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/diff.ts:69](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **tiled**: `string`
 
-Defined in: [src/utils/diff.ts:67](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L67)
+Defined in: [src/utils/diff.ts:67](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L67)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/diff.ts:67](https://github.com/pt9912/v-map/blob/3e820faf
 
 > **type**: [`LayerType`](../type-aliases/LayerType.md)
 
-Defined in: [src/utils/diff.ts:61](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L61)
+Defined in: [src/utils/diff.ts:61](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L61)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/utils/diff.ts:61](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **url**: `string`
 
-Defined in: [src/utils/diff.ts:65](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L65)
+Defined in: [src/utils/diff.ts:65](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L65)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/diff.ts:65](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **visible**: `string` \| `boolean`
 
-Defined in: [src/utils/diff.ts:62](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L62)
+Defined in: [src/utils/diff.ts:62](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L62)
 
 ***
 
@@ -90,4 +90,4 @@ Defined in: [src/utils/diff.ts:62](https://github.com/pt9912/v-map/blob/3e820faf
 
 > `optional` **zIndex**: `string` \| `number`
 
-Defined in: [src/utils/diff.ts:64](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/diff.ts#L64)
+Defined in: [src/utils/diff.ts:64](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/utils/diff.ts#L64)

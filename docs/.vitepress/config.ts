@@ -13,18 +13,48 @@ export default {
   themeConfig: {
     nav: [
       { text: 'Start', link: '/' },
-      { text: 'Guide', link: '/getting-started' },
+      {
+        text: 'Guide',
+        items: [
+          { text: 'Getting Started', link: '/getting-started' },
+          { text: 'Übersicht', link: '/guides/' },
+          { text: 'Error Handling', link: '/guides/error-handling' },
+          { text: 'Styling', link: '/guides/styling' },
+        ],
+      },
       {
         text: 'API',
         items: [
-          { text: 'Komponenten', link: '/api/components/index' },
-          { text: 'TypeScript', link: '/api/ts/index' },
+          { text: 'Komponenten', link: '/api/components/' },
+          { text: 'TypeScript', link: '/api/ts/' },
         ],
       },
       { text: 'Layer-Matrix', link: '/layers/matrix' }, // optional im Top-Navi
     ],
 
     sidebar: {
+      '/guides/': [
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting Started', link: '/getting-started' },
+            { text: 'Übersicht', link: '/guides/' },
+            { text: 'Error Handling', link: '/guides/error-handling' },
+            { text: 'Styling', link: '/guides/styling' },
+          ],
+        },
+      ],
+      '/getting-started': [
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting Started', link: '/getting-started' },
+            { text: 'Übersicht', link: '/guides/' },
+            { text: 'Error Handling', link: '/guides/error-handling' },
+            { text: 'Styling', link: '/guides/styling' },
+          ],
+        },
+      ],
       '/layers/': [
         {
           text: 'Layer-Matrix',
@@ -34,13 +64,13 @@ export default {
       '/api/components/': [
         {
           text: 'Komponenten',
-          items: [{ text: 'Übersicht', link: '/api/components/index' }],
+          items: [{ text: 'Übersicht', link: '/api/components/' }],
         },
       ],
       '/api/ts/': [
         {
           text: 'TypeScript',
-          items: [{ text: 'Übersicht', link: '/api/ts/index' }],
+          items: [{ text: 'Übersicht', link: '/api/ts/' }],
         },
       ],
     },
