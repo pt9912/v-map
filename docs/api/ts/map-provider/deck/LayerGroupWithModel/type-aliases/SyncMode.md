@@ -8,4 +8,4 @@
 
 > **SyncMode** = `"force-model"` \| `"respect-deck"`
 
-Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:7](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/deck/LayerGroupWithModel.ts#L7)
+Defined in: [src/map-provider/deck/LayerGroupWithModel.ts:7](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/deck/LayerGroupWithModel.ts#L7)

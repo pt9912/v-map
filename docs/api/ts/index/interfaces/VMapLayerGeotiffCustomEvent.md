@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGeotiffCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:989](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L989)
+Defined in: [src/components.d.ts:989](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L989)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:990](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L990)
+Defined in: [src/components.d.ts:990](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L990)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerGeotiffElement`
 
-Defined in: [src/components.d.ts:991](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L991)
+Defined in: [src/components.d.ts:991](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L991)
 
 The read-only **`target`** property of the dispatched.
 

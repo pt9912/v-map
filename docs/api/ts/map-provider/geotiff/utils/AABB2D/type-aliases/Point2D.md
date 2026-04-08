@@ -8,7 +8,7 @@
 
 > **Point2D** = `object`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L12)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L12)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9
 
 > **x**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L12)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L12)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9
 
 > **y**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/geotiff/utils/AABB2D.ts#L12)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:12](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/geotiff/utils/AABB2D.ts#L12)

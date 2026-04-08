@@ -6,7 +6,7 @@
 
 # Interface: VMapError
 
-Defined in: [src/components.d.ts:1402](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1402)
+Defined in: [src/components.d.ts:1402](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1402)
 
 `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`
 (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler
@@ -22,7 +22,7 @@ Zeile JavaScript zu schreiben.
 
 > `optional` **autoDismiss**: `number`
 
-Defined in: [src/components.d.ts:1407](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1407)
+Defined in: [src/components.d.ts:1407](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1407)
 
 Auto-Dismiss-Zeit in Millisekunden. `0` deaktiviert das automatische Ausblenden — Toasts bleiben dann sichtbar, bis sie manuell geschlossen oder durch einen neueren Fehler aus dem Stapel gedrängt werden.
 
@@ -38,7 +38,7 @@ Auto-Dismiss-Zeit in Millisekunden. `0` deaktiviert das automatische Ausblenden 
 
 > `optional` **for**: `string`
 
-Defined in: [src/components.d.ts:1411](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1411)
+Defined in: [src/components.d.ts:1411](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1411)
 
 ID der `<v-map>`-Karte, deren Fehler angezeigt werden sollen. Wenn nicht angegeben, hängt sich die Komponente an das nächste `<v-map>`-Vorfahrenelement im DOM-Baum.
 
@@ -48,7 +48,7 @@ ID der `<v-map>`-Karte, deren Fehler angezeigt werden sollen. Wenn nicht angegeb
 
 > `optional` **log**: `LogMode`
 
-Defined in: [src/components.d.ts:1416](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1416)
+Defined in: [src/components.d.ts:1416](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1416)
 
 Zusätzliches Logging in die Browser-Console. - `'none'` (Default): nur Toast-Anzeige, kein Console-Output - `'console'`: jeder Fehler wird zusätzlich mit `console.error` geloggt
 
@@ -64,7 +64,7 @@ Zusätzliches Logging in die Browser-Console. - `'none'` (Default): nur Toast-An
 
 > `optional` **max**: `number`
 
-Defined in: [src/components.d.ts:1421](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1421)
+Defined in: [src/components.d.ts:1421](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1421)
 
 Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei Überschreitung am oberen Ende des Stapels entfernt.
 
@@ -80,7 +80,7 @@ Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei Überschreitu
 
 > `optional` **position**: `ToastPosition`
 
-Defined in: [src/components.d.ts:1426](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/components.d.ts#L1426)
+Defined in: [src/components.d.ts:1426](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components.d.ts#L1426)
 
 Position des Toast-Stapels innerhalb des `<v-map>`-Containers.
 

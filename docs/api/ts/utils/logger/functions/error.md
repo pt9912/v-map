@@ -8,7 +8,7 @@
 
 > **error**(...`args`): `void`
 
-Defined in: [src/utils/logger.ts:196](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/utils/logger.ts#L196)
+Defined in: [src/utils/logger.ts:196](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/utils/logger.ts#L196)
 
 ## Parameters
 
