@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/pt9912/v-map/compare/v0.1.1...v0.2.0) (2026-04-08)
+
+
+### Features
+
+* **v-map-error:** add declarative error toast component ([bedf2f0](https://github.com/pt9912/v-map/commit/bedf2f0af8a9c4f838e8f9aae000f2e423ca2bfc))
+
 ## [0.1.1](https://github.com/pt9912/v-map/compare/v0.1.0...v0.1.1) (2026-04-07)
 
 
