@@ -8,4 +8,4 @@
 
 > `const` **VSTYLE\_DEFAULT**: [`VStyle`](../type-aliases/VStyle.md)
 
-Defined in: [src/lib/vstyle.ts:20](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/lib/vstyle.ts#L20)
+Defined in: [src/lib/vstyle.ts:20](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/lib/vstyle.ts#L20)

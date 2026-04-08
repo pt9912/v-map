@@ -6,7 +6,7 @@
 
 # Interface: GeoTIFFSourceOptions
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:7](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/geotiff-source.ts#L7)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:7](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/geotiff-source.ts#L7)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:7](https://github.com/pt
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:9](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/geotiff-source.ts#L9)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:9](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/geotiff-source.ts#L9)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:9](https://github.com/pt
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:10](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/geotiff-source.ts#L10)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:10](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/geotiff-source.ts#L10)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:10](https://github.com/p
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:8](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/geotiff-source.ts#L8)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:8](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/geotiff-source.ts#L8)

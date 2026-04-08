@@ -6,7 +6,7 @@
 
 # Class: GeoTIFFGridLayer
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:22](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L22)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:22](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L22)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:22](https://github.com
 
 > **new GeoTIFFGridLayer**(`options`): `GeoTIFFGridLayer`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:30](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L30)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:30](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L30)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **layerElementId**: `string`
 
-Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/types/leaflet-augment.d.ts#L7)
+Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/types/leaflet-augment.d.ts#L7)
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **vmapOpacity**: `number`
 
-Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/types/leaflet-augment.d.ts#L6)
+Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/types/leaflet-augment.d.ts#L6)
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/
 
 > `optional` **vmapVisible**: `boolean`
 
-Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/types/leaflet-augment.d.ts#L5)
+Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/types/leaflet-augment.d.ts#L5)
 
 #### Inherited from
 
@@ -1455,7 +1455,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **createTile**(`coords`, `done`): `HTMLCanvasElement`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:41](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L41)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:41](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L41)
 
 #### Parameters
 
@@ -3341,7 +3341,7 @@ Adds a set of type/listener pairs, e.g. {click: onClick, mousemove: onMouseMove}
 
 > **onAdd**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:35](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L35)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:35](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L35)
 
 #### Parameters
 
@@ -4710,7 +4710,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **updateSource**(`options`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:101](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L101)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:101](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L101)
 
 #### Parameters
 

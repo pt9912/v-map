@@ -8,7 +8,7 @@
 
 > **diffLayers**(`oldLayers`, `newLayers`): [`LayersDiff`](../type-aliases/LayersDiff.md)
 
-Defined in: [src/utils/diff.ts:208](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/utils/diff.ts#L208)
+Defined in: [src/utils/diff.ts:208](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/utils/diff.ts#L208)
 
 Computes added/removed/updated/moved/unchanged
 

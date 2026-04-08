@@ -6,7 +6,7 @@
 
 # Interface: VMapBuilderCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:985](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L985)
+Defined in: [src/components.d.ts:985](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L985)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:986](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L986)
+Defined in: [src/components.d.ts:986](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L986)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapBuilderElement`
 
-Defined in: [src/components.d.ts:987](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L987)
+Defined in: [src/components.d.ts:987](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L987)
 
 The read-only **`target`** property of the dispatched.
 

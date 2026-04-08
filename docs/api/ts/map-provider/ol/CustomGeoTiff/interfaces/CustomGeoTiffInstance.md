@@ -6,7 +6,7 @@
 
 # Interface: CustomGeoTiffInstance
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:19](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/ol/CustomGeoTiff.ts#L19)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:19](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/ol/CustomGeoTiff.ts#L19)
 
 ## Extends
 
@@ -567,7 +567,7 @@ geotiffSource.on('change', () => {
 
 > **getGeoKeys**(): `Promise`\<`Partial`\<`GeoKeys`\>\>
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:20](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/ol/CustomGeoTiff.ts#L20)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:20](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/ol/CustomGeoTiff.ts#L20)
 
 #### Returns
 
@@ -694,7 +694,7 @@ Listeners.
 
 > **getProj4String**(): `Promise`\<`string`\>
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:22](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/ol/CustomGeoTiff.ts#L22)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:22](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/ol/CustomGeoTiff.ts#L22)
 
 #### Returns
 
@@ -728,7 +728,7 @@ Projection.
 
 > **getProjectionParameters**(): `Promise`\<`ProjectionParameters`\>
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:21](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/ol/CustomGeoTiff.ts#L21)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:21](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/ol/CustomGeoTiff.ts#L21)
 
 #### Returns
 
@@ -1368,7 +1368,7 @@ Refreshes the source. The source will be cleared, and data from the server will 
 
 > **registerProjectionIfNeeded**(): `Promise`\<`Projection`\>
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:23](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/ol/CustomGeoTiff.ts#L23)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:23](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/ol/CustomGeoTiff.ts#L23)
 
 #### Returns
 

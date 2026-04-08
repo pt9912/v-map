@@ -6,7 +6,7 @@
 
 # Class: GeoTIFFTileProcessor
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:71](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L71)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:71](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L71)
 
 Processes GeoTIFF tiles with triangulation-based reprojection
 
@@ -19,7 +19,7 @@ for efficient reprojection from arbitrary source projections to Web Mercator.
 
 > **new GeoTIFFTileProcessor**(`config`): `GeoTIFFTileProcessor`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:79](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L79)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:79](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L79)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:79](https://
 
 > **createGlobalTriangulation**(): `void`
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:90](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L90)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:90](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L90)
 
 Create global triangulation for the entire GeoTIFF image
 This is called once to avoid recreating triangulation for every tile
@@ -52,7 +52,7 @@ This is called once to avoid recreating triangulation for every tile
 
 > **getElevationData**(`params`): `Promise`\<`Float32Array`\<`ArrayBufferLike`\>\>
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:666](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L666)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:666](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L666)
 
 Get raw elevation values for a tile as Float32Array.
 
@@ -90,7 +90,7 @@ Band 0 of the GeoTIFF is used as the elevation source.
 
 > **getGlobalTriangulation**(): [`Triangulation`](../../Triangulation/classes/Triangulation.md)
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:155](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L155)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:155](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L155)
 
 Get the global triangulation (may be undefined if not created yet)
 
@@ -104,7 +104,7 @@ Get the global triangulation (may be undefined if not created yet)
 
 > **getTileData**(`params`): `Promise`\<`Uint8ClampedArray`\<`ArrayBufferLike`\>\>
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:574](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L574)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:574](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L574)
 
 Generate tile data with triangulation-based reprojection
 

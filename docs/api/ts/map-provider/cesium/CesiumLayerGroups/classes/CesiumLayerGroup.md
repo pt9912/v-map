@@ -6,7 +6,7 @@
 
 # Class: CesiumLayerGroup
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:29](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L29)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:29](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L29)
 
 Eine Gruppe verwaltet Sichtbarkeit & Basemap-Filter ihrer Cesium-Layer.
 - group.visible = false  => Alle Layer der Gruppe unsichtbar.
@@ -20,7 +20,7 @@ Eine Gruppe verwaltet Sichtbarkeit & Basemap-Filter ihrer Cesium-Layer.
 
 > **new CesiumLayerGroup**(`id`, `visible`): `CesiumLayerGroup`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:38](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L38)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:38](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L38)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:38](https://github.com
 
 > `readonly` **id**: `string`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:30](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L30)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:30](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L30)
 
 ## Accessors
 
@@ -52,7 +52,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:30](https://github.com
 
 > **get** **basemap**(): `string`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:52](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L52)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:52](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L52)
 
 ##### Returns
 
@@ -62,7 +62,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:52](https://github.com
 
 > **set** **basemap**(`b`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:55](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L55)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:55](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L55)
 
 ##### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:55](https://github.com
 
 > **get** **visible**(): `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:43](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L43)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:43](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L43)
 
 ##### Returns
 
@@ -92,7 +92,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:43](https://github.com
 
 > **set** **visible**(`v`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:46](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L46)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:46](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L46)
 
 ##### Parameters
 
@@ -110,7 +110,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:46](https://github.com
 
 > **addLayer**(`ref`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:65](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L65)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:65](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L65)
 
 #### Parameters
 
@@ -128,7 +128,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:65](https://github.com
 
 > **apply**(): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:95](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L95)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:95](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L95)
 
 zentrale Logik: Basemap/Visibility anwenden
 
@@ -142,7 +142,7 @@ zentrale Logik: Basemap/Visibility anwenden
 
 > **clear**(): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:88](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L88)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:88](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L88)
 
 #### Returns
 
@@ -154,7 +154,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:88](https://github.com
 
 > **isDirty**(): `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:61](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L61)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:61](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L61)
 
 #### Returns
 
@@ -166,7 +166,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:61](https://github.com
 
 > **removeLayer**(`layerId`): `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:81](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L81)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:81](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L81)
 
 #### Parameters
 
@@ -184,7 +184,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:81](https://github.com
 
 > **setLayerElementId**(`layerId`, `elementId?`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:73](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/CesiumLayerGroups.ts#L73)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:73](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/CesiumLayerGroups.ts#L73)
 
 optional zum Nachziehen von elementId (z. B. wenn erst später bekannt)
 

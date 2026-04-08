@@ -8,4 +8,4 @@
 
 > `const` **OL\_VERSION**: `"10.8.0"`
 
-Defined in: [src/lib/versions.gen.ts:3](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/lib/versions.gen.ts#L3)
+Defined in: [src/lib/versions.gen.ts:3](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/lib/versions.gen.ts#L3)

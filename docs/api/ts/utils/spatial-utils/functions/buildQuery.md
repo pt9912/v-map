@@ -8,7 +8,7 @@
 
 > **buildQuery**(`params`): `string`
 
-Defined in: [src/utils/spatial-utils.ts:33](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/utils/spatial-utils.ts#L33)
+Defined in: [src/utils/spatial-utils.ts:33](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/utils/spatial-utils.ts#L33)
 
 ## Parameters
 

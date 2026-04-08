@@ -6,7 +6,7 @@
 
 # Interface: VMapErrorHost
 
-Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/layer/v-map-layer-helper.ts#L9)
+Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L9)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/
 
 > **setLoadState**(`state`): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:11](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/layer/v-map-layer-helper.ts#L11)
+Defined in: [src/layer/v-map-layer-helper.ts:11](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L11)
 
 Called by the helper to set the component load state
 

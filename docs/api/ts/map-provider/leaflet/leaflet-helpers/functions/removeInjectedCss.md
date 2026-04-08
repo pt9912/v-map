@@ -8,7 +8,7 @@
 
 > **removeInjectedCss**(`shadowRoot`, `injectedStyle`): `void`
 
-Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:61](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/leaflet/leaflet-helpers.ts#L61)
+Defined in: [src/map-provider/leaflet/leaflet-helpers.ts:61](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/leaflet-helpers.ts#L61)
 
 ## Parameters
 

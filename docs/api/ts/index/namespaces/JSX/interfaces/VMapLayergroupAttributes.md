@@ -6,7 +6,7 @@
 
 # Interface: VMapLayergroupAttributes
 
-Defined in: [src/components.d.ts:2432](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2432)
+Defined in: [src/components.d.ts:2432](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2432)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2432](https://github.com/pt9912/v-map/blob/0ecd
 
 > **basemapid**: `string`
 
-Defined in: [src/components.d.ts:2435](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2435)
+Defined in: [src/components.d.ts:2435](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2435)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2435](https://github.com/pt9912/v-map/blob/0ecd
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:2434](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2434)
+Defined in: [src/components.d.ts:2434](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2434)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/components.d.ts:2434](https://github.com/pt9912/v-map/blob/0ecd
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:2433](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2433)
+Defined in: [src/components.d.ts:2433](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2433)

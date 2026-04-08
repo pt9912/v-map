@@ -6,7 +6,7 @@
 
 # Interface: DeckGLGeoTIFFLayerProps
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:73](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L73)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:73](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L73)
 
 ## Extends
 
@@ -80,7 +80,7 @@ The format of colors, default 'RGBA'.
 
 > `optional` **colorMap**: [`GeoStylerColorMap`](../../../../index/interfaces/GeoStylerColorMap.md) \| [`ColorMapName`](../../../geotiff/utils/colormap-utils/type-aliases/ColorMapName.md)
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:146](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L146)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:146](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L146)
 
 ColorMap für Grayscale-Daten
 
@@ -276,7 +276,7 @@ Custom implementation to fetch and parse content from URLs.
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:97](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L97)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:97](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L97)
 
 Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
 
@@ -388,7 +388,7 @@ Options to customize the behavior of loaders
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:102](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L102)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:102](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L102)
 
 ***
 
@@ -396,7 +396,7 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:102](https://github.com
 
 > `optional` **minZoom**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:101](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L101)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:101](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L101)
 
 ***
 
@@ -418,7 +418,7 @@ A 4x4 matrix to transform local coordianates to the world space.
 
 > `optional` **noDataValue**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:99](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L99)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:99](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L99)
 
 ***
 
@@ -426,7 +426,7 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:99](https://github.com/
 
 > `optional` **nullColor**: \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:100](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L100)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:100](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L100)
 
 ***
 
@@ -902,7 +902,7 @@ Called when the mouse enters/leaves an object of this layer.
 
 > `optional` **onTileLoadError**: (`err`) => `void`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:162](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L162)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:162](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L162)
 
 Optional callback for tile load errors, wired by provider.
 
@@ -993,7 +993,7 @@ The format of positions, default 'XYZ'.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:86](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L86)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:86](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L86)
 
 Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
 
@@ -1010,7 +1010,7 @@ Default fallback: 'EPSG:4326' (WGS84)
 
 > `optional` **resampleMethod**: `"near"` \| `"bilinear"`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:125](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L125)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:125](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L125)
 
 Resampling-Methode
 
@@ -1025,7 +1025,7 @@ Default: 'bilinear'
 
 > `optional` **resolution**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:115](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L115)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:115](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L115)
 
 Sampling-Auflösung (0.0 - 1.0)
 
@@ -1056,7 +1056,7 @@ Defined in: node\_modules/.pnpm/@deck.gl+core@9.2.11/node\_modules/@deck.gl/core
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:103](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L103)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:103](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L103)
 
 ***
 
@@ -1092,7 +1092,7 @@ The dependencies used to trigger re-evaluation of functional accessors (get*).
 
 > **url**: `string`
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:74](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L74)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:74](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L74)
 
 ***
 
@@ -1100,7 +1100,7 @@ Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:74](https://github.com/
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:160](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L160)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFLayer.ts:160](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/deck/DeckGLGeoTIFFLayer.ts#L160)
 
 Wertebereich für Normalisierung [min, max]
 
