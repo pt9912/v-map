@@ -18,6 +18,7 @@ export default {
         items: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Übersicht', link: '/guides/' },
+          { text: 'CDN ohne Bundler', link: '/guides/cdn-esm' },
           { text: 'Error Handling', link: '/guides/error-handling' },
           { text: 'Styling', link: '/guides/styling' },
         ],
@@ -39,6 +40,7 @@ export default {
           items: [
             { text: 'Getting Started', link: '/getting-started' },
             { text: 'Übersicht', link: '/guides/' },
+            { text: 'CDN ohne Bundler', link: '/guides/cdn-esm' },
             { text: 'Error Handling', link: '/guides/error-handling' },
             { text: 'Styling', link: '/guides/styling' },
           ],
@@ -50,6 +52,7 @@ export default {
           items: [
             { text: 'Getting Started', link: '/getting-started' },
             { text: 'Übersicht', link: '/guides/' },
+            { text: 'CDN ohne Bundler', link: '/guides/cdn-esm' },
             { text: 'Error Handling', link: '/guides/error-handling' },
             { text: 'Styling', link: '/guides/styling' },
           ],
