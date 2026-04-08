@@ -6,7 +6,7 @@
 
 # Interface: ColorStop
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:9](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/utils/colormap-utils.ts#L9)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:9](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/utils/colormap-utils.ts#L9)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:9](https://github.
 
 > **color**: \[`number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:11](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/utils/colormap-utils.ts#L11)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:11](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/utils/colormap-utils.ts#L11)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:11](https://github
 
 > **value**: `number`
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:10](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/utils/colormap-utils.ts#L10)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:10](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/utils/colormap-utils.ts#L10)

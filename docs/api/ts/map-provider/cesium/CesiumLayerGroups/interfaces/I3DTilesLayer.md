@@ -6,7 +6,7 @@
 
 # Interface: I3DTilesLayer
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:6](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/CesiumLayerGroups.ts#L6)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:6](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/CesiumLayerGroups.ts#L6)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:6](https://github.com/
 
 > **getOpacity**(): `number`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:6](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L6)
+Defined in: [src/map-provider/cesium/i-layer.ts:6](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L6)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:6](https://github.com/pt9912/v-m
 
 > **getOptions**(): `Record`\<`string`, `unknown`\>
 
-Defined in: [src/map-provider/cesium/i-layer.ts:2](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L2)
+Defined in: [src/map-provider/cesium/i-layer.ts:2](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L2)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:2](https://github.com/pt9912/v-m
 
 > **getVisible**(): `boolean`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:4](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L4)
+Defined in: [src/map-provider/cesium/i-layer.ts:4](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L4)
 
 #### Returns
 
@@ -66,7 +66,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:4](https://github.com/pt9912/v-m
 
 > **getZIndex**(): `number`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:8](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L8)
+Defined in: [src/map-provider/cesium/i-layer.ts:8](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L8)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:8](https://github.com/pt9912/v-m
 
 > **remove**(): `void`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:10](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L10)
+Defined in: [src/map-provider/cesium/i-layer.ts:10](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L10)
 
 #### Returns
 
@@ -98,7 +98,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:10](https://github.com/pt9912/v-
 
 > **setColor**(`color`, `opacity?`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:7](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/CesiumLayerGroups.ts#L7)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:7](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/CesiumLayerGroups.ts#L7)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:7](https://github.com/
 
 > **setOpacity**(`value`): `void`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:7](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L7)
+Defined in: [src/map-provider/cesium/i-layer.ts:7](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L7)
 
 #### Parameters
 
@@ -142,7 +142,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:7](https://github.com/pt9912/v-m
 
 > **setOptions**(`options`): `void`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:3](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L3)
+Defined in: [src/map-provider/cesium/i-layer.ts:3](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L3)
 
 #### Parameters
 
@@ -164,7 +164,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:3](https://github.com/pt9912/v-m
 
 > **setStyle**(`style`): `void`
 
-Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:8](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/CesiumLayerGroups.ts#L8)
+Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:8](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/CesiumLayerGroups.ts#L8)
 
 #### Parameters
 
@@ -182,7 +182,7 @@ Defined in: [src/map-provider/cesium/CesiumLayerGroups.ts:8](https://github.com/
 
 > **setVisible**(`value`): `void`
 
-Defined in: [src/map-provider/cesium/i-layer.ts:5](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L5)
+Defined in: [src/map-provider/cesium/i-layer.ts:5](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L5)
 
 #### Parameters
 
@@ -204,7 +204,7 @@ Defined in: [src/map-provider/cesium/i-layer.ts:5](https://github.com/pt9912/v-m
 
 > **setZIndex**(`zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/i-layer.ts:9](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/cesium/i-layer.ts#L9)
+Defined in: [src/map-provider/cesium/i-layer.ts:9](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/cesium/i-layer.ts#L9)
 
 #### Parameters
 

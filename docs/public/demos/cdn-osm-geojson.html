@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>v-map CDN Demo: OSM + GeoJSON</title>
+    <title>v-map CDN Demo: OSM + GeoJSON + Layer-Control</title>
     <script
       type="module"
       src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.2.1/dist/v-map/v-map.esm.js"
@@ -15,35 +15,64 @@
         height: 100%;
         font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       }
+
+      .map-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+      }
+
       v-map {
         display: block;
         width: 100%;
-        height: 100vh;
+        height: 100%;
+      }
+
+      /* Position the layer control as an overlay in the upper-left corner.
+         v-map's host CSS sets position: relative, but v-map-layercontrol
+         lives outside <v-map> here so we anchor it via .map-wrapper. */
+      v-map-layercontrol {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 1000;
+        max-width: 280px;
+        font-size: 13px;
       }
     </style>
   </head>
   <body>
-    <v-map flavour="ol" center="10.0,51.0" zoom="6">
-      <v-map-error position="top-right" auto-dismiss="6000"></v-map-error>
+    <div class="map-wrapper">
+      <v-map id="demo-map" flavour="ol" center="10.0,51.0" zoom="6">
+        <v-map-error position="top-right" auto-dismiss="6000"></v-map-error>
 
-      <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
-        <v-map-layer-osm
-          id="OSM-BASE"
-          label="OpenStreetMap"
-          z-index="0"
-          opacity="1.0"
-        ></v-map-layer-osm>
-      </v-map-layergroup>
+        <v-map-layergroup
+          id="basemaps"
+          group-title="Basiskarten"
+          basemapid="OSM-BASE"
+        >
+          <v-map-layer-osm
+            id="OSM-BASE"
+            label="OpenStreetMap"
+            z-index="0"
+            opacity="1.0"
+          ></v-map-layer-osm>
+        </v-map-layergroup>
 
-      <v-map-layergroup group-title="Daten">
-        <v-map-layer-geojson
-          url="https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
-          fill-color="#0066cc"
-          fill-opacity="0.2"
-          stroke-color="#003366"
-          stroke-width="1"
-        ></v-map-layer-geojson>
-      </v-map-layergroup>
-    </v-map>
+        <v-map-layergroup id="overlays" group-title="Daten">
+          <v-map-layer-geojson
+            id="countries"
+            label="Länder"
+            url="https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson"
+            fill-color="#0066cc"
+            fill-opacity="0.2"
+            stroke-color="#003366"
+            stroke-width="1"
+          ></v-map-layer-geojson>
+        </v-map-layergroup>
+      </v-map>
+
+      <v-map-layercontrol for="demo-map"></v-map-layercontrol>
+    </div>
   </body>
 </html>

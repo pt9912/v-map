@@ -105,7 +105,8 @@ Solange v-map auf `0.x` ist, können auch Minor-Bumps API-relevante
 ## Komplettes Beispiel mit GeoJSON-Overlay
 
 Komplett deklarativ — keine einzige Zeile JavaScript, inklusive
-Fehler-Toasts via `<v-map-error>`. Das Beispiel unten ist auch als
+Fehler-Toasts via `<v-map-error>` und einem interaktiven Layer-Switcher
+via `<v-map-layercontrol>` als Overlay. Das Beispiel unten ist auch als
 standalone HTML-Datei in der Doku hinterlegt und wird hier in einem
 sandboxed Iframe live vorgeführt:
 

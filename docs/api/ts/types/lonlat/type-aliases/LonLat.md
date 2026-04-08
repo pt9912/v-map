@@ -8,4 +8,4 @@
 
 > **LonLat** = \[`number`, `number`\]
 
-Defined in: [src/types/lonlat.ts:1](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/types/lonlat.ts#L1)
+Defined in: [src/types/lonlat.ts:1](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/lonlat.ts#L1)

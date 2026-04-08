@@ -6,7 +6,7 @@
 
 # Interface: GeoTIFFSource
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:19](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L19)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:19](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L19)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:19](https://github.com/p
 
 > **baseImage**: `GeoTIFFImage`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:21](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L21)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:21](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L21)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:21](https://github.com/p
 
 > **fromProjection**: `string`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:26](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L26)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:26](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L26)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:26](https://github.com/p
 
 > **height**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:24](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L24)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:24](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L24)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:24](https://github.com/p
 
 > `optional` **noDataValue**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:32](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L32)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:32](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L32)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:32](https://github.com/p
 
 > **overviewImages**: `GeoTIFFImage`[]
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:22](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L22)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:22](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L22)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:22](https://github.com/p
 
 > **proj4**: \{(`toProj`): `Converter`; (`fromProj`, `toProj`): `Converter`; \<`T`\>(`toProj`, `coord`): `T`; \<`T`\>(`fromProj`, `toProj`, `coord`): `T`; \} & `object`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:31](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L31)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:31](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L31)
 
 #### Type Declaration
 
@@ -240,7 +240,7 @@ The GeoTIFF instance to read the grid from.
 
 > **resolution**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:30](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L30)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:30](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L30)
 
 ***
 
@@ -248,7 +248,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:30](https://github.com/p
 
 > **samplesPerPixel**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:25](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L25)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:25](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L25)
 
 ***
 
@@ -256,7 +256,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:25](https://github.com/p
 
 > **sourceBounds**: \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:28](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L28)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:28](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L28)
 
 ***
 
@@ -264,7 +264,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:28](https://github.com/p
 
 > **sourceRef**: \[`number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:29](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L29)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:29](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L29)
 
 ***
 
@@ -272,7 +272,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:29](https://github.com/p
 
 > **tiff**: `GeoTIFF`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:20](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L20)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:20](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L20)
 
 ***
 
@@ -280,7 +280,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:20](https://github.com/p
 
 > **transformToWgs84**: (`coord`) => \[`number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:34](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L34)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:34](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L34)
 
 #### Parameters
 
@@ -298,7 +298,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:34](https://github.com/p
 
 > **wgs84Bounds**: \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:33](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L33)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:33](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L33)
 
 ***
 
@@ -306,4 +306,4 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:33](https://github.com/p
 
 > **width**: `number`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:23](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L23)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:23](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L23)

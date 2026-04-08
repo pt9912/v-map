@@ -8,7 +8,7 @@
 
 > **LayerErrorCallback** = (`error`) => `void`
 
-Defined in: [src/types/mapprovider.ts:14](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/types/mapprovider.ts#L14)
+Defined in: [src/types/mapprovider.ts:14](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/mapprovider.ts#L14)
 
 ## Parameters
 

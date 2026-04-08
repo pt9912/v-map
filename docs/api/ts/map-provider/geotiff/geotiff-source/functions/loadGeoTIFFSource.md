@@ -8,7 +8,7 @@
 
 > **loadGeoTIFFSource**(`url`, `options`, `deps`): `Promise`\<[`GeoTIFFSource`](../interfaces/GeoTIFFSource.md)\>
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:39](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/geotiff-source.ts#L39)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:39](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/geotiff-source.ts#L39)
 
 ## Parameters
 

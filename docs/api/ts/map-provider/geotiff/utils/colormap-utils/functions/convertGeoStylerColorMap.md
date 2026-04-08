@@ -8,7 +8,7 @@
 
 > **convertGeoStylerColorMap**(`geoStylerColorMap`, `valueRange?`): `object`
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:103](https://github.com/pt9912/v-map/blob/a0bdcbc34adf78a8cde5bfab26d8bd16314805e5/src/map-provider/geotiff/utils/colormap-utils.ts#L103)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:103](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/map-provider/geotiff/utils/colormap-utils.ts#L103)
 
 Convert GeoStyler ColorMap to internal ColorStop array
 
