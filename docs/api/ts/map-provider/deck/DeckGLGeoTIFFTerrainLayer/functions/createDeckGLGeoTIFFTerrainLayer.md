@@ -8,7 +8,7 @@
 
 > **createDeckGLGeoTIFFTerrainLayer**(`props`): `Promise`\<`Layer`\<\{ \}\>\>
 
-Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:120](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L120)
+Defined in: [src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts:120](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/map-provider/deck/DeckGLGeoTIFFTerrainLayer.ts#L120)
 
 Factory-Funktion zum Erstellen eines DeckGLGeoTIFFTerrainLayer
 

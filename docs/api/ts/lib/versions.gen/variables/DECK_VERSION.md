@@ -8,4 +8,4 @@
 
 > `const` **DECK\_VERSION**: `"9.2.11"`
 
-Defined in: [src/lib/versions.gen.ts:5](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/lib/versions.gen.ts#L5)
+Defined in: [src/lib/versions.gen.ts:5](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/lib/versions.gen.ts#L5)
