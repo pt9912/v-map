@@ -67,6 +67,11 @@ geotiff-info-temp.mjs
 # (= built example apps) are ignored.
 docs/public/demos/*/
 
-# Same for the build/ directory inside each example workspace.
+# Same for the build/ and dist/ directory inside each example workspace.
 examples/*/build/
+examples/*/dist/
 examples/*/.svelte-kit/
+
+# vue-tsc build cache
+examples/*/tsconfig.tsbuildinfo
+examples/*/*.tsbuildinfo
