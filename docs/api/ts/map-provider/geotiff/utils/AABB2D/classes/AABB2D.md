@@ -6,7 +6,7 @@
 
 # Class: AABB2D
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:22](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L22)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:22](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L22)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:22](https://github.com/pt9
 
 > **new AABB2D**(`min`, `max`): `AABB2D`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L23)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L23)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9
 
 > **max**: [`Point2D`](../type-aliases/Point2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L23)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L23)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9
 
 > **min**: [`Point2D`](../type-aliases/Point2D.md)
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L23)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L23)
 
 ## Methods
 
@@ -52,7 +52,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:23](https://github.com/pt9
 
 > **contains**(`point`): `boolean`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:25](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L25)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:25](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L25)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:25](https://github.com/pt9
 
 > `static` **fromTriangle**(`triangle`): `AABB2D`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:34](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L34)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:34](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L34)
 
 #### Parameters
 
@@ -88,7 +88,7 @@ Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:34](https://github.com/pt9
 
 > `static` **union**(`a`, `b`): `AABB2D`
 
-Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:42](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/AABB2D.ts#L42)
+Defined in: [src/map-provider/geotiff/utils/AABB2D.ts:42](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/AABB2D.ts#L42)
 
 #### Parameters
 

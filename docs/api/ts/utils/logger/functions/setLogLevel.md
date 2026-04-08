@@ -8,7 +8,7 @@
 
 > **setLogLevel**(`level`): `void`
 
-Defined in: [src/utils/logger.ts:135](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/utils/logger.ts#L135)
+Defined in: [src/utils/logger.ts:135](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/logger.ts#L135)
 
 Ändert das globale Log-Level zur Laufzeit und persistiert es.
 Praktisch für Tests, Feature-Flags und DevTools.

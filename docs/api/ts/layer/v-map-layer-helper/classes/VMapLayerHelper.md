@@ -6,7 +6,7 @@
 
 # Class: VMapLayerHelper
 
-Defined in: [src/layer/v-map-layer-helper.ts:14](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L14)
+Defined in: [src/layer/v-map-layer-helper.ts:14](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L14)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:14](https://github.com/pt9912/v-map
 
 > **new VMapLayerHelper**(`el`, `host?`): `VMapLayerHelper`
 
-Defined in: [src/layer/v-map-layer-helper.ts:31](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L31)
+Defined in: [src/layer/v-map-layer-helper.ts:31](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L31)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:31](https://github.com/pt9912/v-map
 
 > `protected` **addToMapInternal**(`group`, `vmap`, `createLayerConfig`, `elementId?`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:112](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L112)
+Defined in: [src/layer/v-map-layer-helper.ts:112](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L112)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:112](https://github.com/pt9912/v-ma
 
 > **clearError**(): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:72](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L72)
+Defined in: [src/layer/v-map-layer-helper.ts:72](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L72)
 
 #### Returns
 
@@ -78,7 +78,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:72](https://github.com/pt9912/v-map
 
 > **dispose**(): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:294](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L294)
+Defined in: [src/layer/v-map-layer-helper.ts:294](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L294)
 
 #### Returns
 
@@ -90,7 +90,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:294](https://github.com/pt9912/v-ma
 
 > **getError**(): [`VMapErrorDetail`](../../../utils/events/interfaces/VMapErrorDetail.md)
 
-Defined in: [src/layer/v-map-layer-helper.ts:77](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L77)
+Defined in: [src/layer/v-map-layer-helper.ts:77](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L77)
 
 #### Returns
 
@@ -102,7 +102,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:77](https://github.com/pt9912/v-map
 
 > **getLayerId**(): `string`
 
-Defined in: [src/layer/v-map-layer-helper.ts:313](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L313)
+Defined in: [src/layer/v-map-layer-helper.ts:313](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L313)
 
 #### Returns
 
@@ -114,7 +114,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:313](https://github.com/pt9912/v-ma
 
 > **getMapProvider**(): [`MapProvider`](../../../types/mapprovider/interfaces/MapProvider.md)
 
-Defined in: [src/layer/v-map-layer-helper.ts:309](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L309)
+Defined in: [src/layer/v-map-layer-helper.ts:309](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L309)
 
 #### Returns
 
@@ -126,7 +126,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:309](https://github.com/pt9912/v-ma
 
 > **initLayer**(`createLayerConfig`, `elementId?`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:268](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L268)
+Defined in: [src/layer/v-map-layer-helper.ts:268](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L268)
 
 #### Parameters
 
@@ -148,7 +148,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:268](https://github.com/pt9912/v-ma
 
 > **markReady**(): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:42](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L42)
+Defined in: [src/layer/v-map-layer-helper.ts:42](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L42)
 
 #### Returns
 
@@ -160,7 +160,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:42](https://github.com/pt9912/v-map
 
 > **markUpdated**(): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:47](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L47)
+Defined in: [src/layer/v-map-layer-helper.ts:47](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L47)
 
 #### Returns
 
@@ -172,7 +172,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:47](https://github.com/pt9912/v-map
 
 > **recreateLayer**(): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:256](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L256)
+Defined in: [src/layer/v-map-layer-helper.ts:256](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L256)
 
 #### Returns
 
@@ -184,7 +184,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:256](https://github.com/pt9912/v-ma
 
 > **removeLayer**(): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:317](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L317)
+Defined in: [src/layer/v-map-layer-helper.ts:317](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L317)
 
 #### Returns
 
@@ -196,7 +196,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:317](https://github.com/pt9912/v-ma
 
 > **setError**(`detail`): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:52](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L52)
+Defined in: [src/layer/v-map-layer-helper.ts:52](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L52)
 
 #### Parameters
 
@@ -214,7 +214,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:52](https://github.com/pt9912/v-map
 
 > **setOpacity**(`opacity`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:207](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L207)
+Defined in: [src/layer/v-map-layer-helper.ts:207](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L207)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:207](https://github.com/pt9912/v-ma
 
 > **setRuntimeError**(`detail`): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:63](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L63)
+Defined in: [src/layer/v-map-layer-helper.ts:63](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L63)
 
 #### Parameters
 
@@ -250,7 +250,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:63](https://github.com/pt9912/v-map
 
 > **setVisible**(`visible`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:192](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L192)
+Defined in: [src/layer/v-map-layer-helper.ts:192](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L192)
 
 #### Parameters
 
@@ -268,7 +268,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:192](https://github.com/pt9912/v-ma
 
 > **setZIndex**(`zIndex`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:222](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L222)
+Defined in: [src/layer/v-map-layer-helper.ts:222](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L222)
 
 #### Parameters
 
@@ -286,7 +286,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:222](https://github.com/pt9912/v-ma
 
 > **startLoading**(): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:37](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L37)
+Defined in: [src/layer/v-map-layer-helper.ts:37](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L37)
 
 #### Returns
 
@@ -298,7 +298,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:37](https://github.com/pt9912/v-map
 
 > **updateLayer**(`update`): `Promise`\<`void`\>
 
-Defined in: [src/layer/v-map-layer-helper.ts:237](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/layer/v-map-layer-helper.ts#L237)
+Defined in: [src/layer/v-map-layer-helper.ts:237](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/layer/v-map-layer-helper.ts#L237)
 
 #### Parameters
 

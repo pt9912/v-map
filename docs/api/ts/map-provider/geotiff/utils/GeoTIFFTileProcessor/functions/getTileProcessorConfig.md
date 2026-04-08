@@ -8,7 +8,7 @@
 
 > **getTileProcessorConfig**(`tiffSource`, `viewProjection`): `Promise`\<[`GeoTIFFTileProcessorConfig`](../interfaces/GeoTIFFTileProcessorConfig.md)\>
 
-Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:759](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L759)
+Defined in: [src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts:759](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/geotiff/utils/GeoTIFFTileProcessor.ts#L759)
 
 ## Parameters
 

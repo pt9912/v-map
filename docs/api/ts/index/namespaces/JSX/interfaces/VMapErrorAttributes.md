@@ -6,7 +6,7 @@
 
 # Interface: VMapErrorAttributes
 
-Defined in: [src/components.d.ts:2253](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2253)
+Defined in: [src/components.d.ts:2253](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2253)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2253](https://github.com/pt9912/v-map/blob/b03f
 
 > **autoDismiss**: `number`
 
-Defined in: [src/components.d.ts:2256](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2256)
+Defined in: [src/components.d.ts:2256](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2256)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2256](https://github.com/pt9912/v-map/blob/b03f
 
 > **for**: `string`
 
-Defined in: [src/components.d.ts:2254](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2254)
+Defined in: [src/components.d.ts:2254](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2254)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2254](https://github.com/pt9912/v-map/blob/b03f
 
 > **log**: `LogMode`
 
-Defined in: [src/components.d.ts:2258](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2258)
+Defined in: [src/components.d.ts:2258](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2258)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2258](https://github.com/pt9912/v-map/blob/b03f
 
 > **max**: `number`
 
-Defined in: [src/components.d.ts:2257](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2257)
+Defined in: [src/components.d.ts:2257](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2257)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/components.d.ts:2257](https://github.com/pt9912/v-map/blob/b03f
 
 > **position**: `ToastPosition`
 
-Defined in: [src/components.d.ts:2255](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/components.d.ts#L2255)
+Defined in: [src/components.d.ts:2255](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2255)

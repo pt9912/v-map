@@ -6,7 +6,7 @@
 
 # Class: GeoTIFFImageryProvider
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:34](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L34)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:34](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L34)
 
 Custom ImageryProvider that renders GeoTIFF tiles on demand using
 the shared GeoTIFFTileProcessor (triangulation-based reprojection).
@@ -21,7 +21,7 @@ the shared GeoTIFFTileProcessor (triangulation-based reprojection).
 
 > **new GeoTIFFImageryProvider**(`options`): `GeoTIFFImageryProvider`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:56](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L56)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:56](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L56)
 
 #### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:56](https://githu
 
 > `readonly` **credit**: `Credit` = `undefined`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:40](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L40)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:40](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L40)
 
 Gets the credit to display when this imagery provider is active.  Typically this is used to credit
 the source of the imagery.
@@ -54,7 +54,7 @@ the source of the imagery.
 
 > `readonly` **errorEvent**: `Event`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:39](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L39)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:39](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L39)
 
 Gets an event that is raised when the imagery provider encounters an asynchronous error.  By subscribing
 to the event, you will be notified of the error and can potentially recover from it.  Event listeners
@@ -70,7 +70,7 @@ are passed an instance of TileProviderError.
 
 > `readonly` **hasAlphaChannel**: `true` = `true`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:43](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L43)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:43](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L43)
 
 Gets a value indicating whether or not the images provided by this imagery provider
 include an alpha channel.  If this property is false, an alpha channel, if present, will
@@ -88,7 +88,7 @@ and texture upload time are reduced.
 
 > `readonly` **maximumLevel**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:45](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L45)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:45](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L45)
 
 Gets the maximum level-of-detail that can be requested.
 
@@ -102,7 +102,7 @@ Gets the maximum level-of-detail that can be requested.
 
 > `readonly` **minimumLevel**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:44](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L44)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:44](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L44)
 
 Gets the minimum level-of-detail that can be requested.  Generally,
 a minimum level should only be used when the rectangle of the imagery is small
@@ -120,7 +120,7 @@ rendering problems.
 
 > `readonly` **proxy**: `undefined` = `undefined`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:42](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L42)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:42](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L42)
 
 Gets the proxy used by this provider.
 
@@ -134,7 +134,7 @@ Gets the proxy used by this provider.
 
 > **ready**: `boolean` = `false`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:54](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L54)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:54](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L54)
 
 ***
 
@@ -142,7 +142,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:54](https://githu
 
 > `readonly` **rectangle**: `Rectangle`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:38](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L38)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:38](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L38)
 
 Gets the rectangle, in radians, of the imagery provided by the instance.
 
@@ -156,7 +156,7 @@ Gets the rectangle, in radians, of the imagery provided by the instance.
 
 > `readonly` **tileDiscardPolicy**: `TileDiscardPolicy` = `undefined`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:41](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L41)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:41](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L41)
 
 Gets the tile discard policy.  If not undefined, the discard policy is responsible
 for filtering out "missing" tiles via its shouldDiscardImage function.  If this function
@@ -172,7 +172,7 @@ returns undefined, no tiles are filtered.
 
 > `readonly` **tileHeight**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:36](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L36)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:36](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L36)
 
 Gets the height of each tile, in pixels.
 
@@ -186,7 +186,7 @@ Gets the height of each tile, in pixels.
 
 > `readonly` **tileWidth**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:35](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L35)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:35](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L35)
 
 Gets the width of each tile, in pixels.
 
@@ -200,7 +200,7 @@ Gets the width of each tile, in pixels.
 
 > `readonly` **tilingScheme**: `TilingScheme`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:37](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L37)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:37](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L37)
 
 Gets the tiling scheme used by the provider.
 
@@ -216,7 +216,7 @@ Gets the tiling scheme used by the provider.
 
 > **get** **readyPromise**(): `Promise`\<`boolean`\>
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:101](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L101)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:101](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L101)
 
 ##### Returns
 
@@ -230,7 +230,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:101](https://gith
 
 > **get** **tileCredits**(): `Credit`[]
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:105](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L105)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:105](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L105)
 
 ##### Returns
 
@@ -244,7 +244,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:105](https://gith
 
 > **get** **tilingSchemeName**(): `string`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:94](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L94)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:94](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L94)
 
 ##### Returns
 
@@ -258,7 +258,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:94](https://githu
 
 > **get** **url**(): `string`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:117](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L117)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:117](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L117)
 
 ##### Returns
 
@@ -270,7 +270,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:117](https://gith
 
 > **getTileCredits**(`_x`, `_y`, `_level`): `Credit`[]
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:109](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L109)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:109](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L109)
 
 Gets the credits to be displayed when a given tile is displayed.
 
@@ -304,7 +304,7 @@ The credits to be displayed when the tile is displayed.
 
 > **pickFeatures**(): `undefined`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:285](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L285)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:285](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L285)
 
 Asynchronously determines what features, if any, are located at a given longitude and latitude within
 a tile.
@@ -329,7 +329,7 @@ A promise for the picked features that will resolve when the asynchronous
 
 > **requestImage**(`x`, `y`, `level`): `Promise`\<`HTMLCanvasElement` \| `ImageBitmap`\>
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:234](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L234)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:234](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L234)
 
 Requests the image for a given tile.
 

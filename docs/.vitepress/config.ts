@@ -21,6 +21,7 @@ export default {
     // raw HTML across the board. The token name is restricted to PascalCase
     // identifiers so the syntax can't accidentally collide with prose.
     config: md => {
+      // @[component:Name] → <Name />
       md.inline.ruler.before('emphasis', 'vue_component', (state, silent) => {
         const start = state.pos;
         const marker = '@[component:';
@@ -34,6 +35,28 @@ export default {
         if (!silent) {
           const token = state.push('html_inline', '', 0);
           token.content = `<${name} />`;
+        }
+        state.pos = end + 1;
+        return true;
+      });
+
+      // @[demo:filename] → <DemoFrame name="filename" />
+      // Filename refers to docs/public/demos/<filename>.html, which is
+      // copied to /demos/<filename>.html in the deployed site. The
+      // DemoFrame Vue SFC handles the iframe + caption + sandbox.
+      md.inline.ruler.before('emphasis', 'demo_frame', (state, silent) => {
+        const start = state.pos;
+        const marker = '@[demo:';
+        if (state.src.slice(start, start + marker.length) !== marker) {
+          return false;
+        }
+        const end = state.src.indexOf(']', start + marker.length);
+        if (end === -1) return false;
+        const name = state.src.slice(start + marker.length, end).trim();
+        if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) return false;
+        if (!silent) {
+          const token = state.push('html_inline', '', 0);
+          token.content = `<DemoFrame name="${name}" />`;
         }
         state.pos = end + 1;
         return true;

@@ -8,7 +8,7 @@
 
 > **createWCSGridLayer**(`options`): [`WCSGridLayer`](../classes/WCSGridLayer.md)
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:156](https://github.com/pt9912/v-map/blob/b03f85cbf0919db6d229233abae132d837a588fd/src/map-provider/leaflet/WCSGridLayer.ts#L156)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:156](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/leaflet/WCSGridLayer.ts#L156)
 
 Factory function to create a WCS GridLayer
 

@@ -9,6 +9,7 @@
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import LiveMap from './components/LiveMap.vue';
+import DemoFrame from './components/DemoFrame.vue';
 
 if (typeof window !== 'undefined') {
   // Path is relative to docs/.vitepress/theme/index.ts → repo root → loader/.
@@ -22,7 +23,10 @@ if (typeof window !== 'undefined') {
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    // Register LiveMap globally so it's usable in markdown as <LiveMap />.
+    // LiveMap renders an in-page <v-map> via Vue/customElements.
     app.component('LiveMap', LiveMap);
+    // DemoFrame renders a sandboxed iframe loading a standalone HTML demo
+    // from /demos/<name>.html. Used via the markdown shortcut @[demo:name].
+    app.component('DemoFrame', DemoFrame);
   },
 } satisfies Theme;
