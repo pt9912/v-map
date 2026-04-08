@@ -6,7 +6,7 @@
 
 # Interface: GeoTIFFGridLayerOptions
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:9](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L9)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:9](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L9)
 
 ## Extends
 
@@ -54,7 +54,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **colorMap**: [`GeoStylerColorMap`](../../../../index/interfaces/GeoStylerColorMap.md) \| [`ColorMapName`](../../../geotiff/utils/colormap-utils/type-aliases/ColorMapName.md)
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:11](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L11)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:11](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L11)
 
 ***
 
@@ -128,7 +128,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:13](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L13)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:13](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L13)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:17](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L17)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:17](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L17)
 
 #### Overrides
 
@@ -172,7 +172,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **resampleMethod**: `"near"` \| `"bilinear"`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:15](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L15)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:15](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L15)
 
 ***
 
@@ -180,7 +180,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:15](https://github.com
 
 > `optional` **resolution**: `number`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:14](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L14)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:14](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L14)
 
 ***
 
@@ -188,7 +188,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:14](https://github.com
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:16](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L16)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:16](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L16)
 
 #### Overrides
 
@@ -236,7 +236,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **url**: `string`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:10](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L10)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:10](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L10)
 
 ***
 
@@ -244,7 +244,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:10](https://github.com
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:12](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L12)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:12](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L12)
 
 ***
 
@@ -252,7 +252,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:12](https://github.com
 
 > `optional` **viewProjection**: `string`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:19](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L19)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:19](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L19)
 
 ***
 
@@ -260,7 +260,7 @@ Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:19](https://github.com
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:18](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L18)
+Defined in: [src/map-provider/leaflet/GeoTIFFGridLayer.ts:18](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/GeoTIFFGridLayer.ts#L18)
 
 #### Overrides
 

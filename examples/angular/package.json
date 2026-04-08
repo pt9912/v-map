@@ -1,0 +1,32 @@
+{
+  "name": "angular-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "vmap": {
+    "output": "dist/angular-demo/browser"
+  },
+  "scripts": {
+    "ng": "ng",
+    "dev": "ng serve",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit"
+  },
+  "dependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/compiler": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/platform-browser": "^19.0.0",
+    "@angular/platform-browser-dynamic": "^19.0.0",
+    "@npm9912/v-map": "file:../../",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.6.0",
+    "zone.js": "^0.15.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^19.0.0",
+    "@angular/cli": "^19.0.0",
+    "@angular/compiler-cli": "^19.0.0",
+    "typescript": "~5.6.0"
+  }
+}

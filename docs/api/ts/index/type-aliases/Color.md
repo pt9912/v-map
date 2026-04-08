@@ -8,4 +8,4 @@
 
 > **Color** = `string` \| \[`number`, `number`, `number`, `number`?\]
 
-Defined in: [src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx:12](https://github.com/pt9912/v-map/blob/79e577486d868612ec23e0a84b4ac7abb3ad39fd/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx#L12)
+Defined in: [src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx:12](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/components/v-map-layer-scatterplot/v-map-layer-scatterplot.tsx#L12)
