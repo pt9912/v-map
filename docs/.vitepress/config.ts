@@ -95,6 +95,7 @@ export default {
           { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
           { text: 'React', link: '/guides/frameworks/react' },
           { text: 'Vue 3', link: '/guides/frameworks/vue' },
+          { text: 'Angular', link: '/guides/frameworks/angular' },
         ],
       },
       {
@@ -115,6 +116,7 @@ export default {
             { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
+            { text: 'Angular', link: '/guides/frameworks/angular' },
           ],
         },
         {
@@ -145,6 +147,7 @@ export default {
             { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
+            { text: 'Angular', link: '/guides/frameworks/angular' },
           ],
         },
       ],
