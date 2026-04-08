@@ -6,7 +6,7 @@
 
 # Interface: LogTransport
 
-Defined in: [src/utils/logger.ts:18](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/utils/logger.ts#L18)
+Defined in: [src/utils/logger.ts:18](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/utils/logger.ts#L18)
 
 Transport-Interface – definiert, wohin ein Log geschrieben wird.
 Du kannst z. B. einen HTTP-Transport für Remote-Logging implementieren.
@@ -17,7 +17,7 @@ Du kannst z. B. einen HTTP-Transport für Remote-Logging implementieren.
 
 > **log**(`level`, `args`, `namespace?`): `void`
 
-Defined in: [src/utils/logger.ts:20](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/utils/logger.ts#L20)
+Defined in: [src/utils/logger.ts:20](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/utils/logger.ts#L20)
 
 Log-Methode, die vom Logger intern aufgerufen wird.
 

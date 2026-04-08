@@ -91,7 +91,10 @@ export default {
       },
       {
         text: 'Frameworks',
-        items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
+        items: [
+          { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
+          { text: 'React', link: '/guides/frameworks/react' },
+        ],
       },
       {
         text: 'API',
@@ -107,7 +110,10 @@ export default {
       '/guides/frameworks/': [
         {
           text: 'Frameworks',
-          items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
+          items: [
+            { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
+            { text: 'React', link: '/guides/frameworks/react' },
+          ],
         },
         {
           text: 'Guide',
@@ -133,7 +139,10 @@ export default {
         },
         {
           text: 'Frameworks',
-          items: [{ text: 'SvelteKit', link: '/guides/frameworks/sveltekit' }],
+          items: [
+            { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
+            { text: 'React', link: '/guides/frameworks/react' },
+          ],
         },
       ],
       '/getting-started': [

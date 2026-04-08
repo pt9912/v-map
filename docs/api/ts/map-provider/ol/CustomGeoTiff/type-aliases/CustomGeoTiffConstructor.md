@@ -8,7 +8,7 @@
 
 > **CustomGeoTiffConstructor** = () => [`CustomGeoTiffInstance`](../interfaces/CustomGeoTiffInstance.md)
 
-Defined in: [src/map-provider/ol/CustomGeoTiff.ts:26](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/map-provider/ol/CustomGeoTiff.ts#L26)
+Defined in: [src/map-provider/ol/CustomGeoTiff.ts:26](https://github.com/pt9912/v-map/blob/9b0d3fed6c914cb65dd3c754df6ad1c9ac12df7b/src/map-provider/ol/CustomGeoTiff.ts#L26)
 
 ## Returns
 
