@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-08T06:12:32",
+  "timestamp": "2026-04-08T06:45:11",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -464,6 +464,248 @@
           "v-map"
         ]
       }
+    },
+    {
+      "filePath": "src/components/v-map-error/v-map-error.tsx",
+      "encapsulation": "shadow",
+      "tag": "v-map-error",
+      "readme": "# v-map-error\n\n\n",
+      "docs": "`<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`\n(oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler\nals kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.\n\nDamit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine\nZeile JavaScript zu schreiben.",
+      "docsTags": [
+        {
+          "name": "example",
+          "text": "```html\n<v-map flavour=\"ol\">\n  <v-map-error position=\"top-right\" auto-dismiss=\"5000\"></v-map-error>\n  <v-map-layergroup group-title=\"Basiskarten\" basemapid=\"OSM-BASE\">\n    <v-map-layer-osm id=\"OSM-BASE\" label=\"OSM\"></v-map-layer-osm>\n  </v-map-layergroup>\n</v-map>\n```"
+        },
+        {
+          "name": "part",
+          "text": "container - Wrapper um den gesamten Toast-Stapel"
+        },
+        {
+          "name": "part",
+          "text": "toast - Einzelner Fehler-Toast (anpassbar via `::part(toast)`)"
+        },
+        {
+          "name": "part",
+          "text": "badge - Typ-Badge innerhalb des Toasts (z. B. \"network\", \"validation\")"
+        },
+        {
+          "name": "part",
+          "text": "message - Fehler-Nachricht innerhalb des Toasts"
+        },
+        {
+          "name": "part",
+          "text": "close - Schliessen-Button innerhalb des Toasts"
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "autoDismiss",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "auto-dismiss",
+          "reflectToAttr": false,
+          "docs": "Auto-Dismiss-Zeit in Millisekunden. `0` deaktiviert das automatische\nAusblenden — Toasts bleiben dann sichtbar, bis sie manuell geschlossen\noder durch einen neueren Fehler aus dem Stapel gedrängt werden.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "5000"
+            }
+          ],
+          "default": "5000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "for",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "for",
+          "reflectToAttr": false,
+          "docs": "ID der `<v-map>`-Karte, deren Fehler angezeigt werden sollen.\nWenn nicht angegeben, hängt sich die Komponente an das nächste\n`<v-map>`-Vorfahrenelement im DOM-Baum.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "log",
+          "type": "\"console\" | \"none\"",
+          "complexType": {
+            "original": "LogMode",
+            "resolved": "\"console\" | \"none\"",
+            "references": {
+              "LogMode": {
+                "location": "global",
+                "id": "global::LogMode"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "log",
+          "reflectToAttr": false,
+          "docs": "Zusätzliches Logging in die Browser-Console.\n- `'none'` (Default): nur Toast-Anzeige, kein Console-Output\n- `'console'`: jeder Fehler wird zusätzlich mit `console.error` geloggt",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'none'"
+            }
+          ],
+          "default": "'none'",
+          "values": [
+            {
+              "value": "console",
+              "type": "string"
+            },
+            {
+              "value": "none",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max",
+          "reflectToAttr": false,
+          "docs": "Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei\nÜberschreitung am oberen Ende des Stapels entfernt.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "3"
+            }
+          ],
+          "default": "3",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "position",
+          "type": "\"bottom\" | \"bottom-left\" | \"bottom-right\" | \"top\" | \"top-left\" | \"top-right\"",
+          "complexType": {
+            "original": "ToastPosition",
+            "resolved": "\"bottom\" | \"bottom-left\" | \"bottom-right\" | \"top\" | \"top-left\" | \"top-right\"",
+            "references": {
+              "ToastPosition": {
+                "location": "global",
+                "id": "global::ToastPosition"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "position",
+          "reflectToAttr": true,
+          "docs": "Position des Toast-Stapels innerhalb des `<v-map>`-Containers.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'top-right'"
+            }
+          ],
+          "default": "'top-right'",
+          "values": [
+            {
+              "value": "bottom",
+              "type": "string"
+            },
+            {
+              "value": "bottom-left",
+              "type": "string"
+            },
+            {
+              "value": "bottom-right",
+              "type": "string"
+            },
+            {
+              "value": "top",
+              "type": "string"
+            },
+            {
+              "value": "top-left",
+              "type": "string"
+            },
+            {
+              "value": "top-right",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "badge",
+          "docs": "Typ-Badge innerhalb des Toasts (z. B. \"network\", \"validation\")"
+        },
+        {
+          "name": "close",
+          "docs": "Schliessen-Button innerhalb des Toasts"
+        },
+        {
+          "name": "container",
+          "docs": "Wrapper um den gesamten Toast-Stapel"
+        },
+        {
+          "name": "message",
+          "docs": "Fehler-Nachricht innerhalb des Toasts"
+        },
+        {
+          "name": "toast",
+          "docs": "Einzelner Fehler-Toast (anpassbar via `::part(toast)`)"
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/v-map-layer-geojson/v-map-layer-geojson.tsx",

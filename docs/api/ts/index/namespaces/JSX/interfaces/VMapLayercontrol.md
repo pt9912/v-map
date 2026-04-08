@@ -6,7 +6,7 @@
 
 # Interface: VMapLayercontrol
 
-Defined in: [src/components.d.ts:2086](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L2086)
+Defined in: [src/components.d.ts:2190](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L2190)
 
 ## Properties
 
@@ -14,6 +14,6 @@ Defined in: [src/components.d.ts:2086](https://github.com/pt9912/v-map/blob/7499
 
 > `optional` **for**: `string`
 
-Defined in: [src/components.d.ts:2090](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L2090)
+Defined in: [src/components.d.ts:2194](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L2194)
 
 ID der zu steuernden Karte (DOM-Element mit dieser id)

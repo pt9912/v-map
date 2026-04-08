@@ -71,6 +71,47 @@ export namespace Components {
          */
         "mapconfig"?: unknown;
     }
+    /**
+     * `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`
+     * (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler
+     * als kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.
+     * Damit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine
+     * Zeile JavaScript zu schreiben.
+     * @example ```html
+     * <v-map flavour="ol">
+     *   <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+     *   <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+     *     <v-map-layer-osm id="OSM-BASE" label="OSM"></v-map-layer-osm>
+     *   </v-map-layergroup>
+     * </v-map>
+     * ```
+     */
+    interface VMapError {
+        /**
+          * Auto-Dismiss-Zeit in Millisekunden. `0` deaktiviert das automatische Ausblenden — Toasts bleiben dann sichtbar, bis sie manuell geschlossen oder durch einen neueren Fehler aus dem Stapel gedrängt werden.
+          * @default 5000
+         */
+        "autoDismiss": number;
+        /**
+          * ID der `<v-map>`-Karte, deren Fehler angezeigt werden sollen. Wenn nicht angegeben, hängt sich die Komponente an das nächste `<v-map>`-Vorfahrenelement im DOM-Baum.
+         */
+        "for"?: string;
+        /**
+          * Zusätzliches Logging in die Browser-Console. - `'none'` (Default): nur Toast-Anzeige, kein Console-Output - `'console'`: jeder Fehler wird zusätzlich mit `console.error` geloggt
+          * @default 'none'
+         */
+        "log": LogMode;
+        /**
+          * Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei Überschreitung am oberen Ende des Stapels entfernt.
+          * @default 3
+         */
+        "max": number;
+        /**
+          * Position des Toast-Stapels innerhalb des `<v-map>`-Containers.
+          * @default 'top-right'
+         */
+        "position": ToastPosition;
+    }
     interface VMapLayerGeojson {
         /**
           * Fill color for polygon geometries (CSS color value)
@@ -1027,6 +1068,27 @@ declare global {
         prototype: HTMLVMapBuilderElement;
         new (): HTMLVMapBuilderElement;
     };
+    /**
+     * `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`
+     * (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler
+     * als kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.
+     * Damit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine
+     * Zeile JavaScript zu schreiben.
+     * @example ```html
+     * <v-map flavour="ol">
+     *   <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+     *   <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+     *     <v-map-layer-osm id="OSM-BASE" label="OSM"></v-map-layer-osm>
+     *   </v-map-layergroup>
+     * </v-map>
+     * ```
+     */
+    interface HTMLVMapErrorElement extends Components.VMapError, HTMLStencilElement {
+    }
+    var HTMLVMapErrorElement: {
+        prototype: HTMLVMapErrorElement;
+        new (): HTMLVMapErrorElement;
+    };
     interface HTMLVMapLayerGeojsonElement extends Components.VMapLayerGeojson, HTMLStencilElement {
     }
     var HTMLVMapLayerGeojsonElement: {
@@ -1246,6 +1308,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "v-map": HTMLVMapElement;
         "v-map-builder": HTMLVMapBuilderElement;
+        "v-map-error": HTMLVMapErrorElement;
         "v-map-layer-geojson": HTMLVMapLayerGeojsonElement;
         "v-map-layer-geotiff": HTMLVMapLayerGeotiffElement;
         "v-map-layer-google": HTMLVMapLayerGoogleElement;
@@ -1320,6 +1383,47 @@ declare namespace LocalJSX {
           * Event emitted when the map configuration has been successfully parsed and is ready to use.
          */
         "onConfigReady"?: (event: VMapBuilderCustomEvent<BuilderConfig>) => void;
+    }
+    /**
+     * `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`
+     * (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler
+     * als kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.
+     * Damit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine
+     * Zeile JavaScript zu schreiben.
+     * @example ```html
+     * <v-map flavour="ol">
+     *   <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+     *   <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+     *     <v-map-layer-osm id="OSM-BASE" label="OSM"></v-map-layer-osm>
+     *   </v-map-layergroup>
+     * </v-map>
+     * ```
+     */
+    interface VMapError {
+        /**
+          * Auto-Dismiss-Zeit in Millisekunden. `0` deaktiviert das automatische Ausblenden — Toasts bleiben dann sichtbar, bis sie manuell geschlossen oder durch einen neueren Fehler aus dem Stapel gedrängt werden.
+          * @default 5000
+         */
+        "autoDismiss"?: number;
+        /**
+          * ID der `<v-map>`-Karte, deren Fehler angezeigt werden sollen. Wenn nicht angegeben, hängt sich die Komponente an das nächste `<v-map>`-Vorfahrenelement im DOM-Baum.
+         */
+        "for"?: string;
+        /**
+          * Zusätzliches Logging in die Browser-Console. - `'none'` (Default): nur Toast-Anzeige, kein Console-Output - `'console'`: jeder Fehler wird zusätzlich mit `console.error` geloggt
+          * @default 'none'
+         */
+        "log"?: LogMode;
+        /**
+          * Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei Überschreitung am oberen Ende des Stapels entfernt.
+          * @default 3
+         */
+        "max"?: number;
+        /**
+          * Position des Toast-Stapels innerhalb des `<v-map>`-Containers.
+          * @default 'top-right'
+         */
+        "position"?: ToastPosition;
     }
     interface VMapLayerGeojson {
         /**
@@ -2146,6 +2250,13 @@ declare namespace LocalJSX {
         "useDefaultImportMap": boolean;
         "cssMode": CssMode;
     }
+    interface VMapErrorAttributes {
+        "for": string;
+        "position": ToastPosition;
+        "autoDismiss": number;
+        "max": number;
+        "log": LogMode;
+    }
     interface VMapLayerGeojsonAttributes {
         "loadState": 'idle' | 'loading' | 'ready' | 'error';
         "geojson": string;
@@ -2334,6 +2445,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "v-map": Omit<VMap, keyof VMapAttributes> & { [K in keyof VMap & keyof VMapAttributes]?: VMap[K] } & { [K in keyof VMap & keyof VMapAttributes as `attr:${K}`]?: VMapAttributes[K] } & { [K in keyof VMap & keyof VMapAttributes as `prop:${K}`]?: VMap[K] };
         "v-map-builder": VMapBuilder;
+        "v-map-error": Omit<VMapError, keyof VMapErrorAttributes> & { [K in keyof VMapError & keyof VMapErrorAttributes]?: VMapError[K] } & { [K in keyof VMapError & keyof VMapErrorAttributes as `attr:${K}`]?: VMapErrorAttributes[K] } & { [K in keyof VMapError & keyof VMapErrorAttributes as `prop:${K}`]?: VMapError[K] };
         "v-map-layer-geojson": Omit<VMapLayerGeojson, keyof VMapLayerGeojsonAttributes> & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes]?: VMapLayerGeojson[K] } & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes as `attr:${K}`]?: VMapLayerGeojsonAttributes[K] } & { [K in keyof VMapLayerGeojson & keyof VMapLayerGeojsonAttributes as `prop:${K}`]?: VMapLayerGeojson[K] };
         "v-map-layer-geotiff": Omit<VMapLayerGeotiff, keyof VMapLayerGeotiffAttributes> & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes]?: VMapLayerGeotiff[K] } & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes as `attr:${K}`]?: VMapLayerGeotiffAttributes[K] } & { [K in keyof VMapLayerGeotiff & keyof VMapLayerGeotiffAttributes as `prop:${K}`]?: VMapLayerGeotiff[K] };
         "v-map-layer-google": Omit<VMapLayerGoogle, keyof VMapLayerGoogleAttributes> & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes]?: VMapLayerGoogle[K] } & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes as `attr:${K}`]?: VMapLayerGoogleAttributes[K] } & { [K in keyof VMapLayerGoogle & keyof VMapLayerGoogleAttributes as `prop:${K}`]?: VMapLayerGoogle[K] };
@@ -2361,6 +2473,22 @@ declare module "@stencil/core" {
              * A component that builds map configurations dynamically from JSON/YAML configuration scripts.
              */
             "v-map-builder": LocalJSX.IntrinsicElements["v-map-builder"] & JSXBase.HTMLAttributes<HTMLVMapBuilderElement>;
+            /**
+             * `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>`
+             * (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler
+             * als kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.
+             * Damit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine
+             * Zeile JavaScript zu schreiben.
+             * @example ```html
+             * <v-map flavour="ol">
+             *   <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+             *   <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+             *     <v-map-layer-osm id="OSM-BASE" label="OSM"></v-map-layer-osm>
+             *   </v-map-layergroup>
+             * </v-map>
+             * ```
+             */
+            "v-map-error": LocalJSX.IntrinsicElements["v-map-error"] & JSXBase.HTMLAttributes<HTMLVMapErrorElement>;
             "v-map-layer-geojson": LocalJSX.IntrinsicElements["v-map-layer-geojson"] & JSXBase.HTMLAttributes<HTMLVMapLayerGeojsonElement>;
             "v-map-layer-geotiff": LocalJSX.IntrinsicElements["v-map-layer-geotiff"] & JSXBase.HTMLAttributes<HTMLVMapLayerGeotiffElement>;
             /**

@@ -8,4 +8,4 @@
 
 > **Flavour** = `"ol"` \| `"cesium"` \| `"leaflet"` \| `"deck"`
 
-Defined in: [src/types/flavour.ts:1](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/flavour.ts#L1)
+Defined in: [src/types/flavour.ts:1](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/flavour.ts#L1)

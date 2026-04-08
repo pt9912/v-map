@@ -8,7 +8,7 @@
 
 > **isFloatType**(`arrayType`): `boolean`
 
-Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:131](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/geotiff/utils/normalization-utils.ts#L131)
+Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:131](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/map-provider/geotiff/utils/normalization-utils.ts#L131)
 
 Check if a TypedArray type represents floating point data
 

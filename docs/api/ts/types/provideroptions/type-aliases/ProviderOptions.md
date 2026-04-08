@@ -8,7 +8,7 @@
 
 > **ProviderOptions** = `object`
 
-Defined in: [src/types/provideroptions.ts:4](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/provideroptions.ts#L4)
+Defined in: [src/types/provideroptions.ts:4](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/provideroptions.ts#L4)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/types/provideroptions.ts:4](https://github.com/pt9912/v-map/blo
 
 > `optional` **cssMode**: [`CssMode`](../../cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/types/provideroptions.ts:8](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/provideroptions.ts#L8)
+Defined in: [src/types/provideroptions.ts:8](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/provideroptions.ts#L8)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/provideroptions.ts:8](https://github.com/pt9912/v-map/blo
 
 > `optional` **mapInitOptions**: [`MapInitOptions`](../../mapinitoptions/type-aliases/MapInitOptions.md)
 
-Defined in: [src/types/provideroptions.ts:7](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/provideroptions.ts#L7)
+Defined in: [src/types/provideroptions.ts:7](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/provideroptions.ts#L7)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/provideroptions.ts:7](https://github.com/pt9912/v-map/blo
 
 > `optional` **shadowRoot**: `ShadowRoot`
 
-Defined in: [src/types/provideroptions.ts:6](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/provideroptions.ts#L6)
+Defined in: [src/types/provideroptions.ts:6](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/provideroptions.ts#L6)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [src/types/provideroptions.ts:6](https://github.com/pt9912/v-map/blo
 
 > **target**: `HTMLDivElement`
 
-Defined in: [src/types/provideroptions.ts:5](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/types/provideroptions.ts#L5)
+Defined in: [src/types/provideroptions.ts:5](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/types/provideroptions.ts#L5)

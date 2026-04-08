@@ -94,7 +94,7 @@ Eine vollständige SvelteKit-Integration findest du unter [`demo/sveltekit-demo/
 
 ## Komponenten-Übersicht
 
-Insgesamt 18 Web Components in `src/components/`:
+Insgesamt 19 Web Components in `src/components/`:
 
 **Karten-Container & Infrastruktur**
 - `v-map` — Haupt-Kartencontainer
@@ -102,6 +102,7 @@ Insgesamt 18 Web Components in `src/components/`:
 - `v-map-layergroup` — Gruppierung und Sichtbarkeitssteuerung
 - `v-map-layercontrol` — interaktives Layer-Control
 - `v-map-style` — Styling via GeoStyler JSON oder SLD
+- `v-map-error` — deklarative Fehler-Toasts ohne JavaScript
 
 **Raster-Layer**
 - `v-map-layer-osm` — OpenStreetMap-Tiles
@@ -128,16 +129,27 @@ Vollständige API-Referenz: [GitHub Pages Dokumentation](https://pt9912.github.i
 
 ## Error Handling
 
-Alle Layer-Komponenten emittieren ein einheitliches `vmap-error` Event bei Lade- und Laufzeitfehlern:
+Alle Layer-Komponenten emittieren ein einheitliches `vmap-error` Event bei Lade- und Laufzeitfehlern.
+
+**Deklarativ über `<v-map-error>` (kein JavaScript nötig):**
+
+```html
+<v-map flavour="ol">
+  <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+  <!-- ... layer ... -->
+</v-map>
+```
+
+**Programmatisch:**
 
 ```ts
 document.querySelector('v-map')?.addEventListener('vmap-error', (e) => {
   const { detail } = e as CustomEvent;
-  console.error(detail.source, detail.phase, detail.message);
+  console.error(detail.type, detail.message);
 });
 ```
 
-Details: `docs/dev/CONCEPT-ERROR-API.md`.
+Details: [Error-Handling Guide](https://pt9912.github.io/v-map/guides/error-handling).
 
 ---
 
@@ -221,7 +233,7 @@ Releases werden **vollautomatisch** durch [semantic-release](https://semantic-re
 ```
 v-map/
 ├── src/
-│   ├── components/          # 18 Web Components (v-map, v-map-layer-*, …)
+│   ├── components/          # 19 Web Components (v-map, v-map-layer-*, …)
 │   ├── map-provider/        # Provider-Implementierungen (ol, leaflet, cesium, deck)
 │   ├── testing/             # Test-Setups und Mocks
 │   └── index.ts             # Entry Point

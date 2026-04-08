@@ -1,3 +1,6 @@
 :host {
   display: block;
+  /* Establish a positioning context so overlay children like
+     <v-map-error> can use position: absolute relative to the map. */
+  position: relative;
 }

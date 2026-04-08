@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerTerrainGeotiff
 
-Defined in: [src/components.d.ts:421](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L421)
+Defined in: [src/components.d.ts:462](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L462)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:421](https://github.com/pt9912/v-map/blob/7499a
 
 > `optional` **color**: \[`number`, `number`, `number`\]
 
-Defined in: [src/components.d.ts:426](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L426)
+Defined in: [src/components.d.ts:467](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L467)
 
 Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.
 
@@ -30,7 +30,7 @@ Color for the terrain (if no texture is provided). [r, g, b] with values 0-255.
 
 > `optional` **colorMap**: `string` \| [`GeoStylerColorMap`](../../../interfaces/GeoStylerColorMap.md)
 
-Defined in: [src/components.d.ts:431](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L431)
+Defined in: [src/components.d.ts:472](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L472)
 
 ColorMap for elevation data visualization. Only relevant when no texture is set.
 
@@ -46,7 +46,7 @@ null
 
 > `optional` **elevationScale**: `number`
 
-Defined in: [src/components.d.ts:436](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L436)
+Defined in: [src/components.d.ts:477](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L477)
 
 Elevation exaggeration factor.
 
@@ -62,7 +62,7 @@ Elevation exaggeration factor.
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/components.d.ts:441](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L441)
+Defined in: [src/components.d.ts:482](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L482)
 
 Erzwingt die Verwendung der projection-Prop, ignoriert GeoKeys
 
@@ -78,7 +78,7 @@ false
 
 > **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
 
-Defined in: [src/components.d.ts:445](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L445)
+Defined in: [src/components.d.ts:486](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L486)
 
 Returns the last error detail, if any.
 
@@ -92,7 +92,7 @@ Returns the last error detail, if any.
 
 > **getLayerId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:449](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L449)
+Defined in: [src/components.d.ts:490](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L490)
 
 Returns the internal layer ID used by the map provider.
 
@@ -106,7 +106,7 @@ Returns the internal layer ID used by the map provider.
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:454](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L454)
+Defined in: [src/components.d.ts:495](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L495)
 
 Current load state of the layer.
 
@@ -122,7 +122,7 @@ Current load state of the layer.
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:459](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L459)
+Defined in: [src/components.d.ts:500](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L500)
 
 Maximum zoom level.
 
@@ -138,7 +138,7 @@ Maximum zoom level.
 
 > `optional` **meshMaxError**: `number`
 
-Defined in: [src/components.d.ts:464](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L464)
+Defined in: [src/components.d.ts:505](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L505)
 
 Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, but slower.
 
@@ -154,7 +154,7 @@ Mesh error tolerance in meters (Martini). Smaller values = more detailed mesh, b
 
 > `optional` **minZoom**: `number`
 
-Defined in: [src/components.d.ts:469](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L469)
+Defined in: [src/components.d.ts:510](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L510)
 
 Minimum zoom level.
 
@@ -170,7 +170,7 @@ Minimum zoom level.
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/components.d.ts:474](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L474)
+Defined in: [src/components.d.ts:515](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L515)
 
 NoData value to discard (overriding any nodata values in the metadata).
 
@@ -186,7 +186,7 @@ null
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:479](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L479)
+Defined in: [src/components.d.ts:520](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L520)
 
 Opacity of the terrain layer (0–1).
 
@@ -202,7 +202,7 @@ Opacity of the terrain layer (0–1).
 
 > `optional` **projection**: `string`
 
-Defined in: [src/components.d.ts:484](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L484)
+Defined in: [src/components.d.ts:525](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L525)
 
 Quell-Projektion des GeoTIFF (z. B. "EPSG:32632" oder proj4-String)
 
@@ -218,7 +218,7 @@ null
 
 > `optional` **renderMode**: `"terrain"` \| `"colormap"`
 
-Defined in: [src/components.d.ts:489](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L489)
+Defined in: [src/components.d.ts:530](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L530)
 
 Rendering mode for GeoTIFF terrain.
 
@@ -234,7 +234,7 @@ terrain
 
 > `optional` **texture**: `string`
 
-Defined in: [src/components.d.ts:494](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L494)
+Defined in: [src/components.d.ts:535](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L535)
 
 Optional texture URL (can be an image or tile URL).
 
@@ -250,7 +250,7 @@ null
 
 > `optional` **tileSize**: `number`
 
-Defined in: [src/components.d.ts:499](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L499)
+Defined in: [src/components.d.ts:540](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L540)
 
 Tile size in pixels.
 
@@ -266,7 +266,7 @@ Tile size in pixels.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:504](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L504)
+Defined in: [src/components.d.ts:545](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L545)
 
 URL to the GeoTIFF file containing elevation data.
 
@@ -282,7 +282,7 @@ null
 
 > `optional` **valueRange**: \[`number`, `number`\]
 
-Defined in: [src/components.d.ts:509](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L509)
+Defined in: [src/components.d.ts:550](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L550)
 
 Value range for colormap normalization [min, max].
 
@@ -298,7 +298,7 @@ null
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:514](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L514)
+Defined in: [src/components.d.ts:555](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L555)
 
 Sichtbarkeit des Layers
 
@@ -314,7 +314,7 @@ true
 
 > `optional` **wireframe**: `boolean`
 
-Defined in: [src/components.d.ts:519](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L519)
+Defined in: [src/components.d.ts:560](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L560)
 
 Enable wireframe mode (show only mesh lines).
 
@@ -330,7 +330,7 @@ false
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:524](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L524)
+Defined in: [src/components.d.ts:565](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/components.d.ts#L565)
 
 Z-index for layer stacking order. Higher values render on top.
 

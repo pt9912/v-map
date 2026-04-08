@@ -8,7 +8,7 @@
 
 > **VStyleRule** = `object`
 
-Defined in: [src/lib/vstyle.ts:5](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L5)
+Defined in: [src/lib/vstyle.ts:5](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L5)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/lib/vstyle.ts:5](https://github.com/pt9912/v-map/blob/7499a3d9a
 
 > `optional` **label**: `object`
 
-Defined in: [src/lib/vstyle.ts:15](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L15)
+Defined in: [src/lib/vstyle.ts:15](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L15)
 
 #### color?
 
@@ -48,7 +48,7 @@ Defined in: [src/lib/vstyle.ts:15](https://github.com/pt9912/v-map/blob/7499a3d9
 
 > `optional` **line**: `object`
 
-Defined in: [src/lib/vstyle.ts:13](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L13)
+Defined in: [src/lib/vstyle.ts:13](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L13)
 
 #### color?
 
@@ -68,7 +68,7 @@ Defined in: [src/lib/vstyle.ts:13](https://github.com/pt9912/v-map/blob/7499a3d9
 
 > `optional` **point**: `object`
 
-Defined in: [src/lib/vstyle.ts:7](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L7)
+Defined in: [src/lib/vstyle.ts:7](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L7)
 
 #### fill?
 
@@ -112,7 +112,7 @@ Defined in: [src/lib/vstyle.ts:7](https://github.com/pt9912/v-map/blob/7499a3d9a
 
 > `optional` **polygon**: `object`
 
-Defined in: [src/lib/vstyle.ts:14](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L14)
+Defined in: [src/lib/vstyle.ts:14](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L14)
 
 #### fill?
 
@@ -136,4 +136,4 @@ Defined in: [src/lib/vstyle.ts:14](https://github.com/pt9912/v-map/blob/7499a3d9
 
 > `optional` **when**: [`Expr`](Expr.md)\<`boolean`\>
 
-Defined in: [src/lib/vstyle.ts:6](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/lib/vstyle.ts#L6)
+Defined in: [src/lib/vstyle.ts:6](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/lib/vstyle.ts#L6)
