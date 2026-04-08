@@ -1,5 +1,21 @@
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import type { LayerConfig } from '../../types/layerconfig';
+
+// vi.hoisted lets us share the mock function instance between the
+// top-level vi.mock factory (which runs first, before any imports
+// resolve) and the test bodies below. The previous version of this
+// file relied on `vi.resetModules()` + `vi.doMock()` inside the test,
+// which is racy with vitest's ESM mock cache and produced flaky CI
+// failures (assertion that mockImageLayer was called fired before
+// the doMock'd version had actually replaced the original).
+const { mockImageLayer } = vi.hoisted(() => ({
+  mockImageLayer: vi.fn().mockImplementation(function (this: any, opts: any) {
+    Object.assign(this, opts);
+    this.set = vi.fn();
+    this.setOpacity = vi.fn();
+    this.setVisible = vi.fn();
+  }),
+}));
 
 // Mock all OpenLayers modules before they are imported
 vi.mock('ol/Map', () => ({ __esModule: true, default: vi.fn() }));
@@ -9,7 +25,7 @@ vi.mock('ol/layer/Base', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Vector', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Group', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/layer/Tile', () => ({ __esModule: true, default: vi.fn() }));
-vi.mock('ol/layer/Image', () => ({ __esModule: true, default: vi.fn().mockImplementation(function(this: any, opts: any) { Object.assign(this, opts); this.set = vi.fn(); }) }));
+vi.mock('ol/layer/Image', () => ({ __esModule: true, default: mockImageLayer }));
 vi.mock('ol/layer/WebGLTile', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/source/Vector', () => ({ __esModule: true, default: vi.fn() }));
 vi.mock('ol/source/TileWMS', () => ({ __esModule: true, default: vi.fn() }));
@@ -48,8 +64,12 @@ vi.mock('./CustomGeoTiff', () => ({
 }));
 
 describe('OpenLayersProvider WFS/WCS support', () => {
+  beforeEach(() => {
+    mockImageLayer.mockClear();
+  });
+
   afterEach(() => {
-    vi.resetModules();
+    vi.restoreAllMocks();
   });
 
   // it('delegiert das Erstellen eines WFS-Layers an Hilfsfunktionen', async () => {
@@ -91,19 +111,6 @@ describe('OpenLayersProvider WFS/WCS support', () => {
   // });
 
   it('verwendet createWcsSource zum Erstellen eines WCS-Layers', async () => {
-    vi.resetModules();
-
-    const mockImageLayer = vi.fn().mockImplementation(function() { return {
-      set: vi.fn(),
-      setOpacity: vi.fn(),
-      setVisible: vi.fn(),
-    }; });
-
-    vi.doMock('ol/layer/Image', () => ({
-      __esModule: true,
-      default: mockImageLayer,
-    }));
-
     const { OpenLayersProvider } = await import('./openlayers-provider');
     const provider = new OpenLayersProvider();
 
