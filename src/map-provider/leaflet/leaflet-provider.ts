@@ -585,6 +585,17 @@ export class LeafletProvider implements MapProvider {
     this.map?.setView([lat, lon], zoom, { animate: false });
   }
 
+  getView(): { center: LonLat; zoom: number } | null {
+    if (!this.map) return null;
+    const center = this.map.getCenter();
+    return {
+      // Leaflet stores coordinates as { lat, lng }; v-map's LonLat is
+      // [lon, lat] - matches the [lat, lon] argument inversion above.
+      center: [center.lng, center.lat],
+      zoom: this.map.getZoom(),
+    };
+  }
+
   onLayerError(layerId: string, callback: LayerErrorCallback): void {
     this.layerErrorCallbacks.set(layerId, callback);
     this._getLayerById(layerId).then(layer => {

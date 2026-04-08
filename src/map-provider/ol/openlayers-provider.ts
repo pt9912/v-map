@@ -27,7 +27,7 @@ import OlCircle from 'ol/style/Circle';
 import OlIcon from 'ol/style/Icon';
 import OlText from 'ol/style/Text';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
-import { fromLonLat, type ProjectionLike } from 'ol/proj';
+import { fromLonLat, toLonLat, type ProjectionLike } from 'ol/proj';
 import type Projection from 'ol/proj/Projection';
 import type { FeatureLike } from 'ol/Feature';
 import type FeatureFormat from 'ol/format/Feature';
@@ -1151,6 +1151,18 @@ export class OpenLayersProvider implements MapProvider {
     this.map
       .getView()
       .animate({ center: fromLonLat(center), zoom, duration: 0 });
+  }
+
+  getView(): { center: LonLat; zoom: number } | null {
+    if (!this.map) return null;
+    const view = this.map.getView();
+    const centerMercator = view.getCenter();
+    if (!centerMercator) return null;
+    const [lon, lat] = toLonLat(centerMercator);
+    return {
+      center: [lon, lat],
+      zoom: view.getZoom() ?? 0,
+    };
   }
 
   private async _forEachLayer(layerOrGroup: AnyLayer, callback: (layer: AnyLayer) => boolean): Promise<boolean> {

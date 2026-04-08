@@ -80,6 +80,7 @@ import { type LayerModel } from './LayerModel';
 
 export class DeckProvider implements MapProvider {
   private deck!: Deck;
+  private currentViewState: MapViewState | null = null;
   private target!: HTMLDivElement;
   private shadowRoot!: ShadowRoot;
   private injectedStyle!: HTMLStyleElement;
@@ -104,7 +105,7 @@ export class DeckProvider implements MapProvider {
     const lat = opts.mapInitOptions?.center?.[1] ?? 49.0069;
     const zoom = opts.mapInitOptions?.zoom ?? 5;
 
-    let viewState: MapViewState = {
+    this.currentViewState = {
       longitude: lon,
       latitude: lat,
       zoom,
@@ -130,10 +131,10 @@ export class DeckProvider implements MapProvider {
         doubleClickZoom: true,
         keyboard: true,
       },
-      viewState,
+      viewState: this.currentViewState,
       onViewStateChange: ({ viewState: vs }) => {
-        viewState = vs;
-        this.deck.setProps({ viewState });
+        this.currentViewState = vs as MapViewState;
+        this.deck.setProps({ viewState: this.currentViewState });
       },
       layers: [],
       _typedArrayManagerProps: { overAlloc: 1 },
@@ -1607,9 +1608,22 @@ export type TileLoadProps = {
   }
 
   async setView([lon, lat]: LonLat, zoom: number) {
-    this.deck?.setProps({
-      viewState: { longitude: lon, latitude: lat, zoom, bearing: 0, pitch: 0 },
-    });
+    this.currentViewState = {
+      longitude: lon,
+      latitude: lat,
+      zoom,
+      bearing: 0,
+      pitch: 0,
+    };
+    this.deck?.setProps({ viewState: this.currentViewState });
+  }
+
+  getView(): { center: LonLat; zoom: number } | null {
+    if (!this.currentViewState) return null;
+    return {
+      center: [this.currentViewState.longitude, this.currentViewState.latitude],
+      zoom: this.currentViewState.zoom,
+    };
   }
 
   private async createWKTLayer(

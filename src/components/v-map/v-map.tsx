@@ -121,6 +121,49 @@ export class VMap {
     }
   }
 
+  /**
+   * When the `zoom` prop changes from outside (e.g. a slider in the
+   * consuming app), update the underlying provider's view *without*
+   * resetting the user's current center. We query the live center
+   * from the provider via getView() because the user may have panned
+   * the map since init - the original `this.center` prop is the seed
+   * value, not the current state.
+   */
+  @Watch('zoom')
+  async onZoomChanged(oldValue: number, newValue: number) {
+    if (oldValue === newValue) return;
+    if (this.mapState !== 'available' || !this.mapProvider) return;
+    const view = this.mapProvider.getView?.();
+    const currentCenter: LonLat = view?.center ?? this.parseCenter();
+    log(MSG_COMPONENT + 'onZoomChanged ' + newValue);
+    await this.mapProvider.setView(currentCenter, newValue);
+  }
+
+  /**
+   * Same idea for `center`: keep the user's current zoom intact when
+   * the parent updates only the center.
+   */
+  @Watch('center')
+  async onCenterChanged(oldValue: string, newValue: string) {
+    if (oldValue === newValue) return;
+    if (this.mapState !== 'available' || !this.mapProvider) return;
+    const view = this.mapProvider.getView?.();
+    const currentZoom = view?.zoom ?? this.zoom;
+    const newCenter = this.parseCenter(newValue);
+    log(MSG_COMPONENT + 'onCenterChanged ' + newValue);
+    await this.mapProvider.setView(newCenter, currentZoom);
+  }
+
+  private parseCenter(raw: string = this.center): LonLat {
+    const parts = raw.split(',').map(parseFloat) as [number, number];
+    if (!Number.isFinite(parts[0]) || !Number.isFinite(parts[1])) {
+      throw new Error(
+        `<v-map>: Ungültiges center-Prop: "${raw}" (erwartet "lon,lat")`,
+      );
+    }
+    return parts;
+  }
+
   private reset() {
     this.unsubscribeResize?.();
     this.unsubscribePointerMove?.();
