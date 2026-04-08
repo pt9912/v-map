@@ -2,7 +2,12 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
-    initLayer: vi.fn(),
+    // Invoke the factory so the arrow wrapper `() => this.createLayerConfig()`
+    // actually executes during the test, which closes a small gap in
+    // function coverage for every layer component that uses this mock shape.
+    initLayer: vi.fn((factory?: () => unknown) => {
+      if (typeof factory === 'function') factory();
+    }),
     removeLayer: vi.fn(),
     updateLayer: vi.fn(),
     setVisible: vi.fn(),

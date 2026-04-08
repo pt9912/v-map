@@ -3220,4 +3220,26 @@ describe('DeckProvider', () => {
       ).rejects.toThrow('Failed to fetch WKT');
     });
   });
+
+  describe('getView / setView', () => {
+    it('returns null before init', () => {
+      const provider = new DeckProvider();
+      expect(provider.getView()).toBeNull();
+    });
+
+    it('returns the seed view after init', async () => {
+      const provider = await initProvider();
+      const view = provider.getView();
+      expect(view).not.toBeNull();
+      expect(typeof view!.center[0]).toBe('number');
+      expect(typeof view!.center[1]).toBe('number');
+      expect(typeof view!.zoom).toBe('number');
+    });
+
+    it('setView updates the live viewState that getView returns', async () => {
+      const provider = await initProvider();
+      await provider.setView([12.34, 56.78], 9);
+      expect(provider.getView()).toEqual({ center: [12.34, 56.78], zoom: 9 });
+    });
+  });
 });

@@ -163,4 +163,76 @@ describe('v-map-error', () => {
     expect(json).toContain('a');
     expect(json).toContain('b');
   });
+
+  it('retries attach when the target element is not yet in the DOM', () => {
+    vi.useFakeTimers();
+    // Detach the freshly-built component from the test harness so its own
+    // attach() runs against a missing target.
+    component.disconnectedCallback();
+    component = new VMapError();
+    component.host = document.createElement('v-map-error');
+    // No parent v-map exists yet — attach() must schedule a retry timer.
+    document.body.appendChild(component.host);
+
+    component.for = 'late-map';
+    component.connectedCallback();
+
+    // Create the target only AFTER attach() has already queued its retry.
+    const late = document.createElement('v-map');
+    late.id = 'late-map';
+    document.body.appendChild(late);
+
+    // One retry tick is enough — attach() re-runs and picks up the target.
+    vi.advanceTimersByTime(100);
+
+    component.autoDismiss = 0;
+    dispatchError(late, makeErrorDetail({ message: 'eventual' }));
+    expect(component.toasts).toHaveLength(1);
+  });
+
+  it('clears the pending retry timer on disconnect', () => {
+    vi.useFakeTimers();
+    const clearSpy = vi.spyOn(window, 'clearTimeout');
+
+    component.disconnectedCallback();
+    component = new VMapError();
+    component.host = document.createElement('v-map-error');
+    document.body.appendChild(component.host);
+
+    // Target never exists — attach() schedules retries until disconnect.
+    component.for = 'never-there';
+    component.connectedCallback();
+
+    component.disconnectedCallback();
+    // clearTimeout must have been called at least once for the retryTimer.
+    expect(clearSpy).toHaveBeenCalled();
+    clearSpy.mockRestore();
+  });
+
+  it('dismisses a toast when the close button onClick fires', () => {
+    component.autoDismiss = 0;
+    component.connectedCallback();
+    dispatchError(mapEl, makeErrorDetail({ message: 'clicked' }));
+    expect(component.toasts).toHaveLength(1);
+
+    // Walk the rendered vnode tree to find the close-button onClick handler
+    // and invoke it directly. This exercises the inline arrow function at
+    // the render site, which would otherwise stay uncovered.
+    const vnode: any = component.render();
+    const closeHandlers: Array<() => void> = [];
+    const walk = (n: any) => {
+      if (!n || typeof n !== 'object') return;
+      const attrs = n.$attrs$ ?? n.vattrs ?? n.attrs;
+      if (attrs && typeof attrs.onClick === 'function') {
+        closeHandlers.push(attrs.onClick);
+      }
+      const children = n.$children$ ?? n.vchildren ?? n.children;
+      if (Array.isArray(children)) children.forEach(walk);
+    };
+    walk(vnode);
+
+    expect(closeHandlers.length).toBeGreaterThanOrEqual(1);
+    closeHandlers[0]();
+    expect(component.toasts).toHaveLength(0);
+  });
 });

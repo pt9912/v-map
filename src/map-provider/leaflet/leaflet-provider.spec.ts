@@ -23,6 +23,8 @@ const {
 
   const inst = {
     setView: vi.fn().mockReturnThis(),
+    getCenter: vi.fn(() => ({ lat: 48.137, lng: 11.576 })),
+    getZoom: vi.fn(() => 13),
     addLayer: vi.fn(),
     removeLayer: vi.fn(),
     eachLayer: vi.fn(),

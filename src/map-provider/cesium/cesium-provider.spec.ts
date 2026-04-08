@@ -3704,4 +3704,50 @@ describe('CesiumProvider', () => {
       expect((container as any)._googleLogoAdded).toBe(true);
     });
   });
+
+  describe('getView', () => {
+    it('returns null when no viewer', () => {
+      (provider as any).viewer = null;
+      expect(provider.getView()).toBeNull();
+    });
+
+    it('returns null when camera has no positionCartographic', () => {
+      (provider as any).viewer = {
+        camera: { positionCartographic: null },
+      };
+      expect(provider.getView()).toBeNull();
+    });
+
+    it('returns lon/lat in degrees and approximated zoom from height', () => {
+      (provider as any).viewer = {
+        camera: {
+          positionCartographic: {
+            longitude: Math.PI / 16,
+            latitude: Math.PI / 8,
+            height: 100_000,
+          },
+        },
+      };
+
+      const view = provider.getView();
+
+      expect(view).not.toBeNull();
+      expect(view!.center[0]).toBeCloseTo(11.25, 5);
+      expect(view!.center[1]).toBeCloseTo(22.5, 5);
+      expect(view!.zoom).toBeCloseTo(10, 5); // 1_000_000 / 100_000
+    });
+
+    it('returns zoom 0 when camera height is non-positive', () => {
+      (provider as any).viewer = {
+        camera: {
+          positionCartographic: {
+            longitude: 0,
+            latitude: 0,
+            height: 0,
+          },
+        },
+      };
+      expect(provider.getView()!.zoom).toBe(0);
+    });
+  });
 });

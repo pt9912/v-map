@@ -2,7 +2,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
-    initLayer: vi.fn(),
+    initLayer: vi.fn((factory?: () => unknown) => { if (typeof factory === "function") factory(); }),
     removeLayer: vi.fn(),
     updateLayer: vi.fn(),
     setVisible: vi.fn(),
@@ -54,6 +54,7 @@ describe('<v-map-layer-wfs>', () => {
       el: document.createElement('v-map-layer-wfs'),
       didLoad: false,
       createLayerConfig: VMapLayerWfs.prototype['createLayerConfig'],
+      parseParams: VMapLayerWfs.prototype['parseParams'],
       applyExistingStyles: vi.fn(),
       url: 'https://example.com/wfs',
       typeName: 'ns:layer',
