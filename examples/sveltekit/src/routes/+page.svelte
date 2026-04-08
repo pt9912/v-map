@@ -103,8 +103,11 @@
 		// Enable debug logging for v-map (production build defaults to 'warn')
 		localStorage.setItem('@pt9912/v-map:logLevel', 'debug');
 
-		const { defineCustomElements } = await import('@npm9912/v-map/loader');
-		defineCustomElements();
+		// v-map is loaded via a <script type="module"> tag in app.html
+		// (from jsDelivr) instead of being bundled through Vite. We just
+		// wait for customElements to be defined so the rest of the demo
+		// can rely on them being upgraded.
+		await customElements.whenDefined('v-map');
 		addLog('v-map custom elements registered');
 	});
 
