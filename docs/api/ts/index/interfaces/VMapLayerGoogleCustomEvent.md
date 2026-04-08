@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerGoogleCustomEvent\<T\>
 
-Defined in: [src/components.d.ts:993](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L993)
+Defined in: [src/components.d.ts:993](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L993)
 
 ## Extends
 
@@ -158,7 +158,7 @@ The **`defaultPrevented`** read-only property of the Event interface returns a b
 
 > **detail**: `T`
 
-Defined in: [src/components.d.ts:994](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L994)
+Defined in: [src/components.d.ts:994](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L994)
 
 The read-only **`detail`** property of the CustomEvent interface returns any data passed when initializing the event.
 
@@ -254,7 +254,7 @@ The deprecated **`Event.srcElement`** is an alias for the Event.target property.
 
 > **target**: `HTMLVMapLayerGoogleElement`
 
-Defined in: [src/components.d.ts:995](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L995)
+Defined in: [src/components.d.ts:995](https://github.com/pt9912/v-map/blob/32e748cc5b1e00a8ead1e01602763823427d8bf5/src/components.d.ts#L995)
 
 The read-only **`target`** property of the dispatched.
 

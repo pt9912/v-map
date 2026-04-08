@@ -60,3 +60,13 @@ todos.md
 demo/terrain-geotiff/test-dems
 
 geotiff-info-temp.mjs
+
+# Built output of examples/* SPAs that scripts/build-examples.mjs copies
+# into docs/public/demos/<example>/. The hand-written HTML demos at the
+# root of docs/public/demos/*.html are committed; only the directories
+# (= built example apps) are ignored.
+docs/public/demos/*/
+
+# Same for the build/ directory inside each example workspace.
+examples/*/build/
+examples/*/.svelte-kit/

@@ -2,7 +2,14 @@ name: Docs
 on:
   push:
     branches: [ main ]
-    paths: [ 'src/**', 'docs/**', 'stencil.config.ts', 'typedoc.json', 'package.json' ]
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'examples/**'
+      - 'scripts/build-examples.mjs'
+      - 'stencil.config.ts'
+      - 'typedoc.json'
+      - 'package.json'
   workflow_dispatch:
 
 permissions:
@@ -27,6 +34,19 @@ jobs:
           node-version: 22
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
+      # Build v-map main library FIRST so dist/ and loader/ exist - the
+      # example workspaces under examples/* depend on them via file:../../
+      # and sync them via their own sync:vmap script.
+      - run: pnpm prebuild
+      - run: pnpm build
+      # docs:build runs docs:stencil + docs:ts + docs:api + docs:examples
+      # + vitepress build, in that order. docs:examples sequentially
+      # builds every workspace under examples/ and copies its static
+      # output into docs/public/demos/<name>/.
+      #
+      # TODO: when 3+ examples land, split docs:examples into a parallel
+      # matrix job that uploads each example as an artifact, and have
+      # the docs build job download all artifacts before vitepress runs.
       - run: pnpm docs:build
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v4
