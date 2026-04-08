@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/pt9912/v-map/compare/v0.2.1...v0.2.2) (2026-04-08)
+
+
+### Bug Fixes
+
+* **docs:** load v-map.esm.js from jsDelivr instead of bundling the loader ([0ac9483](https://github.com/pt9912/v-map/commit/0ac9483e9d207477536ed83a244535e8747e7134))
+
 ## [0.2.1](https://github.com/pt9912/v-map/compare/v0.2.0...v0.2.1) (2026-04-08)
 
 
