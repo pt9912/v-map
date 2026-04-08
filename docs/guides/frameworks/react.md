@@ -162,7 +162,7 @@ export default function App() {
         onChange={e => setZoom(Number(e.target.value))}
       />
 
-      <v-map flavour="ol" center="11.576,48.137" zoom={String(zoom)}>
+      <v-map flavour="ol" center="11.576,48.137" zoom={zoom}>
         <v-map-error position="bottom-right" auto-dismiss="6000" />
 
         <v-map-layergroup group-title="Base" basemapid="osm">

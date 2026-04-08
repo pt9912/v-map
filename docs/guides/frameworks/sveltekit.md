@@ -111,7 +111,7 @@ nach der Hydration.
   });
 </script>
 
-<v-map flavour="ol" center="11.576,48.137" zoom={String(zoom)}>
+<v-map flavour="ol" center="11.576,48.137" {zoom}>
   <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 
   <v-map-layergroup group-title="Base" basemapid="osm">

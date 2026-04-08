@@ -18,7 +18,9 @@ Vue-3-Composition-API-Idiom:
   am `<v-map>`-Element via `:flavour="provider"`. Provider-Wechsel ohne
   Re-Mount.
 - **Reactive Zoom-Slider:** `ref<number>(11)` mit `v-model.number`
-  am Slider, gebunden an `:zoom="String(zoom)"` am Element.
+  am Slider, direkt gebunden via `:zoom="zoom"`. Vue 3 setzt den
+  Number-Wert als JS-Property auf das Custom Element, Stencil's
+  `@Prop() zoom: number` empfängt das direkt.
 - **Layer-Toggle:** `<v-map-layer-*>` mit `v-if` ein-/ausgeblendet,
   GeoTIFF-Buttons setzen `geotiffUrl.value`, GeoJSON-Buttons setzen
   `geojson.value`.
@@ -137,7 +139,7 @@ const zoom = ref(11);
   <main>
     <input type="range" min="2" max="18" v-model.number="zoom" />
 
-    <v-map flavour="ol" center="11.576,48.137" :zoom="String(zoom)">
+    <v-map flavour="ol" center="11.576,48.137" :zoom="zoom">
       <v-map-error position="bottom-right" auto-dismiss="6000" />
 
       <v-map-layergroup group-title="Base" basemapid="osm">
@@ -159,11 +161,12 @@ v-map {
 Drag den Slider — die Karte zoomt direkt mit. Vue's Reactivity-System
 propagiert die geänderte `zoom`-ref ans Custom-Element-Attribut.
 
-::: tip Number-zu-String-Cast für `:zoom`
-Wir binden `:zoom="String(zoom)"`, weil HTML-Attribute immer Strings
-sind. Vue würde sonst die Zahl als JS-Property setzen, und Stencil
-erwartet das Attribut als String. Die `v-bind:`-Conversion-Regel
-gilt für alle Number-Props (`opacity`, `z-index`, …).
+::: tip Number-Props direkt binden
+Stencil's `@Prop() zoom: number` empfängt entweder einen JS-Property-
+Set oder ein HTML-Attribut. Vue 3 erkennt bei `:zoom="zoom"`, dass das
+Custom Element eine `zoom`-Property hat und setzt sie als Number direkt
+— kein `String(...)` Cast nötig. Genauso für `opacity`, `z-index` und
+andere Number-Props.
 :::
 
 ### 6. Reactive Layer hinzufügen oder ausblenden
@@ -254,11 +257,11 @@ Der relevante Teil ist
 2. **`defineCustomElements()` aus dem Loader bündeln.** Funktioniert
    in Vite-Builds NICHT (gleicher Bug wie bei React/SvelteKit). Immer
    den `<script type="module">` aus jsDelivr im `index.html` verwenden.
-3. **Number-Props ohne `String(...)` cast.** Wenn du `:zoom="zoom"`
-   schreibst statt `:zoom="String(zoom)"`, setzt Vue's `v-bind` die
-   Zahl direkt als Property. Stencils Attribut-Reflection erwartet
-   aber String-Attribute. Symptom: zoom ändert sich beim ersten Mount,
-   reagiert dann nicht mehr auf Slider-Updates.
+3. **Number-Props per `String(...)` casten.** *Nicht nötig* — Vue 3
+   setzt Number-Props automatisch als JS-Property auf Custom Elements,
+   und Stencils typed `@Prop() zoom: number` empfängt das direkt. Der
+   Cast war ein Workaround aus React-18-Zeiten und gehört nicht in
+   Vue-Code.
 4. **Vue's Strict Mode (Dev) doppeltes Mounten.** v-maps Stencil-
    Komponenten sind robust gegen den doppelten Mount-Cycle, du
    brauchst nichts zu konfigurieren.
