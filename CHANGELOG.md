@@ -1,3 +1,15 @@
+## [0.2.4](https://github.com/pt9912/v-map/compare/v0.2.3...v0.2.4) (2026-04-08)
+
+
+### Bug Fixes
+
+* **test:** stabilize openlayers-provider-wfs-wcs spec via vi.hoisted ([69ab155](https://github.com/pt9912/v-map/commit/69ab155887bd66a1bbaf550e5ec939e9f1a4a835))
+
+
+### Features
+
+* **examples:** bulk up sveltekit demo into a reactive showcase ([dff23e8](https://github.com/pt9912/v-map/commit/dff23e8b8ac22af29791168b3f80ad75b4ad7644))
+
 ## [0.2.3](https://github.com/pt9912/v-map/compare/v0.2.2...v0.2.3) (2026-04-08)
 
 
