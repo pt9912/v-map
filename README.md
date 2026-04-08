@@ -79,7 +79,7 @@ defineCustomElements();
 
 Danach stehen die Custom Elements (`<v-map>`, `<v-map-layer-osm>`, …) im gesamten Projekt zur Verfügung.
 
-Eine vollständige SvelteKit-Integration findest du unter [`demo/sveltekit-demo/`](./demo/sveltekit-demo/).
+Eine vollständige SvelteKit-Integration findest du unter [`examples/sveltekit/`](./examples/sveltekit/).
 
 ### Unterstützte `flavour`-Werte
 
