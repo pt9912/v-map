@@ -6,7 +6,7 @@
 
 # Interface: CesiumGeoTIFFTerrainProviderOptions
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:11](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L11)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:11](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L11)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:11](https:/
 
 > **Cesium**: `__module`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:16](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L16)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:16](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L16)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:16](https:/
 
 > `optional` **forceProjection**: `boolean`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:14](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L14)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:14](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:14](https:/
 
 > `optional` **nodata**: `number`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:15](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L15)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:15](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L15)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:15](https:/
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:13](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L13)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:13](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L13)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:13](https:/
 
 > **url**: `string`
 
-Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:12](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L12)
+Defined in: [src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts:12](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/cesium/CesiumGeoTIFFTerrainProvider.ts#L12)

@@ -8,7 +8,7 @@
 
 > **LayerPatch** = `object`
 
-Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L73)
+Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L73)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/diff.ts:73](https://github.com/pt9912/v-map/blob/59b99a54
 
 > **changes**: `Partial`\<`Record`\<`"type"` \| `"visible"` \| `"opacity"` \| `"zIndex"` \| `"url"` \| `"layers"` \| `"tiled"` \| `"style"` \| `"data"`, \{ `new`: `unknown`; `old`: `unknown`; \}\>\>
 
-Defined in: [src/utils/diff.ts:75](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L75)
+Defined in: [src/utils/diff.ts:75](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L75)
 
 ***
 
@@ -24,4 +24,4 @@ Defined in: [src/utils/diff.ts:75](https://github.com/pt9912/v-map/blob/59b99a54
 
 > **id**: `string`
 
-Defined in: [src/utils/diff.ts:74](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L74)
+Defined in: [src/utils/diff.ts:74](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L74)

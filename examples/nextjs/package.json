@@ -1,0 +1,27 @@
+{
+  "name": "nextjs-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "vmap": {
+    "output": "out"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@npm9912/v-map": "file:../../",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "~5.6.0"
+  }
+}

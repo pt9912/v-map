@@ -8,7 +8,7 @@
 
 > **normalizeValue**(`rawValue`, `arrayType`): `number`
 
-Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:23](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/geotiff/utils/normalization-utils.ts#L23)
+Defined in: [src/map-provider/geotiff/utils/normalization-utils.ts:23](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/geotiff/utils/normalization-utils.ts#L23)
 
 Normalize a raw value to 0-255 range based on array type
 

@@ -96,6 +96,7 @@ export default {
           { text: 'React', link: '/guides/frameworks/react' },
           { text: 'Vue 3', link: '/guides/frameworks/vue' },
           { text: 'Angular', link: '/guides/frameworks/angular' },
+          { text: 'Next.js', link: '/guides/frameworks/nextjs' },
         ],
       },
       {
@@ -117,6 +118,7 @@ export default {
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
             { text: 'Angular', link: '/guides/frameworks/angular' },
+            { text: 'Next.js', link: '/guides/frameworks/nextjs' },
           ],
         },
         {
@@ -148,6 +150,7 @@ export default {
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
             { text: 'Angular', link: '/guides/frameworks/angular' },
+            { text: 'Next.js', link: '/guides/frameworks/nextjs' },
           ],
         },
       ],
