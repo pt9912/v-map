@@ -1,8 +1,8 @@
-[**@npm9912/v-map**](../../README.md)
+[**@npm9912/v-map**](../../index.md)
 
 ***
 
-[@npm9912/v-map](../../README.md) / [index](../README.md) / GeoStylerColorMap
+[@npm9912/v-map](../../index.md) / [index](../index.md) / GeoStylerColorMap
 
 # Interface: GeoStylerColorMap
 

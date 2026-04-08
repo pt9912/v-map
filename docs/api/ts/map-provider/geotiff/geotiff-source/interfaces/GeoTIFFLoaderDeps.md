@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [map-provider/geotiff/geotiff-source](../README.md) / GeoTIFFLoaderDeps
+[@npm9912/v-map](../../../../index.md) / [map-provider/geotiff/geotiff-source](../index.md) / GeoTIFFLoaderDeps
 
 # Interface: GeoTIFFLoaderDeps
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/geotiff-source.ts#L13)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/geotiff-source.ts#L13)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:13](https://github.com/p
 
 > **geokeysToProj4**: `__module`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/geotiff-source.ts#L16)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/geotiff-source.ts#L16)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:16](https://github.com/p
 
 > **geotiff**: `__module`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/geotiff-source.ts#L14)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/geotiff-source.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/map-provider/geotiff/geotiff-source.ts:14](https://github.com/p
 
 > **proj4**: \{(`toProj`): `Converter`; (`fromProj`, `toProj`): `Converter`; \<`T`\>(`toProj`, `coord`): `T`; \<`T`\>(`fromProj`, `toProj`, `coord`): `T`; \} & `object`
 
-Defined in: [src/map-provider/geotiff/geotiff-source.ts:15](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/geotiff-source.ts#L15)
+Defined in: [src/map-provider/geotiff/geotiff-source.ts:15](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/geotiff-source.ts#L15)
 
 #### Type Declaration
 

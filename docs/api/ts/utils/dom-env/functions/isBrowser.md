@@ -1,14 +1,14 @@
-[**@npm9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../README.md) / [utils/dom-env](../README.md) / isBrowser
+[@npm9912/v-map](../../../index.md) / [utils/dom-env](../index.md) / isBrowser
 
 # Function: isBrowser()
 
 > **isBrowser**(): `boolean`
 
-Defined in: [src/utils/dom-env.ts:1](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/dom-env.ts#L1)
+Defined in: [src/utils/dom-env.ts:1](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/dom-env.ts#L1)
 
 ## Returns
 

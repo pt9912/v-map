@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [map-provider/leaflet/google-map-tiles-layer](../README.md) / GoogleMapTilesLayer
+[@npm9912/v-map](../../../../index.md) / [map-provider/leaflet/google-map-tiles-layer](../index.md) / GoogleMapTilesLayer
 
 # Class: GoogleMapTilesLayer
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/google-map-tiles-layer.ts#L75)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/google-map-tiles-layer.ts#L75)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:75](https://gith
 
 > **new GoogleMapTilesLayer**(`options`): `GoogleMapTilesLayer`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:89](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/google-map-tiles-layer.ts#L89)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:89](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/google-map-tiles-layer.ts#L89)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **layerElementId**: `string`
 
-Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/types/leaflet-augment.d.ts#L7)
+Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/types/leaflet-augment.d.ts#L7)
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **vmapOpacity**: `number`
 
-Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/types/leaflet-augment.d.ts#L6)
+Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/types/leaflet-augment.d.ts#L6)
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/
 
 > `optional` **vmapVisible**: `boolean`
 
-Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/types/leaflet-augment.d.ts#L5)
+Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/types/leaflet-augment.d.ts#L5)
 
 #### Inherited from
 
@@ -1455,7 +1455,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **createTile**(`coords`, `done`): `HTMLElement`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:174](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/google-map-tiles-layer.ts#L174)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:174](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/google-map-tiles-layer.ts#L174)
 
 #### Parameters
 
@@ -3341,7 +3341,7 @@ Adds a set of type/listener pairs, e.g. {click: onClick, mousemove: onMouseMove}
 
 > **onAdd**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:155](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/google-map-tiles-layer.ts#L155)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:155](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/google-map-tiles-layer.ts#L155)
 
 #### Parameters
 
@@ -3839,7 +3839,7 @@ Behaves as on(...), except the listener will only get fired once and then remove
 
 > **onRemove**(`map`): `this`
 
-Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:165](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/google-map-tiles-layer.ts#L165)
+Defined in: [src/map-provider/leaflet/google-map-tiles-layer.ts:165](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/google-map-tiles-layer.ts#L165)
 
 #### Parameters
 

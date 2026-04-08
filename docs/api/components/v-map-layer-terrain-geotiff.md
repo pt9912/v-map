@@ -1,6 +1,6 @@
 # v-map-layer-terrain-geotiff
 
-[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)
+[← Zur Übersicht](./) · [**@npm9912/v-map**](/)
 
 The `v-map-layer-terrain-geotiff` component displays 3D terrain from GeoTIFF elevation data using deck.gl's TerrainLayer.
 

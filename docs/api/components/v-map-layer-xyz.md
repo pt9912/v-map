@@ -1,6 +1,6 @@
 # v-map-layer-xyz
 
-[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)
+[← Zur Übersicht](./) · [**@npm9912/v-map**](/)
 
 XYZ Tile Layer
 

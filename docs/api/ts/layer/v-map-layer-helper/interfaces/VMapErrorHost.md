@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../README.md) / [layer/v-map-layer-helper](../README.md) / VMapErrorHost
+[@npm9912/v-map](../../../index.md) / [layer/v-map-layer-helper](../index.md) / VMapErrorHost
 
 # Interface: VMapErrorHost
 
-Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/layer/v-map-layer-helper.ts#L9)
+Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/layer/v-map-layer-helper.ts#L9)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/layer/v-map-layer-helper.ts:9](https://github.com/pt9912/v-map/
 
 > **setLoadState**(`state`): `void`
 
-Defined in: [src/layer/v-map-layer-helper.ts:11](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/layer/v-map-layer-helper.ts#L11)
+Defined in: [src/layer/v-map-layer-helper.ts:11](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/layer/v-map-layer-helper.ts#L11)
 
 Called by the helper to set the component load state
 

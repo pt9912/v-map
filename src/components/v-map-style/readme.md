@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property       | Attribute       | Description                                                                                   | Type                                                            | Default     |
-| -------------- | --------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------- |
-| `autoApply`    | `auto-apply`    | Whether to automatically apply the style when loaded.                                         | `boolean`                                                       | `true`      |
-| `content`      | `content`       | Inline style content as string (alternative to src).                                          | `string`                                                        | `undefined` |
-| `format`       | `format`        | The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles'). | `"cesium-3d-tiles" \| "lyrx" \| "mapbox-gl" \| "qgis" \| "sld"` | `'sld'`     |
-| `layerTargets` | `layer-targets` | Target layer IDs to apply this style to. If not specified, applies to all compatible layers.  | `string`                                                        | `undefined` |
-| `src`          | `src`           | The style source - can be a URL to fetch from or inline SLD/style content.                    | `string`                                                        | `undefined` |
+| Property       | Attribute       | Description                                                                                   | Type                                                                           | Default     |
+| -------------- | --------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------- |
+| `autoApply`    | `auto-apply`    | Whether to automatically apply the style when loaded.                                         | `boolean`                                                                      | `true`      |
+| `content`      | `content`       | Inline style content as string (alternative to src).                                          | `string`                                                                       | `undefined` |
+| `format`       | `format`        | The styling format to parse (supports 'sld', 'mapbox-gl', 'qgis', 'lyrx', 'cesium-3d-tiles'). | `"cesium-3d-tiles" \| "geostyler" \| "lyrx" \| "mapbox-gl" \| "qgis" \| "sld"` | `'sld'`     |
+| `layerTargets` | `layer-targets` | Target layer IDs to apply this style to. If not specified, applies to all compatible layers.  | `string`                                                                       | `undefined` |
+| `src`          | `src`           | The style source - can be a URL to fetch from or inline SLD/style content.                    | `string`                                                                       | `undefined` |
 
 
 ## Events

@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [index](../../../README.md) / [Components](../README.md) / VMapLayerWcs
+[@npm9912/v-map](../../../../index.md) / [index](../../../index.md) / [Components](../index.md) / VMapLayerWcs
 
 # Interface: VMapLayerWcs
 
-Defined in: [src/components.d.ts:564](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L564)
+Defined in: [src/components.d.ts:564](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L564)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:564](https://github.com/pt9912/v-map/blob/18d5b
 
 > **coverageName**: `string`
 
-Defined in: [src/components.d.ts:568](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L568)
+Defined in: [src/components.d.ts:568](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L568)
 
 Coverage-Name/ID.
 
@@ -24,7 +24,7 @@ Coverage-Name/ID.
 
 > **format**: `string`
 
-Defined in: [src/components.d.ts:573](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L573)
+Defined in: [src/components.d.ts:573](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L573)
 
 Ausgabeformat, z. B. image/tiff.
 
@@ -40,7 +40,7 @@ Ausgabeformat, z. B. image/tiff.
 
 > **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
 
-Defined in: [src/components.d.ts:577](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L577)
+Defined in: [src/components.d.ts:577](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L577)
 
 Returns the last error detail, if any.
 
@@ -54,7 +54,7 @@ Returns the last error detail, if any.
 
 > **isReady**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:581](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L581)
+Defined in: [src/components.d.ts:581](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L581)
 
 Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
@@ -68,7 +68,7 @@ Gibt `true` zurück, sobald der Layer initialisiert wurde.
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:586](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L586)
+Defined in: [src/components.d.ts:586](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L586)
 
 Current load state of the layer.
 
@@ -84,7 +84,7 @@ Current load state of the layer.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L591)
+Defined in: [src/components.d.ts:591](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L591)
 
 Opazität (0–1).
 
@@ -100,7 +100,7 @@ Opazität (0–1).
 
 > `optional` **params**: `string`
 
-Defined in: [src/components.d.ts:595](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L595)
+Defined in: [src/components.d.ts:595](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L595)
 
 Zusätzliche Parameter als JSON-String.
 
@@ -110,7 +110,7 @@ Zusätzliche Parameter als JSON-String.
 
 > `optional` **projection**: `string`
 
-Defined in: [src/components.d.ts:599](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L599)
+Defined in: [src/components.d.ts:599](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L599)
 
 Projektion (Projection) für die Quelle.
 
@@ -120,7 +120,7 @@ Projektion (Projection) für die Quelle.
 
 > `optional` **resolutions**: `string`
 
-Defined in: [src/components.d.ts:603](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L603)
+Defined in: [src/components.d.ts:603](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L603)
 
 Auflösungen als JSON-Array, z. B. [1000,500].
 
@@ -130,7 +130,7 @@ Auflösungen als JSON-Array, z. B. [1000,500].
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:607](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L607)
+Defined in: [src/components.d.ts:607](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L607)
 
 Basis-URL des WCS-Dienstes.
 
@@ -140,7 +140,7 @@ Basis-URL des WCS-Dienstes.
 
 > **version**: `string`
 
-Defined in: [src/components.d.ts:612](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L612)
+Defined in: [src/components.d.ts:612](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L612)
 
 WCS-Version.
 
@@ -156,7 +156,7 @@ WCS-Version.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:617](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L617)
+Defined in: [src/components.d.ts:617](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L617)
 
 Sichtbarkeit des Layers.
 
@@ -172,7 +172,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:622](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L622)
+Defined in: [src/components.d.ts:622](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L622)
 
 Z-Index für die Darstellung.
 

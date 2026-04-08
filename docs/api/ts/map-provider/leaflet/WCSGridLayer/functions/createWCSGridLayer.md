@@ -1,14 +1,14 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [map-provider/leaflet/WCSGridLayer](../README.md) / createWCSGridLayer
+[@npm9912/v-map](../../../../index.md) / [map-provider/leaflet/WCSGridLayer](../index.md) / createWCSGridLayer
 
 # Function: createWCSGridLayer()
 
 > **createWCSGridLayer**(`options`): [`WCSGridLayer`](../classes/WCSGridLayer.md)
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:156](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/leaflet/WCSGridLayer.ts#L156)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:156](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/leaflet/WCSGridLayer.ts#L156)
 
 Factory function to create a WCS GridLayer
 

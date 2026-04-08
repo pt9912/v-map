@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [index](../../../README.md) / [JSX](../README.md) / VMapLayercontrolAttributes
+[@npm9912/v-map](../../../../index.md) / [index](../../../index.md) / [JSX](../index.md) / VMapLayercontrolAttributes
 
 # Interface: VMapLayercontrolAttributes
 
-Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2318)
+Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2318)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/18d5
 
 > **for**: `string`
 
-Defined in: [src/components.d.ts:2319](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2319)
+Defined in: [src/components.d.ts:2319](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2319)

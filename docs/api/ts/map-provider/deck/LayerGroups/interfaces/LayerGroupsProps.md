@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [map-provider/deck/LayerGroups](../README.md) / LayerGroupsProps
+[@npm9912/v-map](../../../../index.md) / [map-provider/deck/LayerGroups](../index.md) / LayerGroupsProps
 
 # Interface: LayerGroupsProps\<L, G\>
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/LayerGroups.ts#L25)
+Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/deck/LayerGroups.ts#L25)
 
 ## Type Parameters
 
@@ -24,4 +24,4 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/
 
 > `optional` **groups**: readonly `G`[]
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:29](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/deck/LayerGroups.ts#L29)
+Defined in: [src/map-provider/deck/LayerGroups.ts:29](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/deck/LayerGroups.ts#L29)

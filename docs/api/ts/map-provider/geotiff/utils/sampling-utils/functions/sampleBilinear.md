@@ -1,14 +1,14 @@
-[**@npm9912/v-map**](../../../../../README.md)
+[**@npm9912/v-map**](../../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../../README.md) / [map-provider/geotiff/utils/sampling-utils](../README.md) / sampleBilinear
+[@npm9912/v-map](../../../../../index.md) / [map-provider/geotiff/utils/sampling-utils](../index.md) / sampleBilinear
 
 # Function: sampleBilinear()
 
 > **sampleBilinear**(`x`, `y`, `rasterBands`, `arrayType`, `width`, `height`, `offsetX`, `offsetY`, `colorStops?`): \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:79](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/sampling-utils.ts#L79)
+Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:79](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/utils/sampling-utils.ts#L79)
 
 Bilinear Interpolation with window-based reading and multi-band support
 Returns [R, G, B, A] values (0-255)
