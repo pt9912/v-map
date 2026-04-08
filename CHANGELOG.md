@@ -1,3 +1,10 @@
+## [0.2.3](https://github.com/pt9912/v-map/compare/v0.2.2...v0.2.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* **docs:** emit @[...] markers as block tokens to avoid nested <p> ([f2c4d30](https://github.com/pt9912/v-map/commit/f2c4d3050e1a8c1a25dadeb9503e355fdcd2837e))
+
 ## [0.2.2](https://github.com/pt9912/v-map/compare/v0.2.1...v0.2.2) (2026-04-08)
 
 
