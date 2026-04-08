@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerScatterplotAttributes
 
-Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2312)
+Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2312)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/1085
 
 > **data**: `string`
 
-Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2314)
+Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2314)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/1085
 
 > **getFillColor**: [`Color`](../../../type-aliases/Color.md)
 
-Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2316)
+Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2316)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/1085
 
 > **getRadius**: `number`
 
-Defined in: [src/components.d.ts:2317](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2317)
+Defined in: [src/components.d.ts:2317](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2317)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2317](https://github.com/pt9912/v-map/blob/1085
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2313)
+Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2313)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/1085
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2318)
+Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2318)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:2318](https://github.com/pt9912/v-map/blob/1085
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:2315](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2315)
+Defined in: [src/components.d.ts:2315](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2315)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/components.d.ts:2315](https://github.com/pt9912/v-map/blob/1085
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:2319](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2319)
+Defined in: [src/components.d.ts:2319](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2319)

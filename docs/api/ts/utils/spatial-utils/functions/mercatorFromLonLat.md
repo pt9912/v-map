@@ -8,7 +8,7 @@
 
 > **mercatorFromLonLat**(`__namedParameters`): \[`number`, `number`\]
 
-Defined in: [src/utils/spatial-utils.ts:1](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/utils/spatial-utils.ts#L1)
+Defined in: [src/utils/spatial-utils.ts:1](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/utils/spatial-utils.ts#L1)
 
 ## Parameters
 

@@ -8,4 +8,4 @@
 
 > **Cesium3DTileStyle** = `Record`\<`string`, `unknown`\>
 
-Defined in: [src/types/styling.ts:3](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/types/styling.ts#L3)
+Defined in: [src/types/styling.ts:3](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/types/styling.ts#L3)

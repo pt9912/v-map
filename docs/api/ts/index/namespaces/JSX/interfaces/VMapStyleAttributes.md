@@ -6,7 +6,7 @@
 
 # Interface: VMapStyleAttributes
 
-Defined in: [src/components.d.ts:2437](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2437)
+Defined in: [src/components.d.ts:2437](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2437)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2437](https://github.com/pt9912/v-map/blob/1085
 
 > **autoApply**: `boolean`
 
-Defined in: [src/components.d.ts:2442](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2442)
+Defined in: [src/components.d.ts:2442](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2442)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2442](https://github.com/pt9912/v-map/blob/1085
 
 > **content**: `string`
 
-Defined in: [src/components.d.ts:2440](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2440)
+Defined in: [src/components.d.ts:2440](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2440)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2440](https://github.com/pt9912/v-map/blob/1085
 
 > **format**: [`StyleFormat`](../../../../types/styling/type-aliases/StyleFormat.md)
 
-Defined in: [src/components.d.ts:2438](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2438)
+Defined in: [src/components.d.ts:2438](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2438)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2438](https://github.com/pt9912/v-map/blob/1085
 
 > **layerTargets**: `string`
 
-Defined in: [src/components.d.ts:2441](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2441)
+Defined in: [src/components.d.ts:2441](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2441)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/components.d.ts:2441](https://github.com/pt9912/v-map/blob/1085
 
 > **src**: `string`
 
-Defined in: [src/components.d.ts:2439](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2439)
+Defined in: [src/components.d.ts:2439](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L2439)

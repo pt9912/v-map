@@ -6,7 +6,7 @@
 
 # Interface: VMapLayergroup
 
-Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L927)
+Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L927)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:927](https://github.com/pt9912/v-map/blob/10857
 
 > **basemapid**: `string`
 
-Defined in: [src/components.d.ts:932](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L932)
+Defined in: [src/components.d.ts:932](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L932)
 
 Base map identifier for this layer group. When set, layers in this group will be treated as base map layers.
 
@@ -30,7 +30,7 @@ null
 
 > **getGroupId**: () => `Promise`\<`string`\>
 
-Defined in: [src/components.d.ts:936](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L936)
+Defined in: [src/components.d.ts:936](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L936)
 
 Returns the internal group identifier used by the map provider.
 
@@ -44,7 +44,7 @@ Returns the internal group identifier used by the map provider.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:941](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L941)
+Defined in: [src/components.d.ts:941](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L941)
 
 Globale Opazität (0–1) für alle Kinder.
 
@@ -60,7 +60,7 @@ Globale Opazität (0–1) für alle Kinder.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:946](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L946)
+Defined in: [src/components.d.ts:946](https://github.com/pt9912/v-map/blob/f91c4c7c743d7a08ad3bec18b6100b23210f3a9f/src/components.d.ts#L946)
 
 Sichtbarkeit der gesamten Gruppe.
 
