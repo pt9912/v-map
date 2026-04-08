@@ -1,6 +1,6 @@
 # Layer-Matrix (automatisch erzeugt)
 
-[**@pt9912/v-map**](../README.md)
+[**@npm9912/v-map**](/)
 
 
 > Generiert von `scripts/generate-api-docs.mjs`. Bitte nicht manuell bearbeiten.

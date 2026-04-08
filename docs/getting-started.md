@@ -1,11 +1,11 @@
 # Getting Started
 
-[**@pt9912/v-map**](./README.md)
+[**@npm9912/v-map**](./)
 
 ## Installation
 
 ```bash
-pnpm add @pt9912/v-map
+pnpm add @npm9912/v-map
 ```
 
 ## Erste Karte

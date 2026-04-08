@@ -44,8 +44,7 @@ const mdForCmp = c => {
   const desc = h(c.docs);
 
   // 🔙 Rücklink / Breadcrumb
-  //const breadcrumb = `[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../index)\n\n`;
-  const breadcrumb = `[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)\n\n`;
+  const breadcrumb = `[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)\n\n`;
 
   const props = (c.props || []).map(p => [
     `\`${p.name}\``,
@@ -119,7 +118,7 @@ const mdForCmp = c => {
 
   await fs.writeFile(
     path.join(OUT_DIR, 'README.md'),
-    `# Komponenten-API\n\n[**@pt9912/v-map**](../../README.md)\n\n${links}\n`,
+    `# Komponenten-API\n\n[**@npm9912/v-map**](/)\n\n${links}\n`,
     'utf8',
   );
   console.log('✅ Komponenten-API erzeugt.');
@@ -206,7 +205,7 @@ function tick(ok) {
 }
 
 async function generateMatrix() {
-  const breadcrumb = `[**@pt9912/v-map**](../README.md)\n\n`;
+  const breadcrumb = `[**@npm9912/v-map**](/)\n\n`;
   const layerconfig = await readFileSafe(LAYERCONFIG_TS);
   const allTypes = detectLayerTypes(layerconfig);
 
@@ -255,8 +254,8 @@ ${mdTable(headers, rows)}
 import * as fss from 'node:fs/promises';
 
 const TSDOC_DIR = 'docs/api/ts';
-//const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/index) · [**@pt9912/v-map**](/)\n\n`;
-const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/) · [**@pt9912/v-map**](/)\n\n`;
+//const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/index) · [**@npm9912/v-map**](/)\n\n`;
+const BREADCRUMB_TS = `[← Zur Übersicht](/api/ts/) · [**@npm9912/v-map**](/)\n\n`;
 
 async function listMdFiles(dir) {
   const out = [];
