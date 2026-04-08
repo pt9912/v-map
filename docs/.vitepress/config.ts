@@ -83,7 +83,10 @@ export default {
     vue: {
       template: {
         compilerOptions: {
-          isCustomElement: tag => tag.startsWith('v-map-'),
+          // Match the bare <v-map> tag and every <v-map-*> child element so
+          // Vue's template compiler treats them as native custom elements
+          // instead of trying to resolve them as Vue components.
+          isCustomElement: tag => tag === 'v-map' || tag.startsWith('v-map-'),
         },
       },
     },

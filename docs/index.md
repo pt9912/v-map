@@ -49,6 +49,21 @@ features:
     linkText: GitHub Repository
 ---
 
+## Live-Demo
+
+Eine echte v-map-Instanz, direkt auf dieser Doku-Seite. Provider: OpenLayers,
+Basemap: OpenStreetMap. `<v-map-error>` rendert Lade-/Laufzeitfehler automatisch
+oben rechts als Toast — kein JavaScript nötig.
+
+<ClientOnly>
+  <v-map flavour="ol" center="11.5761,48.1371" zoom="11" style="display: block; width: 100%; height: 420px; border-radius: 8px; overflow: hidden; border: 1px solid var(--vp-c-divider);">
+    <v-map-error position="top-right" auto-dismiss="6000"></v-map-error>
+    <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+      <v-map-layer-osm id="OSM-BASE" label="OpenStreetMap"></v-map-layer-osm>
+    </v-map-layergroup>
+  </v-map>
+</ClientOnly>
+
 ## Schnellstart
 
 Installation:
