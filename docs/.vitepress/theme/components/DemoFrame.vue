@@ -40,10 +40,9 @@ const src = computed(() => withBase(`/demos/${props.name}.html`));
       ></iframe>
     </ClientOnly>
     <p class="demo-frame__caption">
-      Live demo:
+      Live demo (sandboxed Iframe):
       <a :href="src" target="_blank" rel="noreferrer">{{ name }}.html</a>
-      &middot; rechte Ecke des Karten-Containers zeigt
-      <code>&lt;v-map-error&gt;</code>-Toasts bei Lade-Fehlern
+      &middot; <a :href="src" target="_blank" rel="noreferrer">in neuem Tab öffnen</a>
     </p>
   </div>
 </template>
