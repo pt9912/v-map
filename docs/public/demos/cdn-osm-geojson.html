@@ -6,7 +6,7 @@
     <title>v-map CDN Demo: OSM + GeoJSON + Layer-Control</title>
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.2.1/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.2.2/dist/v-map/v-map.esm.js"
     ></script>
     <style>
       html,
@@ -28,13 +28,14 @@
         height: 100%;
       }
 
-      /* Position the layer control as an overlay in the upper-left corner.
+      /* Position the layer control as an overlay in the upper-right corner.
+         (Top-left is taken by OpenLayers' built-in zoom in/out buttons.)
          v-map's host CSS sets position: relative, but v-map-layercontrol
          lives outside <v-map> here so we anchor it via .map-wrapper. */
       v-map-layercontrol {
         position: absolute;
         top: 16px;
-        left: 16px;
+        right: 16px;
         z-index: 1000;
         max-width: 280px;
         font-size: 13px;
@@ -44,7 +45,9 @@
   <body>
     <div class="map-wrapper">
       <v-map id="demo-map" flavour="ol" center="10.0,51.0" zoom="6">
-        <v-map-error position="top-right" auto-dismiss="6000"></v-map-error>
+        <!-- Error toasts in bottom-right so they don't overlap the
+             layer-control panel pinned to top-right. -->
+        <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 
         <v-map-layergroup
           id="basemaps"

@@ -21,8 +21,9 @@ import DemoFrame from './components/DemoFrame.vue';
 
 // Pin to the exact released v-map version that matches what the live
 // demos in this docs build target. Bump on every release together with
-// the standalone HTML demos under docs/public/demos/.
-const VMAP_VERSION = '0.2.1';
+// the standalone HTML demos under docs/public/demos/ and the inline
+// code blocks in docs/guides/cdn-esm.md.
+const VMAP_VERSION = '0.2.2';
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
   const VMAP_BUNDLE = `https://cdn.jsdelivr.net/npm/@npm9912/v-map@${VMAP_VERSION}/dist/v-map/v-map.esm.js`;
