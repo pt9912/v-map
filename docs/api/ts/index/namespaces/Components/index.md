@@ -10,6 +10,7 @@
 
 - [VMap](interfaces/VMap.md)
 - [VMapBuilder](interfaces/VMapBuilder.md)
+- [VMapError](interfaces/VMapError.md)
 - [VMapLayercontrol](interfaces/VMapLayercontrol.md)
 - [VMapLayerGeojson](interfaces/VMapLayerGeojson.md)
 - [VMapLayerGeotiff](interfaces/VMapLayerGeotiff.md)

@@ -8,7 +8,7 @@
 
 > **sampleNearest**(`x`, `y`, `rasterBands`, `arrayType`, `width`, `height`, `offsetX`, `offsetY`, `colorStops?`): \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:22](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/geotiff/utils/sampling-utils.ts#L22)
+Defined in: [src/map-provider/geotiff/utils/sampling-utils.ts:22](https://github.com/pt9912/v-map/blob/ce6e00537dea9542f2a50d0b6b75035885736c96/src/map-provider/geotiff/utils/sampling-utils.ts#L22)
 
 Nearest-Neighbor Sampling with window-based reading and multi-band support
 Returns [R, G, B, A] values (0-255)

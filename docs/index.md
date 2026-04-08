@@ -20,8 +20,8 @@ features:
   - title: Provider-agnostisch
     details: OpenLayers, Leaflet, Cesium und Deck.gl hinter einem einheitlichen Web-Component-API. Ein Providerwechsel ist eine einzige Prop — `flavour="ol"`, `"leaflet"`, `"cesium"` oder `"deck"`.
 
-  - title: 18 Web Components
-    details: Karten-Container, Layer-Gruppen, Layer-Control, Styling und ein reicher Layer-Katalog (OSM, XYZ, WMS, WFS, WCS, GeoJSON, WKT, GeoTIFF, 3D-Tiles, Terrain, Deck.gl-Scatterplot, Google Tiles).
+  - title: 19 Web Components
+    details: Karten-Container, Layer-Gruppen, Layer-Control, Styling, Error-Toasts und ein reicher Layer-Katalog (OSM, XYZ, WMS, WFS, WCS, GeoJSON, WKT, GeoTIFF, 3D-Tiles, Terrain, Deck.gl-Scatterplot, Google Tiles).
 
   - title: Deklaratives Building
     details: Komplette Karten und Layer aus JSON oder YAML konfigurieren — `<v-map-builder>` erzeugt Layer-Gruppen, Layer und Styles automatisch aus einer Konfiguration.
@@ -29,8 +29,8 @@ features:
   - title: Styling mit GeoStyler
     details: '`<v-map-style>` mit Unterstützung für GeoStyler-JSON, SLD, mapbox-gl, QGIS und lyrx — providerübergreifend wiederverwendbar.'
 
-  - title: Runtime-Error-API
-    details: Einheitliches `vmap-error` Event über alle Layer-Komponenten. Lade- und Laufzeitfehler werden konsistent gemeldet, statt im Provider zu verschwinden.
+  - title: Error-Toasts ohne JavaScript
+    details: '`<v-map-error>` lauscht auf das `vmap-error` Event und rendert Fehler als Toasts im Karten-Container — kein Listener-Code, kein Boilerplate.'
 
   - title: Vollständige TypeScript-Typen
     details: Generierte Komponenten-Typen, JSX-Definitionen für React/Vue/Svelte/Stencil und eine durchgängig getypte API.

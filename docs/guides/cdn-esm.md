@@ -104,6 +104,9 @@ Solange v-map auf `0.x` ist, können auch Minor-Bumps API-relevante
 
 ## Komplettes Beispiel mit GeoJSON-Overlay
 
+Komplett deklarativ — keine einzige Zeile JavaScript, inklusive
+Fehler-Toasts via `<v-map-error>`:
+
 ```html
 <!DOCTYPE html>
 <html lang="de">
@@ -121,6 +124,8 @@ Solange v-map auf `0.x` ist, können auch Minor-Bumps API-relevante
   </head>
   <body>
     <v-map flavour="ol" center="[10.0, 51.0]" zoom="6">
+      <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+
       <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
         <v-map-layer-osm
           id="OSM-BASE"
@@ -140,16 +145,13 @@ Solange v-map auf `0.x` ist, können auch Minor-Bumps API-relevante
         ></v-map-layer-geojson>
       </v-map-layergroup>
     </v-map>
-
-    <script type="module">
-      // Optional: auf das Error-Event lauschen
-      document.querySelector('v-map').addEventListener('vmap-error', (e) => {
-        console.error('[v-map error]', e.detail);
-      });
-    </script>
   </body>
 </html>
 ```
+
+Sollte der GeoJSON-Endpoint mal nicht antworten oder ungültige Daten
+liefern, erscheint oben rechts im Karten-Container automatisch ein
+Toast mit der Fehlermeldung.
 
 ## Bekannte Einschränkungen im CDN-Modus
 

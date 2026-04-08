@@ -2,8 +2,9 @@
 
 Diese Seite beschreibt die öffentliche Error-API für Anwender von `v-map`.
 
-Für Layer-Komponenten stehen drei Mechanismen zur Verfügung:
+Für Layer-Komponenten stehen vier Mechanismen zur Verfügung:
 
+- `<v-map-error>` für **deklaratives** Error-Handling ohne JavaScript
 - `vmap-error` für reaktives Error-Handling
 - `load-state` für deklarative Zustandsprüfung im DOM
 - `getError()` für das letzte Fehlerdetail
@@ -32,6 +33,67 @@ type VMapErrorDetail = {
   cause?: unknown;
 };
 ```
+
+## Toasts ohne JavaScript: `<v-map-error>`
+
+Der einfachste Weg, Fehler sichtbar zu machen — ein einziges Element als
+Kind von `<v-map>`, kein Listener-Code, kein Boilerplate:
+
+```html
+<v-map flavour="ol" style="height: 400px;">
+  <v-map-error position="top-right" auto-dismiss="5000"></v-map-error>
+
+  <v-map-layer-wms
+    url="https://broken.example.com/wms"
+    layers="roads">
+  </v-map-layer-wms>
+</v-map>
+```
+
+Sobald ein Layer ein `vmap-error` Event feuert, rendert `<v-map-error>`
+einen kleinen Toast im Karten-Container. Default-Styling ist opinionated
+(dunkler, abgerundeter Toast mit roter Akzentleiste) und braucht kein
+zusätzliches CSS.
+
+**Props:**
+
+| Prop | Werte | Default | Bedeutung |
+|---|---|---|---|
+| `for` | string (Element-ID) | — | Optional. Welche `<v-map>`-Karte beobachtet werden soll. Ohne Angabe bindet sich die Komponente an die nächste `<v-map>` im DOM-Baum. |
+| `position` | `top-right` · `top-left` · `top` · `bottom-right` · `bottom-left` · `bottom` | `top-right` | Ecke/Kante des Karten-Containers. |
+| `auto-dismiss` | Zahl (ms), `0` | `5000` | Auto-Dismiss-Zeit pro Toast. `0` lässt Toasts stehen, bis sie manuell geschlossen oder vom Stapel gedrängt werden. |
+| `max` | Zahl | `3` | Maximale Anzahl gleichzeitig sichtbarer Toasts. Ältere werden bei Überschreitung am oberen Ende des Stapels entfernt. |
+| `log` | `none` · `console` | `none` | Bei `console` wird jeder Fehler zusätzlich mit `console.error` geloggt. |
+
+**Eigenes Styling über CSS-Parts:**
+
+```css
+v-map-error::part(toast) {
+  background: #1a3a52;
+  border-left-color: #ffc107;
+}
+v-map-error::part(badge) {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+v-map-error::part(message) {
+  font-weight: 500;
+}
+```
+
+Verfügbare Parts: `container`, `toast`, `badge`, `message`, `close`.
+
+**Mehrere Karten gezielt adressieren:**
+
+```html
+<v-map id="left-map" flavour="ol">…</v-map>
+<v-map id="right-map" flavour="leaflet">…</v-map>
+
+<!-- Globaler Toast für die linke Karte -->
+<v-map-error for="left-map" position="bottom"></v-map-error>
+```
+
+---
 
 ## Einzelnes Layer beobachten
 

@@ -4,6 +4,7 @@
 
 - [`v-map`](./v-map.md) — 
 - [`v-map-builder`](./v-map-builder.md) — A component that builds map configurations dynamically from JSON/YAML configuration scripts.
+- [`v-map-error`](./v-map-error.md) — `<v-map-error>` lauscht auf das `vmap-error` Event seiner Eltern-`<v-map>` (oder einer per `for`-Attribut adressierten Karte) und rendert die Fehler als kleine, opinionated gestylte Toast-Stapel innerhalb des Karten-Containers.  Damit können einfache HTML-Beispiele Fehler sichtbar machen, ohne eine Zeile JavaScript zu schreiben.
 - [`v-map-layer-geojson`](./v-map-layer-geojson.md) — 
 - [`v-map-layer-geotiff`](./v-map-layer-geotiff.md) — 
 - [`v-map-layer-google`](./v-map-layer-google.md) — Google Maps Basemap Layer
