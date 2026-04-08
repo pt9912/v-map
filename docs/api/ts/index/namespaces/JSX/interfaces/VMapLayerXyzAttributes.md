@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../../README.md)
+[**@npm9912/v-map**](../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../README.md) / [index](../../../README.md) / [JSX](../README.md) / VMapLayerXyzAttributes
+[@npm9912/v-map](../../../../index.md) / [index](../../../index.md) / [JSX](../index.md) / VMapLayerXyzAttributes
 
 # Interface: VMapLayerXyzAttributes
 
-Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2308)
+Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2308)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2308](https://github.com/pt9912/v-map/blob/18d5
 
 > **attributions**: `string`
 
-Defined in: [src/components.d.ts:2311](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2311)
+Defined in: [src/components.d.ts:2311](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2311)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2311](https://github.com/pt9912/v-map/blob/18d5
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:2309](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2309)
+Defined in: [src/components.d.ts:2309](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2309)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2309](https://github.com/pt9912/v-map/blob/18d5
 
 > **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2312)
+Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2312)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2312](https://github.com/pt9912/v-map/blob/18d5
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2316)
+Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2316)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/components.d.ts:2316](https://github.com/pt9912/v-map/blob/18d5
 
 > **subdomains**: `string`
 
-Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2314)
+Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2314)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/components.d.ts:2314](https://github.com/pt9912/v-map/blob/18d5
 
 > **tileSize**: `number`
 
-Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2313)
+Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2313)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/components.d.ts:2313](https://github.com/pt9912/v-map/blob/18d5
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2310)
+Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2310)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/components.d.ts:2310](https://github.com/pt9912/v-map/blob/18d5
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:2315](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/components.d.ts#L2315)
+Defined in: [src/components.d.ts:2315](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/components.d.ts#L2315)

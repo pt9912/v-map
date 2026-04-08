@@ -1,14 +1,14 @@
-[**@npm9912/v-map**](../../../../../README.md)
+[**@npm9912/v-map**](../../../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../../../README.md) / [map-provider/geotiff/utils/colormap-utils](../README.md) / getColorStops
+[@npm9912/v-map](../../../../../index.md) / [map-provider/geotiff/utils/colormap-utils](../index.md) / getColorStops
 
 # Function: getColorStops()
 
 > **getColorStops**(`colorMap`, `valueRange?`): `object`
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:228](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/map-provider/geotiff/utils/colormap-utils.ts#L228)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:228](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/map-provider/geotiff/utils/colormap-utils.ts#L228)
 
 Get ColorStop array from ColorMapName or GeoStyler ColorMap
 

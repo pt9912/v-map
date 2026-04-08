@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../README.md) / [utils/events](../README.md) / VMapErrorDetail
+[@npm9912/v-map](../../../index.md) / [utils/events](../index.md) / VMapErrorDetail
 
 # Interface: VMapErrorDetail
 
-Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/events.ts#L12)
+Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/events.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/events.ts:12](https://github.com/pt9912/v-map/blob/18d5b7
 
 > `optional` **attribute**: `string`
 
-Defined in: [src/utils/events.ts:18](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/events.ts#L18)
+Defined in: [src/utils/events.ts:18](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/events.ts#L18)
 
 Affected prop/attribute (if applicable)
 
@@ -24,7 +24,7 @@ Affected prop/attribute (if applicable)
 
 > `optional` **cause**: `unknown`
 
-Defined in: [src/utils/events.ts:20](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/events.ts#L20)
+Defined in: [src/utils/events.ts:20](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/events.ts#L20)
 
 Original thrown value (if available)
 
@@ -34,7 +34,7 @@ Original thrown value (if available)
 
 > **message**: `string`
 
-Defined in: [src/utils/events.ts:16](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/events.ts#L16)
+Defined in: [src/utils/events.ts:16](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/events.ts#L16)
 
 Human-readable error message
 
@@ -44,6 +44,6 @@ Human-readable error message
 
 > **type**: `"network"` \| `"validation"` \| `"parse"` \| `"provider"`
 
-Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/utils/events.ts#L14)
+Defined in: [src/utils/events.ts:14](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/utils/events.ts#L14)
 
 Error category

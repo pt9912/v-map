@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-30T07:13:21",
+  "timestamp": "2026-04-08T05:28:29",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.43.3",
@@ -5980,10 +5980,10 @@
         },
         {
           "name": "format",
-          "type": "\"cesium-3d-tiles\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
+          "type": "\"cesium-3d-tiles\" | \"geostyler\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
           "complexType": {
             "original": "StyleFormat",
-            "resolved": "\"cesium-3d-tiles\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
+            "resolved": "\"cesium-3d-tiles\" | \"geostyler\" | \"lyrx\" | \"mapbox-gl\" | \"qgis\" | \"sld\"",
             "references": {
               "StyleFormat": {
                 "location": "import",
@@ -6007,6 +6007,10 @@
           "values": [
             {
               "value": "cesium-3d-tiles",
+              "type": "string"
+            },
+            {
+              "value": "geostyler",
               "type": "string"
             },
             {
@@ -6220,7 +6224,7 @@
       "path": "src/utils/diff.ts"
     },
     "src/types/styling.ts::StyleFormat": {
-      "declaration": "export type StyleFormat =\n  | 'sld'\n  | 'mapbox-gl'\n  | 'qgis'\n  | 'lyrx'\n  | 'cesium-3d-tiles';",
+      "declaration": "export type StyleFormat =\n  | 'sld'\n  | 'mapbox-gl'\n  | 'qgis'\n  | 'lyrx'\n  | 'cesium-3d-tiles'\n  | 'geostyler';",
       "docstring": "",
       "path": "src/types/styling.ts"
     },

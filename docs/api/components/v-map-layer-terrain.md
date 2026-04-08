@@ -1,6 +1,6 @@
 # v-map-layer-terrain
 
-[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)
+[← Zur Übersicht](./) · [**@npm9912/v-map**](/)
 
 
 

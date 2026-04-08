@@ -44,7 +44,7 @@ const mdForCmp = c => {
   const desc = h(c.docs);
 
   // 🔙 Rücklink / Breadcrumb
-  const breadcrumb = `[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)\n\n`;
+  const breadcrumb = `[← Zur Übersicht](./) · [**@npm9912/v-map**](/)\n\n`;
 
   const props = (c.props || []).map(p => [
     `\`${p.name}\``,
@@ -117,7 +117,7 @@ const mdForCmp = c => {
     .join('\n');
 
   await fs.writeFile(
-    path.join(OUT_DIR, 'README.md'),
+    path.join(OUT_DIR, 'index.md'),
     `# Komponenten-API\n\n[**@npm9912/v-map**](/)\n\n${links}\n`,
     'utf8',
   );

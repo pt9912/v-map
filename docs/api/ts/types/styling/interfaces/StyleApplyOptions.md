@@ -1,12 +1,12 @@
-[**@npm9912/v-map**](../../../README.md)
+[**@npm9912/v-map**](../../../index.md)
 
 ***
 
-[@npm9912/v-map](../../../README.md) / [types/styling](../README.md) / StyleApplyOptions
+[@npm9912/v-map](../../../index.md) / [types/styling](../index.md) / StyleApplyOptions
 
 # Interface: StyleApplyOptions
 
-Defined in: [src/types/styling.ts:20](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/types/styling.ts#L20)
+Defined in: [src/types/styling.ts:21](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/types/styling.ts#L21)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/styling.ts:20](https://github.com/pt9912/v-map/blob/18d5b
 
 > `optional` **layerIds**: `string`[]
 
-Defined in: [src/types/styling.ts:24](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/types/styling.ts#L24)
+Defined in: [src/types/styling.ts:25](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/types/styling.ts#L25)
 
 Layer IDs to apply the style to.
 
@@ -24,7 +24,7 @@ Layer IDs to apply the style to.
 
 > `optional` **mode**: `"replace"` \| `"merge"`
 
-Defined in: [src/types/styling.ts:30](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/types/styling.ts#L30)
+Defined in: [src/types/styling.ts:31](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/types/styling.ts#L31)
 
 Whether to replace existing styles or merge with them.
 
@@ -40,6 +40,6 @@ Whether to replace existing styles or merge with them.
 
 > `optional` **priority**: `number`
 
-Defined in: [src/types/styling.ts:35](https://github.com/pt9912/v-map/blob/18d5b79c2a99722cb0fba2afb4171b61f9fdcbdc/src/types/styling.ts#L35)
+Defined in: [src/types/styling.ts:36](https://github.com/pt9912/v-map/blob/3e820fafd4a1fae7cbd3a1369e56fcdd949569c9/src/types/styling.ts#L36)
 
 Optional priority for style application.
