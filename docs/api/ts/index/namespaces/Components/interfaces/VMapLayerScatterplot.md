@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerScatterplot
 
-Defined in: [src/components.d.ts:320](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L320)
+Defined in: [src/components.d.ts:320](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L320)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:320](https://github.com/pt9912/v-map/blob/a6e98
 
 > `optional` **data**: `string`
 
-Defined in: [src/components.d.ts:324](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L324)
+Defined in: [src/components.d.ts:324](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L324)
 
 Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon, lat]. Zusätzliche Felder sind erlaubt.
 
@@ -24,7 +24,7 @@ Datenquelle für Punkte. Erwartet Objekte mit mindestens einer Position in [lon,
 
 > **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
 
-Defined in: [src/components.d.ts:328](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L328)
+Defined in: [src/components.d.ts:328](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L328)
 
 Returns the last error detail, if any.
 
@@ -38,7 +38,7 @@ Returns the last error detail, if any.
 
 > **getFillColor**: [`Color`](../../../type-aliases/Color.md)
 
-Defined in: [src/components.d.ts:333](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L333)
+Defined in: [src/components.d.ts:333](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L333)
 
 Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CSS-Farbe (providerabhängig).
 
@@ -54,7 +54,7 @@ Funktion zur Bestimmung der Füllfarbe je Punkt. Rückgabe z. B. [r,g,b] oder CS
 
 > **getRadius**: `number`
 
-Defined in: [src/components.d.ts:338](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L338)
+Defined in: [src/components.d.ts:338](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L338)
 
 Funktion/konstanter Wert für den Punkt-Radius.
 
@@ -70,7 +70,7 @@ Funktion/konstanter Wert für den Punkt-Radius.
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:343](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L343)
+Defined in: [src/components.d.ts:343](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L343)
 
 Current load state of the layer.
 
@@ -86,7 +86,7 @@ Current load state of the layer.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:348](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L348)
+Defined in: [src/components.d.ts:348](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L348)
 
 Globale Opazität (0–1).
 
@@ -102,7 +102,7 @@ Globale Opazität (0–1).
 
 > `optional` **url**: `string`
 
-Defined in: [src/components.d.ts:352](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L352)
+Defined in: [src/components.d.ts:352](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L352)
 
 Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
 
@@ -112,7 +112,7 @@ Optionaler Remote-Pfad für JSON/CSV/GeoJSON, der zu `data` geladen wird.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:357](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L357)
+Defined in: [src/components.d.ts:357](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L357)
 
 Sichtbarkeit des Layers.
 

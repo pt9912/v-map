@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerTerrain
 
-Defined in: [src/components.d.ts:1597](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1597)
+Defined in: [src/components.d.ts:1597](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1597)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1597](https://github.com/pt9912/v-map/blob/a6e9
 
 > `optional` **color**: `string`
 
-Defined in: [src/components.d.ts:1601](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1601)
+Defined in: [src/components.d.ts:1601](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1601)
 
 Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,0,0').
 
@@ -24,7 +24,7 @@ Basisfarbe für das Terrain. Erwartet Hex oder RGB (z. B. '#ff0000' oder '255,
 
 > **elevationData**: `string`
 
-Defined in: [src/components.d.ts:1605](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1605)
+Defined in: [src/components.d.ts:1605](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1605)
 
 URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).
 
@@ -34,7 +34,7 @@ URL zu Höhenraster im Heightmap-Format (z. B. GeoTIFF oder PNG Heightmap).
 
 > `optional` **elevationDecoder**: `string`
 
-Defined in: [src/components.d.ts:1609](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1609)
+Defined in: [src/components.d.ts:1609](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1609)
 
 JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offset":0}').
 
@@ -44,7 +44,7 @@ JSON-Repräsentation eines Elevation-Decoders (z. B. '{"r":1,"g":1,"b":1,"offs
 
 > `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:1614](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1614)
+Defined in: [src/components.d.ts:1614](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1614)
 
 Current load state of the layer.
 
@@ -60,7 +60,7 @@ Current load state of the layer.
 
 > `optional` **maxZoom**: `number`
 
-Defined in: [src/components.d.ts:1618](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1618)
+Defined in: [src/components.d.ts:1618](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1618)
 
 Maximale Zoomstufe für das Terrain.
 
@@ -70,7 +70,7 @@ Maximale Zoomstufe für das Terrain.
 
 > `optional` **meshMaxError**: `number`
 
-Defined in: [src/components.d.ts:1622](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1622)
+Defined in: [src/components.d.ts:1622](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1622)
 
 Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).
 
@@ -80,7 +80,7 @@ Fehler-Toleranz für das Mesh (wird an TerrainRenderer durchgereicht).
 
 > `optional` **minZoom**: `number`
 
-Defined in: [src/components.d.ts:1626](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1626)
+Defined in: [src/components.d.ts:1626](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1626)
 
 Minimale Zoomstufe für das Terrain.
 
@@ -90,7 +90,7 @@ Minimale Zoomstufe für das Terrain.
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1631](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1631)
+Defined in: [src/components.d.ts:1631](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1631)
 
 Opazität des Layers.
 
@@ -106,7 +106,7 @@ Opazität des Layers.
 
 > `optional` **texture**: `string`
 
-Defined in: [src/components.d.ts:1635](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1635)
+Defined in: [src/components.d.ts:1635](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1635)
 
 Optionale Textur (RGB) für das Terrain.
 
@@ -116,7 +116,7 @@ Optionale Textur (RGB) für das Terrain.
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1640](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1640)
+Defined in: [src/components.d.ts:1640](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1640)
 
 Sichtbarkeit des Layers.
 
@@ -132,7 +132,7 @@ true
 
 > `optional` **wireframe**: `boolean`
 
-Defined in: [src/components.d.ts:1644](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1644)
+Defined in: [src/components.d.ts:1644](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1644)
 
 Darstellung des Mesh als Drahtgitter.
 
@@ -142,7 +142,7 @@ Darstellung des Mesh als Drahtgitter.
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1649](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/components.d.ts#L1649)
+Defined in: [src/components.d.ts:1649](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/components.d.ts#L1649)
 
 Z-Index für die Darstellung.
 

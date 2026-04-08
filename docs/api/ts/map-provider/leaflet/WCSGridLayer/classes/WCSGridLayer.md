@@ -6,7 +6,7 @@
 
 # Class: WCSGridLayer
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:24](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/map-provider/leaflet/WCSGridLayer.ts#L24)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:24](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/leaflet/WCSGridLayer.ts#L24)
 
 Custom Leaflet GridLayer for WCS (Web Coverage Service) support
 
@@ -26,7 +26,7 @@ Supports:
 
 > **new WCSGridLayer**(`options`): `WCSGridLayer`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:27](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/map-provider/leaflet/WCSGridLayer.ts#L27)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:27](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/leaflet/WCSGridLayer.ts#L27)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **layerElementId**: `string`
 
-Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/types/leaflet-augment.d.ts#L7)
+Defined in: [types/leaflet-augment.d.ts:7](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/types/leaflet-augment.d.ts#L7)
 
 #### Inherited from
 
@@ -108,7 +108,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **vmapOpacity**: `number`
 
-Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/types/leaflet-augment.d.ts#L6)
+Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/types/leaflet-augment.d.ts#L6)
 
 #### Inherited from
 
@@ -120,7 +120,7 @@ Defined in: [types/leaflet-augment.d.ts:6](https://github.com/pt9912/v-map/blob/
 
 > `optional` **vmapVisible**: `boolean`
 
-Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/types/leaflet-augment.d.ts#L5)
+Defined in: [types/leaflet-augment.d.ts:5](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/types/leaflet-augment.d.ts#L5)
 
 #### Inherited from
 
@@ -1463,7 +1463,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **createTile**(`coords`, `done`): `HTMLElement`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:118](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/map-provider/leaflet/WCSGridLayer.ts#L118)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:118](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/leaflet/WCSGridLayer.ts#L118)
 
 Create tile element (required by GridLayer)
 
@@ -4720,7 +4720,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **updateOptions**(`newOptions`): `void`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:144](https://github.com/pt9912/v-map/blob/a6e98c7ad63232ff92ebecfa8a77a5e89f71786e/src/map-provider/leaflet/WCSGridLayer.ts#L144)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:144](https://github.com/pt9912/v-map/blob/7499a3d9a2302439b5ec38ecfaab20686d9f940b/src/map-provider/leaflet/WCSGridLayer.ts#L144)
 
 Update WCS options and redraw
 

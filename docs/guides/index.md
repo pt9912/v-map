@@ -6,6 +6,13 @@ gelesen hast.
 
 ## Verfügbare Guides
 
+### [CDN ohne Bundler](./cdn-esm)
+
+Wie du v-map mit einer einzigen `<script type="module">` Zeile aus einem
+öffentlichen CDN (jsDelivr) lädst — ohne npm, ohne Build-Pipeline. Inklusive
+Erklärung, wie die Auto-Importmap die Peer-Dependencies (OpenLayers, Leaflet,
+Deck.gl) automatisch auflöst, und einer CDN-Empfehlung.
+
 ### [Error Handling](./error-handling)
 
 Beschreibt die öffentliche Error-API für Anwender von v-map.
