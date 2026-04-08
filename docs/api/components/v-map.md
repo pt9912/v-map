@@ -1,6 +1,6 @@
 # v-map
 
-[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)
+[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)
 
 
 

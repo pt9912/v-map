@@ -1,6 +1,6 @@
 # Komponenten-API
 
-[**@pt9912/v-map**](../../README.md)
+[**@npm9912/v-map**](/)
 
 - [`v-map`](./v-map.md) — 
 - [`v-map-builder`](./v-map-builder.md) — A component that builds map configurations dynamically from JSON/YAML configuration scripts.

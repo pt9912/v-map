@@ -1,6 +1,6 @@
 # v-map-builder
 
-[← Zur Übersicht](./README.md) · [**@pt9912/v-map**](../../README.md)
+[← Zur Übersicht](./README.md) · [**@npm9912/v-map**](/)
 
 A component that builds map configurations dynamically from JSON/YAML configuration scripts.
 
