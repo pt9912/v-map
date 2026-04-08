@@ -6,7 +6,7 @@
 
 # Class: LayerManager
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:38](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L38)
+Defined in: [src/map-provider/cesium/layer-manager.ts:38](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L38)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:38](https://github.com/pt9
 
 > **new LayerManager**(`Cesium`, `viewer`): `LayerManager`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:44](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L44)
+Defined in: [src/map-provider/cesium/layer-manager.ts:44](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L44)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:44](https://github.com/pt9
 
 > **addCustomLayer**(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:100](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L100)
+Defined in: [src/map-provider/cesium/layer-manager.ts:100](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L100)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:100](https://github.com/pt
 
 > **addLayer**\<`T`\>(`id`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:73](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L73)
+Defined in: [src/map-provider/cesium/layer-manager.ts:73](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L73)
 
 #### Type Parameters
 
@@ -86,7 +86,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:73](https://github.com/pt9
 
 > **getLayer**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:105](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L105)
+Defined in: [src/map-provider/cesium/layer-manager.ts:105](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L105)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:105](https://github.com/pt
 
 > **getLayerById**(`layerId`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L111)
+Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L111)
 
 #### Parameters
 
@@ -122,7 +122,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:111](https://github.com/pt
 
 > **removeLayer**(`layerId`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:115](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L115)
+Defined in: [src/map-provider/cesium/layer-manager.ts:115](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L115)
 
 #### Parameters
 
@@ -140,7 +140,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:115](https://github.com/pt
 
 > **replaceLayer**\<`T`\>(`id`, `oldlayer`, `layer`): [`ILayer`](../../i-layer/interfaces/ILayer.md) \| `I3DTilesLayer`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:49](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L49)
+Defined in: [src/map-provider/cesium/layer-manager.ts:49](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L49)
 
 #### Type Parameters
 
@@ -172,7 +172,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:49](https://github.com/pt9
 
 > **setOpacity**(`layerId`, `opacity`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:126](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L126)
+Defined in: [src/map-provider/cesium/layer-manager.ts:126](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L126)
 
 #### Parameters
 
@@ -194,7 +194,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:126](https://github.com/pt
 
 > **setVisible**(`layerId`, `visible`): `void`
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:121](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L121)
+Defined in: [src/map-provider/cesium/layer-manager.ts:121](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L121)
 
 #### Parameters
 
@@ -216,7 +216,7 @@ Defined in: [src/map-provider/cesium/layer-manager.ts:121](https://github.com/pt
 
 > **setZIndex**(`layerId`, `zindex`): `Promise`\<`void`\>
 
-Defined in: [src/map-provider/cesium/layer-manager.ts:131](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/layer-manager.ts#L131)
+Defined in: [src/map-provider/cesium/layer-manager.ts:131](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/layer-manager.ts#L131)
 
 #### Parameters
 

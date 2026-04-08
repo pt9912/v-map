@@ -105,7 +105,17 @@ Solange v-map auf `0.x` ist, können auch Minor-Bumps API-relevante
 ## Komplettes Beispiel mit GeoJSON-Overlay
 
 Komplett deklarativ — keine einzige Zeile JavaScript, inklusive
-Fehler-Toasts via `<v-map-error>`:
+Fehler-Toasts via `<v-map-error>`. Das Beispiel unten ist auch als
+standalone HTML-Datei in der Doku hinterlegt und wird hier in einem
+sandboxed Iframe live vorgeführt:
+
+@[demo:cdn-osm-geojson]
+
+Der Iframe lädt
+[`/demos/cdn-osm-geojson.html`](/demos/cdn-osm-geojson.html) — eine
+echte HTML-Datei, die über jsDelivr `@npm9912/v-map@0.2.0` bezieht.
+Du kannst sie direkt im neuen Tab öffnen, das `view-source:`-Schema
+verwenden oder den Quellcode unten in eine eigene Datei kopieren.
 
 ```html
 <!DOCTYPE html>

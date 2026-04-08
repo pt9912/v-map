@@ -6,7 +6,7 @@
 
 # Interface: CesiumGeoTIFFImageryOptions
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:18](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L18)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:18](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L18)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:18](https://githu
 
 > **Cesium**: `__module`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:19](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L19)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:19](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L19)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:19](https://githu
 
 > `optional` **colorStops**: [`ColorStop`](../../../geotiff/utils/colormap-utils/interfaces/ColorStop.md)[]
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:25](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L25)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:25](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L25)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:25](https://githu
 
 > `optional` **maximumLevel**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:27](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L27)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:27](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L27)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:27](https://githu
 
 > `optional` **minimumLevel**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:26](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L26)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:26](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L26)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:26](https://githu
 
 > **rectangleDegrees**: \[`number`, `number`, `number`, `number`\]
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:20](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L20)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:20](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L20)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:20](https://githu
 
 > **resampleMethod**: `"near"` \| `"bilinear"`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:24](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L24)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:24](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L24)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:24](https://githu
 
 > **resolution**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:23](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L23)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:23](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L23)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:23](https://githu
 
 > **tileProcessor**: [`GeoTIFFTileProcessor`](../../../geotiff/utils/GeoTIFFTileProcessor/classes/GeoTIFFTileProcessor.md)
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:21](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L21)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:21](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L21)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:21](https://githu
 
 > **tileSize**: `number`
 
-Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:22](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L22)
+Defined in: [src/map-provider/cesium/GeoTIFFImageryProvider.ts:22](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/map-provider/cesium/GeoTIFFImageryProvider.ts#L22)

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerTile3d
 
-Defined in: [src/components.d.ts:1857](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1857)
+Defined in: [src/components.d.ts:1857](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1857)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:1857](https://github.com/pt9912/v-map/blob/0ecd
 
 > `optional` **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:1862](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1862)
+Defined in: [src/components.d.ts:1862](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1862)
 
 Current load state of the layer.
 
@@ -30,7 +30,7 @@ Current load state of the layer.
 
 > `optional` **onReady**: (`event`) => `void`
 
-Defined in: [src/components.d.ts:1866](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1866)
+Defined in: [src/components.d.ts:1866](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1866)
 
 Fired once the tileset layer is initialised.
 
@@ -50,7 +50,7 @@ Fired once the tileset layer is initialised.
 
 > `optional` **opacity**: `number`
 
-Defined in: [src/components.d.ts:1871](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1871)
+Defined in: [src/components.d.ts:1871](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1871)
 
 Global opacity factor (0-1).
 
@@ -66,7 +66,7 @@ Global opacity factor (0-1).
 
 > `optional` **tilesetOptions**: `string` \| `Record`\<`string`, `unknown`\>
 
-Defined in: [src/components.d.ts:1875](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1875)
+Defined in: [src/components.d.ts:1875](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1875)
 
 Optional JSON string or object with Cesium3DTileset options.
 
@@ -76,7 +76,7 @@ Optional JSON string or object with Cesium3DTileset options.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:1879](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1879)
+Defined in: [src/components.d.ts:1879](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1879)
 
 URL pointing to the Cesium 3D Tileset.
 
@@ -86,7 +86,7 @@ URL pointing to the Cesium 3D Tileset.
 
 > `optional` **visible**: `boolean`
 
-Defined in: [src/components.d.ts:1884](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1884)
+Defined in: [src/components.d.ts:1884](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1884)
 
 Whether the tileset should be visible.
 
@@ -102,7 +102,7 @@ true
 
 > `optional` **zIndex**: `number`
 
-Defined in: [src/components.d.ts:1889](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L1889)
+Defined in: [src/components.d.ts:1889](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L1889)
 
 Z-index used for ordering tilesets.
 

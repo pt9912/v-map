@@ -6,7 +6,7 @@
 
 # Interface: VMapAttributes
 
-Defined in: [src/components.d.ts:2246](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2246)
+Defined in: [src/components.d.ts:2246](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2246)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:2246](https://github.com/pt9912/v-map/blob/0ecd
 
 > **center**: `string`
 
-Defined in: [src/components.d.ts:2248](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2248)
+Defined in: [src/components.d.ts:2248](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2248)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/components.d.ts:2248](https://github.com/pt9912/v-map/blob/0ecd
 
 > **cssMode**: [`CssMode`](../../../../types/cssmode/type-aliases/CssMode.md)
 
-Defined in: [src/components.d.ts:2251](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2251)
+Defined in: [src/components.d.ts:2251](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2251)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/components.d.ts:2251](https://github.com/pt9912/v-map/blob/0ecd
 
 > **flavour**: [`Flavour`](../../../../types/flavour/type-aliases/Flavour.md)
 
-Defined in: [src/components.d.ts:2247](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2247)
+Defined in: [src/components.d.ts:2247](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2247)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/components.d.ts:2247](https://github.com/pt9912/v-map/blob/0ecd
 
 > **useDefaultImportMap**: `boolean`
 
-Defined in: [src/components.d.ts:2250](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2250)
+Defined in: [src/components.d.ts:2250](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2250)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/components.d.ts:2250](https://github.com/pt9912/v-map/blob/0ecd
 
 > **zoom**: `number`
 
-Defined in: [src/components.d.ts:2249](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L2249)
+Defined in: [src/components.d.ts:2249](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L2249)

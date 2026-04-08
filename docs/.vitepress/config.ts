@@ -7,7 +7,61 @@ export default {
   base: '/v-map/',
 
   markdown: {
-    html: false, // rohes HTML in .md ausschalten
+    // Stay false - the typedoc-generated TS reference pages contain
+    // generic-type signatures like `<T>` that the Vue template compiler
+    // would otherwise try to parse as HTML and choke on.
+    html: false,
+
+    // Tiny inline plugin: turn `@[component:Name]` markers in markdown into
+    // raw `<Name />` HTML by emitting an `html_inline` token directly.
+    // markdown-it's `html: false` option only disables the *parsing* of
+    // raw HTML from input, but `html_inline` tokens emitted by plugins are
+    // still rendered as-is. This lets us reference globally registered Vue
+    // SFCs (like <LiveMap />) from inside any .md file without enabling
+    // raw HTML across the board. The token name is restricted to PascalCase
+    // identifiers so the syntax can't accidentally collide with prose.
+    config: md => {
+      // @[component:Name] → <Name />
+      md.inline.ruler.before('emphasis', 'vue_component', (state, silent) => {
+        const start = state.pos;
+        const marker = '@[component:';
+        if (state.src.slice(start, start + marker.length) !== marker) {
+          return false;
+        }
+        const end = state.src.indexOf(']', start + marker.length);
+        if (end === -1) return false;
+        const name = state.src.slice(start + marker.length, end).trim();
+        if (!/^[A-Z][A-Za-z0-9]*$/.test(name)) return false;
+        if (!silent) {
+          const token = state.push('html_inline', '', 0);
+          token.content = `<${name} />`;
+        }
+        state.pos = end + 1;
+        return true;
+      });
+
+      // @[demo:filename] → <DemoFrame name="filename" />
+      // Filename refers to docs/public/demos/<filename>.html, which is
+      // copied to /demos/<filename>.html in the deployed site. The
+      // DemoFrame Vue SFC handles the iframe + caption + sandbox.
+      md.inline.ruler.before('emphasis', 'demo_frame', (state, silent) => {
+        const start = state.pos;
+        const marker = '@[demo:';
+        if (state.src.slice(start, start + marker.length) !== marker) {
+          return false;
+        }
+        const end = state.src.indexOf(']', start + marker.length);
+        if (end === -1) return false;
+        const name = state.src.slice(start + marker.length, end).trim();
+        if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) return false;
+        if (!silent) {
+          const token = state.push('html_inline', '', 0);
+          token.content = `<DemoFrame name="${name}" />`;
+        }
+        state.pos = end + 1;
+        return true;
+      });
+    },
   },
 
   themeConfig: {

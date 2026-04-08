@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>v-map CDN Demo: OSM</title>
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.2.0/dist/v-map/v-map.esm.js"
+    ></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      v-map {
+        display: block;
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <v-map flavour="ol" center="11.5761,48.1371" zoom="11">
+      <v-map-error position="top-right" auto-dismiss="6000"></v-map-error>
+      <v-map-layergroup group-title="Basiskarten" basemapid="OSM-BASE">
+        <v-map-layer-osm
+          id="OSM-BASE"
+          label="OpenStreetMap"
+        ></v-map-layer-osm>
+      </v-map-layergroup>
+    </v-map>
+  </body>
+</html>

@@ -6,7 +6,7 @@
 
 # Interface: VMapLayerTile3d
 
-Defined in: [src/components.d.ts:567](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L567)
+Defined in: [src/components.d.ts:567](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L567)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/components.d.ts:567](https://github.com/pt9912/v-map/blob/0ecd7
 
 > **getError**: () => `Promise`\<[`VMapErrorDetail`](../../../../utils/events/interfaces/VMapErrorDetail.md)\>
 
-Defined in: [src/components.d.ts:571](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L571)
+Defined in: [src/components.d.ts:571](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L571)
 
 Returns the last error detail, if any.
 
@@ -28,7 +28,7 @@ Returns the last error detail, if any.
 
 > **isReady**: () => `Promise`\<`boolean`\>
 
-Defined in: [src/components.d.ts:575](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L575)
+Defined in: [src/components.d.ts:575](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L575)
 
 Indicates whether the tileset has been initialised and added to the map.
 
@@ -42,7 +42,7 @@ Indicates whether the tileset has been initialised and added to the map.
 
 > **loadState**: `"ready"` \| `"error"` \| `"idle"` \| `"loading"`
 
-Defined in: [src/components.d.ts:580](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L580)
+Defined in: [src/components.d.ts:580](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L580)
 
 Current load state of the layer.
 
@@ -58,7 +58,7 @@ Current load state of the layer.
 
 > **opacity**: `number`
 
-Defined in: [src/components.d.ts:585](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L585)
+Defined in: [src/components.d.ts:585](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L585)
 
 Global opacity factor (0-1).
 
@@ -74,7 +74,7 @@ Global opacity factor (0-1).
 
 > `optional` **tilesetOptions**: `string` \| `Record`\<`string`, `unknown`\>
 
-Defined in: [src/components.d.ts:589](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L589)
+Defined in: [src/components.d.ts:589](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L589)
 
 Optional JSON string or object with Cesium3DTileset options.
 
@@ -84,7 +84,7 @@ Optional JSON string or object with Cesium3DTileset options.
 
 > **url**: `string`
 
-Defined in: [src/components.d.ts:593](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L593)
+Defined in: [src/components.d.ts:593](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L593)
 
 URL pointing to the Cesium 3D Tileset.
 
@@ -94,7 +94,7 @@ URL pointing to the Cesium 3D Tileset.
 
 > **visible**: `boolean`
 
-Defined in: [src/components.d.ts:598](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L598)
+Defined in: [src/components.d.ts:598](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L598)
 
 Whether the tileset should be visible.
 
@@ -110,7 +110,7 @@ true
 
 > **zIndex**: `number`
 
-Defined in: [src/components.d.ts:603](https://github.com/pt9912/v-map/blob/0ecd77eb3e79ea2919fb3e00d13376b10828962a/src/components.d.ts#L603)
+Defined in: [src/components.d.ts:603](https://github.com/pt9912/v-map/blob/108573a318331113571d4e8a895cc80082774fc3/src/components.d.ts#L603)
 
 Z-index used for ordering tilesets.
 
