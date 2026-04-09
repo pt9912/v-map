@@ -25,7 +25,7 @@ export default function RootLayout({
         */}
         <script
           type="module"
-          src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js"
+          src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js"
         />
       </head>
       <body>{children}</body>
