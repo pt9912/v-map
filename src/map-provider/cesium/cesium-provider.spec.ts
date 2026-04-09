@@ -2333,9 +2333,11 @@ describe('CesiumProvider', () => {
   /*  23. setView                                                     */
   /* ================================================================ */
   describe('setView', () => {
-    it('calls camera.flyTo with correct parameters', async () => {
-      const mockFlyTo = vi.fn();
-      (provider as any).viewer.camera = { flyTo: mockFlyTo };
+    it('calls camera.setView with correct parameters (no flyTo animation)', async () => {
+      // setView must apply immediately, not kick off a 2-second flyTo
+      // animation that the next slider tick would cancel.
+      const mockSetView = vi.fn();
+      (provider as any).viewer.camera = { setView: mockSetView };
       mockCesium.Cartesian3 = {
         fromDegrees: vi.fn().mockReturnValue({ x: 1, y: 2, z: 3 }),
       };
@@ -2351,10 +2353,19 @@ describe('CesiumProvider', () => {
         50,
         200000,
       );
-      expect(mockFlyTo).toHaveBeenCalledWith(
+      expect(mockSetView).toHaveBeenCalledWith(
         expect.objectContaining({
-          duration: 2.0,
+          destination: { x: 1, y: 2, z: 3 },
+          orientation: expect.objectContaining({
+            heading: 0,
+            pitch: -30 * (Math.PI / 180),
+            roll: 0,
+          }),
         }),
+      );
+      // And explicitly *not* flyTo:
+      expect((mockSetView as any).mock.calls[0][0]).not.toHaveProperty(
+        'duration',
       );
     });
 
@@ -2525,13 +2536,9 @@ describe('CesiumProvider', () => {
   /*  20. setView                                                      */
   /* ================================================================ */
   describe('setView', () => {
-    it('calls camera.flyTo with correct coordinates', async () => {
+    it('calls camera.setView with correct coordinates (no flyTo animation)', async () => {
       const camera = {
-        flyTo: vi.fn((opts: any) => {
-          // Exercise the complete and cancel callbacks for coverage
-          if (opts.complete) opts.complete();
-          if (opts.cancel) opts.cancel();
-        }),
+        setView: vi.fn(),
       };
       (provider as any).viewer = {
         ...(provider as any).viewer,
@@ -2545,11 +2552,15 @@ describe('CesiumProvider', () => {
         50,
         expect.any(Number),
       );
-      expect(camera.flyTo).toHaveBeenCalledWith(
+      expect(camera.setView).toHaveBeenCalledWith(
         expect.objectContaining({
-          duration: 2.0,
+          destination: expect.anything(),
+          orientation: expect.any(Object),
         }),
       );
+      // The fix here is specifically that we no longer call flyTo, so
+      // assert the old path is gone.
+      expect((camera as any).flyTo).toBeUndefined();
     });
 
     it('does nothing when viewer is not set', async () => {

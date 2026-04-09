@@ -1951,17 +1951,22 @@ export class CesiumProvider implements MapProvider {
   async setView(center: LonLat, zoom: number) {
     if (!this.viewer) return;
     const [lon, lat] = center;
-    this.viewer.camera.flyTo({
+    // Use camera.setView (instant) instead of camera.flyTo with a
+    // 2-second duration. flyTo is gorgeous for one-off "go to this
+    // place" calls, but it composes badly with a zoom slider or any
+    // other control that emits many setView calls in rapid
+    // succession: each drag tick cancels the previous animation and
+    // starts a new one, which the user perceives as the map "fighting
+    // back" against their input. setView applies the destination and
+    // orientation synchronously, so consecutive calls simply overwrite
+    // each other and the final state always matches the latest input.
+    this.viewer.camera.setView({
       destination: this.Cesium.Cartesian3.fromDegrees(lon, lat, 1000000 / zoom),
-      duration: 2.0, // Sekunden, anpassbar
       orientation: {
         heading: this.Cesium.Math.toRadians(0.0), // Blickrichtung nach Norden
         pitch: this.Cesium.Math.toRadians(-30.0), // leicht nach unten schauen
         roll: 0.0,
       },
-      // optional: onComplete / onCancel callbacks
-      complete: () => log('v-map - provider - cesium - Fly‑to finished'),
-      cancel: () => warn('v-map - provider - cesium - Fly‑to cancelled'),
     });
   }
 

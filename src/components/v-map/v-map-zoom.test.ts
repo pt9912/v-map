@@ -141,6 +141,41 @@ describe('v-map zoom propagation (browser)', () => {
     expect(map.__vMapProvider!.getView!()!.zoom).toBe(7);
   });
 
+  // -------- Cesium -------------------------------------------------------
+  it('Cesium: propagates a programmatic zoom change to the provider view', async () => {
+    // Regression for the animated-flyTo bug: setView used to kick off
+    // camera.flyTo({ duration: 2.0 }), which composed badly with rapid
+    // consecutive @Watch calls — every new drag tick cancelled the
+    // previous flight. The fix uses camera.setView (instant), and
+    // this test asserts that the change is observable without waiting
+    // for a two-second flight animation to complete.
+    const map = createLiveMap('cesium') as VMapHost;
+    const readyEvent = onceEvent(map, 'map-provider-ready', 15_000);
+    document.body.appendChild(map);
+
+    await waitForHydration(map);
+    await readyEvent;
+
+    // Cesium derives its "zoom" from camera height via
+    // (1_000_000 / height), so getView returns a continuous number
+    // rather than a discrete OL-style integer level. Use
+    // Math.round + a generous window instead of strict equality.
+    const initial = map.__vMapProvider?.getView?.();
+    expect(initial, 'cesium provider must implement getView()').not.toBeNull();
+
+    map.zoom = 5;
+    await waitFor(
+      () => {
+        const v = map.__vMapProvider?.getView?.();
+        return !!v && Math.round(v.zoom) === 5;
+      },
+      5_000,
+    );
+
+    const updated = map.__vMapProvider!.getView!();
+    expect(Math.round(updated!.zoom)).toBe(5);
+  });
+
   // -------- Center watcher (cross-provider sanity) -----------------------
   it('OL: propagates a programmatic center change to the provider view', async () => {
     const map = createLiveMap('ol') as VMapHost;
