@@ -1,3 +1,11 @@
+## [0.4.4](https://github.com/pt9912/v-map/compare/v0.4.3...v0.4.4) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** bump jsDelivr v-map pin from 0.4.2 to 0.4.3 ([591c88a](https://github.com/pt9912/v-map/commit/591c88a46a9b828256b5f2df437679046851e4a7))
+* **v-map:** stop resetting Cesium camera orientation on every setView ([bebedf2](https://github.com/pt9912/v-map/commit/bebedf26da2f17f86ba3a610fa3a1e764fa2f436))
+
 ## [0.4.3](https://github.com/pt9912/v-map/compare/v0.4.2...v0.4.3) (2026-04-09)
 
 
