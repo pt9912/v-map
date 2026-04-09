@@ -19,6 +19,7 @@
     "typescript": "^5.9.3"
   },
   "vmap": {
+    "skip": true,
     "output": ".output/public"
   }
 }
