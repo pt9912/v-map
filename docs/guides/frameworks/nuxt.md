@@ -87,7 +87,7 @@ useHead({
   title: 'My v-map App',
   script: [
     {
-      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js',
+      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.5.0/dist/v-map/v-map.esm.js',
       type: 'module',
     },
   ],
@@ -114,7 +114,7 @@ const zoom = ref(11);
 useHead({
   script: [
     {
-      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js',
+      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.5.0/dist/v-map/v-map.esm.js',
       type: 'module',
     },
   ],
