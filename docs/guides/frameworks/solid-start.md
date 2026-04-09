@@ -1,16 +1,14 @@
 # v-map mit SolidStart
 
 Dieser Guide zeigt, wie du v-map in eine SolidStart-App einbindest.
-Den vollständigen Source findest du unter
+Die Live-Demo unten ist die echte App aus
 [`examples/solid-start/`](https://github.com/pt9912/v-map/tree/main/examples/solid-start)
-im v-map-Repo — clone und starte es lokal mit `pnpm dev`.
+des v-map-Repos, gebaut mit `vinxi build` (preset: `static`) und in
+einem sandboxed Iframe eingebettet.
 
-::: tip Live-Demo: Solid (ohne SSR)
-Die interaktive v-map-Demo findest du im [Solid-Guide](./solid) —
-sie zeigt dasselbe Showcase-Pattern, nur ohne den SolidStart-SSR-
-Overhead. SolidStart fügt File-System-Routing und SSG hinzu, aber
-die v-map-Integration selbst ist identisch.
-:::
+## Live-Demo
+
+@[example:solid-start]
 
 SolidStart ist das SSR/SSG-Meta-Framework für Solid — vergleichbar mit
 Next.js (React) oder Nuxt (Vue).
