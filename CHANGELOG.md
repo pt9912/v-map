@@ -1,3 +1,18 @@
+## [0.4.1](https://github.com/pt9912/v-map/compare/v0.4.0...v0.4.1) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** bump jsDelivr v-map pin from 0.3.0 to 0.4.0 ([c6debe1](https://github.com/pt9912/v-map/commit/c6debe174500768ab3556e69c0386b1d88cc35df))
+* **v-map:** make zoom/center prop changes actually reach the provider ([6d2a8cf](https://github.com/pt9912/v-map/commit/6d2a8cfc39bac2ef2de42e5ed31a7b0ca4911f66))
+
+
+### Features
+
+* **examples:** add Astro framework guide ([83ec2cc](https://github.com/pt9912/v-map/commit/83ec2cc20030b5123f249083a497d8edef230cc1))
+* **examples:** add Lit framework guide ([e17f093](https://github.com/pt9912/v-map/commit/e17f093c01a1ddfb6bd37623534facc0331d5968))
+* **examples:** add Nuxt 4 framework guide ([28d5465](https://github.com/pt9912/v-map/commit/28d546587514ea18d2492d843859ee90d0b10ed3))
+
 # [0.4.0](https://github.com/pt9912/v-map/compare/v0.3.0...v0.4.0) (2026-04-09)
 
 
