@@ -2356,15 +2356,14 @@ describe('CesiumProvider', () => {
         50,
         1_250_000,
       );
-      expect(mockSetView).toHaveBeenCalledWith(
-        expect.objectContaining({
-          destination: { x: 1, y: 2, z: 3 },
-          orientation: expect.objectContaining({
-            heading: 0,
-            pitch: -30 * (Math.PI / 180),
-            roll: 0,
-          }),
-        }),
+      expect(mockSetView).toHaveBeenCalledWith({
+        destination: { x: 1, y: 2, z: 3 },
+      });
+      // Orientation must NOT be passed — Cesium preserves the current
+      // camera heading/pitch/roll when the field is omitted, so the
+      // user's existing right-click-drag rotation stays intact.
+      expect((mockSetView as any).mock.calls[0][0]).not.toHaveProperty(
+        'orientation',
       );
       // And explicitly *not* flyTo:
       expect((mockSetView as any).mock.calls[0][0]).not.toHaveProperty(
@@ -2558,8 +2557,12 @@ describe('CesiumProvider', () => {
       expect(camera.setView).toHaveBeenCalledWith(
         expect.objectContaining({
           destination: expect.anything(),
-          orientation: expect.any(Object),
         }),
+      );
+      // Orientation must NOT be passed — Cesium preserves the current
+      // camera heading/pitch/roll when the field is omitted.
+      expect((camera.setView as any).mock.calls[0][0]).not.toHaveProperty(
+        'orientation',
       );
       // The fix here is specifically that we no longer call flyTo, so
       // assert the old path is gone.

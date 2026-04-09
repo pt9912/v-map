@@ -1996,20 +1996,23 @@ export class CesiumProvider implements MapProvider {
     // other control that emits many setView calls in rapid
     // succession: each drag tick cancels the previous animation and
     // starts a new one, which the user perceives as the map "fighting
-    // back" against their input. setView applies the destination and
-    // orientation synchronously, so consecutive calls simply overwrite
-    // each other and the final state always matches the latest input.
+    // back" against their input. setView applies the destination
+    // synchronously, so consecutive calls simply overwrite each
+    // other and the final state always matches the latest input.
+    //
+    // No `orientation` is passed: Cesium preserves the current
+    // camera heading/pitch/roll when orientation is omitted. That is
+    // what we want here because setView is driven by the shared
+    // <v-map zoom=""> prop, which only describes *altitude*, not
+    // rotation. Forcing a specific orientation on every call would
+    // clobber any rotation the user performed via the Cesium native
+    // right-click-drag navigation.
     this.viewer.camera.setView({
       destination: this.Cesium.Cartesian3.fromDegrees(
         lon,
         lat,
         zoomToHeight(zoom),
       ),
-      orientation: {
-        heading: this.Cesium.Math.toRadians(0.0), // Blickrichtung nach Norden
-        pitch: this.Cesium.Math.toRadians(-30.0), // leicht nach unten schauen
-        roll: 0.0,
-      },
     });
   }
 
