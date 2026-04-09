@@ -1,3 +1,19 @@
+# [0.4.0](https://github.com/pt9912/v-map/compare/v0.3.0...v0.4.0) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** drop unnecessary String(zoom) cast and untrack .next/ ([4c9f7c5](https://github.com/pt9912/v-map/commit/4c9f7c58e2dde99550ee7fa153a228ba8a8d4956))
+
+
+### Features
+
+* **examples:** add Angular framework guide ([b5a4970](https://github.com/pt9912/v-map/commit/b5a4970fad75b3f0cf167c3bf92783fdef91189e))
+* **examples:** add Next.js framework guide ([7f7b05d](https://github.com/pt9912/v-map/commit/7f7b05dccd06a39a00d2d086d283a31da006100d))
+* **examples:** add React framework guide + fix Stencil chunk 404 in iframe demos ([0dddeab](https://github.com/pt9912/v-map/commit/0dddeab8b8a2c1d1a0ab246a50714791e5c252c0))
+* **examples:** add Vue 3 framework guide ([6e9a9b9](https://github.com/pt9912/v-map/commit/6e9a9b9e188a3f8ef154d3d9c99a57f47d88d6e1))
+* **v-map:** propagate zoom and center prop changes to provider via @Watch ([75acad6](https://github.com/pt9912/v-map/commit/75acad6755c3042fd16e8e3602392566c79ff397))
+
 # [0.3.0](https://github.com/pt9912/v-map/compare/v0.2.4...v0.3.0) (2026-04-08)
 
 
