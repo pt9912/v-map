@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vinxi build",
+    "build": "vinxi build && mkdir -p .output/public/assets && cp -r .output/public/_build/assets/* .output/public/assets/ 2>/dev/null || true",
     "dev": "vinxi dev",
     "start": "vinxi start"
   },
