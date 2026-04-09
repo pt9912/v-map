@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>v-map Solid Demo</title>
+    <!--
+      Load v-map directly from jsDelivr at runtime instead of bundling
+      it through Vite. Stencil's lazy loader uses import.meta.url to
+      find its sibling *.entry.js chunks; if Vite bundles the loader,
+      that URL ends up under /assets/... and Stencil 404s on every
+      layer chunk. Loading the published v-map.esm.js from jsDelivr
+      keeps Stencil's chunk resolution intact.
+
+      Pin the version explicitly so the demo behaves identically across
+      deploys; bump in lockstep with v-map releases.
+    -->
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js"
+    ></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
