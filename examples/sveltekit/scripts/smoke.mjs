@@ -1,11 +1,26 @@
 import { spawn } from 'node:child_process';
-import { existsSync, rmSync } from 'node:fs';
+import { rmSync } from 'node:fs';
 import net from 'node:net';
 import path from 'node:path';
 import process from 'node:process';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import puppeteer from 'puppeteer';
+import { chromium } from 'playwright';
+
+// Smoke test for the SvelteKit demo. Spins up a real Vite dev server,
+// drives a real Chromium via Playwright, and asserts the user-visible
+// behaviour of the showcase page end-to-end:
+//   1. Custom elements register and the deck provider becomes ready.
+//   2. The local GeoTIFF sample is reachable and the layer toggles on.
+//   3. Switching the provider to OL and dragging the zoom slider
+//      actually moves the live OL view (regression test for the
+//      @Watch('zoom') propagation fix in v0.4.1).
+//   4. Switching the provider to Cesium succeeds.
+//
+// Playwright is used because v-map's other browser tests already
+// depend on it (via @vitest/browser-playwright). Puppeteer would also
+// work but pulling in a second headless Chromium driver isn't worth
+// it.
 
 const LOG_PREFIX = 'smoke - ';
 
@@ -13,23 +28,9 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const demoDir = path.resolve(scriptDir, '..');
 const repoRoot = path.resolve(demoDir, '..', '..');
 const host = '127.0.0.1';
-const chromeDebugPort = process.env.CHROME_DEBUG_PORT ?? '9222';
 const requestedPort = Number(process.env.PORT ?? '4175');
 const port = String(await findFreePort(requestedPort));
 const baseUrl = `http://${host}:${port}/`;
-const browserUrl = `http://${host}:${chromeDebugPort}`;
-
-function pickChromiumExecutable() {
-  const candidates = [
-    process.env.PUPPETEER_EXECUTABLE_PATH,
-    '/snap/bin/chromium',
-    '/usr/bin/chromium',
-    '/usr/bin/chromium-browser',
-    '/usr/bin/google-chrome',
-  ].filter(Boolean);
-
-  return candidates.find(existsSync);
-}
 
 function isPortFree(portToCheck) {
   return new Promise(resolve => {
@@ -134,76 +135,66 @@ const devServer = spawn(
 devServer.stdout.on('data', captureOutput);
 devServer.stderr.on('data', captureOutput);
 
-const chromiumExecutable = pickChromiumExecutable();
+let browser;
 
-if (!chromiumExecutable) {
-  throw new Error('No Chromium executable found for smoke test');
-}
-
-const browserProcess = spawn(
-  chromiumExecutable,
-  [
-    '--headless',
-    '--no-sandbox',
-    '--disable-dev-shm-usage',
-    '--enable-webgl',
-    '--ignore-gpu-blocklist',
-    '--remote-debugging-address=127.0.0.1',
-    `--remote-debugging-port=${chromeDebugPort}`,
-    '--user-data-dir=/tmp/v-map-smoke-chromium',
-    'about:blank',
-  ],
-  {
-    cwd: repoRoot,
-    env: process.env,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  },
-);
-
-browserProcess.stdout.on('data', captureOutput);
-browserProcess.stderr.on('data', captureOutput);
-
-const cleanup = () => {
+const cleanup = async () => {
+  if (browser) {
+    try {
+      await browser.close();
+    } catch {
+      /* swallow */
+    }
+    browser = undefined;
+  }
   if (!devServer.killed) {
     devServer.kill('SIGTERM');
-  }
-  if (!browserProcess.killed) {
-    browserProcess.kill('SIGTERM');
   }
 };
 
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 
-let browser;
-
 try {
   console.log(`${LOG_PREFIX}waiting for dev server at ${baseUrl}`);
   await waitForHttp(baseUrl);
   console.log(`${LOG_PREFIX}checking local GeoTIFF asset`);
   await waitForHttp(`${baseUrl}geotiff/cea.tif`);
-  console.log(`${LOG_PREFIX}waiting for Chromium DevTools at ${browserUrl}`);
-  await waitForHttp(`${browserUrl}/json/version`);
 
-  browser = await puppeteer.connect({
-    browserURL: browserUrl,
+  console.log(`${LOG_PREFIX}launching Chromium via Playwright`);
+  browser = await chromium.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-dev-shm-usage',
+      '--enable-webgl',
+      '--ignore-gpu-blocklist',
+    ],
   });
 
-  const page = await browser.newPage();
-  await page.evaluateOnNewDocument(() => {
+  const context = await browser.newContext();
+  await context.addInitScript(() => {
     localStorage.setItem('@pt9912/v-map:logLevel', 'debug');
   });
 
+  const page = await context.newPage();
+
   console.log(`${LOG_PREFIX}opening demo page`);
-  await page.goto(`${baseUrl}?vmapDebug`, { waitUntil: 'networkidle2' });
+  // `networkidle` is too strict for Vite dev: HMR keeps a websocket
+  // open. Wait for DOM ready instead and rely on the explicit
+  // waitForFunction calls below for the v-map lifecycle gates.
+  await page.goto(`${baseUrl}?vmapDebug`, { waitUntil: 'domcontentloaded' });
+
   console.log(`${LOG_PREFIX}waiting for custom elements registration`);
   await page.waitForFunction(
     () => document.body.innerText.includes('v-map custom elements registered'),
+    null,
     { timeout: 30000 },
   );
-  console.log(`${LOG_PREFIX}waiting for map-provider-ready`);
+
+  console.log(`${LOG_PREFIX}waiting for map-provider-ready (ol)`);
   await page.waitForFunction(
-    () => document.body.innerText.includes('map-provider-ready (deck)'),
+    () => document.body.innerText.includes('map-provider-ready (ol)'),
+    null,
     { timeout: 30000 },
   );
 
@@ -212,36 +203,94 @@ try {
     const button = Array.from(document.querySelectorAll('button')).find(
       el => el.textContent?.includes('Local CEA Grayscale'),
     );
-
     if (!(button instanceof HTMLButtonElement)) {
       throw new Error('GeoTIFF sample button not found');
     }
-
     button.click();
   });
 
-  console.log(`${LOG_PREFIX}waiting for page log entry`);
+  console.log(`${LOG_PREFIX}waiting for GeoTIFF log entry`);
   await page.waitForFunction(
     () => document.body.innerText.includes('GeoTIFF: /geotiff/cea.tif'),
+    null,
+    { timeout: 30000 },
+  );
+
+  console.log(`${LOG_PREFIX}driving the zoom slider and asserting the OL view follows`);
+  // Regression test for the @Watch('zoom') propagation bug fixed in
+  // v0.4.1. The default OL provider is already active.
+  const initialOlZoom = await page.evaluate(() => {
+    const map = document.querySelector('v-map');
+    return map?.__vMapProvider?.getView?.()?.zoom ?? null;
+  });
+  console.log(`${LOG_PREFIX}initial OL view zoom = ${initialOlZoom}`);
+  if (initialOlZoom == null) {
+    throw new Error(
+      'OL provider has no getView() — was v-map loaded from the local dist?',
+    );
+  }
+
+  // Mutate the slider state directly: dispatch an `input` event so
+  // Svelte's bind:value picks up the new value, which then flows
+  // through `zoom` → `<v-map zoom={zoom}>` → @Watch('zoom') →
+  // OpenLayers view.setZoom(). This is the same code path the user's
+  // mouse drag triggers.
+  await page.evaluate(() => {
+    const slider = document.querySelector(
+      'input[type="range"][min="2"][max="18"]',
+    );
+    if (!(slider instanceof HTMLInputElement)) {
+      throw new Error('Zoom slider not found');
+    }
+    slider.value = '6';
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  await page.waitForFunction(
+    () => {
+      const map = document.querySelector('v-map');
+      const view = map?.__vMapProvider?.getView?.();
+      return view && Math.round(view.zoom) === 6;
+    },
+    null,
+    { timeout: 10000 },
+  );
+
+  const updatedOlZoom = await page.evaluate(() => {
+    const map = document.querySelector('v-map');
+    return map?.__vMapProvider?.getView?.()?.zoom ?? null;
+  });
+  console.log(`${LOG_PREFIX}OL view zoom after slider drag = ${updatedOlZoom}`);
+  if (Math.round(updatedOlZoom) !== 6) {
+    throw new Error(
+      `Expected OL view zoom 6 after slider drag, got ${updatedOlZoom}`,
+    );
+  }
+
+  console.log(`${LOG_PREFIX}switching provider to deck`);
+  await page.selectOption('select', 'deck');
+  await page.waitForFunction(
+    () => document.body.innerText.includes('map-provider-ready (deck)'),
+    null,
     { timeout: 30000 },
   );
 
   console.log(`${LOG_PREFIX}switching provider to cesium`);
-  await page.select('select', 'cesium');
+  await page.selectOption('select', 'cesium');
   await page.waitForFunction(
     () => document.body.innerText.includes('map-provider-ready (cesium)'),
+    null,
     { timeout: 30000 },
   );
 
   console.log(`${LOG_PREFIX}ok ${baseUrl}`);
-  console.log(`${LOG_PREFIX}provider initialized, local GeoTIFF requested, and cesium path confirmed`);
+  console.log(
+    `${LOG_PREFIX}provider initialized, local GeoTIFF requested, zoom slider verified, and cesium path confirmed`,
+  );
 } catch (error) {
   console.error(`${LOG_PREFIX}failed`);
   console.error(serverOutput);
   throw error;
 } finally {
-  if (browser) {
-    await browser.close();
-  }
-  cleanup();
+  await cleanup();
 }
