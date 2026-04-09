@@ -17,7 +17,9 @@ nur mit Angular-19-Idiom:
   am `<v-map>`-Element via `[attr.flavour]="provider()"`. Provider-Wechsel
   ohne Re-Mount.
 - **Reactive Zoom-Slider:** `signal<number>(11)` mit `(input)` Event
-  Handler, gebunden via `[attr.zoom]="zoom().toString()"`.
+  Handler, gebunden via `[attr.zoom]="zoom()"`. Angular wandelt
+  Number-Werte für `[attr.X]`-Bindings automatisch in Strings um, also
+  brauchst du kein explizites `.toString()`.
 - **Layer-Toggle:** Angular's neuer `@if`-Control-Flow blendet
   `<v-map-layer-*>` Komponenten ein/aus.
 - **`<v-map-error>` Toast:** deklarativer Fehler-Stapel unten rechts,
@@ -136,7 +138,7 @@ export class AppComponent {
   (input)="zoom.set($any($event.target).valueAsNumber)"
 />
 
-<v-map flavour="ol" center="11.576,48.137" [attr.zoom]="zoom().toString()">
+<v-map flavour="ol" center="11.576,48.137" [attr.zoom]="zoom()">
   <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 
   <v-map-layergroup group-title="Base" basemapid="osm">
@@ -159,12 +161,12 @@ markiert die `zoom`-abhängigen Bindings als dirty und re-rendert die
 betroffenen Attribute am Custom-Element.
 
 ::: tip `[attr.foo]` vs `[foo]`
-Wir binden `[attr.zoom]="zoom().toString()"` und nicht `[zoom]="zoom()"`.
-Der `[attr.X]` Bind setzt das HTML-**Attribut** (immer String), während
-`[X]` die **Property** des Elements setzen würde — und Stencil's
-Attribute-Reflection erwartet beim ersten Mount das Attribut. Bei
-Number-Props wie `zoom`, `opacity`, `z-index` immer `[attr.X]` mit
-expliziter `.toString()`-Conversion verwenden.
+Wir binden `[attr.zoom]="zoom()"`. Der `[attr.X]` Bind setzt das
+HTML-**Attribut** und nicht die JS-Property. Angular ruft beim Setzen
+von Attributen automatisch `.toString()` auf, also brauchst du keinen
+expliziten Cast für Number-Werte. Stencils
+`@Prop({ reflect: true })` propagiert die Änderung dann zurück in den
+typed Number-Prop. Das funktioniert auch für `opacity`, `z-index` etc.
 :::
 
 ### 6. Reactive Layer hinzufügen oder ausblenden
@@ -248,10 +250,11 @@ Der relevante Teil ist
 1. **`CUSTOM_ELEMENTS_SCHEMA` vergessen.** Compile-time-Error „is not
    a known element". Pflicht-Schritt für jedes Component, das v-map-Tags
    verwendet.
-2. **`[zoom]="zoom()"` statt `[attr.zoom]="zoom().toString()"`.** Setzt
-   die Property statt des Attributs. Funktioniert beim ersten Mount,
-   aber spätere Updates greifen nicht zuverlässig — Stencil's
-   Attribut-Reflection ist die zuverlässige API.
+2. **`[zoom]="zoom()"` statt `[attr.zoom]="zoom()"`.** Setzt die JS-
+   Property statt des Attributs. Funktioniert in den meisten Fällen,
+   aber das Attribut-basierte Pattern via `[attr.X]` ist robuster
+   gegen Angular-Compiler-Strikt-Mode-Checks (schemaless properties)
+   und reflected sich automatisch zurück ins HTML.
 3. **`defineCustomElements()` aus dem Loader bündeln.** Funktioniert in
    Angular's esbuild-Build NICHT (gleicher Bug wie React/Vue/SvelteKit).
    Immer den `<script type="module">` aus jsDelivr im `index.html`

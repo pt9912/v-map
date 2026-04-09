@@ -2,7 +2,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const { helperMock } = vi.hoisted(() => {
   const helperMock = {
-    initLayer: vi.fn(),
+    initLayer: vi.fn((factory?: () => unknown) => { if (typeof factory === "function") factory(); }),
     removeLayer: vi.fn(),
     updateLayer: vi.fn(),
     setVisible: vi.fn(),

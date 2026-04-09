@@ -98,6 +98,91 @@ describe('<v-map>', () => {
     expect(component.reset).not.toHaveBeenCalled();
   });
 
+  it('onZoomChanged calls setView with the live center from getView', async () => {
+    const setView = vi.fn().mockResolvedValue(undefined);
+    const getView = vi.fn(() => ({ center: [11.5, 48.1] as [number, number], zoom: 11 }));
+    const component = new VMap() as any;
+    component.mapProvider = { setView, getView };
+    component.mapState = 'available';
+    component.center = '0,0';
+
+    await component.onZoomChanged(11, 14);
+
+    // Should preserve the LIVE center from the provider, not the
+    // initial seed prop value '0,0'.
+    expect(getView).toHaveBeenCalledTimes(1);
+    expect(setView).toHaveBeenCalledWith([11.5, 48.1], 14);
+  });
+
+  it('onZoomChanged is a no-op when old and new value match', async () => {
+    const setView = vi.fn();
+    const component = new VMap() as any;
+    component.mapProvider = { setView, getView: vi.fn() };
+    component.mapState = 'available';
+
+    await component.onZoomChanged(11, 11);
+
+    expect(setView).not.toHaveBeenCalled();
+  });
+
+  it('onZoomChanged is a no-op while map is not yet available', async () => {
+    const setView = vi.fn();
+    const component = new VMap() as any;
+    component.mapProvider = { setView, getView: vi.fn() };
+    component.mapState = 'creating';
+
+    await component.onZoomChanged(11, 14);
+
+    expect(setView).not.toHaveBeenCalled();
+  });
+
+  it('onZoomChanged falls back to parsed seed center when getView is unavailable', async () => {
+    const setView = vi.fn().mockResolvedValue(undefined);
+    const component = new VMap() as any;
+    component.mapProvider = { setView }; // no getView method
+    component.mapState = 'available';
+    component.center = '7.5,50.2';
+
+    await component.onZoomChanged(11, 14);
+
+    expect(setView).toHaveBeenCalledWith([7.5, 50.2], 14);
+  });
+
+  it('onCenterChanged calls setView with the live zoom from getView', async () => {
+    const setView = vi.fn().mockResolvedValue(undefined);
+    const getView = vi.fn(() => ({ center: [0, 0] as [number, number], zoom: 17 }));
+    const component = new VMap() as any;
+    component.mapProvider = { setView, getView };
+    component.mapState = 'available';
+    component.zoom = 11; // initial seed - should be ignored in favour of live zoom
+
+    await component.onCenterChanged('0,0', '11.0,48.0');
+
+    expect(setView).toHaveBeenCalledWith([11.0, 48.0], 17);
+  });
+
+  it('onCenterChanged falls back to seed zoom when getView is unavailable', async () => {
+    const setView = vi.fn().mockResolvedValue(undefined);
+    const component = new VMap() as any;
+    component.mapProvider = { setView };
+    component.mapState = 'available';
+    component.zoom = 11;
+
+    await component.onCenterChanged('0,0', '11.0,48.0');
+
+    expect(setView).toHaveBeenCalledWith([11.0, 48.0], 11);
+  });
+
+  it('onCenterChanged throws on a malformed new value', async () => {
+    const component = new VMap() as any;
+    component.mapProvider = { setView: vi.fn(), getView: vi.fn() };
+    component.mapState = 'available';
+
+    await expect(
+      component.onCenterChanged('0,0', 'not-a-coord'),
+    ).rejects.toThrow(/Ungültiges center-Prop/);
+  });
+
   it('createMap returns early when already creating', async () => {
     mockCreateProvider.mockClear();
     const component = new VMap() as any;

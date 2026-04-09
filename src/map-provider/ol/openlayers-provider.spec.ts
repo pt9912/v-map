@@ -24,6 +24,7 @@ const {
   mockWKT,
   mockControl,
   mockFromLonLat,
+  mockToLonLat,
   mockBboxStrategy,
   mockImageSource,
 } = vi.hoisted(() => {
@@ -90,6 +91,8 @@ const {
     animate: vi.fn(),
     getProjection: vi.fn(() => 'EPSG:3857'),
     getResolution: vi.fn(() => 1),
+    getCenter: vi.fn(() => [1287000, 6128000]),
+    getZoom: vi.fn(() => 13),
   };
 
   const hoistedMockView = vi.fn().mockImplementation(function () {
@@ -163,6 +166,7 @@ const {
     }),
     mockControl: vi.fn(),
     mockFromLonLat: vi.fn((c: any) => c),
+    mockToLonLat: vi.fn((c: any) => c),
     mockBboxStrategy: vi.fn(),
     mockImageSource: vi.fn().mockImplementation(function () { /* no explicit return so `this` is preserved for subclasses */ }),
   };
@@ -210,6 +214,7 @@ vi.mock('ol/loadingstrategy', () => ({ __esModule: true, bbox: mockBboxStrategy 
 vi.mock('ol/proj', () => ({
   __esModule: true,
   fromLonLat: mockFromLonLat,
+  toLonLat: mockToLonLat,
 }));
 
 vi.mock('./openlayers-helper', () => ({
@@ -343,6 +348,46 @@ describe('OpenLayersProvider', () => {
     it('does nothing when map is not initialized', async () => {
       const provider = createProvider();
       await expect(provider.setView([0, 0], 2)).resolves.not.toThrow();
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // getView
+  // -----------------------------------------------------------------------
+  describe('getView', () => {
+    it('returns null when map is not initialised', () => {
+      const provider = createProvider();
+      expect(provider.getView()).toBeNull();
+    });
+
+    it('returns null when the view has no center', async () => {
+      const provider = await createInitializedProvider();
+      const view = (provider as any).map.getView();
+      view.getCenter.mockReturnValueOnce(undefined);
+      expect(provider.getView()).toBeNull();
+    });
+
+    it('returns the live center (toLonLat-converted) and zoom', async () => {
+      const provider = await createInitializedProvider();
+      const view = (provider as any).map.getView();
+      view.getCenter.mockReturnValueOnce([1287000, 6128000]);
+      view.getZoom.mockReturnValueOnce(13);
+      mockToLonLat.mockReturnValueOnce([11.576, 48.137]);
+
+      const result = provider.getView();
+
+      expect(mockToLonLat).toHaveBeenCalledWith([1287000, 6128000]);
+      expect(result).toEqual({ center: [11.576, 48.137], zoom: 13 });
+    });
+
+    it('falls back to zoom 0 when getZoom returns undefined', async () => {
+      const provider = await createInitializedProvider();
+      const view = (provider as any).map.getView();
+      view.getCenter.mockReturnValueOnce([0, 0]);
+      view.getZoom.mockReturnValueOnce(undefined);
+      mockToLonLat.mockReturnValueOnce([0, 0]);
+
+      expect(provider.getView()).toEqual({ center: [0, 0], zoom: 0 });
     });
   });
 

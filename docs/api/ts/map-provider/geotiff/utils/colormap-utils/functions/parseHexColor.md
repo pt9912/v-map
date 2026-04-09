@@ -8,7 +8,7 @@
 
 > **parseHexColor**(`hexColor`): \[`number`, `number`, `number`\]
 
-Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:66](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/geotiff/utils/colormap-utils.ts#L66)
+Defined in: [src/map-provider/geotiff/utils/colormap-utils.ts:66](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/geotiff/utils/colormap-utils.ts#L66)
 
 Parse a hex color string to RGB array
 

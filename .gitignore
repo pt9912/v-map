@@ -70,7 +70,9 @@ docs/public/demos/*/
 # Same for the build/ and dist/ directory inside each example workspace.
 examples/*/build/
 examples/*/dist/
+examples/*/out/
 examples/*/.svelte-kit/
+examples/*/.next/
 
 # vue-tsc build cache
 examples/*/tsconfig.tsbuildinfo

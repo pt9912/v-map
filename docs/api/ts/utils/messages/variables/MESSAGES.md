@@ -8,7 +8,7 @@
 
 > `const` **MESSAGES**: `object`
 
-Defined in: [src/utils/messages.ts:1](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/messages.ts#L1)
+Defined in: [src/utils/messages.ts:1](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/messages.ts#L1)
 
 ## Type Declaration
 

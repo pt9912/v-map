@@ -6,7 +6,7 @@
 
 # Interface: WCSGridLayerOptions
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:6](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L6)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:6](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L6)
 
 ## Extends
 
@@ -54,7 +54,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **coverageName**: `string`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:8](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L8)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:8](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L8)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:8](https://github.com/pt99
 
 > `optional` **format**: `string`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:10](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L10)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:10](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L10)
 
 ***
 
@@ -172,7 +172,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > `optional` **params**: `Record`\<`string`, `string` \| `number` \| `boolean`\>
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:12](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L12)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:12](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L12)
 
 ***
 
@@ -180,7 +180,7 @@ Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:12](https://github.com/pt9
 
 > `optional` **projection**: `string`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:11](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L11)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:11](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L11)
 
 ***
 
@@ -236,7 +236,7 @@ Defined in: node\_modules/.pnpm/@types+leaflet@1.9.21/node\_modules/@types/leafl
 
 > **url**: `string`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:7](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L7)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:7](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L7)
 
 ***
 
@@ -244,7 +244,7 @@ Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:7](https://github.com/pt99
 
 > `optional` **version**: `string`
 
-Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:9](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/leaflet/WCSGridLayer.ts#L9)
+Defined in: [src/map-provider/leaflet/WCSGridLayer.ts:9](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/leaflet/WCSGridLayer.ts#L9)
 
 ***
 

@@ -6,7 +6,7 @@
 
 # Interface: LayerGroupsProps\<L, G\>
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/deck/LayerGroups.ts#L25)
+Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/deck/LayerGroups.ts#L25)
 
 ## Type Parameters
 
@@ -24,4 +24,4 @@ Defined in: [src/map-provider/deck/LayerGroups.ts:25](https://github.com/pt9912/
 
 > `optional` **groups**: readonly `G`[]
 
-Defined in: [src/map-provider/deck/LayerGroups.ts:29](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/map-provider/deck/LayerGroups.ts#L29)
+Defined in: [src/map-provider/deck/LayerGroups.ts:29](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/map-provider/deck/LayerGroups.ts#L29)

@@ -84,7 +84,7 @@
     <div class="map-container">
       <v-map
         [attr.flavour]="provider()"
-        [attr.zoom]="zoom().toString()"
+        [attr.zoom]="zoom()"
         center="11.576,48.137"
         id="map1"
         (vmap-error)="onMapError($event)"

@@ -216,7 +216,7 @@
 			<!-- svelte-ignore element_invalid_self_closing_tag -->
 			<v-map
 				flavour={provider}
-				zoom={String(zoom)}
+				{zoom}
 				center="11.576,48.137"
 				id="map1"
 				onmap-provider-ready={onMapReady}

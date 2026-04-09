@@ -247,7 +247,7 @@ export default function App() {
           <v-map
             ref={mapRef}
             flavour={provider}
-            zoom={String(zoom)}
+            zoom={zoom}
             center="11.576,48.137"
             id="map1"
           >

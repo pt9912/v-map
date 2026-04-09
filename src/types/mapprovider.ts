@@ -36,6 +36,15 @@ export interface MapProvider {
   /** View/Camera setzen; in OL/Cesium meist async (Animations/Promises), daher Promise<void> */
   setView(center: LonLat, zoom: number): Promise<void>;
 
+  /**
+   * Aktuelle View/Camera des Providers abfragen. Spiegelt den IST-Stand
+   * (nach User-Pan/Zoom) wider, NICHT die initialen Init-Optionen.
+   * Wird von `<v-map>`'s `@Watch('zoom')` / `@Watch('center')` Handlern
+   * benutzt, um partielle Updates ohne Daten-Verlust zusammenzubauen.
+   * Gibt `null` zurück, wenn der Provider noch nicht initialisiert ist.
+   */
+  getView?(): { center: LonLat; zoom: number } | null;
+
   ensureGroup(
     groupId: string,
     visible: boolean,

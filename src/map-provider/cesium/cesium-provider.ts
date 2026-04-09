@@ -1965,6 +1965,23 @@ export class CesiumProvider implements MapProvider {
     });
   }
 
+  getView(): { center: LonLat; zoom: number } | null {
+    if (!this.viewer) return null;
+    const camera = this.viewer.camera;
+    const position = camera.positionCartographic;
+    if (!position) return null;
+    const lon = this.Cesium.Math.toDegrees(position.longitude);
+    const lat = this.Cesium.Math.toDegrees(position.latitude);
+    // Cesium has no native zoom level - we approximate it from the
+    // camera height using the inverse of the formula in setView()
+    // (height = 1_000_000 / zoom). This is the same approximation
+    // setView uses, so a roundtrip getView()/setView() preserves the
+    // same camera height.
+    const height = position.height;
+    const zoom = height > 0 ? 1_000_000 / height : 0;
+    return { center: [lon, lat], zoom };
+  }
+
   private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
   ): Promise<unknown> {

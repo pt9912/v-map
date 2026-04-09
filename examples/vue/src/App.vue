@@ -204,7 +204,7 @@ function onMapReady() {
       <div class="map-container">
         <v-map
           :flavour="provider"
-          :zoom="String(zoom)"
+          :zoom="zoom"
           center="11.576,48.137"
           id="map1"
           @vmap-error="onMapError"

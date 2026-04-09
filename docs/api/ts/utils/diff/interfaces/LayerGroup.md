@@ -6,7 +6,7 @@
 
 # Interface: LayerGroup
 
-Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L29)
+Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L29)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/diff.ts:29](https://github.com/pt9912/v-map/blob/59b99a54
 
 > **basemapid**: `string`
 
-Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L31)
+Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L31)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/diff.ts:31](https://github.com/pt9912/v-map/blob/59b99a54
 
 > **groupTitle**: `string`
 
-Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L30)
+Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L30)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/diff.ts:30](https://github.com/pt9912/v-map/blob/59b99a54
 
 > **layers**: [`NormalizedLayer`](NormalizedLayer.md)[]
 
-Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L33)
+Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L33)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/utils/diff.ts:33](https://github.com/pt9912/v-map/blob/59b99a54
 
 > `optional` **visible**: `string` \| `boolean`
 
-Defined in: [src/utils/diff.ts:32](https://github.com/pt9912/v-map/blob/59b99a54c6e19ee91fcaa91c0e3ce882570d99e9/src/utils/diff.ts#L32)
+Defined in: [src/utils/diff.ts:32](https://github.com/pt9912/v-map/blob/73db6df097021fa1ea63592bd8118a9557fa46d1/src/utils/diff.ts#L32)
