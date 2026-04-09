@@ -154,7 +154,7 @@ useHead({
     {
       // Pin the version explicitly so the demo behaves identically
       // across deploys; bump in lockstep with v-map releases.
-      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js',
+      src: 'https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js',
       type: 'module',
       // Stencil's lazy loader uses import.meta.url to find its sibling
       // *.entry.js chunks; if a bundler ingests the loader, that URL
