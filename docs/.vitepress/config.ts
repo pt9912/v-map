@@ -98,6 +98,7 @@ export default {
           { text: 'Angular', link: '/guides/frameworks/angular' },
           { text: 'Next.js', link: '/guides/frameworks/nextjs' },
           { text: 'Astro', link: '/guides/frameworks/astro' },
+          { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
         ],
       },
       {
@@ -121,6 +122,7 @@ export default {
             { text: 'Angular', link: '/guides/frameworks/angular' },
             { text: 'Next.js', link: '/guides/frameworks/nextjs' },
             { text: 'Astro', link: '/guides/frameworks/astro' },
+            { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
           ],
         },
         {
@@ -154,6 +156,7 @@ export default {
             { text: 'Angular', link: '/guides/frameworks/angular' },
             { text: 'Next.js', link: '/guides/frameworks/nextjs' },
             { text: 'Astro', link: '/guides/frameworks/astro' },
+            { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
           ],
         },
       ],
