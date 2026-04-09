@@ -98,6 +98,10 @@ describe('<v-map>', () => {
     expect(component.reset).not.toHaveBeenCalled();
   });
 
+  // Stencil's @Watch signature is (newValue, oldValue) — see the
+  // corresponding handlers in v-map.tsx. The tests below call the
+  // handlers directly with that order.
+
   it('onZoomChanged calls setView with the live center from getView', async () => {
     const setView = vi.fn().mockResolvedValue(undefined);
     const getView = vi.fn(() => ({ center: [11.5, 48.1] as [number, number], zoom: 11 }));
@@ -106,7 +110,8 @@ describe('<v-map>', () => {
     component.mapState = 'available';
     component.center = '0,0';
 
-    await component.onZoomChanged(11, 14);
+    // Going from zoom 11 → 14: (newValue=14, oldValue=11)
+    await component.onZoomChanged(14, 11);
 
     // Should preserve the LIVE center from the provider, not the
     // initial seed prop value '0,0'.
@@ -131,7 +136,7 @@ describe('<v-map>', () => {
     component.mapProvider = { setView, getView: vi.fn() };
     component.mapState = 'creating';
 
-    await component.onZoomChanged(11, 14);
+    await component.onZoomChanged(14, 11);
 
     expect(setView).not.toHaveBeenCalled();
   });
@@ -143,7 +148,7 @@ describe('<v-map>', () => {
     component.mapState = 'available';
     component.center = '7.5,50.2';
 
-    await component.onZoomChanged(11, 14);
+    await component.onZoomChanged(14, 11);
 
     expect(setView).toHaveBeenCalledWith([7.5, 50.2], 14);
   });
@@ -156,7 +161,8 @@ describe('<v-map>', () => {
     component.mapState = 'available';
     component.zoom = 11; // initial seed - should be ignored in favour of live zoom
 
-    await component.onCenterChanged('0,0', '11.0,48.0');
+    // Going from '0,0' → '11.0,48.0': (newValue, oldValue)
+    await component.onCenterChanged('11.0,48.0', '0,0');
 
     expect(setView).toHaveBeenCalledWith([11.0, 48.0], 17);
   });
@@ -168,7 +174,7 @@ describe('<v-map>', () => {
     component.mapState = 'available';
     component.zoom = 11;
 
-    await component.onCenterChanged('0,0', '11.0,48.0');
+    await component.onCenterChanged('11.0,48.0', '0,0');
 
     expect(setView).toHaveBeenCalledWith([11.0, 48.0], 11);
   });
@@ -179,7 +185,7 @@ describe('<v-map>', () => {
     component.mapState = 'available';
 
     await expect(
-      component.onCenterChanged('0,0', 'not-a-coord'),
+      component.onCenterChanged('not-a-coord', '0,0'),
     ).rejects.toThrow(/Ungültiges center-Prop/);
   });
 
@@ -189,6 +195,23 @@ describe('<v-map>', () => {
     component.el = createMockEl();
     component.ensureContainer = VMap.prototype['ensureContainer'];
     component.mapState = 'creating';
+
+    await component.createMap();
+
+    expect(mockCreateProvider).not.toHaveBeenCalled();
+  });
+
+  it('createMap returns early when map is already available', async () => {
+    // Regression: componentDidRender fires on every Stencil re-render,
+    // including those triggered by outside <slider>-style prop
+    // mutations (e.g. zoom). Without this guard, createMap re-runs
+    // provider.init() on the existing container, which Leaflet
+    // refuses with "Map container is already initialized".
+    mockCreateProvider.mockClear();
+    const component = new VMap() as any;
+    component.el = createMockEl();
+    component.ensureContainer = VMap.prototype['ensureContainer'];
+    component.mapState = 'available';
 
     await component.createMap();
 

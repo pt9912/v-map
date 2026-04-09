@@ -1148,9 +1148,18 @@ export class OpenLayersProvider implements MapProvider {
 
   async setView(center: LonLat, zoom: number) {
     if (!this.map) return;
-    this.map
-      .getView()
-      .animate({ center: fromLonLat(center), zoom, duration: 0 });
+    // Use direct setters instead of view.animate({ duration: 0 }).
+    // OpenLayers' animate() with a zero duration is unreliable: it
+    // queues the change against the animation runner, which may drop
+    // it if another animation is in flight or if the requestAnimation-
+    // Frame tick has not yet started. The result is that subsequent
+    // setView() calls (e.g. from <v-map>'s @Watch('zoom') handler when
+    // a slider drives the zoom) silently no-op even though the
+    // function was invoked. setCenter()/setZoom() apply immediately
+    // and do not depend on the animation queue.
+    const view = this.map.getView();
+    view.setCenter(fromLonLat(center));
+    view.setZoom(Number(zoom));
   }
 
   getView(): { center: LonLat; zoom: number } | null {
