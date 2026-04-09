@@ -241,6 +241,10 @@ export function App() {
             center="11.576,48.137"
             on:map-provider-ready={onMapReady}
             on:vmap-error={onMapError}
+            on:vmap-view-change={(e: Event) => {
+              const d = (e as CustomEvent).detail;
+              if (d) setZoom(Math.round(d.zoom));
+            }}
           >
             {/* Declarative error toast — no JavaScript needed for the UI side */}
             <v-map-error

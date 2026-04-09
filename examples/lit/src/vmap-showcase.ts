@@ -182,6 +182,11 @@ export class VmapShowcase extends LitElement {
     this.addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
   };
 
+  private onViewChange = (event: Event) => {
+    const detail = (event as CustomEvent).detail;
+    if (detail) this.zoom = Math.round(detail.zoom);
+  };
+
   // ---- Cross-shadow event listeners -----------------------------------
   // v-map's events have `composed: true`, so they cross shadow DOM
   // boundaries. We can attach listeners directly via `@map-provider-
@@ -298,6 +303,7 @@ export class VmapShowcase extends LitElement {
               center="11.576,48.137"
               @map-provider-ready=${this.onMapReady}
               @vmap-error=${this.onMapError}
+              @vmap-view-change=${this.onViewChange}
             >
               <!-- Declarative error toast — no JavaScript needed for the UI side -->
               <v-map-error

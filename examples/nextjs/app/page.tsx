@@ -129,12 +129,19 @@ export default function Page() {
 
     const onReady = () => addLog(`map-provider-ready (${provider})`);
 
+    const onViewChange = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (detail) setZoom(Math.round(detail.zoom));
+    };
+
     map.addEventListener('vmap-error', onError);
     map.addEventListener('map-provider-ready', onReady);
+    map.addEventListener('vmap-view-change', onViewChange);
 
     return () => {
       map.removeEventListener('vmap-error', onError);
       map.removeEventListener('map-provider-ready', onReady);
+      map.removeEventListener('vmap-view-change', onViewChange);
     };
   }, [ready, provider]);
 

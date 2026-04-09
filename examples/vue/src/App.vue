@@ -113,6 +113,11 @@ function onMapError(event: Event) {
 function onMapReady() {
   addLog(`map-provider-ready (${provider.value})`);
 }
+
+function onViewChange(event: Event) {
+  const detail = (event as CustomEvent).detail;
+  if (detail) zoom.value = Math.round(detail.zoom);
+}
 </script>
 
 <template>
@@ -209,6 +214,7 @@ function onMapReady() {
           id="map1"
           @vmap-error="onMapError"
           @map-provider-ready="onMapReady"
+          @vmap-view-change="onViewChange"
         >
           <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 

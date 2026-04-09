@@ -89,6 +89,7 @@
         id="map1"
         (vmap-error)="onMapError($event)"
         (map-provider-ready)="onMapReady()"
+        (vmap-view-change)="onViewChange($event)"
       >
         <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 

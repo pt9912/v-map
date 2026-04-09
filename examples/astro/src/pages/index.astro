@@ -363,6 +363,15 @@
         addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
       });
 
+      map.addEventListener('vmap-view-change', event => {
+        const detail = (event as CustomEvent).detail;
+        if (!detail) return;
+        const rounded = Math.round(detail.zoom);
+        zoomInput.value = String(rounded);
+        zoomValue.textContent = String(rounded);
+        map.setAttribute('zoom', String(rounded));
+      });
+
       // Enable debug logging for v-map (production build defaults to 'warn').
       try {
         localStorage.setItem('@pt9912/v-map:logLevel', 'debug');

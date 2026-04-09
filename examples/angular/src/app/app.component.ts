@@ -173,6 +173,11 @@ export class AppComponent {
     this.addLog(`map-provider-ready (${this.provider()})`);
   }
 
+  onViewChange(event: Event) {
+    const detail = (event as CustomEvent).detail;
+    if (detail) this.zoom.set(Math.round(detail.zoom));
+  }
+
   clearLogs() {
     this.logs.set([]);
   }

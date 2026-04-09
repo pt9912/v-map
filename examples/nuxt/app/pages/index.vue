@@ -128,6 +128,11 @@ function onMapError(event: Event) {
   addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
 }
 
+function onViewChange(event: Event) {
+  const detail = (event as CustomEvent).detail;
+  if (detail) zoom.value = Math.round(detail.zoom);
+}
+
 onMounted(async () => {
   // Enable debug logging for v-map (production build defaults to 'warn')
   try {
@@ -265,6 +270,7 @@ useHead({
           center="11.576,48.137"
           @map-provider-ready="onMapReady"
           @vmap-error="onMapError"
+          @vmap-view-change="onViewChange"
         >
           <!-- Declarative error toast — no JavaScript needed for the UI side -->
           <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
