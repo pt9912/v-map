@@ -241,6 +241,10 @@ export default function Showcase() {
             center="11.576,48.137"
             on:map-provider-ready={onMapReady}
             on:vmap-error={onMapError}
+            on:vmap-view-change={(e: Event) => {
+              const d = (e as CustomEvent).detail;
+              if (d) setZoom(Math.round(d.zoom));
+            }}
           >
             <v-map-error
               position="bottom-right"

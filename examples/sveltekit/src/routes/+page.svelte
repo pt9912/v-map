@@ -125,6 +125,11 @@
 		const target = event.target instanceof HTMLElement ? event.target.tagName.toLowerCase() : '?';
 		addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
 	}
+
+	function onViewChange(event: Event) {
+		const detail = (event as CustomEvent).detail;
+		if (detail) zoom = Math.round(detail.zoom);
+	}
 </script>
 
 <svelte:head>
@@ -221,6 +226,7 @@
 				id="map1"
 				onmap-provider-ready={onMapReady}
 				onvmap-error={onMapError}
+				onvmap-view-change={onViewChange}
 			>
 				<!-- Declarative error toast — no JavaScript needed for the UI side -->
 				<v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>

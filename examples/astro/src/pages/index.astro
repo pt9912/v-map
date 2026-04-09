@@ -33,7 +33,7 @@
     -->
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.5.0/dist/v-map/v-map.esm.js"
     ></script>
   </head>
 
@@ -361,6 +361,15 @@
             ? event.target.tagName.toLowerCase()
             : '?';
         addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
+      });
+
+      map.addEventListener('vmap-view-change', event => {
+        const detail = (event as CustomEvent).detail;
+        if (!detail) return;
+        const rounded = Math.round(detail.zoom);
+        zoomInput.value = String(rounded);
+        zoomValue.textContent = String(rounded);
+        map.setAttribute('zoom', String(rounded));
       });
 
       // Enable debug logging for v-map (production build defaults to 'warn').

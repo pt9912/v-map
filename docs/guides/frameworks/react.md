@@ -54,7 +54,7 @@ mit einem `<script type="module">` im `index.html` zu laden:
     <title>My v-map App</title>
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.5.0/dist/v-map/v-map.esm.js"
     ></script>
   </head>
   <body>
