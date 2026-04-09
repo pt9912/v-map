@@ -91,6 +91,45 @@ function removeCesiumWidgetsCss(shadowRoot: ShadowRoot): void {
   }
 }
 
+// Cesium has no native "zoom level" — the camera is just placed at a
+// world-coordinate altitude. For a v-map that is controlled by a
+// shared <v-map zoom="N"> prop across providers, we need a mapping
+// from OL/Leaflet-style integer zoom levels to Cesium camera height.
+//
+// The previous implementation used `height = 1_000_000 / zoom`, which
+// is a linear ramp. At high zoom levels it becomes useless:
+//
+//   zoom  5 →    200_000 m
+//   zoom 10 →    100_000 m
+//   zoom 15 →     66_666 m
+//   zoom 20 →     50_000 m
+//
+// The visible difference between zoom 15 and 20 is almost nothing, so
+// slider drags in the 10-20 range felt like they were "swallowed".
+//
+// The correct mapping matches the Web Mercator tile convention, where
+// each zoom level halves the visible ground resolution. Total globe
+// circumference is ~40_075_000 m; a zoom-0 view that fits the whole
+// world needs a camera at roughly that altitude, and every extra zoom
+// level halves it.
+//
+//   zoom  0 →  40_000_000 m  (whole globe)
+//   zoom  5 →   1_250_000 m
+//   zoom 10 →      39_062 m
+//   zoom 15 →       1_220 m
+//   zoom 20 →          38 m
+//
+// Exported so tests can exercise them directly without spinning up
+// the full provider.
+export function zoomToHeight(zoom: number): number {
+  return 40_000_000 / Math.pow(2, zoom);
+}
+
+export function heightToZoom(height: number): number {
+  if (!(height > 0)) return 0;
+  return Math.log2(40_000_000 / height);
+}
+
 class CesiumTerrainLayer implements ILayer {
   private options: Record<string, unknown>;
   private opacity = 1;
@@ -1961,7 +2000,11 @@ export class CesiumProvider implements MapProvider {
     // orientation synchronously, so consecutive calls simply overwrite
     // each other and the final state always matches the latest input.
     this.viewer.camera.setView({
-      destination: this.Cesium.Cartesian3.fromDegrees(lon, lat, 1000000 / zoom),
+      destination: this.Cesium.Cartesian3.fromDegrees(
+        lon,
+        lat,
+        zoomToHeight(zoom),
+      ),
       orientation: {
         heading: this.Cesium.Math.toRadians(0.0), // Blickrichtung nach Norden
         pitch: this.Cesium.Math.toRadians(-30.0), // leicht nach unten schauen
@@ -1978,13 +2021,13 @@ export class CesiumProvider implements MapProvider {
     const lon = this.Cesium.Math.toDegrees(position.longitude);
     const lat = this.Cesium.Math.toDegrees(position.latitude);
     // Cesium has no native zoom level - we approximate it from the
-    // camera height using the inverse of the formula in setView()
-    // (height = 1_000_000 / zoom). This is the same approximation
-    // setView uses, so a roundtrip getView()/setView() preserves the
-    // same camera height.
-    const height = position.height;
-    const zoom = height > 0 ? 1_000_000 / height : 0;
-    return { center: [lon, lat], zoom };
+    // camera height using the inverse of zoomToHeight() below. A
+    // round-trip getView()/setView() preserves the same camera
+    // altitude.
+    return {
+      center: [lon, lat],
+      zoom: heightToZoom(position.height),
+    };
   }
 
   private async fetchWFSFromUrl(

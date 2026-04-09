@@ -2348,10 +2348,13 @@ describe('CesiumProvider', () => {
 
       await provider.setView([10, 50], 5);
 
+      // Exponential zoom-to-height mapping:
+      //   height = 40_000_000 / 2^zoom
+      // zoom 5 → 1_250_000 m
       expect(mockCesium.Cartesian3.fromDegrees).toHaveBeenCalledWith(
         10,
         50,
-        200000,
+        1_250_000,
       );
       expect(mockSetView).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -3735,7 +3738,11 @@ describe('CesiumProvider', () => {
           positionCartographic: {
             longitude: Math.PI / 16,
             latitude: Math.PI / 8,
-            height: 100_000,
+            // Pick a power-of-two-friendly height so the exponential
+            // heightToZoom formula lands on a clean integer:
+            //   height = 40_000_000 / 2^zoom
+            //   height = 1_250_000   →  zoom = log2(40_000_000 / 1_250_000) = log2(32) = 5
+            height: 1_250_000,
           },
         },
       };
@@ -3745,7 +3752,7 @@ describe('CesiumProvider', () => {
       expect(view).not.toBeNull();
       expect(view!.center[0]).toBeCloseTo(11.25, 5);
       expect(view!.center[1]).toBeCloseTo(22.5, 5);
-      expect(view!.zoom).toBeCloseTo(10, 5); // 1_000_000 / 100_000
+      expect(view!.zoom).toBeCloseTo(5, 5);
     });
 
     it('returns zoom 0 when camera height is non-positive', () => {

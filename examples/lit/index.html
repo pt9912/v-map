@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>v-map Lit Demo</title>
+    <style>
+      /*
+        Reset the iframe's top-level document. The <vmap-showcase>
+        Lit element is sized to 100dvh on :host, but those styles
+        live inside a shadow root and don't affect the parent
+        document. Without this reset the browser adds the default
+        body margin (8px) plus the full 100dvh element, which
+        overflows and paints a scrollbar on the iframe.
+      */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
     <!--
       Load v-map directly from jsDelivr at runtime instead of bundling
       it through Vite. Stencil's lazy loader uses import.meta.url to
@@ -17,7 +34,7 @@
     -->
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.1/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js"
     ></script>
   </head>
   <body>
