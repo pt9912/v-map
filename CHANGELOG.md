@@ -1,3 +1,12 @@
+## [0.4.3](https://github.com/pt9912/v-map/compare/v0.4.2...v0.4.3) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** bump jsDelivr v-map pin from 0.4.1 to 0.4.2 ([7904255](https://github.com/pt9912/v-map/commit/7904255762a0bbf94e71b548bbe0add37307d021))
+* **examples:** reset body styles in the Lit demo iframe document ([44a4768](https://github.com/pt9912/v-map/commit/44a4768988de1f4c8a076349218c2caca1a31ce5))
+* **v-map:** use exponential zoom-to-height mapping in CesiumProvider ([18fa3e7](https://github.com/pt9912/v-map/commit/18fa3e7be5c037ee95a9ad365e70c95f29b38178))
+
 ## [0.4.2](https://github.com/pt9912/v-map/compare/v0.4.1...v0.4.2) (2026-04-09)
 
 
