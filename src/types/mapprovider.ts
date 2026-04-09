@@ -60,4 +60,16 @@ export interface MapProvider {
 
   /** Register a callback for pointer-move with geo-coordinates. Returns unsubscribe function. */
   onPointerMove?(callback: (coordinate: [number, number] | null, pixel: [number, number]) => void): () => void;
+
+  /**
+   * Register a callback for view changes (user pan/zoom/rotate).
+   * The callback receives the live center (LonLat) and zoom level
+   * after the interaction completes. Returns an unsubscribe function.
+   *
+   * Providers fire this for BOTH user interactions AND programmatic
+   * setView() calls. The feedback-loop guard lives in `<v-map>`, not
+   * here — keeping the provider layer dumb and the component layer
+   * smart.
+   */
+  onViewChange?(callback: (view: { center: LonLat; zoom: number }) => void): () => void;
 }

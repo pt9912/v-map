@@ -11,10 +11,7 @@ einem sandboxed Iframe eingebettet.
 @[example:solid-start]
 
 SolidStart ist das SSR/SSG-Meta-Framework für Solid — vergleichbar mit
-Next.js (React) oder Nuxt (Vue). Die Demo zeigt dasselbe Showcase-
-Pattern wie das Standalone-Solid-Example, jedoch im Kontext eines
-vollständigen SolidStart-Setups mit File-System-Router und Vinxi-
-Build-Pipeline.
+Next.js (React) oder Nuxt (Vue).
 
 ## Setup für eigene Projekte
 

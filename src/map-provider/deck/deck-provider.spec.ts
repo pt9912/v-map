@@ -3242,4 +3242,43 @@ describe('DeckProvider', () => {
       expect(provider.getView()).toEqual({ center: [12.34, 56.78], zoom: 9 });
     });
   });
+
+  describe('onViewChange', () => {
+    it('fires callback when Deck onViewStateChange triggers', async () => {
+      const provider = await initProvider();
+      const cb = vi.fn();
+
+      provider.onViewChange(cb);
+
+      // Simulate a user interaction by invoking Deck's onViewStateChange
+      // callback, which is captured during init.
+      const deckConstructorCall = (mockDeck as ReturnType<typeof vi.fn>).mock.calls[0]?.[0];
+      const onViewStateChange = deckConstructorCall?.onViewStateChange;
+      expect(onViewStateChange).toBeDefined();
+
+      onViewStateChange({
+        viewState: { longitude: 13.4, latitude: 52.5, zoom: 10, bearing: 0, pitch: 0 },
+      });
+
+      expect(cb).toHaveBeenCalledWith({
+        center: [13.4, 52.5],
+        zoom: 10,
+      });
+    });
+
+    it('unsubscribe stops callback', async () => {
+      const provider = await initProvider();
+      const cb = vi.fn();
+
+      const unsub = provider.onViewChange(cb);
+      unsub();
+
+      const deckConstructorCall = (mockDeck as ReturnType<typeof vi.fn>).mock.calls[0]?.[0];
+      deckConstructorCall?.onViewStateChange({
+        viewState: { longitude: 0, latitude: 0, zoom: 1, bearing: 0, pitch: 0 },
+      });
+
+      expect(cb).not.toHaveBeenCalled();
+    });
+  });
 });

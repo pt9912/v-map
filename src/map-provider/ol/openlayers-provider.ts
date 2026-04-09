@@ -1174,6 +1174,15 @@ export class OpenLayersProvider implements MapProvider {
     };
   }
 
+  onViewChange(callback: (view: { center: LonLat; zoom: number }) => void): () => void {
+    const handler = () => {
+      const view = this.getView();
+      if (view) callback(view);
+    };
+    this.map!.on('moveend', handler);
+    return () => { this.map?.un('moveend', handler); };
+  }
+
   private async _forEachLayer(layerOrGroup: AnyLayer, callback: (layer: AnyLayer) => boolean): Promise<boolean> {
     // Wenn das aktuelle Objekt eine LayerGroup ist, rufen wir die Funktion für jedes Kind erneut auf
     if (layerOrGroup instanceof LayerGroup) {

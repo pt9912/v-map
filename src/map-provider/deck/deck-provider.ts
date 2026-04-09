@@ -81,6 +81,7 @@ import { type LayerModel } from './LayerModel';
 export class DeckProvider implements MapProvider {
   private deck!: Deck;
   private currentViewState: MapViewState | null = null;
+  private viewChangeCallback: ((view: { center: LonLat; zoom: number }) => void) | null = null;
   private target!: HTMLDivElement;
   private shadowRoot!: ShadowRoot;
   private injectedStyle!: HTMLStyleElement;
@@ -135,6 +136,15 @@ export class DeckProvider implements MapProvider {
       onViewStateChange: ({ viewState: vs }) => {
         this.currentViewState = vs as MapViewState;
         this.deck.setProps({ viewState: this.currentViewState });
+        if (this.viewChangeCallback) {
+          this.viewChangeCallback({
+            center: [
+              (vs as MapViewState).longitude,
+              (vs as MapViewState).latitude,
+            ],
+            zoom: (vs as MapViewState).zoom,
+          });
+        }
       },
       layers: [],
       _typedArrayManagerProps: { overAlloc: 1 },
@@ -1624,6 +1634,11 @@ export type TileLoadProps = {
       center: [this.currentViewState.longitude, this.currentViewState.latitude],
       zoom: this.currentViewState.zoom,
     };
+  }
+
+  onViewChange(callback: (view: { center: LonLat; zoom: number }) => void): () => void {
+    this.viewChangeCallback = callback;
+    return () => { this.viewChangeCallback = null; };
   }
 
   private async createWKTLayer(

@@ -3771,4 +3771,43 @@ describe('CesiumProvider', () => {
       expect(provider.getView()!.zoom).toBe(0);
     });
   });
+
+  describe('onViewChange', () => {
+    it('registers a camera.changed listener and invokes callback', () => {
+      const removeListener = vi.fn();
+      (provider as any).viewer = {
+        camera: {
+          changed: {
+            addEventListener: vi.fn(() => removeListener),
+          },
+          percentageChanged: 0.5,
+          positionCartographic: {
+            longitude: 0.2,
+            latitude: 0.87,
+            height: 1_250_000,
+          },
+        },
+      };
+
+      const cb = vi.fn();
+      const unsub = provider.onViewChange(cb);
+
+      const handler = (provider as any).viewer.camera.changed.addEventListener.mock.calls[0][0];
+      handler();
+
+      expect(cb).toHaveBeenCalledWith(
+        expect.objectContaining({ zoom: expect.any(Number) }),
+      );
+      expect((provider as any).viewer.camera.percentageChanged).toBe(0.001);
+
+      unsub();
+      expect(removeListener).toHaveBeenCalled();
+    });
+
+    it('returns a no-op unsubscribe when viewer is null', () => {
+      (provider as any).viewer = null;
+      const unsub = provider.onViewChange(vi.fn());
+      expect(() => unsub()).not.toThrow();
+    });
+  });
 });

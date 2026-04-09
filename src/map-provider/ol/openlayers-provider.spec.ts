@@ -112,6 +112,8 @@ const {
       dispatchEvent: vi.fn(),
     })),
     updateSize: vi.fn(),
+    on: vi.fn(),
+    un: vi.fn(),
   };
 
   const hoistedMockMap = vi.fn().mockImplementation(function () {
@@ -395,6 +397,36 @@ describe('OpenLayersProvider', () => {
       mockToLonLat.mockReturnValueOnce([0, 0]);
 
       expect(provider.getView()).toEqual({ center: [0, 0], zoom: 0 });
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // onViewChange
+  // -----------------------------------------------------------------------
+  describe('onViewChange', () => {
+    it('registers a moveend listener and invokes callback with current view', async () => {
+      const provider = await createInitializedProvider();
+      const map = (provider as any).map;
+      const cb = vi.fn();
+      mockToLonLat.mockReturnValueOnce([11.5, 48.1]);
+
+      const unsubscribe = provider.onViewChange(cb);
+
+      expect(map.on).toHaveBeenCalledWith('moveend', expect.any(Function));
+
+      // Simulate moveend by invoking the registered handler
+      const handler = map.on.mock.calls.find(
+        (c: unknown[]) => c[0] === 'moveend',
+      )?.[1] as () => void;
+      handler();
+
+      expect(cb).toHaveBeenCalledWith(
+        expect.objectContaining({ zoom: expect.any(Number) }),
+      );
+
+      // Unsubscribe should call map.un
+      unsubscribe();
+      expect(map.un).toHaveBeenCalledWith('moveend', handler);
     });
   });
 
