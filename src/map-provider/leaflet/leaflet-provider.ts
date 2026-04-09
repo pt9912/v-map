@@ -596,6 +596,15 @@ export class LeafletProvider implements MapProvider {
     };
   }
 
+  onViewChange(callback: (view: { center: LonLat; zoom: number }) => void): () => void {
+    const handler = () => {
+      const view = this.getView();
+      if (view) callback(view);
+    };
+    this.map!.on('moveend', handler);
+    return () => { this.map?.off('moveend', handler); };
+  }
+
   onLayerError(layerId: string, callback: LayerErrorCallback): void {
     this.layerErrorCallbacks.set(layerId, callback);
     this._getLayerById(layerId).then(layer => {

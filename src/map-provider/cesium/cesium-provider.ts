@@ -2033,6 +2033,20 @@ export class CesiumProvider implements MapProvider {
     };
   }
 
+  onViewChange(callback: (view: { center: LonLat; zoom: number }) => void): () => void {
+    if (!this.viewer) return () => {};
+    // Lower the threshold so the event fires for small interactions
+    // (default 0.5 = 50% change required, which swallows most mouse
+    // wheel ticks). 0.001 catches any visible camera motion.
+    this.viewer.camera.percentageChanged = 0.001;
+    const handler = () => {
+      const view = this.getView();
+      if (view) callback(view);
+    };
+    const removeListener = this.viewer.camera.changed.addEventListener(handler);
+    return () => { removeListener(); };
+  }
+
   private async fetchWFSFromUrl(
     config: Extract<LayerConfig, { type: 'wfs' }>,
   ): Promise<unknown> {

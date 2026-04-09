@@ -22,7 +22,7 @@ import type { MapInitOptions } from '../../types/mapinitoptions';
 
 import { ensureImportMap } from '../../lib/ensure-importmap';
 
-import { VMapEvents, type MapProviderDetail, type MapMouseMoveDetail } from '../../utils/events';
+import { VMapEvents, type MapProviderDetail, type MapMouseMoveDetail, type ViewChangeDetail } from '../../utils/events';
 import { watchElementResize, Unsubscribe } from '../../utils/dom-env';
 import { log } from '../../utils/logger';
 import MSG from '../../utils/messages';
@@ -111,6 +111,17 @@ export class VMap {
   private mapContainer!: HTMLDivElement;
   private unsubscribeResize: Unsubscribe;
   private unsubscribePointerMove: (() => void) | null = null;
+  private unsubscribeViewChange: (() => void) | null = null;
+
+  // Feedback-loop guard for the bidirectional zoom/center binding.
+  // When v-map calls setView() programmatically (from @Watch), the
+  // provider fires its native moveend / camera.changed event, which
+  // our onViewChange callback would pick up and re-dispatch as
+  // vmap-view-change. Without this guard the consuming app would see
+  // a "bounced" event and might re-set the prop, creating a loop.
+  private _isSettingView = false;
+  private _lastProgrammaticZoom: number | null = null;
+  private _lastProgrammaticCenter: LonLat | null = null;
 
   @Watch('flavour')
   async onFlavourChanged(newValue: string, oldValue: string) {
@@ -131,18 +142,19 @@ export class VMap {
    */
   @Watch('zoom')
   async onZoomChanged(newValue: number, oldValue: number) {
-    // Stencil's @Watch signature is (newValue, oldValue) — NOT
-    // (oldValue, newValue). The previous version of this handler had
-    // the labels swapped, which silently called setView with the OLD
-    // zoom value and made every slider drag a no-op. Keep the
-    // parameter order matching the Stencil docs:
-    //   https://stenciljs.com/docs/reactive-data#watch-decorator
     if (newValue === oldValue) return;
     if (this.mapState !== 'available' || !this.mapProvider) return;
     const view = this.mapProvider.getView?.();
     const currentCenter: LonLat = view?.center ?? this.parseCenter();
     log(MSG_COMPONENT + 'onZoomChanged ' + newValue);
-    await this.mapProvider.setView(currentCenter, newValue);
+    this._isSettingView = true;
+    this._lastProgrammaticZoom = newValue;
+    this._lastProgrammaticCenter = currentCenter;
+    try {
+      await this.mapProvider.setView(currentCenter, newValue);
+    } finally {
+      queueMicrotask(() => { this._isSettingView = false; });
+    }
   }
 
   /**
@@ -151,14 +163,20 @@ export class VMap {
    */
   @Watch('center')
   async onCenterChanged(newValue: string, oldValue: string) {
-    // Same Stencil signature gotcha as onZoomChanged: (newValue, oldValue).
     if (newValue === oldValue) return;
     if (this.mapState !== 'available' || !this.mapProvider) return;
     const view = this.mapProvider.getView?.();
     const currentZoom = view?.zoom ?? this.zoom;
     const newCenter = this.parseCenter(newValue);
     log(MSG_COMPONENT + 'onCenterChanged ' + newValue);
-    await this.mapProvider.setView(newCenter, currentZoom);
+    this._isSettingView = true;
+    this._lastProgrammaticZoom = currentZoom;
+    this._lastProgrammaticCenter = newCenter;
+    try {
+      await this.mapProvider.setView(newCenter, currentZoom);
+    } finally {
+      queueMicrotask(() => { this._isSettingView = false; });
+    }
   }
 
   private parseCenter(raw: string = this.center): LonLat {
@@ -175,6 +193,8 @@ export class VMap {
     this.unsubscribeResize?.();
     this.unsubscribePointerMove?.();
     this.unsubscribePointerMove = null;
+    this.unsubscribeViewChange?.();
+    this.unsubscribeViewChange = null;
 
     const mapProvider = this.mapProvider;
     this.mapProvider = null;
@@ -266,6 +286,34 @@ export class VMap {
         this.el.dispatchEvent(
           new CustomEvent<MapMouseMoveDetail>(VMapEvents.MapMouseMove, {
             detail: { coordinate, pixel },
+            bubbles: true,
+            composed: true,
+          }),
+        );
+      });
+    }
+
+    // View change → bidirectional zoom/center binding. The provider
+    // fires this for BOTH user interactions AND programmatic setView()
+    // calls. We suppress the latter via the _isSettingView flag and a
+    // value-comparison guard to break the feedback loop.
+    if (this.mapProvider?.onViewChange) {
+      this.unsubscribeViewChange = this.mapProvider.onViewChange((view) => {
+        if (this._isSettingView) return;
+        if (
+          this._lastProgrammaticZoom !== null &&
+          Math.abs(view.zoom - this._lastProgrammaticZoom) < 0.05 &&
+          this._lastProgrammaticCenter !== null &&
+          Math.abs(view.center[0] - this._lastProgrammaticCenter[0]) < 0.0001 &&
+          Math.abs(view.center[1] - this._lastProgrammaticCenter[1]) < 0.0001
+        ) {
+          return;
+        }
+        this._lastProgrammaticZoom = null;
+        this._lastProgrammaticCenter = null;
+        this.el.dispatchEvent(
+          new CustomEvent<ViewChangeDetail>(VMapEvents.ViewChange, {
+            detail: { center: view.center, zoom: view.zoom },
             bubbles: true,
             composed: true,
           }),

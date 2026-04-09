@@ -30,6 +30,8 @@ const {
     eachLayer: vi.fn(),
     invalidateSize: vi.fn(),
     remove: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn(),
   };
 
   return {
@@ -3565,6 +3567,35 @@ describe('LeafletProvider', () => {
       // Exercise the onEachFeature callback (line 1326)
       const mockLayer = { bindTooltip: vi.fn() };
       capturedOptions.onEachFeature(feature, mockLayer);
+    });
+  });
+
+  // -----------------------------------------------------------------------
+  // onViewChange
+  // -----------------------------------------------------------------------
+  describe('onViewChange', () => {
+    it('registers a moveend listener and invokes callback with current view', async () => {
+      const provider = await createInitializedProvider();
+      const cb = vi.fn();
+
+      const unsubscribe = provider.onViewChange(cb);
+
+      expect(mapInstance.on).toHaveBeenCalledWith('moveend', expect.any(Function));
+
+      // Simulate moveend
+      const handler = mapInstance.on.mock.calls.find(
+        (c: unknown[]) => c[0] === 'moveend',
+      )?.[1] as () => void;
+      handler();
+
+      expect(cb).toHaveBeenCalledWith({
+        center: [11.576, 48.137],
+        zoom: 13,
+      });
+
+      // Unsubscribe
+      unsubscribe();
+      expect(mapInstance.off).toHaveBeenCalledWith('moveend', handler);
     });
   });
 });

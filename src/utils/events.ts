@@ -7,6 +7,7 @@ export const VMapEvents = {
   MapProviderReady: 'map-provider-ready',
   MapProviderWillShutdown: 'map-provider-will-shutdown',
   MapMouseMove: 'map-mousemove',
+  ViewChange: 'vmap-view-change',
 } as const;
 
 export interface VMapErrorDetail {
@@ -32,4 +33,14 @@ export interface MapProviderDetail {
 export interface MapMouseMoveDetail {
   coordinate: [number, number] | null;
   pixel: [number, number];
+}
+
+/** Detail payload for `vmap-view-change` events. Fired when the user
+ *  pans or zooms the map via direct interaction (mouse wheel, pinch,
+ *  drag, double-click). NOT fired for programmatic changes via the
+ *  `zoom` / `center` props — those originate from the consuming app
+ *  and looping them back would create a feedback cycle. */
+export interface ViewChangeDetail {
+  center: [number, number];
+  zoom: number;
 }
