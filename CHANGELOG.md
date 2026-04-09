@@ -1,3 +1,20 @@
+# [0.5.0](https://github.com/pt9912/v-map/compare/v0.4.4...v0.5.0) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** Astro startup errors + SolidStart blank page ([8d09571](https://github.com/pt9912/v-map/commit/8d09571ed100bbbfefd6f46552db9a272c420bef))
+* **examples:** bump jsDelivr v-map pin from 0.4.3 to 0.4.4 ([354da85](https://github.com/pt9912/v-map/commit/354da85fa35aa3377008de8a037d4a37cbfa81fb))
+* **examples:** fix SolidStart blank page by passing base to Router ([13c85cb](https://github.com/pt9912/v-map/commit/13c85cb84b730df4266ed706ec0899f4b7c9d9d3))
+* **examples:** skip SolidStart iframe in docs build ([6cda275](https://github.com/pt9912/v-map/commit/6cda275409db077a6a781cbfa129465bcb8b670b))
+
+
+### Features
+
+* **examples:** add Solid framework guide ([0a08cba](https://github.com/pt9912/v-map/commit/0a08cba05a4287574ad025bb42730404b812ef36))
+* **examples:** add SolidStart framework guide ([f1a2afc](https://github.com/pt9912/v-map/commit/f1a2afc5f5a7c1eb14eaa6953a2e3713e857a436))
+* **v-map:** add vmap-view-change event for bidirectional zoom/center binding ([4dfbca2](https://github.com/pt9912/v-map/commit/4dfbca2d9cb21b6de8cf47a0deb0fd4065347c68))
+
 ## [0.4.4](https://github.com/pt9912/v-map/compare/v0.4.3...v0.4.4) (2026-04-09)
 
 
