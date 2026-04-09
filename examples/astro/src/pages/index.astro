@@ -104,50 +104,25 @@
 
       <section class="stage">
         <div class="map-container">
+          <!--
+            Only the base layer lives in the static HTML. All optional
+            layers (GeoTIFF, GeoJSON, broken WMS) are created and
+            inserted by the <script> block below when the user clicks
+            the corresponding button. If they were present from the
+            start (even with hidden layergroups), v-map would try to
+            initialise them immediately and emit errors because they
+            have no data/URL yet.
+          -->
           <v-map
             id="map1"
             flavour="ol"
             zoom="11"
             center="11.576,48.137"
           >
-            <!--
-              Declarative error toast — no JavaScript needed for the UI
-              side. Just drop the element in and let it listen for the
-              vmap-error event bubbling up from any sibling layer.
-            -->
             <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
 
             <v-map-layergroup group-title="Base" basemapid="osm-base">
               <v-map-layer-osm id="osm-base" label="OpenStreetMap" z-index="0"></v-map-layer-osm>
-            </v-map-layergroup>
-
-            <v-map-layergroup id="raster-group" group-title="Raster" hidden>
-              <v-map-layer-geotiff
-                id="geotiff-1"
-                label="GeoTIFF"
-                visible="false"
-                opacity="1"
-                nodata="0"
-                z-index="10"
-              ></v-map-layer-geotiff>
-            </v-map-layergroup>
-
-            <v-map-layergroup id="vector-group" group-title="Vector" hidden>
-              <v-map-layer-geojson
-                id="geojson-1"
-                label="GeoJSON"
-                z-index="100"
-              ></v-map-layer-geojson>
-            </v-map-layergroup>
-
-            <v-map-layergroup id="broken-group" group-title="Broken" hidden>
-              <v-map-layer-wms
-                id="broken-wms-layer"
-                label="Intentionally broken"
-                url="https://this-host-does-not-exist.invalid/wms"
-                layers="nope"
-                z-index="200"
-              ></v-map-layer-wms>
             </v-map-layergroup>
           </v-map>
         </div>
@@ -217,13 +192,25 @@
       const opacityValue = document.getElementById('opacity-value')!;
       const logEntries = document.getElementById('log-entries')!;
 
-      const rasterGroup = document.getElementById('raster-group')!;
-      const vectorGroup = document.getElementById('vector-group')!;
-      const brokenGroup = document.getElementById('broken-group')!;
-      const geotiffEl = document.getElementById('geotiff-1')!;
-      const geojsonEl = document.getElementById('geojson-1')!;
-
+      // Optional layers are created dynamically when the user clicks
+      // a button, and removed when they click "Hide" / "Clear".
+      // This avoids the startup errors you'd get from putting an
+      // empty <v-map-layer-geotiff> (no url) in the static HTML.
+      let rasterGroup: HTMLElement | null = null;
+      let vectorGroup: HTMLElement | null = null;
+      let brokenGroup: HTMLElement | null = null;
       let brokenWmsActive = false;
+
+      function ensureGroup(id: string, title: string): HTMLElement {
+        let g = map.querySelector(`#${id}`) as HTMLElement | null;
+        if (!g) {
+          g = document.createElement('v-map-layergroup');
+          g.id = id;
+          g.setAttribute('group-title', title);
+          map.appendChild(g);
+        }
+        return g;
+      }
 
       function addLog(msg: string, kind: LogKind = 'info') {
         const ts = new Date().toLocaleTimeString('de-DE', {
@@ -263,15 +250,26 @@
       document.querySelectorAll<HTMLButtonElement>('button[data-geotiff]').forEach(btn => {
         btn.addEventListener('click', () => {
           const url = btn.dataset.geotiff!;
-          geotiffEl.setAttribute('url', url);
-          geotiffEl.setAttribute('visible', 'true');
-          rasterGroup.removeAttribute('hidden');
+          rasterGroup = ensureGroup('raster-group', 'Raster');
+          rasterGroup.innerHTML = `
+            <v-map-layer-geotiff
+              id="geotiff-1"
+              label="GeoTIFF"
+              url="${url}"
+              visible="true"
+              opacity="${opacityInput.value}"
+              nodata="0"
+              z-index="10"
+            ></v-map-layer-geotiff>`;
           addLog(`GeoTIFF: ${url}`);
         });
       });
 
       document.getElementById('hide-geotiff')!.addEventListener('click', () => {
-        geotiffEl.setAttribute('visible', 'false');
+        if (rasterGroup) {
+          rasterGroup.remove();
+          rasterGroup = null;
+        }
         addLog('GeoTIFF hidden');
       });
 
@@ -279,25 +277,38 @@
       opacityInput.addEventListener('input', () => {
         const o = opacityInput.value;
         opacityValue.textContent = Number(o).toFixed(1);
-        geotiffEl.setAttribute('opacity', o);
+        const geotiffEl = document.getElementById('geotiff-1');
+        if (geotiffEl) geotiffEl.setAttribute('opacity', o);
       });
 
       // ---- GeoJSON buttons ------------------------------------------------
+      function setGeoJSON(data: string, label: string) {
+        vectorGroup = ensureGroup('vector-group', 'Vector');
+        vectorGroup.innerHTML = `
+          <v-map-layer-geojson
+            id="geojson-1"
+            label="GeoJSON"
+            z-index="100"
+          ></v-map-layer-geojson>`;
+        // Set geojson as property (not attribute) to avoid HTML-encoding issues
+        const el = vectorGroup.querySelector('#geojson-1')!;
+        el.setAttribute('geojson', data);
+        addLog(`GeoJSON: ${label}`);
+      }
+
       document.getElementById('geojson-point')!.addEventListener('click', () => {
-        geojsonEl.setAttribute('geojson', POINT_GEOJSON);
-        vectorGroup.removeAttribute('hidden');
-        addLog('GeoJSON: point');
+        setGeoJSON(POINT_GEOJSON, 'point');
       });
 
       document.getElementById('geojson-polygon')!.addEventListener('click', () => {
-        geojsonEl.setAttribute('geojson', POLYGON_GEOJSON);
-        vectorGroup.removeAttribute('hidden');
-        addLog('GeoJSON: polygon');
+        setGeoJSON(POLYGON_GEOJSON, 'polygon');
       });
 
       document.getElementById('geojson-clear')!.addEventListener('click', () => {
-        geojsonEl.removeAttribute('geojson');
-        vectorGroup.setAttribute('hidden', '');
+        if (vectorGroup) {
+          vectorGroup.remove();
+          vectorGroup = null;
+        }
         addLog('GeoJSON cleared');
       });
 
@@ -306,11 +317,22 @@
       brokenBtn.addEventListener('click', () => {
         brokenWmsActive = !brokenWmsActive;
         if (brokenWmsActive) {
-          brokenGroup.removeAttribute('hidden');
+          brokenGroup = ensureGroup('broken-group', 'Broken');
+          brokenGroup.innerHTML = `
+            <v-map-layer-wms
+              id="broken-wms-layer"
+              label="Intentionally broken"
+              url="https://this-host-does-not-exist.invalid/wms"
+              layers="nope"
+              z-index="200"
+            ></v-map-layer-wms>`;
           brokenBtn.textContent = 'Remove broken WMS';
           addLog('Broken WMS layer added');
         } else {
-          brokenGroup.setAttribute('hidden', '');
+          if (brokenGroup) {
+            brokenGroup.remove();
+            brokenGroup = null;
+          }
           brokenBtn.textContent = 'Add broken WMS layer';
           addLog('Broken WMS layer removed');
         }
