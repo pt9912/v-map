@@ -92,6 +92,7 @@ export default {
       {
         text: 'Frameworks',
         items: [
+          { text: 'Vergleich', link: '/guides/frameworks/' },
           { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
           { text: 'React', link: '/guides/frameworks/react' },
           { text: 'Vue 3', link: '/guides/frameworks/vue' },
@@ -119,6 +120,7 @@ export default {
         {
           text: 'Frameworks',
           items: [
+            { text: 'Vergleich', link: '/guides/frameworks/' },
             { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
@@ -156,6 +158,7 @@ export default {
         {
           text: 'Frameworks',
           items: [
+            { text: 'Vergleich', link: '/guides/frameworks/' },
             { text: 'SvelteKit', link: '/guides/frameworks/sveltekit' },
             { text: 'React', link: '/guides/frameworks/react' },
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
