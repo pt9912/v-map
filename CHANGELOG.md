@@ -1,3 +1,11 @@
+## [0.4.2](https://github.com/pt9912/v-map/compare/v0.4.1...v0.4.2) (2026-04-09)
+
+
+### Bug Fixes
+
+* **examples:** bump jsDelivr v-map pin from 0.4.0 to 0.4.1 ([bc9a48b](https://github.com/pt9912/v-map/commit/bc9a48b6bf334e9cf51af13cc8f44eff1e076595))
+* **v-map:** use camera.setView instead of flyTo in the Cesium provider ([c849cd9](https://github.com/pt9912/v-map/commit/c849cd9db0be2c9373e18f928fadfeee44ef6cdd))
+
 ## [0.4.1](https://github.com/pt9912/v-map/compare/v0.4.0...v0.4.1) (2026-04-09)
 
 
