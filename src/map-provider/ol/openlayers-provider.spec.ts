@@ -89,6 +89,8 @@ const {
 
   const viewInstance = {
     animate: vi.fn(),
+    setCenter: vi.fn(),
+    setZoom: vi.fn(),
     getProjection: vi.fn(() => 'EPSG:3857'),
     getResolution: vi.fn(() => 1),
     getCenter: vi.fn(() => [1287000, 6128000]),
@@ -333,15 +335,20 @@ describe('OpenLayersProvider', () => {
   // setView
   // -----------------------------------------------------------------------
   describe('setView', () => {
-    it('animates the view to new center and zoom', async () => {
+    it('applies new center and zoom directly via setCenter / setZoom', async () => {
+      // setView used to call view.animate({ duration: 0 }), which was
+      // unreliable: OL's animation queue would silently drop the
+      // change if a previous animation was still in flight or if the
+      // requestAnimationFrame tick had not yet started. The fix uses
+      // setCenter()/setZoom() directly so the change applies
+      // synchronously and is not subject to the animation runner.
       const provider = await createInitializedProvider();
       const view = (provider as any).map.getView();
 
       await provider.setView([10, 50], 7);
 
-      expect(view.animate).toHaveBeenCalledWith(
-        expect.objectContaining({ zoom: 7, duration: 0 }),
-      );
+      expect(view.setCenter).toHaveBeenCalledTimes(1);
+      expect(view.setZoom).toHaveBeenCalledWith(7);
       expect(mockFromLonLat).toHaveBeenCalledWith([10, 50]);
     });
 

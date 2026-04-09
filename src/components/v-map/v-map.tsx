@@ -113,9 +113,9 @@ export class VMap {
   private unsubscribePointerMove: (() => void) | null = null;
 
   @Watch('flavour')
-  async onFlavourChanged(oldValue: string, newValue: string) {
+  async onFlavourChanged(newValue: string, oldValue: string) {
     log(MSG_COMPONENT + 'onFlavourChanged');
-    if (oldValue !== newValue) {
+    if (newValue !== oldValue) {
       this.reset();
       // await this.createMap();
     }
@@ -130,8 +130,14 @@ export class VMap {
    * value, not the current state.
    */
   @Watch('zoom')
-  async onZoomChanged(oldValue: number, newValue: number) {
-    if (oldValue === newValue) return;
+  async onZoomChanged(newValue: number, oldValue: number) {
+    // Stencil's @Watch signature is (newValue, oldValue) — NOT
+    // (oldValue, newValue). The previous version of this handler had
+    // the labels swapped, which silently called setView with the OLD
+    // zoom value and made every slider drag a no-op. Keep the
+    // parameter order matching the Stencil docs:
+    //   https://stenciljs.com/docs/reactive-data#watch-decorator
+    if (newValue === oldValue) return;
     if (this.mapState !== 'available' || !this.mapProvider) return;
     const view = this.mapProvider.getView?.();
     const currentCenter: LonLat = view?.center ?? this.parseCenter();
@@ -144,8 +150,9 @@ export class VMap {
    * the parent updates only the center.
    */
   @Watch('center')
-  async onCenterChanged(oldValue: string, newValue: string) {
-    if (oldValue === newValue) return;
+  async onCenterChanged(newValue: string, oldValue: string) {
+    // Same Stencil signature gotcha as onZoomChanged: (newValue, oldValue).
+    if (newValue === oldValue) return;
     if (this.mapState !== 'available' || !this.mapProvider) return;
     const view = this.mapProvider.getView?.();
     const currentZoom = view?.zoom ?? this.zoom;
@@ -192,8 +199,23 @@ export class VMap {
 
   private async createMap() {
     this.mapContainer = this.ensureContainer();
-    if (this.mapState === 'creating') {
-      log('Map already in creating state.');
+    // Guard against the *two* states where re-entering would corrupt
+    // the provider:
+    //   1. 'creating' — a previous componentDidRender call is still
+    //      awaiting provider.init(); a second call would race against
+    //      it and double-initialise.
+    //   2. 'available' — the map is already up. componentDidRender
+    //      fires on every Stencil re-render (e.g. when an outside
+    //      slider mutates the `zoom` prop), and without this branch
+    //      we would call provider.init() again on the existing
+    //      container. OpenLayers tolerates that silently, but
+    //      Leaflet throws "Map container is already initialized" and
+    //      Deck/Cesium leak the previous instance. The @Watch
+    //      handlers (onZoomChanged / onCenterChanged) are responsible
+    //      for propagating prop changes to the live provider — we
+    //      should not recreate the map here.
+    if (this.mapState === 'creating' || this.mapState === 'available') {
+      log('Map already created (' + this.mapState + ').');
       return;
     }
     this.mapState = 'creating';
