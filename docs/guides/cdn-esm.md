@@ -24,7 +24,7 @@ Für produktive Apps mit eigenem Build empfehlen wir nach wie vor
     <title>v-map CDN Demo</title>
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js"
     ></script>
     <style>
       html, body { margin: 0; height: 100%; }
@@ -93,7 +93,7 @@ Pin die v-map-Version explizit (`@0.2.2`), nicht `@latest`:
 
 ```html
 <!-- Empfohlen -->
-<script src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js"></script>
 
 <!-- Riskant: nimmt jeden neuen Release, auch breaking changes -->
 <script src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@latest/dist/v-map/v-map.esm.js"></script>
@@ -115,7 +115,7 @@ sandboxed Iframe live vorgeführt:
 Der Iframe lädt
 [`/demos/cdn-osm-geojson.html`](/demos/cdn-osm-geojson.html) — eine
 echte HTML-Datei, die über jsDelivr die jeweils
-zuletzt published Version (aktuell `@npm9912/v-map@0.4.2`) bezieht.
+zuletzt published Version (aktuell `@npm9912/v-map@0.4.3`) bezieht.
 Du kannst sie direkt im neuen Tab öffnen, das `view-source:`-Schema
 verwenden oder den Quellcode unten in eine eigene Datei kopieren.
 
@@ -127,7 +127,7 @@ verwenden oder den Quellcode unten in eine eigene Datei kopieren.
     <title>v-map CDN — OSM + GeoJSON</title>
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js"
     ></script>
     <style>
       html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
