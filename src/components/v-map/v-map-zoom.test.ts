@@ -38,7 +38,10 @@ describe('v-map zoom propagation (browser)', () => {
   // -------- OpenLayers ---------------------------------------------------
   it('OL: propagates a programmatic zoom change to the provider view', async () => {
     const map = createLiveMap('ol') as VMapHost;
-    const readyEvent = onceEvent(map, 'map-provider-ready');
+    // Bumped timeout: the OL provider chunk is lazy-loaded on first
+    // use, and a cold start can exceed the default 3s in CI even
+    // though warm runs finish in under a second.
+    const readyEvent = onceEvent(map, 'map-provider-ready', 10_000);
     document.body.appendChild(map);
 
     await waitForHydration(map);
@@ -68,7 +71,10 @@ describe('v-map zoom propagation (browser)', () => {
 
   it('OL: propagates a follow-up zoom change without losing the live center', async () => {
     const map = createLiveMap('ol') as VMapHost;
-    const readyEvent = onceEvent(map, 'map-provider-ready');
+    // Bumped timeout: the OL provider chunk is lazy-loaded on first
+    // use, and a cold start can exceed the default 3s in CI even
+    // though warm runs finish in under a second.
+    const readyEvent = onceEvent(map, 'map-provider-ready', 10_000);
     document.body.appendChild(map);
 
     await waitForHydration(map);
@@ -96,7 +102,10 @@ describe('v-map zoom propagation (browser)', () => {
   // -------- Leaflet ------------------------------------------------------
   it('Leaflet: propagates a programmatic zoom change to the provider view', async () => {
     const map = createLiveMap('leaflet') as VMapHost;
-    const readyEvent = onceEvent(map, 'map-provider-ready');
+    // Bumped timeout: the OL provider chunk is lazy-loaded on first
+    // use, and a cold start can exceed the default 3s in CI even
+    // though warm runs finish in under a second.
+    const readyEvent = onceEvent(map, 'map-provider-ready', 10_000);
     document.body.appendChild(map);
 
     await waitForHydration(map);
@@ -114,7 +123,10 @@ describe('v-map zoom propagation (browser)', () => {
   // -------- Deck.gl ------------------------------------------------------
   it('Deck: propagates a programmatic zoom change to the provider view', async () => {
     const map = createLiveMap('deck') as VMapHost;
-    const readyEvent = onceEvent(map, 'map-provider-ready');
+    // Bumped timeout: the OL provider chunk is lazy-loaded on first
+    // use, and a cold start can exceed the default 3s in CI even
+    // though warm runs finish in under a second.
+    const readyEvent = onceEvent(map, 'map-provider-ready', 10_000);
     document.body.appendChild(map);
 
     await waitForHydration(map);
@@ -132,7 +144,10 @@ describe('v-map zoom propagation (browser)', () => {
   // -------- Center watcher (cross-provider sanity) -----------------------
   it('OL: propagates a programmatic center change to the provider view', async () => {
     const map = createLiveMap('ol') as VMapHost;
-    const readyEvent = onceEvent(map, 'map-provider-ready');
+    // Bumped timeout: the OL provider chunk is lazy-loaded on first
+    // use, and a cold start can exceed the default 3s in CI even
+    // though warm runs finish in under a second.
+    const readyEvent = onceEvent(map, 'map-provider-ready', 10_000);
     document.body.appendChild(map);
 
     await waitForHydration(map);
