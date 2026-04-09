@@ -97,6 +97,7 @@ export default {
           { text: 'Vue 3', link: '/guides/frameworks/vue' },
           { text: 'Angular', link: '/guides/frameworks/angular' },
           { text: 'Next.js', link: '/guides/frameworks/nextjs' },
+          { text: 'Astro', link: '/guides/frameworks/astro' },
         ],
       },
       {
@@ -119,6 +120,7 @@ export default {
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
             { text: 'Angular', link: '/guides/frameworks/angular' },
             { text: 'Next.js', link: '/guides/frameworks/nextjs' },
+            { text: 'Astro', link: '/guides/frameworks/astro' },
           ],
         },
         {
@@ -151,6 +153,7 @@ export default {
             { text: 'Vue 3', link: '/guides/frameworks/vue' },
             { text: 'Angular', link: '/guides/frameworks/angular' },
             { text: 'Next.js', link: '/guides/frameworks/nextjs' },
+            { text: 'Astro', link: '/guides/frameworks/astro' },
           ],
         },
       ],

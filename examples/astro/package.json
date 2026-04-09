@@ -1,0 +1,23 @@
+{
+  "name": "astro-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@npm9912/v-map": "file:../../"
+  },
+  "devDependencies": {
+    "astro": "^5.14.1",
+    "typescript": "^5.9.3"
+  },
+  "vmap": {
+    "output": "dist"
+  }
+}

@@ -1,0 +1,548 @@
+---
+// Astro frontmatter — runs at build time only. We render static HTML
+// for the entire showcase; all interactivity lives in the client-side
+// <script> block at the bottom of the file.
+//
+// Why this works without a framework wrapper:
+// Astro treats every unknown HTML tag as a real custom element. There
+// is no `isCustomElement` config to set (unlike Vue) and no JSX
+// IntrinsicElements augmentation to write (unlike React). We just type
+// `<v-map>` and Astro emits it verbatim into the static HTML, so the
+// browser can upgrade it once the v-map.esm.js loader registers the
+// definitions.
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>v-map Astro Demo</title>
+
+    <!--
+      Load v-map directly from jsDelivr at runtime instead of bundling
+      it through Astro/Vite. Stencil's lazy loader uses import.meta.url
+      to find its sibling *.entry.js chunks; if a bundler ingests the
+      loader, that URL ends up at /_astro/abc.js and Stencil 404s on
+      every layer chunk. Loading the published v-map.esm.js from
+      jsDelivr keeps Stencil's chunk resolution intact and matches the
+      CDN guide's recommended setup.
+
+      Pin the version explicitly so the demo behaves identically across
+      deploys; bump in lockstep with v-map releases.
+    -->
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.0/dist/v-map/v-map.esm.js"
+    ></script>
+  </head>
+
+  <body>
+    <main>
+      <h1>v-map + Astro</h1>
+      <p class="lead">
+        Reactive Demo: Astro rendert die Seite statisch, der kleine
+        <code>&lt;script&gt;</code>-Block unten verdrahtet die Controls
+        direkt mit den <code>&lt;v-map&gt;</code>-Props. Kein Framework,
+        kein imperatives <code>map.setView()</code>.
+      </p>
+
+      <section class="controls">
+        <div class="row">
+          <label>
+            Provider:
+            <select id="provider">
+              <option value="ol">OpenLayers</option>
+              <option value="leaflet">Leaflet</option>
+              <option value="deck">Deck.gl</option>
+              <option value="cesium">Cesium</option>
+            </select>
+          </label>
+
+          <label class="zoom-label">
+            Zoom:
+            <input id="zoom" type="range" min="2" max="18" step="1" value="11" />
+            <span id="zoom-value" class="zoom-value">11</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <strong>GeoTIFF:</strong>
+          <button data-geotiff="https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/36/Q/WD/2020/7/S2A_36QWD_20200701_0_L2A/TCI.tif">
+            Sentinel-2 RGB
+          </button>
+          <button id="hide-geotiff" class="secondary">Hide</button>
+        </div>
+        <div class="row hint">
+          External COG sample, gestreamed via HTTP-Range-Requests.
+        </div>
+
+        <div class="row">
+          <label>
+            Opacity:
+            <input id="opacity" type="range" min="0" max="1" step="0.1" value="1.0" />
+            <span id="opacity-value">1.0</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <strong>GeoJSON:</strong>
+          <button id="geojson-point">Point</button>
+          <button id="geojson-polygon">Polygon</button>
+          <button id="geojson-clear" class="secondary">Clear</button>
+        </div>
+
+        <div class="row">
+          <strong>Error API:</strong>
+          <button id="broken-wms" class="danger">Add broken WMS layer</button>
+          <span class="hint">
+            Adds a layer with an unreachable URL — should produce a
+            <code>vmap-error</code> event and a toast.
+          </span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="map-container">
+          <v-map
+            id="map1"
+            flavour="ol"
+            zoom="11"
+            center="11.576,48.137"
+          >
+            <!--
+              Declarative error toast — no JavaScript needed for the UI
+              side. Just drop the element in and let it listen for the
+              vmap-error event bubbling up from any sibling layer.
+            -->
+            <v-map-error position="bottom-right" auto-dismiss="6000"></v-map-error>
+
+            <v-map-layergroup group-title="Base" basemapid="osm-base">
+              <v-map-layer-osm id="osm-base" label="OpenStreetMap" z-index="0"></v-map-layer-osm>
+            </v-map-layergroup>
+
+            <v-map-layergroup id="raster-group" group-title="Raster" hidden>
+              <v-map-layer-geotiff
+                id="geotiff-1"
+                label="GeoTIFF"
+                visible="false"
+                opacity="1"
+                nodata="0"
+                z-index="10"
+              ></v-map-layer-geotiff>
+            </v-map-layergroup>
+
+            <v-map-layergroup id="vector-group" group-title="Vector" hidden>
+              <v-map-layer-geojson
+                id="geojson-1"
+                label="GeoJSON"
+                z-index="100"
+              ></v-map-layer-geojson>
+            </v-map-layergroup>
+
+            <v-map-layergroup id="broken-group" group-title="Broken" hidden>
+              <v-map-layer-wms
+                id="broken-wms-layer"
+                label="Intentionally broken"
+                url="https://this-host-does-not-exist.invalid/wms"
+                layers="nope"
+                z-index="200"
+              ></v-map-layer-wms>
+            </v-map-layergroup>
+          </v-map>
+        </div>
+
+        <aside class="log">
+          <h2>
+            Logs
+            <button id="clear-logs" class="small secondary">Clear</button>
+          </h2>
+          <div id="log-entries" class="log-entries"></div>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      // Astro processes this <script> block through Vite, so TypeScript
+      // syntax works out of the box. Everything below runs in the
+      // browser after the page is hydrated — there is no SSR cost.
+
+      type VMapErrorDetail = {
+        type: 'network' | 'validation' | 'parse' | 'provider';
+        message: string;
+        attribute?: string;
+        cause?: unknown;
+      };
+
+      type LogKind = 'info' | 'error';
+
+      const POINT_GEOJSON = JSON.stringify({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: { name: 'München' },
+            geometry: { type: 'Point', coordinates: [11.576, 48.137] },
+          },
+        ],
+      });
+
+      const POLYGON_GEOJSON = JSON.stringify({
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: { name: 'Area' },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [11.55, 48.12],
+                  [11.6, 48.12],
+                  [11.6, 48.15],
+                  [11.55, 48.15],
+                  [11.55, 48.12],
+                ],
+              ],
+            },
+          },
+        ],
+      });
+
+      const map = document.getElementById('map1')!;
+      const providerSelect = document.getElementById('provider') as HTMLSelectElement;
+      const zoomInput = document.getElementById('zoom') as HTMLInputElement;
+      const zoomValue = document.getElementById('zoom-value')!;
+      const opacityInput = document.getElementById('opacity') as HTMLInputElement;
+      const opacityValue = document.getElementById('opacity-value')!;
+      const logEntries = document.getElementById('log-entries')!;
+
+      const rasterGroup = document.getElementById('raster-group')!;
+      const vectorGroup = document.getElementById('vector-group')!;
+      const brokenGroup = document.getElementById('broken-group')!;
+      const geotiffEl = document.getElementById('geotiff-1')!;
+      const geojsonEl = document.getElementById('geojson-1')!;
+
+      let brokenWmsActive = false;
+
+      function addLog(msg: string, kind: LogKind = 'info') {
+        const ts = new Date().toLocaleTimeString('de-DE', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        });
+        const div = document.createElement('div');
+        div.className = `log-entry log-${kind}`;
+        div.innerHTML = `<span class="log-ts">${ts}</span><span class="log-msg"></span>`;
+        div.querySelector('.log-msg')!.textContent = msg;
+        logEntries.appendChild(div);
+        logEntries.scrollTop = logEntries.scrollHeight;
+        // Cap at the last 50 entries to keep the panel light.
+        while (logEntries.children.length > 50) {
+          logEntries.removeChild(logEntries.firstChild!);
+        }
+      }
+
+      // ---- Provider switch ------------------------------------------------
+      providerSelect.addEventListener('change', () => {
+        map.setAttribute('flavour', providerSelect.value);
+        addLog(`provider → ${providerSelect.value}`);
+      });
+
+      // ---- Zoom slider ----------------------------------------------------
+      // The @Watch('zoom') handler in <v-map> picks up attribute changes
+      // and calls the underlying provider's setView() with the live
+      // center, so panning + zooming compose correctly.
+      zoomInput.addEventListener('input', () => {
+        const z = zoomInput.value;
+        zoomValue.textContent = z;
+        map.setAttribute('zoom', z);
+      });
+
+      // ---- GeoTIFF buttons ------------------------------------------------
+      document.querySelectorAll<HTMLButtonElement>('button[data-geotiff]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const url = btn.dataset.geotiff!;
+          geotiffEl.setAttribute('url', url);
+          geotiffEl.setAttribute('visible', 'true');
+          rasterGroup.removeAttribute('hidden');
+          addLog(`GeoTIFF: ${url}`);
+        });
+      });
+
+      document.getElementById('hide-geotiff')!.addEventListener('click', () => {
+        geotiffEl.setAttribute('visible', 'false');
+        addLog('GeoTIFF hidden');
+      });
+
+      // ---- Opacity slider -------------------------------------------------
+      opacityInput.addEventListener('input', () => {
+        const o = opacityInput.value;
+        opacityValue.textContent = Number(o).toFixed(1);
+        geotiffEl.setAttribute('opacity', o);
+      });
+
+      // ---- GeoJSON buttons ------------------------------------------------
+      document.getElementById('geojson-point')!.addEventListener('click', () => {
+        geojsonEl.setAttribute('geojson', POINT_GEOJSON);
+        vectorGroup.removeAttribute('hidden');
+        addLog('GeoJSON: point');
+      });
+
+      document.getElementById('geojson-polygon')!.addEventListener('click', () => {
+        geojsonEl.setAttribute('geojson', POLYGON_GEOJSON);
+        vectorGroup.removeAttribute('hidden');
+        addLog('GeoJSON: polygon');
+      });
+
+      document.getElementById('geojson-clear')!.addEventListener('click', () => {
+        geojsonEl.removeAttribute('geojson');
+        vectorGroup.setAttribute('hidden', '');
+        addLog('GeoJSON cleared');
+      });
+
+      // ---- Broken WMS toggle ----------------------------------------------
+      const brokenBtn = document.getElementById('broken-wms')!;
+      brokenBtn.addEventListener('click', () => {
+        brokenWmsActive = !brokenWmsActive;
+        if (brokenWmsActive) {
+          brokenGroup.removeAttribute('hidden');
+          brokenBtn.textContent = 'Remove broken WMS';
+          addLog('Broken WMS layer added');
+        } else {
+          brokenGroup.setAttribute('hidden', '');
+          brokenBtn.textContent = 'Add broken WMS layer';
+          addLog('Broken WMS layer removed');
+        }
+      });
+
+      // ---- Logs panel clear -----------------------------------------------
+      document.getElementById('clear-logs')!.addEventListener('click', () => {
+        logEntries.innerHTML = '';
+      });
+
+      // ---- v-map lifecycle hooks ------------------------------------------
+      map.addEventListener('map-provider-ready', () => {
+        addLog(`map-provider-ready (${map.getAttribute('flavour')})`);
+      });
+
+      // Programmatic listener for vmap-error events bubbling up from any
+      // layer. The <v-map-error> element above already renders toasts;
+      // this handler additionally pushes the error into the logs panel,
+      // which is the typical pattern when you want errors in an app
+      // store as well.
+      map.addEventListener('vmap-error', event => {
+        const detail = (event as CustomEvent<VMapErrorDetail>).detail;
+        if (!detail) return;
+        const target =
+          event.target instanceof HTMLElement
+            ? event.target.tagName.toLowerCase()
+            : '?';
+        addLog(`[${detail.type}] ${target}: ${detail.message}`, 'error');
+      });
+
+      // Enable debug logging for v-map (production build defaults to 'warn').
+      try {
+        localStorage.setItem('@pt9912/v-map:logLevel', 'debug');
+      } catch {
+        /* localStorage may be unavailable in sandbox iframes */
+      }
+
+      customElements.whenDefined('v-map').then(() => {
+        addLog('v-map custom elements registered');
+      });
+    </script>
+
+    <style is:global>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: system-ui, sans-serif;
+        background: #1a1a2e;
+        color: #eee;
+      }
+
+      main {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem;
+        height: 100dvh;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        margin: 0 0 0.25rem;
+      }
+
+      .lead {
+        margin: 0 0 1rem;
+        font-size: 0.85rem;
+        color: #b8c2d9;
+      }
+
+      .controls {
+        background: #16213e;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+      }
+
+      .row:last-child {
+        margin-bottom: 0;
+      }
+
+      .zoom-label {
+        margin-left: 1rem;
+      }
+
+      .zoom-value {
+        display: inline-block;
+        min-width: 1.5rem;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: #b8c2d9;
+      }
+
+      code {
+        font-family: monospace;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 0 0.25rem;
+        border-radius: 3px;
+      }
+
+      .stage {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 1rem;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .map-container {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      v-map {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .log {
+        background: #16213e;
+        border-radius: 8px;
+        padding: 0.75rem;
+        min-height: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .log h2 {
+        font-size: 0.9rem;
+        margin: 0 0 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .log-entries {
+        overflow-y: auto;
+        flex: 1;
+        font-size: 0.75rem;
+        font-family: monospace;
+      }
+
+      .log-entry {
+        padding: 2px 0;
+        border-bottom: 1px solid #1a1a2e;
+        display: flex;
+        gap: 6px;
+      }
+
+      .log-ts {
+        flex: none;
+        color: #6c7fa1;
+      }
+
+      .log-msg {
+        flex: 1 1 auto;
+        word-break: break-word;
+      }
+
+      .log-error .log-msg {
+        color: #ff8a8a;
+      }
+
+      button {
+        background: #0f3460;
+        color: #eee;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+
+      button:hover {
+        background: #1a4a8a;
+      }
+
+      button.secondary {
+        background: #333;
+      }
+
+      button.danger {
+        background: #7a1f1f;
+      }
+
+      button.danger:hover {
+        background: #a02828;
+      }
+
+      button.small {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.7rem;
+      }
+
+      select,
+      input[type='range'] {
+        background: #0a0a1a;
+        color: #eee;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 0.3rem;
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+      }
+
+      strong {
+        font-size: 0.85rem;
+      }
+    </style>
+  </body>
+</html>
