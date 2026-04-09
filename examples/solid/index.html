@@ -3,15 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>v-map React Demo</title>
+    <title>v-map Solid Demo</title>
     <!--
       Load v-map directly from jsDelivr at runtime instead of bundling
-      it through Vite. Stencil's lazy loader uses import.meta.url to find
-      its sibling *.entry.js chunks; if Vite bundles the loader, that URL
-      ends up under /_app/... and Stencil 404s on every layer chunk.
-      Loading the published v-map.esm.js from jsDelivr keeps Stencil's
-      chunk resolution intact and matches the CDN guide's recommended
-      setup.
+      it through Vite. Stencil's lazy loader uses import.meta.url to
+      find its sibling *.entry.js chunks; if Vite bundles the loader,
+      that URL ends up under /assets/... and Stencil 404s on every
+      layer chunk. Loading the published v-map.esm.js from jsDelivr
+      keeps Stencil's chunk resolution intact.
 
       Pin the version explicitly so the demo behaves identically across
       deploys; bump in lockstep with v-map releases.

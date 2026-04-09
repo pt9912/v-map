@@ -63,7 +63,7 @@ durch Angular's esbuild-Pipeline zu bündeln:
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.3/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.4/dist/v-map/v-map.esm.js"
     ></script>
   </head>
   <body>

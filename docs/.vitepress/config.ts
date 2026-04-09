@@ -100,6 +100,8 @@ export default {
           { text: 'Astro', link: '/guides/frameworks/astro' },
           { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
           { text: 'Lit', link: '/guides/frameworks/lit' },
+          { text: 'Solid', link: '/guides/frameworks/solid' },
+          { text: 'SolidStart', link: '/guides/frameworks/solid-start' },
         ],
       },
       {
@@ -125,6 +127,8 @@ export default {
             { text: 'Astro', link: '/guides/frameworks/astro' },
             { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
             { text: 'Lit', link: '/guides/frameworks/lit' },
+            { text: 'Solid', link: '/guides/frameworks/solid' },
+            { text: 'SolidStart', link: '/guides/frameworks/solid-start' },
           ],
         },
         {
@@ -160,6 +164,8 @@ export default {
             { text: 'Astro', link: '/guides/frameworks/astro' },
             { text: 'Nuxt 4', link: '/guides/frameworks/nuxt' },
             { text: 'Lit', link: '/guides/frameworks/lit' },
+            { text: 'Solid', link: '/guides/frameworks/solid' },
+            { text: 'SolidStart', link: '/guides/frameworks/solid-start' },
           ],
         },
       ],
