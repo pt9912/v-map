@@ -83,7 +83,7 @@ Wir empfehlen, v-map per `<script type="module">` aus jsDelivr zu laden,
 
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.1/dist/v-map/v-map.esm.js"
+      src="https://cdn.jsdelivr.net/npm/@npm9912/v-map@0.4.2/dist/v-map/v-map.esm.js"
     ></script>
   </head>
   <body>
