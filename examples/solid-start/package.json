@@ -1,0 +1,24 @@
+{
+  "name": "solid-start-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "vinxi build",
+    "dev": "vinxi dev",
+    "start": "vinxi start"
+  },
+  "dependencies": {
+    "@npm9912/v-map": "file:../../",
+    "@solidjs/router": "^0.15.3",
+    "@solidjs/start": "^1.3.2",
+    "solid-js": "^1.9.12",
+    "vinxi": "^0.5.11"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "vmap": {
+    "output": ".output/public"
+  }
+}
